@@ -1,0 +1,71 @@
+﻿@model CMSV2.Models.ShipmentItemVM
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#Item").focus();
+
+        $("#btnsave").click(function () {
+            var item = $("#Item").val();
+
+            if (item == "") {
+                $("#validations").show();
+                return false;
+            }
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+       
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Shipment Item - Modify</h1>
+
+</section>
+
+
+
+<section class="content">
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+      <div class="row no-margin"> 
+               
+    
+
+          <div class="col-md-3">
+              @Html.HiddenFor(model=>model.ItemID)
+                          <label class="headinglabel required">Shipment Item</label>
+                  @Html.TextBoxFor(model => model.Item, new {@class="form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.Item)
+                     
+                 </div>
+
+         
+         </div>
+
+
+         <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 btn-right">
+                           
+                            <input type="submit" value="Update" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "ShipmentItem", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                               
+                          
+                        </div>
+                    </div>
+
+    </fieldset>
+}
+

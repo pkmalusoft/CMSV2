@@ -1,0 +1,186 @@
+﻿@model CMSV2.Models.AcJournalMasterVoucherVM
+
+@{
+    ViewBag.Title = "AcJournalVoucher";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 700px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+            var startdate = '@Session["FyearFrom"].ToString()';
+        var enddate = '@Session["FyearTo"].ToString()';
+        var sd = new Date(startdate);
+        var ed = new Date(enddate);
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+
+        $(function () {
+
+            $(".datepicker").datepicker({
+                dateFormat: 'dd-M-yy',
+                changeYear: true, changeMonth: true,
+                minDate: sd,
+                maxDate: ed,
+            });
+        });
+
+        $("#btnadd").click(function () {
+
+            debugger;
+            var str = "";
+            var acheadid = $("#acHeadId option:selected").val();
+            var Achead = $("#acHeadId option:selected").text();
+            var Amount = $("#Amount").val();
+            var PaymentType = $("#IsDebit option:selected").val();
+            var PaymentTypetext = $("#IsDebit option:selected").text();
+            var remark = $("#AcRemark").val();
+
+            if (Achead == "") {
+                alert("Please Select Account Head");
+            }
+
+            var i = $('#tbl1 tr').length - 1;
+
+            $("#tbl1").append('<tr>' + '<td>' + Achead + '<input type="hidden" value=' + Achead + ' name="acJournalDetailsList[' + i + '].AcHead"><input type="hidden" value=' + acheadid + ' name="acJournalDetailsList[' + i + '].acHeadID"></td>' + '<td class=textright>' + Amount + '<input type="hidden" value=' + Amount + ' name="acJournalDetailsList[' + i + '].Amount"></td>' +
+                '<td>' + PaymentTypetext + '<input type="hidden" value=' + PaymentType + ' name="acJournalDetailsList[' + i + '].IsDebit"></td>' + '<td>' + remark + '<input type="hidden" value=' + remark + ' name="acJournalDetailsList[' + i + '].AcRemark"></td></tr>');
+
+            $("#acHeadId").val($("#acHeadId option:first").val());
+            $("#Amount").val('');
+            $("#AcRemark").val('');
+        });
+
+        $("#btnsave").click(function () {
+            if ($("#TransDate").val() == "") {
+                $("#alert").show();
+                return false;
+            }
+            else {
+                $("#alert").hide();
+                return true;
+            }
+        });
+    });
+
+
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">JOURNAL VOUCHER </h1>
+
+</section>
+<div class="searchdiv ">
+    <div id="alert" style="color:red;display:none;margin-left:10px;">*Please Select Transaction Date</div>
+    <fieldset>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="row no-margin">
+			
+			<div class="col-md-6">
+                    <label class="headinglabel" id="VoucherNumber">Voucher Number</label>
+                  <input type="text" name="voucher_number" readonly class="form-control"/>
+                </div>
+                <div class="col-md-6">
+                    <label class="required headinglabel" id="lblTransDate">Voucher Date</label>
+                    @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control datepicker ", placeholder = "dd-mmm-yyyy" })
+               
+				</div>
+				</div>
+				<div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-6">
+                    <label class="headinglabel" id="lblReference">Reference Number</label>
+                    @Html.TextBoxFor(model => model.Refference, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6">
+                    <label class="headinglabel" id="lblremark">Remarks</label>
+                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+                </div>
+            
+			</div>
+
+            
+
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-4">
+                    <label class="headinglabel">Chart of Accounts</label>
+                    @Html.DropDownListFor(model => model.acHeadId, new SelectList(ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Debit/Credit</label>
+
+                    @Html.DropDownListFor(model => model.IsDebit, new List<SelectListItem> { new SelectListItem { Text = "Dr", Value = "1" }, new SelectListItem { Text = "Cr", Value = "0" } }, "Select", new { @class = "form-control" })
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel" id="txtAmount">Amount</label>
+
+                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2" style="margin-top:40px">
+
+                    <input type="button" value="Add" class="btn btn-primary btnwidth" id="btnadd" />
+                </div>
+            </div>
+
+
+            <div class="row no-margin form-layout">
+                <div class="col-xs-12" style="padding-top: 10px">
+                    <div class="data" style="padding-top: 10px;">
+                        <table border="1" class="table table-responsive tblbackground" style="width: 100%" id="tbl1">
+                            <tr style="font-weight: bold;background-color: #35b8eb;color: #fff;font-size: 16px;">
+
+                                <th>A/C Head</th>
+                                <th>Amount</th>
+                                <th>Dr/Cr</th>
+                                <th>
+                                    Remark
+                                </th>
+
+
+                            </tr>
+
+
+                        </table>
+                        @Html.HiddenFor(model => model.AcJournalDetail)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="" style="text-align:right;padding:10px">
+
+                    <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+
+                    &nbsp;
+                    <a href='@Url.Action("AcJournalVoucherIndex", "Accounts", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                </div>
+
+                <!--<div id="tmpdata" style="width: 500px; height: 400px; color: white">
+            </div>-->
+            </div>
+        }
+    </fieldset>
+</div>

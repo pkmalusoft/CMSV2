@@ -1,0 +1,56 @@
+﻿@model CMSV2.Models.GeneralSetupVM
+@{
+    Layout = null;
+}
+
+<style>
+    #invoicesearch .row .col-md-1 {
+        width: 12%;
+    }
+
+    .multiselect {
+        align-items: center;
+        display: flex !Important;
+        justify-content: space-around;
+    }
+
+    #movementid + .btn-group button, #movementid + .btn-group {
+        display: block;
+        width: 100%;
+    }
+
+    #FormDate {
+        border-radius: 10px;
+    }
+</style>
+
+<script>
+     var customernames = [];
+    $(document).ready(function () {
+        
+    });
+    
+</script>
+@using (Html.BeginForm("SetupType", "BranchMaster", FormMethod.Post, new { @id = "invoicesearch" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row no-margin ">
+        <div class="col-md-3">
+            <label class="headinglabel">Branch</label>
+            <input type="text"  class="form-control" value=@ViewBag.BranchName  readonly/>
+        </div>
+        <div class="col-md-4">
+            @Html.HiddenFor(model => model.SetupID,new { @value = 1 })
+            <label class="headinglabel required ">Type</label>
+            @Html.DropDownListFor(model => model.SetupTypeID, new SelectList(@ViewBag.SetupType, "ID", "TypeName"), null, new { @class = "form-control", @requied = "true" })
+            @Html.ValidationMessageFor(model => model.SetupTypeID)
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        </div>
+    </div>
+
+}
+
+

@@ -1,0 +1,560 @@
+﻿@model IEnumerable<CMSV2.Models.InScanVM>
+
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    }
+
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+      
+    </style>
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+    <script type="text/javascript">
+
+
+        $(function () {
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+            
+        });
+
+        $(function () {
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+            $('#ToDate').datepicker("setDate", new Date());
+        });
+
+        $(function () {
+        $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+        
+
+
+    </script>
+
+    <script type="text/javascript">
+        @*function LoadList() {
+            debugger;
+
+            $.ajax({
+                url: '@Url.Action("Index", "PickUpRequest")',
+                data: {StatusId:$('#StatusId').val(), FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val() }
+            }).done(function () {
+                alert('Added');
+            });
+        }*@
+
+        function ShowStatusModal(InScanID,PickupRequestStatusId) {
+            
+            $("#InScanID").val(InScanID);
+            $("#PickupRequestStatusId").val(PickupRequestStatusId);
+            $('#ChangeStatusId').val($("#PickupRequestStatusId").val());
+
+           $.ajax({
+            type: "POST",
+            url: "/PickUpRequest/GetStatus",
+            datatype: "Json",
+            data: { 'InScanID': $('#InScanID').val() },
+            success: function (response) {
+                debugger;
+                console.log(response);
+                var _detail = response.data;
+                console.log(_detail);
+                //$("#ChangeStatusId").val($('#PickupRequestStatusId').val());
+
+                var changestatus = _detail.ChangeStatusId; // $("#ChangeStatusId").val();
+                if (changestatus == 2) {
+                    $('#lblstatuserror').html('');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divassigned').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                }
+                else if (changestatus == 3) { //no show status
+                    $('#lblstatuserror').html('');
+                    $('#divassigned').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divnoshow').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                    $('#SubReasonStatusId').val(_detail.SubStatusReason).trigger('change');
+                }
+                else if (changestatus == 4) { //collected
+                    $('#divassigned').addClass('hide');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                    $('#PickedEmployeeId').val(_detail.PickedUpId).trigger('change');
+                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);  
+                    var myDate = new Date(_detail.PickedUpDateTime.match(/\d+/)[0] * 1);
+                    console.log(myDate);
+                    var cmon = myDate.getMonth() + 1;
+                   var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();        
+                    $('#txtpickuptime').val(collectdate);
+                }
+                else {
+                    $('#divassigned').addClass('hide');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                }
+                 $('#StatusModal').modal('show');
+
+            }
+        });
+
+        }
+
+        function SaveStatus() {
+
+            debugger;
+            var changestatus = $("#ChangeStatusId").val();
+
+                  if ($('#PickupRequestStatusId').val() == 1 && changestatus == 2)  //assigned for collection
+                {
+                    if ($('#AssignedEmployeeId').val() == null) {
+                        $('#lblstatuserror').html('Enter Required Values!');
+                            return false;
+                        }
+                }
+                else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 3) { //no show status
+               
+                }
+                else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 4) { //collected
+
+                if ($('#PickedEmployeeId').val() == null || $('#txtpickuptime').val() == "") {
+                      $('#lblstatuserror').html('Enter Required Values!');
+                    return;
+                }
+            }
+            var statusobj = {
+                InScanID: $('#InScanID').val(),
+                ChangeStatusId: $('#ChangeStatusId').val(),
+                AssignedEmployee: $('#AssignedEmployeeId').val(),
+                PickedUpId: $('#PickedEmployeeId').val(), PickedUpDateTime: $('#txtpickuptime').val(),
+                SubStatusReason :$('#SubStatusReason').val()
+            };
+
+             $.ajax({
+                type: "POST",
+                url: "/PickUpRequest/SaveStatus",
+                datatype: "Json",
+                data: statusobj,
+                success: function (data) {
+                    debugger;                    
+                    if (data=="ok")
+                    {
+                        $.notify("Status Updated Successfully!", "success");
+                        //var statustext = $("#ChangeStatusId option:selected").text();
+                        window.location.reload();
+                        //$('#h1status').html("Status :" + statustext);
+                    }
+                    else
+                        $.notify("Save Failed :" + data, "warning");
+
+                    
+                    $('#StatusModal').modal('hide');
+                    $('#dataTables-example').dataTable({});
+                }
+            });
+                                     
+
+        }
+        $(document).ready(function () {
+         
+            $("select").css({ "border-radius": "5px" });
+
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+            //$('#FromDate').datepicker("setDate", new Date());
+
+
+            //LoadList();
+
+            //var table = $('#dataTables-example').DataTable({ "sPaginationType": none });
+
+            //var table = $('#dataTables-example').DataTable();
+            var table = $('#dataTables-example').dataTable({
+                "bDestroy": true,
+                //"order": []
+                 "aaSorting": []
+            }).fnDestroy();
+
+
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style="width:100%" />');
+
+
+                //var table = $('#dataTables-example').DataTable();
+
+
+
+            });
+            $("#ChangeStatusId").change(function () {
+                debugger;
+                var changestatus = $("#ChangeStatusId").val();
+
+                if ($("#PickupRequestStatusId") == changestatus)
+                    return;
+
+                $('#btnsavestatus').removeAttr("Disabled");
+
+                if ($('#PickupRequestStatusId').val() == 1 && changestatus != 2) {
+                    $(this).val($('#PickupRequestStatusId').val());
+                    $('#lblstatuserror').html('Invalid Status Change!');
+                    $('#divnoshow').addClass('hide');
+                    $('#divassigned').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                }
+                else if ($('#PickupRequestStatusId').val() == 1 && changestatus == 2)  //assigned for collection
+                {
+                    $('#lblstatuserror').html('');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divassigned').removeClass('hide');
+                }
+                else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 3) { //no show status
+                    $('#divassigned').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divnoshow').removeClass('hide');
+                }
+                else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 4) { //collected
+                    $('#divassigned').addClass('hide');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').removeClass('hide');
+                }
+                else {
+                    $('#lblstatuserror').html('Invalid Status Change!');
+                    $('#btnsavestatus').attr("Disabled", "disabled");
+                }
+
+            });
+
+    
+    
+
+       
+            // var table = $('#dataTables-example').DataTable({
+            // "footerCallback": function ( row, data, start, end, display ) {
+            //    var api = this.api(), data;
+
+            //    // Remove the formatting to get integer data for summation
+            //    var intVal = function ( i ) {
+            //        return typeof i === 'string' ?
+            //            i.replace(/[\$,]/g, '')*1 :
+            //            typeof i === 'number' ?
+            //                i : 0;
+            //    };
+
+            //    // Total over all pages
+            //    total = api
+            //        .column( 4 )
+            //        .data()
+            //        .reduce( function (a, b) {
+            //            return intVal(a) + intVal(b);
+            //        }, 0 );
+
+            //    // Total over this page
+            //    pageTotal = api
+            //        .column( 4, { page: 'current'} )
+            //        .data()
+            //        .reduce( function (a, b) {
+            //            return intVal(a) + intVal(b);
+            //        }, 0 );
+
+            //    // Update footer
+            //    $( api.column( 4 ).footer() ).html(
+            //        '$'+pageTotal +' ( $'+ total +' total)'
+            //    );
+            //}
+            //  });
+
+
+            ////table.columns().every(function () {
+            ////    var that = this;
+
+            ////    $('input', this.footer()).on('keyup change', function () {
+            ////        if (that.search() !== this.value) {
+            ////            that
+            ////                .search(this.value)
+            ////                .draw();
+            ////        }
+            ////    });
+            ////});
+
+               var m_names = new Array("Jan", "Feb", "Mar",
+"Apr", "May", "Jun", "Jul", "Aug", "Sep",
+"Oct", "Nov", "Dec");
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth()+1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year;
+
+            if ($("#FromDate").val()=="")
+                $("#FromDate").val('@ViewBag.FromDate');
+
+            if ($("#ToDate").val()=="")
+                $("#ToDate").val('@ViewBag.ToDate');
+                              
+       
+       });
+
+        
+    </script>
+    <section class="content-header">
+        <h1 class="headingfont">InScan Local </h1>
+    </section>
+    
+    <div class="row no-margin">
+        <div class=" d-flex">
+            @*<div class="col-md-3">                
+                <label class="headinglabel">Status</label>
+                @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+            </div>*@
+            <div class="col-md-1">
+                <label class="headinglabel">From</label>
+                <input id="FromDate" class="form-control text-right"  name="FromDate" type="text" value="@ViewBag.FromDate" />
+                @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">To </label>
+                <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+                @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+            </div>
+			
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;" >
+             <a  class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?StatusId=0' + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            </div>
+        <div class="pull-left" style="padding-top:32px;">
+            <p class="indexbtnpadding" style="padding-right:15px">
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false)
+                {
+                @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth",@disabled="disabled",@title="Create Not allowed in this Financial year!" })
+                }
+                else
+                {
+                @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                }
+            </p>
+        </div>
+            </div>
+    </div>
+
+
+
+    <section class="content">
+
+
+        @if (TempData["SuccessMsg"] != null)
+        {
+            <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+            </script>
+        }
+        @*<div class="row no-margin">
+            <div class="col-md-3">
+                 <label class="headinglabel">Sort By</label>
+                        @Html.DropDownList("Filter", new List<SelectListItem>
+                        {
+                             new SelectListItem{ Text="Both", Value = "1" },
+                            new SelectListItem{ Text="Pending", Value = "2" },
+                            new SelectListItem{ Text="Picked Up", Value = "3" },
+
+
+                         }, new { @class = "form-control" })
+
+
+            </div>
+             <div class="col-md-3" style="padding-top:25px">
+                 <input type="button" id="btnSearch" class="btn btn-primary" value="Search" />
+            </div>
+        </div>*@
+
+
+
+
+        <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+
+
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.Label("Sheet No")
+                        </th>
+                        <th>
+                            @Html.Label("Scan Date")
+                        </th>                        
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+                        <th>
+                            @Html.Label("Received By")
+                        </th>
+                        <th>
+                            @Html.Label("Driver")
+                        </th>
+                       
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.Label("Sheet No")
+
+                        </th>
+
+                        <th class="right_text">
+                            @Html.Label("InScan Date")
+                        </th>
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+
+                        <th>
+                            @Html.Label("Received By")
+                        </th>
+
+                        <th>
+                            @Html.Label("Driver")
+                        </th>
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+
+
+                            <td style="text-align:right">
+                                @Html.DisplayFor(modelItem => item.InScanSheetNo)
+                            </td>
+                            <td class="text-right">
+                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.QuickInscanDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CollectedBy)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReceivedBy)
+                            </td>                                                        
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DriverName)
+                            </td>
+                            <td>
+                                @*<a href="#" title="Change Satus" onclick="ShowStatusModal('@item.EnquiryID','@item.PickupRequestStatusId')"><i class="fa fa-file"></i></a> |*@
+                                <a href="@Url.Action("Create", new { id = item.QuickInscanID })"><i class="fa fa-pencil"></i></a> |
+                                @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+                                <a href="#" onclick="Delete(ID=@item.QuickInscanID)"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+        <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">
+                            Change Status
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row" style="padding-top: 5px">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Current Status
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus"), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "ChangeStatusId" })
+                                            @*  @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })*@
+                                        </div>
+                                    </div>
+                                    <div class="row hide" id="divassigned" style="margin-top:10px">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Assigned Employee
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            @Html.DropDownList("AssignedEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.AssignedEmployeeId), "Select", new { @class = "form-control", @id = "AssignedEmployeeId", @name = "AssignedEmployeeId" })
+
+                                        </div>
+                                    </div>
+                                    <div class="row hide" id="divnoshow" style="margin-top:10px">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Reason
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            @Html.DropDownList("NoshowReason", new List<SelectListItem>
+                                                    {
+                                            new SelectListItem{ Text="Telephone not Answering", Value = "1" },
+                                            new SelectListItem{ Text="Shop Closed", Value = "2" },
+                                                            new SelectListItem{ Text="Vehicle Damaged", Value = "3" }
+
+                                        }, "", new { @class = "form-control", @id = "SubStatusReason" })
+
+
+                                        </div>
+                                    </div>
+                                    <div id="divcollected" class="hide">
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-xs-5 col-sm-3">
+                                                Picked By
+                                            </div>
+                                            <div class="col-xs-7 col-sm-9">
+                                                @Html.DropDownList("PickedByEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.PickedByEmployeeId), "Select", new { @class = "form-control", @id = "PickedEmployeeId", @name = "PickedEmployeeId" })
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-xs-5 col-sm-3">
+                                                Picked Date Time
+                                            </div>
+                                            <div class="col-xs-7 col-sm-4">
+                                                <input type="text" id="txtpickuptime" value="" class="form-control" />
+                                                @*@Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding-top: 5px">
+                        <lable style="color:red" id="lblstatuserror" class="pull-left"></lable>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus" onclick="SaveStatus();">Save Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        function Delete(ID) {
+            if (confirm("Are you sure? You want to Delete PickUp Request?")) {
+                window.location.href = "/PickUpRequest/DeleteConfirmed/?id=" + ID;
+            }
+        }
+    </script>

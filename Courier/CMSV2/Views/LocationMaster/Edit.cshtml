@@ -1,0 +1,127 @@
+﻿@model CMSV2.Models.LocationVM
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+
+        $("select").css({ "border-radius": "5px" });
+      
+        $("#Location").focus();
+
+        $("#btnsave").click(function () {
+            var loc = $("#Location").val();
+            var cou = $("#CountryID option:selected").val();
+            var cit = $("#CityID option:selected").val();
+
+
+
+            if (loc == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (cou == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (cit == "") {
+                $("#validations").show();
+                return false;
+            }
+
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+        $("#CountryID").change(function () {
+            $("#CityID").empty();
+            $.ajax({
+                type: "POST",
+                url: "/LocationMaster/GetCity",
+                datatype: "Json",
+                data: { id: $("#CountryID option:selected").val() },
+                success: function (data) {
+
+
+                    $.each(data, function (index, value) {
+                        $('#CityID').append('<option value="' + value.CityID + '">' + value.City + '</option>');
+                    });
+
+                }
+            });
+        });
+
+
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Location - Modify</h1>
+
+</section>
+
+<section class="content">
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+
+           <div class="row no-margin"> 
+               
+             <div class="col-md-3">
+                   @Html.HiddenFor(Model => Model.LocationID)
+                          <label class="headinglabel required">Location</label>
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control txttarget" })
+                 </div>
+      
+ <div class="col-md-3">
+                          <label class="headinglabel required">Country</label>
+           @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control" })
+
+          
+                 </div>
+
+        <div class="col-md-3">
+                          <label class="headinglabel required">City</label>
+           @Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID","City"), "Select", new { @class = "form-control" })
+
+          
+                 </div>
+
+     
+
+
+         </div>
+
+      <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 btn-right">
+                           
+                  <input type="submit" value="Update" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                               
+                          
+                        
+                          <a href='@Url.Action("Index", "LocationMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+                               
+                          
+                        </div>
+                    </div>
+
+
+
+
+    </fieldset>
+}
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+*@

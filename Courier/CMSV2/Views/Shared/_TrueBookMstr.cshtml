@@ -1,0 +1,705 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Truebook-@Session["CompanyName"].ToString()</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+          name='viewport'>
+  
+    <link href="~/Content/js/jquery-ui.css" rel="stylesheet" />
+    <!-- JS SCRIPTS -->
+    <script src="~/Content/NewCSS/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/Content/js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="~/Content/NewCSS/bootstrap/css/bootstrap.min.css">
+
+    <script src="~/Content/NewCSS/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/NewCSS/js/app.min.js"></script>
+    <script src="~/Content/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/Content/js/notify.js"></script>
+    <script src="~/Content/js/notify.min.js"></script>
+    <!-- css files -->
+
+    <link rel="stylesheet" href="~/Content/NewCSS/css/style.css">
+    <link rel="stylesheet" href="~/Content/NewCSS/css/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="~/Content/NewCSS/css/skins/skin-blue.min.css">
+    <link href="~/Content/plugins/Select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/Select2/js/select2.min.js"></script>
+    <link href="~/Content/multicheckselect/multiselect.css" rel="stylesheet" />
+    <script src="~/Content/multicheckselect/multiselect.min.js"></script>
+
+    @*<script src="js/app.min.js"></script>*@
+
+    <style>
+        /*.panel-body {
+            background-color:silver !important;
+        }*/
+        html, button, input, optgroup, select, textarea {
+            font-family: Calibri;
+        }
+
+        .field-validation-error {
+            color: #ff0000;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        .input-validation-error {
+            border: 1px solid #ff0000;
+            background-color: #ffeeee;
+        }
+
+        .validation-summary-errors {
+            font-weight: bold;
+            color: #ff0000;
+        }
+		.f-year{
+			background-color: transparent!important;
+    border: 1px solid #908f8f;
+    border-radius: 10px!important;
+		}
+		
+		.f-year a{
+		    color: #908f8f!important;
+			padding: 0!important;
+			min-width: 250px;
+			line-height: 36px!important;
+			text-align: CENTER;
+			height: 36px;
+			font-size: 16px;
+	}
+	.navbar-custom-menu .navbar-nav:nth-of-type(1) .f-year a{
+			    min-width: 150px;
+		}
+	   .f-year ul{
+	   padding-left: 10px;
+		left: 0!important;
+		top: 105%;
+	}
+        .validation-summary-valid {
+            display: none;
+        }
+
+        .required:after {
+            content: " *";
+            font-weight: bold;
+            color: red;
+        }
+
+        .headinglabel {
+            font-family: Calibri;
+            font-size: 14px;
+            color: #fff !important;
+        }
+
+        .newlink {
+            padding-left: 20px;
+        }
+
+        .newrowpadding {
+            padding-top: 10px;
+        }
+
+        .cbtnpadding {
+            padding-left: 30px;
+        }
+
+        .btnwidth {
+            width: 100px;
+        }
+
+        .textright {
+            text-align: right;
+        }
+
+        .textleft {
+            text-align: left;
+        }
+
+        .main-header .logo {
+            height: auto;
+        }
+
+        .tblfont {
+            font-family: Calibri;
+            font-size: 15px;
+        }
+
+        .headingfont {
+            font-family: Calibri;
+        }
+
+        .tblbackground {
+            background-color: #fff;
+        }
+
+        .indexbtnpadding {
+            padding-left: 15px;
+        }
+
+        .errorclass {
+            background-color: brown;
+        }
+
+        .no-js #loader {
+            display: none;
+        }
+
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            /*/background: url(images/loader-64x/Preloader_2.gif) center no-repeat #fff;*/
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            box-sizing: border-box;
+            display: inline-block;
+            min-width: 1.5em;
+            padding: 0.5em 1em;
+            margin-left: 2px;
+            text-align: center;
+            text-decoration: none !important;
+            cursor: pointer;
+            background-color: #35b8eb;
+            color: white !important;
+            border: 1px solid transparent;
+        }
+
+        #dataTables-example_filter {
+            display: none !important;
+        }
+
+        #mydataTable-example_filter {
+            display: none !important;
+        }
+        .liyearitem{
+            cursor:pointer;
+        }
+        .lidepotitem {
+            cursor: pointer;
+        }
+    </style>
+
+    <style>
+        @@media screen and (min-width: 992px) {
+
+            .notifyjs-corner {
+                width: 65% !important;
+                border-radius: 1px;
+            }
+
+            .notifyjs-bootstrap-base {
+                text-align: center !important;
+                background-color: #4db6ac;
+                top: 150px;
+                color: white;
+            }
+        }
+
+        #google_translate_element {
+            float: left;
+            padding-right: 16px;
+        }
+
+            #google_translate_element .goog-te-gadget-simple {
+                border-radius: 10px;
+                padding: 6px;
+                border: 2px solid #908f8f;
+            }
+    </style>
+
+
+    <script>
+        //paste this code under head tag or in a seperate js file.
+        // Wait for window load
+        $(window).load(function () {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");;
+        });
+    </script>
+
+
+    <script type="text/javascript">
+
+        function ShowProfile() {
+            $('#UserProfileModal').modal('show');
+
+               @*$.ajax({
+                url: "@Url.Action("GetEmployeeProfile", "EmployeeMaster")",
+                type: "GET",
+                   dataType: "json",
+                   data: {'id':49},
+                success: function (data) {
+                    //hideLoading();
+                    conosle.log(data.view);
+                    //$("#divprofile").html(data.view);
+                     $('#UserProfileModal').modal('show');
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });*@
+
+        }
+
+        $(document).ajaxError(function (xhr, props) {
+        if (props.status === 401) {
+            window.location.href = '@Url.Action("Login", "Login")';
+            }
+        });
+
+        $(document).ready(function () {
+            $(".liyearitem").on('click',function (obj) {
+                var id = $(this).attr('id').replace('liyear_', '');
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/ChangeYear",
+                    datatype: "Json",
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.status == "ok") {
+                            //window.location.href = '@Session["HomePage"].ToString()' //  reload();
+                            window.location.reload();
+                            //$.notify(response.message, "success");
+                            $("#spanyear").html(response.yearname);
+                        }
+                        else {
+                            $.notify(response.message, "error");
+
+                        }
+                    }
+
+                });
+
+            });
+
+            $(".lidepotitem").on('click', function (e) {
+                debugger;
+                var id = $(this).attr('id').replace('lidepot_', '');
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/ChangeBranch",
+                    datatype: "Json",
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.status == "ok") {
+                            window.location.reload();
+                            //window.location.href= '@Session["HomePage"].ToString()' //  reload();
+                            $("#spandepot").html(response.depotname);
+                            //$.notify(response.message, "success");
+                        }
+                        else {
+                            $.notify(response.message, "error");
+
+                        }
+                    }
+
+                });
+            });
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Login/GetFYear",
+            //    datatype: "Json",
+            //    success: function (data) {
+            //        $("#FYearID").empty();
+
+            //        $.each(data, function (index, value) {
+            //            $('#FYearID').append('<option value="' + value.AcFinancialYearID + '">' + value.FYearName + '</option>');
+            //        });
+
+            //    }
+            //});
+
+            $(".txttarget").change(function () {
+                var x = $(this);
+                var str = "";
+                str = x.val();
+                var splitStr = str.toLowerCase().split(' ');
+                for (var i = 0; i < splitStr.length; i++) {
+                    // You do not need to check if i is larger than splitStr length, as your for does that for you
+                    // Assign it back to the array
+                    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+                }
+                // Directly return the joined string
+                var newtxt = "";
+                newtxt = splitStr.join(' ');
+                $(x).val('');
+                $(x).val(newtxt);
+
+            });
+
+          @*  $("#AcFYearID").change(function () {
+                alert("hi");
+                //$.ajax({
+                //    type: "GET",
+                //    url: "/Login/GetChangeFyear",
+                //    data: { FyearId: $('#AcFYearID').val() },
+                //    success: function (data) {
+
+                //        alert(data);
+                //    }
+                //    });
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetChangeFyear", "Login")',
+                    datatype: "html",
+                    data: { FyearId: $('#AcFYearID').val() },
+                    success: function (data) {
+
+                     }
+                 });
+            });*@
+
+            $(".tdtarget").each(function () {
+                var x = $(this);
+                var str = "";
+                str = x.text();
+                var splitStr = str.toLowerCase().split(' ');
+                for (var i = 0; i < splitStr.length; i++) {
+                    // You do not need to check if i is larger than splitStr length, as your for does that for you
+                    // Assign it back to the array
+                    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+                }
+                // Directly return the joined string
+                var newtxt = "";
+                newtxt = splitStr.join(' ');
+                $(x).text('');
+                $(x).text(newtxt);
+
+            });
+
+
+
+
+        });
+        @*  $(document).ready(function () {
+            $("a").click(function () {
+                if ($(this).attr('id') == "78") {
+                    $('#myModal').modal('show');
+                }
+            });
+
+            $("#btnsubmit").click(function () {
+                if ($("#plain").is(':checked')) {
+
+                    window.location.href = '@Url.Action("JobRegister", "ReportInvoice", new { layout = "~/Views/Shared/PlainLayout.cshtml" })';
+                }
+
+                if ($("#formatted").is(':checked')) {
+
+                    window.location.href = '@Url.Action("JobRegister", "ReportInvoice", new { layout = "~/Views/Shared/FormattedLayout.cshtml" })';
+                }
+
+
+            });
+        });*@
+    </script>
+</head>
+@{ string UserName = "";
+
+    if (Session["UserName"] != null)
+    {
+        UserName = Session["UserName"].ToString();
+    }
+    List<int> RoleId = (List<int>)Session["RoleID"];
+}
+
+<body class="hold-transition skin-blue sidebar-mini ">
+    <div class="se-pre-con"></div>
+    <div class="wrapper">
+
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href='@Session["HomePage"]' class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+                    @*<img class="img-responsive" src="~/Content/img/TrueBook10.png" alt="logosmall">*@
+                    <img class="img-responsive" src="~/Content/img/TrueBook10.png" alt="logosmall" />
+                </span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    @*<img class="img-responsive" src="~/Content/img/TrueBook10.png" alt="logolarge">*@
+                    <img class="img-responsive" src="~/Content/img/TrueBook10.png" alt="logolarge" />
+                </span>
+            </a>
+
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"><span class="sr-only">Toggle navigation</span> </a>
+                <div style="display: inline-block; padding-top: 15px;">
+                    @*@Html.DropDownList("AcFYearID", new SelectList(AcYearList, "AcFinancialYearID", "FYearName"), new { @class = "form-control" })*@
+                </div>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+
+                    @if (Session["UserType"].ToString() == "Employee")
+                    {
+
+                        <ul class="nav navbar-nav" style="margin-right:10px">
+
+                            <!-- User Depot Menu -->
+                            <li class="dropdown user f-year">
+                                @{
+                                    List<CMSV2.Models.tblDepot> depotList = (List<CMSV2.Models.tblDepot>)Session["Depot"];
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="hidden-xs" id="spandepot">@Session["CurrentDepot"].ToString()</span> <b class="caret"></b>
+                                    </a>
+                                    if (RoleId[0] == 1)
+                                    {
+                                        <ul class="dropdown-menu" id="lidepot">
+                                            @foreach (var item in depotList)
+                                            {
+                                                <li class="lidepotitem" id="lidepot_@item.ID">@item.Depot</li>
+                                            }
+                                        </ul>
+                                    }
+                                }
+                            </li>
+                        </ul>
+                    }
+                    <ul class="nav navbar-nav" style="margin-right:10px">
+                        <!-- Year Menu -->
+                        <li class="dropdown user f-year">
+                            @{
+                                List<CMSV2.Models.AcFinancialYear> yearList = (List<CMSV2.Models.AcFinancialYear>)Session["FYear"];
+                                <!-- Menu Toggle Button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="hidden-xs" id="spanyear">@Session["CurrentYear"].ToString()</span> <b class="caret"></b>
+                                </a>                               
+                                    <ul class="dropdown-menu" id="liyear">
+                                        @foreach (var item in yearList)
+                                        {
+                                            <li class="liyearitem" id="liyear_@item.AcFinancialYearID">@item.ReferenceName</li>
+                                        }
+                                    </ul>
+                                
+                            }
+                        </li>
+                    </ul>
+                    <div id="google_translate_element"></div>
+
+                    <ul class="nav navbar-nav">
+
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img src="~/Content/NewCSS/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <hidden-xs hides the username on small devices so only the image appears.
+                                <span class="hidden-xs">@UserName</span> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu extended logout">
+                                <li><a href="#" onclick="ShowProfile()"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                                <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                                <li><a href="@Url.Action("Signout", "Login")"><i class="fa fa-key"></i>Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu">
+                    @{
+                            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+
+                            List<CMSV2.Models.Menu> menuList = (List<CMSV2.Models.Menu>)Session["Menu"];
+                            List<CMSV2.Models.Menu> parentMenu = new List<CMSV2.Models.Menu>();
+
+                            //List<CMSV2.Models.MenuVM> menuList = (List<CMSV2.Models.MenuVM>)Session["Menu"];
+                            //List<CMSV2.Models.MenuVM> parentMenu = new List<CMSV2.Models.MenuVM>();
+                            if (menuList != null)
+                            {
+                                parentMenu = menuList.Where(p => Convert.ToInt32(p.ParentID) == 0).ToList();
+                            }
+
+                            if (parentMenu != null)
+                            {
+                                foreach (var item in parentMenu)
+                                {
+                                    
+                                    int menuid = Convert.ToInt32(item.MenuID);
+                                    if (item.PermissionRequired.HasValue && item.PermissionRequired.Value)
+                                    {
+                                        if (obj.IsAccessibleMenu(menuid, RoleId))
+                                        {
+                                        <li>
+                                            <a id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                            @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                            {
+                                                @:<ul class="treeview-menu">
+                                                }
+                                            @RenderMenuList(menuList, item)
+                                            @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                            {
+                                            @:</ul>
+                                        }
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                        @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                        {
+                                            @:<ul class="treeview-menu">
+                                            }
+                                        @RenderMenuList(menuList, item)
+                                        @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                        {
+                                        @:</ul>
+                                    }
+                                    </li>
+                                }
+
+                            }
+                        }
+
+                        @helper RenderMenuList(List<CMSV2.Models.Menu> menuList, CMSV2.Models.Menu mi)
+                        {
+                            foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
+                            {
+                                @:<li>
+                                    <a id="
+                            @item1.MenuID" href=@item1.Link><i class="@item1.imgclass"></i><span>@item1.Title</span></a>
+                            if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+                            {
+                                @:<ul style="padding-left:55px">
+                                }
+                                @RenderMenuList(menuList, item1)
+                                if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+                                {
+                                @:</ul>
+                            }
+                            else
+                            {
+                            @:</li>
+                        }
+                    }
+                        }
+
+                    }
+                    <!-- Optionally, you can add icons to the links -->
+
+
+                </ul>
+
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+
+
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            @RenderBody()
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <!-- Default to the left -->
+            Copyright &copy; 2016 <a href="#">Truebook</a>. All rights reserved.
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+    @*<div class="modal modal-lg fade" id="UserProfileModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #f5f5f5;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        User Profile
+                    </h4>
+                </div>
+
+                <div class="modal-body" id="divprofile">
+                    @{ Html.RenderAction("UserProfile", "EmployeeMaster");}
+                </div>
+                <div class="modal-footer" style="padding-top: 5px">
+                    <input type="hidden" id="hdnCountryID" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btnsavestatus">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Report</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="radio" name="rpttype" id="plain" class="rbtn" value="plain" />&nbsp;Plain Report<br />
+                    <br />
+                    <input type="radio" id="formatted" name="rpttype" class="rbtn" value="formatted" />&nbsp;Formatted Report
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary" id="btnsubmit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en', includedLanguages: 'en,fa,ar',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
+
+
+

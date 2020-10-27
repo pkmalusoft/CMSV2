@@ -1,0 +1,138 @@
+﻿@model IEnumerable<CMSV2.Models.CourierStatusVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<style>
+     tfoot {
+            display: table-header-group;
+     }
+        </style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable();
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Shipment Status</h1>
+
+</section>
+
+<div class="col-md-12">
+<p class="indexbtnpadding pull-right">
+    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
+</p>
+</div>
+<div class="clearfix"></div>
+
+
+<section class="content">
+      @if (TempData["SuccessMsg"] != null)
+    {
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+                                                </script>
+    }
+    <div class="table-responsive tblbackground" style="padding:15px">
+<table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+
+    <thead>
+        <tr>
+
+
+
+            <th>
+                @Html.Label("Courier Status")
+            </th>
+
+            <th>
+                @Html.Label("Code")
+            </th>
+            <th>
+                @Html.Label("Status Type")
+            </th>
+            <th>
+                @Html.Label("Action")
+            </th>
+
+
+        </tr>
+        </thead>
+
+    <tfoot>
+    <tr>
+       
+      
+        <th class="form-100">
+             @Html.Label("CourierStatus")
+        </th>
+        <th>
+             @Html.Label("Code")
+        </th>
+        <th class="form-100">
+            @Html.Label("Status Type")
+        </th>
+       
+        <th style="display:none"></th>
+    </tr>
+        </tfoot>
+
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+      
+        <td>
+            @Html.DisplayFor(modelItem=>item.CourierStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusCourier)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusType)
+        </td>
+        
+        <td>
+             <a href="@Url.Action("Edit", new { id = item.CourierStatusID })"><i class="fa fa-pencil"></i></a> |
+            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+            <a href="#" onclick="Delete(ID=@item.CourierStatusID)"><i class="fa fa-times"></i></a>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+        </div>
+    </section>
+
+<script type="text/javascript">
+    function Delete(id) {
+        if (confirm("Are you sure, You want to Delete Status Type?")) {
+            window.location.href = "/CourierStatus/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

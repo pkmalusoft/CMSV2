@@ -1,0 +1,359 @@
+﻿@model CMSV2.Models.CreditNoteVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+
+
+    string path = Request.Url.AbsolutePath.ToLower();
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        TrueBooksMVC.Models.SourceMastersModel obj = new TrueBooksMVC.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+    .tblbackground {
+        background-color: #fff;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+        border-radius: 10px;
+    }
+
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 765px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var startdate = '@Session["FyearFrom"].ToString()';
+        var enddate = '@Session["FyearTo"].ToString()';
+        var sd = new Date(startdate);
+        var ed = new Date(enddate);
+
+        $("#CreditNoteNo").focus();
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#InvoiceAmount").attr("disabled", "disabled");
+        $("#ReceivedAmount").attr("disabled", "disabled");
+
+
+
+
+        $("#btnsave").click(function () {
+            var date = $("#Date").val();
+            var cust = $("#CustomerID option:selected").val();
+            var inv = $("#JobNOStr").val();
+            var amt = $("#Amount").val();
+            var JobNO = $("#JobNO").val();
+
+
+
+            if (date == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (cust == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (inv == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (JobNO == "" || JobNO == 0) {
+                $("#alert").hide();
+                $("#alert1").show();
+                return false;
+            }
+            else if (amt == "") {
+                $("#alert").show();
+                return false;
+            }
+
+
+            else {
+                $("#alert").hide();
+                $("#alert1").hide();
+                return true;
+            }
+
+
+        });
+
+
+
+
+
+
+        var startdate = '@Session["FyearFrom"].ToString()';
+        var enddate = '@Session["FyearTo"].ToString()';
+        var sd = new Date(startdate);
+        var ed = new Date(enddate);
+
+        $("#Date").datepicker({
+            dateFormat: 'dd-M-yy',
+            minDate: sd,
+            maxDate: ed,
+            changeYear: true,
+            changeMonth: true
+        });
+        $("#Date").datepicker("setDate", new Date());
+
+        $("#CustomerID").change(function () {
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/CreditNote/GetJobNo",
+            //    datatype: "Json",
+            //    data: { id: $('#CustomerID option:selected').val() },
+            //    success: function (data) {
+
+            //            $("#JobNO").empty();
+            //            $("#JobNO").append("<option value=0>Select</option>");
+
+
+            //            $.each(data, function (index, value) {
+            //                $('#JobNO').append('<option value="' + value.JobNo + '">' + value.JobNo + '</option>');
+            //            });
+
+            //        }
+
+
+
+            //});
+        });
+        $("#JobNOStr").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CreditNote/GetJobNoAutocomp',
+                    datatype: "json",
+                    data: {
+                        id: $("#CustomerID").val(), term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+
+                            return {
+                                label: val.JobNo,
+                                value: val.JobNum,
+                                Trading: val.Istrading
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#JobNO").val(i.item.value);
+                $("#JobNOStr").val(i.item.label);
+                $('#TradingInvoice').val(i.item.Trading);
+                getamt();
+            }
+        });
+        $('#JobNOStr').on('input', function () {
+            var val = $(this).val();
+            if (val == "") {
+                $("#JobNO").val("");
+                $('#TradingInvoice').val("");
+                $("#InvoiceAmount").val("0.00");
+                $("#ReceivedAmount").val("0.00");
+            }
+        });
+        //$("#JobNO").change(function () {
+
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/CreditNote/GetAmount",
+        //        datatype: "Json",
+        //        data: { id: $('#JobNO option:selected').val() },
+        //        success: function (data) {
+
+        //            $("#InvoiceAmount").val(data.invoiceamt);
+        //            $("#ReceivedAmount").val(data.recamt);
+
+        //        }
+
+
+
+        //    });
+        //});
+        $("#Amount").on('change', function () {
+            var value = $(this).val();
+            if (value == null || value == "") {
+                $(this).val("0.00");
+            } else {
+                $(this).val(parseFloat(value).toFixed(2));
+            }
+        });
+    });
+    function getamt() {
+        $.ajax({
+            type: "POST",
+            url: "/CreditNote/GetAmountByinvono",
+            datatype: "Json",
+            data: { invno: $("#JobNO").val(), IsTrading: $('#TradingInvoice').val() },
+            success: function (data) {
+                $("#InvoiceAmount").val(parseFloat(data.invoiceamt).toFixed(2));
+                $("#ReceivedAmount").val(parseFloat(data.recamt).toFixed(2));
+            }
+        });
+
+    }
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Credit Note</h1>
+
+</section>
+@if (ViewBag.SuccessMsg != null)
+{
+    <script type="text/javascript">
+          $(document).ready(function () {
+              $.notify("@ViewBag.SuccessMsg", "success");
+          });
+    </script>
+}
+
+<section class="content">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="searchdiv sm-width">
+            <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+            <div id="alert1" style="color:red;display:none;margin-left:10px;">*Please select valid invoice number</div>
+            <fieldset>
+
+                <div class="row no-margin">
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Date</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Date, new { @class = "form-control text-right", placeholder = "dd-mmm-yyyy", @readonly = true })
+                            @Html.ValidationMessageFor(model => model.Date)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="headinglabel">Expence A/C</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.AcHeadID, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AcHeadID)
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top:10px">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="headinglabel required">Client</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.customer, "CustomerID", "Customer1"), "Select", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CustomerID)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="required headinglabel"> Invoice No</label>
+                            </div>
+                            <div class="col-md-9">
+                                @*@Html.DropDownListFor(model => model.JobNO, new SelectList(@ViewBag.jobno, "JobNo", "JobNo"), "Select", new { @class = "form-control" })*@
+                                <input type="text" id="JobNOStr" name="JobNOStr" value="" class="form-control" />
+                                <input type="hidden" id="TradingInvoice" name="TradingInvoice" value="" class="form-control" />
+                                <input type="hidden" id="JobNO" name="JobNO" value="" class="form-control" />
+                                @Html.ValidationMessageFor(model => model.JobNO)
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row no-margin" style="padding-top:10px">
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+
+                                <label class="headinglabel">Invoice Amount</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.InvoiceAmount)
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+
+                                <label class="headinglabel">Received Amount</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ReceivedAmount)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+
+                                <label class="required headinglabel">Amount</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control text-right" })
+                                @Html.ValidationMessageFor(model => model.Amount)
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 butdivs">
+                            @if (isadd)
+                            {
+                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" disabled />
+                            }
+                            &nbsp;
+                            <a href='@Url.Action("ServiceIndex", "CreditNote", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                        </div>
+                    </div>
+
+
+            </fieldset>
+        </div>
+    }
+</section>
+

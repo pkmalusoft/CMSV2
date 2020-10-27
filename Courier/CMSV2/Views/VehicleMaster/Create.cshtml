@@ -1,0 +1,192 @@
+﻿@model CMSV2.Models.VehiclesVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+   
+        $("#VehicleValue").blur(function () {
+            var x = parseFloat($(this).val()).toFixed(2);
+            $(this).val(x);
+        });
+     
+
+        $("#VehicleNO").focus();
+
+        $("#btnsave").click(function () {
+            var no = $("#VehicleNO").val();
+            var reg = $("#RegistrationNo").val();
+            var mod = $("#Model").val();
+            var type = $("#Type").val();
+            var pur = $("#PurchaseDate").val();
+            var value = $("#VehicleValue").val();
+            var vdate = $("#ValueDate").val();
+            var pdate = $("#PurchaseDate").val();
+            var exp = $("#RegExpirydate").val();
+            var des = $("#VehicleDescription").val();
+        
+         
+            if (no == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (reg == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (mod == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (type == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (pur == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (value == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (vdate == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (pdate == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (exp == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (des  == "") {
+                $("#validations").show();
+                return false;
+            }
+
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+    });
+
+ </script>
+
+
+
+<section class="content-header">
+    <h1 class="headingfont">Vehicle</h1>
+
+</section>
+
+
+<section class="content">
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+
+        <div class="row no-margin"> 
+  
+         <div class="col-md-3">
+                          <label class="headinglabel required">Vehicle No</label>
+                 @Html.TextBoxFor(model => model.VehicleNO, new {@class="form-control" })
+            @Html.ValidationMessageFor(model => model.VehicleNO)
+                 </div>
+
+         
+
+            <div class="col-md-3">
+                          <label class="headinglabel required">Registration No</label>
+         @Html.TextBoxFor(model => model.RegistrationNo, new {@class="form-control " })
+            @Html.ValidationMessageFor(model => model.RegistrationNo)
+                 </div>
+
+            
+            <div class="col-md-3">
+                          <label class="headinglabel required">Model</label>
+       @Html.TextBoxFor(model => model.Model, new {@class="form-control txttarget text-right" })
+            @Html.ValidationMessageFor(model => model.Model)
+                 </div>
+            <div class="col-md-3">
+                          <label class="headinglabel required">Type</label>
+       @Html.TextBoxFor(model => model.Type, new {@class="form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.Type)
+                 </div>
+           
+         </div>
+
+
+        <div class="row no-margin" style="padding-top:10px">
+                
+             <div class="col-md-3">
+                          <label class="headinglabel required">Value</label>
+       @Html.TextBoxFor(model => model.VehicleValue, new {@class="form-control text-right" })
+       
+                 </div>
+        <div class="col-md-3">
+                          <label class="headinglabel">Value Date</label>  
+                       @Html.TextBoxFor(model => model.ValueDate,new { @class = "form-control text-right" })
+                  
+                           
+             </div>
+             <div class="col-md-3">
+                          <label class="headinglabel required">Purchase Date</label>
+        @Html.TextBoxFor(model => model.PurchaseDate, new {@class="form-control text-right" })
+          
+                 </div>
+            <div class="col-md-3">
+                          <label class="headinglabel required">Reg Expiry date</label>
+        @Html.TextBoxFor(model => model.RegExpirydate, new {@class="form-control text-right" })
+          
+                 </div>
+        </div>
+
+
+
+              <div class="row no-margin" style="padding-top:10px">
+                
+
+                   <div class="col-md-3">
+                          <label class="headinglabel required">Description</label>
+               @Html.TextBoxFor(model => model.VehicleDescription, new {@class="form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.VehicleDescription)
+                     
+                 </div>
+          
+          
+            
+        </div>
+
+         <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 btn-right">
+                            
+                                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />/&nbsp;&nbsp;<a href='@Url.Action("Index", "VehicleMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                          
+                        </div>
+                    </div>
+
+    </fieldset>
+}
+    </section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#ValueDate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
+        $("#PurchaseDate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
+        $("#RegExpirydate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
+    });
+</script>

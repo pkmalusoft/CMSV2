@@ -1,0 +1,367 @@
+﻿@model CMSV2.Models.InScanVM
+
+
+@{    
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+    var AWBItems = [];
+    var RemoveAWBItems = [];
+    $(document).ready(function () {
+        AWBItems = [];
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+
+
+        $('#QuickInscanDateTime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+        //$('#InscanDate').datepicker({
+        //    dateFormat: 'dd-M-yy',
+        //    changeYear: true, changeMonth: true,
+        //});
+
+        $("#txtawb").change(function () {
+            $('#btnadd').trigger('click');
+        });
+        $("#btnadd").click(function () {
+            debugger;
+            if ($("#txtawb").val().trim() == '') {
+                return;
+            }
+            else {
+                $('#btnadd').attr('disabled', 'disabled');
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/InScan/GetAWBDetail",
+                datatype: "Json",
+                data: { id: $("#txtawb").val() },
+                success: function (response) {
+                    if (response.status == "ok") {
+                        var data = response.data;
+                        AWBItems.push(data);
+                       // var i = $('#details tr').length - 1;
+                        //$("#details").append('<tr>' + '<td id= >' + data.AWB + '<input type="hidden" value=' + $("#txtawb").val() + ' name="lst[' + i + '].AWB"></td><td><a href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        //$("#details").append('<tr awbno="' + $("#txtawb").val() + '">' + '<td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' + $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        $("#detailsbody").html('');
+                        $.each(AWBItems, function (index, item) {
+                            debugger;
+                            // $('#details tr').length - 1;
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        });
+                        $('#btnadd').removeAttr('disabled');
+                        $("#txtawb").val('');
+                        $("#txtawb").focus();
+                    }
+                    else {
+                        $('#btnadd').removeAttr('disabled');
+                        $("#txtawb").focus();
+                        alert(response.message);
+                    }
+
+                    //$.each(data, function (index, value) {
+
+                    //      var i = AWBItems.length; // $('#details tr').length - 1;
+                    //      $("#details").append('<tr awbno="' +  $("#txtawb").val() + '">' + '<td>' + index + '</td><td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' +  $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                    //});
+
+                }
+
+
+            });
+        });
+
+        $("#details").on('click', '.rem', function () {
+            debugger;
+            var remove_awbono = $(this).attr('awbno');
+
+            var tempAWBItems = [];
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.AWB == remove_awbono) {
+                    RemoveAWBItems.push(value);
+                    return;
+                }
+            });
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.AWB != remove_awbono) {
+                    tempAWBItems.push(value);
+                }
+
+            });
+            AWBItems = [];
+            AWBItems = tempAWBItems;
+            //$(this).parent().parent().remove();
+            $("#detailsbody").html('');
+            $.each(AWBItems, function (index, item) {
+                    $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+            });
+        });
+
+        //$("#InScanSheetNo").change(function () {
+        function DisplayAWBItems() {
+            debugger;
+          //  $('#details tr').slice(1).remove();
+            $.ajax({
+                type: "POST",
+                url: "/InScan/GetAWB",
+                datatype: "Json",
+                data: { id: $("#QuickInscanID").val() },  //$("#CollectedByID option:selected").val()
+                success: function (response) {
+                    debugger;
+                    console.log(response);
+                    if (response.status == "ok") {
+                        var quickinscan = response.masterdata;
+                        $('#QuickInscanID').val(quickinscan.QuickInscanID);
+                        $('#DepotID').val(quickinscan.DepotId).trigger('change');
+                        $('#VehicleId').val(quickinscan.VehicleId).trigger('change');
+                        $('#DriverName').val(quickinscan.DriverName);
+                        $('#CollectedByID').val(quickinscan.CollectedByID).trigger('change');
+                        $('#ReceivedByID').val(quickinscan.ReceivedByID).trigger('change');
+                        var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
+                        var cmon = myDate.getMonth() + 1;
+                        var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                        $('#QuickInscanDateTime').val(inscandate);
+                        AWBItems = [];
+                        AWBItems = response.data;
+
+                        $.each(AWBItems, function (index, item) {
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        });
+
+                    }
+                    else {
+                        AWBItems = [];
+                          $("#detailsbody").html('');
+                        $('#QuickInscanID').val('');
+                        $('#DepotID').val('').trigger('change');
+                        $('#VehicleId').val(0).trigger('change');
+                        $('#DriverName').val('');
+                        $('#CollectedByID').val(0).trigger('change');
+                        $('#ReceivedByID').val(0).trigger('change');
+                          var d = new Date();
+                        var curr_date = d.getDate();
+                        var curr_month = d.getMonth()+1;
+                        var curr_year = d.getFullYear();
+                        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+                         $('#QuickInscanDateTime').val(reqdate);
+
+                    }
+
+                }
+            });
+        }
+        $('#btnsave').click(function () {
+            debugger;
+            var lst1 = [];
+            var SelectedInScanId = '';
+            var RemovedAWB = '';
+             $.each(AWBItems, function (index, item) {
+
+                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
+                 if (SelectedInScanId != '')
+                     SelectedInScanId += ',';
+
+                 SelectedInScanId = SelectedInScanId + item.InScanId;
+                //lst1.push(awbitem);
+             });
+
+            $.each(RemoveAWBItems, function (index, item) {
+
+                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
+                 if (RemovedAWB != '')
+                     RemovedAWB += ',';
+
+                 RemovedAWB = RemovedAWB +item.InScanId;
+                //lst1.push(awbitem);
+            });
+
+            var saveobj = {
+                QuickInscanID:$('#QuickInscanID').val(),
+                DepotID: $('#DepotID').val(),
+                DepotName: "",
+                InScanSheetNo: $('#InScanSheetNo').val(),
+                VehicleId: $('#VehicleId').val(),
+                DriverName: $('#DriverName').val(),
+                BranchId: 0,
+                UserId: 0,
+                CollectedByID: $('#CollectedByID').val(),
+                ReceivedByID: $('#ReceivedByID').val(),
+                QuickInscanDateTime: $('#QuickInscanDateTime').val(),
+                SelectedInScanId: SelectedInScanId,
+                RemovedInScanId :RemovedAWB
+            }
+
+             $.ajax({
+                type: "POST",
+                url: "/InScan/SaveQuickInScan",
+                datatype: "Json",
+                data: saveobj,
+                success: function (response) {
+                    if (response.status == "ok") {
+                        $("#detailsbody").html('');
+                        $('#QuickInscanID').val(0);
+                        $('#DepotID').val(0);
+                        $('#VehicleId').val(0).trigger('change');
+                        $('#DriverName').val('');
+                        $('#CollectedByID').val(0).trigger('change');
+                        $('#ReceivedByID').val(0).trigger('change');
+                         var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
+                        var cmon = myDate.getMonth() + 1;
+                        var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                        $('#QuickInscanDateTime').val(inscandate);
+
+                        $('#InScanSheetNo').val('');
+                        $("#txtawb").val('');
+                        $('#InScanSheetNo').focus();
+                        RemoveAWBItems = [];
+                        AWBItems = [];
+                        $.notify(response.message, "success");
+                        window.location = "/InScan/index";
+                    }
+                    else {
+
+                        $.notify(response.message, "warning");
+
+                    }
+                }
+            });
+
+
+        });
+     if ('@ViewBag.EditMode' == "true") {
+            DisplayAWBItems();
+        }
+        else {
+            $('#DRSDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+            $("#DRSDate").focus();
+        }
+
+        $("#InScanSheetNo").focus();
+    });
+
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>
+<div class="row">
+    <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
+                        <div class="row no-margin btn-right" style="padding-top:10px">
+                            <div class="col-md-12">
+                                <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+                                @*     <input type="submit" value="Save&Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" style="margin-left:5px;"  />*@
+
+                                <a href='@Url.Action("Index", "InScan")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                            </div>
+                        </div>
+                    </div>
+</div>
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+	
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.QuickInscanID, new { })
+                    <label class="headinglabel required">Sheet No.</label>
+                    @Html.TextBoxFor(model => model.InScanSheetNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.InScanSheetNo)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">InScan Date</label>
+
+                    @Html.TextBoxFor(model => model.QuickInscanDateTime, new { @class = "form-control text-right" })
+                    @Html.ValidationMessageFor(model => model.QuickInscanDateTime)
+                </div>                
+                    <div class="col-md-3">
+                        <label class="headinglabel required">Depot</label>
+                        @Html.DropDownListFor(model => model.DepotID, new SelectList(@ViewBag.depot, "ID", "Depot"), "Select", new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        <label class="headinglabel required">Collected By</label>
+                        @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="row no-margin" style="padding-top:10px">
+                    <div class="col-md-3">
+                        <label class="headinglabel required">Received By</label>
+                        @Html.DropDownListFor(model => model.ReceivedByID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        <label class="headinglabel">Vehicle Detail</label>
+                        @Html.DropDownListFor(model => model.VehicleId, new SelectList(@ViewBag.Vehicles, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.VehicleId)
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="headinglabel">Driver Name</label>
+                        @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.DriverName)
+
+                    </div>
+                </div>
+
+                <div class="row no-margin" style="padding-top:10px">
+                    <div class="col-md-3">
+                        <label class="headinglabel required">AWB No.</label>
+                        <input type="text" id="txtawb" class="form-control" />
+                    </div>
+                    <div class="col-md-3" style="padding-top:32px">
+                      <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+						
+                    </div>
+                
+                </div>
+
+                <div class="row no-margin" style="padding-top:30px">
+
+                    <div class="col-md-12">
+                        <table id="details" class="table table-responsive table-bordered" style="background-color:white">
+                            <thead>
+                            <th>S No.</th>
+                            <th>AWB No.</th>
+                            <th>Origin</th>
+                            <th>Destination</th>
+                            <th>Remove</th>
+                            </thead>
+                            <tbody id="detailsbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+
+</fieldset>
+    }
+</section>

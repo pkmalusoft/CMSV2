@@ -1,0 +1,122 @@
+﻿@model IEnumerable<CMSV2.Models.Designation>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<style>
+     tfoot {
+            display: table-header-group;
+     }
+        </style>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Designation</h1>
+
+</section>
+<div class="col-md-12">
+<p class="indexbtnpadding pull-right">
+    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
+</p>
+</div>
+
+<section class="content">
+      @if (TempData["SuccessMsg"] != null)
+    {
+     @*<div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                            <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
+                                        </div>*@
+             <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                      });
+                                                </script>
+    }
+    <div class="table-responsive tblbackground" style="padding:15px">
+<table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+ <thead>
+
+        <tr>
+        <th>
+            @Html.Label("Designation")
+        </th>
+       @* <th>
+              @Html.Label("Status Designation")
+        </th>*@
+        <th>Action</th>
+    </tr>
+ </thead>
+
+    <tfoot>
+        
+        <tr>
+        <th>
+             @Html.Label("Designation")
+        </th>
+       @* <th>
+               @Html.Label("Status Designation")
+        </th>*@
+        <th style="display:none"></th>
+    </tr>
+
+    </tfoot>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Designation1)
+        </td>
+       @* <td>
+            @Html.DisplayFor(modelItem => item.StatusDesignation)
+        </td>*@
+        <td>
+           @* @Html.ActionLink("Edit", "Edit", new { id=item.DesignationID })*@
+              <a href="@Url.Action("Edit", new { id = item.DesignationID })"><i class="fa fa-pencil"></i></a> |
+         @*   @Html.ActionLink("Details", "Details", new { id=item.DesignationID }) |*@
+           @* @Html.ActionLink("Delete", "Delete", new { id=item.DesignationID })*@
+              <a href="#" onclick="Delete(ID=@item.DesignationID)"><i class="fa fa-times"></i></a>
+        </td>
+    </tr>
+}
+
+</table>
+        </div>
+    </section>
+
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Designation?")) {
+            window.location.href = "/Designation/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>
