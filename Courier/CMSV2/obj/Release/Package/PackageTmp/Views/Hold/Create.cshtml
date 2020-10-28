@@ -1,0 +1,233 @@
+﻿@model CMSV2.Models.HoldVM
+
+@{
+    
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+    $(function () {
+        $('#HeldOn').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        var m_names = new Array("Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+            "Oct", "Nov", "Dec");
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        if ($("#Action").val() == "Create") {
+            $('#HeldOn').val(reqdate);
+        }
+        else {
+            $("#AWBNo").attr("readonly", "readonly");
+        }
+        
+        $("#HeldBy").val($("#employeeid").val()).trigger('change');
+        $('#AWBNo').focus();
+        $("#AWBNo").change(function () {
+            var id = $("#AWBNo").val();
+            $.ajax({
+                type: "POST",
+                url: "/Hold/GetAWBData",
+                datatype: "Json",
+                data: { id: id },
+                success: function (response) {
+                    if (response.status == "ok") {
+                        debugger;
+                        var data = response.data;
+                        console.log(data);
+                        $("#InScanID").val(data.InScanID);
+                        var myDate = new Date(data.date.match(/\d+/)[0] * 1);                        
+                        var cmon = myDate.getMonth() + 1;
+                        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                        $('#date').val(collectdate);                        
+                        $("#Consignor").val(data.Consignor);
+                        $("#Consignee").val(data.Consignee);
+                        $("#Pieces").val(data.Pieces);
+                        $("#Weight").val(data.Weight);
+                        $("#CourierCharges").val(data.CourierCharges);
+                        $("#OriginCountry").val(data.OriginCountry);
+                        $("#ConsigneeCountry").val(data.ConsigneeCountry);
+                        $("#StatusPaymentMOde").val(data.StatusPaymentMOde);
+                        $("#CollectedByName").val(data.CollectedByName);
+
+
+                        //$.each(AWBItems, function (index, item) {
+
+                        //    var i = $('#details tr').length - 1;
+                        //    // $('#details tr').length - 1;
+                        //    $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type = "hidden" value=' + item.consignor + ' name = "lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
+                        //        + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
+                        //        + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
+                        //        + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
+                        //        + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
+                        //        + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+
+                        //});
+
+
+
+                    }
+                    else {
+                        $("#InScanID").val(0);
+                        $('#AWBNo').val('');
+                        $('#AWBNo').focus();
+                        alert(response.message);
+                    }
+
+                }
+            });
+
+
+        })
+
+    });
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>
+
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+
+            <div class="row no-margin" style="padding-top:25px;">
+                <div class="col-md-2">
+                    @Html.HiddenFor(model => model.InScanID)
+                    @Html.HiddenFor(model => model.Action)
+                    @Html.HiddenFor(model => model.ActionType)
+                    <input type="hidden" id="employeeid" value="@Model.HeldBy" />
+                    <label class="headinglabel required">AWB No.</label>
+                    @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.AWBNo)
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Entered By</label>
+                    @*@Html.TextBoxFor(model => model.HeldBy, new {@class="form-control" })*@
+                    @Html.DropDownListFor(model => model.HeldBy, new SelectList(ViewBag.HeldBy, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @required = "true" })
+
+                    @Html.ValidationMessageFor(model => model.HeldBy)
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Entry Date</label>
+                    @Html.TextBoxFor(model => model.HeldOn, new { @class = "form-control text-right", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.HeldOn)
+
+                </div>
+
+                <div class="col-md-6">
+                    <label class="headinglabel required">Remarks</label>
+                    @Html.TextBoxFor(model => model.HeldResoan, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.HeldResoan)
+
+                </div>
+            </div>
+
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    <h3 style="color:white">AWB DETAILS</h3>
+                    <hr />
+                </div>
+            </div>
+            <div class="row no-margin">
+                <div class="col-md-2">
+                    <label class="headinglabel">Transaction Date</label>
+                    @Html.TextBoxFor(model => model.date, new { @class = "form-control text-right",@readonly="readonly" })
+                    @Html.ValidationMessageFor(model => model.date)
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Collected By</label>
+                    @Html.TextBoxFor(model => model.CollectedByName, new { @class = "form-control" , @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CollectedByName)
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel">Payment Mode</label>
+                    @Html.TextBoxFor(model => model.StatusPaymentMOde, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.StatusPaymentMOde)
+
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Weight</label>
+                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Weight)
+
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel">Pieces</label>
+                    @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Pieces)
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Courier Charges</label>
+                    @Html.TextBoxFor(model => model.CourierCharges, new { @class = "form-control text-right", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CourierCharges)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px;">
+
+                <div class="col-md-3">
+                    <label class="headinglabel">Shipper</label>
+                    @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control" , @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Consignor)
+                </div>
+
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.OriginID)
+                    <label class="headinglabel">Origin</label>
+                    @Html.TextBoxFor(model => model.OriginCountry, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.OriginCountry)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Consignee</label>
+                    @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Consignee)
+                </div>
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.DestinationID)
+                    <label class="headinglabel">Destination</label>
+                    @Html.TextBoxFor(model => model.ConsigneeCountry, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.ConsigneeCountry)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12 btn-right">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+                    <a href='@Url.Action("Index", "Hold", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                </div>
+            </div>
+        </fieldset>
+
+    }
+</section>
+
+

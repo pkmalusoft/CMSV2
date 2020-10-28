@@ -1,0 +1,230 @@
+﻿@model CMSV2.Models.ProductTypeVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+    .loginbox
+    {
+        background-color:white;
+       border-style: solid;
+    border-color: black;
+    border-radius:10px;
+    }
+    #Length
+    {
+        color:black;
+          border-style: solid;
+    border-color: black;
+    }
+     #Width
+    {
+        color:black;
+          border-style: solid;
+    border-color: black;
+    }
+       #Height
+    {
+        color:black;
+          border-style: solid;
+    border-color: black;
+    }
+         #CBM
+    {
+        color:black;
+          border-style: solid;
+    border-color: black;
+    }
+
+</style>
+ <script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#ProductName").focus();
+
+        $("#btnsave").click(function () {
+            var cou = $("#ProductName").val();
+
+            var id = $("#ParcelType option:selected").val();
+            var inscan = $("#transport option:selected").val();
+            if (cou == "") {
+                $("#validations").show();
+                return false;
+            }
+
+            else if (id == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (inscan == "") {
+                $("#validations").show();
+                return false;
+            }
+
+
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+     
+
+
+    
+    });
+</script>
+   <script type="text/javascript">
+    $(document).ready(function () {
+            $("#Length").val(parseFloat(0).toFixed(2));
+            $("#Width").val(parseFloat(0).toFixed(2));
+            $("#Height").val(parseFloat(0).toFixed(2));
+            $("#Cubemeter").val(parseFloat(0).toFixed(2));
+
+
+      
+
+        $("#Length").blur(function () {
+            cal();
+        });
+        $("#Width").blur(function () {
+            cal();
+        });
+        $("#Height").blur(function () {
+            cal();
+        });
+        function cal() {
+            var l=parseFloat($("#Length").val());
+            var w = parseFloat($("#Width").val());
+            var h = parseFloat($("#Height").val());
+
+            var CBM = l * w * h;
+            $("#CBM").val(parseFloat(CBM).toFixed(2));
+
+
+        }
+    });
+       </script>
+<section class="content-header">
+    <h1 class="headingfont">Product Type</h1>
+
+</section>
+
+<section class="content">
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+        
+
+       <div class="row no-margin"> 
+               
+        
+
+         <div class="col-md-3">
+                          <label class="headinglabel required">Product Name</label>
+                 @Html.TextBoxFor(model => model.ProductName,new { @class = "form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.ProductName)
+                     
+                 </div>
+
+             
+
+        <div class="col-md-3">
+                          <label class="headinglabel required">Parcel Type</label>
+              @Html.DropDownListFor(model => model.ParcelType, new SelectList(@ViewBag.ParcelType, "ID","ParcelType1"), "Select", new { @class = "form-control" })
+     
+                 </div>
+
+     
+         
+          
+                 
+                 <div class="col-md-3">
+                        <label class="headinglabel required">Transport Mode</label>
+              @Html.DropDownListFor(model => model.TransportModeID, new SelectList(@ViewBag.transport, "TransportModeID","Mode"), "Select", new { @class = "form-control" })
+     </div> 
+
+
+               <div class="col-md-3 checkboxdesign" style="padding:20px;">
+             <label class="headinglabel required">CBM based Charges</label>&nbsp;&nbsp;
+                  <label class="headinglabel">   @Html.CheckBoxFor(model=>model.CBMbasedCharges)</label>
+                   
+               </div>
+           </div>
+
+
+
+
+
+
+          <div class="col-lg-9 col-md-8" style="padding:10px;">
+                <label  class="headinglabel"> <h4>  Package Dimensions </h4></label>
+                    <div class="loginbox col-md-12" style="padding:25px">
+                     
+                     
+                            <div class="col-md-3">
+
+                              <label>Length</label>
+                 @Html.TextBoxFor(model => model.Length,new { @class = "form-control text-right" })
+            @Html.ValidationMessageFor(model => model.Length)
+                            </div>
+             
+                            <div class="col-md-3">
+                                     <label>Width</label>
+                 @Html.TextBoxFor(model => model.Width,new { @class = "form-control text-right" })
+            @Html.ValidationMessageFor(model => model.Width)
+                        
+                            </div>
+                             <div class="col-md-3">
+                                      <label >Height</label>
+               @Html.TextBoxFor(model=>model.Height,new{@class="form-control text-right"})
+                    @Html.ValidationMessageFor(model=>model.Height)
+                            </div>
+                          
+          
+                            <div class="col-md-3">
+                             <label>Cubic Meter</label>
+               @Html.TextBoxFor(model=>model.CBM,new{@class="form-control text-right"})
+                    @Html.ValidationMessageFor(model=>model.CBM)
+                            </div> 
+          
+            
+         
+                      
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+         
+        <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 btn-right">
+                   <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "ProductType", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                    
+                          
+                        </div>
+            </div>
+    </fieldset>
+}
+

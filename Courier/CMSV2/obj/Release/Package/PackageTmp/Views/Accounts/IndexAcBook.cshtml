@@ -1,0 +1,234 @@
+﻿@model IEnumerable<CMSV2.Models.AcJournalMasterSelectAll_Result>
+    @{
+        ViewBag.Title = "Cash and Bank Book";
+        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+        var isadd = true;
+        var ismodify = true;
+        var isdelete = true;
+
+        string path = Request.Url.AbsolutePath.ToLower();
+
+        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+        {
+            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+        }
+    }
+    <style>
+    tfoot {
+    display: table-header-group;
+    }
+    </style>
+    
+    @*<style>
+            tfoot {
+                display: table-header-group;
+            }
+
+            .tblbackground {
+            background-color: #fff;
+            box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+            border-radius: 10px;
+        }
+
+        td.details-control img {
+            padding: 5px;
+            /* background: url('/Content/img/details_open.png') no-repeat center center;
+            cursor: pointer;*/
+            }
+
+            tr.shown td.details-control img {
+                padding: 5px;
+                /* background: url('/Content/img/details_close.png') no-repeat center center; */
+            }
+    </style>*@
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" />');
+            });
+
+            //var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+                 var table = $('#dataTables-example').DataTable({
+                "aaSorting": [],
+                //"dom": '<"top"i>rt<"top"flp><"clear">',
+                	//dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                 //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                 //"pagingType": "simple"
+            });
+            table.draw();
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            function format(d) {
+                // `d` is the original data object for the row
+                debugger;
+                var JournalDetailId = d[5];
+                var DataHtml = '';
+                $.ajax({
+                    type: "POST",
+                    url: "/Accounts/AcBookDetails",
+                    datatype: "Json",
+                    data: { DetailId: JournalDetailId },
+                    success: function (data) {
+                        debugger;
+                        DataHtml = '<table>';
+                        $.each(data, function (index, value) {
+                            debugger;
+                            DataHtml = DataHtml + '<tr><td>' + value.AcHead + '</td><td class="textright">' + value.Amount + '</td><td>' + value.Remarks + '</td></tr>';
+                        });
+                        debugger;
+                        DataHtml = DataHtml + '</table>';
+                        $('#pr_' + JournalDetailId).append(DataHtml);
+                    }
+                });
+
+                return '<p id="pr_' + JournalDetailId + '"></p>';
+            }
+
+            $('#dataTables-example tbody').on('click', 'td.details-control', function () {
+                debugger;
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    $(this).find('img').attr('src', '/Content/img/details_open.png');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                    $(this).find('img').attr('src', '/Content/img/details_close.png');
+                }
+            });
+
+        });
+
+    </script>
+
+    <section class="content-header">
+        <h1 class="headingfont">Cash And Bank Book</h1>
+
+    </section>
+
+    <div class="col-md-12">
+        <p class="indexbtnpadding pull-right">
+            @if (isadd)
+            {
+                @Html.ActionLink("Create New", "CreateAcBook", null, new { @class = "btn btn-primary btnwidth" })
+            }
+        </p>
+    </div>
+    <section class="content">
+        @if (ViewBag.SuccessMsg != null)
+        {
+            <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.SuccessMsg ", "success");
+         });
+            </script>
+        }
+        <div class="table-responsive tblbackground" style="padding:15px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+                <thead>
+                    <tr>
+                        @*  <th>
+                                 @Html.Label("Transaction Type")
+                            </th>
+                        *@
+                        <th>
+                            @Html.Label("Voucher No")
+                        </th>
+                        <th>
+                            @Html.Label("Transaction Date")
+                        </th>
+                        <th>
+                            @Html.Label("Amount")
+                        </th>
+                        <th>
+                            @Html.Label("Narraction")
+                        </th>
+                        <th>Action</th>
+                        <th style="display:none;"></th>
+                    </tr>
+                </thead>
+
+                <tfoot>
+                    <tr>
+                        @*  <th>
+                                 @Html.Label("Transaction Type")
+                            </th>*@
+                        <th>
+                            @Html.Label("Voucher No")
+                        </th>
+                        <th>
+                            @Html.Label("Transaction Date")
+                        </th>
+                        <th>
+                            @Html.Label("Amount")
+                        </th>
+                        <th>
+                            @Html.Label("Remark")
+                        </th>
+
+                        <th>Action</th>
+                        <th style="display:none;"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="details-control">
+                                <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
+                                @Html.DisplayFor(modelItem => item.VoucherNo)
+                            </td>
+                            <td class="tdtarget">
+                                <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;width:10px;margin:1px;" />
+                                @CMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
+                            </td>
+                            <td class="tdtarget textright">
+                                @string.Format("{0:n2}", item.Amount)
+                            </td>
+                            <td class="tdtarget">
+                                @Html.DisplayFor(modelItem => item.Remarks)
+                            </td>
+                            <td>
+                                @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
+                                    @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+                                @if (ismodify)
+                                {
+                                    <a href="@Url.Action("EditAcBook", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                                } @*<a href="@Url.Action("Delete", new { id = item.CountryID })"><i class="fa fa-times"></i></a>*@
+                                @* <a href="#" onclick="Delete(ID=@item.AcCategoryID)"><i class="fa fa-times"></i></a>*@
+
+                            </td>
+                            <td style="display:none;">
+                                @item.AcJournalID
+                            </td>
+                        </tr>
+                    }
+                    <//tbody>
+            </table>
+        </div>
+    </section>

@@ -1,0 +1,1112 @@
+﻿@model CMSV2.Models.PickupRequestVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal =Convert.ToInt32(@Session["Decimal"].ToString());
+    var _mindate = @CMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
+    var _maxdate = @CMSV2.Models.CommanFunctions.GetMaxFinancialDate();
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+
+<script type="text/javascript">
+    //    google.maps.event.addDomListener(window, 'load', function () {
+    //        var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+    //        google.maps.event.addListener(places, 'place_changed', function () {
+    //            var place = places.getPlace();
+    //    var address = place.formatted_address;
+    //    var latitude = place.geometry.location.A;
+    //    var longitude = place.geometry.location.F;
+    //    var mesg = "Address: " + address;
+    //    mesg += "\nLatitude: " + latitude;
+    //    mesg += "\nLongitude: " + longitude;
+    //    alert(mesg);
+    //});
+    //    });
+
+    var placeSearch, autocomplete, autocompleteCity, autocompleteCountry;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+           autocomplete.addListener('place_changed', fillInAddress);
+
+
+        autocompleteCity = new google.maps.places.Autocomplete(
+            document.getElementById('ConsigneeCityName'), { types: ['geocode'] });
+
+        autocompleteCountry = new google.maps.places.Autocomplete(
+            document.getElementById('ConsigneeCountryName'), { types: ['geocode'] });
+
+    }
+
+    function fillInAddress() {
+        debugger;
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        console.log(place.address_components);
+
+        //for (var component in componentForm) {
+        //  document.getElementById(component).value = '';
+        //  document.getElementById(component).disabled = false;
+        //}
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        //for (var i = 0; i < place.address_components.length; i++) {
+        //  var addressType = place.address_components[i].types[0];
+        //  if (componentForm[addressType]) {
+        //    var val = place.address_components[i][componentForm[addressType]];
+        //    document.getElementById(addressType).value = val;
+        //  }
+        //      }
+
+        var postcode = '';
+        $.each(place.address_components, function (index, component) {
+            var types = component.types;
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#ConsigneeCityName').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#ConsigneeCountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
+            });
+        });
+
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+
+    function geoCitylocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocompleteCity.setBounds(circle.getBounds());
+            });
+        }
+    }
+
+    function geoCountrylocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocompleteCountry.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
+<script type="text/javascript">
+
+      function checkmobileno(inputtxt) {
+        
+        //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        var phoneno = /^[0-9]{10}$/;
+        if (inputtxt.match(phoneno)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        }
+        else {
+            $("#validations").html('The Mobile Number entered is invalid!');
+            return false;
+        }
+    }
+    function checkPhoneNumber(phoneNo) {
+        var phoneRE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/; ///^\(\d\d\d\) \d\d\d-\d\d\d\d$/;
+        if (phoneNo.match(phoneRE)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        } else {
+            $("#validations").html('The phone number entered is invalid!');
+
+            return false;
+        }
+    }
+</script>
+<script type="text/javascript">
+     function setTwoNumberDecimal(obj) {
+
+
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
+    function setThreeNumberDecimal(obj) {
+
+         if ($(obj).val() == '') {
+            $(obj).val(0);
+        }
+        else {
+            $(obj).val(parseFloat($(obj).val()).toFixed(3));
+        }
+}
+    $(function () {
+        $('#EnquiryDate').datetimepicker({  maxDate:'@_maxdate',
+                minDate: '@_mindate',format: 'DD-MM-YYYY HH:mm' });
+    });
+    $(function () {
+        $('#ReadyTime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+
+    $(function () {
+        $('#CollectedTime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+    $(function () {
+        $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+
+    //$(function () {
+    //    $('#OfficeTimeFrom').datetimepicker({ format: 'HH:mm' });
+    //});
+
+    //$(function () {
+    //    $('#OfficeTimeTo').datetimepicker({ format: 'HH:mm' });
+    //});
+
+
+</script>
+<script type="text/javascript">
+    
+    var consigneenames = [];
+    var customernames = [];
+
+    function ShowStatusModal() {
+        $.ajax({
+            type: "POST",
+            url: "/PickUpRequest/GetStatus",
+            datatype: "Json",
+            data: { 'InScanID': $('#InScanID').val() },
+            success: function (response) {
+                debugger;
+                console.log(response);
+                var _detail = response.data;
+                console.log(_detail);
+                //$("#ChangeStatusId").val($('#PickupRequestStatusId').val());
+                 if (_detail.StatusType != 'PICKUP REQUEST') {
+                    alert('Could not Change Status,Shipment Type out of Pickup Request!');
+                    return;
+                }
+                var changestatus = _detail.ChangeStatusId; // $("#ChangeStatusId").val();
+                if (changestatus == 2) {
+                    $('#lblstatuserror').html('');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divassigned').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                }
+                else if (changestatus == 3) { //no show status
+                    $('#lblstatuserror').html('');
+                    $('#divassigned').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                    $('#divnoshow').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                    $('#SubReasonStatusId').val(_detail.SubStatusReason).trigger('change');
+                }
+                else if (changestatus == 4) { //collected
+                    $('#divassigned').addClass('hide');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').removeClass('hide');
+                    $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
+                    $('#PickedEmployeeId').val(_detail.PickedUpId).trigger('change');
+                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);  
+                    var myDate = new Date(_detail.PickedUpDateTime.match(/\d+/)[0] * 1);
+                    console.log(myDate);
+                    var cmon = myDate.getMonth() + 1;
+                   var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();        
+                    $('#txtpickuptime').val(collectdate);
+                }
+                else {
+                    $('#divassigned').addClass('hide');
+                    $('#divnoshow').addClass('hide');
+                    $('#divcollected').addClass('hide');
+                }
+                 $('#StatusModal').modal('show');
+
+            }
+        });
+         
+    }
+     function GetConsigneeDetail() {
+              
+         $.ajax({
+             type: "POST",
+             url: "/PickUpRequest/GetConsigneeData",
+             datatype: "Json",
+             data: { consigneename: $('#Consignee').val() },
+                success: function (data) {
+                    if (data != null && data.CustName!=null) {
+                        $("#Consignee").val(data.CustName);
+                        $("#ConsigneeContact").val(data.ContactPerson);
+                        $("#ConsigneeAddress").val(data.Address1);
+                        $("#ConsigneeAddress1").val(data.Address2);
+                        $("#ConsigneeAddress2").val(data.Address3);
+                        $("#ConsigneePhone").val(data.Phone);
+                        $("#ConsigneeCountryName").val(data.CountryName);
+                        $("#ConsigneeCityName").val(data.CityName);
+                        //$("#ConsigneeLocationName").val(data.LocationName);
+                        $("#autocomplete").val(data.LocationName);
+                        
+                    }
+                    else {
+                        debugger;
+                         console.log($('#Consignee').val());
+                        $("#ConsigneeContact").val('');
+                        $("#ConsigneeAddress").val('');
+                        $("#ConsigneeAddress1").val('');
+                        $("#ConsigneeAddress2").val('');
+                        $("#ConsigneePhone").val('');
+                        $("#ConsigneeCountryName").val('');
+                        $("#ConsigneeCityName").val('');
+                        $("#autocomplete").val(data.LocationName);
+                        //$("#ConsigneeLocationName").val('');
+                    }
+                }
+            });
+
+        }
+   
+    $(document).ready(function () {
+
+    
+        
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $("#divvehicle").css({ "display": "none" });
+
+        
+        setThreeNumberDecimal($('#Weight'));
+
+        $("#vehreq").click(function () {
+            if ($("#vehreq").is(':checked')) {
+                $("#divvehicle").css({ "display": "block" });
+
+            }
+            else {
+                $("#divvehicle").css({ "display": "none" });
+
+            }
+        });
+
+        var m_names = new Array("Jan", "Feb", "Mar",
+"Apr", "May", "Jun", "Jul", "Aug", "Sep",
+"Oct", "Nov", "Dec");
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth()+1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();        
+        //var reqdate = curr_date + "-" + m_names[curr_month] + "-" + curr_year;
+
+        
+          
+        //$("#EnquiryDate").prop("disabled", true);
+
+        $("#VehicleID").change(function () {
+            $("#Vehicle").val($("#VehicleID option:selected").text());
+
+        });
+
+        $("#ChangeStatusId").change(function () {
+            
+            var changestatus = $(this).val();
+
+
+            if ($('#PickupRequestStatusId').val() == 1 && changestatus != 2) {
+                $(this).val($('#PickupRequestStatusId').val());
+                $('#lblstatuserror').html('Invalid Status Change!');
+                $('#divnoshow').addClass('hide');
+                $('#divassigned').addClass('hide');
+                $('#divcollected').addClass('hide');
+            }
+            else if ($('#PickupRequestStatusId').val() == 1 && changestatus == 2)  //assigned for collection
+            {
+                $('#lblstatuserror').html('');
+                $('#divnoshow').addClass('hide');
+                $('#divcollected').addClass('hide');
+                $('#divassigned').removeClass('hide');
+            }
+            else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 3) { //no show status
+                $('#divassigned').addClass('hide');
+                $('#divcollected').addClass('hide');
+                $('#divnoshow').removeClass('hide');
+            }
+            else if ($('#PickupRequestStatusId').val() == 2 && changestatus == 4) { //collected
+                $('#divassigned').addClass('hide');
+                $('#divnoshow').addClass('hide');
+                $('#divcollected').removeClass('hide');
+            }
+           else if ($('#PickupRequestStatusId').val() == 3 && changestatus == 4) { //collected
+                $('#divassigned').addClass('hide');
+                $('#divnoshow').addClass('hide');
+                $('#divcollected').removeClass('hide');
+           }
+            else {
+                $('#lblstatuserror').html('Invalid Status Change!');
+            }
+
+        })
+        //$('#CustomerID').select2({});
+
+    
+        $.ajax({
+            type: "GET",
+            url: "/PickUpRequest/GetConsignee",
+            datatype: "Json",            
+            success: function (response) {
+                debugger;
+                console.log(response);
+                consigneenames = response.data;
+                console.log(consigneenames);
+                $( "#Consignee" ).autocomplete({
+                    source: consigneenames
+                });
+            }
+        });
+
+        // $.ajax({
+        //    type: "GET",
+        //    url: "/PickUpRequest/GetCustomerName",
+        //    datatype: "Json",            
+        //    success: function (response) {
+        //        debugger;                
+        //        customernames = response.data;                
+        //        $( "#CustomerName" ).autocomplete({
+        //            source: customernames
+        //        });
+        //    }
+        //});
+        $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/QuickAWB/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            console.log(val);
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerName,
+                                CustomerId: val.CustomerID,
+                                type: val.CustomerType
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#CustomerName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#customer").val(i.item.label);
+                $('#CustomerID').val(i.item.CustomerId);
+                $('#hdnCustomerType').val(i.item.type);
+            },
+
+        });
+        //function reportselect() {
+        //    var reportname = $("#reportname")[0].value
+        //    var thelinks = $('a.large:contains("' + reportname + '")').filter(
+        //        function (i) { return (this.text === reportname) })
+        //    window.location = thelinks[0].href
+        //}
+        $('#CustomerName').change(function () {
+            debugger;
+           var custname = $('#CustomerName').val();
+           $.ajax({
+               type: "POST",
+               url: "/PickUpRequest/GetCustomerId",
+               datatype: "Json",
+               data: { id:  custname },
+               success: function (response) {
+                   if (response.data == 0) {
+                       $('#CustomerID').val(0);
+                       $('#CustomerName').val('');
+                       return;
+                   }
+                   else {
+                       $('#CustomerID').val(response.data);
+                       $.ajax({
+                           type: "POST",
+                           url: "/PickUpRequest/GetCustomerData",
+                           datatype: "Json",
+                           data: { id: $('#CustomerID').val() },
+                           success: function (data) {
+                               debugger;
+                               $("#custcode").val(data.CustCode);
+                               $("#Consignor").val(data.CustName);
+                               $("#ConsignorContact").val(data.ContactPerson);
+                               $("#ConsignorAddress").val(data.Address1);
+                               $("#ConsignorAddress1").val(data.Address2);
+                               $("#ConsignorAddress2").val(data.Address3);
+                               $("#ConsignorPhone").val(data.Phone);
+                               $("#ConsignorCountryName").val(data.CountryName);
+                               $("#ConsignorCityName").val(data.CityName);
+                               $("#ConsignorLocationName").val(data.LocationName);
+                               $("#OfficeTimeFrom").val(data.OfficeOpenTime);
+                               $("#OfficeTimeTo").val(data.OfficeCloseTime);
+
+                           }
+                       });
+                   }
+               }
+                                    
+           });
+                  
+                                                  
+        });
+
+        $('#btnsavestatus').click(function () {
+            debugger;
+            var statustext = $("#ChangeStatusId option:selected").text();
+            if (statustext == "Assigned For Collections") {
+                if ($('#AssignedEmployeeId').val() == 0) {
+                    $.notify("Select Employee Name", "warning");
+                    return;
+                }
+            }
+            else if (statustext == "Collected") {
+                if ($('#PickedEmployeeId').val() == 0) {
+                    $.notify("Select Collected Employee Name!", "error");
+                    return;
+                }
+                if ($('#txtpickuptime').val() == '') {
+                    $.notify("Select Collected Time!", "error");
+                    return;
+                }
+            }
+            else if (statustext == "Attempted - No Show") {
+                 if ($('#SubReasonStatusId').val()== 0) {
+                    $.notify("Select Reason!", "warning");
+                    return;
+                }
+            }
+            var statusobj = {
+                InScanID: $('#InScanID').val(),
+                ChangeStatusId: $('#ChangeStatusId').val(),
+                AssignedEmployee: $('#AssignedEmployeeId').val(),
+                PickedUpId: $('#PickedEmployeeId').val(), PickedUpDateTime: $('#txtpickuptime').val(),
+                SubStatusReason :$('#SubReasonStatusId').val()
+            };
+
+             $.ajax({
+                type: "POST",
+                url: "/PickUpRequest/SaveStatus",
+                datatype: "Json",
+                data: statusobj,
+                success: function (response) {
+                    debugger;                    
+                    if (response.status=="ok")
+                    {
+                        $.notify("Status Updated Successfully!", "success");
+                        var statustext = $("#ChangeStatusId option:selected").text();
+                        $('#PickupRequestStatusId').val($("#ChangeStatusId").val());
+                        $('#h1status').html(statustext);
+                    }
+                    else
+                        $.notify("Save Failed :" + response.message, "warning");
+
+                    
+                     $('#StatusModal').modal('hide');
+                }
+            });
+                                     
+
+        });
+
+        $("#btnsave").click(function () {
+            debugger;
+
+           // $('#validations').html('* Please fill mandatory fields!');
+
+           // if ($("#CustomerID").val() == "" || $("#CustomerID").val()==0 ||$("#CustomerID").val()=="0") {
+           //     $("#validations").show();
+           //     $('#CustomerName').focus();
+           //     return false;
+           // }
+           // else if ($("#Consignor").val() == "") {
+           //     $("#validations").show();
+           //     $("#Consignor").focus();
+           //     return false;
+           // }
+           // else if ($("#ConsignorLocationName").val() == "0") {
+
+           //     $("#validations").show();
+           //     $("#ConsignorLocationName").focus();
+           //     return false;
+           // }           
+           // else if ($("#ConsignorCityName").val() == "0") {
+           //     $("#validations").show();
+           //     $("#ConsignorCityName").focus();
+           //     return false;
+           // }
+           //else if ($("#ConsignorCountryName").val() == "") {
+           //     $("#validations").show();
+           //     $("#ConsignorCountryName").focus();
+           //     return false;
+           // }
+           //else if ($("#Consignee").val() == "") {
+
+           //     $("#validations").show();
+           //     $("#Consignee").focus();
+           //     return false;
+           // }
+           //     else if ($("#autocomplete").val() == "") {
+
+           //     $("#validations").show();
+           //     $("#autocomplete").focus();
+           //     return false;
+           // }
+           //  else if ($("#ConsigneeCityName").val() == "") {
+
+           //     $("#validations").show();
+           //     $("#ConsigneeCityName").focus();
+           //     return false;
+           // }
+           // else if ($("#ConsigneeCountryName").val() == "") {
+           //     $("#validations").show();
+           //     $("#ConsigneeCountryName").focus();
+           //     return false;
+           // }
+           // else if ($("#EnteredByID").val() == "") {
+
+           //     $("#validations").show();
+           //     return false;
+           // }
+           // // else if ($('#CollectedEmpID').val() == "")
+           // //{
+           // //      $("#validations").show();
+           // //    return false;
+           // //}
+           // //else if ($('#EmployeeID').val() == "")
+           // //{
+           // //    $("#validations").show();
+           // //    return false;
+           // //}
+           //else if ($('#ReadyTime').val() < $('#EnquiryDate').val())
+           // {                 
+           //      $("#validations").show();
+           //     $('#validations').html('Invalid Ship Ready Time!');                
+           //     return false;
+           // }
+           // else {
+           //     $("#validations").hide();
+           //     return true;
+           // }
+
+          
+            if ($('#ReadyTime').val() != '') {
+                if ($('#ReadyTime').val() < $('#EnquiryDate').val())
+            {                 
+                 $("#validations").show();
+                $('#validations').html('Invalid Ship Ready Time!');                
+                return false;
+            }
+            else {
+                $("#validations").hide();
+                return true;
+            }
+            }
+            
+
+
+        });
+
+        $('#ReadyTime').on('change',function () {
+            debugger;
+            if ($('#ReadyTime').val() < $('#EnquiryDate').val()) {
+                alert('Ship Ready Time Should be greater than Pickup Request Time!');
+            }
+        });
+
+        if ($('#InScanID').val() == "0" || $('#InScanID').val() == null) {
+                     
+            $("#EnquiryDate").val(reqdate);
+            $('#divsetting').addClass('hide');
+            $('#EnquiryDate').focus();
+        }
+        else {
+
+           
+        }
+
+    });
+</script>
+
+
+
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            <h1 class="headingfont">PickUp Request</h1>
+        </div>
+        <div class="col-md-5 pull-right text-right">
+            <h2 class="awb"><strong>@ViewBag.AWBNo</strong></h2>
+            <h5 id="h1status" style="color:red">@ViewBag.Status</h5>
+            
+        </div>
+
+    </div>
+
+
+    <div class="row">
+    <div class="pull-right setting">
+        <div class="navbar-custom-menu" id="divsetting">
+            <ul class="nav navbar-nav">
+
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                <ul class="dropdown-menu extended logout" style="top:0%!important">
+                    <!-- Menu Toggle Button -->
+
+
+                    <li>
+                        <a style="color:#35b8eb;cursor:pointer" onclick="ShowStatusModal()">Change Status</a>
+                    </li>
+
+                    <li><a style="color:#35b8eb">Print Request</a></li>
+                </ul>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
+                </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #f5f5f5;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    Change Status
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" style="padding-top: 5px">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-3">
+                                    Current Status
+                                </div>
+                                <div class="col-xs-7 col-sm-9">
+                                    @*@Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "Id", "PickRequestStatus", @ViewBag.StatusId), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "StatusId" })*@
+                                    @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "StatusId" })
+                                    @*  @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })*@
+                                </div>
+                            </div>
+                            <div class="row hide" id="divassigned" style="margin-top:10px">
+                                <div class="col-xs-5 col-sm-3">
+                                    Assigned Employee
+                                </div>
+                                <div class="col-xs-7 col-sm-9">
+                                    @Html.DropDownList("AssignedEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.AssignedEmployeeId), "Select", new { @class = "form-control", @id = "AssignedEmployeeId", @name = "AssignedEmployeeId" })
+
+                                </div>
+                            </div>
+                            <div class="row hide" id="divnoshow" style="margin-top:10px">
+                                <div class="col-xs-5 col-sm-3">
+                                    Reason
+                                </div>
+                                <div class="col-xs-7 col-sm-9">
+                                    @Html.DropDownList("SubReasonStatusId", new SelectList(@ViewBag.PickupSubReason, "Id", "StatusName", @ViewBag.SubReasonStatusId), "Select", new { @class = "form-control", @value = 1, @id = "SubReasonStatusId", @name = "SubReasonStatusId" })
+                                </div>
+                            </div>
+                            <div id="divcollected" class="hide" >
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-xs-5 col-sm-3">
+                                        Picked By
+                                    </div>
+                                    <div class="col-xs-7 col-sm-9">
+                                        @Html.DropDownList("PickedByEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.PickedByEmployeeId), "Select", new { @class = "form-control", @id = "PickedEmployeeId", @name = "PickedEmployeeId" })
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-xs-5 col-sm-3">
+                                        Picked Date Time
+                                    </div>
+                                    <div class="col-xs-7 col-sm-4">
+                                        <input type="text" id="txtpickuptime" value="" class="form-control" />
+                                        @*@Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 5px">                
+                <lable style="color:red" id="lblstatuserror" class="pull-left" ></lable>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus">Save Status</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+
+    @using (Html.BeginForm())
+    {
+        <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+   
+      
+
+<div class="row no-margin">
+    <div class="col-md-12">
+        <h3 style="color: white">Customer Detail</h3>
+        <hr />
+    </div>
+    
+</div>
+     
+
+
+        <div class="row no-margin">
+
+            @*       <div class="editor-label">
+            @Html.LabelFor(model => model.CustomerID)
+        </div>*@
+            <div class="col-md-3">
+                @Html.HiddenFor(model => model.InScanID)
+                @Html.HiddenFor(model => model.BranchID)
+                @Html.HiddenFor(model => model.DepotID)
+                @Html.HiddenFor(model => model.AcCompanyID)
+                @Html.HiddenFor(model => model.UserID)
+                @Html.HiddenFor(model => model.PickupRequestStatusId)
+                <label class="headinglabel">Request No</label>
+                @*@Html.TextBox(model => model.EnquiryNo, @ViewBag.RequestNo, new { @class = "form-control text-right" })*@
+                @Html.TextBox("EnquiryNo", (string)ViewBag.RequestNo, new { @class = "form-control text-right", @readonly = "readonly", @style = "font-weight:700;font-size:18px; " })
+
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Date</label>
+                @Html.TextBoxFor(model => model.EnquiryDate, new { @class = "form-control text-right",@required="true" })
+
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Request Type</label>
+                @Html.DropDownListFor(model => model.RequestSource, new SelectList(@ViewBag.RequestType, "Id", "RequestTypeName"), "Select", new { @class = "form-control" })
+
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Customer</label>
+                @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget"})
+                @if (Session["UserType"].ToString() == "Customer")
+                {
+                   
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget" , @readonly="readonly",@autocomplete="off"  })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget",@required="true", @autocomplete = "off" })
+                }
+
+
+                @*<input type="text" id="txtCustomerName" />*@
+                @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })*@
+            </div>
+
+
+        </div>
+
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3">
+                <label class="headinglabel">Customer Code</label>
+                @*<input type="text"  class="form-control" readonly />*@
+                @Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control txttarget", @readonly = "readonly", @id="custcode" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel required">Shipper</label>
+                @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control txttarget",@readonly="readonly" ,@required="true" })
+            </div>
+
+
+            <div class="col-md-3">
+                <label class="headinglabel">Office Open Time</label>
+                @Html.TextBoxFor(model => model.OfficeTimeFrom, new { @class = "form-control" ,@readonly="readonly"})
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Office Close Time</label>
+                @Html.TextBoxFor(model => model.OfficeTimeTo, new { @class = "form-control",@readonly="readonly" })
+            </div>
+        </div>
+            
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3">
+                <label class="headinglabel">Contact Person</label>
+                @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Flat/Building</label>
+                @Html.TextBoxFor(model => model.ConsignorAddress, new { @class = "form-control txttarget" })
+            </div>
+
+
+            <div class="col-md-3">
+                <label class="headinglabel">Street Name</label>
+                @Html.TextBoxFor(model => model.ConsignorAddress1, new { @class = "form-control txttarget" })
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Pincode</label>
+                @Html.TextBoxFor(model => model.ConsignorAddress2, new { @class = "form-control text-right txttarget" })
+            </div>
+        </div>
+        
+        <div class="row no-margin" style="padding-top: 10px">
+
+
+            <div class="col-md-3">
+                <label class="headinglabel">Phone No</label>
+                @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control text-right" })
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Origin Country</label>
+                @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control", id = "ConsignorCountryName",@required="true" })
+                                
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Origin City</label>                
+                @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control", id = "ConsignorCityName",@required="true" })
+                
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Origin Location</label> 
+                @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget",@required="true" })
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-md-12">
+                <h3 style="color: white">Shipment Detail Section</h3>
+                <hr />
+            </div>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+
+            <div class="col-md-3">
+                <label class="headinglabel">Shipment Ready Time</label>
+                @Html.TextBoxFor(model => model.ReadyTime, new { @class = "form-control text-right" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Document Type</label>
+                @Html.DropDownListFor(model => model.DocumentTypeId, new SelectList(@ViewBag.DocumentType, "Id", "DocumentTypeName"), "Select", new { @class = "form-control" })
+                @*@Html.DropDownList("DocumentType", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="Doc", Value = "Doc" },
+                    new SelectListItem{ Text="Non Doc", Value = "Non Doc" },
+
+
+                 }, "Select", new { @class = "form-control" })*@
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Weight</label>
+                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right",@onchange="setThreeNumberDecimal(this)" })
+                @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+            </div>
+
+
+        </div>
+        
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3 checkboxdesign" style="padding-top: 20px">
+                @Html.CheckBox("vehreq", new { @name = "vehreq" }) &nbsp
+                    <label class="headinglabel">Vehicle Required</label>
+
+            </div>
+            <div class="col-md-3" id="divvehicle">
+                <label class="headinglabel">Vehicle Type</label>
+                @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
+                @Html.HiddenFor(model => model.Vehicle)
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-md-12">
+                <h3 style="color: white">Consignee Details</h3>
+                <hr />
+            </div>
+        </div>
+        
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3">
+                <label class="headinglabel required">Consignee</label>                
+                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget" ,@onchange="GetConsigneeDetail()" ,@required="true"})
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Contact Person</label>
+                @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Flat/Building</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress, new { @class = "form-control txttarget" })
+            </div>
+
+
+            <div class="col-md-3">
+                <label class="headinglabel">Street Name</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress1, new { @class = "form-control txttarget" })
+            </div>
+
+        </div>
+        
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3">
+                <label class="headinglabel">Pincode</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress2, new { @class = "form-control text-right txttarget" })
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Phone No</label>
+                @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control text-right", @placeholder = "XXX-XXX-XXXX" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel required">Consignee Location</label>
+                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control", id = "autocomplete", @onFocus = "geolocate()" ,@required="true" })
+                @*<input class="form-control" id="autocomplete" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
+                @*@Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget" })*@
+            </div>
+           
+            <div class="col-md-3">
+                <label class="headinglabel required">Consignee City</label>
+                @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control", id = "ConsigneeCityName", @onFocus = "geoCitylocate()", @required="true" })
+                @*<input class="form-control" id="ConsigneeCityName" name="ConsigneeCityName" type="text" onFocus="geoCitylocate()" />*@
+                @*@Html.DropDownListFor(model => model.ConsigneeCityId, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
+            </div>
+
+
+        </div>
+             
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-3">
+                <label class="headinglabel required">Consignee Country</label>
+                @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control", id = "ConsigneeCountryName", @onFocus = "geoCountrylocate()" ,@required="true"})
+                @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
+                @*@Html.DropDownListFor(model => model.ConsigneeCountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+            </div>
+
+
+
+
+        </div> 
+        <hr>
+        <div class="row no-margin" style="padding-top: 10px">
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Entered By</label>
+                @Html.TextBoxFor(model => model.employeename, new { @class = "form-control", Value = @ViewBag.empname ,@Disabled="disabled" ,@required="true"})
+                @Html.HiddenFor(model => model.EnteredByID, new { Value = @ViewBag.empid })
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Assigned To</label>
+                @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3 hide">
+                <label class="headinglabel">Collected By</label>
+                @Html.DropDownListFor(model => model.CollectedEmpID, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3 hide">
+                <label class="headinglabel">Collected Time</label>
+                @Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control"})
+            </div>
+
+
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-6">
+                <label class="headinglabel">Remarks</label>
+                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-md-6 btn-right">
+
+                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "PickUpRequest", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+
+            </div>
+        </div>
+
+
+       
+    }
+
+</section>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@

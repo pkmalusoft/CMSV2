@@ -358,7 +358,7 @@ namespace CMSV2.Controllers
                 v.AcCompanyId = companyid;
                 v.SetupTypeID = vm.SetupTypeID;
                 //v.Text1 = vm.TextDoc;
-                if (v.SetupTypeID == 2)
+                if (v.SetupTypeID != 1)
                 {
                     v.Text1 = vm.TextDoc;
                 }
@@ -375,7 +375,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                if (v.SetupTypeID == 2)
+                if (v.SetupTypeID != 2)
                 {
                     v.Text1 = vm.TextDoc;
                 }

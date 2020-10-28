@@ -116,4 +116,12 @@ namespace CMSV2.Models
 
         public int paymentId { get; set; }
     }
+
+    public class AccountsReportParam
+    {
+        public int  AcHeadId { get; set; }
+        public string AcHeadName { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+    }
 }

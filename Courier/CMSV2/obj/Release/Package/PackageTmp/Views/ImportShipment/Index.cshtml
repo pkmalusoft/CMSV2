@@ -1,0 +1,121 @@
+﻿@model CMSV2.Models.DatePicker
+
+@{
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+
+    ViewBag.Title = "Index";
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+
+
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#ToDate').datepicker("setDate", new Date());
+    });
+
+    $(function () {
+        $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+
+
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Import Shipments</h1>
+
+</section>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="row no-margin">
+    <div class=" pull-right">
+        <div class="col-md-3">
+            <label class="headinglabel">Agent</label>
+            @Html.DropDownList("AgentId", new SelectList(ViewBag.Agents, "AgentID", "Name", @ViewBag.AgentId), "Select All", new { @class = "form-control", @value = 1, @id = "AgentId", @name = "AgentId" })
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel">Status</label>
+            @Html.DropDownList("StatusId", new SelectList(@ViewBag.Status, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+      </div>
+        <div class="col-md-3">
+            <label class="headinglabel">From Date</label>
+            <input id="FromDate" class="form-control" name="FromDate" type="text" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
+            @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+        </div>
+
+        <div class="col-md-3">
+            <label class="headinglabel">To Date</label>
+            <input type="text" id="ToDate" name="ToDate" class="form-control" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
+            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+        </div>
+      
+        <div class="pull-right" style="padding-top:32px;">
+            <p class="indexbtnpadding">
+                <input type="submit" value="Filter" class="btn btn-primary btnwidth" onclick="location.href='@Url.Action("Index", "PickupRequest")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " />
+            </p>
+        </div>
+    </div>
+    
+</div>
+    <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+        <table class="table table-responsive table-bordered tblfont" id="datatable-1" role="grid" aria-describedby="datatable-1_info">
+            @{ Html.RenderAction("Table", "ImportShipment");}
+
+        </table>
+    </div>
+   
+}
+
+<script>
+        $(document).ready(function () {
+            $("#importshipment").addClass("active");
+            @if(TempData["toasterMessage"] != null)
+            {
+                @:toasterMessage("@TempData["toasterMessage"].ToString()");
+            }
+        });
+
+        function deleteImport(id, controller) {
+            debugger;
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this " + controller,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "POST",
+                            datatype: "html",
+                            url: "Delete?id=" + id.toString(),
+                            data: id,
+                            success: function (data) {
+                                swal({ title: "Deleted!", text: controller + " has been deleted.", type: "success" }, function () { window.location = window.location.href; });
+                            }
+                        });
+                    } else {
+                        swal("Cancelled", controller + " is safe :)", "error");
+                    }
+                });
+
+        }
+</script>

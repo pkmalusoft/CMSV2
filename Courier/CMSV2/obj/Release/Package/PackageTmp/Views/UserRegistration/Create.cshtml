@@ -1,0 +1,364 @@
+﻿@model CMSV2.Models.UserRegistrationVM
+@{
+   
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+        var employeenames= [];
+    var customernames = [];
+    var agentnames = [];
+
+    function getpassword() {
+            $.ajax({
+                type: "GET",
+                url: "/UserRegistration/GetRandomPassword",
+                datatype: "Json",
+                success: function (response) {
+                    
+                    $('#Password').val(response.data);
+                    $('#txtpass').val(response.data);
+
+                }
+            });
+    }
+
+    $(document).ready(function () {
+
+         
+        $("#RoleID").focus();
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $(":password").css({ "border-radius": "5px" });
+
+        
+
+         $.ajax({
+            type: "GET",
+            url: "/PickUpRequest/GetCustomerName",
+            datatype: "Json",            
+            success: function (response) {
+                
+                customernames = response.data;                
+               
+            }
+          });
+
+           $.ajax({
+            type: "GET",
+            url: "/EmployeeMaster/GetEmployeeName",
+            datatype: "Json",            
+            success: function (response) {
+                
+                employeenames = response.data;                
+             
+            }
+           });
+
+        $.ajax({
+            type: "GET",
+            url: "/Agent/GetAgentName",
+            datatype: "Json",            
+            success: function (response) {
+                            
+                agentnames = response.data;                
+               
+            }
+          });
+
+          $("#RoleID").change(function () {
+            
+            var roleid = $("#RoleID").val();
+              console.log(roleid);
+            if (roleid == 13) {
+                $("#UserName").autocomplete({
+                    source: customernames
+                });
+                $('#lblusername').html('Customer Name');
+            }
+            else if (roleid == 14) {
+                $("#UserName").autocomplete({
+                    source: agentnames
+                });
+                $('#lblusername').html('Agent Name');
+            }
+            else {
+                   $("#UserName").autocomplete({
+                    source: employeenames
+                   });
+                $('#lblusername').html('Employee Name');
+            }
+
+          });
+        $('#apassshow').click(function () {
+            
+            if ($('#apassshow').html() == 'Show') {
+
+                if ($('#Password').val()!="")
+                    $('#txtpass').val($('#Password').val());
+
+                $('#Password').addClass('hide');
+                $('#txtpass').removeClass('hide');
+                $('#apassshow').html('Hide');
+            }
+            else {
+             $('#Password').removeClass('hide');
+                $('#txtpass').addClass('hide');
+                  $('#apassshow').html('Show');
+            }
+            
+        });
+
+        $('#txtpass').change(function () {
+
+            $('#Password').val($('#txtpass').val());
+
+        })
+
+
+        $('#UserName').change(function () {
+
+            if ($('#UserName').val() != "" && $('#RoleID').val() != 0) {
+                $.ajax({
+                    type: "Post",
+                    url: "/UserRegistration/GetUserEmail",
+                    data: { username: $('#UserName').val(), roleid: $('#RoleID').val() },
+                    datatype: "Json",
+                    success: function (response) {
+                        
+
+                        if (response.status == true) {
+                            $('#EmailId').val(response.data);
+                            $('#UserReferenceId').val(response.refid);
+                        }
+                        else {
+                            $('#UserReferenceId').val(0);
+                            $('#EmailId').val('');
+                            $.notify(response.message, "warning");
+                        }
+
+                    }
+                });
+            }
+
+        });
+        $("#btnsave").click(function () {
+            var uname = $("#UserName").val();
+            var pass = $("#Password").val();
+            var role = $("#RoleID option:selected").val();
+            //var phone = $("#Phone").val();
+            var email = $("#EmailId").val();
+            var isactive = $("#IsActive option:selected").val();          
+
+            if (role == "") {
+                $("#alert").show();
+                $('#RoleID').focus();
+                return false;
+            }
+            else if (uname == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if ($('#UserReferenceId').val() == 0) {
+                $("#alert").show();
+                $('#UserName').focus();
+                return false;
+            }
+            else if (pass == "" && $('#UserID').val() == 0) {
+                $("#alert").show();
+                $('#Password').focus();
+                return false;
+            }
+
+
+            //else if (phone == "") {
+            //    $("#alert").show();
+            //    return false;
+            //}
+            else if (email == "") {
+                $("#alert").show();
+                return false;
+
+            }
+            else if (isactive == "") {
+                $("#alert").show();
+                return false;
+            }
+            else {
+                $("#alert").hide();
+                return true;
+            }
+                //$.ajax({
+                //    type: "Get",
+                //    url: "/EmployeeMaster/CheckUserEmailExist",
+                //    datatype: "Json",
+                //    data: { EmailId: $('#EmailId').val() },
+                //    success: function (data) {
+                //        
+                //        console.log(data);
+                //        if (data == "true") {
+                //            $("#validations").html("User Emailid already exists!");
+                //            $("#validations").show();
+                //            return false;
+                //        }
+                //        else {
+                //            $("#validations").hide();
+                //            return true;
+                //            //                var valdata = $("#Myform").serialize();
+                //            ////to get alert popup
+                //            //alert(valdata);
+                //            //$.ajax({
+                //            //    url: "/CustomerMaster/Create",
+                //            //    type: "POST",
+                //            //    dataType: 'json',
+                //            //    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                //            //    data: valdata
+                //            //});
+                //            //                $('#Myform').trigger('submit')
+                //            //return true;
+                //        }
+
+
+
+                //    }
+                //});
+            //else {
+            //    $("#alert").hide();
+            //    return true;
+           
+        });
+
+        
+        if (@ViewBag.EditMode == true) {
+
+            setTimeout(function () {
+                $('#RoleID').trigger('change');
+                $('#RoleID').attr('disabled', 'disabled');
+            }, 1000)
+            $('#btnsave').val('Update');
+        }
+        else {
+            $('#btnsave').val('Create');
+        }
+    });
+</script>
+
+
+<section class="content-header">
+    
+    <h1 class="headingfont"> @ViewBag.Title </h1>
+    
+</section>
+
+
+
+<section class="content">
+    @if (TempData["SuccessMSG"] != null)
+    {
+        <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4><i class="icon fa fa-check"></i>Alert!</h4>
+            <div id="divFinalMsg">@TempData["SuccessMSG"]</div>
+        </div>
+    }
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["ErrorMsg"]", "error");
+                      });
+        </script>
+    }
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+        <fieldset>
+
+            <div class="row no-margin">
+
+                <div class="col-md-6">
+
+                    @Html.HiddenFor(model => model.UserReferenceId)
+                    @Html.HiddenFor(model => model.UserID)
+                    <label class="required headinglabel">Role</label>
+
+
+                    @Html.DropDownListFor(model => model.RoleID, new SelectList(ViewBag.UserRole, "RoleID", "RoleName"), "Select Role", new { @class = "form-control" })
+
+
+                    @Html.ValidationMessageFor(model => model.RoleID)
+                </div>
+
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-6">
+
+                    <label class="required headinglabel" id="lblusername">User Name</label>
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserName)
+                </div>
+            </div>
+
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-6">
+                    <label class="required headinglabel">Email</label>
+                    @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmailId)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+
+                <div class="col-md-6">
+                    <label class="required headinglabel">Password <a id="apassshow">Show</a> </label>
+                    <input type="text" id="txtpass" value="@Model.Password" class="form-control hide" />
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+                <div class="col-md-6" style="padding-top:40px">
+                    <a href="javascript:void(0);" onclick="getpassword();" id="btngenerate">Generate Password</a>
+                </div>
+                @*<div class="col-md-3">
+                        <label class="required headinglabel">Phone</label>
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control textright txttarget" })
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>*@
+
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-4 checkboxdesign" style="padding-top:20px">
+
+                    @Html.CheckBox("EmailNotify", new { @name = "EmailSend" }) &nbsp <label class="headinglabel">Send Notification to user by Email</label>
+                    @Html.ValidationMessageFor(model => model.EmailNotify)
+
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-6 checkboxdesign">
+
+                    @Html.CheckBox("IsActive", new { @name = "StatusActive" }) &nbsp <label class="headinglabel">Is Active</label>
+                    @Html.ValidationMessageFor(model => model.IsActive)
+
+                </div>
+
+            </div>
+            <div class="row no-margin" style="padding-top:20px">
+                <div class="col-md-12 btn-right">                    
+                        <input type="submit" value="Create" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;                    
+
+                    <a href='@Url.Action("Index", "UserRegistration", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
+            </div>
+
+        </fieldset>
+    }
+
+</section>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

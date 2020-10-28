@@ -1,0 +1,421 @@
+﻿@model CMSV2.Models.ForwardingAgentInvoiceVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        /*code*/
+        //var basewt = $("#BaseWt").val();
+        //var baserate = $("#BaseRate").val();
+        //$("#btnsave").click(function () {
+        //    if (contractid == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else if (zonechartid == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else if (prodtypeid == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else if (fagentid == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else if (basewt == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else if (baserate == "") {
+        //        $("#validations").show();
+        //        return false;
+        //    }
+        //    else {
+        //        $("#validations").hide();
+        //        return true;
+        //    }
+        //});
+
+
+        //    $("#BaseWt").blur(function () {
+        //        var wt = $(this).val();
+        //        var newwt = parseFloat(wt) + 0.001;
+        //        $("#addwtfrom").val(newwt.toFixed(3));
+        //        $("#BaseWt").val(parseFloat(wt).toFixed(3));
+        //        $("#BaseRate").focus();
+
+        //    });
+        //    $("#BaseRate").blur(function () {
+        //        var wt = $(this).val();
+
+        //        $("#BaseRate").val(parseFloat(wt).toFixed(3));
+
+        //    });
+
+
+        //    $("#ContractRateTypeID").change(function () {
+        //        $("#ZoneChartID").empty();
+        //        $('#ZoneChartID').append('<option value="0">Select</option>');
+
+        //        $.ajax({
+        //            type: "POST",
+        //            url: "/CustomerRatesMaster/GetZoneByCustomer",
+        //            datatype: "Json",
+        //            data: { contractid: $("#ContractRateTypeID option:selected").val() },
+        //            success: function (data) {
+
+
+        //                $.each(data, function (index, value) {
+        //                    $('#ZoneChartID').append('<option value="' + value.ZoneID + '">' + value.ZoneName + '</option>');
+        //                });
+
+        //            }
+        //        });
+        //    });
+
+        //    $("#contractrate").blur(function () {
+        //        var rowCount = $('#details tr').length - 1;
+
+        //        if (rowCount == 0 || $("#hfAddCustomerRate").val() == 0) {
+        //            if ($("#BaseRate").val() != "" && $("#contractrate").val() != "") {
+        //                var AddittionalRate = parseFloat($("#contractrate").val()) - parseFloat($("#BaseRate").val());
+
+        //                $("#addrate").val(AddittionalRate.toFixed(3));
+        //            }
+        //        }
+        //        else {
+
+
+        //            var decAdditionalRate;
+        //            var x = $("#details tr:last td:nth-child(4)");
+
+        //            var c = $(x).text();
+        //            decAdditionalRate = parseFloat($("#contractrate").val()) - parseFloat(c);
+
+        //            $("#addrate").val(decAdditionalRate.toFixed(3));
+        //        }
+
+        //        var w = $(this).val();
+        //        $(this).val(parseFloat(w).toFixed(3));
+
+        //        $("#hfAddCustomerRate").val(parseInt(rowCount) + 1);
+        //    });
+
+        //    $("#addwtto").blur(function () {
+        //        if ($(this).val() < $("#addwtfrom").val()) {
+        //            $(".outrange").show();
+        //            $(this).focus();
+        //        }
+        //        else {
+        //            var wt = $(this).val();
+        //            $(this).val(parseFloat(wt).toFixed(3));
+        //            $(".outrange").hide();
+
+        //            var addwtfrm = $("#addwtfrom").val();
+        //            var incr = parseFloat(wt) - parseFloat(addwtfrm);
+
+        //            $("#incrwt").val(parseFloat(incr).toFixed(3));
+
+        //            $("#incrwt").focus();
+        //        }
+        //    });
+
+        //    $("#incrwt").blur(function () {
+        //        var wt = $(this).val();
+        //        $(this).val(parseFloat(wt).toFixed(3));
+
+        //    });
+
+
+
+
+
+        //    $("#btnadd").click(function () {
+        //        //var newaddrate;
+        //        //var contract;
+        //        //var prevrate;
+
+        //        //if (flagedit == 1) {
+        //        //    var row = $("#details").find("tr:eq('" + currentindex + "')");
+        //        //    var prevrow = $("#details").find("tr:eq('" + currentindex - 1 + "')");
+        //        //    var newrow = $("#details").find("tr:eq('" + currentindex + 1 + "')");
+        //        //    alert(currentindex);
+        //        //    alert(lastindex);
+        //        //    alert("Hiii");
+        //        //    if (currentindex == 1 && currentindex == lastindex) {
+                    
+        //        //        contract = $("#contractrate").val();
+        //        //        prevrate = $("#BaseRate").val();
+        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
+
+
+        //        //        $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
+        //        //        $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
+        //        //        $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
+        //        //        $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
+
+        //        //        $(row).find("td:eq(0)").text($("#addwtfrm").val());
+        //        //        $(row).find("td:eq(1)").text($("#addwtto").val());
+        //        //        $(row).find("td:eq(2)").text($("#incrwt").val());
+        //        //        $(row).find("td:eq(3)").text($("#contractrate").val());
+        //        //        $(row).find("td:eq(4)").text($("#addrate").val());
+
+
+        //        //    }
+        //        //    else if (currentindex == lastindex && lastindex > 1) {
+        //        //        contract = $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        prevrate = $(prevrow).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
+
+        //        //        $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
+        //        //        $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
+        //        //        $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
+        //        //        $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
+
+        //        //        $(row).find("td:eq(0)").text($("#addwtfrm").val());
+        //        //        $(row).find("td:eq(1)").text($("#addwtto").val());
+        //        //        $(row).find("td:eq(2)").text($("#incrwt").val());
+        //        //        $(row).find("td:eq(3)").text($("#contractrate").val());
+        //        //        $(row).find("td:eq(4)").text($("#addrate").val());
+        //        //    }
+        //        //    else if ((currentindex < lastindex) && currentindex==1 ) {
+        //        //        contract = $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        prevrate = $(prevrow).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
+        //        //    }
+
+
+             
+        //        //    $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
+        //        //    $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
+        //        //    $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
+        //        //    $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
+        //        //    $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
+
+        //        //    $(row).find("td:eq(0)").text($("#addwtfrm").val());
+        //        //    $(row).find("td:eq(1)").text($("#addwtto").val());
+        //        //    $(row).find("td:eq(2)").text($("#incrwt").val());
+        //        //    $(row).find("td:eq(3)").text($("#contractrate").val());
+        //        //    $(row).find("td:eq(4)").text($("#addrate").val());
+
+        //        //    lastindex = $("#details tr:last").index('tr');
+
+               
+
+
+        //        //    currentindex = 0;
+        //        //    nextindex = 0;
+        //        //    lastindex = 0;
+                
+        //        //    flagedit = 0;
+        //        //}
+        //        //else {
+        //        if (CheckForNull() == true) {
+        //            var i = $('#details tr').length - 1;
+
+        //            $("#details").append('<tr>' + '<td>' + $("#addwtfrom").val() + '<input type="hidden" value=' + $("#addwtfrom").val() + ' name="FAgentRateDetails[' + i + '].AddWtFrom"></td>' +
+        //                '<td>' + $("#addwtto").val() + '<input type="hidden" value=' + $("#addwtto").val() + ' name="FAgentRateDetails[' + i + '].AddWtTo"></td>' + '<td>' + $("#incrwt").val() + '<input type="hidden" value=' + $("#incrwt").val() + ' name="FAgentRateDetails[' + i + '].IncrWt"></td>' + '<td>' + $("#contractrate").val() + '<input type="hidden" value=' + $("#contractrate").val() + ' name="FAgentRateDetails[' + i + '].ContractRate"></td>' + '<td>' + $("#addrate").val() + '<input type="hidden" class="crate" value=' + $("#addrate").val() + ' name="FAgentRateDetails[' + i + '].AddRate"></td><td><input type="button" class="btnedit" onclick="check(this)" value="Click"></td></tr>');
+
+        //            $("#addwtfrom").val('');
+        //            $("#addwtto").val('');
+        //            $("#incrwt").val('');
+        //            $("#contractrate").val('');
+        //            $("#addrate").val('');
+
+        //            var x = $("#details tr:last td:nth-child(2)");
+        //            var c = $(x).text();
+        //            var decAdditionalRate = (parseFloat(c) + 0.001).toFixed(3);
+
+        //            $("#addwtfrom").val(decAdditionalRate);
+        //        }
+        //        //}
+
+        //        $("#addwtto").focus();
+        //    });
+
+
+        //    function CheckForNull() {
+
+        //        if ($("#addwtfrom").val() == "" || $("#addwtto").val() == "" || $("#incrwt").val() == "" || $("#contractrate").val() == "" || $("#addrate").val() == "") {
+        //            $(".error").show();
+        //            return false;
+        //        }
+        //        else {
+        //            $(".error").hide();
+        //            return true;
+        //        }
+        //    }
+        //    //$(".btnedit").click(function () {
+        //    //    alert("hii");
+        //    //    var x = $(this).parent("<td>").parent("<tr>");
+
+        //    //    var x1 = $(x).find("td:first-child").text();
+        //    //    alert(x1);
+        //    //});
+
+
+        //});
+
+        //function check(x)
+        //{
+       
+        //    var crow = $(x).parent("td").parent("tr");
+        //    currentindex = $(crow).index('this');
+        //    nextindex = parseInt(currentindex) + 1;
+
+        //    var addwtfrm = $(crow).find("td:eq(0)").find('input[type=hidden]').val();
+        //    var addwtto = $(crow).find("td:eq(1)").find('input[type=hidden]').val();
+        //    var incrwt = $(crow).find("td:eq(2)").find('input[type=hidden]').val();
+        //    var contract = $(crow).find("td:eq(3)").find('input[type=hidden]').val();
+        //    var addrate = $(crow).find("td:eq(4)").find('input[type=hidden]').val();
+
+        //    $("#addwtfrom").val(addwtfrm);
+        //    $("#addwtto").val(addwtto);
+        //    $("#incrwt").val(incrwt);
+        //    $("#contractrate").val(contract);
+        //    $("#addrate").val(addrate);
+        //    flagedit = 1;
+
+  
+    }
+       
+    /*code*/
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Forwarding Agent Invoice</h1>
+
+</section>
+
+<section class="content">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        
+        <fieldset>
+
+            <div class="row no-margin">
+
+         <div class="col-md-3">
+                  <label class="headinglabel required "> Invoice No</label>
+                    @Html.TextBoxFor(model=>model.FAInvoiceNo, new {@class="form-control txttarget"})
+                    @Html.ValidationMessageFor(model => model.FAInvoiceNo)
+                </div>
+            <div class="col-md-3">
+              <label class="headinglabel required ">Transaction Date</label>
+                  @Html.TextBoxFor(model=>model.FAInvoiceDate, new {@class="form-control txttarget"})
+               @Html.ValidationMessageFor(model => model.FAInvoiceDate)
+                </div>
+
+                <div class="col-md-3">
+              <label class="headinglabel required ">Agent Date</label>
+                  @Html.TextBoxFor(model=>model.FAInvoiceDate, new {@class="form-control txttarget"})
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Fule Surcharge %</label>
+                    @Html.TextBoxFor(model=>model.FuelSurchargePer, new {@class="form-control txttarget"})
+                </div>
+</div>
+             <div class="row no-margin" style="padding-top:10px">
+                  <div class="col-md-3">
+                    <label class="headinglabel required">From Date</label>
+                     @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.FromDate)
+                </div>
+
+                 <div class="col-md-3">
+                    <label class="headinglabel required">To date</label>
+                     @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.ToDate)
+                </div>
+              </div>
+            
+
+            <div class="row no-margin" style="padding-top: 30px">
+                
+                <div class="col-md-3">
+                    <label class="headinglabel required">Column</label>
+                    @Html.DropDownListFor(model=>model.Column, new SelectList(@ViewBag.Column,"ColumnID", "Column"),"Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Column)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Value</label>&nbsp;&nbsp; 
+                    @Html.DropDownListFor(model=>model.value, new SelectList(@ViewBag.Value,"ValueID","Value"),"Select",new{@class="form-control"})
+                    @Html.ValidationMessageFor(model => model.Column)
+                </div>
+              @*  <div class="col-md-3">
+                    <label class="headinglabel">Forwarding Charge</label>
+                    @Html.TextBoxFor(model=>model.ForwardingCharge, new {@class="form-control txttrget"})
+
+                </div>*@
+
+                <div class="col-md-3">
+                    <label class="headinglabel">Fuel</label>
+                    @Html.TextBoxFor(model=>model.Fuel,new {@class="form-control txttrget"})
+
+                </div>
+               
+
+            </div>
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-3">
+                     
+                    <label class="headinglabel">Descrepancy</label>
+                  @*  @Html.TextBoxFor(model=>model.Descrepancy,new {@class="form-control txttrget"})*@
+
+                </div>
+                
+                <div class="col-md-3">
+                     
+                    <label class="headinglabel">Original Amount</label>
+                 @*   @Html.TextBoxFor(model=>model.OriginalAmt,new {@class="form-control txttrget"})*@
+
+                </div>
+
+                 <div class="col-md-3">
+                     
+                    <label class="headinglabel">Total Amount</label>
+                  @*  @Html.TextBoxFor(model=>model.Total,new {@class="form-control txttrget"})*@
+
+                </div>
+
+                 <div class="col-md-3">
+                     
+                    <label class="headinglabel">AWBs To</label>
+                   @* @Html.TextBoxFor(model=>model.FAAWBNO,new {@class="form-control txttrget"})*@
+
+                </div>
+
+
+            </div>
+
+             <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12">
+                           
+                              <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "AgentCollectionRate", new { id = 0 })' class="btn btn-primary btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                               
+                          
+                        </div>
+                 </div>
+
+            
+
+            </fieldset>
+    }
+    </section>

@@ -1,0 +1,1187 @@
+﻿@model CMSV2.Models.CustomerRcieptVM
+
+@{
+    ViewBag.Title = "CustomerReciept";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var staffmodel = ViewBag.StaffNoteModel as IEnumerable<CMSV2.Models.StaffNoteModel>;
+    var spath = "";// System.Configuration.ConfigurationManager.AppSettings["spath"].ToString();
+    var CustomerNotification = ViewBag.CustomerNotification as IEnumerable<CMSV2.Models.CustomerNotificationModel>;
+    var CustomerDetails = ViewBag.CustomerDetail; /*as  CMSV2.Models.CustomerMaster()*/
+}
+
+
+@*<script src="@Url.Content("~/Scripts/angular.js")"></script>
+    <script src="@Url.Content("~/MyJsFiles/CustomerReceiptJS.js")"></script>*@
+<style>
+    .form_field {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+        padding: 16px;
+        margin-top: 21px;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 17px;
+        color: #1b1919 !important;
+    }
+
+    #staffmodelbody {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+</style>
+<script type="text/javascript">
+    var customernames=[];
+    $(document).ready(function () {
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $("textarea").css({ "border-radius": "5px" });
+          $(".chkAllocate").prop("checked", true);
+        //$("#FMoney").attr("readonly", false);
+
+        if ('@Model.RecPayID' == 0) {
+            $("#divCash").css({ "display": "none" });
+            $("#divBank").css({ "display": "block" });
+
+            $("#CurrencyId").val('@Session["BaseCurrencyId"]');
+            $("#EXRate").val('1.00');
+
+        } else {
+
+            if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
+                $("#divCash").css({ "display": "block" });
+                $("#divBank").css({ "display": "none" });
+                $("#ChequeNo").attr({ "disabled": true })
+                $("#ChequeDate").attr({ "disabled": true })
+                $("#PaymentMode").val(2);
+
+            } else {
+                $("#divCash").css({ "display": "none" });
+                $("#divBank").css({ "display": "block" });
+
+            }
+        }
+        var wt = $("#EXRate").val();
+        if (wt == null || wt == "") {
+            $("#EXRate").val("0.00");
+        } else {
+            $("#EXRate").val(parseFloat(wt).toFixed(2));
+        }
+
+        $("#EXRate").blur(function () {
+            var wt = $(this).val();
+            $("#EXRate").val(parseFloat(wt).toFixed(2));
+
+        });
+        $("#FMoney").blur(function () {
+            var wt = $(this).val();
+            if (wt == null || wt == "") {
+                $("#FMoney").val("0.00");
+            } else {
+                $("#FMoney").val(parseFloat(wt).toFixed(2));
+            }
+        });
+
+        $(".chkAllocate").click(function () {
+            if ($(".chkAllocate").is(':checked')) {
+
+                $("#FMoney").attr("readonly", false);
+                $(".readonlyamt").show();
+                $(".textamt").hide();
+            }
+            else {
+
+                $("#FMoney").attr("readonly", true);
+                $(".readonlyamt").hide();
+                $(".textamt").show();
+            }
+        });
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/PickUpRequest/GetCustomerName",
+        //    datatype: "Json",            
+        //    success: function (response) {
+        //        debugger;                
+        //        customernames = response.data;                
+        //        $("#CustomerName").autocomplete({
+        //            source: customernames
+        //        });
+        //    }
+        //});
+
+         $("#customerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CustomerReceipt/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {                                                       
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerName,
+                                ID: val.CustomerID,
+                                type:val.CustomerType
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus:true,           
+            select: function (e, i) {
+                e.preventDefault();
+                $("#customerName").val(i.item.label);
+                $('#CustomerID').val(i.item.ID);
+                //$('#hdnCustomerType').val(i.item.type);
+                //if ($('#hdnCustomerType').val() == "CR") {
+                //    $("#Consignor1").css('color', 'blue');
+                //}
+                //else if ($('#hdnCustomerType').val() == "CS") {
+                //    $("#Consignor1").css('color', 'red');
+                //}
+                //else {
+                //    $("#Consignor1").css('color', 'black');
+                //}
+                
+            },
+           
+        });
+        
+        $("#customerName").change(function () {
+            var ID = $('#CustomerID').val();
+       $.ajax({
+           type: "GET",
+            url: '/CustomerReceipt/GetTradeInvoiceOfCustomer/' + ID,                          
+           success: function (data) {
+               $('#tbl1 tr:gt(0)').remove();
+               //$scope.Orders = data;
+               for (var i = 0; i < data.length; i++) {
+                   var date = new Date(data[i].date);
+                   var tempdate = new Date(date).getDate() + '/' + (new Date(date).getMonth() + 1) + '/' + new Date(date).getFullYear();
+
+                   $('#tbl1').append('<tr>' +
+                       '<td>' + data[i].InvoiceNo + ' <input id="" name="CustomerRcieptChildVM[' + i + '].JobID" value=' + data[i].JobID + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceDetailID + ' type="hidden"></td>' +
+                       '<td>' + data[i].DateTime + '<input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
+                       '<td>' + parseFloat(data[i].InvoiceAmount).toFixed(2) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value=' + data[i].InvoiceAmount + ' type="hidden" class="AmountToBeRecieved"></td>' +
+                       '<td>' + parseFloat(data[i].AmountReceived).toFixed(2) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden"></td>' +
+                       '<td>' + parseFloat(data[i].Balance).toFixed(2) + '<input id="" name="CustomerRcieptChildVM[' + i + '].Balance" value=' + data[i].Balance + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden"></td>' +
+                       //'<td>' + data[i].Amount + '<input id="" name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"></td>' +
+                       '<td> <input type="text" onBlur="CheckAmt(this)"  class="amt txtNum text-right AmountReceived" name=CustomerRcieptChildVM[' + i + '].Amount>' +
+                       '<td> <input type="text"  onBlur="CheckAmt1(this)" class="amt1 txtNum text-right AdjustmentAmount" name=CustomerRcieptChildVM[' + i + '].AdjustmentAmount>' +
+
+                       '<tr>');
+                   //hideLoading();
+               }
+           }
+        });
+
+    });
+        // $('#CustomerName').change(function () {
+        //    debugger;
+        //   var custname = $('#CustomerName').val();
+        //   $.ajax({
+        //       type: "POST",
+        //       url: "/PickUpRequest/GetCustomerId",
+        //       datatype: "Json",
+        //       data: { id:  custname },
+        //       success: function (response) {
+        //           if (response.data == 0) {
+        //               $('#CustomerId').val(0);
+        //               //$('#CustomerName').val('');
+        //               return;
+        //           }
+        //           else {
+        //               $('#CustomerId').val(response.data);
+             
+        //           }
+        //       }
+                                    
+        //   });
+                  
+                                                  
+        //});
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/CustomerReceipt/GetInvoiceOfCustomer",
+
+        //    datatype: "Json",
+        //    data: { ID: $('#RecPayID').val()},
+        //    success: function (data) {
+        //        debugger;
+        //        for (var i = 0; i < data.length; i++) {
+        //            $('#tbl1').append('<tr>' +
+        //                                       '<td>' + data[i].InvoiceNo + ' <input id="" name="customerRcieptVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden"></td>' +
+        //                                       '<td>' + data[i].JobCode + '<input id="" name="customerRcieptVM[' + i + '].JobCode" value=' + data[i].JobCode + ' type="hidden"></td>' +
+        //                                       '<td>' + data[i].InvoiceDate + '<input id="" name="customerRcieptVM[' + i + '].InvoiceDate" value=' + data[i].InvoiceDate + ' type="hidden"></td>' +
+        //                                       '<td>' + data[i].AmountToBeRecieved + '<input id="" name="customerRcieptVM[' + i + '].AmountToBeRecieved" value=' + data[i].AmountToBeRecieved + ' type="hidden"></td>' +
+        //                                       '<td>' + data[i].AmtPaidTillDate + '<input id="" name="customerRcieptVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmtPaidTillDate + ' type="hidden"></td>' +
+        //                                       '<td>' + data[i].Balance + '<input id="" name="customerRcieptVM[' + i + '].Balance" value=' + data[i].Balance + ' type="hidden"></td>' +
+        //                                        //'<td>' + data[i].Amount + '<input id="" name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"></td>' +
+        //                                       '<td> <input type="text" id="" name=customerRcieptVM[' + i + '].Amount> <input  name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"> ' +
+
+        //                                       '<tr>');
+        //        }
+        //    }
+        //});
+
+        $(".amt").blur(function () {
+            var curror = $(this).parent("div").parent("td").parent("tr");
+            var amt = parseFloat($(curror).find("td").eq(2).find("div").find('input[type=hidden]').val());
+
+            var allocateamt = parseFloat($(curror).find("td").eq(3).find("div").find(".amt").val());
+            if (allocateamt == "") {
+                allocateamt = 0;
+            }
+
+            if (allocateamt > amt) {
+                $(curror).find("td").eq(3).find("div").find(".amt").val(amt);
+
+            }
+            else {
+                $(curror).find("td").eq(3).find("div").find(".amt").val(allocateamt);
+            }
+        });
+
+
+        $(".aamt").blur(function () {
+
+            var amt = parseFloat($(this).val());
+            var f = 0;
+            $("#tbl1 tr").not(":first").each(function () {
+
+                var a = $(this).find("td").eq(5).text();
+                if (a == "")
+                    a = 0;
+                if (a < amt && f == 0) {
+
+                    $(this).find("td").eq(6).find(".amt").val(parseFloat(a).toFixed(2));
+                    amt = amt - parseFloat(a);
+                }
+                else {
+                    f = 1;
+                }
+            });
+        });
+
+
+        $(".aeamt").blur(function () {
+            var amt = parseFloat($(this).val());
+            var f = 0;
+            $("#tbl1 tr").not(":first").each(function () {
+
+                var a = $(this).find("td").eq(2).find("div").find('input[type=hidden]').val();
+                if (a == "")
+                    a = 0;
+                if (a < amt && f == 0) {
+                    {
+                        $(this).find("td").eq(3).find("div").find(".amt").val(parseFloat(a).toFixed(2));
+                        amt = amt - parseFloat(a);
+                    }
+                }
+                else {
+                    f = 1;
+                }
+            });
+        });
+
+
+        if ($("#RecPayID").val() > 0) {
+            if ($("#StatusEntry").val() == "BK") {
+                $("#Bank").prop('checked', true);
+                $("#Cash").prop('checked', false);
+                $("#Bank").trigger("click");
+            }
+            else if ($("#StatusEntry").val() == "CS") {
+                $("#Cash").prop('checked', true);
+                $("#Bank").prop('checked', false);
+                $("#Cash").trigger("click");
+            }
+
+
+            var money = parseFloat($("#FMoney").val());
+            $("#FMoney").val(money.toFixed(2));
+
+            var exrate = parseFloat($("#EXRate").val());
+            $("#ExRate").val(exrate.toFixed(2));
+        }
+
+        Comma($(".aeamt").val());
+
+        $('.txtNum').blur(function () {
+            if (isNaN(parseInt($(this).val()))) {
+                $(this).val('0.00');
+            } else {
+                var amt = parseFloat($(this).val());
+                $(this).val(amt.toFixed(2));
+            }
+        });
+
+        function ValidateTotal() {
+            var TotalAmount = 0;
+            $('#tbl1 tr').not(':first').each(function (i, obj) {
+                var AmountToBeRecieved = parseFloat($(obj).find('.AmountToBeRecieved').val());
+                var AmountReceived = parseFloat($(obj).find('.AmountReceived').val());
+
+
+                if (isNaN(AmountToBeRecieved) == false && isNaN(AmountReceived) == false) {
+                    if (AmountReceived > AmountToBeRecieved) {
+                        $('#msg1').show();
+                        $('#msg1').text('Amount cannot be greater than Invoice Amount.');
+                        return false;
+                    } else {
+                        $('#msg1').hide();
+                    }
+                }
+
+                if (isNaN(AmountReceived) == false) {
+                    TotalAmount = TotalAmount + AmountReceived;
+                }
+            });
+
+            var TotalInvoiceAmount = parseFloat($('.TotalInvoiceAmount').val());
+            if (TotalAmount > TotalInvoiceAmount) {
+                $('#msg1').show();
+                $('#msg1').text('Sum of Amount cannot be greater than Total Invoice Amount');
+                return false;
+            } else {
+                return true;
+            }
+        }
+        $('#tbl1').on('blur', '.amt', function () {
+            var result = ValidateTotal();
+        });
+
+        $('form').submit(function (e) {
+            debugger;
+            var result = ValidateTotal();
+            if (result == false) {
+                e.preventDefault();
+            }
+        });
+
+    });
+</script>
+
+<script>
+    function Comma(Num) { //function to add commas to textboxes
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        $(".aeamt").val(x1 + x2);
+    }
+</script>
+
+<script type="text/javascript">
+    function CheckAmt(x) {
+        var thisval = $(x).val();
+
+        if (thisval == null || thisval == "") {
+            $(x).val('0.00');
+        } else {
+            $(x).val(parseFloat(thisval).toFixed(2));
+        }
+        var curror = $(x).parent("td").parent("tr");
+        var exactamt = $(curror).find("td").eq(5).text();
+        var amt = parseFloat($(curror).find("td").eq(5).text());
+        var allocateamt = parseFloat($(curror).find("td").eq(6).find(".amt").val());
+        if (exactamt.trim() == null || exactamt.trim()  == "") {
+            $(curror).find("td").eq(6).find(".amt").val("0.00");
+        } else {
+            if (allocateamt > amt) {
+                $(curror).find("td").eq(6).find(".amt").val(parseFloat(amt).toFixed(2));
+            }
+            else {
+                $(curror).find("td").eq(6).find(".amt").val(parseFloat(allocateamt).toFixed(2));
+            }
+        }
+    }
+
+    function CheckAmt1(x) {
+        var thisval = $(x).val();
+
+        if (thisval == null || thisval == "") {
+            $(x).val('0.00');
+        } else {
+            $(x).val(parseFloat(thisval).toFixed(2));
+        }
+        //var total = $(x).closest('tr').find("input .AmountToBePaid").value;
+
+        //var curror = $(x).parent("td").parent("tr");
+        //var amt = parseFloat($(curror).find("td").eq(5).text());
+        //var allocateamt = parseFloat($(curror).find("td").eq(6).find(".amt").val());
+
+        //if (allocateamt > amt) {
+        //    $(curror).find("td").eq(6).find(".amt").val(amt.toFixed(2));
+        //}
+        //else {
+        //    $(curror).find("td").eq(6).find(".amt").val(allocateamt.toFixed(2));
+        //}
+    }
+      function ShowStaffNotes() {
+         if ('@Model.RecPayID' > 0) {
+             $("#StaffNoteModal").modal('show');
+        } else {
+            alert("Receipt not Created !!")
+        }
+    }
+    function SaveStaffNotes() {
+           var Jobid = '@Model.RecPayID';
+        var staffnote = $("#txtStaffnote").val();
+        if (staffnote == "" || staffnote == null) {
+            alert("Please Enter Your Notes !")
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/CustomerReceipt/UpdateStaffNote",
+                datatype: "Json",
+                data: { Jobid: Jobid, staffnote: staffnote },
+                success: function (data) {
+                    if (data.success == true) {
+                        $.notify("Notes Submitted Successfully !!", "success");
+                        $("#txtStaffnote").val('');
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        $.notify(data.message, "error");
+                        $('#StaffNoteModal').modal('hide');
+                    }
+                }
+            });
+        }
+    }
+     function Printreceipt(id) {
+        if (id > 0) {
+            var url = '@spath' + "/Reports/ReceiptVocher.aspx?recpayid=" + id;
+            //var src = "http://localhost:1052/Reports/ReceiptVocher.aspx?recpayid=" + id;
+            window.open(url, "_blank");
+        } else {
+            alert("Receipt not Created !!")
+
+        }
+    }
+     function ShowCustomerNotification() {
+         if ('@Model.RecPayID' > 0) {
+             $("#CustomerNotificationmodel").modal('show');
+        } else {
+            alert("Receipt not Created !!")
+        }
+    }
+      function SaveCustNotes() {
+           var Jobid = '@Model.RecPayID';
+         var Custid = '@Model.CustomerID';
+         var isemail = false;
+         var iswhatsapp = false;
+         var issms = false;
+         if ($("#Isemail").prop('checked') == true) {
+             isemail = true;
+         }
+         if ($("#Issms").prop('checked') == true) {
+             issms = true;
+         }
+         if ($("#Iswhatsapp").prop('checked') == true) {
+             iswhatsapp = true;
+         }
+         var staffnote = $("#txtcustMessage").val();
+         if (staffnote == "" || staffnote == null) {
+             alert("Please Enter Your Message !")
+         } else if (isemail == false && issms == false && iswhatsapp == false)
+         {
+             alert("Please select any one of the notification method !")
+         }
+         else {
+            $.ajax({
+                type: "GET",
+                url: "/CustomerReceipt/SendCustomerNotification",
+                datatype: "Json",
+                data: { JobId: Jobid, Message: staffnote, Customerid: Custid, whatsapp: iswhatsapp, Email: isemail, sms: issms },
+                success: function (data) {
+                    if (data.success == true) {
+                        $.notify("Notification Sent Successfully !!", "success");
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        $.notify(data.message, "error");
+                        $('#CustomerNotificationmodel').modal('hide');
+                    }
+                }
+            });
+        }
+    }
+    function PaymentModeChange() {
+        var val = $("#PaymentMode").val();
+        if (val == 1) {
+            $("#divCash").css({ "display": "none" });
+            $("#divBank").css({ "display": "block" });
+            $("#ChequeNo").attr({ "disabled": false })
+            $("#ChequeDate").attr({ "disabled": false })
+        } else {
+            $("#divBank").css({ "display": "none" });
+            $("#divCash").css({ "display": "block" });
+            $("#ChequeNo").attr({ "disabled": true })
+            $("#ChequeDate").attr({ "disabled": true })
+        }
+
+    }
+</script>
+
+<section class="content-header">
+<div class="row">
+    <div class="col-md-5 pull-left">
+        <h1 class="headingfont">Customer Receipt - Create</h1>
+    </div>
+    <div class="col-md-5 pull-right text-right">
+        <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
+        @*<h5>Delivered</h5>*@
+        <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important'>@ViewBag.StatusType</h4><h5 class="pull-right" id="h4courierstatus" style='color:red'>@ViewBag.CourierStatus</h5>
+    </div>
+
+</div>
+<div class="row">
+    <div class="pull-right setting">
+        <div class="navbar-custom-menu" id="divsetting">
+            <ul class="nav navbar-nav">
+
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                    <!-- Menu Toggle Button -->
+
+                    <ul class="dropdown-menu extended logout" style="top:0%!important">
+                        <li><a style="color:#35b8eb;cursor:pointer" onclick="Printreceipt(1)">Print</a></li>
+                        <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowStaffNotes()">Staff Notes</a></li>
+                        <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowCustomerNotification()">Customer Notification</a></li>
+                    </ul>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</section>
+
+    <!-- Main content -->
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.RecPayID)
+        @Html.HiddenFor(model => model.CustomerID)
+        @Html.HiddenFor(model => model.RecPayDetailID)
+        @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.StatusEntry)
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 col-sm-4">
+                <label class="headinglabel">Document No</label>
+                @Html.TextBoxFor(model => model.DocumentNo, new { @Value = ViewBag.DocumentNos, @class = "form-control", @readonly = "readonly" })
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Date</label>
+                @Html.TextBoxFor(model => model.RecPayDate, new { Value = Model.RecPayDate.Value.ToString("dd-MMM-yyyy"), @class = "form-control text-right" })
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Payment Mode</label>
+                <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
+                    <option value="1">Bank</option>
+                    <option value="2">Cash</option>
+                </select>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div id="divCash">
+                    <label class=" required headinglabel">Cash</label>
+                    @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
+                        new SelectListItem{Text="Cash Account",Value="Cash Account"},
+                        new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
+                        new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
+                        new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
+                        new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
+                        "Select", new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+
+                </div>
+                <div id="divBank">
+                    <div class="form-title">
+                        <label class=" required headinglabel">Bank</label>
+                    </div>
+                    <div class="form-field">
+                        @* @Html.DropDownListFor(model => model.ChequeBank, new List<SelectListItem> {
+                            new SelectListItem{Text="BANK OF BARODA",Value="BANK OF BARODA"},
+                            new SelectListItem{Text="Unpresented Cheques",Value="Unpresented Cheques"}},
+                            "Select", new { @class = "form-control" })*@
+
+                        @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 col-sm-4">
+                <label class=" required headinglabel">Cheque No</label>
+                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
+
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <label class=" required headinglabel">Cheque Date</label>
+                @if (Model.ChequeDate != null)
+                {
+                    @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
+                }
+                else
+                {
+
+                    @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
+                }
+            </div>
+            @if (Model.RecPayID <= 0)
+            {
+                <div class="col-xs-12 col-sm-4">
+                    <label class=" required headinglabel">Client</label>
+                    @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })                                        
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-4">
+                    <label class=" required headinglabel">Client</label>
+                    @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
+
+
+                </div>
+
+            }
+
+        </div>
+
+        <div class="row no-margin" style="padding-top:10px">
+            @if (Model.RecPayID == 0)
+            {
+                <div class="col-xs-12 col-sm-4">
+                    <label class=" required headinglabel">Currency</label>
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="headinglabel">Exchange Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
+
+                </div>@*
+
+                    <div class="col-xs-12 col-sm-2">
+                            <input type="checkbox" class="chkAllocate" />&nbsp;&nbsp;&nbsp;<label class="headinglabel">Auto Allocate</label>
+
+                    </div>
+                *@<div class="col-xs-12 col-sm-4">
+                    <label class=" required headinglabel">Amount</label>
+
+                    @Html.TextBoxFor(model => model.FMoney, new { ng_model = "Amt", ng_change = "getvalueofamount()", @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
+
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-4">
+                    <label class="headinglabel">Currency</label>
+
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="headinglabel">Exchange Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { @readonly = "readonly", @class = "form-control" })
+
+                </div>
+
+
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Amount</label>
+                    @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright", @readonly = "readonly" })
+
+                    @Html.HiddenFor(model => model.AcCompanyID)
+                    @Html.HiddenFor(model => model.AcJournalID)
+                    @Html.HiddenFor(model => model.BusinessCentreID)
+                    @Html.HiddenFor(model => model.DocumentNo)
+                    @Html.HiddenFor(model => model.RecPayID)
+                    @Html.HiddenFor(model => model.FMoney)
+                    @Html.HiddenFor(model => model.FYearID)
+                    @Html.HiddenFor(model => model.RecPayDate)
+                    @Html.HiddenFor(model => model.RecPayID)
+                    @Html.HiddenFor(model => model.Remarks)
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @Html.HiddenFor(model => model.CurrencyId)
+                    @Html.HiddenFor(model => model.EXRate)
+                    @Html.HiddenFor(model => model.FMoney)
+
+                </div>
+
+            }
+
+
+        </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 col-sm-4">
+                <label class="headinglabel">Remarks</label>
+                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-xs-12 col-sm-8">
+                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
+            </div>
+        </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 no-padding for-device">
+                <div class="data-table payment-div">
+                    @* <div class="heading">
+                            <div class="title1">Invoice No</div>
+                            <div class="title2">Job Code</div>
+                            <div class="title3">Invoice Date</div>
+                            <div class="title4">Amount To Be Received</div>
+                            <div class="title5">Amount Already Received</div>
+                            <div class="title6">Balance</div>
+                            <div class="title7">Amount</div>
+                        </div>*@
+                    <div class="data">
+                        <table border="1" style="margin-top: 15px; " class="table table-responsive tblbackground" id="tbl1">
+                            @if (Model.RecPayID > 0)
+                            {
+                                <tr style="font-weight: bold">
+                                    <td>Invoice No</td>
+                                    <td>Invoice Date</td>
+                                    <td>Amount To be Received</td>
+                                    <td>Amount already Received</td>
+                                    <td>Outstanding</td>
+                                    <td>Amount Allocated</td>
+                                    <td>Adjustment Amount</td>
+                                </tr>
+
+
+                                for (int i = 0; i < Model.CustomerRcieptChildVM.Count; i++)
+                                {
+
+                                    <tr>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Model.CustomerRcieptChildVM[i].SInvoiceNo
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayDetailID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].CurrencyId)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceNo)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Amount)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount)
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
+                                                {
+                                                    @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                }
+                                                else
+                                                {
+                                                    @Model.CustomerRcieptChildVM[i].strDate
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                }
+                                            </div>
+                                        </td>
+
+                                        <td style="text-align: right;">
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @*   @Model.recPayDetail[i].Amount*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBeRecieved, new { @Class = "AmountToBeRecieved" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBeRecieved)
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBePaid, new { @Class = "AmountToBePaid" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBePaid)
+
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Balance, new { @Class = "Balance" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Balance)
+
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].Amount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Amount), new { @Class = "amt txtNum text-right Amount", @onChange = "CheckAmt1(this)", @readonly = "readonly" })
+
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @Class = "amt1 txtNum text-right AdjustmentAmount", @readonly = "readonly" })
+
+
+                                            </div>
+                                        </td>
+                                        @* <td style="text-align: right;">
+                                                <div class="data6">{{order.Balance | currency:""}}</div>
+                                            </td>*@
+                                        @*<td style="text-align: right;">
+
+                                                 <div class="data7 readonlyamt">{{order.Amount | currency:""}}</div>
+                                                <div class="data7 textamt" style="display:none"><input type="text" ng-bind="{{order.Amount}}" value="{{order.Amount}}" /></div>
+
+                                            </td>*@
+                                    </tr>
+                                    @*<tr>
+                                            <td>
+                                                <div class="data1">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <div class="data2">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <div class="data3">&nbsp;</div>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="data4"><b>{{FinalAmount | currency:""}}</b></div>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="data5">&nbsp;</div>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="data6"><b>{{leftAmt | currency:""}}</b></div>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="data7"><b>{{TotalAmt | currency:""}}</b></div>
+
+                                            </td>
+                                        </tr>*@
+                                }
+                            }
+
+                            else
+                            {
+
+                                <tr style="font-weight: bold">
+                                    <td>Invoice No</td>
+                                    <td>Invoice Date</td>
+                                    <td>Invoice Amount</td>
+                                    <td>Amount Received</td>
+                                    <td>Balance</td>
+                                    <td>Amount Allocated</td>
+                                    <td>Adjustment Amount</td>
+                                </tr>
+
+
+
+
+                                @*<tr ng-repeat="order in Orders">
+
+                                        <td>
+                                          //  <div class="data1 textright">{{order.InvoiceNo}}</div>
+                                       </td>
+                                       <td>
+                                           <div class="data2 textright">{{order.JobCode}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="data3">{{order.InvoiceDate | date : '0:dd MMM yyyy'}}</div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data4">{{order.AmountToBeRecieved | currency:""}}</div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data5">{{order.AmtPaidTillDate | currency:""}}</div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data6">{{order.Balance | currency:""}}</div>
+                                        </td>
+                                        <td style="text-align: right;">
+
+                                              <div class="data7">{{order.Amount | currency:""}}</div>
+                                            <input type="text" ng-bind="{{order.Amount}}" value="{{order.Amount}}" />
+                                            <div class="data7 readonlyamt">{{order.Amount | currency:""}}</div>
+                                            <div class="data7 textamt" style="display: none">
+                                                <input type="text" ng-bind="{{order.Amount}}" ng-model="Amount" value="{{order.Amount}}" /></div>
+
+                                        </td>
+                                    </tr>*@
+                                @*  <tr>
+                                        <td>
+                                            <div class="data1">&nbsp;</div>
+                                        </td>
+                                        <td>
+                                            <div class="data2">&nbsp;</div>
+                                        </td>
+                                        <td>
+                                            <div class="data3">&nbsp;</div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data4"><b>{{FinalAmount | currency:""}}</b></div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data5">&nbsp;</div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data6"><b>{{leftAmt | currency:""}}</b></div>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <div class="data7"><b>{{TotalAmt | currency:""}}</b></div>
+                                        </td>
+                                    </tr>*@
+                            }
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-12 btn-right">
+                @if (Model.RecPayID > 0)
+                {
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Update" />
+                }
+                else
+                {
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" name="Command" />
+                }
+                <a href='@Url.Action("CustomerTradeReceiptDetails", "CustomerReceipt", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+            </div>
+        </div>
+    }
+</section>
+        <div id="wrapper">
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="modal fade StaffNoteModal" id="StaffNoteModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" style="width:70%">
+                                <div class="modal-content">
+
+                                    <div class="modal-header" style="background-color: #f5f5f5;">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                        <h4 class="modal-title" id="StaffNoteModal1">
+                                            <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Staff Notes</span>
+                                        </h4>
+                                    </div>
+
+                                    <div class="modal-body" id="staffmodelbody">
+                                        <div class="container-fluid">
+                                            <div class="row" style="padding-top: 5px">
+                                                <div class="col-sm-12">
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-12">
+                                                            <label>Enter Your Note</label>
+                                                            <textarea id="txtStaffnote" rows="4" cols="100"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-12">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="18%">Date</th>
+                                                                        <th width="15%">Staff</th>
+                                                                        <th style="text-align:center !important">Notes</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var staffnote in staffmodel)
+                                                                    {
+
+                                                                        <tr>
+                                                                            <td width="18%">@staffnote.Datetime</td>
+                                                                            <td width="15%">@staffnote.EmpName</td>
+                                                                            <td>@staffnote.TaskDetails</td>
+                                                                        </tr>
+
+
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="padding-top: 5px;text-align:right">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveStaffNotes()" id="SaveStaffnote">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="modal fade CustomerNotificationmodel" id="CustomerNotificationmodel" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" style="width:70%">
+                                <div class="modal-content">
+
+                                    <div class="modal-header" style="background-color: #f5f5f5;">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                        <h4 class="modal-title" id="CustomerNotificationmodel1">
+                                            <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Customer Notification</span>
+                                        </h4>
+                                    </div>
+
+                                    <div class="modal-body" id="staffmodelbody">
+                                        <div class="container-fluid">
+                                            <div class="row" style="padding-top: 5px">
+                                                <div class="col-sm-12">
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-4">
+                                                            <label>TO  </label>
+                                                        </div>
+                                                        <div class="col-xs-7 col-sm-8">
+                                                            <label>@CustomerDetails.CustomerName </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-4">
+                                                            <label><input type="checkbox" id="Isemail" /> Email  </label>
+                                                        </div>
+                                                        <div class="col-xs-7 col-sm-8">
+                                                            <span>@CustomerDetails.Email  </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-4">
+                                                            <label><input type="checkbox" id="Issms" /> SMS  </label>
+                                                        </div>
+                                                        <div class="col-xs-7 col-sm-8">
+                                                            <span>@*@CustomerDetails.MobileNo*@ </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-4">
+                                                            <label><input type="checkbox" id="Iswhatsapp" /> WhatsApp  </label>
+                                                        </div>
+                                                        <div class="col-xs-7 col-sm-8">
+                                                            @*<span>@CustomerDetails.WhatsAppNumber </span>*@
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-12">
+                                                            <label>Enter Your Message</label>
+                                                            <textarea id="txtcustMessage" rows="4" cols="100"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-xs-7 col-sm-12">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="18%">Date</th>
+                                                                        <th width="15%">Staff</th>
+                                                                        <th width="15%">Is Email</th>
+                                                                        <th width="15%">Is SMS</th>
+                                                                        <th width="15%">Is WhatsApp</th>
+                                                                        <th style="text-align:center !important">Message</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @*@foreach (var CustNotify in CustomerNotification)
+                                                                        {
+
+                                                                            <tr>
+                                                                                <td width="18%">@CustNotify.Datetime</td>
+                                                                                <td width="15%">@CustNotify.EmpName</td>
+                                                                                <td width="15%">@CustNotify.IsEmail</td>
+                                                                                <td width="15%">@CustNotify.IsSms</td>
+                                                                                <td width="15%">@CustNotify.IsWhatsapp</td>
+                                                                                <td>@CustNotify.Message</td>
+                                                                            </tr>
+
+
+                                                                        }*@
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="padding-top: 5px;text-align:right">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveCustNotes()" id="SaveStaffnote">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+
+
+<div>
+</div>
+
+<script type="text/javascript">
+    // When the document is ready
+    $(document).ready(function () {
+        var startdate = '@Session["FyearFrom"].ToString()';
+        var enddate = '@Session["FyearTo"].ToString()';
+        var sd = new Date(startdate);
+        var ed = new Date(enddate);
+        $('#RecPayDate').datepicker({
+
+            dateFormat: 'dd-M-yy',
+            minDate: sd,
+            maxDate: ed,
+            changeYear: true, changeMonth: true,
+        });
+
+
+        $('#ChequeDate').datepicker({
+            dateFormat: 'dd-M-yy',
+            minDate: sd,
+            maxDate: ed,
+            changeYear: true, changeMonth: true
+        });
+        $('#RecPayDate').datepicker("setDate", new Date());
+        //$('#ChequeDate').datepicker("setDate", sd);
+
+    });
+
+</script>

@@ -1,0 +1,319 @@
+﻿@model CMSV2.Models.DRSVM
+@{
+    
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<style>
+    #details tr
+    {
+        height:25px;
+    }
+</style>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript">
+    $(function () {
+        $('#DRSDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+
+</script>
+<script type="text/javascript">
+    var AWBItems = [];
+    var RemoveAWBItems = [];
+    $(document).ready(function () {
+        AWBItems = [];
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+                       
+        $("#txtawb").change(function () {
+            $('#btnAdd').trigger('click');
+        });
+
+        $("#btnAdd").click(function () {
+            if ($("#txtawb").val().trim() == '') {
+                return;
+            }
+            else {
+                $('#btAadd').attr('disabled', 'disabled');
+                $.each(AWBItems, function (index, item) {
+                    if (item.AWB == $('#txtawb').val().trim()) {
+                        alert('Duplicate AWB No.!');
+                        $("#txtawb").val('');
+                        $("#txtawb").focus();
+                        return false;
+                    }
+                });
+            }
+
+            if ($("#txtawb").val().trim() != '') {
+
+                var id = $("#txtawb").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/OutScan/GetAWBData",
+                    datatype: "Json",
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.status == "ok") {
+                            debugger;
+                            var data = response.data;
+                            AWBItems.push(data);
+                            $("#detailsbody").html('');
+                            $.each(AWBItems, function (index, item) {
+
+                                var i = $('#details tr').length - 1;
+                                // $('#details tr').length - 1;
+                                $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type = "hidden" value=' + item.consignor + ' name = "lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
+                                    + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
+                                    + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
+                                    + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
+                                    + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
+                                    + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+
+                            });
+
+                            $('#btnAdd').removeAttr('disabled');
+                            $("#txtawb").val('');
+                            $("#txtawb").focus();
+                        }
+                        else {
+                            $('#btnAdd').removeAttr('disabled');
+                            $("#txtawb").val('');
+                            $("#txtawb").focus();
+                            alert(response.message);
+                        }
+                        //if (data.AWB) {
+
+                        //    var i = $('#details tr').length - 1;
+                        //    $("#details").append('<tr>' + '<td>' + data.AWB + '<input type="hidden" value=' + data.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + data.InScanID + ' name="lst[' + i + '].InScanID"></td>' + '<td>' + data.consignee + '<input type="hidden" value=' + data.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + data.city + '<input type="hidden" value=' + data.city + ' name="lst[' + i + '].City"></td>'
+                        //        + '<td>' + data.phone + '<input type="hidden" value=' + data.phone + ' name="lst[' + i + '].Phone"></td>'
+                        //        + '<td>' + data.address + '<input type="hidden" value=' + data.address + ' name="lst[' + i + '].Address"></td>'
+                        //        + '<td>' + data.COD + '<input type="hidden" value=' + data.COD + ' name="lst[' + i + '].COD"></td><td><a awbno="' + data.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+
+                        //}
+
+
+                    }
+                });
+                return false;
+            }
+
+        });
+
+        $("#details").on('click', '.rem', function () {            
+            var remove_awbono = $(this).attr('awbno');
+            var tempAWBItems = [];
+            $.each(AWBItems, function (index, value) {
+            
+                if (value.AWB == remove_awbono) {
+                    RemoveAWBItems.push(value);
+                    return;
+                }
+            });
+            $.each(AWBItems, function (index, value) {
+            
+                if (value.AWB != remove_awbono) {
+                    tempAWBItems.push(value);
+                }
+
+            });
+            AWBItems = [];
+            AWBItems = tempAWBItems;
+            //$(this).parent().parent().remove();
+            $("#detailsbody").html('');
+            $.each(AWBItems, function (index, item) {
+                debugger;
+                // $('#details tr').length - 1;
+                var i = $('#details tr').length - 1;
+                $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type="hidden" value=' + item.consignor + ' name="lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td><td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
+                    + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
+                    + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
+                    + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
+                    + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
+                    + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td ></tr>');
+
+
+            });
+        });
+
+
+
+        $("#btnsave").click(function () {
+            debugger;
+            var drs = $("#DRSDate").val();
+            var del = $("#DeliveredBy option:selected").val();
+            var vec = $("#VehicleID option:selected").val();
+            var check = $("#CheckedBy option:selected").val();
+
+            if (drs == "") {
+                $("#validations").show();
+                $("#DRSDate").focus();
+                return false;
+            }
+            else if (del == "") {
+                $("#validations").show();
+                $("#DeliveredBy").focus();
+                return false;
+            }
+            else if (check == "") {
+                $("#validations").show();
+                $("#CheckedBy").focus();
+                return false;
+            }
+            else if (vec == "") {
+                $("#validations").show();
+                $("#VehicleID").focus();
+                return false;
+            }
+          
+            else if (AWBItems.length == 0)
+            {
+                $("#validations").hide();
+                alert('Add OutScanning AWB Items save!');
+                return false;
+            }
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+        function DisplayAWBItems() {
+            $.ajax({
+                type: "POST",
+                url: "/OutScan/GetDRSDetails",
+                datatype: "Json",
+                data: { id: $("#DRSID").val() },
+                success: function (data) {
+                    debugger;
+                    
+                    $.each(data, function (index, value) {
+                        AWBItems.push(value);
+                        var i = $('#details tr').length - 1;
+                        $("#details").append('<tr>' + '<td>' + value.AWB + '<input type="hidden" value=' + value.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + value.InScanID + ' name="lst[' + i + '].InScanID"></td>' + '<td>' + value.consignor + '<input type="hidden" value=' + value.consignor + ' name="lst[' + i + '].consignor"></td><td>' + value.consignee + '<input type="hidden" value=' + value.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + value.city + '<input type="hidden" value=' + value.city + ' name="lst[' + i + '].City"></td>'
+                            + '<td>' + value.phone + '<input type="hidden" value=' + value.phone + ' name="lst[' + i + '].Phone"></td>'
+                            + '<td>' + value.address + '<input type="hidden" value=' + value.address + ' name="lst[' + i + '].Address"></td>'
+                            + '<td>' + value.COD + '<input type="hidden" value=' + value.COD + ' name="lst[' + i + '].COD"></td><td>' + value.MaterialCost + '<input type = "hidden" value = ' + value.MaterialCost + ' name = "lst[' + i + '].MaterialCost" ></td ><td><a awbno="' + value.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                    });
+
+                }
+
+            });
+        }
+        if (@ViewBag.EditMode ==true) {
+            DisplayAWBItems();
+            $('#CheckedBy').val($('#chkid').val()).trigger('change');
+        }
+        else {
+
+            var m_names = new Array("Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec");
+
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
+
+            var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();      
+            $('#DRSDate').val(reqdate);
+            $("#DRSDate").focus();
+        }
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>  
+<section class="content">
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+      <fieldset>
+          <div class="row no-margin" style="padding-top:10px; padding-bottom:30px">
+              <div class="col-md-12 btn-right">
+                  <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+                  @*     <input type="submit" value="Save&Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" style="margin-left:5px;"  />*@
+
+                  <a href='@Url.Action("Index", "OutScan", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+              </div>
+          </div>
+          <div class="row no-margin">
+
+              <div class="col-md-2">
+                  <label class="headinglabel required">Sheet No.</label>
+                  @Html.HiddenFor(model => model.DRSID)
+                  @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" })
+                  @Html.ValidationMessageFor(model => model.DRSNo)
+              </div>
+              <div class="col-md-2">
+                  <label class="headinglabel required">OutScan Time</label>
+                  @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control text-right" })
+              </div>
+
+              <div class="col-md-2">
+                  <label class="headinglabel required">Checked By</label>
+                  <input type="hidden" id="chkid" value="@Model.CheckedBy" />
+                  @*@Html.DropDownListFor(model => model.CheckedBy, new SelectList(ViewBag.Checkedby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })*@
+                  @Html.DropDownList("CheckedBy", new SelectList(@ViewBag.Checkedby, "EmployeeID", "EmployeeName", 51), "Select", new { @class = "form-control", @id = "CheckedBy", @name = "CheckedBy" })
+              </div>
+              <div class="col-md-2">
+                  <label class="headinglabel required">Deliverd By</label>
+
+                  @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+
+              </div>
+              <div class="col-md-3">
+                  <label class="headinglabel required">Vehicle</label>
+
+                  @Html.DropDownListFor(model => model.VehicleID, new SelectList(ViewBag.vehicle, "VehicleID", "VehicleNo"), "Select", new { @class = "form-control" })
+              </div>
+          </div>
+
+
+
+
+
+          <div class="row no-margin" style="padding-top:25px">
+              <div class="col-md-3">
+                  <label class="headinglabel required">AWB No</label>
+                  <input type="text" id="txtawb" class="form-control" />
+
+              </div>
+              <div class="col-md-3" style="padding-top:32px">
+
+                  <button type="button" class="btn btn-primary small_btn " id="btnAdd"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+              </div>
+          </div>
+
+
+          <div class="row no-margin" style="padding-top:30px">
+
+              <div class="col-md-12">
+                  <table border="1" class="table table-responsive table-bordered" style="width: 100%" id="details">
+                      <thead>
+                      <th>AWB No.</th>
+                      <th>Consignor</th>
+                      <th>Consignee</th>
+                      <th>Consignee Phone</th>
+                      <th>Consignee City</th>
+                      <th>Consignee Country</th>
+                      <th>COD</th>
+                      <th>Material Cost</th>
+                      <th></th>
+                      </thead>
+                      <tbody id="detailsbody"></tbody>
+                  </table>
+              </div>
+          </div>          
+      </fieldset>
+}
+    </section>

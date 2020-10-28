@@ -1,0 +1,147 @@
+﻿@model IEnumerable<CMSV2.Models.DepotVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+  <style>
+     tfoot {
+            display: table-header-group;
+     }
+        </style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).ready(function () {
+
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" />');
+            });
+
+
+            var table = $('#dataTables-example').DataTable();
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Depot</h1>
+
+</section>
+<div class="col-md-12">
+<p class="indexbtnpadding pull-right">
+    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
+</p>
+</div>
+<div class="clearfix"></div>
+<section class="content">
+      @if (TempData["SuccessMsg"] != null)
+    {
+    @* <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                            <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
+                                        </div>*@
+             <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                      });
+                                                </script>
+    }
+    <div class="table-responsive tblbackground" style="padding:15px">
+<table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+    
+   <thead>
+        <tr>
+        <th>
+            @Html.Label("Depot")
+        </th>
+        <th>
+            @Html.Label("City/Hub")
+        </th>
+        <th>
+            @Html.Label("Type")
+        </th>
+        <th>
+            @Html.Label("Country")
+        </th>
+       
+        <th>Action</th>
+    </tr>
+   </thead>
+    <tfoot>
+          <tr>
+        <th class="form-100">
+            @Html.Label("Depot")
+        </th>
+        <th class="form-100">
+            @Html.Label("City/Hub")
+        </th>
+        <th>
+            @Html.Label("Type")
+        </th>
+        <th class="form-100">
+            @Html.Label("Country")
+        </th>
+       
+        <th style="display:none"></th>
+    </tr>
+    </tfoot>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Depot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CityName)
+        </td>
+        <td>
+          @if (item.IsOwn == true)
+          {
+               @Html.Label("Own")
+          }
+            else
+            {
+                @Html.Label("Agent")
+          }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountryName)
+        </td>
+       
+        <td>
+            <a href="@Url.Action("Edit", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
+           <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+        </td>
+    </tr>
+}
+
+</table>
+        </div>
+    </section>
+
+
+
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Depot?")) {
+            window.location.href = "/Depot/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

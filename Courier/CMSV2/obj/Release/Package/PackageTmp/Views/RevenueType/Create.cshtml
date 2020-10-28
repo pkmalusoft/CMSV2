@@ -1,0 +1,216 @@
+﻿@model CMSV2.Models.RevenueType
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 765px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#RevenueType1").focus();
+        var Acheadid = '@ViewBag.AcheadId';
+        if (Acheadid == 0 || Acheadid == null || Acheadid == "") {
+
+        } else {
+            $("#AcHeadID").val(Acheadid);
+        }
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#RevenueCost").blur(function () {
+            var wt = $(this).val();
+            $("#RevenueCost").val(parseFloat(wt).toFixed(2));
+        });
+        $("#MinimumValue").blur(function () {
+            var wt = $(this).val();
+            $("#MinimumValue").val(parseFloat(wt).toFixed(2));
+        });
+
+        $("#btnsave").click(function () {
+
+
+            $.ajax({
+                        type: "get",
+                        url: "/revenuetype/getrevenuetypename",
+                        datatype: "json",
+                        data: { name: $('#RevenueType1').val(), achead: $('#AcHeadID option:selected').val() },
+                        success: function (data) {
+                            if (data.flag == 0) {
+                                $("#flag").val('0');
+                            }
+                            else if (data.flag == 1) {
+                                $("#flag").val('1');
+                            }
+                        }
+
+                    });
+
+
+
+            var rev = $("#RevenueType1").val();
+            var achead = $("#AcHeadID option:selected").val();
+            var revco = $("#RevenueCode").val();
+
+            $("#alert1").hide();
+            $("#alert").hide();
+
+
+            if (rev == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (achead == "") {
+                $("#alert").show();
+                return false;
+            }
+
+            else if ($("#flag").val()=="1") {
+                $("#alert").hide();
+                $("#alert1").show();
+                return false;
+            }
+            else {
+                $("#alert1").hide();
+                $("#alert").hide();
+                return true;
+            }
+
+
+        });
+
+
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Revenue Type</h1>
+
+</section>
+
+@if (ViewBag.SuccessMsg != null)
+{
+    <script type="text/javascript">
+          $(document).ready(function () {
+              $.notify("@ViewBag.SuccessMsg", "success");
+          });
+    </script>
+}
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="searchdiv  sm-width">
+
+            <fieldset>
+                <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+                <div id="alert1" style="color:red;display:none;margin-left:10px;">*Revenue Type Already Exist</div>
+                <div class="row no-margin">
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Revenue Type</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueType1, new { @class = "form-control txttarget" })
+                            @Html.ValidationMessageFor(model => model.RevenueType1)
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="headinglabel">Revenue Code</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueCode, new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.RevenueCode)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Chart-of-Account</label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.AcHeadID, new SelectList(@ViewBag.accounthead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AcHeadID)
+                        </div>
+                        <div class="col-md-1">
+                            <a href="/Accounts/CreateAcHead?frmpage=2"><i style="font-size: 37px;color:#07a7e3; margin-top: 15px;" class="fa fa-plus-circle"></i></a>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="headinglabel">Revenue Cost</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueCost, new { @class = "form-control textright", @Value = "0" })
+                            @Html.ValidationMessageFor(model => model.RevenueCost)
+
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+
+                            <label class="headinglabel">Minimum Value</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.MinimumValue, new { @class = "form-control textright", @Value = "0" })
+                            @Html.ValidationMessageFor(model => model.MinimumValue)
+                        </div>
+
+                    </div>
+
+
+
+
+
+                    <div class="row no-margin" style="padding-top:10px">
+                        <div class="" style="text-align:right;padding:10px">
+                            <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+
+
+                            &nbsp;
+                            <a href='@Url.Action("Index", "RevenueType", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </fieldset>
+        </div>
+    }
+
+</section>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

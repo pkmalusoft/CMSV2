@@ -142,9 +142,10 @@ namespace CMSV2.Controllers
                 Session["CurrentCompanyID"] = compdetail.AcCompanyID;
                 Session["CurrencyId"] = compdetail.CurrencyID;
                 Session["CompanyName"] = compdetail.AcCompany1;
-                //int accid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                Session["CompanyAddress"] = compdetail.Address1 + "," + compdetail.Address2 + " " + compdetail.Address3 + compdetail.CityName + " " + compdetail.CountryName;
+            //int accid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
-                int currencyid = compdetail.CurrencyID.Value; //  (from c in db.AcCompanies where c.AcCompanyID == accid select c.CurrencyID).FirstOrDefault().Value;
+            int currencyid = compdetail.CurrencyID.Value; //  (from c in db.AcCompanies where c.AcCompanyID == accid select c.CurrencyID).FirstOrDefault().Value;
                 var currency = (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c).FirstOrDefault();
                 short? noofdecimals = currency.NoOfDecimals;
                 string monetaryunit = currency.MonetaryUnit; // (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c.MonetaryUnit.FirstOrDefault().Value;

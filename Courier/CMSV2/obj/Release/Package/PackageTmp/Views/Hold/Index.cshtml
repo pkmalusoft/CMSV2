@@ -1,0 +1,357 @@
+﻿@model IEnumerable<CMSV2.Models.HoldVM>
+
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    }
+
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+    </style>
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+    <script type="text/javascript">
+
+
+        $(function () {
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+            $('#ReleaseOn').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+        });
+
+        $(function () {
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+           
+        });
+       
+
+    </script>
+
+    <script type="text/javascript">
+        function ShowStatusModal(InScanId,AWBNo) {
+
+            $('#InScanID').val(InScanId);
+
+            $.ajax({
+                type: "POST",
+                url: "/QuickAWB/GetActiveStatus",
+                datatype: "Json",
+                data: { 'InScanID': InScanId },
+                success: function (response) {
+                    debugger;
+                    console.log(response);
+                    var _detail = response.data;                    
+                    $('#releasemodaltitle').html('Release AWB :' + AWBNo);
+                    console.log(_detail);
+                    //$("#AWBNo").val(AWBNo);
+                    //$('#CourierStatusId').val(_detail.CourierStatusID);
+                    //$('#StatusTypeId').val(_detail.StatusTypeID);
+                    //$('#ChangeStatusTypeId').val(_detail.StatusTypeID).trigger('change');
+
+                    $('#StatusModal').modal('show');
+
+                }
+            });
+
+        }
+        $(document).ready(function () {
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style=width:100% />');
+            });
+
+
+            var table = $('#dataTables-example').DataTable({
+                "aaSorting": []              
+            });
+            table.draw();
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+
+            $("#FromDate").val(GetCurrentDate());
+            $('#ToDate').datepicker("setDate", new Date());
+            function GetCurrentDate() {
+                var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+                var sd = new Date();
+                var curr_date = '01';
+                var curr_month = sd.getMonth() + 1;
+                var curr_year = sd.getFullYear();
+                return (curr_date + "-" + curr_month + "-" + curr_year);
+            }
+
+
+
+            $('#btnsavestatus').click(function () {
+                if ($('#ReleaseBy').val() == "") {
+                    $("#errlabel").html("Select Released By!");
+                    return;
+                }
+                else if ($("#ReleaseOn").val() == "") {
+                    $("#errlabel").html("Select Release On!");
+                    return;
+                }
+                else if ($("#ReleaseReason").val() == "") {
+                    $("#errlabel").html("Enter Reason!");
+                    return;
+                }
+                else {
+                    $("#errlabel").html("");
+                }
+                var statusobj = {
+                    InScanID: $('#InScanID').val(),
+                    ReleaseBy: $('#ReleaseBy').val(),
+                    ReleaseOn: $('#ReleaseOn').val(),
+                    ReleaseReason: $('#ReleaseReason').val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Hold/SaveReleaseStatus",
+                    datatype: "Json",
+                    data: statusobj,
+                    success: function (response) {
+                        
+                        $('#StatusModal').modal('hide');
+                        if (response.status == "ok") {
+                            $.notify(response.message, "success");
+                            window.location.reload();
+                        }
+                        else { $.notify("Save Failed :" + response.message, "warning"); }
+
+
+                        
+                    }
+                });
+
+
+            });
+
+        });
+
+
+    </script>
+    <section class="content-header">
+        <h1 class="headingfont">Hold/Release Air WayBill</h1>
+
+
+    </section>
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-2">
+                <input type="hidden" id="PickupRequestStatusId" />
+                <input type="hidden" id="InScanID" />
+                <label class="headinglabel">Status</label>
+                @Html.DropDownList("StatusId", new SelectList(@ViewBag.CourierStatusList, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+            </div>
+            <div class="col-md-1">
+                <label class="headinglabel">From </label>
+                <input id="FromDate" class="form-control text-right " name="FromDate" type="text" value="@ViewBag.FromDate" />
+                @*@Html.TextBox("FromDate",new { @class = "form-control  text-right txttarget" })*@
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">To</label>
+                <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+                @*@Html.TextBox("ToDate", new { @class = "form-control txttarget text-right" })*@
+            </div>
+
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+                <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "Hold")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            </div>
+            <div class="pull-left" style="padding-top:32px;padding-right:15px">
+                <p class="indexbtnpadding">
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="content">
+        @if (TempData["SuccessMsg"] != null)
+        {
+            <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+            </script>
+        }
+        <div class="table-responsive tblbackground" style="padding:15px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+
+                <thead>
+                    <tr>
+                        <th>
+                            Air WayBill No.
+                        </th>
+                        <th>
+                            @Html.Label("Air WayBill Date")
+                        </th>
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+                        <th>
+                            @Html.Label("Shipper")
+                        </th>
+                        <th>
+                            @Html.Label("Origin")
+                        </th>
+                        <th>
+                            @Html.Label("Consignee")
+                        </th>
+                        <th>
+                            @Html.Label("Destination")
+                        </th>
+                        <th>
+                            @Html.Label("Hold/Release Date")
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+
+                        <th>
+                            @Html.Label("AWB No")
+                        </th>
+                        <th class="right_text">
+                            @Html.Label("Date & Time")
+                        </th>
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+
+                        <th>
+                            @Html.Label("Shipper")
+                        </th>
+                        <th>
+                            @Html.Label("Origin")
+                        </th>
+                        <th>
+                            @Html.Label("Consignee")
+                        </th>
+                        <th>
+                            @Html.Label("Destination")
+                        </th>
+                        <th>
+                            @Html.Label("Date")
+                        </th>
+                        <th>
+                            Status
+                        </th>
+
+
+
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AWBNo)
+                </td>
+                <td class="text-right">
+                    @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TransactionnDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CollectedByName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consignor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OriginCountry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consignee)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConsigneeCountry)
+                </td>
+                <td class="text-right">
+                    @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourierStatus)
+                </td>
+                <td>
+                    <a href="@Url.Action("Create", new { id = item.InScanID })"><i class="fa fa-pencil"></i></a>
+                    @if (item.CourierStatus == "OnHold")
+                    {<a href="#" title="Change Satus to Release" onclick="ShowStatusModal('@item.InScanID','@item.AWBNo')">|<i class="fa fa-file"></i></a>}
+
+                </td>
+            </tr>
+                }
+
+            </table>
+        </div>
+
+        <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="releasemodaltitle">
+                            Release AWB
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row" style="padding-top: 5px">
+                                <div class="col-sm-12">
+                                    <label class="warning" style="color:red" id="errlabel"></label>
+                                    
+                                </div>
+                           </div>
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="col-sm-6">
+                                        <label class="headinglabel required">Release By</label>
+                                        @*@Html.TextBoxFor(model => model.HeldBy, new {@class="form-control" })*@
+                                        @Html.DropDownList("ReleaseBy", new SelectList(@ViewBag.ReleaseBy, "EmployeeID", "EmployeeName", 0), "Select", new { @class = "form-control", @id = "ReleaseBy", @name = "ReleaseBy" })
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="headinglabel required">Release Date</label>
+                                        <input type="text" class="form-control" id="ReleaseOn" />
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="col-sm-12">
+                                        <label class="headinglabel required">Remarks</label>
+                                        <textarea rows="3" cols="87" id="ReleaseReason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="modal-footer" style="padding-top: 5px">
+                        <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btnsavestatus">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        
+                    </div>
+                </div>
+                </div>
+            </div>
+        
+    </section>
+

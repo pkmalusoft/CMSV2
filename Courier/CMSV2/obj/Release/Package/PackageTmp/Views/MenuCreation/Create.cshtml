@@ -1,0 +1,219 @@
+﻿@model CMSV2.Models.MenuVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".parent").find('ul').css('display', 'none');
+        $("ul").css('list-style-type', 'disc');
+
+        $("#Title").focus();
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+
+        $("a.menutrv").click(function () {
+            $("a.menutrv").removeClass("selected");
+            $("#ParentID").val($(this).attr('itemid'));
+            $(this).addClass("selected");
+
+
+        });
+
+        $('.parent').click(function () {
+
+            $(this).find('ul').slideToggle();
+        });
+
+
+        //$("#btnsave").click(function () {
+        //    alert("hii");
+        //    $.ajax(
+        //     {
+
+        //         type: "POST", //HTTP POST Method  
+        //         dataType: "json",
+        //         contentType: "application/json; charset=utf-8",
+        //           url: "MenuCreation/Create",  
+        //           data: "{'Title':'" + $("#Title").val() + "','ParentID': '" + $("#parenthidden").val() + "'}",
+        //           success: function (result) {
+        //               alert("Success");
+
+        //           }
+
+
+        //     });
+
+        //    return false;
+        //});
+
+
+        $("#btnsave").click(function () {
+            var title = $("#Title").val();
+
+
+
+
+            if (title == "") {
+                $("#alert").show();
+                return false;
+            }
+
+
+            else {
+                $("#alert").hide();
+                return true;
+            }
+
+
+        });
+
+
+
+    });
+</script>
+
+<style>
+    .selected {
+        display: block;
+        height: 25px;
+        padding-left: 3px;
+        border-radius: 5px;
+        background-color: rgb(239,228,176);
+    }
+</style>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Menu Creation</h1>
+
+</section>
+
+
+
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div id="alert" style="color: red; display: none; margin-left: 10px;">*Please fill mandatory fields</div>
+        <fieldset>
+
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    <label class="required headinglabel">Menu Title</label>
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Title)
+                    <span id="parentmenu"></span>
+                    @Html.HiddenFor(model => model.ParentID)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Navigation Link</label>
+                    @Html.TextBoxFor(model => model.Link, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Link)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel">Order</label>
+                    @Html.TextBoxFor(model => model.MenuOrder, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MenuOrder)
+                </div>
+            </div>
+
+            <div class="row no-margin" style="padding-top: 10px">
+               
+               <div class="col-md-3">
+                   <label class="headinglabel">Parent</label>
+                   <ul class="treeview-menu">
+
+
+                       @{
+        List<CMSV2.Models.Menu> menuList = (List<CMSV2.Models.Menu>)Session["Menu"];
+        List<CMSV2.Models.Menu> parentMenu = new List<CMSV2.Models.Menu>();
+        if (menuList != null)
+        {
+
+            parentMenu = menuList.Where(p => Convert.ToInt32(p.ParentID) == 0).ToList();
+        }
+                           <ul>
+                               @if (parentMenu != null)
+                               {
+
+
+                                   foreach (var item in parentMenu)
+                                   {
+                                   <li class="parent"><a itemid=@item.MenuID  style="color:#fff" class="menutrv">@item.Title</a>
+                                       @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                       {
+                                           @:<ul>
+
+                                       }
+                                       @RenderMenuList(menuList, item)
+                             @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                             {
+                              @:</ul>
+                                                                                                                                                                                                                                                       
+                             }
+                                   </li>
+                            
+                                   }
+                               }
+                           </ul>
+                           @helper RenderMenuList(List<CMSV2.Models.Menu> menuList, CMSV2.Models.Menu mi)
+{
+    foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
+    {
+                               @:<li class="parent">
+<a itemid=
+@item1.MenuID style="color:#fff"  class="menutrv">@item1.Title</a>
+        if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+        {
+                               @:<ul>
+                                           }
+                               @RenderMenuList(menuList, item1)
+        if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+        {
+                               @:</ul>
+                                           }
+        else
+        {
+                               @:</li>   
+                                           }
+    }
+                           }
+                                   
+                       }
+
+                   </ul>
+               </div>
+                <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+
+                    @Html.CheckBox("PermissionRequired", new { @name = "PermissionRequired" }) &nbsp
+                    <label class="headinglabel">Permission Required</label>
+                </div>
+
+                <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+                     @Html.CheckBox("Active", new { @name = "Active" }) &nbsp
+                    <label class="headinglabel">Is Active</label>
+                </div>
+		 <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+                   
+                    @Html.CheckBox("IsAccountMenu", new {@name = "IsAccountMenu" })&nbsp; <label class="headinglabel">Is Account Menu</label>
+                      @Html.ValidationMessageFor(model => model.IsAccountMenu)
+                </div>
+            </div>
+
+            
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12 btn-right">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />
+                    <a href='@Url.Action("Index", "MenuCreation", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
+            </div>
+        </fieldset>
+    }
+</section>
+
+

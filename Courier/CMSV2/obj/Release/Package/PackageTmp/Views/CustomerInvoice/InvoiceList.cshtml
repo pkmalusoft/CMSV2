@@ -1,0 +1,153 @@
+﻿
+@model CMSV2.Models.CustomerInvoiceVM
+@{
+    int i = 0;
+    var _decimal = @Session["Decimal"].ToString();
+}
+
+@foreach (var item in Model.CustomerInvoiceDetailsVM)
+{
+    <tr>
+        <td>
+
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceDetailID, new { @Value = @item.CustomerInvoiceDetailID })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceID, new { @Value = @item.CustomerInvoiceID })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].AWBNo, new { @Value = @item.AWBNo })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].StatusPaymentMode, new { @Value = @item.StatusPaymentMode })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].InscanID, new { @Value = @item.InscanID })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CourierCharge, new { @Value = @item.CourierCharge })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomCharge, new { @Value = @item.CustomCharge })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].OtherCharge, new { @Value = @item.OtherCharge })
+            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].TotalCharges, new { @Value = @item.TotalCharges })
+
+            
+            <div class="col-md-1 checkboxdesign">
+                @(i + 1)
+                @Html.CheckBoxFor(model => model.CustomerInvoiceDetailsVM[i].AWBChecked, new { name = "AWBChecked", @class = "checkfilter calfield" })
+                @*@Html.CheckBox(@item.AWBChecked, new { @name = "AWBChecked", value = @item.AWBChecked })*@
+            </div>
+        </td>        
+        <td>
+            @item.AWBNo
+        </td>
+        <td>
+            @CMSV2.Models.CommanFunctions.GetShortDateFormat( @item.AWBDateTime)
+         </td>
+         <td>
+             @item.ConsigneeName
+         </td>
+         <td>
+             @item.ConsigneeCountryName
+         </td>
+         <td class="text-right">
+             @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.CourierCharge,_decimal)
+          </td>
+          <td class="text-right">
+              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.CustomCharge, _decimal)
+          </td>
+          <td class="text-right">
+              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.OtherCharge, _decimal)
+          </td>
+          <td class="text-right">
+              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalCharges, _decimal)
+           </td>
+
+         @*<td style="width:101px">
+        <a onclick="deleteAWBItem('@i')" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+    </td>*@
+</tr>
+    i++;
+}
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#Selectall").change(function () {
+            var i = 0;
+            if ($(this).prop("checked") == true) {
+                i = 1;
+                $("#listContainer tbody tr").addClass('Selected');
+                $(".checkfilter").prop('checked', true);
+            } else {
+                $("#listContainer tbody tr").removeClass('Selected');
+                $(".checkfilter").prop('checked', false);
+            }
+
+             var fullform = $('form#customerInvoice').serialize();
+            var cust = JSON.stringify(fullform);
+
+              $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetTotalCharge", "CustomerInvoice")?Id=' + $('#CustomerID').val(),
+                datatype: "json",
+                data: cust ,
+                success: function (response) {
+                    console.log(response.data);
+                    var _custdata = response.data;
+                          
+                    $('#lbltotalcharge').html(parseFloat(_custdata.TotalCharges).toFixed(@_decimal));
+                    $('#lbladminpercent').html(parseFloat(_custdata.AdminPer).toFixed(@_decimal));
+            $('#lbltaxpercent').html(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal));
+            $('#lblfuelpercent').html(parseFloat(_custdata.FuelPer).toFixed(@_decimal));
+                    $('#lblothercharge').html(parseFloat(_custdata.OtherCharge).toFixed(@_decimal));
+
+                    $('#AdminAmt').val(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
+                    $('#FuelAmt').val(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
+                    $('#ChargeableWT').val(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
+                    $('#InvoiceTotal').val(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                    $('#lbladminamount').html(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
+                    $('#lbltaxamount').html(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
+                    $('#lblfuelamount').html(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
+                    $('#lblinvoicetotal').html(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+
+                }
+            });
+
+        });
+
+        $(".checkfilter").change(function () {
+
+            var id = this.id;
+            var countryid = id.split('_');
+            if ($(this).prop("checked") == true) {
+                $("#listContainer tbody tr[id=" + countryid[1] + "]").addClass('Selected');
+
+            } else {
+                $("#listContainer tbody tr[id=" + countryid[1] + "]").removeClass('Selected');
+                $("#Selectall").prop('checked', false);
+            }
+
+             var fullform = $('form#customerInvoice').serialize();
+            var cust = JSON.stringify(fullform);
+
+              $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetTotalCharge", "CustomerInvoice")?Id=' + $('#CustomerID').val(),
+                datatype: "json",
+                data: cust ,
+                success: function (response) {
+                    console.log(response.data);
+                    var _custdata = response.data;
+                         $('#lbltotalcharge').html(parseFloat(_custdata.TotalCharges).toFixed(@_decimal));
+                    $('#lbladminpercent').html(parseFloat(_custdata.AdminPer).toFixed(@_decimal));
+            $('#lbltaxpercent').html(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal));
+            $('#lblfuelpercent').html(parseFloat(_custdata.FuelPer).toFixed(@_decimal));
+                    $('#lblothercharge').html(parseFloat(_custdata.OtherCharge).toFixed(@_decimal));
+
+                    $('#AdminAmt').val(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
+                    $('#FuelAmt').val(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
+                    $('#ChargeableWT').val(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
+                    $('#InvoiceTotal').val(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                    $('#lbladminamount').html(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
+                    $('#lbltaxamount').html(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
+                    $('#lblfuelamount').html(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
+                    $('#lblinvoicetotal').html(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                }
+            });
+        });
+    });
+
+</script>

@@ -1,0 +1,326 @@
+﻿@model CMSV2.Models.MenuRoleVM
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+
+    .treeview-menu menu-open
+    {
+        background-color:white!important;
+    }
+    skin-blue .sidebar-menu>li>.treeview-menu
+    {
+        background-color:white!important;
+    }
+    .skin-blue .sidebar1  a 
+    {
+        color:black!important;
+    }
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#RoleName").focus();
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        
+
+        $('[id^=menu_]').on('click', function () {
+
+            if ($(this).val() == 0) {
+                  $(this).val(1);
+                var menus = $('[id^=menu_]');
+                var parentid = $(this).attr('id').split('_')[1];
+                 $.each(menus, function (index, item) {
+                    debugger;                
+                     var selectedmenuid = $(item).attr('parentid')
+                     if (parentid == selectedmenuid) {
+                         $(item).val(1);
+                         $(item).prop('checked', true);
+                     }
+            });     
+              
+            }
+            else {
+                $(this).val(0);
+                  var menus = $('[id^=menu_]');
+                var parentid = $(this).attr('id').split('_')[1];
+                 $.each(menus, function (index, item) {
+                    debugger;                
+                     var selectedmenuid = $(item).attr('parentid')
+                     if (parentid == selectedmenuid) {
+                         $(item).val(0);
+                         $(item).prop('checked', false);
+                     }
+            });     
+            }
+
+        });
+
+        $('#RoleId').change(function () {
+
+            debugger;
+            $.ajax({
+                type: "Get",
+                url: "/MenuRole/GetRoleAccess",
+                datatype: "Json",
+                data: { 'RoleId': $('#RoleId').val() },
+                success: function (response) {
+                    debugger;
+                    console.log(response);
+                    var menus = $('[id^=menu_]');
+                    $.each(menus, function (index, item) {
+                        debugger;
+
+                        $(item).val(0);
+                        $(item).prop('checked', false);
+                    });
+
+                    $.each(response.data, function (index, item) {
+                        debugger;
+                        var menuid = item.MenuID;
+                        $('#menu_' + menuid).prop('checked', true);
+                        $('#menu_' + menuid).val(1);
+                    });
+                }
+            });
+
+        });
+
+        $("#btnsave").click(function () {
+            var selectedmenuid = "";
+            var menus = $('[id^=menu_]');
+            $.each(menus, function (index, item) {
+                debugger;
+                if ($(item).val() == 1) {
+                    selectedmenuid += $(item).attr('id').split('_')[1] + ',' ;                    
+                }
+                 
+            });       
+            
+            $.ajax({
+                type: "Post",
+                url: "/MenuRole/SaveRoleAccess",
+                datatype: "Json",
+                data: { 'RoleId': $('#RoleId').val(), 'Menus': selectedmenuid },
+                success: function (response) {
+                    if (response.status == "ok") {
+                        $.notify("Menu Access Saved Successfully!", "success");
+                        window.location = "/MenuRole/Index";
+                    }
+                    else {
+                        $.notify( response.message, "error");
+                    }
+                }
+            });
+
+            //if ($("#MenuID").val() == "") {
+            //    $("#alert").show();
+            //    return false;
+
+            //}
+            //else if ($("#RoleId").val() == "") {
+            //    $("#alert").show();
+            //    return false;
+
+            //}
+            //else {
+            //    $("#alert").hide();
+            //    return true;
+            //}
+        });
+
+        $('#RoleId').trigger('change');
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont"> @ViewBag.Title     </h1>
+</section>
+
+<section class="content">
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+      <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+      <fieldset>
+
+
+          @* <div class="editor-label">
+            @Html.LabelFor(model => model.RoleID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RoleID)
+            @Html.ValidationMessageFor(model => model.RoleID)
+        </div>*@
+
+          <div class="row no-margin">
+              <div class="col-md-3">
+                  <label class="headinglabel required"> User Role</label>
+                  @Html.DropDownListFor(model => model.RoleId, new SelectList(@ViewBag.Roles, "RoleID", "RoleName"), "Select", new { @class = "form-control" })
+                  @Html.ValidationMessageFor(model => model.RoleId)
+
+              </div>
+          </div>
+          <section class="sidebar">
+          <ul class="sidebar-menu sidebar1">
+              @{
+                  CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+
+                  List<CMSV2.Models.Menu> menuList = (List<CMSV2.Models.Menu>)Session["MenuAll"];
+                  List<CMSV2.Models.Menu> parentMenu = new List<CMSV2.Models.Menu>();
+
+                  //List<CMSV2.Models.MenuVM> menuList = (List<CMSV2.Models.MenuVM>)Session["Menu"];
+                  //List<CMSV2.Models.MenuVM> parentMenu = new List<CMSV2.Models.MenuVM>();
+                  if (menuList != null)
+                  {
+                      parentMenu = menuList.Where(p => Convert.ToInt32(p.ParentID) == 0).ToList();
+                  }
+
+                  if (parentMenu != null)
+                  {
+                      foreach (var item in parentMenu)
+                      {
+                          List<int> RoleId = (List<int>)Session["AllRoleID"];
+                          int menuid = Convert.ToInt32(item.MenuID);
+                          if (item.PermissionRequired.HasValue && item.PermissionRequired.Value)
+                          {
+                              if (obj.IsAccessibleMenu(menuid, RoleId))
+                              {
+                                  <li style="color:green">
+                                 <a  class="sidea" style="color:blue!important" id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                      @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                      {
+                                          @:<ul class="treeview-menu" style="background-color:rgb(245 245 245)">
+                                          }
+                                      @RenderMenuList(menuList, item)
+                                      @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                      {
+                                      @:</ul>
+                                  }
+                                  </li>
+                              }
+                          }
+                          else
+                          {
+                              <li>
+                                  <a id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                  @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                  {
+                                      @:<ul class="treeview-menu" style="background-color:rgb(245 245 245)">
+                                      }
+                                  @RenderMenuList(menuList, item)
+                                  @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                  {
+                                  @:</ul>
+                              }
+                              </li>
+                          }
+
+                      }
+                  }
+
+                  @helper RenderMenuList(List<CMSV2.Models.Menu> menuList, CMSV2.Models.Menu mi)
+                  {
+                      foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
+                      {
+                          @:<li style="list-style:none">
+                                <div class="checkboxdesign" style="color:black">
+                                    <input type="checkbox" id="menu_@item1.MenuID" value="0" parentid=@mi.MenuID  />
+                                    <label class="headinglabel">@item1.Title</label>
+                                </div>
+                              if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+                              {
+                                  @:<ul style="padding-left:55px">
+                                  }
+                                  @RenderMenuList(menuList, item1)
+                                  if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+                                  {
+                                  @:</ul>
+                              }
+                              else
+                              {
+                              @:</li>
+                          }
+                      }
+                  }
+
+              }
+              
+              </ul>
+              </section>
+              <div class="row role_menu hide">
+                  <div class="col-md-3">
+                      <h3>Menu</h3>
+                      <div class="accountsBlock roleBlock">
+                          <div class="checkbox ">
+                              <label><input type="checkbox" value="accounts" name="accounts[]">Accounts</label>
+                          </div>
+                          <div class="col-md-11 col-md-offset-1">
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="chart of accounts" name="accounts[]">Chart of Accounts</label>
+                              </div>
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="account setup" name="accounts[]">Account Setup</label>
+                              </div>
+                          </div>
+                          <div class="clearfix"></div>
+                      </div>
+
+                      <div class="clientsBlock roleBlock">
+                          <div class="checkbox ">
+                              <label><input type="checkbox" value="clients" name="client[]">Client</label>
+                          </div>
+                          <div class="col-md-11 col-md-offset-1">
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="maintain client" name="client[]">Maintain Client</label>
+                              </div>
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="client invoice" name="client[]">Client Invoice</label>
+                              </div>
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="client receipts" name="client[]">Client Receipts</label>
+                              </div>
+                          </div>
+                          <div class="clearfix"></div>
+                      </div>
+
+                      <div class="vendorsBlock roleBlock">
+                          <div class="checkbox">
+                              <label><input type="checkbox" value="Vendor" name="vendor[]">Vendor</label>
+                          </div>
+                          <div class="col-md-11 col-md-offset-1">
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="maintain vendors" name="vendor[]">Maintain Vendor</label>
+                              </div>
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="vendor invoice" name="vendor[]">Vendor Invoice</label>
+                              </div>
+                              <div class="checkbox">
+                                  <label><input type="checkbox" value="vendor payments" name="vendor[]">Vendor Payments</label>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row no-margin" style="padding-top:10px">
+                  <div class="col-md-12 btn-right">
+                      <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />
+
+
+
+                      &nbsp; &nbsp;
+
+                      <a href='@Url.Action("Index", "MenuRole", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                  </div>
+              </div>
+      </fieldset>
+}
+
+    </section>
+

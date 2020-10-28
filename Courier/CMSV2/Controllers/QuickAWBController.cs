@@ -61,7 +61,7 @@ namespace CMSV2.Controllers
                                     where c.BranchID == branchid   && c.DepotID==depotId 
                                     //&& c.AcFinancialYearID==yearid                                
                                     && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-                                    && (c.CourierStatusID == pStatusId || (pStatusId == 0 && c.CourierStatusID>=4))
+                                     && (c.CourierStatusID == pStatusId || (pStatusId == 0 && c.CourierStatusID >= 4 && c.PickupRequestStatusId != null) || (pStatusId == 0 && c.PickupRequestStatusId == null))
                                     && c.IsDeleted==false
                                     orderby c.TransactionDate descending, c.AWBNo descending
                                     select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone }).ToList();  //, requestsource=subpet3.RequestTypeName 
@@ -968,7 +968,8 @@ namespace CMSV2.Controllers
                        OtherCharge = c.OtherCharge,
                        totalCharge = c.NetTotal,
                        MovementTypeID = c.MovementID == null ? 0 : c.MovementID.Value,
-                       paymentmode=pay.PaymentModeText
+                       paymentmode=pay.PaymentModeText,
+                       ConsigneePhone = c.ConsigneePhone
                    }).ToList();
 
             if (datePicker.SelectedValues != null)

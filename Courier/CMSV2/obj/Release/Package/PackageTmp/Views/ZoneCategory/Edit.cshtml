@@ -1,0 +1,76 @@
+﻿@model CMSV2.Models.ZoneCategoryVM
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<section class="content-header">
+    <h1 class="headingfont">Zone Category - Modify</h1>
+
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#ZoneCategory").focus();
+
+        $("#btnsave").click(function () {
+            var zone = $("#ZoneCategory").val();
+
+
+            if (zone == "") {
+                $("#validations").show();
+                return false;
+            }
+
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+    });
+</script>
+
+
+<section class="content">
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+        
+
+       <div class="row no-margin"> 
+               
+      
+
+         <div class="col-md-3">
+             @Html.HiddenFor(model=>model.ZoneCategoryID)
+                          <label class="headinglabel required">Zone Category</label>
+                 @Html.TextBoxFor(model => model.ZoneCategory, new {@class="form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.ZoneCategory)
+                     
+                 </div>
+               <div class="col-md-3" style="padding-top:15px">
+                    @Html.CheckBox("StatusBaseCategory", new { @name = "StatusBaseCategory" }) &nbsp
+                    <label class="headinglabel" style="padding:10px">Status Base Category</label>
+                    @Html.ValidationMessageFor(model => model.StatusBaseCategory)
+                </div>
+
+     
+                </div>
+
+        <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12">
+                           
+                              <input type="submit" value="Update" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "ZoneCategory", new { id = 0 })' class="btn btn-primary btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                               
+                          
+                        </div>
+            </div>
+    </fieldset>
+}

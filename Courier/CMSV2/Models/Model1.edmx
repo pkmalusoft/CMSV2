@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_9F57C4_couriertest_newModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_9F57C4_couriertest_newModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AcAnalysisHeadAllocation">
           <Key>
             <PropertyRef Name="AcAnalysisHeadAllocationID" />
@@ -208,6 +208,7 @@
           <Property Name="Lock" Type="bit" />
           <Property Name="TransactionNo" Type="nvarchar" MaxLength="100" />
           <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
         </EntityType>
         <EntityType Name="AcMemoAnalysisHeadAllocation">
           <Key>
@@ -1204,17 +1205,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
           <Property Name="Designation" Type="nvarchar" MaxLength="50" />
           <Property Name="StatusDesignation" Type="char" MaxLength="2" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.DocumentNoSetup' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="DocumentNoSetup">
-          <Property Name="InvoiceStartsWith" Type="int" />
-          <Property Name="InvoicePrefix" Type="char" MaxLength="3" />
-          <Property Name="PrePaidPrefix" Type="char" MaxLength="3" />
-          <Property Name="MCPaymentPrefix" Type="char" MaxLength="3" />
-          <Property Name="FAgentInvoicePrefix" Type="char" MaxLength="3" />
-          <Property Name="ForwardingNo" Type="int" />
-          <Property Name="AcCompanyID" Type="int" />
-        </EntityType>-->
         <EntityType Name="DRR">
           <Key>
             <PropertyRef Name="DRRID" />
@@ -2482,13 +2472,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.MCPaymentReceipt' do
           <Property Name="Subject" Type="nvarchar" MaxLength="1000" />
           <Property Name="AcCompanyID" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.Modules' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Modules">
-          <Property Name="MID" Type="nvarchar" MaxLength="255" />
-          <Property Name="ModuleName" Type="nvarchar" MaxLength="255" />
-          <Property Name="ControlName" Type="nvarchar" MaxLength="255" />
-        </EntityType>-->
         <EntityType Name="OtherCharge">
           <Key>
             <PropertyRef Name="OtherChargeID" />
@@ -3041,13 +3024,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have
           <Property Name="StateName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CountryID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.StateProvinceMaster' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="StateProvinceMaster">
-          <Property Name="StateProvinceID" Type="int" />
-          <Property Name="CountryID" Type="int" />
-          <Property Name="StateName" Type="nvarchar" MaxLength="510" />
-        </EntityType>-->
         <EntityType Name="StockDetails">
           <Key>
             <PropertyRef Name="StockDetailID" />
@@ -3486,15 +3462,6 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.StateProvinceMaster'
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempAcTrialBalance' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempAcTrialBalance">
-          <Property Name="AcHeadID" Type="int" />
-          <Property Name="AcHead" Type="nvarchar" MaxLength="50" />
-          <Property Name="Amount" Type="money" />
-          <Property Name="TranStatus" Type="int" />
-          <Property Name="AcCompanyID" Type="int" />
-        </EntityType>-->
         <EntityType Name="TempCommission">
           <Key>
             <PropertyRef Name="TempCommissionID" />
@@ -3557,57 +3524,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerInvoice'
           <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerRateList' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempCustomerRateList">
-          <Property Name="customerrateid" Type="money" />
-          <Property Name="WeightFrom" Type="money" />
-          <Property Name="WeightTo" Type="money" />
-          <Property Name="Rate" Type="money" />
-          <Property Name="intCnt" Type="int" />
-          <Property Name="courierservice" Type="nvarchar" MaxLength="500" />
-          <Property Name="FAgentName" Type="nvarchar" MaxLength="500" />
-          <Property Name="CountryName" Type="nvarchar" MaxLength="1500" />
-          <Property Name="ZoneName" Type="nvarchar" MaxLength="500" />
-          <Property Name="CustomerRateType" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerStatement' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempCustomerStatement">
-          <Property Name="VoucherNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="InvoiceDate" Type="datetime" />
-          <Property Name="Debit" Type="money" />
-          <Property Name="Credit" Type="money" />
-          <Property Name="Particulars" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerXPR' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempCustomerXPR">
-          <Property Name="CustomerCode" Type="char" MaxLength="7" />
-          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="char" MaxLength="15" />
-          <Property Name="Fax" Type="char" MaxLength="15" />
-          <Property Name="Email" Type="nvarchar" MaxLength="150" />
-          <Property Name="CashCredit" Type="char" MaxLength="1" />
-          <Property Name="LocationCode" Type="char" MaxLength="3" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempDRRSales' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempDRRSales">
-          <Property Name="SalesHeadID" Type="int" />
-          <Property Name="Amount" Type="money" />
-          <Property Name="TaxPercentage" Type="money" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempInScan">
           <Key>
@@ -3657,28 +3573,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempInScan' does not
           <Property Name="ForwardingAWBNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempInvoiceSales' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempInvoiceSales">
-          <Property Name="SalesHeadID" Type="int" />
-          <Property Name="Amount" Type="money" />
-          <Property Name="CustomerID" Type="int" />
-          <Property Name="OtherCharge" Type="money" />
-          <Property Name="FuelSurCharge" Type="money" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempOutstandingInvoice' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempOutstandingInvoice">
-          <Property Name="InvoiceNo" Type="char" MaxLength="35" />
-          <Property Name="InvoiceDate" Type="datetime" />
-          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="Amount" Type="money" />
-          <Property Name="Received" Type="money" />
-          <Property Name="Status" Type="char" MaxLength="10" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-          <Property Name="SalesExecutive" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempRateDetail">
@@ -3739,18 +3633,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateMaster' does
           <Property Name="PackingCharge" Type="money" />
           <Property Name="CustomCharge" Type="money" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempUnpostedSales' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempUnpostedSales">
-          <Property Name="SalesHeadID" Type="int" />
-          <Property Name="Amount" Type="money" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TempUnpostedTax' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TempUnpostedTax">
-          <Property Name="TaxHeadID" Type="int" />
-          <Property Name="Amount" Type="money" />
-        </EntityType>-->
         <EntityType Name="test1">
           <Key>
             <PropertyRef Name="id" />
@@ -3788,15 +3670,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <Property Name="TransportModeID" Type="int" Nullable="false" />
           <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="TVCustReceiptDetail">
-          <Property Name="PolicyNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="InvoiceId" Type="int" />
-          <Property Name="Amount" Type="money" />
-          <Property Name="StatusAdvance" Type="bit" />
-          <Property Name="InvoiceStatus" Type="bit" />
-        </EntityType>-->
         <EntityType Name="Type">
           <Key>
             <PropertyRef Name="TypeID" />
@@ -9800,8 +9673,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_9F57C4_couriertest_newModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -10045,6 +9917,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_AcJournalMaster" FromRole="AcJournalMaster" ToRole="SalesInvoice" />
           <NavigationProperty Name="tblCustomerAdjustments" Relationship="Self.FK_tblCustomerAdjustment_AcJournalMaster" FromRole="AcJournalMaster" ToRole="tblCustomerAdjustment" />
           <NavigationProperty Name="tblSupplierAdjustments" Relationship="Self.FK_tblSupplierAdjustment_AcJournalMaster" FromRole="AcJournalMaster" ToRole="tblSupplierAdjustment" />
+          <Property Name="BranchID" Type="Int32" />
         </EntityType>
         <EntityType Name="AcMemoAnalysisHeadAllocation">
           <Key>
@@ -17007,7 +16880,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
           </AssociationSet>
           <FunctionImport Name="IDs" IsComposable="true" ReturnType="Collection(DB_9F57C4_couriertest_newModel.IDs_Result)">
-            <Parameter Name="list" Mode="In" Type="String" />
+          <Parameter Name="list" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="splitAwbNo" IsComposable="true" ReturnType="Collection(DB_9F57C4_couriertest_newModel.splitAwbNo_Result)">
             <Parameter Name="delimited" Mode="In" Type="String" />
@@ -17018,7 +16891,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="pInChrSeparator" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcAnalysisHeadAllocationDelete">
-            <Parameter Name="AcAnalysisHeadAllocationIDs" Mode="In" Type="String" />
+          <Parameter Name="AcAnalysisHeadAllocationIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcAnalysisHeadAllocationInsert">
             <Parameter Name="AcJournalDetailID" Mode="In" Type="Int32" />
@@ -17026,25 +16899,25 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Amount" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result)">
-            <Parameter Name="AcJournalDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="AcJournalDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcBankDetailsByAcJournalID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcBankDetailsByAcJournalID_Result)">
-            <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcBankDetailsUpdate">
             <Parameter Name="AcBankDetailIDs" Mode="In" Type="String" />
             <Parameter Name="SelectedAcBankDetailID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcCategoryDelete">
-            <Parameter Name="AcCategoryIDs" Mode="In" Type="String" />
+          <Parameter Name="AcCategoryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcCategoryInsert">
-            <Parameter Name="AcCategory" Mode="In" Type="String" />
+          <Parameter Name="AcCategory" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcCategorySelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcCategorySelect_Result)" />
           <FunctionImport Name="AcCategorySelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcCategorySelectAll_Result)" />
           <FunctionImport Name="AcCategorySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcCategorySelectByID_Result)">
-            <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcCategoryUpdate">
             <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
@@ -17076,10 +16949,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="AcCompanySelectAll" />
           <FunctionImport Name="AcCompanySelectAll1" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcCompanySelectAll1_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcCompanySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcCompanySelectByID_Result)">
-            <Parameter Name="AcCompanyID" Mode="In" Type="Int32" />
+          <Parameter Name="AcCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcCompanyUpdate">
             <Parameter Name="AcCompanyID" Mode="In" Type="Int32" />
@@ -17108,10 +16981,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="AcFinancialYearSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcFinancialYearSelect_Result)" />
           <FunctionImport Name="AcFinancialYearSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcFinancialYearSelectByID_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcGroupDelete">
-            <Parameter Name="AcGroupIDs" Mode="In" Type="String" />
+          <Parameter Name="AcGroupIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcGroupInsert">
             <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
@@ -17123,17 +16996,17 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="GroupCode" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcGroupSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcGroupSelect_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcGroupSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcGroupSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcGroupSelectByCategoryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcGroupSelectByCategoryID_Result)">
             <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcGroupSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcGroupSelectByID_Result)">
-            <Parameter Name="AcGroupID" Mode="In" Type="Int32" />
+          <Parameter Name="AcGroupID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcGroupUpdate">
             <Parameter Name="AcGroupID" Mode="In" Type="Int32" />
@@ -17162,7 +17035,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="DiscountAcHeadID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcHeadDelete">
-            <Parameter Name="AcHeadIDs" Mode="In" Type="String" />
+          <Parameter Name="AcHeadIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcHeadInsert">
             <Parameter Name="AcHeadID" Mode="In" Type="Int32" />
@@ -17174,16 +17047,16 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AccountDescription" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcHeadSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcHeadSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcHeadSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcHeadSelectByID_Result)">
-            <Parameter Name="AcHeadID" Mode="In" Type="Int32" />
+          <Parameter Name="AcHeadID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcHeadSelectForBank" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcHeadSelectForBank_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcHeadSelectForCash" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcHeadSelectForCash_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcHeadUpdate">
             <Parameter Name="AcHeadKey" Mode="In" Type="String" />
@@ -17193,7 +17066,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Prefix" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcJournalDetailDelete">
-            <Parameter Name="AcJournalDetailIDs" Mode="In" Type="String" />
+          <Parameter Name="AcJournalDetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcJournalDetailInsert">
             <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
@@ -17207,10 +17080,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="PaymentType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcJournalDetailSelectByAcJournalIDJV" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcJournalDetailSelectByAcJournalIDJV_Result)">
-            <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcJournalMasterDelete">
-            <Parameter Name="AcJournalIDs" Mode="In" Type="String" />
+          <Parameter Name="AcJournalIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcJournalMasterInsert">
             <Parameter Name="TransDate" Mode="In" Type="DateTime" />
@@ -17251,7 +17124,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcJournalMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcJournalMasterSelectByID_Result)">
-            <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcJournalMasterUpdate">
             <Parameter Name="AcJournalID" Mode="In" Type="Int32" />
@@ -17279,7 +17152,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Reference" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcMemoAnalysisHeadAllocationDelete">
-            <Parameter Name="AcMemoAnalysisHeadAllocationIDs" Mode="In" Type="String" />
+          <Parameter Name="AcMemoAnalysisHeadAllocationIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcMemoAnalysisHeadAllocationInsert">
             <Parameter Name="AcMemoJournalDetailID" Mode="In" Type="Int32" />
@@ -17287,13 +17160,13 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Amount" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="AcMemoAnalysisHeadAllocationSelectByAcMemoJournalDetailID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcMemoAnalysisHeadAllocationSelectByAcMemoJournalDetailID_Result)">
-            <Parameter Name="AcMemoJournalDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="AcMemoJournalDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoBankDetailsByAcJournalID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcMemoBankDetailsByAcJournalID_Result)">
-            <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalDetailDelete">
-            <Parameter Name="AcMemoJournalDetailIDs" Mode="In" Type="String" />
+          <Parameter Name="AcMemoJournalDetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalDetailInsert">
             <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
@@ -17303,10 +17176,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalDetailSelectByAcJournalID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcMemoJournalDetailSelectByAcJournalID_Result)">
-            <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalMasterDelete">
-            <Parameter Name="AcMemoJournalIDs" Mode="In" Type="String" />
+          <Parameter Name="AcMemoJournalIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalMasterInsert">
             <Parameter Name="TransDate" Mode="In" Type="DateTime" />
@@ -17330,7 +17203,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcMemoJournalMasterSelectByID_Result)">
-            <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
+          <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcMemoJournalMasterUpdate">
             <Parameter Name="AcMemoJournalID" Mode="In" Type="Int32" />
@@ -17355,10 +17228,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="CompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcOPInvoiceDetailsSelectByInvoiceID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcOPInvoiceDetailsSelectByInvoiceID_Result)">
-            <Parameter Name="AcOPInvoiceMasterID" Mode="In" Type="Int32" />
+          <Parameter Name="AcOPInvoiceMasterID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcOPInvoiceMasterDelete">
-            <Parameter Name="AcOPInvoiceMasterIDs" Mode="In" Type="String" />
+          <Parameter Name="AcOPInvoiceMasterIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcOPInvoiceMasterInsert">
             <Parameter Name="OPDate" Mode="In" Type="DateTime" />
@@ -17376,7 +17249,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FYearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcOPInvoiceMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcOPInvoiceMasterSelectByID_Result)">
-            <Parameter Name="AcOPInvoiceMasterID" Mode="In" Type="Int32" />
+          <Parameter Name="AcOPInvoiceMasterID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AcOPInvoiceMasterUpdate">
             <Parameter Name="AcOPInvoiceMasterID" Mode="In" Type="Int32" />
@@ -17390,7 +17263,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Details" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AcSubGroupSelectByCategoryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcSubGroupSelectByCategoryID_Result)">
-            <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="AcCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddAgentInvoice">
             <Parameter Name="AgentID" Mode="In" Type="Int32" />
@@ -17444,7 +17317,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Mode" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AnalysisGroupDelete">
-            <Parameter Name="AnalysisGroupIDs" Mode="In" Type="String" />
+          <Parameter Name="AnalysisGroupIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AnalysisGroupInsert">
             <Parameter Name="AnalysisGroupID" Mode="In" Type="Int32" />
@@ -17452,14 +17325,14 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="AnalysisGroupSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AnalysisGroupSelectAll_Result)" />
           <FunctionImport Name="AnalysisGroupSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AnalysisGroupSelectByID_Result)">
-            <Parameter Name="AnalysisGroupID" Mode="In" Type="Int32" />
+          <Parameter Name="AnalysisGroupID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AnalysisGroupUpdate">
             <Parameter Name="AnalysisGroupID" Mode="In" Type="Int32" />
             <Parameter Name="AnalysisGroup" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AnalysisHeadDelete">
-            <Parameter Name="AnalysisHeadIDs" Mode="In" Type="String" />
+          <Parameter Name="AnalysisHeadIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AnalysisHeadInsert">
             <Parameter Name="AnalysisCode" Mode="In" Type="String" />
@@ -17468,10 +17341,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AnalysisHeadSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AnalysisHeadSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AnalysisHeadSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AnalysisHeadSelectByID_Result)">
-            <Parameter Name="AnalysisHeadID" Mode="In" Type="Int32" />
+          <Parameter Name="AnalysisHeadID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AnalysisHeadUpdate">
             <Parameter Name="AnalysisHeadID" Mode="In" Type="Int32" />
@@ -17480,7 +17353,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AnalysisGroupID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaMasterDelete">
-            <Parameter Name="AreaIDs" Mode="In" Type="String" />
+          <Parameter Name="AreaIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AreaMasterInsert">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
@@ -17488,11 +17361,11 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AreaID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AreaMasterSelect_Result)">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AreaMasterSelectAll_Result)" />
           <FunctionImport Name="AreaMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AreaMasterSelectByID_Result)">
-            <Parameter Name="AreaID" Mode="In" Type="Int32" />
+          <Parameter Name="AreaID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaMasterUpdate">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
@@ -17500,7 +17373,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AreaID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="aspnet_AnyDataInTables" ReturnType="Collection(String)">
-            <Parameter Name="TablesToCheck" Mode="In" Type="Int32" />
+          <Parameter Name="TablesToCheck" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="aspnet_Applications_CreateApplication">
             <Parameter Name="ApplicationName" Mode="In" Type="String" />
@@ -17755,17 +17628,17 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="DeleteOnlyIfRoleIsEmpty" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="aspnet_Roles_GetAllRoles" ReturnType="Collection(String)">
-            <Parameter Name="ApplicationName" Mode="In" Type="String" />
+          <Parameter Name="ApplicationName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="aspnet_Roles_RoleExists">
             <Parameter Name="ApplicationName" Mode="In" Type="String" />
             <Parameter Name="RoleName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="aspnet_Setup_RemoveAllRoleMembers">
-            <Parameter Name="name" Mode="In" Type="String" />
+          <Parameter Name="name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="aspnet_Setup_RestorePermissions">
-            <Parameter Name="name" Mode="In" Type="String" />
+          <Parameter Name="name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="aspnet_UnRegisterSchemaVersion">
             <Parameter Name="Feature" Mode="In" Type="String" />
@@ -17831,7 +17704,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Details" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="BranchMasterDelete">
-            <Parameter Name="BranchIDs" Mode="In" Type="String" />
+          <Parameter Name="BranchIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="BranchMasterInsert">
             <Parameter Name="BranchName" Mode="In" Type="String" />
@@ -17862,7 +17735,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="BranchMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.BranchMasterSelect_Result)" />
           <FunctionImport Name="BranchMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.BranchMasterSelectAll_Result)" />
           <FunctionImport Name="BranchMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.BranchMasterSelectByID_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="BranchMasterSelectForTransit" ReturnType="Collection(DB_9F57C4_couriertest_newModel.BranchMasterSelectForTransit_Result)" />
           <FunctionImport Name="BranchMasterUpdate">
@@ -17891,10 +17764,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="StatusAssociate" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="Cash" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Cash_Result)">
-            <Parameter Name="acType" Mode="In" Type="String" />
+          <Parameter Name="acType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CategoryDelete">
-            <Parameter Name="CategoryIDs" Mode="In" Type="String" />
+          <Parameter Name="CategoryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CategoryInsert">
             <Parameter Name="CategoryName" Mode="In" Type="String" />
@@ -17902,13 +17775,13 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="CategoryID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CategorySelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CategorySelect_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CategorySelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CategorySelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CategorySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CategorySelectByID_Result)">
-            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="CategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CategoryUpdate">
             <Parameter Name="CategoryID" Mode="In" Type="Int32" />
@@ -17916,10 +17789,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AcHeadID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CheckDuplicateAwbNo" ReturnType="Collection(Int32)">
-            <Parameter Name="awbNo" Mode="In" Type="String" />
+          <Parameter Name="awbNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CityMasterDelete">
-            <Parameter Name="CityIDs" Mode="In" Type="String" />
+          <Parameter Name="CityIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CityMasterInsert">
             <Parameter Name="CityName" Mode="In" Type="String" />
@@ -17930,36 +17803,36 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="CityID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CityMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CityMasterSelect_Result)">
-            <Parameter Name="CountryID" Mode="In" Type="Int32" />
+          <Parameter Name="CountryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CityMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CityMasterSelectAll_Result)" />
           <FunctionImport Name="CityMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CityMasterSelectByID_Result)">
-            <Parameter Name="CityID" Mode="In" Type="Int32" />
+          <Parameter Name="CityID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CMSUserSellectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CMSUserSellectAll_Result)" />
           <FunctionImport Name="CompanyMasterDelete">
-            <Parameter Name="CompanyIDs" Mode="In" Type="String" />
+          <Parameter Name="CompanyIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConvertJobEnquiryToJob">
-            <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
+          <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ConvertJobToJobEnquiry">
-            <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
+          <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ConvertJournaltoPDC">
-            <Parameter Name="AcMemoJournalIDs" Mode="In" Type="String" />
+          <Parameter Name="AcMemoJournalIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConvertPDCtoJournal">
             <Parameter Name="AcMemoJournalIDs" Mode="In" Type="String" />
             <Parameter Name="TransDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="CountryMasterDelete">
-            <Parameter Name="CountryIDs" Mode="In" Type="String" />
+          <Parameter Name="CountryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CountryMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CountryMasterSelect_Result)" />
           <FunctionImport Name="CountryMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CountryMasterSelectAll_Result)" />
           <FunctionImport Name="CountryMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CountryMasterSelectByID_Result)">
-            <Parameter Name="CountryID" Mode="In" Type="Int32" />
+          <Parameter Name="CountryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CountryMasterUpdate">
             <Parameter Name="CountryID" Mode="In" Type="Int32" />
@@ -17968,7 +17841,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="TelephoneCode" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CurrencyMasterDelete">
-            <Parameter Name="CurrencyIDs" Mode="In" Type="String" />
+          <Parameter Name="CurrencyIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CurrencyMasterInsert">
             <Parameter Name="CurrencyName" Mode="In" Type="String" />
@@ -17982,10 +17855,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="CurrencyMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CurrencyMasterSelect_Result)" />
           <FunctionImport Name="CurrencyMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CurrencyMasterSelectAll_Result)" />
           <FunctionImport Name="CurrencyMasterSelectByCountryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CurrencyMasterSelectByCountryID_Result)">
-            <Parameter Name="CountryID" Mode="In" Type="Int32" />
+          <Parameter Name="CountryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CurrencyMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CurrencyMasterSelectByID_Result)">
-            <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
+          <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CurrencyMasterUpdate">
             <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
@@ -18002,30 +17875,30 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Flag" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterDelete" ReturnType="Collection(Int32)">
-            <Parameter Name="CustomerIDs" Mode="In" Type="String" />
+          <Parameter Name="CustomerIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterReport">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterReportDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerMasterReportDummy_Result)">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerMasterSelect_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterSelectByBranchID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerMasterSelectByBranchID_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustomerMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerMasterSelectByID_Result)">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustomerRateTypeDelete">
-            <Parameter Name="CustomerRateTypeIDs" Mode="In" Type="String" />
+          <Parameter Name="CustomerRateTypeIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CustomerRateTypeSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerRateTypeSelect_Result)" />
           <FunctionImport Name="CustomerRateTypeSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerRateTypeSelectAll_Result)" />
           <FunctionImport Name="CustomerRateTypeSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.CustomerRateTypeSelectByID_Result)">
-            <Parameter Name="CustomerRateTypeID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerRateTypeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustomerRateTypeUpdate">
             <Parameter Name="CustomerRateTypeID" Mode="In" Type="Int32" />
@@ -18034,37 +17907,37 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="StatusDefault" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="CustomerReceiptsGetByCustomerID">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="deleteacjournaldetail">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="deleteacjournalmaster">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteAgentInvoice">
-            <Parameter Name="AgentInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="AgentInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteAgentPaymentReceipt">
-            <Parameter Name="AgentReceiptID" Mode="In" Type="Int32" />
+          <Parameter Name="AgentReceiptID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteCustomerInvoice">
-            <Parameter Name="CustomerInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteCustomerReceipt">
-            <Parameter Name="CustomerReceiptID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerReceiptID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteMenuAccessLevel">
-            <Parameter Name="MenuAccessID" Mode="In" Type="Int64" />
+          <Parameter Name="MenuAccessID" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="deleterecpay">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="deleterecpaydetail">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DesignationDelete">
-            <Parameter Name="DesignationIDs" Mode="In" Type="String" />
+          <Parameter Name="DesignationIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DesignationInsert">
             <Parameter Name="Designation" Mode="In" Type="String" />
@@ -18072,7 +17945,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="DesignationSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.DesignationSelectAll_Result)" />
           <FunctionImport Name="DesignationSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.DesignationSelectByID_Result)">
-            <Parameter Name="DesignationID" Mode="In" Type="Int32" />
+          <Parameter Name="DesignationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DesignationUpdate">
             <Parameter Name="DesignationID" Mode="In" Type="Int32" />
@@ -18080,26 +17953,26 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="DestinationSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.DestinationSelectAll_Result)" />
           <FunctionImport Name="EmployeeMasterDelete">
-            <Parameter Name="EmployeeIDs" Mode="In" Type="String" />
+          <Parameter Name="EmployeeIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EmployeeMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.EmployeeMasterSelect_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EmployeeMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.EmployeeMasterSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EmployeeMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.EmployeeMasterSelectByID_Result)">
-            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ExpenseDelete">
-            <Parameter Name="ExpenseIDs" Mode="In" Type="String" />
+          <Parameter Name="ExpenseIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ExpenseDetailsSelectByExpenseID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ExpenseDetailsSelectByExpenseID_Result)">
-            <Parameter Name="ExpenseID" Mode="In" Type="Int32" />
+          <Parameter Name="ExpenseID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ExpenseSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ExpenseSelectAll_Result)" />
           <FunctionImport Name="ExpenseSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ExpenseSelectByID_Result)">
-            <Parameter Name="ExpenseID" Mode="In" Type="Int32" />
+          <Parameter Name="ExpenseID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAccountBalanceByHeadID" ReturnType="Collection(Decimal)">
             <Parameter Name="AcHeadID" Mode="In" Type="Int32" />
@@ -18110,14 +17983,14 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="acCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAcHeadByAccount" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAcHeadByAccount_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAcHeadByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAcHeadByID_Result)">
             <Parameter Name="ID" Mode="In" Type="Int32" />
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAcJDetailsExpenseAllocation" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAcJDetailsExpenseAllocation_Result)">
-            <Parameter Name="AcJournalDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="AcJournalDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminMenu" />
           <FunctionImport Name="GetAgentAddInvoice">
@@ -18133,41 +18006,41 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AgentType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentAdvanceAmount" ReturnType="Collection(Decimal)">
-            <Parameter Name="AgentID" Mode="In" Type="Int32" />
+          <Parameter Name="AgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAgentDeliveryRate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentDeliveryRate_Result)">
-            <Parameter Name="agentID" Mode="In" Type="Int32" />
+          <Parameter Name="agentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAgentInvoiceReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentInvoiceReport_Result)">
-            <Parameter Name="invoiceNo" Mode="In" Type="String" />
+          <Parameter Name="invoiceNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentPaymentReceipt" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentPaymentReceipt_Result)" />
           <FunctionImport Name="GetAgentPaymentType" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentPaymentType_Result)">
-            <Parameter Name="type" Mode="In" Type="String" />
+          <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentPaymetType" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentPaymetType_Result)">
-            <Parameter Name="paymentType" Mode="In" Type="String" />
+          <Parameter Name="paymentType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentRateChart" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentRateChart_Result)">
-            <Parameter Name="agentID" Mode="In" Type="Int32" />
+          <Parameter Name="agentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAgentReceipt" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentReceipt_Result)">
-            <Parameter Name="voucherNo" Mode="In" Type="String" />
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentReceiptByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentReceiptByID_Result)">
-            <Parameter Name="AgentID" Mode="In" Type="Int32" />
+          <Parameter Name="AgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAgentReportDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAgentReportDummy_Result)">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAgentReportDynamic">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAirBillWayReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAirBillWayReport_Result)">
-            <Parameter Name="AWBNO" Mode="In" Type="String" />
+          <Parameter Name="AWBNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAirWayBillReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAirWayBillReport_Result)">
-            <Parameter Name="AWBNO" Mode="In" Type="String" />
+          <Parameter Name="AWBNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAllAgentInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAllAgentInvoice_Result)" />
           <FunctionImport Name="GetAllCourierStatus" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAllCourierStatus_Result)" />
@@ -18178,10 +18051,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="iEndDate" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAllDepot" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAllDepot_Result)">
-            <Parameter Name="countryID" Mode="In" Type="Int32" />
+          <Parameter Name="countryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllLocationZoneChart" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAllLocationZoneChart_Result)">
-            <Parameter Name="ZoneID" Mode="In" Type="Int32" />
+          <Parameter Name="ZoneID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPurchaseInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAllPurchaseInvoice_Result)">
             <Parameter Name="FyearID" Mode="In" Type="Int32" />
@@ -18201,20 +18074,20 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="GetAutoAWB" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAutoAWB_Result)" />
           <FunctionImport Name="GetAWBNoByCargoCourier" ReturnType="Collection(String)">
-            <Parameter Name="AwbType" Mode="In" Type="String" />
+          <Parameter Name="AwbType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAWBRegister">
-            <Parameter Name="where" Mode="In" Type="String" />
+          <Parameter Name="where" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAWBRegisterDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAWBRegisterDummy_Result)" />
           <FunctionImport Name="GetAWBReportD" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAWBReportD_Result)">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAWBReportDynamic">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAWBStatus" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetAWBStatus_Result)">
-            <Parameter Name="AWBNo" Mode="In" Type="String" />
+          <Parameter Name="AWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAwbStockCountByAWBRange" ReturnType="Collection(Int32)">
             <Parameter Name="FromAWBNo" Mode="In" Type="Decimal" />
@@ -18231,20 +18104,20 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FYearTo" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="GetBranchDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetBranchDetails_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetByDepotDate">
             <Parameter Name="DepotID" Mode="In" Type="Int32" />
             <Parameter Name="TransferDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="GetCargoDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCargoDetails_Result)">
-            <Parameter Name="AWBNo" Mode="In" Type="String" />
+          <Parameter Name="AWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCargoInScanDetail" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCargoInScanDetail_Result)">
-            <Parameter Name="CargoAWBNo" Mode="In" Type="String" />
+          <Parameter Name="CargoAWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCargoInScanDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCargoInScanDetails_Result)">
-            <Parameter Name="CargoInscanID" Mode="In" Type="Int32" />
+          <Parameter Name="CargoInscanID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCargoManifest">
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -18254,19 +18127,19 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="GetComboMenu" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetComboMenu_Result)" />
           <FunctionImport Name="GetConsignmentEntry_Domestic" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetConsignmentEntry_Domestic_Result)">
-            <Parameter Name="AWBNo" Mode="In" Type="String" />
+          <Parameter Name="AWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetConsignmentEntry_International" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetConsignmentEntry_International_Result)">
-            <Parameter Name="AWBNo" Mode="In" Type="String" />
+          <Parameter Name="AWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCourierByDRSDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCourierByDRSDate_Result)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="GetCourierStatusByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCourierStatusByID_Result)">
-            <Parameter Name="courierStatusID" Mode="In" Type="Int32" />
+          <Parameter Name="courierStatusID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCurrencyByCountryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCurrencyByCountryID_Result)">
-            <Parameter Name="CountryID" Mode="In" Type="Int32" />
+          <Parameter Name="CountryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerAdvanceAmount">
             <Parameter Name="CustomerID" Mode="In" Type="Int32" />
@@ -18283,7 +18156,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="UserRole" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerInovice4Rpt" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerInovice4Rpt_Result)">
-            <Parameter Name="iCustomerInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="iCustomerInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerInvoice_Result)">
             <Parameter Name="iCustomerID" Mode="In" Type="Int32" />
@@ -18292,26 +18165,26 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AWBType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerInvoiceByNo">
-            <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+          <Parameter Name="InvoiceNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerInvoiceDetailReport">
-            <Parameter Name="masterID" Mode="In" Type="Int32" />
+          <Parameter Name="masterID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerInvoiceReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerInvoiceReport_Result)">
-            <Parameter Name="invoiceNo" Mode="In" Type="String" />
+          <Parameter Name="invoiceNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerMultiContract" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerMultiContract_Result)" />
           <FunctionImport Name="GetCustomerRates" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerRates_Result)" />
           <FunctionImport Name="GetCustomerReceiptForEdit">
-            <Parameter Name="RecpayID" Mode="In" Type="Int32" />
+          <Parameter Name="RecpayID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerReciept">
-            <Parameter Name="voucherNo" Mode="In" Type="String" />
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerReciepts" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomerReciepts_Result)" />
           <FunctionImport Name="GetCustomersInvoices" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetCustomersInvoices_Result)" />
           <FunctionImport Name="GetDailySalesRegister">
-            <Parameter Name="where" Mode="In" Type="String" />
+          <Parameter Name="where" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetDailySalesRegisterDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetDailySalesRegisterDummy_Result)" />
           <FunctionImport Name="GetDatabyDate">
@@ -18320,34 +18193,34 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="InScanDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="GetDepotByCountryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetDepotByCountryID_Result)">
-            <Parameter Name="countryID" Mode="In" Type="Int32" />
+          <Parameter Name="countryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetDRSCourierList" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetDRSCourierList_Result)" />
           <FunctionImport Name="GetDrsCourierRecordByDrsID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetDrsCourierRecordByDrsID_Result)">
-            <Parameter Name="iDRSID" Mode="In" Type="String" />
+          <Parameter Name="iDRSID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GETDRSMAXNO" ReturnType="Collection(Int32)" />
           <FunctionImport Name="GetDRSReportDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetDRSReportDummy_Result)">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetDRSReportDynamic">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetFilterCreatedBy">
-            <Parameter Name="FieldName" Mode="In" Type="String" />
+          <Parameter Name="FieldName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetFilterData">
-            <Parameter Name="FieldName" Mode="In" Type="String" />
+          <Parameter Name="FieldName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetFilterRecievedBy">
-            <Parameter Name="FieldName" Mode="In" Type="String" />
+          <Parameter Name="FieldName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetforwadingAgentReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetforwadingAgentReport_Result)" />
           <FunctionImport Name="GetForwardingAgentRate">
-            <Parameter Name="SearchText" Mode="In" Type="String" />
+          <Parameter Name="SearchText" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetForwardingAgentRateChart" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetForwardingAgentRateChart_Result)">
-            <Parameter Name="fAgentID" Mode="In" Type="Int32" />
+          <Parameter Name="fAgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetHoldReleaseAWB">
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -18359,10 +18232,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="HoldRelease" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetInScanByAWBNo" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetInScanByAWBNo_Result)">
-            <Parameter Name="AWBNO" Mode="In" Type="String" />
+          <Parameter Name="AWBNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetInScanGridData" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetInScanGridData_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetInscanInternational" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetInscanInternational_Result)" />
           <FunctionImport Name="GetInScanRecordsForSkyLark" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetInScanRecordsForSkyLark_Result)" />
@@ -18375,17 +18248,17 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="ZoneID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetManiFestReportDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetManiFestReportDummy_Result)">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetManiFestReportDynamic">
-            <Parameter Name="search" Mode="In" Type="String" />
+          <Parameter Name="search" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMaxAWBNo" ReturnType="Collection(String)">
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
             <Parameter Name="BranchId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetMaxCustomerNo" ReturnType="Collection(String)">
-            <Parameter Name="BranchId" Mode="In" Type="Int32" />
+          <Parameter Name="BranchId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetMaxDRSSheetNo" ReturnType="Collection(String)">
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
@@ -18409,10 +18282,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetMaxVouchrNo">
-            <Parameter Name="Inputstring" Mode="In" Type="String" />
+          <Parameter Name="Inputstring" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMenu">
-            <Parameter Name="UserName" Mode="In" Type="String" />
+          <Parameter Name="UserName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetMenuAccessLevel" />
           <FunctionImport Name="GetMultipleAWBStatus">
@@ -18432,7 +18305,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="GetOutScanGridData" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetOutScanGridData_Result)" />
           <FunctionImport Name="GetParentMenuItems" />
           <FunctionImport Name="GetPaymentBySupplierID">
-            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPDCReminder" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetPDCReminder_Result)">
             <Parameter Name="MaturedDate" Mode="In" Type="DateTime" />
@@ -18445,13 +18318,13 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="GetPODRecordsForSkyLark" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetPODRecordsForSkyLark_Result)" />
           <FunctionImport Name="GetPrintAwbnoInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetPrintAwbnoInvoice_Result)">
-            <Parameter Name="iAwbno" Mode="In" Type="String" />
+          <Parameter Name="iAwbno" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetRateTypeByCustomer" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetRateTypeByCustomer_Result)">
-            <Parameter Name="customerID" Mode="In" Type="Int32" />
+          <Parameter Name="customerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetReceiptByCustomerID">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetRecords">
             <Parameter Name="PageIndex" Mode="In" Type="Int32" />
@@ -18460,20 +18333,20 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="GetRoles" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetRoles_Result)" />
           <FunctionImport Name="GetSubMenu" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetSubMenu_Result)">
-            <Parameter Name="MenuID" Mode="In" Type="Int32" />
+          <Parameter Name="MenuID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetSupplierPaymentByVoucherNo">
-            <Parameter Name="voucherNo" Mode="In" Type="String" />
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetSupplierPaymentForEdit">
-            <Parameter Name="RecpayID" Mode="In" Type="Int32" />
+          <Parameter Name="RecpayID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetSupplierRecPayList">
             <Parameter Name="FyearID" Mode="In" Type="Int32" />
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetTempCustomerInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetTempCustomerInvoice_Result)">
-            <Parameter Name="iAWBNo" Mode="In" Type="String" />
+          <Parameter Name="iAWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetTempCustomerInvoice4All" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetTempCustomerInvoice4All_Result)">
             <Parameter Name="iCustomerID" Mode="In" Type="String" />
@@ -18481,33 +18354,33 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="iEndDate" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetTrackingDetail" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetTrackingDetail_Result)">
-            <Parameter Name="AWBNo" Mode="In" Type="String" />
+          <Parameter Name="AWBNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetUnDeliveredAwb">
-            <Parameter Name="where" Mode="In" Type="String" />
+          <Parameter Name="where" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetUndeliveredAWBDummy" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetUndeliveredAWBDummy_Result)" />
           <FunctionImport Name="GetUserMenu">
-            <Parameter Name="UserName" Mode="In" Type="String" />
+          <Parameter Name="UserName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetUserMenuPagesList" ReturnType="Collection(String)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
+          <Parameter Name="UserName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetVehiclesByDRSDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetVehiclesByDRSDate_Result)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="GetZoneChart" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetZoneChart_Result)">
             <Parameter Name="ZoneStatus" Mode="In" Type="String" />
             <Parameter Name="ZoneCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetZoneChartByAgentRate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetZoneChartByAgentRate_Result)">
-            <Parameter Name="AgentID" Mode="In" Type="Int32" />
+          <Parameter Name="AgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetZoneChartByCustomer" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetZoneChartByCustomer_Result)">
-            <Parameter Name="CustomerRateTypeID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerRateTypeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetZoneChartByForwardingAgent" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetZoneChartByForwardingAgent_Result)">
-            <Parameter Name="FordardingAgentID" Mode="In" Type="Int32" />
+          <Parameter Name="FordardingAgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetZoneChartCity" ReturnType="Collection(DB_9F57C4_couriertest_newModel.GetZoneChartCity_Result)">
             <Parameter Name="ZoneID" Mode="In" Type="Int32" />
@@ -18562,7 +18435,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AcCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ItemUnitDelete">
-            <Parameter Name="ItemUnitIDs" Mode="In" Type="String" />
+          <Parameter Name="ItemUnitIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ItemUnitInsert">
             <Parameter Name="UnitName" Mode="In" Type="String" />
@@ -18573,7 +18446,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="ItemUnitSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ItemUnitSelect_Result)" />
           <FunctionImport Name="ItemUnitSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ItemUnitSelectAll_Result)" />
           <FunctionImport Name="ItemUnitSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ItemUnitSelectByID_Result)">
-            <Parameter Name="ItemUnitID" Mode="In" Type="Int32" />
+          <Parameter Name="ItemUnitID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ItemUnitUpdate">
             <Parameter Name="ItemUnitID" Mode="In" Type="Int32" />
@@ -18582,10 +18455,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Remarks" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="JobEnquiryDelete">
-            <Parameter Name="JobEnquiryIDs" Mode="In" Type="String" />
+          <Parameter Name="JobEnquiryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="JobEnquiryDetailsDelete">
-            <Parameter Name="JobEnquiryDetailIDs" Mode="In" Type="String" />
+          <Parameter Name="JobEnquiryDetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="JobEnquiryDetailsInsert">
             <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
@@ -18599,7 +18472,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="JobEnquiryDetailsSelectByJobEnquiryID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.JobEnquiryDetailsSelectByJobEnquiryID_Result)">
-            <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
+          <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="JobEnquiryInsert">
             <Parameter Name="JobEnquiryDate" Mode="In" Type="DateTime" />
@@ -18616,7 +18489,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="JobEnquirySelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.JobEnquirySelectAll_Result)" />
           <FunctionImport Name="JobEnquirySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.JobEnquirySelectByID_Result)">
-            <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
+          <Parameter Name="JobEnquiryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="JobEnquirySelectJob" ReturnType="Collection(DB_9F57C4_couriertest_newModel.JobEnquirySelectJob_Result)" />
           <FunctionImport Name="JobEnquiryUpdate">
@@ -18633,14 +18506,14 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Remarks" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="LocationMasterDelete">
-            <Parameter Name="LocationIDs" Mode="In" Type="String" />
+          <Parameter Name="LocationIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="LocationMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.LocationMasterSelect_Result)">
-            <Parameter Name="CityID" Mode="In" Type="Int32" />
+          <Parameter Name="CityID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LocationMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.LocationMasterSelectAll_Result)" />
           <FunctionImport Name="LocationMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.LocationMasterSelectByID_Result)">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LocationSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.LocationSelectAll_Result)" />
           <FunctionImport Name="LTMSUserSellectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.LTMSUserSellectAll_Result)" />
@@ -18778,7 +18651,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="DteToDate" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProDeliveryRunSheet" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProDeliveryRunSheet_Result)">
-            <Parameter Name="intDrsNo" Mode="In" Type="String" />
+          <Parameter Name="intDrsNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="proDestinationWiseAWBCount" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proDestinationWiseAWBCount_Result)" />
           <FunctionImport Name="proDRSDetailed" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proDRSDetailed_Result)" />
@@ -18788,22 +18661,22 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="proDRSwiseSalesReport" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proDRSwiseSalesReport_Result)" />
           <FunctionImport Name="ProductCategoryMasterDelete">
-            <Parameter Name="ProductCategoryIDs" Mode="In" Type="String" />
+          <Parameter Name="ProductCategoryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductCategoryMasterInsert">
-            <Parameter Name="ProductCategoryName" Mode="In" Type="String" />
+          <Parameter Name="ProductCategoryName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductCategoryMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductCategoryMasterSelect_Result)" />
           <FunctionImport Name="ProductCategoryMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductCategoryMasterSelectAll_Result)" />
           <FunctionImport Name="ProductCategoryMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductCategoryMasterSelectByID_Result)">
-            <Parameter Name="ProductCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="ProductCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProductCategoryMasterUpdate">
             <Parameter Name="ProductCategoryID" Mode="In" Type="Int32" />
             <Parameter Name="ProductCategoryName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductItemMasterDelete">
-            <Parameter Name="ProductItemIDs" Mode="In" Type="String" />
+          <Parameter Name="ProductItemIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductItemMasterInsert">
             <Parameter Name="ProductItemName" Mode="In" Type="String" />
@@ -18811,11 +18684,11 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="MinimumCharges" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="ProductItemMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductItemMasterSelect_Result)">
-            <Parameter Name="ProductCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="ProductCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProductItemMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductItemMasterSelectAll_Result)" />
           <FunctionImport Name="ProductItemMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductItemMasterSelectByID_Result)">
-            <Parameter Name="ProductItemID" Mode="In" Type="Int32" />
+          <Parameter Name="ProductItemID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProductItemMasterUpdate">
             <Parameter Name="ProductItemID" Mode="In" Type="Int32" />
@@ -18824,7 +18697,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="MinimumCharges" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="ProductsDelete">
-            <Parameter Name="ProductIDs" Mode="In" Type="String" />
+          <Parameter Name="ProductIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductsInsert">
             <Parameter Name="ProductName" Mode="In" Type="String" />
@@ -18838,10 +18711,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="ProductsSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductsSelect_Result)" />
           <FunctionImport Name="ProductsSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductsSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProductsSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ProductsSelectByID_Result)">
-            <Parameter Name="ProductID" Mode="In" Type="Int32" />
+          <Parameter Name="ProductID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProductsUpdate">
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
@@ -18894,7 +18767,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="monCustomerRate" Mode="InOut" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="proGetCustomerRatelist" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proGetCustomerRatelist_Result)">
-            <Parameter Name="customerrateid" Mode="In" Type="Int32" />
+          <Parameter Name="customerrateid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proGetForwardingRate" ReturnType="Collection(Decimal)">
             <Parameter Name="intFAgentID" Mode="In" Type="Int32" />
@@ -18913,7 +18786,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="monFAgentRate" Mode="InOut" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="proInvoiceDetailsGPA" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proInvoiceDetailsGPA_Result)">
-            <Parameter Name="CharInvoiceNo" Mode="In" Type="String" />
+          <Parameter Name="CharInvoiceNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="proInvoiceDetailsGPATEST" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proInvoiceDetailsGPATEST_Result)" />
           <FunctionImport Name="proInvoiceDetailsGPATest1" ReturnType="Collection(DB_9F57C4_couriertest_newModel.proInvoiceDetailsGPATest1_Result)" />
@@ -18962,23 +18835,23 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="charPaytype" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="pUpdateInscanFAgentRate">
-            <Parameter Name="FAgentID" Mode="In" Type="Int32" />
+          <Parameter Name="FAgentID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseInvoiceDelete">
-            <Parameter Name="PurchaseInvoiceIDs" Mode="In" Type="String" />
+          <Parameter Name="PurchaseInvoiceIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseInvoiceSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.PurchaseInvoiceSelectAll_Result)">
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
             <Parameter Name="FYearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseInvoiceSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.PurchaseInvoiceSelectByID_Result)">
-            <Parameter Name="PurchaseInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="PurchaseInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderDelete">
-            <Parameter Name="PurchaseOrderIDs" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderDetailsDelete">
-            <Parameter Name="PurchaseOrderDetailIDs" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderDetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderDetailsInsert">
             <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
@@ -18989,7 +18862,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderDetailsSelectByPurchaseOrderID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.PurchaseOrderDetailsSelectByPurchaseOrderID_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderInsert">
             <Parameter Name="PurchaseOrderDate" Mode="In" Type="DateTime" />
@@ -19003,10 +18876,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="PurchaseOrderDetails" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.PurchaseOrderSelectAll_Result)">
-            <Parameter Name="FyearID" Mode="In" Type="Int32" />
+          <Parameter Name="FyearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.PurchaseOrderSelectByID_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseOrderUpdate">
             <Parameter Name="PurchaseOrderID" Mode="In" Type="Int32" />
@@ -19019,10 +18892,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="DeliveryDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="QuotationDelete">
-            <Parameter Name="QuotationIDs" Mode="In" Type="String" />
+          <Parameter Name="QuotationIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="QuotationDetailsDelete">
-            <Parameter Name="QuotationDetailIDs" Mode="In" Type="String" />
+          <Parameter Name="QuotationDetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="QuotationDetailsInsert">
             <Parameter Name="QuotationID" Mode="In" Type="Int32" />
@@ -19035,7 +18908,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="QuotationDetailsSelectByQuotationID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.QuotationDetailsSelectByQuotationID_Result)">
-            <Parameter Name="QuotationID" Mode="In" Type="Int32" />
+          <Parameter Name="QuotationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QuotationInsert">
             <Parameter Name="QuotationDate" Mode="In" Type="DateTime" />
@@ -19050,7 +18923,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="QuotationSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.QuotationSelect_Result)" />
           <FunctionImport Name="QuotationSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.QuotationSelectAll_Result)" />
           <FunctionImport Name="QuotationSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.QuotationSelectByID_Result)">
-            <Parameter Name="QuotationID" Mode="In" Type="Int32" />
+          <Parameter Name="QuotationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QuotationUpdate">
             <Parameter Name="QuotationID" Mode="In" Type="Int32" />
@@ -19092,7 +18965,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="AcCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_CustomerInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Report_CustomerInvoice_Result)">
-            <Parameter Name="CustomerInvoiceId" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerInvoiceId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_DayBook" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Report_DayBook_Result)">
             <Parameter Name="FYearID" Mode="In" Type="Int32" />
@@ -19120,7 +18993,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FyearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_SalesInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Report_SalesInvoice_Result)">
-            <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_TradingProfitAndLoss" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Report_TradingProfitAndLoss_Result)">
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
@@ -19133,23 +19006,23 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FyearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_WorkOrder">
-            <Parameter Name="WOID" Mode="In" Type="Int32" />
+          <Parameter Name="WOID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Report_WorkOrderInvoice">
-            <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SalesInvoiceDelete">
-            <Parameter Name="SalesInvoiceIDs" Mode="In" Type="String" />
+          <Parameter Name="SalesInvoiceIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SalesInvoiceDetailsSelectBySalesInvoiceID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SalesInvoiceDetailsSelectBySalesInvoiceID_Result)">
-            <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SalesInvoiceSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SalesInvoiceSelectAll_Result)">
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
             <Parameter Name="FYearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SalesInvoiceSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SalesInvoiceSelectByID_Result)">
-            <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="SalesInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SaveDRSNewRecord">
             <Parameter Name="iDRSID" Mode="In" Type="Int32" />
@@ -19182,7 +19055,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="iCustomerInvoiceID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="selectrecpay" ReturnType="Collection(DB_9F57C4_couriertest_newModel.selectrecpay_Result)">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SoftDeleteMenu">
             <Parameter Name="MenuID" Mode="In" Type="Int32" />
@@ -19194,10 +19067,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_DeleteCustomerReciepts">
-            <Parameter Name="RecPayID" Mode="In" Type="Int32" />
+          <Parameter Name="RecPayID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_GetAdvanceAmountOfCustomer" ReturnType="Collection(Decimal)">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)" />
           <FunctionImport Name="SP_GetAllRecieptsDetailsByDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetailsByDate_Result)">
@@ -19206,10 +19079,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FyearId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_GetCargoTrackByAWBNo" ReturnType="Collection(DB_9F57C4_couriertest_newModel.sp_GetCargoTrackByAWBNo_Result)">
-            <Parameter Name="iAWBNO" Mode="In" Type="String" />
+          <Parameter Name="iAWBNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Sp_GetCustomerInvoice" ReturnType="Collection(DB_9F57C4_couriertest_newModel.Sp_GetCustomerInvoice_Result)">
-            <Parameter Name="AWBType" Mode="In" Type="String" />
+          <Parameter Name="AWBType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_GetCustomerInvoiceDetailsForReciept" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetCustomerInvoiceDetailsForReciept_Result)">
             <Parameter Name="CustomerID" Mode="In" Type="Int32" />
@@ -19219,7 +19092,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <FunctionImport Name="SP_GetMaxPVID" ReturnType="Collection(String)" />
           <FunctionImport Name="SP_GetMaxRVID" ReturnType="Collection(String)" />
           <FunctionImport Name="sp_GetTrackByAWBNo" ReturnType="Collection(DB_9F57C4_couriertest_newModel.sp_GetTrackByAWBNo_Result)">
-            <Parameter Name="iAWBNO" Mode="In" Type="String" />
+          <Parameter Name="iAWBNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_InsertJournalEntryForRecPay">
             <Parameter Name="RecPayID" Mode="In" Type="Int32" />
@@ -19285,10 +19158,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="JobID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SPGetAllLocalCurrencyCustRecievable">
-            <Parameter Name="AcFinancialYearID" Mode="In" Type="Int32" />
+          <Parameter Name="AcFinancialYearID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterDelete">
-            <Parameter Name="SupplierIDs" Mode="In" Type="String" />
+          <Parameter Name="SupplierIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterInsert">
             <Parameter Name="ReferenceCode" Mode="In" Type="String" />
@@ -19310,13 +19183,13 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterSelect" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SupplierMasterSelect_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SupplierMasterSelectAll_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="Int32" />
+          <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SupplierMasterSelectByID_Result)">
-            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierMasterUpdate">
             <Parameter Name="SupplierID" Mode="In" Type="Int32" />
@@ -19338,11 +19211,11 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="SupplierTypeId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierTypeDelete">
-            <Parameter Name="SupplierTypeIDs" Mode="In" Type="String" />
+          <Parameter Name="SupplierTypeIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SupplierTypeSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SupplierTypeSelectAll_Result)" />
           <FunctionImport Name="SupplierTypeSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SupplierTypeSelectByID_Result)">
-            <Parameter Name="SupplierTypeID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierTypeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SupplierTypeUpdate">
             <Parameter Name="SupplierTypeID" Mode="In" Type="Int32" />
@@ -19354,7 +19227,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="CCHarge" Mode="InOut" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="TypeDelete">
-            <Parameter Name="TypeIDs" Mode="In" Type="String" />
+          <Parameter Name="TypeIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TypeInsert">
             <Parameter Name="TypeName" Mode="In" Type="String" />
@@ -19362,7 +19235,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="TypeSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.TypeSelectAll_Result)" />
           <FunctionImport Name="TypeSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.TypeSelectByID_Result)">
-            <Parameter Name="TypeID" Mode="In" Type="Int32" />
+          <Parameter Name="TypeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="TypeUpdate">
             <Parameter Name="TypeID" Mode="In" Type="Int32" />
@@ -19384,7 +19257,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="BranchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UserInBranchSelectByUserID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.UserInBranchSelectByUserID_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+          <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="usp_GetCustomerInvoice2" ReturnType="Collection(DB_9F57C4_couriertest_newModel.usp_GetCustomerInvoice2_Result)">
             <Parameter Name="cid" Mode="In" Type="Int32" />
@@ -19392,7 +19265,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="tdate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="WorkCategoryDelete">
-            <Parameter Name="WorkCategoryIDs" Mode="In" Type="String" />
+          <Parameter Name="WorkCategoryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkCategoryInsert">
             <Parameter Name="WorkCategoryName" Mode="In" Type="String" />
@@ -19400,21 +19273,21 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="WorkCategorySelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.WorkCategorySelectAll_Result)" />
           <FunctionImport Name="WorkCategorySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.WorkCategorySelectByID_Result)">
-            <Parameter Name="WorkCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="WorkCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkCategoryUpdate">
             <Parameter Name="WorkCategoryID" Mode="In" Type="Int32" />
             <Parameter Name="WorkCategoryName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailDelete">
-            <Parameter Name="WODetailIDs" Mode="In" Type="String" />
+          <Parameter Name="WODetailIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailForEditInvoice">
             <Parameter Name="WOID" Mode="In" Type="Int32" />
             <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailForInvoice">
-            <Parameter Name="WOID" Mode="In" Type="Int32" />
+          <Parameter Name="WOID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailInsert">
             <Parameter Name="WOID" Mode="In" Type="Int32" />
@@ -19424,7 +19297,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Rate" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailSelectByWOID">
-            <Parameter Name="WOID" Mode="In" Type="Int32" />
+          <Parameter Name="WOID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderDetailUpdate">
             <Parameter Name="AutoID" Mode="In" Type="Int32" />
@@ -19434,7 +19307,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Rate" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderInvoiceDelete">
-            <Parameter Name="WOInvoiceIDs" Mode="In" Type="String" />
+          <Parameter Name="WOInvoiceIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderInvoiceInsert">
             <Parameter Name="InvoiceDate" Mode="In" Type="DateTime" />
@@ -19451,7 +19324,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="WorkOrderInvoiceSelectAll" />
           <FunctionImport Name="WorkOrderInvoiceSelectByID">
-            <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
+          <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderInvoiceUpdate">
             <Parameter Name="WOInvoiceID" Mode="In" Type="Int32" />
@@ -19467,7 +19340,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="Details" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderMasterDelete">
-            <Parameter Name="WOIDs" Mode="In" Type="String" />
+          <Parameter Name="WOIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderMasterInsert">
             <Parameter Name="WODate" Mode="In" Type="DateTime" />
@@ -19480,7 +19353,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="WorkOrderMasterSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.WorkOrderMasterSelectAll_Result)" />
           <FunctionImport Name="WorkOrderMasterSelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.WorkOrderMasterSelectByID_Result)">
-            <Parameter Name="WOID" Mode="In" Type="Int32" />
+          <Parameter Name="WOID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderMasterUpdate">
             <Parameter Name="WOID" Mode="In" Type="Int32" />
@@ -19493,10 +19366,10 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
             <Parameter Name="FollowUpDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="WorkOrderNoGetByCustomerID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.WorkOrderNoGetByCustomerID_Result)">
-            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ZoneCategoryDelete">
-            <Parameter Name="ZoneCategoryIDs" Mode="In" Type="String" />
+          <Parameter Name="ZoneCategoryIDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ZoneCategoryInsert">
             <Parameter Name="ZoneCategory" Mode="In" Type="String" />
@@ -19505,7 +19378,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           </FunctionImport>
           <FunctionImport Name="ZoneCategorySelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ZoneCategorySelectAll_Result)" />
           <FunctionImport Name="ZoneCategorySelectByID" ReturnType="Collection(DB_9F57C4_couriertest_newModel.ZoneCategorySelectByID_Result)">
-            <Parameter Name="ZoneCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="ZoneCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ZoneCategoryUpdate">
             <Parameter Name="ZoneCategoryID" Mode="In" Type="Int32" />
@@ -23227,6 +23100,7 @@ warning 6013: The table/view 'DB_9F57C4_couriertest_new.dbo.TVCustReceiptDetail'
           <EntitySetMapping Name="AcJournalMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalMaster">
               <MappingFragment StoreEntitySet="AcJournalMaster">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="VoucherNo" ColumnName="VoucherNo" />
                 <ScalarProperty Name="TransDate" ColumnName="TransDate" />

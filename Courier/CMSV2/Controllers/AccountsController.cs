@@ -9,6 +9,9 @@ using System.IO;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.Entity;
+using System.Configuration;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 
 namespace CMSV2.Controllers
 {
@@ -771,7 +774,8 @@ new AcGroupModel()
             acJournalMaster.StatusDelete = false;
             acJournalMaster.ShiftID = null;
             acJournalMaster.Remarks = data.Remark;
-            acJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            acJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            acJournalMaster.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             acJournalMaster.Reference = data.Refference;
             db.AcJournalMasters.Add(acJournalMaster);
             db.SaveChanges();
@@ -1147,6 +1151,7 @@ new AcGroupModel()
 
             //ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ajm.Reference = v.reference;
 
             db.AcJournalMasters.Add(ajm);
@@ -2561,6 +2566,8 @@ new AcGroupModel()
                     acJournalMaster.VoucherNo = "";
                     acJournalMaster.TransDate = DateTime.Now; ;
                     acJournalMaster.AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                    acJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+                    acJournalMaster.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
                     acJournalMaster.VoucherType = "YE";
                     acJournalMaster.TransType = 1;
                     acJournalMaster.StatusDelete = false;
@@ -2972,12 +2979,147 @@ new AcGroupModel()
 
         public ActionResult Ledger()
         {
-            ViewBag.currentFyearFrom = Convert.ToDateTime(Session["FyearFrom"].ToString()).ToString("dd/MM/yyyy");
-            ViewBag.currentFyearTo = Convert.ToDateTime(Session["FyearTo"].ToString()).ToString("dd/MM/yyyy");
 
+
+            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            //ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            //ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
+            //ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
+            //ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
+            //ViewBag.CourierStatusId = 0;
+           
             return View();
+            
         }
 
+        public ActionResult ReportFrame()
+        {
+            if (Session["ReportOutput"] != null)
+                ViewBag.ReportOutput = Session["ReportOutput"].ToString();
+            else
+                ViewBag.ReportOutput = "~/Reports/AccLedger.pdf";
+            return PartialView();
+        }
+        public ActionResult ReportParam()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            DateTime pFromDate;
+            DateTime pToDate;
+            
+                if (reportparam == null)
+                {
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1);
+                    reportparam = new AccountsReportParam();
+                    reportparam.FromDate = pFromDate;
+                    reportparam.ToDate = pToDate;
+                    reportparam.AcHeadId = 0;
+                    reportparam.AcHeadName = "";
+                }        
+                            
+            return View(reportparam);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReportParam([Bind(Include = "FromDate,ToDate,AcHeadId,AcHeadName")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
+                AcHeadId = picker.AcHeadId,
+                AcHeadName = picker.AcHeadName,                
+            };
+            
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            AccountsReportsDAO.GenerateLedgerReport();
+            
+            return RedirectToAction("Ledger", "Accounts");
+            
+            //return PartialView(model);
+            //return View(model);
+
+            //return PartialView("InvoiceSearch",model);
+
+        }
+
+        public string GenerateReport()
+        {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            int userid= Convert.ToInt32(Session["UserID"].ToString());
+            string usertype = Session["UserType"].ToString();
+
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_accledger";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@YearId", yearid);
+            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
+            //if (TextBox1.Text.Trim() != "")
+            //    comd.Parameters[0].Value = TextBox1.Text;
+            //else
+            //    comd.Parameters[0].Value = DBNull.Value;
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AccLedger");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();           
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.rpt"));
+            
+            rd.SetDataSource(ds);
+
+            
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
+            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid,usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"), reportname);
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
+            Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
     }
 
 

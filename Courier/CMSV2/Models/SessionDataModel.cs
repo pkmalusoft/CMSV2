@@ -33,6 +33,15 @@ namespace CMSV2.Models
         {
             return (DatePicker)System.Web.HttpContext.Current.Session["TableFilter"];
         }
+
+        public static AccountsReportParam GetAccountsParam()
+        {
+            return (AccountsReportParam)System.Web.HttpContext.Current.Session["AccountsParam"];
+        }
+        public static void  SetAccountsParam(AccountsReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AccountsParam"] = reportparam;            
+        }
         public static void SetCookie(byte[] arr)
         {
             System.Web.HttpContext.Current.Session["sessionVariable"] = arr;

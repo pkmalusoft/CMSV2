@@ -1,0 +1,181 @@
+﻿@model CMSV2.Models.OtherCharge
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 450px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+<script type="text/javascript">
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    $(document).ready(function () {
+        $("#OtherCharge1").focus();
+        var Acheadid = '@ViewBag.AcheadId';
+        if (Acheadid == 0 || Acheadid == null || Acheadid == "") {
+
+        } else {
+            $("#AcHeadID").val(Acheadid);
+        }
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#SetAmount").blur(function () {
+            var wt = $(this).val();
+            $("#SetAmount").val(parseFloat(wt).toFixed(2));
+        });
+        //$("#MinimumValue").blur(function () {
+        //    var wt = $(this).val();
+        //    $("#MinimumValue").val(parseFloat(wt).toFixed(2));
+        //});
+
+        $("#btnsave").click(function () {
+            var rev = $("#OtherCharge1").val();
+            var achead = $("#AcHeadID option:selected").val();         
+        
+            
+            $("#alert1").hide();
+            $("#alert").hide();
+
+
+            if (rev == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (achead == "") {
+                $("#alert").show();
+                return false;
+            }
+
+            else {
+
+                $.ajax({
+                    type: "get",
+                    url: "/OtherCharge/GetOtherChargeTypeName",
+                    datatype: "json",
+                    data: { name: $('#OtherCharge1').val(), achead: $('#AcHeadID option:selected').val() },
+                    success: function (data) {
+                        if (data.flag == 0) {
+                            $("#flag").val('0');
+                            $("#alert1").hide();
+                            $("#alert").hide();
+                            return true;
+                        }
+                        else if (data.flag == 1) {
+                            $("#flag").val('1');
+                            $("#alert").hide();
+                            $("#alert1").show();
+                            return false;
+                        }
+                    }
+
+                });
+
+            }
+      });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Other Charge - Create</h1>
+
+</section>
+
+@if (ViewBag.SuccessMsg != null)
+{
+    <script type="text/javascript">
+          $(document).ready(function () {
+              $.notify("@ViewBag.SuccessMsg", "success");
+          });
+    </script>
+}
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="searchdiv  sm-width">
+                        
+                <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+                <div id="alert1" style="color:red;display:none;margin-left:10px;">*Revenue Type Already Exist</div>
+                <div class="">
+
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="required headinglabel">Other Charge Name</label>
+                            @Html.TextBoxFor(model => model.OtherCharge1, new { @class = "form-control txttarget" })
+                            @Html.ValidationMessageFor(model => model.OtherCharge1)
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label class="required headinglabel">Chart-of-Account</label>
+                            @Html.DropDownListFor(model => model.AcHeadID, new SelectList(@ViewBag.accounthead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AcHeadID)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4 checkboxdesign" style="padding-top: 40px">
+                            @Html.CheckBox("TypePercent", new { @name = "TypePercent" }) &nbsp
+                            <label class="headinglabel">Type Percent</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="headinglabel">Amount</label>
+                            @Html.TextBoxFor(model => model.SetAmount, new { @class = "form-control textright", @Value = "0", @onkeypress = "return isNumberKey(event)" })
+                            @Html.ValidationMessageFor(model => model.SetAmount)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6 checkboxdesign" style="padding-top: 10px">
+                            @Html.CheckBox("Reimbursement", new { @name = "Reimbursement" }) &nbsp
+                            <label class="headinglabel">Reimbursement</label>
+                        </div>
+                        <div class="col-md-6 checkboxdesign" style="padding-top: 10px">
+                            @Html.CheckBox("TaxApplicable", new { @name = "TaxApplicable" }) &nbsp
+                            <label class="headinglabel">TaxApplicable</label>
+                        </div>
+                    </div>         
+                    <div class="form-group row">
+                        <div class="col-md-12" style="text-align:right;padding:10px">
+                            <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+
+                            &nbsp;
+                            <a href='@Url.Action("Index", "OtherCharge", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                        </div>
+                    </div>
+                </div>                   
+
+
+        </div>
+    }
+
+</section>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

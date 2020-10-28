@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -273,5 +274,65 @@ namespace CMSV2.Models
             return query;
         }
         #endregion
+
+
+        #region reportheading
+        public static string GetReportHeader1(int branchId)
+        {
+            Entities1 db = new Entities1();
+            string reportheader = "";
+            var  setuptype= db.GeneralSetupTypes.Where(cc => cc.TypeName == "ReportHeader1").FirstOrDefault();
+            if (setuptype==null)
+            {
+                reportheader = db.BranchMasters.Find(branchId).BranchName;
+            }
+            else
+            {
+                var setup = db.GeneralSetups.Where(cc => cc.BranchId == branchId && cc.SetupTypeID==setuptype.ID).FirstOrDefault();
+                if (setup!=null)
+                {
+                    reportheader = setup.Text1;
+                }
+                else
+                {
+                    reportheader = db.BranchMasters.Find(branchId).BranchName;
+                }
+            }
+            
+            return reportheader;
+
+
+        }
+
+        public static string GetReportHeader2(int branchId)
+        {
+            Entities1 db = new Entities1();
+            string reportheader = "";
+            var branch = db.BranchMasters.Find(branchId);
+            var setuptype = db.GeneralSetupTypes.Where(cc => cc.TypeName == "ReportHeader2").FirstOrDefault();
+            if (setuptype == null)
+            {
+                reportheader = branch.CityName + branch.CountryName;
+            }
+            else
+            {
+                var setup = db.GeneralSetups.Where(cc => cc.BranchId == branchId && cc.SetupTypeID == setuptype.ID).FirstOrDefault();
+                if (setup != null)
+                {
+                    reportheader = setup.Text1;
+                }
+                else
+                {
+
+                    reportheader = branch.CityName + branch.CountryName;
+                }
+            }
+
+            return reportheader;
+
+
+        }
+        #endregion
+
     }
 }

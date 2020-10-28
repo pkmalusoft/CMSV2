@@ -1,0 +1,97 @@
+﻿@model CMSV2.Models.CustomerRateTypeVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+      
+        $("#CustomerRateType").focus();
+
+        $("#btnsave").click(function () {
+            var rate = $("#CustomerRateType").val();
+            var zone = $("#ZoneCategoryID option:selected").val();
+
+            if (rate == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (zone == "") {
+                $("#validations").show();
+                return false;
+            }
+
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+
+
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Customer Rate Type</h1>
+
+</section>
+<section class="content">
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <fieldset>
+      
+
+
+
+        
+
+           <div class="row no-margin"> 
+               
+             <div class="col-md-3">
+                          <label class="headinglabel required">Customer Rate Type</label>
+                        @Html.TextBoxFor(model => model.CustomerRateType, new { @class = "form-control txttarget" })
+                 </div>
+      
+
+        <div class="col-md-3">
+                          <label class="headinglabel required">Zone Category</label>
+           @Html.DropDownListFor(model => model.ZoneCategoryID, new SelectList(@ViewBag.zone, "ZoneCategoryID","ZoneCategory1"), "Select", new { @class = "form-control" });
+
+          
+                 </div>
+                   <div class="col-md-3 checkboxdesign" style="padding-top:20px">
+                        
+          @Html.CheckBox("StatusDefault", new {@name="StatusDefault" })&nbsp;  <label class="headinglabel">Set as Default</label>
+
+          
+                 </div>
+
+     
+                 <div class="row no-margin" style="padding-top:10px">
+                        <div class="col-md-12 btn-right">
+                           
+                              <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                               
+                          
+                        
+                          <a href='@Url.Action("Index", "CustomerRateType", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+                          
+                        </div>
+                    </div>
+
+
+
+         </div>
+
+
+
+    </fieldset>
+}
+</section>
