@@ -21,9 +21,28 @@
 
     $(function () {
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
-                
+
     });
     $(document).ready(function () {
+        //$('#btn1').on('click', function () {
+
+        //$.ajax({
+        //    url: '/Accounts/ReportLedger',
+        //    dataType: 'json',
+        //    type: 'POST',
+        //    data: { FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val(), AcHeadId: $('#SelectedAcHead').val(), AcHeadName: $('#AcHeadName').val() }, //your string data
+        //    success: function (response) {
+        //        debugger;
+        //        $("#DisplayPDF").html(
+        //            $('<iframe>', {
+        //                src: this.href,
+        //                width: '600px',
+        //                height: "800px"
+        //            })
+        //        );
+        //    }
+        //});
+        //});
 
         $("#AcHeadName").autocomplete({
             source: function (request, response) {
@@ -50,16 +69,8 @@
                 $('#SelectedAcHead').val(i.item.AcHeadID);
             }
         });
+            });
 
-
-
-    });
-
-
-    @*$('#MovementId').select2({
-        data:@ViewBag.Movement,
-        multiple: true
-    });*@
 
 </script>
 @using (Html.BeginForm("ReportParam", "Accounts", FormMethod.Post, new { @id = "reportparam" }))
@@ -71,17 +82,15 @@
 
         <div class="col-md-2">
             <label class="headinglabel required ">From Date</label>
-            @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
+            @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
         </div>
         <div class="col-md-2">
             <label class="headinglabel required">To Date</label>
-            @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+            @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
         </div>
         <div class="col-md-2">
-            <label class="headinglabel">Account Head</label>
-            @*<input type="text" id="AcHeadName" value=model. name="AcHeadName" class="form-control" autocomplete="off" />*@
-            @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control",@autocomplete="off",@id="AcHeadName"})
-            @*<input type="text" id="AcHeadName" value=model. name="AcHeadName" class="form-control" autocomplete="off" />*@
+            <label class="headinglabel">Account Head</label>            
+            @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control",@autocomplete="off",@id="AcHeadName",@required="true"})            
             @Html.HiddenFor(model => model.AcHeadId, new { Value = "0", id = "SelectedAcHead" })
         </div>
         @*<div class="col-md-3">
@@ -90,15 +99,14 @@
                     <option value=""></option>
                 </select>
             </div>*@
-        <div class="col-md-2">
-            <button class="btn btn-primary" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-            <a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>
-            @*<a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img  style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>*@
-        </div>
-
-        <div class="col-md-2" style="padding-top:30px">
+    <div class="col-md-2">        
+        <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        @*<a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>*@
+        @*<a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img  style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>*@
+    </div>
+        @*<div class="col-md-2" style="padding-top:30px">
             @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
-        </div>
+        </div>*@
     </div>
 }
 

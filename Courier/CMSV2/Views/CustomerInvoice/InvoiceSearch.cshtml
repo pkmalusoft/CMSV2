@@ -48,8 +48,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {
-                            console.log(val);
+                        response($.map(data, function (val, item) {                            
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,
@@ -60,11 +59,14 @@
                     }
                 })
             },
-            minLength: 1,
-            autoFocus: true,
+            minLength: 1,              
+              autoFocus: false,
+              focus: function (event, ui) {
+                  $("#CustomerName").val(ui.item.value);
+              },
             select: function (e, i) {
                 e.preventDefault();
-                $("#customer").val(i.item.label);
+                $("#CustomerName").val(i.item.label);
                 $('#CustomerId').val(i.item.CustomerId);                
             },
 

@@ -2090,6 +2090,18 @@
     <Content Include="Content\js\notify.min.js" />
     <Content Include="Content\js\pages\dashboard.js" />
     <Content Include="Content\js\pages\dashboard2.js" />
+    <Content Include="Content\multicheckselect\bootstrap.min.css" />
+    <Content Include="Content\multicheckselect\default-responsive.css" />
+    <Content Include="Content\multicheckselect\default.css" />
+    <Content Include="Content\multicheckselect\ej.web.all.min.css" />
+    <Content Include="Content\multicheckselect\ej.web.all.min.js" />
+    <Content Include="Content\multicheckselect\jquery-3.4.1.min.js" />
+    <Content Include="Content\multicheckselect\multiselect.css" />
+    <Content Include="Content\multicheckselect\multiselect.js" />
+    <Content Include="Content\multicheckselect\multiselect.min.js" />
+    <Content Include="Content\multicheckselect\properties.js" />
+    <Content Include="Content\Multiselect\bootstrap-multiselect.css" />
+    <Content Include="Content\Multiselect\bootstrap-multiselect.js" />
     <Content Include="Content\NewCSS\bootstrap\css\bootstrap.css" />
     <Content Include="Content\NewCSS\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\NewCSS\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -2989,7 +3001,17 @@
     <Content Include="Content\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Reports\AccLedger.rpt" />
+    <Content Include="Reports\AccLedger.pdf" />
+    <Content Include="ReportsPDF\AccLedger_2810201826.pdf" />
+    <Content Include="ReportsXSD\AccTrialBalance.xsc">
+      <DependentUpon>AccTrialBalance.xsd</DependentUpon>
+    </Content>
+    <Content Include="ReportsXSD\AccTrialBalance.xss">
+      <DependentUpon>AccTrialBalance.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\AccLedger.xsd" />
+    <Content Include="Reports\AccTrialBalance.rpt" />
+    <Content Include="Reports\AccTradingAccount.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3411,10 +3433,10 @@
     <Content Include="Views\Accounts\PrintAWBRegister.cshtml" />
     <Content Include="Views\Accounts\ReportParam.cshtml" />
     <Content Include="Views\Accounts\ReportFrame.cshtml" />
+    <Content Include="Views\Accounts\ReportParamAsonDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ReportsPDF\" />
     <Folder Include="ReportsXSD\" />
   </ItemGroup>
   <ItemGroup>
@@ -3451,7 +3473,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52057</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52057/</IISUrl>
+          <IISUrl>http://localhost:1057/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

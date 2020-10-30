@@ -438,8 +438,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {
-                            console.log(val);
+                        response($.map(data, function (val, item) {                            
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,

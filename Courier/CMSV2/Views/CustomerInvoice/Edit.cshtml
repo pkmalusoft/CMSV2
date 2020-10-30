@@ -401,42 +401,42 @@ input[type=checkbox], input[type=radio] {
                                 <td>Total Charge</td>
                                 <td></td>
                                 <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges, _decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Admin%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminPer, @_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label></td>
                                 <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lbladminamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminAmt, @_decimal)</label></td>
+                                <td class="text-right"><label class="headinglabel" id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Fuel SurCharge%</td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelPer, @_decimal)</label></td>
+                                <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label></td>
                                 <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelAmt, @_decimal)</label></td>
+                                <td class="text-right"><label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Tax%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.CustomerInvoiceTax, @_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label></td>
                                 <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.ChargeableWT, @_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Other Charges</td>
                                 <td></td>
                                 <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.OtherCharge, @_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td><b>Net Invoice Total</b></td>
                                 <td></td>
                                 <td> </td>
-                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.InvoiceTotal, _decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal, _decimal)</label></td>
                             </tr>
                         </tbody>
 
@@ -453,7 +453,7 @@ input[type=checkbox], input[type=radio] {
 
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges,_decimal)</label>
+                        <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges,_decimal)</label>
                     </div>
                 </div>
                 <div class="row no-margin d-flex">
@@ -462,10 +462,10 @@ input[type=checkbox], input[type=radio] {
 
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminPer,@_decimal)</label>
+                        <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer,@_decimal)</label>
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel " id="lbladminamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminAmt,@_decimal)</label>
+                        <label class="headinglabel " id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt,@_decimal)</label>
                     </div>
                 </div>
                 <div class="row no-margin d-flex">
@@ -473,10 +473,10 @@ input[type=checkbox], input[type=radio] {
                         <label class="headinglabel">Fuel SurCharge%</label>
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelPer,@_decimal)</label>
+                        <label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer,@_decimal)</label>
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelAmt, @_decimal)</label>
+                        <label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label>
                     </div>
                 </div>
 
@@ -485,10 +485,10 @@ input[type=checkbox], input[type=radio] {
                         <label class="headinglabel">Tax%</label>
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.CustomerInvoiceTax, @_decimal)</label>
+                        <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label>
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.ChargeableWT, @_decimal)</label>
+                        <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label>
                     </div>
                 </div>
                 <div class="row no-margin d-flex">
@@ -499,7 +499,7 @@ input[type=checkbox], input[type=radio] {
 
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.OtherCharge, @_decimal)</label>
+                        <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label>
                     </div>
                 </div>
                 <div class="row no-margin d-flex">
@@ -510,7 +510,7 @@ input[type=checkbox], input[type=radio] {
 
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel " id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.InvoiceTotal,@_decimal)</label>
+                        <label class="headinglabel " id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal,@_decimal)</label>
                     </div>
                 </div>
 
@@ -536,22 +536,23 @@ input[type=checkbox], input[type=radio] {
                 success: function (response) {
 
                     var _custdata = response.data;
-                      
-                    $('#lbltotalcharge').html(parseFloat(_custdata.TotalCharges).toFixed(@_decimal));
-                    $('#lbladminpercent').html(parseFloat(_custdata.AdminPer).toFixed(@_decimal));
-            $('#lbltaxpercent').html(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal));
-            $('#lblfuelpercent').html(parseFloat(_custdata.FuelPer).toFixed(@_decimal));
-                    $('#lblothercharge').html(parseFloat(_custdata.OtherCharge).toFixed(@_decimal));
 
-                    $('#AdminAmt').val(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#FuelAmt').val(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#ChargeableWT').val(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#InvoiceTotal').val(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
-                    $('#lbladminamount').html(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#lbltaxamount').html(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#lblfuelamount').html(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#lblinvoicetotal').html(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                    $('#lbltotalcharge').html(addCommas(parseFloat(_custdata.TotalCharges).toFixed(@_decimal)));
+                    $('#lbladminpercent').html(addCommas(parseFloat(_custdata.AdminPer).toFixed(@_decimal)));
+                    $('#lbltaxpercent').html(addCommas(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal)));
+                    $('#lblfuelpercent').html(addCommas(parseFloat(_custdata.FuelPer).toFixed(@_decimal)));
+                    $('#lblothercharge').html(addCommas(parseFloat(_custdata.OtherCharge).toFixed(@_decimal)));
 
+                    $('#AdminAmt').val(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#FuelAmt').val(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#ChargeableWT').val(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#InvoiceTotal').val(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
+                    $('#lbladminamount').html(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#lbltaxamount').html(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#lblfuelamount').html(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#lblinvoicetotal').html(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
+                    $('#lblinvoicetotal').html(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
+                    
                 }
             });
         }

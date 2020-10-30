@@ -16,6 +16,14 @@
         .dataTables_info{
             display:block!important;
         }
+        .tblfont
+        {
+            font-size:13px;
+        }
+        .tdphone
+        {
+            width:50px!important;
+        }
         /* .dataTables_paginate 
          {
              display:block!important;
@@ -247,13 +255,12 @@
         }
 
         <div class="table-responsive tblbackground" style="padding:15px">
-            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
-
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="8%">
-                            @Html.Label("AWB No")
+                            @Html.Label("AWB No.")
                         </th>
                         <th width="8%">
                             @Html.Label("Transaction Date")
@@ -265,7 +272,7 @@
                         <th width="15%">
                             @Html.Label("Receiver/Consignee")
                         </th>
-                        <th width="15%">
+                        <th width="3%" class="tdphone">
                             Receiver/Consignee <br />
                             Phone No.
                         </th>
@@ -282,41 +289,41 @@
                             @Html.Label("Status")
                         </th>
 
-                        <th width="10%">Action</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
 
                 <tfoot>
                     <tr>
                         <th>
-                            @Html.Label("AWB No.")
+                            
                         </th>
                         <th class="right_text">
-                            @Html.Label("Transcation Date")
+                            
                         </th>
                         <th>
-                            @Html.Label("Shipper")
+                            
                         </th>
                         <th width="15%">
-                            @Html.Label("Receiver/Consignee")
+                            
                         </th>
                         <th width="15%">
-                            @Html.Label("Phone No.")
+                        
                         </th>
                         <th>
-                            @Html.Label("Destination")
+                        
                         </th>
                         <th>
-                            @Html.Label("Payment Mode")
+                        
                         </th>
                         <th>
-                            @Html.Label("Amount")
+                        
                         </th>
                         <th>
-                            @Html.Label("Status")
+                        
                         </th>
 
-                        <th style="display:none">Action</th>
+                        <th style="display:none"></th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -340,7 +347,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.consigneename)
                             </td>
-                            <td>
+                            <td class="tdphone">
                                 @Html.DisplayFor(modelItem => item.ConsigneePhone)
                             </td>
                             <td class="textright">
@@ -358,7 +365,7 @@
                             </td>
                             <td>
                                 <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.InScanID')"><i class="fa fa-file"></i></a> |
-                                <a href="@Url.Action("Create", new { id = item.InScanID})"><i class="fa fa-pencil"></i></a> |<a href="#" onclick="Delete(ID=@item.InScanID)"><i class="fa fa-times"></i></a> |
+                                <a href="@Url.Action("Create", new { id = item.InScanID})"><i class="fa fa-pencil"></i></a> |<a href="#" onclick="Delete(ID=@item.InScanID)"><i class="fa fa-times"></i></a>
                                 |<a href="@Url.Action("AWBPrint","QuickAWB", new { id = item.InScanID})"><i class="fa fa-print"></i></a>
                                 @*
 

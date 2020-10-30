@@ -2977,17 +2977,32 @@ new AcGroupModel()
             }
         }
 
-        public ActionResult Ledger()
+        public ActionResult Ledger(int id)
         {
-
-
             //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             //ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             //ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             //ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             //ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             //ViewBag.CourierStatusId = 0;
-           
+            if (id == 1) //Ledger
+            {
+                ViewBag.ReportName = "Accounts Ledger";
+                ViewBag.ReportId = "1";
+                Session["ReportId"] = "1";
+            }
+            else if (id == 2)
+            {
+                ViewBag.ReportName = "Trial Balance";
+                ViewBag.ReportId = "2";
+                Session["ReportId"] = "2";
+            }
+            else if (id == 3)
+            {
+                ViewBag.ReportName = "Trading Account";
+                ViewBag.ReportId = "3";
+                Session["ReportId"] = "3";
+            }
             return View();
             
         }
@@ -3012,13 +3027,22 @@ new AcGroupModel()
                 if (reportparam == null)
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
-                    pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
                     reportparam = new AccountsReportParam();
                     reportparam.FromDate = pFromDate;
                     reportparam.ToDate = pToDate;
                     reportparam.AcHeadId = 0;
                     reportparam.AcHeadName = "";
-                }        
+                }
+            else
+            {
+                if (reportparam.FromDate.Date.ToString() =="01-01-0001")
+                {
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.FromDate = pFromDate;
+                }
+
+            }
                             
             return View(reportparam);
         }
@@ -3039,9 +3063,10 @@ new AcGroupModel()
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
+            //Stream stream= GenerateReport();
             AccountsReportsDAO.GenerateLedgerReport();
-            
-            return RedirectToAction("Ledger", "Accounts");
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+            return RedirectToAction("Ledger", "Accounts",new { id = 1 });
             
             //return PartialView(model);
             //return View(model);
@@ -3050,7 +3075,86 @@ new AcGroupModel()
 
         }
 
-        public string GenerateReport()
+        [HttpPost]
+        public ActionResult ReportLedger(AccountsReportParam picker)
+        {
+            picker.AcHeadName = "test";
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                AcHeadId = picker.AcHeadId,
+                AcHeadName = picker.AcHeadName,
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Stream stream = GenerateReport();
+            //MemoryStream outputStream = new MemoryStream();
+            //MemoryStream workStream = new MemoryStream();
+            //var bytes = System.Text.Encoding.UTF8.GetBytes(id);
+            //byte[] byteArray = bytes;
+            //outputStream.Write(byteArray, 0, byteArray.Length);
+            //outputStream.Position = 0;
+            return File(stream, "application/pdf");
+            //AccountsReportsDAO.GenerateLedgerReport();
+            return File(stream, "application/pdf", "AccLedger.pdf");
+            //return RedirectToAction("Ledger", "Accounts",new { id = 1 });
+
+            //return PartialView(model);
+            //return View(model);
+
+            //return PartialView("InvoiceSearch",model);
+
+        }
+
+
+        public ActionResult ReportParamAsonDate()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            DateTime pToDate;            
+
+            if (reportparam == null)
+            {
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam();
+                reportparam.ToDate = pToDate.Date;
+            }
+            
+
+            return View(reportparam);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReportParamAsonDate([Bind(Include = "ToDate")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                ToDate = picker.ToDate
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (Session["ReportID"].ToString() == "2") //trial balance
+                AccountsReportsDAO.GenerateTrialBalanceReport();
+            else //3 trading account report
+                AccountsReportsDAO.GenerateTradingAccountReport();
+
+            int reportid = Convert.ToInt32(Session["ReportID"].ToString());
+            return RedirectToAction("Ledger", "Accounts", new {id=reportid});
+
+        }
+        public Stream GenerateReport()
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -3109,16 +3213,34 @@ new AcGroupModel()
             Response.ClearContent();
             Response.ClearHeaders();
             string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
-            string reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"), reportname);
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
+            string reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"));
+            
+            //rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
             Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
-            return reportpath;
-
-            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            //stream.Seek(0, SeekOrigin.Begin);
+                  
+            
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
             //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+            //SaveStreamAsFile(reportpath, stream, reportname);
+            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
+            //return reportpath;
+        }
 
-            //return File(stream, "application/pdf", "AccLedger.pdf");
+        public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
+        {
+            DirectoryInfo info = new DirectoryInfo(filePath);
+            if (!info.Exists)
+            {
+                info.Create();
+            }
+
+            string path = Path.Combine(filePath, fileName);
+            using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
+            {
+                inputStream.CopyTo(outputFileStream);
+            }
         }
     }
 

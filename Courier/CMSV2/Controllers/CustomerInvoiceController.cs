@@ -622,8 +622,10 @@ namespace CMSV2.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public ActionResult Details(int id)
+        public ActionResult Details(int id)        
         {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ViewBag.Customer = db.CustomerMasters.ToList();
             ViewBag.Movement = db.CourierMovements.ToList();
             var _invoice = db.CustomerInvoices.Find(id);
@@ -641,7 +643,12 @@ namespace CMSV2.Controllers
             _custinvoice.OtherCharge = _invoice.OtherCharge;
             _custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
+            
+            string monetaryunit = Session["MonetaryUnit"].ToString();
+            _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
 
+            var comp = db.AcCompanies.Find(companyid);
+            _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
             _details = (from c in db.CustomerInvoiceDetails
                         join ins in db.InScanMasters on c.InscanID equals ins.InScanID
@@ -706,7 +713,7 @@ namespace CMSV2.Controllers
             _custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
             //_custinvoice.invoiceFooter = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" select c.Text1).FirstOrDefault();
-            _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" && c.BranchId==branchid select c).FirstOrDefault();
+            _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "InvoiceFooter" && c.BranchId==branchid select c).FirstOrDefault();
             var comp = db.AcCompanies.Find(companyid);
 
             _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;

@@ -362,7 +362,7 @@ namespace CMSV2.Controllers
                 {
                     v.Text1 = vm.TextDoc;
                 }
-                else
+                else if(v.SetupID==1)
                 {
                     v.Text1 = vm.Text1;
                     v.Text2 = vm.Text2;
@@ -375,11 +375,11 @@ namespace CMSV2.Controllers
             }
             else
             {
-                if (v.SetupTypeID != 2)
+                if (v.SetupTypeID != 1)
                 {
                     v.Text1 = vm.TextDoc;
                 }
-                else
+                else if (v.SetupID==1) //invoice footer
                 {
                     v.Text1 = vm.Text1; // Doc;
                     v.Text2 = vm.Text2;

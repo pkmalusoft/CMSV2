@@ -23,7 +23,7 @@
             
             <div class="col-md-1 checkboxdesign">
                 @(i + 1)
-                @Html.CheckBoxFor(model => model.CustomerInvoiceDetailsVM[i].AWBChecked, new { name = "AWBChecked", @class = "checkfilter calfield" })
+                @Html.CheckBoxFor(model => model.CustomerInvoiceDetailsVM[i].AWBChecked, new { name = "AWBChecked", @class = "checkfilter calfield",style="margin-left:10px;" })
                 @*@Html.CheckBox(@item.AWBChecked, new { @name = "AWBChecked", value = @item.AWBChecked })*@
             </div>
         </td>        
@@ -40,16 +40,16 @@
              @item.ConsigneeCountryName
          </td>
          <td class="text-right">
-             @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.CourierCharge,_decimal)
+             @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge,_decimal)
           </td>
           <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.CustomCharge, _decimal)
+              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CustomCharge, _decimal)
           </td>
           <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.OtherCharge, _decimal)
+              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, _decimal)
           </td>
           <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalCharges, _decimal)
+              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.TotalCharges, _decimal)
            </td>
 
          @*<td style="width:101px">
@@ -88,20 +88,20 @@
                     console.log(response.data);
                     var _custdata = response.data;
                           
-                    $('#lbltotalcharge').html(parseFloat(_custdata.TotalCharges).toFixed(@_decimal));
-                    $('#lbladminpercent').html(parseFloat(_custdata.AdminPer).toFixed(@_decimal));
-            $('#lbltaxpercent').html(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal));
-            $('#lblfuelpercent').html(parseFloat(_custdata.FuelPer).toFixed(@_decimal));
-                    $('#lblothercharge').html(parseFloat(_custdata.OtherCharge).toFixed(@_decimal));
+                    $('#lbltotalcharge').html(addCommas(parseFloat(_custdata.TotalCharges).toFixed(@_decimal)));
+                    $('#lbladminpercent').html(addCommas(parseFloat(_custdata.AdminPer).toFixed(@_decimal)));
+                    $('#lbltaxpercent').html(addCommas(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal)));
+                    $('#lblfuelpercent').html(addCommas(parseFloat(_custdata.FuelPer).toFixed(@_decimal)));
+                    $('#lblothercharge').html(addCommas(parseFloat(_custdata.OtherCharge).toFixed(@_decimal)));
 
-                    $('#AdminAmt').val(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#FuelAmt').val(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#ChargeableWT').val(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#InvoiceTotal').val(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
-                    $('#lbladminamount').html(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#lbltaxamount').html(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#lblfuelamount').html(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#lblinvoicetotal').html(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                    $('#AdminAmt').val(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#FuelAmt').val(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#ChargeableWT').val(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#InvoiceTotal').val(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
+                    $('#lbladminamount').html(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#lbltaxamount').html(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#lblfuelamount').html(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#lblinvoicetotal').html(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
 
                 }
             });
@@ -131,20 +131,20 @@
                 success: function (response) {
                     console.log(response.data);
                     var _custdata = response.data;
-                         $('#lbltotalcharge').html(parseFloat(_custdata.TotalCharges).toFixed(@_decimal));
-                    $('#lbladminpercent').html(parseFloat(_custdata.AdminPer).toFixed(@_decimal));
-            $('#lbltaxpercent').html(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal));
-            $('#lblfuelpercent').html(parseFloat(_custdata.FuelPer).toFixed(@_decimal));
-                    $('#lblothercharge').html(parseFloat(_custdata.OtherCharge).toFixed(@_decimal));
+                    $('#lbltotalcharge').html(addCommas(parseFloat(_custdata.TotalCharges).toFixed(@_decimal)));
+                    $('#lbladminpercent').html(addCommas(parseFloat(_custdata.AdminPer).toFixed(@_decimal)));
+                    $('#lbltaxpercent').html(addCommas(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal)));
+                    $('#lblfuelpercent').html(addCommas(parseFloat(_custdata.FuelPer).toFixed(@_decimal)));
+                    $('#lblothercharge').html(addCommas(parseFloat(_custdata.OtherCharge).toFixed(@_decimal)));
 
-                    $('#AdminAmt').val(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#FuelAmt').val(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#ChargeableWT').val(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#InvoiceTotal').val(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
-                    $('#lbladminamount').html(parseFloat(_custdata.AdminAmt).toFixed(@_decimal));
-                    $('#lbltaxamount').html(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal));
-                    $('#lblfuelamount').html(parseFloat(_custdata.FuelAmt).toFixed(@_decimal));
-                    $('#lblinvoicetotal').html(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal));
+                    $('#AdminAmt').val(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#FuelAmt').val(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#ChargeableWT').val(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#InvoiceTotal').val(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
+                    $('#lbladminamount').html(addCommas(parseFloat(_custdata.AdminAmt).toFixed(@_decimal)));
+                    $('#lbltaxamount').html(addCommas(parseFloat(_custdata.ChargeableWT).toFixed(@_decimal)));
+                    $('#lblfuelamount').html(addCommas(parseFloat(_custdata.FuelAmt).toFixed(@_decimal)));
+                    $('#lblinvoicetotal').html(addCommas(parseFloat(_custdata.InvoiceTotal).toFixed(@_decimal)));
                 }
             });
         });

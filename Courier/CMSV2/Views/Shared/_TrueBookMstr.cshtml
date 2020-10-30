@@ -496,7 +496,7 @@
                                     <ul class="dropdown-menu" id="liyear">
                                         @foreach (var item in yearList)
                                         {
-                                            <li class="liyearitem" id="liyear_@item.AcFinancialYearID">@item.ReferenceName</li>
+                                        <li class="liyearitem" id="liyear_@item.AcFinancialYearID">@CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.AcFYearFrom) - @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.AcFYearTo)</li>
                                         }
                                     </ul>
                                 

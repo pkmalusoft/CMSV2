@@ -139,7 +139,7 @@ namespace CMSV2.Controllers
                 if (finacialyear != null)
                 {
                     Session["fyearid"] = finacialyear.AcFinancialYearID;
-                    Session["CurrentYear"] = finacialyear.ReferenceName;
+                    Session["CurrentYear"] = (finacialyear.AcFYearFrom.Value.Date.ToString("dd MMM yyyy") + " - " + finacialyear.AcFYearTo.Value.Date.ToString("dd MMM yyyy"));
                     Session["FyearFrom"] = finacialyear.AcFYearFrom;
                     Session["FyearTo"] = finacialyear.AcFYearTo;
                 }

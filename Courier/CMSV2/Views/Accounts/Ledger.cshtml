@@ -4,13 +4,35 @@
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        console.log(@ViewBag.ReportId);
+        if (@ViewBag.ReportId == '1') {
+            console.log('report1');
+            $("#divreport2").addClass('hide');
+        }
+        else if (@ViewBag.ReportId == '2') {
+            console.log('report2');
+            $("#divreport1").addClass('hide');
+        }
+        else if (@ViewBag.ReportId == '3') {
+            console.log('report3');
+            $("#divreport1").addClass('hide');
+        }
+    });
+</script>
 
 <section class="content-header">
-    <h1 class="headingfont">Accounts Ledger</h1>
+    <h1 class="headingfont">@ViewBag.ReportName</h1>
 </section>
-<div class="row no-margin">
+<div class="row no-margin" id="divreport1">
     @{ Html.RenderAction("ReportParam", "Accounts");}
 </div>
+
+<div class="row no-margin" id="divreport2">
+    @{ Html.RenderAction("ReportParamAsonDate", "Accounts");}
+</div>
+<div id="DisplayPDF">Hie</div>
 <div class="row no-margin" style="padding-top:10px">
     @{ Html.RenderAction("ReportFrame", "Accounts");}
     @*<iframe src=@ViewBag.ReportOutput width="100%" height="600px"></iframe>*@

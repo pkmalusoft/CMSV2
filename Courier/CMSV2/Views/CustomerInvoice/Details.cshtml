@@ -148,42 +148,50 @@
                             <td>Total Charge</td>
                             <td></td>
                             <td></td>
-                            <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges, _decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
                         </tr>
                         <tr class="charegRow">
                             <td colspan="5"></td>
                             <td>Admin%</td>
-                            <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminPer, @_decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label></td>
                             <td></td>
-                            <td class="text-right"><label class="headinglabel" id="lbladminamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminAmt, @_decimal)</label></td>
+                            <td class="text-right"><label class="headinglabel" id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label></td>
                         </tr>
                         <tr class="charegRow">
                             <td colspan="5"></td>
                             <td>Fuel SurCharge%</td>
-                            <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelPer, @_decimal)</label></td>
+                            <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label></td>
                             <td></td>
-                            <td class="text-right"><label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelAmt, @_decimal)</label></td>
+                            <td class="text-right"><label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label></td>
                         </tr>
                         <tr class="charegRow">
                             <td colspan="5"></td>
                             <td>Tax%</td>
-                            <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.CustomerInvoiceTax, @_decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label></td>
                             <td></td>
-                            <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.ChargeableWT, @_decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label></td>
                         </tr>
                         <tr class="charegRow">
                             <td colspan="5"></td>
                             <td>Other Charges</td>
                             <td></td>
                             <td></td>
-                            <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.OtherCharge, @_decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label></td>
                         </tr>
                         <tr class="charegRow">
-                            <td colspan="5"></td>
+                            <td colspan="5">
+
+                            </td>
                             <td><b>Net Invoice Total</b></td>
                             <td></td>
                             <td> </td>
-                            <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges, _decimal)</label></td>
+                            <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
+                            <td colspan="4">
+                               <b>@Model.CurrencyName: - (@Model.InvoiceTotalInWords)</b>
+                            </td>
                         </tr>
                     </tbody>
 
@@ -200,7 +208,7 @@
 
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges, _decimal)</label>
+                    <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label>
                 </div>
             </div>
             <div class="row no-margin d-flex">
@@ -209,10 +217,10 @@
 
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminPer, @_decimal)</label>
+                    <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label>
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel " id="lbladminamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.AdminAmt, @_decimal)</label>
+                    <label class="headinglabel " id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label>
                 </div>
             </div>
             <div class="row no-margin d-flex">
@@ -220,10 +228,10 @@
                     <label class="headinglabel">Fuel SurCharge%</label>
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelPer, @_decimal)</label>
+                    <label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label>
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.FuelAmt, @_decimal)</label>
+                    <label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label>
                 </div>
             </div>
 
@@ -232,10 +240,10 @@
                     <label class="headinglabel">Tax%</label>
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.CustomerInvoiceTax, @_decimal)</label>
+                    <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label>
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.ChargeableWT, @_decimal)</label>
+                    <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label>
                 </div>
             </div>
             <div class="row no-margin d-flex">
@@ -246,7 +254,7 @@
 
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.OtherCharge, @_decimal)</label>
+                    <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label>
                 </div>
             </div>
             <div class="row no-margin d-flex">
@@ -254,12 +262,13 @@
                     <label class="headinglabel">Net Invoice Total</label>
                 </div>
                 <div class="col-md-3 text-right">
-
+                    
                 </div>
                 <div class="col-md-3 text-right">
-                    <label class="headinglabel " id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.InvoiceTotal, @_decimal)</label>
+                    <label class="headinglabel " id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal, @_decimal)</label>
                 </div>
             </div>
+          
 
         </div>
     </div>

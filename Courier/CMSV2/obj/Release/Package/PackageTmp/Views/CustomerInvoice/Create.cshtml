@@ -173,7 +173,7 @@
                         </th>
                         <th width="12%">AWB No.</th>
                         <th>AWB Date</th>
-                        <th width="20%">Consingee</th>
+                        <th width="20%">Consignee</th>
                         <th>Destination Country</th>
                         <th>Courier Charge</th>
                         <th>Custom Charge</th>
@@ -189,7 +189,7 @@
                                 <td>Total Charge</td>
                                 <td></td>
                                 <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.TotalCharges,_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges,_decimal)</label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
@@ -224,7 +224,7 @@
                                 <td><b>Net Invoice Total</b></td>
                                 <td></td>
                                 <td> </td>
-                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.InvoiceTotal,_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal,_decimal)</label></td>
                             </tr>
                         </tbody>
 
