@@ -63,6 +63,10 @@
                     }
                 })
             }, minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#AcHeadName").val(ui.item.label);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#AcHeadName").val(i.item.label);
@@ -91,7 +95,7 @@
         <div class="col-md-2">
             <label class="headinglabel">Account Head</label>            
             @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control",@autocomplete="off",@id="AcHeadName",@required="true"})            
-            @Html.HiddenFor(model => model.AcHeadId, new { Value = "0", id = "SelectedAcHead" })
+            @Html.HiddenFor(model => model.AcHeadId, new { id = "SelectedAcHead" })
         </div>
         @*<div class="col-md-3">
                 <label class="headinglabel">Courier Type</label> <br />
