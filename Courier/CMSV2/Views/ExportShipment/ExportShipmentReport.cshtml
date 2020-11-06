@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
     var i = 1;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
- 
+    var _decimal = @Session["Decimal"].ToString();
 }
 
 <script type="text/javascript">
@@ -18,7 +18,15 @@
 
 </script>
 <script>
-    
+     function setTwoNumberDecimal(obj) {
+        if ($(obj).val() == null || $(obj).val() == "") {
+            $(obj).val(0);
+        }
+        else {
+
+            $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        }
+    }
        function printDiv() {
           var divid="divreport"
     var contents = document.getElementById(divid).innerHTML;
@@ -50,23 +58,17 @@
     </div>
 </div>
 
-<div class="wrapper" id="divreport">
-    @*<style>
-        * {
-            margin: 0;
-            padding: 0;
+<div class="" id="divreport">
+    <style>
+        body {
             box-sizing: border-box;
             font-family: Calibri;
         }
 
-        .wrapper {
-            max-width: 1200px;
-            margin: auto;
-        }
+
 
         .invoiceRow {
-            justify-content: space-between;
-            align-items: center;
+            margin: 50px 0;
         }
 
         .logo {
@@ -76,6 +78,10 @@
 
         .invoiceRow table th {
             text-align: left;
+            background: #daf2fb;
+            -webkit-print-color-adjust: exact;
+            color: #1a7fa5;
+            font-size: 14px;
         }
 
         .headrow {
@@ -97,13 +103,14 @@
         }
 
         .invoiceRow table {
-            border-radius: 15px;
-            border: 2px solid #333;
+            border: 1px solid #c0e0ec;
+            ;
             border-spacing: 0;
+            border-collapse: unset;
         }
 
             .invoiceRow table th, .invoiceRow table td {
-                padding: 5px 10px;
+                padding: 8px 10px;
             }
 
 
@@ -141,14 +148,20 @@
         }
 
             .particularInner table th {
-                border-top: 2px solid #333;
-                border-bottom: 2px solid #333;
-                padding: 8px 0;
+                border-top: 2px solid #07a7e3;
+                border-bottom: 2px solid #07a7e3;
+                padding: 8px 6px;
                 text-align: left;
+                background: #07a7e3;
+                font-size: 14px;
+                color: #fff;
+                font-weight: normal;
+                -webkit-print-color-adjust: exact;
             }
 
-            .particularInner table td, .rightTotal th, .rightTotal td {
-                padding: 5px 0;
+            .particularInner table td {
+                padding: 5px 10px;
+                font-weight: normal;
             }
 
         .trnBlock {
@@ -160,12 +173,11 @@
         }
 
         .particularInner table > thead > th {
-            font-size: 10pt;
             font-weight: 500;
         }
 
         .particularInner table > tbody > tr > td {
-            font-size: 9pt !important;
+            font-size: 12px !important;
         }
 
         .totalRow {
@@ -195,9 +207,9 @@
             }
 
         .text-right {
-            text-align: right;
+            text-align: right !important;
         }
-    </style>*@
+    </style>
     <section class="invoiceInfo">
         <div class="invoiceRow d-flex">
 
@@ -208,6 +220,7 @@
                     <th>Consignee Name</th>
                     <th>Origin Airport</th>
                     <th>Destination Airport</th>
+                    <th>---</th>
                 </tr>
                 <tr>
                     <td>
@@ -275,7 +288,7 @@
                     <td>
                         @Html.DisplayFor(model => model.TotalAWB)
                     </td>
-                </tr>               
+                </tr>
             </table>
 
         </div>
@@ -291,16 +304,16 @@
                         <th>
                             AWB No.
                         </th>
-                        <th>
+                        <th width="13%">
                             Shipper
                         </th>
-                        <th>
+                        <th width="13%">
                             Receiver
                         </th>
-                        <th>
-                            Destination
-                        </th>
-                        <th>
+                        @*<th width="8%">
+                                Destination
+                            </th>*@
+                        <th width="8%">
                             Contents
                         </th>
                         <th>
@@ -313,7 +326,7 @@
                             Bag
                         </th>
                         <th>
-                            Value
+                            Charge
                         </th>
                         <th>
                             F.Agent
@@ -324,40 +337,47 @@
                         <th>
                             F.A. Date
                         </th>
-                        <th>
+                        <th class="text-right">
                             F.A.Charge
                         </th>
-                        <th>
+                        <th class="text-right">
                             O.Charge
-                        </th>                       
+                        </th>
                         <th>
                             Flight
-                        </th>                        
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="input-table">
                     @foreach (var shipment in Model.ShipmentsVM)
                     {
-                    <tr>
-                        <td>@i</td>
-                        <td>@shipment.AWB</td>
-                        <td>@shipment.Shipper</td>
-                        <td>@shipment.Reciver</td>
-                        <td>@shipment.DestinationCity</td>
+                        <tr>
+                            <td>@i</td>
+                            <td>@shipment.AWB</td>
+                            <td>
+                                @shipment.Shipper<br />
+                            @shipment.ConsignorPhone <br />
+                            @shipment.OriginCountry
+                        </td>
+                        <td>
+                            @shipment.Reciver <br />
+                            @shipment.ConsigneePhone <br />
+                            @shipment.DestinationCity
+                        </td>
                         <td>@shipment.Contents</td>
                         <td>@shipment.PCS</td>
-                        <td>@shipment.Weight.ToString("0.00")</td>
+                        <td>@shipment.Weight.ToString("0.000")</td>
                         <td>@shipment.BagNo</td>
                         <td>@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
                         <td>@shipment.ForwardAgentName</td>
                         <td>@shipment.FwdAgentAWBNo</td>
-                        <td>@shipment.FwdDate</td>
-                        <td>@shipment.FwdCharge</td>
-                        <td>@shipment.OtherCharge</td>
+                        <td class="text-right">@shipment.FwdDate</td>
+                        <td class="text-right">@shipment.FwdCharge</td>
+                        <td class="text-right">@shipment.OtherCharge</td>
                         <td>@shipment.FwdFlight</td>
                     </tr>
-                        i++;
-                    }
+                    i++;
+                }
                 </tbody>
             </table>
 
@@ -366,9 +386,9 @@
 
 </div>
 
-    <script>
-        $(document).ready(function () {
-            $("#exportshipment").addClass("active");
-        });
-    </script>
+<script>
+    $(document).ready(function () {
+        $("#exportshipment").addClass("active");
+    });
+</script>
 

@@ -76,6 +76,11 @@ namespace CMSV2.Models
         public string ForwardAgentName {get;set;}
         public string CurrencyName { get; set; }
         public string CurrenySymbol { get; set; }
+        public string ConsignorPhone { get; set; }
+        public string ConsigneePhone { get; set; }
+        public string OriginCountry { get; set; }
+        public decimal? AWBOtherCharge { get; set; }
+        public decimal? AWBCourierCharge { get; set; }
     }
     public class ExportShipmentVM :ExportShipment
     {
@@ -119,9 +124,18 @@ namespace CMSV2.Models
 
     public class AccountsReportParam
     {
-        public int  AcHeadId { get; set; }
+        public int  AcHeadId { get; set; }        
         public string AcHeadName { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+
+        public int AcTypeId { get; set; }
+        public int AcGroupId { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+
+
     }
 }

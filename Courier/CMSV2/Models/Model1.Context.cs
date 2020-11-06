@@ -269,6 +269,8 @@ namespace CMSV2.Models
         public virtual DbSet<TempRateMaster> TempRateMasters { get; set; }
         public virtual DbSet<Transit> Transits { get; set; }
         public virtual DbSet<TransportMode> TransportModes { get; set; }
+        public virtual DbSet<CODReceipt> CODReceipts { get; set; }
+        public virtual DbSet<CODReceiptDetail> CODReceiptDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

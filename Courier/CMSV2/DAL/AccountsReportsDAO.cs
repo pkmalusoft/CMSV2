@@ -74,7 +74,27 @@ namespace CMSV2.DAL
             //Response.ClearHeaders();
             string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output=="EXCEL")
+            {
+                
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if(reportparam.Output=="WORD")
+            {
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+                        
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 

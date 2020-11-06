@@ -726,6 +726,49 @@
     <Property Name="IsHub" Type="bit" />
     <Property Name="CountryCode" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="CODReceipt">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptDate" Type="datetime" Nullable="false" />
+    <Property Name="AgentID" Type="int" Nullable="false" />
+    <Property Name="ManifestID" Type="nvarchar" MaxLength="500" />
+    <Property Name="AchHeadID" Type="int" Nullable="false" />
+    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Deleted" Type="bit" />
+    <Property Name="FYearID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="EXRate" Type="money" />
+    <Property Name="FMoney" Type="money" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="ReceiptNo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="CurrencyID" Type="int" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CODReceiptDetail">
+    <Key>
+      <PropertyRef Name="ReceiptDetailID" />
+    </Key>
+    <Property Name="ReceiptDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptID" Type="int" Nullable="false" />
+    <Property Name="ManifestID" Type="int" Nullable="false" />
+    <Property Name="InScanId" Type="int" Nullable="false" />
+    <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Consignee" Type="nvarchar" MaxLength="400" />
+    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="400" />
+    <Property Name="CourierCharge" Type="money" Nullable="false" />
+    <Property Name="OtherCharge" Type="money" />
+    <Property Name="TotalCharge" Type="money" Nullable="false" />
+    <Property Name="AmountAllocate" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" />
+  </EntityType>
   <EntityType Name="ColoaderAllocation">
     <Key>
       <PropertyRef Name="ColoaderAllocationID" />
@@ -4009,6 +4052,18 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Principal>
       <Dependent Role="aspnet_UsersInRoles">
         <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CODReceip__Recei__5D8BC399">
+    <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
+    <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="CODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8589,6 +8644,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CODReceipt" EntityType="Self.CODReceipt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CODReceiptDetail" EntityType="Self.CODReceiptDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ColoaderAllocation" EntityType="Self.ColoaderAllocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ColoaderCostDetails" EntityType="Self.ColoaderCostDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
@@ -9022,6 +9079,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <AssociationSet Name="FK__aspnet_Us__UserI__2E5BD364" Association="Self.FK__aspnet_Us__UserI__2E5BD364">
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
       <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="Self.FK__CODReceip__Recei__5D8BC399">
+      <End Role="CODReceipt" EntitySet="CODReceipt" />
+      <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
     <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />

@@ -418,6 +418,9 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChartDetails_ZoneChart" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChartDetails_ZoneChart1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.aspnet_UsersInRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CODReceipt" Width="1.5" PointX="42.375" PointY="9" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CODReceiptDetail" Width="1.5" PointX="44.625" PointY="9.625" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -206,6 +206,7 @@
     <Compile Include="Controllers\BranchMasterController.cs" />
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
+    <Compile Include="Controllers\CODReceiptController.cs" />
     <Compile Include="Controllers\CompanyMasterController.cs" />
     <Compile Include="Controllers\ConsignmentEntryDomesticController.cs" />
     <Compile Include="Controllers\ConsignmentEntryFAgentAssignController.cs" />
@@ -640,6 +641,13 @@
     <Compile Include="Models\CMSUserSellectAll_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CODReceipt.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CODReceiptDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CODReceiptVM.cs" />
     <Compile Include="Models\ColoaderAllocation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3436,10 +3444,16 @@
     <Content Include="Views\Accounts\ReportParam.cshtml" />
     <Content Include="Views\Accounts\ReportFrame.cshtml" />
     <Content Include="Views\Accounts\ReportParamAsonDate.cshtml" />
+    <Content Include="Views\CODReceipt\Table.cshtml" />
+    <Content Include="Views\CODReceipt\Index.cshtml" />
+    <Content Include="Views\CODReceipt\Create.cshtml" />
+    <Content Include="Views\QuickAWB\Details.cshtml" />
+    <Content Include="Views\QuickAWB\Create - Copy.cshtml" />
+    <Content Include="Views\CODReceipt\ReceiptDetail.cshtml" />
+    <Content Include="Views\CODReceipt\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ReportsXSD\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

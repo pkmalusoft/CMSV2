@@ -20,6 +20,53 @@
             cursor: default;
             z-index: 1001 !important
         }
+        .autocomplete:focus{
+           background-color: #dbffcf;
+        }
+    .bg_box,.bg_box1{
+            background: #f3fbff;
+            padding: 5px 20px;
+            padding-bottom: 20px;
+        }
+      .detailBox:nth-of-type(2) .bg_box{
+            background: #f3fef0;
+        }
+        .charges{
+            border:1px solid #ccc;
+            width: 100%;
+        }
+        .charges td label{
+            color:#0997d0!important;
+            font-weight: bold;
+        }
+        .charges td,.charges th{
+            padding:5px;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .details1:nth-of-type(1) .bg_box1{
+            background:#fcf6ff;
+        }
+        .details1:nth-of-type(2) .bg_box1{
+            background:#f5f3ff;
+        }
+        .form-control{
+            height:30px!important;
+            border-radius: 5px!important;
+        }
+        .flexTitle{
+            display: flex;
+            justify-content: space-between;
+        }
+        h3{
+            margin:5px 0;
+            font-size: 19px;
+        }
+        hr{
+            margin-top:5px;
+            margin-bottom: 5px;
+            font-size:20px;
+        }
 </style>
 <script type="text/javascript">
 
@@ -1269,118 +1316,127 @@
         </div>
 
         <div class="row no-margin">
-            <div class="col-md-3">
-                <h3 style="color:white">CONSIGNOR/SHIPPER DETAILS</h3>
+            <div class="col-md-6 detailBox" >
+                <div class="bg_box">
+                <div class="row">
+                    <div class="flexTitle">
+            <div class="">
+                <h3 style="color:white; margin-top:10px">CONSIGNOR/SHIPPER DETAILS</h3>
             </div>
-
+            <div class="checkboxdesign text-right" style="float:right">                     
+                        @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
+                        <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+             </div>
         </div>
+            
+
+        <hr />
+            </div>
+       
         @*<div class="row no-margin">
                 <div class="col-md-3 checkboxdesign" style="padding-top: 20px">
                     @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
                     <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
 
+            </div>
+        </div>*@
+       
+            <div class="row no-margin" style="margin-top:10px!important">
+                <div class="col-md-6">
+                    
+                    @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "",@placeholder="Shipper Name" })
                 </div>
-            </div>*@
-        <div class="row no-margin" style="margin-top:20px">
-            <div class="col-md-6">
-                <label class="headinglabel required">Shipper Name</label>
-                <div class="checkboxdesign text-right" style="float:right">
-                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
-                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+
+                 <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true",@placeholder="Contact Person" })
+                    @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger",@placeholder="Contact Person" })
                 </div>
-                @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "margin-top:10px" })
+            </div>
+            <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
+               
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true",@placeholder="Telephone" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true",@placeholder="Flat/Building"})
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true",@placeholder="Street" })
+                </div>
+				 <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder="PinCode" })
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
+               
+                <div class="col-md-6">
+                    <label class="headinglabel required">Location</label>
+                    @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()",@placeholder="Location"  })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Origin City</label>
+                    @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
+                    @*<input class="form-control" id="ConsignorCityName" name="ConsignorCityName" type="text" readonly />*@
+                    @*@Html.DropDownListFor(model => model.origincity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Origin Country</label>
+                    @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
+                    @*<input class="form-control" id="ConsignorCountryName" name="ConsignorCountryName" type="text" readonly />*@
+                    @*@Html.DropDownListFor(model => model.origincountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                </div>
+
             </div>
 
+</div>
+</div>
 
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
-            <div class="col-md-3">
-                <label class="headinglabel required">Contact Person</label>
-                @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true" })
-                @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger" })
+           
+                <div class="col-md-6 detailBox">
+                    <div class="bg_box">
+                <div class="">
+                    <h3 style="color:white; margin-top:10px; margin-bottom: 0;">RECEIVER/CONSIGNEE DETAILLS</h3><hr />
+                </div>
+               
+            <div class="row no-margin" style="padding-top: 10px;margin-top: 74px!important; ">
+                <div class="col-md-6">
+                        <label class="headinglabel required">Consignee</label>
+                        @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
+                </div>
+                 <div class="col-md-6">
+                    <label class="headinglabel required">Contact Person</label>
+                    @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Telephone</label>
-                @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true" })
-            </div>
+            <div class="row no-margin" style="padding-top: 10px">
 
-            <div class="col-md-3">
-                <label class="headinglabel required">Flat/Building</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
-            </div>
+               
 
-            <div class="col-md-3">
-                <label class="headinglabel required">Street</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true" })
+                <div class="col-md-3">
+                    <label class="headinglabel required">Telephone No</label>
+                    @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Flat/Building</label>
+                    @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Street</label>
+                    @Html.TextBoxFor(model => model.ConsigneeAddress2_Street, new { @class = "form-control txttarget" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Pincode</label>
+                    @Html.TextBoxFor(model => model.ConsigneeAddress3_PinCode, new { @class = "form-control txttarget" })
+                </div>
             </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
-            <div class="col-md-3">
-                <label class="headinglabel required">PinCode</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Location</label>
-                @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geolocate1()" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin City</label>
-                @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
-                @*<input class="form-control" id="ConsignorCityName" name="ConsignorCityName" type="text" readonly />*@
-                @*@Html.DropDownListFor(model => model.origincity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin Country</label>
-                @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
-                @*<input class="form-control" id="ConsignorCountryName" name="ConsignorCountryName" type="text" readonly />*@
-                @*@Html.DropDownListFor(model => model.origincountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-        </div>
-
-
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
-                <h3 style="color:white">RECEIVER/CONSIGNEE DETAILLS</h3><hr />
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-6">
-                <label class="headinglabel required">Consignee</label>
-                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px">
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Contact Person</label>
-                @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Telephone No</label>
-                @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Flat/Building</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Street</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress2_Street, new { @class = "form-control txttarget" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Pincode</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress3_PinCode, new { @class = "form-control txttarget" })
-            </div>
-        </div>
 
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-6">
                 <label class="headinglabel required">Consingee Location</label>
-                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget", @onFocus = "geolocate()", @required = "true" })
-                @*<input class="form-control" id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
+                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
+                @*<input class="form-control  " id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
                 @*@Html.TextBoxFor(model => model.destlocation, new { @class = "form-control txttarget" })*@
             </div>
             <div class="col-md-3">
@@ -1390,114 +1446,69 @@
                 @*@Html.DropDownListFor(model => model.destinationCity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
             </div>
 
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee Country</label>
-                @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
-                @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
-                @*@Html.DropDownListFor(model => model.destinationCountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                    <div class="col-md-3">
+                        <label class="headinglabel required">Consignee Country</label>
+                        @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
+                        @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
+                        @*@Html.DropDownListFor(model => model.destinationCountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                    </div>
+                    </div>
+                </div>
             </div>
-
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
-                <h3 style="color:white">SHIPMENT DETAILS</h3><hr />
-            </div>
-
-        </div>
-
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
-                <label class="headinglabel required">Description</label>
-                @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-
-            <div class="col-md-1">
-                <label class="headinglabel required">Pieces</label>
-                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
-            </div>
-            <div class="col-md-1">
-                <label class="headinglabel required">Weight</label>
-                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Courier Movement Type</label>
-                @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Parcel Type</label>
-                @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Product Type</label>
-                @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divCostUpdate">
-
-            <h3 style="color:white">COST UPDATION</h3><hr />
-
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Customer Rate Type</label>
-                @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel">Material Cost</label>
-                @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Courier Charge</label>
-                @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel">Packing Charge</label>
-                @Html.TextBoxFor(model => model.PackingCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel">Customs Charge</label>
-                @Html.TextBoxFor(model => model.CustomCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel">Other Charge</label>
-                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-        </div>
+ </div>
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-6 details1">
+                        <div class="bg_box1">
+                    <div class="col-md-12">
+                        <h3 style="color:white">SHIPMENT DETAILS</h3><hr />
+                    </div>
 
 
 
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-md-2">
-                <label class="headinglabel">Total</label>
-                @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
-            </div>
-            <div class="col-md-4">
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-3">
+                        <label class="headinglabel required">Description</label>
+                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true" })
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Pieces</label>
+                        @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright",@onkeypress = "return isNumberKey1(event)", @required = "true" ,@maxlength=13 })
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Weight</label>
+                        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
+                    </div>
+                    <div class="col-md-5">
+                        <label class="headinglabel required">Courier Movement Type</label>
+                        @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
+                    </div>
+                    </div>
+                      <div class="row no-margin" style="padding-top: 10px">
+                      
+                       <div class="col-md-6">
+                        <label class="headinglabel required">Product Type</label>
+                        @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="headinglabel required">Parcel Type</label>
+                        @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
+                    </div>
+
+                   
+                </div>
+                <div class="row" style="padding-top:10px;">
+                     <div class="col-md-12">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
             </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Picked up By</label>
-                @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel">Depot Received By</label>
-                @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-            </div>
-
         </div>
+         <div class="row no-margin" style="padding-top:10px">
+            
+        </div>
+                </div>
 
-
+                <div class="col-md-12">
         <div class="row no-margin" style="padding-top: 10px" id="divforwardingagent">
 
             <h3 style="color:white">FORWARDING AGENT DETAILS</h3><hr />
@@ -1506,22 +1517,118 @@
 
         <div class="row no-margin" style="padding-top: 10px">
 
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <label class="headinglabel">Forwarding Agent</label>
                 @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "AgentID", "Name"), "Select", new { @class = "form-control" })
             </div>
 
 
-            <div class="col-md-3">
-                <label class="headinglabel">Forwarding AWB</label>
+            <div class="col-md-6">
+                <label class="headinglabel">Forwarding Agent Number</label>
                 @Html.TextBoxFor(model => model.FAWBNo, new { @class = "form-control" })
             </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel">Forwarding Charge</label>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-6">
+                <label class="headinglabel">Forwarding Agent Flight</label>
+                @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
+            </div>
+            <div class="col-md-6">
+                <label class="headinglabel">Forwarding Rate</label>
                 @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
             </div>
         </div>
+        </div>
+            </div>
+      
+       
+        <div class="col-md-6 details1"  id="divCostUpdate">
+            <div class="bg_box1">
+            <h3 style="color:white">COST UPDATION</h3><hr />
+
+
+        <div class="row no-margin" style="padding-top: 10px">
+
+
+            <div class="col-md-4">
+                <label class="headinglabel required">Customer Rate Type</label>
+                @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
+            </div>
+   
+          
+
+            <div class="col-md-4">
+                <label class="headinglabel required">Courier Charge</label>
+                @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
+            </div>
+
+             <div class="col-md-4">
+                <label class="headinglabel">Material Cost</label>
+                @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+            </div>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+
+             <div class="col-md-6">
+                <table class="charges">
+                    <thead>
+                        <tr>
+                            <th>Additional Cost</th>
+                            <th>Amount</th>
+                            <th>Based on</th>
+                        </tr>
+                    </thead>
+                        <tr>
+                            <td> <label class="headinglabel">Transportation</label></td>
+                            <td>   @Html.TextBoxFor(model => model.PackingCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })</td>
+                        </tr>
+                         
+                         <tr>
+                            <td>  <label class="headinglabel">Customs Duty</label></td>
+                            <td>   @Html.TextBoxFor(model => model.CustomCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })</td>
+                        </tr>
+                      
+                        <tr>
+                            <td> <label class="headinglabel">Transportation</label></td>
+                            <td><input type="text" class="form-control"></td>
+                        </tr>
+                </table>
+        </div>
+
+            <div class="col-md-6">
+            <div class="col-md-6">
+                <label class="headinglabel">Other Charge</label>
+                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+            </div>
+              <div class="col-md-6">
+                <label class="headinglabel">Total</label>
+                @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
+            </div>
+            <div class="col-md-6">
+                <label class="headinglabel">Picked up By</label>
+                @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="headinglabel">Depot Received By</label>
+                @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+            </div>
+        </div>
+           
+        </div>
+
+       
+
+        </div>
+    </div>
+</div>
+
+            
+           
+            
+
+
+        
         @*        <div class="col-md-3" style="padding-top:25px">
 
             <input type="button" value="Add" id="btnAddFAgent" class="btn btn-primary" />
@@ -1541,6 +1648,7 @@
                         </thead>
                     </table>
                 </div>
+
                 </div>*@
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-12 btn-right">

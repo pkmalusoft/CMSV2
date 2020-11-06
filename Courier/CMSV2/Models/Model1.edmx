@@ -731,6 +731,49 @@
           <Property Name="IsHub" Type="bit" />
           <Property Name="CountryCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="CODReceipt">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+          </Key>
+          <Property Name="ReceiptID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceiptDate" Type="datetime" Nullable="false" />
+          <Property Name="AgentID" Type="int" Nullable="false" />
+          <Property Name="ManifestID" Type="nvarchar" MaxLength="500" />
+          <Property Name="AchHeadID" Type="int" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChequeDate" Type="datetime" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Deleted" Type="bit" />
+          <Property Name="FYearID" Type="int" />
+          <Property Name="AcCompanyID" Type="int" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="EXRate" Type="money" />
+          <Property Name="FMoney" Type="money" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="ReceiptNo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CurrencyID" Type="int" />
+          <Property Name="Amount" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CODReceiptDetail">
+          <Key>
+            <PropertyRef Name="ReceiptDetailID" />
+          </Key>
+          <Property Name="ReceiptDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceiptID" Type="int" Nullable="false" />
+          <Property Name="ManifestID" Type="int" Nullable="false" />
+          <Property Name="InScanId" Type="int" Nullable="false" />
+          <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Consignee" Type="nvarchar" MaxLength="400" />
+          <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="400" />
+          <Property Name="CourierCharge" Type="money" Nullable="false" />
+          <Property Name="OtherCharge" Type="money" />
+          <Property Name="TotalCharge" Type="money" Nullable="false" />
+          <Property Name="AmountAllocate" Type="money" Nullable="false" />
+          <Property Name="Discount" Type="money" />
+        </EntityType>
         <EntityType Name="ColoaderAllocation">
           <Key>
             <PropertyRef Name="ColoaderAllocationID" />
@@ -4014,6 +4057,18 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
             </Principal>
             <Dependent Role="aspnet_UsersInRoles">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CODReceip__Recei__5D8BC399">
+          <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
+          <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CODReceipt">
+              <PropertyRef Name="ReceiptID" />
+            </Principal>
+            <Dependent Role="CODReceiptDetail">
+              <PropertyRef Name="ReceiptID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8594,6 +8649,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CODReceipt" EntityType="Self.CODReceipt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CODReceiptDetail" EntityType="Self.CODReceiptDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ColoaderAllocation" EntityType="Self.ColoaderAllocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ColoaderCostDetails" EntityType="Self.ColoaderCostDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
@@ -9027,6 +9084,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <AssociationSet Name="FK__aspnet_Us__UserI__2E5BD364" Association="Self.FK__aspnet_Us__UserI__2E5BD364">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="Self.FK__CODReceip__Recei__5D8BC399">
+            <End Role="CODReceipt" EntitySet="CODReceipt" />
+            <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
@@ -19385,6 +19446,12 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
             <Parameter Name="ZoneCategory" Mode="In" Type="String" />
             <Parameter Name="StatusBaseCategory" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <EntitySet Name="CODReceipts" EntityType="DB_9F57C4_couriertest_newModel.CODReceipt" />
+          <EntitySet Name="CODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.CODReceiptDetail" />
+          <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399">
+            <End Role="CODReceipt" EntitySet="CODReceipts" />
+            <End Role="CODReceiptDetail" EntitySet="CODReceiptDetails" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22898,6 +22965,63 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <Property Type="String" Name="ZoneCategory" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="StatusBaseCategory" Nullable="true" />
         </ComplexType>
+        <EntityType Name="CODReceipt">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+          </Key>
+          <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AgentID" Type="Int32" Nullable="false" />
+          <Property Name="ManifestID" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AchHeadID" Type="Int32" Nullable="false" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Deleted" Type="Boolean" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="CODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" FromRole="CODReceipt" ToRole="CODReceiptDetail" />
+          <Property Name="ReceiptNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="CODReceiptDetail">
+          <Key>
+            <PropertyRef Name="ReceiptDetailID" />
+          </Key>
+          <Property Name="ReceiptDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptID" Type="Int32" Nullable="false" />
+          <Property Name="ManifestID" Type="Int32" Nullable="false" />
+          <Property Name="InScanId" Type="Int32" Nullable="false" />
+          <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Consignee" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneePhone" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="AmountAllocate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="CODReceipt" Relationship="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" FromRole="CODReceiptDetail" ToRole="CODReceipt" />
+        </EntityType>
+        <Association Name="FK__CODReceip__Recei__5D8BC399">
+          <End Type="DB_9F57C4_couriertest_newModel.CODReceipt" Role="CODReceipt" Multiplicity="1" />
+          <End Type="DB_9F57C4_couriertest_newModel.CODReceiptDetail" Role="CODReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CODReceipt">
+              <PropertyRef Name="ReceiptID" />
+            </Principal>
+            <Dependent Role="CODReceiptDetail">
+              <PropertyRef Name="ReceiptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -31887,7 +32011,52 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ZoneCategoryUpdate" FunctionName="DB_9F57C4_couriertest_newModel.Store.ZoneCategoryUpdate" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="CODReceipts">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CODReceipt">
+              <MappingFragment StoreEntitySet="CODReceipt">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FMoney" ColumnName="FMoney" />
+                <ScalarProperty Name="EXRate" ColumnName="EXRate" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="AchHeadID" ColumnName="AchHeadID" />
+                <ScalarProperty Name="ManifestID" ColumnName="ManifestID" />
+                <ScalarProperty Name="AgentID" ColumnName="AgentID" />
+                <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CODReceiptDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CODReceiptDetail">
+              <MappingFragment StoreEntitySet="CODReceiptDetail">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="AmountAllocate" ColumnName="AmountAllocate" />
+                <ScalarProperty Name="TotalCharge" ColumnName="TotalCharge" />
+                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+                <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
+                <ScalarProperty Name="ConsigneePhone" ColumnName="ConsigneePhone" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+                <ScalarProperty Name="InScanId" ColumnName="InScanId" />
+                <ScalarProperty Name="ManifestID" ColumnName="ManifestID" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+                <ScalarProperty Name="ReceiptDetailID" ColumnName="ReceiptDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -1,0 +1,119 @@
+﻿@model CMSV2.Models.CODReceiptVM
+@{
+    int i = 0;
+    var _decimal = @Session["Decimal"].ToString();
+    decimal amountcollected = 0;
+}
+
+
+@*<input type="hidden" id="allocatedtotalamount" name="allocatedtotalamount" value="@Model.allocatedtotalamount"  />*@
+<thead class="input-table">
+    <tr>
+        <th>S.No.</th>
+        <th>Manifest No.</th>
+        <th>AWB NO.</th>
+        <th>AWB Date</th>
+        <th>Consignee</th>        
+        <th>Phone No.</th>
+        <th>Courier Charge</th>
+        <th>Other Charge</th>
+        <th>Total Charge</th>
+        <th>Amount Allocated</th>
+        <th>Discount</th>       
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model.ReceiptDetails)
+    {
+    <tr>
+        <td>@(i + 1)</td>
+        <td>
+
+            @Html.DisplayFor(model => model.ReceiptDetails[i].ManifestNumber)
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].ManifestID' value="@Model.ReceiptDetails[i].ManifestID" />
+        </td>
+        <td>
+            @*@Html.HiddenFor(model => model.ReceiptDetails[i].ReceiptID, new { @name = "ReceiptDetails[" + @i.ToString() + "].ReceiptID", @value = @Model.ReceiptDetails[i].ReceiptID })
+        @Html.HiddenFor(model => model.ReceiptDetails[i].ReceiptDetailID, new { @name = "ReceiptDetails[" + @i.ToString() + "].ReceiptDetailID", @value = @Model.ReceiptDetails[i].ReceiptDetailID })
+        @Html.HiddenFor(model => model.ReceiptDetails[i].InScanId, new { @name = "ReceiptDetails[" + @i.ToString() + "].InScanId", @value = @Model.ReceiptDetails[i].InScanId })
+        @Html.DisplayFor(model => model.ReceiptDetails[i].AWBNo, new { @name = "ReceiptDetails[" + @i.ToString() + "].AWBNo", @value = @Model.ReceiptDetails[i].AWBNo })*@
+
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].ReceiptID' value="@Model.ReceiptDetails[i].ReceiptID" />
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].ReceiptDetailID' value="@Model.ReceiptDetails[i].ReceiptDetailID" />
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].InScanId' value="@Model.ReceiptDetails[i].InScanId" />
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].AWBNo' value="@Model.ReceiptDetails[i].AWBNo" />
+            @Html.DisplayFor(model => model.ReceiptDetails[i].AWBNo)
+
+        </td>
+        <td>
+            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.ReceiptDetails[i].AWBDate)
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].AWBDate' value=@CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.ReceiptDetails[i].AWBDate) />
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.ReceiptDetails[i].Consignee)
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].Consignee' value="@Model.ReceiptDetails[i].Consignee" />
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.ReceiptDetails[i].ConsigneePhone)
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].ConsigneePhone' value="@Model.ReceiptDetails[i].ConsigneePhone" />
+        </td>
+        <td class="text-right">
+            @Html.DisplayFor(model => model.ReceiptDetails[i].CourierCharge, new { @class = "text-right" })
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].CourierCharge' value="@Model.ReceiptDetails[i].CourierCharge" />
+        </td>
+        <td class="text-right">
+            @Html.DisplayFor(model => model.ReceiptDetails[i].OtherCharge, new { @class = "text-right" })
+            <input type="hidden" name='ReceiptDetails[@i.ToString()].OtherCharge' value="@Model.ReceiptDetails[i].OtherCharge" />
+        </td>
+        <td class="text-right">
+            @Html.DisplayFor(model => model.ReceiptDetails[i].TotalCharge,new { @class = "text-right" })
+            <input type="hidden"  name='ReceiptDetails[@i.ToString()].TotalCharge' value="@Model.ReceiptDetails[i].TotalCharge" />
+        </td>
+        <td>
+            @*@Html.TextBoxFor(model => model.ReceiptDetails[i].AmountAllocate, new {@value=@Model.ReceiptDetails[i].AmountAllocate, @class = "form-control", @min = 1, @required = "true" })*@
+            <input type="text" id="amtallocate_@i"  name='ReceiptDetails[@i.ToString()].AmountAllocate' value="@Model.ReceiptDetails[i].AmountAllocate" class="text-right" onchange="checktotal(this)" />
+        </td>
+        <td>
+            <input type="text" id="amtdisc_@i" name='ReceiptDetails[@i.ToString()].Discount' value="@Model.ReceiptDetails[i].Discount" class="text-right"  onchange="checktotal(this)"/>
+            @*@Html.TextBoxFor(model => model.ReceiptDetails[i].Discount, new { @class = "form-control", @min = 1, @required = "true" })*@
+        </td>              
+    </tr>
+        i++;
+        @*@amountcollected += @Model.ReceiptDetails[i].AmountAllocate;*@
+    }
+    <tr>
+        <td colspan="9" class="text-right" >
+            <b>Total</b>
+        </td>
+        <td>
+            <input type="text" id="txttotalamountcollected" readonly class="text-right" value="@Model.allocatedtotalamount" />
+        </td>
+        <td>
+            <input type="text" id="txttotaldiscount" readonly value="0" class="text-right" />
+        </td>
+    </tr>
+</tbody>
+<script type="text/javascript">
+        function Delete(ID) {
+            if (confirm("Are you sure? You want to Delete this Invoice?")) {
+                window.location.href = "/CustomerInvoice/DeleteConfirmed/?id=" + ID;
+            }
+        }
+</script>
+
+@*<script type="text/javascript">
+
+    $(document).ready(function () {
+        var totalamt = parseFloat($("#allocatedtotalamount").val());
+        var amt = parseFloat($("#Amount").val());
+        if (amt > 0 && totalamt > 0) {
+            if (amt > totalamt) {
+                alert("Reeceived amount more than pending amount!");
+                $("#Amount").val(totalamt);
+            }
+        }
+        if (@ViewBag.ManifestIDs != null) {
+            $("#ManifestID").val(@ViewBag.ManifestIDs);
+        }
+    });
+</script>*@

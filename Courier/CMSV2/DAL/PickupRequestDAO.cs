@@ -315,6 +315,45 @@ namespace CMSV2.DAL
             }
             return MaxPickUpNo;
         }
+
+
+        public string GetMaxCODReceiptNo(int Companyid, int BranchId)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "GetMaxCODReceiptNo";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@CompanyId", Companyid);
+                        cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        con.Open();
+                        SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
+                        SqlDA.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            MaxPickUpNo = dt.Rows[0][0].ToString();
+
+
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return MaxPickUpNo;
+
+        }
     }
 
 }

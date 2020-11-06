@@ -410,6 +410,7 @@ namespace CMSV2.Controllers
             
         }
 
+        
         public JsonResult GetAgentBy_Id(int Id)
         {
             var agent = db.AgentMasters.Find(Id); // db.ForwardingAgentMasters.FirstOrDefault();
@@ -1442,6 +1443,7 @@ namespace CMSV2.Controllers
             _ExportShipment.ShipmentTypeId = exportshipment.ShipmentTypeId;
             _ExportShipment.Type = db.tblShipmentTypes.Find(exportshipment.ShipmentTypeId).ShipmentType;
             _ExportShipment.ShipmentsVM = (from c in db.ExportShipmentDetails
+                                           join ins in db.InScanMasters on c.InscanId equals ins.InScanID
                                            join cur in db.CurrencyMasters on c.CurrencyID equals cur.CurrencyID
                                            join agent in db.AgentMasters on c.FwdAgentId equals agent.AgentID into gj
                                            from subpet in gj.DefaultIfEmpty()
@@ -1461,6 +1463,11 @@ namespace CMSV2.Controllers
                                                Reciver = c.Reciver,
                                                DestinationCountry = c.DestinationCountry,
                                                DestinationCity = c.DestinationCity,
+                                               OriginCountry = ins.ConsignorCountryName,
+                                               ConsignorPhone = ins.ConsignorPhone,
+                                               ConsigneePhone = ins.ConsigneePhone,
+                                               AWBCourierCharge = ins.CourierCharge,
+                                               AWBOtherCharge = ins.OtherCharge,
                                                BagNo = c.BagNo,
                                                CurrencyID = c.CurrencyID,
                                                FwdAgentId = c.FwdAgentId,
@@ -1755,6 +1762,7 @@ namespace CMSV2.Controllers
                 obj.Contents = lst.CargoDescription;
                 obj.AWB = lst.AWBNo;
                 obj.InScanId = lst.InScanID;
+                obj.Value = Convert.ToDecimal(lst.NetTotal);
 
                     return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
 

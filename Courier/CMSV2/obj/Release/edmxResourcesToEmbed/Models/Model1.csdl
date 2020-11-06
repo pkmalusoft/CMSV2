@@ -9708,6 +9708,12 @@
       <Parameter Name="ZoneCategory" Mode="In" Type="String" />
       <Parameter Name="StatusBaseCategory" Mode="In" Type="Boolean" />
     </FunctionImport>
+    <EntitySet Name="CODReceipts" EntityType="DB_9F57C4_couriertest_newModel.CODReceipt" />
+    <EntitySet Name="CODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.CODReceiptDetail" />
+    <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399">
+      <End Role="CODReceipt" EntitySet="CODReceipts" />
+      <End Role="CODReceiptDetail" EntitySet="CODReceiptDetails" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13221,4 +13227,61 @@
     <Property Type="String" Name="ZoneCategory" Nullable="true" MaxLength="50" />
     <Property Type="Boolean" Name="StatusBaseCategory" Nullable="true" />
   </ComplexType>
+  <EntityType Name="CODReceipt">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="AgentID" Type="Int32" Nullable="false" />
+    <Property Name="ManifestID" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="AchHeadID" Type="Int32" Nullable="false" />
+    <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Deleted" Type="Boolean" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="UserID" Type="Int32" />
+    <NavigationProperty Name="CODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" FromRole="CODReceipt" ToRole="CODReceiptDetail" />
+    <Property Name="ReceiptNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="CODReceiptDetail">
+    <Key>
+      <PropertyRef Name="ReceiptDetailID" />
+    </Key>
+    <Property Name="ReceiptDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" />
+    <Property Name="ManifestID" Type="Int32" Nullable="false" />
+    <Property Name="InScanId" Type="Int32" Nullable="false" />
+    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Consignee" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneePhone" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="AmountAllocate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="CODReceipt" Relationship="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" FromRole="CODReceiptDetail" ToRole="CODReceipt" />
+  </EntityType>
+  <Association Name="FK__CODReceip__Recei__5D8BC399">
+    <End Type="DB_9F57C4_couriertest_newModel.CODReceipt" Role="CODReceipt" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.CODReceiptDetail" Role="CODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="CODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

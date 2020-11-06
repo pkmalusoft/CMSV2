@@ -23,6 +23,32 @@
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
     });
+
+    function setfilteroption() {
+        if ($("#Filters").val() == "AcType") {
+            $("#divacgroup").addClass("hide");
+            $("#divachead").addClass("hide");
+            $("#divactype").removeClass("hide");
+
+        }
+        else if ($("#Filters").val() == "AcGroup") {
+            $("#divachead").addClass("hide");
+            $("#divactype").addClass("hide");
+            $("#divacgroup").removeClass("hide");
+        }
+        else if ($("#Filters").val() == "AcHead") {
+            $("#divactype").addClass("hide");
+            $("#divacgroup").addClass("hide");
+            $("#divachead").removeClass("hide");
+        }
+        else {
+            $("#divactype").addClass("hide");
+            $("#divacgroup").addClass("hide");
+            $("#divachead").removeClass("hide");
+            $("#divachead").attr("disabled", "disabled");
+        }
+
+    }
     $(document).ready(function () {
         //$('#btn1').on('click', function () {
 
@@ -43,6 +69,27 @@
         //    }
         //});
         //});
+        $("#Filters").on("change", function () {
+
+            if ($("#Filters").val() == "AcType") {
+                $("#divacgroup").addClass("hide");
+                $("#divachead").addClass("hide");
+                $("#divactype").removeClass("hide");
+
+            }
+            else if ($("#Filters").val() == "AcGroup") {
+                $("#divachead").addClass("hide");
+                $("#divactype").addClass("hide");
+                $("#divacgroup").removeClass("hide");
+            }
+            else if ($("#Filters").val() == "AcHead") {
+                $("#divactype").addClass("hide");
+                $("#divacgroup").addClass("hide");
+                $("#divachead").removeClass("hide");
+            }
+
+
+        });
 
         $("#AcHeadName").autocomplete({
             source: function (request, response) {
@@ -73,7 +120,7 @@
                 $('#SelectedAcHead').val(i.item.AcHeadID);
             }
         });
-            });
+    });
 
 
 </script>
@@ -82,36 +129,99 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex">
+<div class="row no-margin d-flex">
+    <div class="col-md-2">
+        <label class="headinglabel">Filters</label>
+        @Html.DropDownList("Filters", new List<SelectListItem>
+            {
+                new SelectListItem{ Text="All", Value = "All" },
+                new SelectListItem{ Text="Account Type", Value = "AcType" },
+                new SelectListItem{ Text="Account Group", Value = "AcGroup" },
+                new SelectListItem{ Text="Chart of Account", Value = "AcHead" },
 
-        <div class="col-md-2">
-            <label class="headinglabel required ">From Date</label>
-            @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+             }, "Select", new { @class = "form-control", @id = "Filters" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel required ">From Date</label>
+        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel required">To Date</label>
+        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+
+    <div class="col-md-4">
+        <div id="divactype" class="hide">
+            <label class="headinglabel">Account Type</label>
+            @Html.DropDownListFor(model => model.AcTypeId, new SelectList(ViewBag.AccountType, "Id", "AccountType"), "Select", new { @class = "form-control txttarget" })
+            @Html.ValidationMessageFor(model => model.AcTypeId)
         </div>
-        <div class="col-md-2">
-            <label class="headinglabel required">To Date</label>
-            @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+        <div id="divacgroup" class="hide">
+            <label class="headinglabel">Account Group</label>
+            @Html.DropDownListFor(model => model.AcGroupId, new SelectList(ViewBag.groups, "AcGroupID", "AcGroup"), "Select", new { @class = "form-control" })
         </div>
-        <div class="col-md-2">
-            <label class="headinglabel">Account Head</label>            
-            @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control",@autocomplete="off",@id="AcHeadName",@required="true"})            
+        <div id="divachead">
+            <label class="headinglabel">Account Head</label>
+            @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control", @autocomplete = "off", @id = "AcHeadName", @required = "true" })
             @Html.HiddenFor(model => model.AcHeadId, new { id = "SelectedAcHead" })
         </div>
-        @*<div class="col-md-3">
-                <label class="headinglabel">Courier Type</label> <br />
-                <select id="movementid" name="SelectedValues" multiple="multiple">
-                    <option value=""></option>
-                </select>
-            </div>*@
-    <div class="col-md-2">        
-        <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-        @*<a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>*@
-        @*<a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img  style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>*@
     </div>
-        @*<div class="col-md-2" style="padding-top:30px">
-            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
-        </div>*@
-    </div>
-}
+
+</div>
+
+        <div class="row no-margin d-flex">
+            <div class="col-md-2">
+                <label class="headinglabel">Output</label>
+                @Html.DropDownList("Output", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="PDF", Value = "PDF" },
+                    new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
+                    new SelectListItem{ Text="WORD", Value = "WORD" },
+
+                 }, "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Format</label>
+                @Html.DropDownList("Format", new List<SelectListItem>
+               {
+                   new SelectListItem{ Text="PlainPaper", Value = "Plain Paper" },
+                   new SelectListItem{ Text="LetterHead", Value = "Letter Head" }
+
+                }, "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Report Type</label>
+                @Html.DropDownList("ReportType", new List<SelectListItem>
+               {
+                   new SelectListItem{ Text="Detailed", Value = "Detailed" },
+                   new SelectListItem{ Text="Summary", Value = "Summary" }
+
+                }, "Select", new { @class = "form-control" })
+            </div>
+            @*<div class="col-md-2">
+                    <label class="headinglabel">Account Head</label>
+                    @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control", @autocomplete = "off", @id = "AcHeadName", @required = "true" })
+                    @Html.HiddenFor(model => model.AcHeadId, new { id = "SelectedAcHead" })
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required ">From Date</label>
+                    @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">To Date</label>
+                    @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+                </div>*@
+            <div class="col-md-2">
+                <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                <a class="btn btn-primary btnwidth" id="btnexportexcel" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)"><img style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>
+                @*<a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>*@
+                @*<a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img  style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>*@
+            </div>
+            @*<div class="col-md-2" style="padding-top:30px">
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+                </div>*@
+        </div>
+    }
 
 

@@ -3020,6 +3020,9 @@ new AcGroupModel()
             AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            
+            ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();            
+            ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
 
             DateTime pFromDate;
             DateTime pToDate;
@@ -3048,7 +3051,7 @@ new AcGroupModel()
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ReportParam([Bind(Include = "FromDate,ToDate,AcHeadId,AcHeadName")] AccountsReportParam picker)
+        public ActionResult ReportParam([Bind(Include = "FromDate,ToDate,AcHeadId,AcHeadName,Output,Filters")] AccountsReportParam picker)
         {
             AccountsReportParam model = new AccountsReportParam
             {
@@ -3056,8 +3059,10 @@ new AcGroupModel()
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
                 AcHeadId = picker.AcHeadId,
                 AcHeadName = picker.AcHeadName,                
+                Output =picker.Output
             };
-            
+
+            //model.Output = "EXCEL";
             ViewBag.Token = model;
             SessionDataModel.SetAccountsParam(model);
             Response.Buffer = false;
@@ -3065,10 +3070,16 @@ new AcGroupModel()
             Response.ClearHeaders();
             //Stream stream= GenerateReport();
             //GenerateDefaultReport();
-            AccountsReportsDAO.GenerateLedgerReport();
-            //return File(stream, "application/pdf", "AccLedger.pdf");
-            return RedirectToAction("Ledger", "Accounts",new { id = 1 });
             
+            AccountsReportsDAO.GenerateLedgerReport();
+            if (model.Output!="PDF")
+                return RedirectToAction("Download","Accounts",new { file = "a" });
+            else
+                return RedirectToAction("Ledger", "Accounts", new { id = 1 });
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+
+
             //return PartialView(model);
             //return View(model);
 
@@ -3111,7 +3122,37 @@ new AcGroupModel()
             //return PartialView("InvoiceSearch",model);
 
         }
-
+       [HttpGet]
+       [DeleteFileAttribute] //Action Filter, it will auto delete the file after download, 
+                      //I will explain it later
+        public ActionResult Download()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string file = reportparam.ReportFileName;
+            string fullPath = "";
+            if (Session["ReportOutput"] != null)
+                fullPath = Server.MapPath(Session["ReportOutput"].ToString());
+            else
+                ViewBag.ReportOutput = null;// "~/Reports/DefaultReport.pdf";
+            //get the temp folder and file path in server
+            
+            //return the file for download, this is an Excel 
+            //so I set the file content type to "application/vnd.ms-excel"
+            
+            if (reportparam.Output=="EXCEL" || reportparam.Output=="WORD")
+            {
+                return File(fullPath, "application/vnd.ms-excel", file);
+            }
+            //else if (reportparam.Output=="WORD")
+            //{
+            //    return File(fullPath, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", file);
+            //}
+            else
+            {
+                return File(fullPath, "application/pdf", file);
+            }
+            
+        }
 
         public ActionResult ReportParamAsonDate()
         {
@@ -3355,4 +3396,17 @@ public static class MvcHelpers
     }
 
 
+}
+public class DeleteFileAttribute : ActionFilterAttribute
+{
+    public override void OnResultExecuted(ResultExecutedContext filterContext)
+    {
+        filterContext.HttpContext.Response.Flush();
+
+        //convert the current filter context to file and get the file path
+        string filePath = (filterContext.Result as FilePathResult).FileName;
+
+        //delete the file after download
+        System.IO.File.Delete(filePath);
+    }
 }

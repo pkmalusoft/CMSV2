@@ -989,6 +989,10 @@ namespace CMSV2.Controllers
 
         }
 
+        public ActionResult Details(int id=0)
+        {
+            return View();
+        }
         public ActionResult PrintSearch()
         {
 

@@ -332,6 +332,21 @@ namespace CMSV2.Models
 
 
         }
+
+        public static int GetCompanyCurrencyID (int companyid)
+        {
+            Entities1 db = new Entities1();
+            var company = db.AcCompanies.Find(companyid);
+            if (company != null)
+            {
+                if (company.CurrencyID != null)
+                    return Convert.ToInt32(company.CurrencyID);
+                else
+                    return 0;
+            }
+            else
+                return 0;
+        }
         #endregion
 
     }

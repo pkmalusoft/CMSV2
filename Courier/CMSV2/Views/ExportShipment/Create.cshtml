@@ -93,12 +93,23 @@
         vertical-align: middle !important;
         padding: 10px !important;
     }
+    .multiselect {
+        align-items: center;
+        display: flex !Important;
+        justify-content: space-around;
+    }
+
+    #movementid + .btn-group button, #movementid + .btn-group {
+        display: block;
+        width: 100%;
+    }
 </style>
 
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
 <script type="text/javascript">
       function setTwoNumberDecimal(obj) {
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
@@ -417,14 +428,14 @@
                                 @Html.LabelFor(model => model.ShipmentTypeId, htmlAttributes: new { @class = "headinglabel required" })
                                 <div>
                                     @*@Html.DropDownListFor(model => model.Type, (IEnumerable<SelectListItem>)ViewBag.Type, Model.Type, htmlAttributes: new { @class = "form-control", @required = "true", @value = @Model.Type, @selected = @Model.Type })*@
-                                    @Html.DropDownListFor(model => model.ShipmentTypeId, new SelectList(@ViewBag.Type, "ID", "ShipmentType"), "Select" , htmlAttributes: new { @class = "form-control",@required="true" })
+                                    @Html.DropDownListFor(model => model.ShipmentTypeId, new SelectList(@ViewBag.Type, "ID", "ShipmentType"), "Select", htmlAttributes: new { @class = "form-control", @required = "true" })
                                     @Html.ValidationMessageFor(model => model.ShipmentTypeId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(model => model.TotalAWB, htmlAttributes: new { @class = "headinglabel required" })
                                 <div>
-                                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control", @min = 1, @required = "true"})
+                                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control", @min = 1, @required = "true" })
                                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                                 </div>
                             </div>
