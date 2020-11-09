@@ -113,7 +113,22 @@ namespace CMSV2.Controllers
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
-                }
+                   List<OtherChargeDetailVM> othercharngesvm = new List<OtherChargeDetailVM>();
+                OtherChargeDetailVM charge1 = new OtherChargeDetailVM();
+                charge1.OtherChargeID = 1;
+                charge1.OtherChargeName = "Customs charge";
+                charge1.Amount = 100;
+                othercharngesvm.Add(charge1);
+
+                charge1 = new OtherChargeDetailVM();
+                charge1.OtherChargeID = 2;
+                charge1.OtherChargeName = "Other charge";
+                charge1.Amount = 200;
+                othercharngesvm.Add(charge1);
+                v.othercharges = othercharngesvm;
+
+
+            }
                 else
                 {
                     ViewBag.Enquiry = db.InScanMasters.ToList();

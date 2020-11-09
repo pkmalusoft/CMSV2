@@ -3039,7 +3039,7 @@ new AcGroupModel()
                 }
             else
             {
-                if (reportparam.FromDate.Date.ToString() =="01-01-0001")
+                if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;

@@ -21,10 +21,15 @@ namespace CMSV2
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
+            DateTime dt = DateTime.Parse("2017-07-25 00:00:00");
+            string arabicculture = new CultureInfo("ar-AE").DateTimeFormat.GetMonthName(dt.Month);
+            
             CultureInfo newCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             newCulture.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
             newCulture.DateTimeFormat.DateSeparator = "-";
+                        
             Thread.CurrentThread.CurrentCulture = newCulture;
+            
         }
         protected void Application_EndRequest()
         {

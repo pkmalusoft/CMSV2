@@ -126,8 +126,8 @@ namespace CMSV2.Models
             int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
             DateTime startdate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearFrom);
             DateTime enddate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearTo);
-                        
-            DateTime todaydate = DateTime.Now.Date;
+
+            DateTime todaydate = DateTimeOffset.Now.Date; // DateTime.Now.Date;            
             return todaydate;
             //if (todaydate >= startdate && todaydate <= enddate) //current date between current financial year
             //    return todaydate;

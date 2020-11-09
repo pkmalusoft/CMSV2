@@ -1496,13 +1496,17 @@ namespace CMSV2.Controllers
                
                 try
                 {
-                    //var exportsid = db.S_ImportShipmentDetails.Where(d => d.ExportShipmentID == id).ToList();
-                    //exportsid.ForEach(s => { s.ExportShipmentID = null; s.Status = 3; });//status=3 export deleted
-                    //S_ExportShipment s_ExportShipment = db.S_ExportShipment.Find(id);
-                    //List<S_ExportShipmentDetails> Details = db.S_ExportShipmentDetails.Where(d => d.ExportID == id).ToList();
-                    //db.S_ExportShipmentDetails.RemoveRange(Details);
-                    //db.S_ExportShipment.Remove(s_ExportShipment);
-                    //db.SaveChanges();
+                    PickupRequestDAO _dao = new PickupRequestDAO();
+                    string result=_dao.DeleteExportShipment(id);                 
+                    if (result=="OK")
+                    {
+                        TempData["SuccessMsg"] = "Selected Manifest Deleted Successfully!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMsg"] = result;
+                    }
+                    
                     return RedirectToAction("Index");
                 }
                 catch(Exception e)

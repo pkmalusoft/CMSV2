@@ -4,7 +4,9 @@
 // MVID: 2B3B4E05-393A-455A-A5DE-86374CE9B081
 // Assembly location: D:\Courier09022018\Decompiled\obj\Release\Package\PackageTmp\bin\CMSV2.dll
 
+using iTextSharp.text;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CMSV2.Models
@@ -131,6 +133,9 @@ namespace CMSV2.Models
 
         public string AWBTermsConditions { get; set; }
 
+        public List<OtherChargeDetailVM> othercharges { get; set; }
+
+
     }
 
     public class StaffNotesVM:StaffNote
@@ -144,5 +149,8 @@ namespace CMSV2.Models
 
         public string CustomerName { get; set; }
         public string AWBNo { get; set; }
+    }
+    public class OtherChargeDetailVM : InscanOtherCharge
+    { public string OtherChargeName { get; set; }
     }
 }

@@ -263,6 +263,7 @@
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\QuickAWBController.cs" />
     <Compile Include="Controllers\ReExportShipmentController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ReturnShipmentController.cs" />
     <Compile Include="Controllers\ReturnShippmentController.cs" />
     <Compile Include="Controllers\RevenueTypeController.cs" />
@@ -868,6 +869,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeeVM.cs" />
+    <Compile Include="Models\EmposFeeReportModel.cs" />
     <Compile Include="Models\ExcelColumn.cs" />
     <Compile Include="Models\Expense.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -3028,6 +3030,7 @@
     <Content Include="Reports\Report1.rpt" />
     <Content Include="Reports\DefaultReport.rpt" />
     <Content Include="Reports\DefaultReport.pdf" />
+    <Content Include="Reports\EmpostFeeReport.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3451,6 +3454,13 @@
     <Content Include="Views\QuickAWB\Create - Copy.cshtml" />
     <Content Include="Views\CODReceipt\ReceiptDetail.cshtml" />
     <Content Include="Views\CODReceipt\Details.cshtml" />
+    <Content Include="Views\QuickAWB\OtherCharge.cshtml" />
+    <Content Include="Views\ExportShipment\Details - Copy.cshtml" />
+    <Content Include="Views\ExportShipment\ExportShipmentReport - Copy.cshtml" />
+    <Content Include="Views\Reports\EmposFeeReport.cshtml" />
+    <Content Include="Views\Reports\PrintSearch.cshtml" />
+    <Content Include="Views\QuickAWB\CreateV2.cshtml" />
+    <Content Include="Views\Reports\ReportFrame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

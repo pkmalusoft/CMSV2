@@ -56,9 +56,24 @@
 
 </script>
 
-<section class="content-header"style="margin-bottom:20px">
+<section class="content-header" style="margin-bottom:20px">
     <h1 class="headingfont">Export Shipments</h1>
-
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["ErrorMsg"]", "error");
+                 });
+        </script>
+    }
 </section>
 @using (Html.BeginForm())
 {
@@ -114,35 +129,38 @@
                 @:toasterMessage("@TempData["toasterMessage"].ToString()");
             }
         });
-        function deleteExport(id, controller) {
-            debugger;
-            swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this " + controller,
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-                function (isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            type: "POST",
-                            datatype: "html",
-                            url: "Delete?id=" + id.toString(),
-                            data: id,
-                            success: function (data) {
-                                debugger;
-                                swal({ title: "Deleted!", text: controller + " has been deleted.", type: "success" }, function () { window.location = window.location.href; });
-                            }
-                        });
-                    } else {
-                        swal("Cancelled", controller + " is safe :)", "error");
-                    }
-                });
+    function deleteExport(id, controller) {
+        if (confirm("Are you sure, You want to Delete this Export Manifest Entry ?")) {
+            window.location.href = "/ExportShipment/Delete?id=" + id;
+        }
+            //debugger;
+            //swal({
+            //    title: "Are you sure?",
+            //    text: "You will not be able to recover this " + controller,
+            //    type: "warning",
+            //    showCancelButton: true,
+            //    confirmButtonClass: "btn-danger",
+            //    confirmButtonText: "Yes, delete it!",
+            //    cancelButtonText: "No, cancel plx!",
+            //    closeOnConfirm: false,
+            //    closeOnCancel: false
+            //},
+            //    function (isConfirm) {
+            //        if (isConfirm) {
+            //            $.ajax({
+            //                type: "POST",
+            //                datatype: "html",
+            //                url: "Delete?id=" + id.toString(),
+            //                data: id,
+            //                success: function (data) {
+            //                    debugger;
+            //                    swal({ title: "Deleted!", text: controller + " has been deleted.", type: "success" }, function () { window.location = window.location.href; });
+            //                }
+            //            });
+            //        } else {
+            //            swal("Cancelled", controller + " is safe :)", "error");
+            //        }
+            //    });
 
         }
 </script>

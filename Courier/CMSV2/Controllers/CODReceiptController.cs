@@ -33,14 +33,28 @@ namespace CMSV2.Controllers
         // GET: CODReceipt
         public ActionResult Index()
         {
-            DatePicker model = new DatePicker
+            DatePicker datePicker = SessionDataModel.GetTableVariable();
+            DatePicker model = new DatePicker();
+            //string tz = "Arabian Standard Time";
+            //DateTime now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+            if (datePicker == null)
             {
-                FromDate = CommanFunctions.GetFirstDayofMonth().Date,
-                ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59)
-                //      Delete = (bool)Token.Permissions.Deletion,
-                //    Update = (bool)Token.Permissions.Updation,
-                //  Create = (bool)Token.Permissions.Creation
-            };
+                model = new DatePicker
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date //DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59).AddHours(8)
+
+                    //      Delete = (bool)Token.Permissions.Deletion,
+                    //    Update = (bool)Token.Permissions.Updation,
+                    //  Create = (bool)Token.Permissions.Creation
+                };
+            }
+            else
+            {
+                model.FromDate = datePicker.FromDate;
+                model.ToDate = datePicker.ToDate;
+
+            }
             ViewBag.Token = model;
             SessionDataModel.SetTableVariable(model);
             return View(model);
@@ -346,7 +360,8 @@ namespace CMSV2.Controllers
             List<CODReceiptDetailVM> manifests = (from c in db.ExportShipments  join d in db.ExportShipmentDetails on c.ID equals d.ExportID
                              join i in db.InScanMasters on d.InscanId equals i.InScanID
                              where c.AgentID == ship.AgentID &&  ship.ManifestID.Contains(c.ID.ToString()) 
-                             && i.NetTotal>0
+                             &&  i.PaymentModeId==2
+                             && i.NetTotal>0 //COd
                                select new CODReceiptDetailVM { InScanId  = i.InScanID,ManifestID=c.ID,ManifestNumber=c.ManifestNumber,
                                    AWBNo=d.AWB ,AWBDate= i.TransactionDate,Consignee=i.Consignee,ConsigneePhone=i.ConsigneePhone,CourierCharge=((decimal)(i.CourierCharge != null ? i.CourierCharge : 0)),OtherCharge=i.OtherCharge,TotalCharge=(decimal)(i.NetTotal !=null ? i.NetTotal : 0)}).ToList();
 

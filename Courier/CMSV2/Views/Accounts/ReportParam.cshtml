@@ -178,9 +178,9 @@
                     new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
                     new SelectListItem{ Text="WORD", Value = "WORD" },
 
-                 }, "Select", new { @class = "form-control" })
+                 }, "Select", new { @class = "form-control",@value="PDF",@required="true" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 hide">
                 <label class="headinglabel">Format</label>
                 @Html.DropDownList("Format", new List<SelectListItem>
                {
@@ -189,7 +189,7 @@
 
                 }, "Select", new { @class = "form-control" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 hide">
                 <label class="headinglabel">Report Type</label>
                 @Html.DropDownList("ReportType", new List<SelectListItem>
                {
@@ -213,8 +213,7 @@
                     @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
                 </div>*@
             <div class="col-md-2">
-                <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                <a class="btn btn-primary btnwidth" id="btnexportexcel" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)"><img style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>
+                <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>                
                 @*<a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>*@
                 @*<a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img  style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>*@
             </div>

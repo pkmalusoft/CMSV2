@@ -354,6 +354,37 @@ namespace CMSV2.DAL
             return MaxPickUpNo;
 
         }
+
+
+        public string DeleteExportShipment(int Id)
+        {            
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "Delete from exportshipmentDetails where ExportId=" + Id.ToString();
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        cmd.CommandText = "Delete from exportshipment where Id=" + Id.ToString();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
     }
 
 }

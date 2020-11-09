@@ -1,336 +1,394 @@
 ﻿@model CMSV2.Models.ExportShipmentFormModel
-
 @{
     ViewBag.Title = "Details";
     var i = 1;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-
+    var _decimal = @Session["Decimal"].ToString();
 }
 
-<div class="card">
-    <div class="card-body">
-        <h4>Export Shipment</h4>
-        <hr />
-        <dl class="dl-horizontal row">
-            <div class="col-md-3">
-                <dt>
-                    Manifest Number
-                </dt>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        setTwoNumberDecimal($('#AdminPer'));
+        setTwoNumberDecimal($('#CustomerInvoiceTax'));
+        setTwoNumberDecimal($('#FuelPer'));
+    });
 
-                <dd>
-                    @Html.DisplayFor(model => model.ManifestNumber)
-                </dd>
-            </div>
+</script>
+<script>
+     function setTwoNumberDecimal(obj) {
+        if ($(obj).val() == null || $(obj).val() == "") {
+            $(obj).val(0);
+        }
+        else {
 
-            <div class="col-md-3">
-                <dt>
-                    Origin
-                </dt>
+            $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        }
+    }
+       function printDiv() {
+          var divid="divreport"
+    var contents = document.getElementById(divid).innerHTML;
+    var frame1 = document.createElement('iframe');
+    frame1.name = "frame1";
+    frame1.style.position = "absolute";
+    frame1.style.top = "-1000000px";
+    document.body.appendChild(frame1);
+    var frameDoc = frame1.contentWindow ? frame1.contentWindow : frame1.contentDocument.document ? frame1.contentDocument.document : frame1.contentDocument;
+    frameDoc.document.open();
+    frameDoc.document.write('<html><head><title>DIV Contents</title>');
+    frameDoc.document.write('</head><body>');
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+        window.frames["frame1"].focus();
+        window.frames["frame1"].print();
+        document.body.removeChild(frame1);
+    }, 500);
+    return false;
+}
 
-                <dd>
-                    @Html.DisplayFor(model => model.ConsignorCountryName)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Destination
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ConsigneeCountryName)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Type)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Type)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Consignor Address
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ConsignorAddress)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Consignee Address
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ConsigneeAddress)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Flight Date
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.FlightDate)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Flight No
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.FlightNo)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    MAWB
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.MAWB)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    @Html.DisplayNameFor(model => model.CD)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CD)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Bags)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Bags)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Run No
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.RunNo)
-                </dd>
-            </div>
-
-
-
-            <div class="col-md-3">
-                <dt>
-                    Total AWB
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.TotalAWB)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Origin  Airport City
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.OriginAirportCity)
-                </dd>
-            </div>
-            <div class="col-md-3">
-                <dt>
-                    Destination  Airport City
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.DestinationAirportCity)
-                </dd>
-            </div>
-
-            @*<div class="col-md-3">
-                    <dt>
-                        Origin Country
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.S_CountryMaster.CountryName)
-                    </dd>
-                </div>
-
-                <div class="col-md-3">
-                    <dt>
-                        Destination Country
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.S_CountryMaster1.CountryName)
-                    </dd>
-                </div>*@
-
-            <div class="col-md-3">
-                <dt>
-                    Created Date
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CreatedDate)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Created by
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CreatedByName)
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-                <dt>
-                    Last edited by
-                </dt>
-
-                <dd>
-                    @*@Html.DisplayFor(model => model.Laste)*@
-                </dd>
-            </div>
-
-            <div class="col-md-3">
-
-                <dt>
-                    Agent Name
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ConsigneeName)
-                </dd>
-            </div>
-        </dl>
-        <h4>Shipments</h4>
-        <hr />
-        <table class="table table-datatable table-striped table-hover table_lg_head m_icons dataTable no-footer" id="datatable-1" role="grid" aria-describedby="datatable-1_info">
-            <thead>
-                <tr>
-                    <th>
-                        Sl No
-                    </th>
-                    <th>
-                        HAWB NO.
-                    </th>
-                    <th>
-                        AIRWAY BILL NO.
-                    </th>
-                    <th>
-                        PCS
-                    </th>
-                    <th>
-                        Weight
-                    </th>
-                    <th>
-                        Contents
-                    </th>
-                    <th>
-                        Shipper
-                    </th>
-                    <th>
-                        Value
-                    </th>
-                    <th>
-                        Receiver
-                    </th>
-                    <th>
-                        Destination
-                    </th>
-                    <th>
-                        Bag No
-                    </th>
-                    <th>
-                        FWD Agent
-                    </th>
-                    <th>
-                        FWD Agent AWB
-                    </th>
-                    <th>
-                        FWD Date
-                    </th>
-                    <th>
-                        FWD Flight
-                    </th>
-                    <th>
-                        FWD Charge
-                    </th>
-                    <th>
-                        Other Charge
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var shipment in Model.ShipmentsVM)
-                {
-                    <tr>
-                        <td>@i</td>
-                        <td>@shipment.HAWB</td>
-                        <td>@shipment.AWB</td>
-                        <td>@shipment.PCS</td>
-                        <td>@shipment.Weight.ToString("0.00")</td>
-                        <td>@shipment.Contents</td>
-                        <td>@shipment.Shipper</td>
-                        <td>@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
-                        <td>@shipment.Reciver</td>
-                        <td>@shipment.DestinationCity</td>
-                        <td>@shipment.BagNo</td>
-                        <td>@shipment.FwdAgentId</td>
-                        <td>@shipment.ForwardAgentName</td>
-                        <td>@shipment.FwdAgentAWBNo</td>
-                        <td>@shipment.FwdDate</td>
-                        <td>@shipment.FwdFlight</td>
-                        <td>@shipment.FwdCharge</td>
-                        <td>@shipment.OtherCharge</td>
-                    </tr>
-                    i++;
-                }
-            </tbody>
-        </table>
-        <hr />
-        <div class="form-group col-lg-3 col-md-6 col-sm-12 float-right" style="display:flex">
-            <div class="col-md-6">
-                @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-secondary btn-sm waves-effect waves-light float-right" })
-            </div>
-            <div class="col-md-6">
-                @if (ViewBag.Edit == true)
-                {
-                    @Html.ActionLink("Edit", "CreateExport", new { id = Model.ID }, new { @class = "btn btn-primary waves-effect waves-light" })
-                }
-                else
-                {
-                    <button class="btn btn-primary waves-effect waves-light" disabled>Edit</button>
-                }
-            </div>
-        </div>
+</script>
+<div class="row no-margin" style="padding-top: 10px">
+    <div class="col-md-12 btn-right">
+        @*<input type="button" value="Edit" class="btn btn-primary btnwidth" onclick="printDiv()" />&nbsp;&nbsp;*@
+        @Html.ActionLink("Edit", "CreateExport", null, new { @id=Model.ID, @class = "btn btn-primary btnwidth" })
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
     </div>
 </div>
 
-    <script>
-        $(document).ready(function () {
-            $("#exportshipment").addClass("active");
-        });
-    </script>
+<div class="" id="divreport">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: Calibri;
+        }
+
+
+
+        .invoiceRow {
+            margin: 50px 0;
+        }
+
+        .logo {
+            padding-left: 60px;
+            padding-bottom: 20px;
+        }
+
+        .invoiceRow table th {
+            text-align: left;
+            background: #daf2fb;
+            -webkit-print-color-adjust: exact;
+            color: #1a7fa5;
+            font-size: 14px;
+        }
+
+        .headrow {
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .trnrow {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .invoiceRow table {
+            border: 1px solid #c0e0ec;
+            ;
+            border-spacing: 0;
+            border-collapse: unset;
+        }
+
+            .invoiceRow table th, .invoiceRow table td {
+                padding: 8px 10px;
+            }
+
+
+        .rightInfo, .leftInfo, .logo, .rightBlock, .trnitem, .rightTotal {
+            width: 40%;
+        }
+
+        .rightBlock, .trnitem {
+            text-align: center;
+        }
+
+            .rightBlock h1 {
+                text-transform: uppercase;
+                color: #a51717;
+            }
+
+        .rightInfo table {
+            background: #eee;
+        }
+
+            .rightInfo table th {
+                border-bottom: 2px dashed #333;
+            }
+
+            .rightInfo table th, .rightInfo table td {
+                border-right: 2px solid #333;
+            }
+
+                .rightInfo table th:last-of-type, .rightInfo table td:last-of-type {
+                    border-right: none;
+                }
+
+        .particularInner table {
+            border-spacing: 0;
+        }
+
+            .particularInner table th {
+                border-top: 2px solid #07a7e3;
+                border-bottom: 2px solid #07a7e3;
+                padding: 8px 6px;
+                text-align: left;
+                background: #07a7e3;
+                font-size: 14px;
+                color: #fff;
+                font-weight: normal;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .particularInner table td {
+                padding: 5px 10px;
+                font-weight: normal;
+            }
+
+        .trnBlock {
+            padding-bottom: 30px;
+        }
+
+        .particularInner table tr:last-of-type td {
+            border-bottom: 2px solid #333;
+        }
+
+        .particularInner table > thead > th {
+            font-weight: 500;
+        }
+
+        .particularInner table > tbody > tr > td {
+            font-size: 12px !important;
+        }
+
+        .totalRow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 10px 0;
+        }
+
+            .totalRow h3 {
+                padding-bottom: 20px;
+                text-decoration: underline;
+            }
+
+            .totalRow table {
+                font-weight: bold;
+                table-layout: fixed;
+                text-align: right;
+            }
+
+        .terms ol {
+            list-style-position: inside;
+        }
+
+            .terms ol li {
+                padding: 5px 0;
+            }
+
+        .text-right {
+            text-align: right !important;
+        }
+    </style>
+    <section class="invoiceInfo">
+        <div class="invoiceRow d-flex">
+
+            <table>
+                <tr>
+                    <th>Manifest No.</th>
+                    <th>Consignor Name</th>
+                    <th>Consignee Name</th>
+                    <th>Origin Airport</th>
+                    <th>Destination Airport</th>
+                    <th>---</th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.ManifestNumber)
+                    </td>
+                    <td>@Html.DisplayFor(model => model.ConsignorName)</td>
+                    <td>@Html.DisplayFor(model => model.ConsigneeName)</td>
+                    <td>@Html.DisplayFor(model => model.OriginAirportCity)</td>
+                    <td>@Html.DisplayFor(model => model.DestinationAirportCity)</td>
+                </tr>
+                <tr>
+                    <th>
+                        Origin Country
+                    </th>
+                    <th>Destination Country</th>
+                    <th>Flight Date</th>
+                    <th>CD</th>
+                    <th>Run No.</th>
+                    <th>Bags</th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.ConsignorCountryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.ConsigneeCountryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.FlightDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.CD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.RunNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Bags)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Consignor Address</th>
+                    <th>Consignee Address</th>
+                    <th>Flight No.</th>
+                    <th>Type</th>
+                    <th>
+                        MAX AWB
+                    </th>
+                    <th>
+                        Total AWB
+                    </th>
+                </tr>
+                <tr>
+                    <td>  @Html.DisplayFor(model => model.ConsignorAddress)</td>
+                    <td>    @Html.DisplayFor(model => model.ConsigneeAddress)</td>
+                    <td>
+                        @Html.DisplayFor(model => model.FlightNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.MAWB)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.TotalAWB)
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </section>
+    <section class="particulars" style="margin-top:10px">
+        <div class="particularInner">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            SNo.
+                        </th>
+                        <th>
+                            AWB No.
+                        </th>
+                        <th width="13%">
+                            Shipper
+                        </th>
+                        <th width="13%">
+                            Receiver
+                        </th>
+                        @*<th width="8%">
+                                Destination
+                            </th>*@
+                        <th width="8%">
+                            Contents
+                        </th>
+                        <th>
+                            Pcs
+                        </th>
+                        <th>
+                            Weight
+                        </th>
+                        <th>
+                            Bag
+                        </th>
+                        <th>
+                            Charge
+                        </th>
+                        <th>
+                            F.Agent
+                        </th>
+                        <th>
+                            F.A. AWB
+                        </th>
+                        <th>
+                            F.A. Date
+                        </th>
+                        <th class="text-right">
+                            F.A.Charge
+                        </th>
+                        <th class="text-right">
+                            O.Charge
+                        </th>
+                        <th>
+                            Flight
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="input-table">
+                    @foreach (var shipment in Model.ShipmentsVM)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@shipment.AWB</td>
+                            <td>
+                                @shipment.Shipper<br />
+                                @shipment.ConsignorPhone <br />
+                                @shipment.OriginCountry
+                            </td>
+                            <td>
+                                @shipment.Reciver <br />
+                                @shipment.ConsigneePhone <br />
+                                @shipment.DestinationCity
+                            </td>
+                            <td>@shipment.Contents</td>
+                            <td>@shipment.PCS</td>
+                            <td>@shipment.Weight.ToString("0.000")</td>
+                            <td>@shipment.BagNo</td>
+                            <td>@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
+                            <td>@shipment.ForwardAgentName</td>
+                            <td>@shipment.FwdAgentAWBNo</td>
+                            <td class="text-right">@shipment.FwdDate</td>
+                            <td class="text-right">@shipment.FwdCharge</td>
+                            <td class="text-right">@shipment.OtherCharge</td>
+                            <td>@shipment.FwdFlight</td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#exportshipment").addClass("active");
+    });
+</script>
 
