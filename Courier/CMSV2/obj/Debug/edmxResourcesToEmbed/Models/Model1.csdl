@@ -703,6 +703,8 @@
     <NavigationProperty Name="Quotations" Relationship="Self.FK_Quotation_BranchMaster" FromRole="BranchMaster" ToRole="Quotation" />
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_BranchMaster" FromRole="BranchMaster" ToRole="SalesInvoice" />
     <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
+    <Property Name="CODReceiptPrefix" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="CODReceiptFormat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="BusinessType">
     <Key>
@@ -2272,6 +2274,8 @@
     <Property Name="AcFinancialYearID" Type="Int32" />
     <NavigationProperty Name="CustomerInvoiceDetails" Relationship="Self.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetails" />
     <NavigationProperty Name="InscanOtherCharges" Relationship="Self.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="ManifestID" Type="Int32" />
   </EntityType>
   <EntityType Name="InScanMasterNew">
     <Key>
@@ -9714,6 +9718,7 @@
       <End Role="CODReceipt" EntitySet="CODReceipts" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetails" />
     </AssociationSet>
+    <EntitySet Name="AccountHeadControls" EntityType="DB_9F57C4_couriertest_newModel.AccountHeadControl" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13284,4 +13289,11 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="AccountHeadControl">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ControlName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

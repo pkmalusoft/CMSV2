@@ -26,7 +26,31 @@
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-
+        $("#AcHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHead").val(i.item.label);
+                $('#AccountHeadID').val(i.item.AcHeadID);
+            }
+        });
 
         $("#btnsave").click(function () {
             var prov = $("#Pagecontrol option:selected").val();
@@ -76,7 +100,14 @@
 
 
 <section class="content">
-
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.ErrorMsg ", "error");
+         });
+        </script>
+    }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -97,13 +128,16 @@
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Account Control Head</label>
-                        @Html.TextBoxFor(model => model.AccountName, new { @class = "form-control txttarget" })
+                        @*@Html.TextBoxFor(model => model.AccountName, new { @class = "form-control txttarget" })*@
+                        @Html.DropDownListFor(model => model.AccountName, new SelectList(ViewBag.AccountControl, "ControlName", "ControlName"), "Select", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.AccountName)
 
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Account Head</label>
-                        @Html.DropDownListFor(model => model.AccountHeadID, new SelectList(ViewBag.AccountHeadID, "AcHeadID", "AcHead"), "Select", new { @class = "form-control txttarget" })
+                        <input type="text" id="AcHead" value="" class="form-control" autocomplete="off" />
+                        @Html.HiddenFor(model => model.AccountHeadID, new { Value = "0", id = "AccountHeadID" })
+                        @*@Html.DropDownListFor(model => model.AccountHeadID, new SelectList(ViewBag.AccountHeadID, "AcHeadID", "AcHead"), "Select", new { @class = "form-control txttarget" })*@
                         @Html.ValidationMessageFor(model => model.AccountHeadID)
                     </div>
 
@@ -125,12 +159,12 @@
                     <div class="col-md-4">
                         <label class="required headinglabel">Field</label>
                         @*<select class="form-control txttarget" id="Remarks" name="Remarks">
-                    <option value="">Select</option>
-                    <option value="1">Invoice Total</option>
-                    <option value="2">Tax</option>
-                    <option value="3">Discount</option>
-                    <option value="0">Sum</option>
-                </select>*@
+                                <option value="">Select</option>
+                                <option value="1">Invoice Total</option>
+                                <option value="2">Tax</option>
+                                <option value="3">Discount</option>
+                                <option value="0">Sum</option>
+                            </select>*@
                         @Html.DropDownListFor(model => model.Remarks, ViewBag.Remarks as SelectList, "Select", new { @class = "form-control txttarget" })
                         @Html.ValidationMessageFor(model => model.Remarks)
 

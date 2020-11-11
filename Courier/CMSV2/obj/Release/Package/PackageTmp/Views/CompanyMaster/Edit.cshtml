@@ -134,6 +134,31 @@
             }
         }
     </script>
+    <style>
+        .editLogo{
+                background: #fff;
+                border-radius: 50%;
+                width: 35px;
+                margin: auto;
+                height: 35px;
+                line-height: 35px;
+                color: #ffffff;
+                background: #35b8eb;
+                font-size: 20px;
+                border: 2px solid #ffffff;
+                text-align: center;
+                right: 0;
+                left: 0;
+                pointer-events: none;
+                position: absolute;
+                cursor: pointer;
+          }
+          .logo{
+            display: flex;
+            position: relative;
+            justify-content: center;
+          }
+    </style>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -407,8 +432,10 @@
                 </div>
                 <div class="col-md-2">
                     <label class="headinglabel">Logo</label>
+                    <div class="logo">
                     <img src='@Model.LogoFilPath' width="100" height="100" id="imglogo" title="Click Image to Edit Logo" />
-
+                    <i class="fa fa-pencil editLogo"></i>
+                </div>
                 </div>
                 @*<div class="col-md-3 awbno">
                     <label class="headinglabel">Invoice Prefix</label>

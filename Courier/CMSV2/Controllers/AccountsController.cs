@@ -2708,6 +2708,7 @@ new AcGroupModel()
             ViewBag.Pagecontrol = new SelectList(PageControl, "Id", "ControlName");
             var PageControlField = db.PageControlFields.ToList();
             ViewBag.Remarks = new SelectList(PageControlField, "Id", "FieldName");
+            ViewBag.AccountControl = db.AccountHeadControls.ToList();
 
             return View();
         }
@@ -2719,7 +2720,7 @@ new AcGroupModel()
             ViewBag.Pagecontrol = new SelectList(PageControl, "Id", "ControlName");
             var PageControlField = db.PageControlFields.ToList();
             ViewBag.Remarks = new SelectList(PageControlField, "Id", "FieldName");
-
+            ViewBag.AccountControl = db.AccountHeadControls.ToList();
             var data = new AcHeadControl();
             data.AccountHeadID = acheadcontrol.AccountHeadID;
             data.AccountName = acheadcontrol.AccountName;
@@ -2728,6 +2729,12 @@ new AcGroupModel()
             data.Pagecontrol = acheadcontrol.Pagecontrol;
             if (ModelState.IsValid)
             {
+                var duplicate = db.AcHeadControls.Where(cc => cc.Pagecontrol == acheadcontrol.Pagecontrol && cc.AccountName == acheadcontrol.AccountName).FirstOrDefault();
+                if (duplicate!=null)
+                {
+                    ViewBag.ErrorMsg = "An Entry Exist to this Page control with same Account Control Name!";
+                    return View(acheadcontrol);
+                }
                 if (acheadcontrol.Remarks == 0)
                 {
                     data.CheckSum = false;
@@ -2753,6 +2760,9 @@ new AcGroupModel()
             ViewBag.Pagecontrol = PageControl;
             var PageControlField = db.PageControlFields.Where(d => d.PageControlId == data.Pagecontrol).ToList();
             ViewBag.Remarks = PageControlField;
+            ViewBag.AccountControl = db.AccountHeadControls.ToList();
+            if(db.AcHeads.Find(data.AccountHeadID)!=null)
+                @ViewBag.AccountHeadName = db.AcHeads.Find(data.AccountHeadID).AcHead1;
 
             return View(data);
         }
@@ -2766,7 +2776,7 @@ new AcGroupModel()
             ViewBag.Pagecontrol = PageControl;
             var PageControlField = db.PageControlFields.Where(d => d.PageControlId == data.Pagecontrol).ToList();
             ViewBag.Remarks = PageControlField;
-
+            ViewBag.AccountControl = db.AccountHeadControls.ToList();
 
             data.AccountHeadID = acheadcontrol.AccountHeadID;
             data.AccountName = acheadcontrol.AccountName;
@@ -2775,6 +2785,13 @@ new AcGroupModel()
             data.Pagecontrol = acheadcontrol.Pagecontrol;
             if (ModelState.IsValid)
             {
+                var duplicate = db.AcHeadControls.Where(cc => cc.Pagecontrol == acheadcontrol.Pagecontrol && cc.AccountName == acheadcontrol.AccountName && cc.Id!=data.Id ).FirstOrDefault();
+                if (duplicate != null)
+                {
+                    ViewBag.ErrorMsg = "An Entry Exists to this Page control with same Account Control Name!";
+                    return View(acheadcontrol);
+                }
+
                 if (acheadcontrol.Remarks == 0)
                 {
                     data.CheckSum = false;
@@ -3036,6 +3053,7 @@ new AcGroupModel()
                     reportparam.ToDate = pToDate;
                     reportparam.AcHeadId = 0;
                     reportparam.AcHeadName = "";
+                    reportparam.Output = "PDF";
                 }
             else
             {
@@ -3043,6 +3061,7 @@ new AcGroupModel()
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF"
                 }
 
             }

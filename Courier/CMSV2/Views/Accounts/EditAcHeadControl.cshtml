@@ -32,7 +32,31 @@
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
-
+        $("#AcHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHead").val(i.item.label);
+                $('#AccountHeadID').val(i.item.AcHeadID);
+            }
+        });
         $("#btnsave").click(function () {
             var prov = $("#Pagecontrol option:selected").val();
             var accrued = $("#AccountHeadID option:selected").val();
@@ -82,7 +106,14 @@
 
 
 <section class="content">
-
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.ErrorMsg ", "warning");
+         });
+        </script>
+    }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -117,15 +148,19 @@
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Account Control Head</label>
-                        @Html.TextBoxFor(model => model.AccountName, new { @class = "form-control txttarget" })
+                        @*@Html.TextBoxFor(model => model.AccountName, new { @class = "form-control txttarget" })*@
+                        @Html.HiddenFor(model => model.AccountHeadID, new { Value = "0", id = "AccountHeadID" })
+                        @Html.DropDownListFor(model => model.AccountName, new SelectList(ViewBag.AccountControl, "ControlName", "ControlName"), "Select", new { @class = "form-control txttarget" })
                         @Html.ValidationMessageFor(model => model.AccountName)
 
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Account Head</label>
+                        <input type="text" id="AcHead" value="@ViewBag.AccountHeadName" class="form-control" autocomplete="off" />
+                        @Html.HiddenFor(model => model.AccountHeadID, new { Value = "0", id = "AccountHeadID" })
                         @*@Html.DropDownListFor(model => model.AccountHeadID, new SelectList(ViewBag.AccountHeadID, "AcHeadID", "AcHead"), "Select", new { @class = "form-control txttarget" })*@
                         @Html.ValidationMessageFor(model => model.AccountHeadID)
-                        <select class="form-control txttarget" id="AccountHeadID" name="AccountHeadID">
+                        @*<select class="form-control txttarget" id="AccountHeadID" name="AccountHeadID">
                             @foreach (var item in Achead)
                             {
                                 if (item.AcHeadID == Model.AccountHeadID)
@@ -138,7 +173,7 @@
 
                                 }
                             }
-                        </select>
+                        </select>*@
                     </div>
 
                 </div>

@@ -43,13 +43,15 @@ namespace CMSV2.Controllers
                 reportparam.ToDate = pToDate;
                 reportparam.AcHeadId = 0;
                 reportparam.AcHeadName = "";
+                reportparam.Output = "PDF";
             }
             else
             {
-                if (reportparam.FromDate.Date.ToString() == "01-01-0001")
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF";
                 }
 
             }

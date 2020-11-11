@@ -35,7 +35,7 @@ input::-webkit-inner-spin-button {
 	width:8%;
 }
 .reve_rates3{
-	width:12%;
+	width:10%;
 }
 .reve_rates4{
 	width:12%;
@@ -105,7 +105,7 @@ input::-webkit-inner-spin-button {
     }
 
     .xdsoft_calendar > table.table th, table.table td, table th, table td {
-        font-size: 18px !important;
+        font-size: 14px !important;
         vertical-align: middle !important;
         padding: 10px !important;
     }
@@ -539,9 +539,8 @@ input::-webkit-inner-spin-button {
                         <label class="headinglabel required">Destination </label>
                         <input id="tDestinationCountryID" name="tDestinationCountryID" type="text" class="form-control">
                     </div>
-                </div>
 
-                <div class="row col-md-12 form-group bt-right">
+                <div class="col-md-1 reve_rates3 form-group bt-right">
 
                     <input type="hidden" id="tId" name="tId" value="0" />
                     <input type="hidden" id="tfwdagent" name="tfwdagent" value="0" />
@@ -551,18 +550,19 @@ input::-webkit-inner-spin-button {
                     <input type="hidden" id="totherchrg" name="totherchrg" value="0" />
                     <input type="hidden" id="tfwdflight" name="tfwdflight" value="" />
                     <div class="row form-group" id="addbtndiv" style="text-align:right;margin-top:10px">
-                        <button type="button" class="btn btn-primary btnwidth" onclick="addShipment1()" id="Newbtn">New</button>
-                        @*<button type="button" class="btn btn-secondary waves-effect waves-light" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>*@
+                        <button type="button" class="btn btn-primary small_btn btnwidth" onclick="addShipment1()" id="Newbtn"><i class="fa fa-plus"></i></button>
+                        @*<button type="button" class="btn btn-secondary small_btn waves-effect waves-light" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>*@
                     </div>
                     <div class="" id="updatebtndiv" style="text-align:right;margin-top:30px;display:none">                        
-                        <button type="button" class="btn btn-primary btnwidth" style="margin:0 0 0 0 !important" onclick="UpdateDetails()" id="Updatebtn">Update</button>&nbsp;&nbsp;
-                        <button type="button" class="btn btn-danger btnwidth float-right" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>
+                        <button type="button" class="btn small_btn btn-primary btnwidth" style="margin:0 0 0 0 !important" onclick="UpdateDetails()" id="Updatebtn"><i class="fa fa-check"></i></button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger small_btn btnwidth float-right" style="margin:0 0 0 0 !important" onclick="CancelDetails()"><i class="fa fa-times"></i></button>
                     </div>
 
                     <span style="color:red;display:none" id="DetailsError">* Please fill all required fields</span>
-                    <hr />
                 </div>
             </div>
+                </div>
+
             <div class="col-md-12" style="padding:15px;margin-top:20px">
                 <table class="table table-responsive table-bordered tblfont" role="grid" aria-describedby="datatable-1_info" style="min-width: 100%" id="DetailsTable">
                     @*<table class="table" style="min-width: 100%">*@
@@ -775,22 +775,15 @@ input::-webkit-inner-spin-button {
                         $('#tPCS').val(data.Pieces);
                         $('#tContents').val(data.Contents);
                         $('#tWeight').val(data.Weight);
-                        $('#tValue').val(data.Value);
-
-                        //obj.Bags = lst.BagNo;
-                //obj.Weight = lst.Weight;
-                //obj.Shipper = lst.Consignor;
-                //obj.Receiver = lst.Consignee;
-                //obj.Pieces = lst.Pieces;
-               //obj.AWB = lst.AWBNo;
-                //obj.InScanId = lst.InScanID;
+                        $('#tValue').val(data.Value);                      
 
                     }
-                    //else {
-                    //    $('#btnadd').removeAttr('disabled');
-                    //    $("#txtawb").focus();
-                    //    alert(response.message);
-                    //}
+                    else {
+                        $('#btnadd').removeAttr('disabled');
+                        $('#tAWB').val('');
+                        $('#tAWB').focus();
+                        alert(response.message);
+                    }
 
                 }
 

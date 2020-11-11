@@ -130,7 +130,7 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 <div class="row no-margin d-flex">
-    <div class="col-md-2">
+    <div class="col-md-2 hide">
         <label class="headinglabel">Filters</label>
         @Html.DropDownList("Filters", new List<SelectListItem>
             {
@@ -161,7 +161,7 @@
             @Html.DropDownListFor(model => model.AcGroupId, new SelectList(ViewBag.groups, "AcGroupID", "AcGroup"), "Select", new { @class = "form-control" })
         </div>
         <div id="divachead">
-            <label class="headinglabel">Account Head</label>
+            <label class="headinglabel required">Account Head</label>
             @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control", @autocomplete = "off", @id = "AcHeadName", @required = "true" })
             @Html.HiddenFor(model => model.AcHeadId, new { id = "SelectedAcHead" })
         </div>
@@ -171,7 +171,7 @@
 
         <div class="row no-margin d-flex">
             <div class="col-md-2">
-                <label class="headinglabel">Output</label>
+                <label class="headinglabel  required">Output</label>
                 @Html.DropDownList("Output", new List<SelectListItem>
                 {
                     new SelectListItem{ Text="PDF", Value = "PDF" },

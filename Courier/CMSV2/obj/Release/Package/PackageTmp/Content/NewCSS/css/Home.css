@@ -1191,6 +1191,7 @@ button, input, select, textarea, label {
     justify-content: space-between;
     align-items: center;
     z-index: 99;
+    flex-wrap:wrap;
 }
 
 .header-links {
@@ -1324,11 +1325,46 @@ button, input, select, textarea, label {
         display: block;
         width: 528px
     }
+
 }
 
 @media (max-width:640px) {
     .hero-form {
         margin: 0 auto
+    }
+     .site-header-inner{
+        display: block;
+    }
+    .footer-social-links{
+        display: block!important;
+        width:unset!important;
+    }
+    .logo{
+        margin:0 auto 20px auto;
+    }
+    .rightBrand{
+        justify-content: space-around;
+    }
+    .control {
+        text-align: center;
+    }
+    .control a{
+        margin-bottom: 20px;
+    }
+    .features-inner {
+        margin: auto;
+    }
+    .hero-paragraph{
+        text-align: center;
+    }
+    .modal-dialog{
+        width:300px!important;
+    }
+    .otherLogin{
+        display: block!important;
+    }
+    .otherLogin input[type="submit"]{
+        margin-bottom: 20px;
     }
 }
 
@@ -1488,8 +1524,10 @@ main {
         flex: 50%
     }
 
+
     .footer-copyright {
         margin-bottom: 0;
+        align-items: center;
         justify-content: flex-end;
     }
 
@@ -1538,11 +1576,12 @@ main {
 
 .rightBrand {
     display: flex;
+    flex-wrap:wrap;
 }
 
-    .rightBrand a {
-        margin-left: 20px;
-    }
+.rightBrand a {
+    margin-left: 20px;
+}
 
 .loginBlock {
     width: 34%;

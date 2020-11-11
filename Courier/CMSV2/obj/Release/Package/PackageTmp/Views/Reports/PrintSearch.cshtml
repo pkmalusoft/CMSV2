@@ -33,14 +33,14 @@
         @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
     </div>
     <div class="col-md-2">
-        <label class="headinglabel">Output</label>
+        <label class="headinglabel  required">Output</label>
         @Html.DropDownList("Output", new List<SelectListItem>
         {
             new SelectListItem{ Text="PDF",Value = "PDF" },
             new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
             new SelectListItem{ Text="WORD", Value = "WORD" },
 
-         }, "Select", new { @class = "form-control", @value = "PDF" })
+         }, "Select", new { @class = "form-control", @value = "PDF", @required="true" })
     </div>
     <div class="col-md-2">
         <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>

@@ -95,7 +95,7 @@ namespace CMSV2.Controllers
                 ViewBag.ProductType = db.ProductTypes.ToList();
                 ViewBag.parceltype = db.ParcelTypes.ToList();
                 ViewBag.customerrate = db.CustomerRateTypes.ToList();
-                ViewBag.CourierDescription = db.CourierDescriptions.ToList();
+                ViewBag.CourierDescription = db.CourierDescriptions.ToList(); // not used
                 ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
                 ViewBag.CourierStatusList = db.CourierStatus.ToList();
                 ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
@@ -356,6 +356,8 @@ namespace CMSV2.Controllers
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
                         AddAWBTrackStatus(inscan.InScanID);
+                        if (v.PaymentModeId == 1 || v.PaymentModeId==2 )
+                            _dao.AWBAccountsPosting(inscan.InScanID);
                         if (v.PaymentModeId == 2)
                         { SaveConsignee(v); }
                         isid.InScanID = inscan.InScanID;
@@ -396,6 +398,10 @@ namespace CMSV2.Controllers
 
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
+                        
+                        if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
+                            _dao.AWBAccountsPosting(inscan.InScanID);
+                        
                         SaveConsignee(v);
                         TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
                         

@@ -872,7 +872,7 @@ namespace CMSV2.Controllers
                             {
                                 var _inscan = db.InScanMasters.Find(e_details.InscanId);
                                 _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "READY TO EXPORT").FirstOrDefault().ID;
-
+                                _inscan.ManifestID = _exportShipment.ID;
                                 _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Export Manifest Prepared").FirstOrDefault().CourierStatusID;
                                 db.Entry(_inscan).State = EntityState.Modified;
                                 db.SaveChanges();
@@ -922,6 +922,14 @@ namespace CMSV2.Controllers
                         var _exportfound = model.Shipments.Where(cc => cc.ShipmentDetailID == e_details.ShipmentDetailID).FirstOrDefault();
                         if (_exportfound == null)
                         {
+                            //re update inscan status 
+                            var _inscan = db.InScanMasters.Find(e_details.InscanId);
+                            _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "INSCAN").FirstOrDefault().ID;
+                            _inscan.ManifestID = null;
+                            _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                            db.Entry(_inscan).State = EntityState.Modified;
+                            db.SaveChanges();
+
                             db.Entry(e_details).State = EntityState.Deleted;
                             db.SaveChanges();
                         }
@@ -1747,7 +1755,7 @@ namespace CMSV2.Controllers
         public JsonResult GetAWBDetail(string id)
         {
             ExportAWBList obj = new ExportAWBList();
-            var lst = (from c in db.InScanMasters where c.AWBNo == id select c).FirstOrDefault();
+            var lst = (from c in db.InScanMasters where c.AWBNo == id &&  c.IsDeleted==false &&  c.ManifestID==null select c).FirstOrDefault();
             if (lst == null)
             {
                 return Json(new { status = "failed", data = obj, message = "AWB No. Not found" }, JsonRequestBehavior.AllowGet);
@@ -1766,7 +1774,7 @@ namespace CMSV2.Controllers
                 obj.Contents = lst.CargoDescription;
                 obj.AWB = lst.AWBNo;
                 obj.InScanId = lst.InScanID;
-                obj.Value = Convert.ToDecimal(lst.NetTotal);
+                obj.Value = Convert.ToDecimal(lst.CourierCharge);
 
                     return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
 

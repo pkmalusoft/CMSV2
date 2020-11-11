@@ -361,6 +361,7 @@ namespace CMSV2.Controllers
                              join i in db.InScanMasters on d.InscanId equals i.InScanID
                              where c.AgentID == ship.AgentID &&  ship.ManifestID.Contains(c.ID.ToString()) 
                              &&  i.PaymentModeId==2
+                             && i.IsDeleted==false
                              && i.NetTotal>0 //COd
                                select new CODReceiptDetailVM { InScanId  = i.InScanID,ManifestID=c.ID,ManifestNumber=c.ManifestNumber,
                                    AWBNo=d.AWB ,AWBDate= i.TransactionDate,Consignee=i.Consignee,ConsigneePhone=i.ConsigneePhone,CourierCharge=((decimal)(i.CourierCharge != null ? i.CourierCharge : 0)),OtherCharge=i.OtherCharge,TotalCharge=(decimal)(i.NetTotal !=null ? i.NetTotal : 0)}).ToList();
