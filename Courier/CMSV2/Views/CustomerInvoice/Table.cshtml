@@ -15,7 +15,7 @@
             <th>
                 Customer Name
             </th>
-
+            <th>Invoice Amount</th>
             <th width="5%"></th>
         </tr>
     </thead>
@@ -32,6 +32,10 @@
 
                 <td>
                     @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceTotal)                   
+
                 </td>
                 <td style="font-size:13px">
                     @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@

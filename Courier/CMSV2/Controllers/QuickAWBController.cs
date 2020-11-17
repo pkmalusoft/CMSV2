@@ -358,8 +358,10 @@ namespace CMSV2.Controllers
                         AddAWBTrackStatus(inscan.InScanID);
                         if (v.PaymentModeId == 1 || v.PaymentModeId==2 )
                             _dao.AWBAccountsPosting(inscan.InScanID);
-                        if (v.PaymentModeId == 2)
-                        { SaveConsignee(v); }
+
+                        //if (v.PaymentModeId == 2)
+                        //{ SaveConsignee(v); }
+
                         isid.InScanID = inscan.InScanID;
                         isi.InScanID = inscan.InScanID;
                         isi.InScanInternationalID = 0;
@@ -402,7 +404,7 @@ namespace CMSV2.Controllers
                         if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                             _dao.AWBAccountsPosting(inscan.InScanID);
                         
-                        SaveConsignee(v);
+                        //SaveConsignee(v);
                         TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
                         
                     }
@@ -823,7 +825,7 @@ namespace CMSV2.Controllers
         public int SaveCustomer(QuickAWBVM v)
         {
             CustM objCust = new CustM();
-            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType != "CN" select c).FirstOrDefault();
+            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
 
             int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -838,8 +840,8 @@ namespace CMSV2.Controllers
                 obj.AcCompanyID = accompanyid;
 
                 obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
-                obj.CustomerName = v.Consignor;
-                obj.CustomerType = "CS"; //Cash customer
+                obj.CustomerName = v.customer;//  v.Consignor;
+                obj.CustomerType = "CR"; //Cash customer
 
                 //obj.ContactPerson = v.ConsignorContact;
                 //obj.Address1 = v.ConsignorAddress1_Building;
@@ -862,8 +864,9 @@ namespace CMSV2.Controllers
                 obj.DepotID = depotid;
                 db.CustomerMasters.Add(obj);
                 db.SaveChanges();
-                cust = (from c in db.CustomerMasters where c.CustomerName == v.Consignor && c.CustomerType != "CN" select c).FirstOrDefault();
-                return cust.CustomerID;
+                return obj.CustomerID;
+                //cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
+                //return cust.CustomerID;
             }
             else
             {
@@ -1154,7 +1157,7 @@ namespace CMSV2.Controllers
         public JsonResult GetCustomerName(string term)
         {
             var customerlist = (from c1 in db.CustomerMasters
-                                where c1.CustomerType == "CR" && c1.CustomerName.ToLower().Contains(term.ToLower())
+                                where c1.CustomerType == "CR" && c1.CustomerName.ToLower().StartsWith(term.ToLower())
                                 orderby c1.CustomerName ascending
                                 select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).ToList();                                
 
@@ -1178,7 +1181,7 @@ namespace CMSV2.Controllers
         public JsonResult GetReceiverName(string term)
         {
             var shipperlist = (from c1 in db.InScanMasters
-                               where c1.Consignee.ToLower().Contains(term.ToLower())
+                               where c1.Consignee.ToLower().StartsWith(term.ToLower())
                                orderby c1.Consignee ascending
                                select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
 
@@ -1190,7 +1193,7 @@ namespace CMSV2.Controllers
         public JsonResult GetShipperName(string term)
         {
             var shipperlist = (from c1 in db.InScanMasters
-                                where c1.Consignor.ToLower().Contains(term.ToLower()) 
+                                where c1.Consignor.ToLower().StartsWith(term.ToLower()) 
                                 orderby c1.Consignor ascending
                                 select new { ShipperName=c1.Consignor, ContactPerson= c1.ConsignorContact, Phone=c1.ConsignorPhone,LocationName=c1.ConsignorLocationName, CityName= c1.ConsignorCityName , CountryName=c1.ConsignorCountryName,Address1= c1.ConsignorAddress1_Building , Address2=c1.ConsignorAddress2_Street,PinCode= c1.ConsignorAddress3_PinCode }).Distinct();
             return Json(shipperlist, JsonRequestBehavior.AllowGet);

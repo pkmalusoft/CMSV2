@@ -3,6 +3,23 @@
     @{
         ViewBag.Title = "Index";
         Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+        var isadd = true;
+        var ismodify = true;
+        var isdelete = true;
+        var isprint = true;
+        var isview = true;
+        string path = "/QuickAWB/Index";
+
+        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+        {
+            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+        }
     }
 
     <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
@@ -222,7 +239,7 @@
             </div>
             <div class="pull-left" style="padding-top:32px;">
                 <p class="indexbtnpadding">
-                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false)
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                     {
                     @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth",@Title="Create Not allowed in the previous financial year" })
                     }
@@ -363,16 +380,24 @@
                             </td>
                             <td>
                                 <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.InScanID')"><i class="fa fa-file"></i></a> |
-                                <a href="@Url.Action("Create", new { id = item.InScanID})"><i class="fa fa-pencil"></i></a>
-                                |<a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i></a>
-                                |<a href="#" onclick="Delete(ID=@item.InScanID)"><i class="fa fa-times"></i></a>
-                                |<a href="@Url.Action("AWBPrint","QuickAWB", new { id = item.InScanID})"><i class="fa fa-print"></i></a>
-                                @*
-
-            <a href="#" onclick="Delete(ID=@item.InScanID)"><i class="fa fa-times"></i></a>
-            |<a href="@Url.Action("PrintAWB","PrintBill", new { id = item.HAWBNo })"><i class="fa fa-times"></i></a>
-        </td>*@
-</tr>
+                                @if (ismodify)
+                                {
+                                    <a href="@Url.Action("Create", new { id = item.InScanID})"><i class="fa fa-pencil"></i>|</a>
+                                }
+                                @if (isview)
+                                {
+                                    <a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i>|</a>                                
+                                }
+                                @if (isdelete)
+                                {
+                                    <a href="#" onclick="Delete(ID=@item.InScanID)"><i class="fa fa-times"></i>|</a>
+                                }
+                                @if (isprint)
+                                {
+                                    <a href="@Url.Action("AWBPrint", "QuickAWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>                                                                
+                                }
+                            </td>
+                        </tr>
                     }
                 </tbody>
 

@@ -33,6 +33,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.AgentName)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem=>item.allocatedtotalamount)
+            </td>
             <td style="font-size:13px">
                 @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
                 <a target="_blank" href="InvoicePrint?id=@item.ReceiptID"><i class="fa fa-print"></i></a>

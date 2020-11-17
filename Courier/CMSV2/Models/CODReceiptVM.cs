@@ -13,6 +13,7 @@ namespace CMSV2.Models
         public string AcHeadName { get; set; }
         public int[] SelectedValues { get; set; }
         public decimal allocatedtotalamount { get; set; }
+
         public string CurrencyName { get; set; }
         public List<CODReceiptDetailVM> ReceiptDetails { get; set; }
     }

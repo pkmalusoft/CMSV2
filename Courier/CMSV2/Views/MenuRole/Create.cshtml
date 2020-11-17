@@ -167,32 +167,48 @@
               </div>
           </div>
           <section class="sidebar">
-          <ul class="sidebar-menu sidebar1">
-              @{
-                  CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+              <ul class="sidebar-menu sidebar1">
+                  @{
+                      CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
 
-                  List<CMSV2.Models.Menu> menuList = (List<CMSV2.Models.Menu>)Session["MenuAll"];
-                  List<CMSV2.Models.Menu> parentMenu = new List<CMSV2.Models.Menu>();
+                      List<CMSV2.Models.Menu> menuList = (List<CMSV2.Models.Menu>)Session["MenuAll"];
+                      List<CMSV2.Models.Menu> parentMenu = new List<CMSV2.Models.Menu>();
 
-                  //List<CMSV2.Models.MenuVM> menuList = (List<CMSV2.Models.MenuVM>)Session["Menu"];
-                  //List<CMSV2.Models.MenuVM> parentMenu = new List<CMSV2.Models.MenuVM>();
-                  if (menuList != null)
-                  {
-                      parentMenu = menuList.Where(p => Convert.ToInt32(p.ParentID) == 0).ToList();
-                  }
-
-                  if (parentMenu != null)
-                  {
-                      foreach (var item in parentMenu)
+                      //List<CMSV2.Models.MenuVM> menuList = (List<CMSV2.Models.MenuVM>)Session["Menu"];
+                      //List<CMSV2.Models.MenuVM> parentMenu = new List<CMSV2.Models.MenuVM>();
+                      if (menuList != null)
                       {
-                          List<int> RoleId = (List<int>)Session["AllRoleID"];
-                          int menuid = Convert.ToInt32(item.MenuID);
-                          if (item.PermissionRequired.HasValue && item.PermissionRequired.Value)
+                          parentMenu = menuList.Where(p => Convert.ToInt32(p.ParentID) == 0).ToList();
+                      }
+
+                      if (parentMenu != null)
+                      {
+                          foreach (var item in parentMenu)
                           {
-                              if (obj.IsAccessibleMenu(menuid, RoleId))
+                              List<int> RoleId = (List<int>)Session["AllRoleID"];
+                              int menuid = Convert.ToInt32(item.MenuID);
+                              if (item.PermissionRequired.HasValue && item.PermissionRequired.Value)
                               {
-                                  <li style="color:green">
-                                 <a  class="sidea" style="color:blue!important" id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                  if (obj.IsAccessibleMenu(menuid, RoleId))
+                                  {
+                                      <li style="color:green">
+                                          <a class="sidea" style="color:blue!important" id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
+                                          @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                          {
+                                              @:<ul class="treeview-menu" style="background-color:rgb(245 245 245)">
+                                              }
+                                          @RenderMenuList(menuList, item)
+                                          @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
+                                          {
+                                          @:</ul>
+                                      }
+                                      </li>
+                                  }
+                              }
+                              else
+                              {
+                                  <li>
+                                      <a id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
                                       @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
                                       {
                                           @:<ul class="treeview-menu" style="background-color:rgb(245 245 245)">
@@ -204,53 +220,37 @@
                                   }
                                   </li>
                               }
-                          }
-                          else
-                          {
-                              <li>
-                                  <a id="@item.MenuID" href=@item.Link><i class="@item.imgclass"></i><span>@item.Title</span></a>
-                                  @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
-                                  {
-                                      @:<ul class="treeview-menu" style="background-color:rgb(245 245 245)">
-                                      }
-                                  @RenderMenuList(menuList, item)
-                                  @if (menuList.Count(p => p.ParentID == item.MenuID) > 0)
-                                  {
-                                  @:</ul>
-                              }
-                              </li>
-                          }
 
+                          }
                       }
-                  }
 
-                  @helper RenderMenuList(List<CMSV2.Models.Menu> menuList, CMSV2.Models.Menu mi)
-                  {
-                      foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
+                      @helper RenderMenuList(List<CMSV2.Models.Menu> menuList, CMSV2.Models.Menu mi)
                       {
-                          @:<li style="list-style:none">
-                                <div class="checkboxdesign" style="color:black">
-                                    <input type="checkbox" id="menu_@item1.MenuID" value="0" parentid=@mi.MenuID  />
-                                    <label class="headinglabel">@item1.Title</label>
-                                </div>
-                              if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
-                              {
-                                  @:<ul style="padding-left:55px">
-                                  }
-                                  @RenderMenuList(menuList, item1)
+                          foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
+                          {
+                              @:<li style="list-style:none">
+                                  <div class="checkboxdesign" style="color:black">
+                                      <input type="checkbox" id="menu_@item1.MenuID" value="0" parentid=@mi.MenuID />
+                                      <label class="headinglabel">@item1.Title</label>
+                                  </div>                                  
                                   if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
                                   {
-                                  @:</ul>
+                                      @:<ul style="padding-left:55px">
+                                      }
+                                      @RenderMenuList(menuList, item1)
+                                      if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
+                                      {
+                                      @:</ul>
+                                  }
+                                  else
+                                  {
+                                  @:</li>
                               }
-                              else
-                              {
-                              @:</li>
                           }
                       }
+
                   }
 
-              }
-              
               </ul>
               </section>
               <div class="row role_menu hide">

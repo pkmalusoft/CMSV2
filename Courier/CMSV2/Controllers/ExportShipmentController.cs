@@ -1454,6 +1454,7 @@ namespace CMSV2.Controllers
                                            join ins in db.InScanMasters on c.InscanId equals ins.InScanID
                                            join cur in db.CurrencyMasters on c.CurrencyID equals cur.CurrencyID
                                            join agent in db.AgentMasters on c.FwdAgentId equals agent.AgentID into gj
+                                           join pay in db.tblPaymentModes on ins.PaymentModeId equals pay.ID
                                            from subpet in gj.DefaultIfEmpty()
                                            where c.ExportID == id
                                            select new ExportShipmentDetailVM
@@ -1469,6 +1470,7 @@ namespace CMSV2.Controllers
                                                Shipper = c.Shipper,
                                                Value = c.Value,
                                                Reciver = c.Reciver,
+                                               PaymentMode=pay.PaymentModeText,
                                                DestinationCountry = c.DestinationCountry,
                                                DestinationCity = c.DestinationCity,
                                                OriginCountry = ins.ConsignorCountryName,

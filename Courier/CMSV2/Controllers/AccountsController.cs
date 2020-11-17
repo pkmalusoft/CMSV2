@@ -3061,7 +3061,7 @@ new AcGroupModel()
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
-                    reportparam.Output = "PDF"
+                    reportparam.Output = "PDF";
                 }
 
             }

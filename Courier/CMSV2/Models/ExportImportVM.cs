@@ -73,6 +73,7 @@ namespace CMSV2.Models
     }
     public class ExportShipmentDetailVM : ExportShipmentDetail
     {
+        public string PaymentMode { get; set; }
         public string ForwardAgentName {get;set;}
         public string CurrencyName { get; set; }
         public string CurrenySymbol { get; set; }

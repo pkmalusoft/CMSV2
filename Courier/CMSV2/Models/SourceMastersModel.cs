@@ -116,6 +116,17 @@ namespace CMSV2.Models
             }
             return false;
         }
+        public bool GetViewpermission(int RoleId, string href)
+        {
+            var menus = db.Menus;
+            var menuid = menus.Where(d => d.Link.Contains(href)).FirstOrDefault().MenuID;
+            var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsView == true).FirstOrDefault();
+            if (permission != null)
+            {
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region RevenueType

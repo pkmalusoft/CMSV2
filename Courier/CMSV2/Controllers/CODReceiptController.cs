@@ -99,7 +99,8 @@ namespace CMSV2.Controllers
                                                      ReceiptNo= c.ReceiptNo,
                                                      ReceiptDate = c.ReceiptDate,
                                                      AgentID = c.AgentID,
-                                                     AgentName = cust.Name
+                                                     AgentName = cust.Name,
+                                                     allocatedtotalamount=c.Amount
 
                                                  }).ToList();
 
@@ -165,6 +166,7 @@ namespace CMSV2.Controllers
                                                       }).ToList();
 
                 vm.ReceiptDetails = receiptdetails;
+                vm.allocatedtotalamount = vm.Amount;
                 Session["CODReceiptCreate"] = vm;
             }
             else if (CODReceiptSession!=null)
@@ -232,11 +234,13 @@ namespace CMSV2.Controllers
                 {
                     db.CODReceipts.Add(codreceipt);
                     db.SaveChanges();
-                    savemessage = "You have successfully Saved the Customer Invoice";
+                    savemessage = "You have successfully Saved the COD Receipt";
                 }
                 else
                 {
                     db.Entry(codreceipt).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    savemessage = "You have successfully Updated the COD Receipt";
                 }
 
                 //Detail table save and udpate
@@ -289,6 +293,10 @@ namespace CMSV2.Controllers
                     }
 
                 }
+
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateCODPosting(codreceipt.ReceiptID);
+
                 TempData["SuccessMsg"] = savemessage;
             }
 

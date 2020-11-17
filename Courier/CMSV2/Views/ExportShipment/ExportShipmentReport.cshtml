@@ -317,6 +317,9 @@
                             Contents
                         </th>
                         <th>
+                            Payment Mode
+                        </th>
+                        <th>
                             Pcs
                         </th>
                         <th>
@@ -329,9 +332,9 @@
                             Charge
                         </th>
                         <th>
-                            F.Agent
+                            F.Agent Details
                         </th>
-                        <th>
+                        @*<th>
                             F.A. AWB
                         </th>
                         <th>
@@ -345,7 +348,7 @@
                         </th>
                         <th>
                             Flight
-                        </th>
+                        </th>*@
                     </tr>
                 </thead>
                 <tbody class="input-table">
@@ -365,16 +368,20 @@
                             @shipment.DestinationCity
                         </td>
                         <td>@shipment.Contents</td>
+                         <td>@shipment.PaymentMode</td>
                         <td>@shipment.PCS</td>
                         <td>@shipment.Weight.ToString("0.000")</td>
                         <td>@shipment.BagNo</td>
                         <td>@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
-                        <td>@shipment.ForwardAgentName</td>
-                        <td>@shipment.FwdAgentAWBNo</td>
-                        <td class="text-right">@shipment.FwdDate</td>
-                        <td class="text-right">@shipment.FwdCharge</td>
-                        <td class="text-right">@shipment.OtherCharge</td>
-                        <td>@shipment.FwdFlight</td>
+                        <td>
+                            @shipment.ForwardAgentName<br />
+                            @shipment.FwdAgentAWBNo <br />
+                            @shipment.FwdDate <br />
+                            @shipment.FwdCharge <br />
+                            @shipment.FwdFlight <br />
+                            @shipment.OtherCharge <br />
+                        </td>
+                        
                     </tr>
                     i++;
                 }

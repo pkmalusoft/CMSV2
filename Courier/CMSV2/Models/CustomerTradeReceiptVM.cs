@@ -22,5 +22,7 @@ namespace CMSV2.Models
         public decimal? Balance { get; set; }
         public string DateTime { get; set; }
         public decimal? AdjustmentAmount { get; set; }
+
+        public decimal? Amount { get; set; }
     }
 }

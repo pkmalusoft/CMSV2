@@ -147,7 +147,8 @@ namespace CMSV2.Controllers
                                                      CustomerInvoiceNo = c.CustomerInvoiceNo,
                                                      InvoiceDate = c.InvoiceDate,
                                                      CustomerID = c.CustomerID,
-                                                     CustomerName = cust.CustomerName
+                                                     CustomerName = cust.CustomerName,
+                                                     InvoiceTotal=c.InvoiceTotal
 
                                                  }).ToList();
 
@@ -172,7 +173,11 @@ namespace CMSV2.Controllers
 
             CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
             PickupRequestDAO _dao = new PickupRequestDAO();
-            _custinvoice.InvoiceDate = DateTime.Now;            
+            DateTime saveNow = DateTime.Now;
+            DateTime myDt;
+            myDt = DateTime.SpecifyKind(saveNow, DateTimeKind.Unspecified);
+
+            _custinvoice.InvoiceDate = myDt;// DateTimeKind. DateTimeOffset.Now.UtcDateTime.AddHours(5.30); // DateTime.Now;            
             _custinvoice.CustomerInvoiceNo = _dao.GetMaxInvoiceNo(companyid, branchid);
             //_custinvoice.FromDate = datePicker.FromDate;
             //_custinvoice.ToDate = datePicker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -263,6 +268,7 @@ namespace CMSV2.Controllers
         public ActionResult Create(CustomerInvoiceVM model)
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             var userid = Convert.ToInt32(Session["UserID"]);
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             if (model.CustomerInvoiceID == 0)
@@ -282,6 +288,7 @@ namespace CMSV2.Controllers
                 _custinvoice.OtherCharge = model.OtherCharge;
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
                 _custinvoice.AcFinancialYearID = yearid;
+                _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
 
                 db.CustomerInvoices.Add(_custinvoice);
@@ -322,6 +329,11 @@ namespace CMSV2.Controllers
 
                     }
                 }
+
+                //Accounts Posting
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateInvoicePosting(_custinvoice.CustomerInvoiceID);
+
                 TempData["SuccessMsg"] = "You have successfully Saved the Customer Invoice";
                 return RedirectToAction("Index");
             }

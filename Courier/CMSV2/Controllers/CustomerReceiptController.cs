@@ -52,22 +52,29 @@ namespace CMSV2.Controllers
                 if (id > 0)
                 {
                     cust = RP.GetRecPayByRecpayID(id);
-                    var acheadforcash = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         t.AccountType.ToLower() == "cash" && s.AcBranchID == branchid
-                                         select d).ToList();
-                    var acheadforbank = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         t.AccountType.ToLower() == "bank" && s.AcBranchID == branchid
-                                         select d).ToList();
+
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+
+                    //var acheadforcash = (from d in Context1.AcHeads
+                    //                     join
+                    //                    s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
+                    //                     join
+                    //                     t in Context1.AcTypes on s.AcTypeId equals t.Id
+                    //                     where
+                    //                     t.AccountType.ToLower() == "cash" && s.AcBranchID == branchid
+                    //                     select d).ToList();
+                    //var acheadforbank = (from d in Context1.AcHeads
+                    //                     join
+                    //                    s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
+                    //                     join
+                    //                     t in Context1.AcTypes on s.AcTypeId equals t.Id
+                    //                     where
+                    //                     t.AccountType.ToLower() == "bank" && s.AcBranchID == branchid
+                    //                     select d).ToList();
                     //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     ViewBag.achead = acheadforcash;
@@ -105,26 +112,29 @@ namespace CMSV2.Controllers
                     //ViewBag.achead = Context1.AcHeads.ToList().Where(x => x.AcGroupID == 10);
                     //ViewBag.acheadbank = Context1.AcHeads.ToList().Where(x => x.AcGroupID == 49);
 
-                    //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    var acheadforcash = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         t.AccountType.ToLower() == "cash" && s.AcBranchID == branchid
-                                         select d).ToList();
-                    var acheadforbank = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         t.AccountType.ToLower() == "bank" && s.AcBranchID == branchid
-                                         select d).ToList();
-                    //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+                    
+                    //var acheadforcash = (from d in Context1.AcHeads
+                    //                     join
+                    //                    s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
+                    //                     join
+                    //                     t in Context1.AcTypes on s.AcTypeId equals t.Id
+                    //                     where
+                    //                     t.AccountType.ToLower() == "cash" && s.AcBranchID == branchid
+                    //                     select d).ToList();
+                    //var acheadforbank = (from d in Context1.AcHeads
+                    //                     join
+                    //                    s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
+                    //                     join
+                    //                     t in Context1.AcTypes on s.AcTypeId equals t.Id
+                    //                     where
+                    //                     t.AccountType.ToLower() == "bank" && s.AcBranchID == branchid
+                    //                     select d).ToList();
+                    
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
                     cust.RecPayDate = System.DateTime.UtcNow;
@@ -827,24 +837,12 @@ namespace CMSV2.Controllers
                 if (id > 0)
                 {
                     cust = RP.GetRecPayByRecpayID(id);
-                    var acheadforcash = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         //t.AccountType.ToLower() == "cash" &&
-                                         s.AcBranchID == branchid
-                                         select d).ToList();
-                    var acheadforbank = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         //t.AccountType.ToLower() == "bank" && 
-                                         s.AcBranchID == branchid
-                                         select d).ToList();
+
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
                     //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     ViewBag.achead = acheadforcash;
@@ -890,28 +888,13 @@ namespace CMSV2.Controllers
                 else
                 {
                     BindAllMasters(2);
-                    var acheadforcash = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         //t.AccountType.ToLower() == "cash" &&
-                                         s.AcBranchID == branchid
-                                         select d).ToList();
-                    var acheadforbank = (from d in Context1.AcHeads
-                                         join
-                                        s in Context1.AcGroups on d.AcGroupID equals s.AcGroupID
-                                         join
-                                         t in Context1.AcTypes on s.AcTypeId equals t.Id
-                                         where
-                                         //t.AccountType.ToLower() == "bank" 
-                                         s.AcBranchID == branchid
-                                         select d).ToList();
-                    //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
+
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
+                    
 
                     cust.RecPayDate = System.DateTime.UtcNow;
                 }
@@ -963,7 +946,9 @@ namespace CMSV2.Controllers
             return View(cust);
 
         }
-        public JsonResult GetTradeInvoiceOfCustomer(int? ID)
+
+        [HttpPost]
+        public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived)
         {
 
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
@@ -973,40 +958,62 @@ namespace CMSV2.Controllers
             foreach (var item in AllInvoices)
             {
                 //var invoicedeails = (from d in Context1.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                var invoicedeails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.CustomerInvoiceID select d).ToList(); 
-                                     //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                foreach (var det in invoicedeails)
-                {
-                    var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == det.CustomerInvoiceDetailID select d).ToList();
-                    var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                    var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
+                var invoicedeails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.CustomerInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null)  select d).ToList();
+                //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                decimal? totamt = 0;
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+                decimal? CreditAmount = 0;
+                //foreach (var det in invoicedeails)
+                //{
+                    var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == item.CustomerInvoiceID  select d).ToList();
+                    totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
+                    totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                     //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == det.SalesInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
-                    var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
-                    decimal? CreditAmount = 0;
-                    if (CreditNote.Count > 0)
-                    {
-                        CreditAmount = CreditNote.Sum(d => d.Amount);
-                    }
-                    var totamt = totamtpaid + totadjust + CreditAmount;
-                    var Invoice = new CustomerTradeReceiptVM();
-                    //Invoice.JobID = det.JobID;
-                    Invoice.JobCode = "";
-                    Invoice.SalesInvoiceID = det.CustomerInvoiceID; // SalesInvoiceID;
-                    Invoice.InvoiceNo = item.CustomerInvoiceNo;
-                    Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
-                    Invoice.InvoiceAmount = det.NetValue; // CourierCharge;
-                    Invoice.date = item.InvoiceDate;
-                    Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
-                    //var RecPay = (from d in Context1.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
+                    //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
+                    
+                    //if (CreditNote.Count > 0)
+                    //{
+                    //    CreditAmount = CreditNote.Sum(d => d.Amount);
+                    //}
+                     totamt = totamtpaid + totadjust + CreditAmount;                
+                //}
 
-                    Invoice.AmountReceived = totamt;
-                    Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
-                    Invoice.AdjustmentAmount = totadjust;
+                var Invoice = new CustomerTradeReceiptVM();
+                //Invoice.JobID = det.JobID;
+                Invoice.JobCode = "";
+                Invoice.SalesInvoiceID = item.CustomerInvoiceID; // SalesInvoiceID;
+                Invoice.InvoiceNo = item.CustomerInvoiceNo;
+                //Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
+                Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
+                Invoice.date = item.InvoiceDate;
+                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
+                //var RecPay = (from d in Context1.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
 
-                    if (Invoice.Balance > 0)
+                Invoice.AmountReceived = totamt;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
+                Invoice.AdjustmentAmount = totadjust;             
+                
+                if (Invoice.Balance > 0)
+                {
+                    if (amountreceived != null)
                     {
-                        salesinvoice.Add(Invoice);
+                        if (amountreceived >= Invoice.Balance)
+                        {
+                            Invoice.Amount = Invoice.Balance;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else if (amountreceived > 0)
+                        {
+                            Invoice.Amount = amountreceived;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else
+                        {
+                            Invoice.Amount = 0;
+                        }
                     }
+                    salesinvoice.Add(Invoice);
                 }
             }
 

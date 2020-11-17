@@ -72,7 +72,16 @@
 
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-         $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+
+        $('#InvoiceDate').val(reqdate);
     });
 
 

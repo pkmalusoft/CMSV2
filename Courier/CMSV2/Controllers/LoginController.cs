@@ -134,6 +134,7 @@ namespace CMSV2.Controllers
             //User and role Setting
             rolelist.Add(proleid);
                 Session["RoleID"] = rolelist;
+            Session["UserRoleID"] = rolelist[0];
                 Session["UserID"] = u1.UserID;
                 Session["UserName"] = u1.UserName;
                 //Session["CurrentBranchID"] = u.BranchID;                                                          

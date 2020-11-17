@@ -7,7 +7,10 @@
     #details tr {
         height: 32px;
     }
-
+ #details tr:first-of-type {
+        background: #35b8eb;
+        color: #fff;
+    }
     .headinglabel {
         font-family: Calibri;
         font-size: 16px;
@@ -1023,7 +1026,7 @@
 
         <fieldset class="">
             <div class="row no-margin">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <input type="hidden" name="deletedExpAllocations" id="deletedExpAllocations" value="" />
                     <input type="hidden" name="deletedJournalDetails" id="deletedJournalDetails" value="" />
                     @Html.HiddenFor(model => model.TransactionNo)
@@ -1040,12 +1043,12 @@
                     <label class="headinglabel">Transaction No.</label>
                     <input type="text" name="TransactionNoROT" value="@Model.TransactionNo" class="form-control" readonly="readonly" />
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label class="headinglabel">Transaction Date</label>
                     @Html.TextBoxFor(model => model.transdate, String.Format("{0:dd-MMM-yyyy}", this.Model.transdate), new { @class = "form-control", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => model.transdate)
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
 
                     <label class="headinglabel">Transaction Type</label>
                     @Html.DropDownListFor(model => model.transtype, ViewBag.transtypes as SelectList, new { @class = "form-control" })
@@ -1053,28 +1056,32 @@
                     @Html.HiddenFor(model => model.TransactionType)
 
                 </div>
-                <div class="col-md-2">
+            </div>
+                <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-4">
                     <label class="headinglabel">Payment Type</label>
                     @Html.DropDownListFor(model => model.paytype, ViewBag.paytypes as SelectList, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.paytype)
                     @Html.HiddenFor(model => model.paytype)
                 </div>
                 <div class="col-md-4">
-                    <label class="headinglabel">Reference</label>
-                    @Html.TextBoxFor(model => model.reference, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.reference)
-                </div>
-            </div>
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-md-6">
-                        <label class="headinglabel">Account Head</label>
+                        <label class="headinglabel">Cash/Bank Accounts</label>
                         @Html.TextBoxFor(model => model.AcHead, new { @id = "AcHead", @class = "form-control", autocomplete = "off" })
                         @Html.HiddenFor(model => model.SelectedAcHead, new
                         {@*Value = "0"*@id = "SelectedAcHead"
                     })
                     </div>
+                <div class="col-md-4">
+                    <label class="headinglabel">Reference</label>
+                    @Html.TextBoxFor(model => model.reference, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.reference)
+                </div>
+                
+            </div>
+                <div class="row no-margin" style="padding-top:10px">
+                    
 
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="headinglabel">Narration</label>
                         @Html.TextAreaFor(model => model.remarks, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.remarks)
@@ -1146,9 +1153,8 @@
                     <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel">Action</label>
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;" onclick="ClearData()">-</button>&nbsp;&nbsp;
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;" index="1" id="btnAdd" class="addmore">+</button>
+                    <button type="button"  style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                    <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" class="addmore">+</button>
                 </div>
                 @*<div class="col-md-12 butdivs">
                         <br />
@@ -1162,7 +1168,6 @@
                 <table class="table table-bordered table-responsive" id="details" style="background-color:white">
                     <tr>
                         <td style="width:25%">AcHead</td>
-                        <td style="width:3%">Inc.Tax</td>
                         <td style="width:10%">Amount</td>
                         <td style="width:5%">Tax%</td>
                         <td style="width:5%">Tax Amt</td>
