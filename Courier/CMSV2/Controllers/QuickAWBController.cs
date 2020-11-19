@@ -100,9 +100,9 @@ namespace CMSV2.Controllers
                 ViewBag.CourierStatusList = db.CourierStatus.ToList();
                 ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
                 ViewBag.PaymentMode = db.tblPaymentModes.ToList();
-
-
-                QuickAWBVM v = new QuickAWBVM();
+            ViewBag.OtherCharge = db.OtherCharges.ToList();
+            List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
+            QuickAWBVM v = new QuickAWBVM();
                 if (id == 0)
                 {
                     ViewBag.Enquiry = db.InScanMasters.Where(dd => dd.CourierStatusID == 4).ToList();
@@ -113,19 +113,20 @@ namespace CMSV2.Controllers
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
-                   List<OtherChargeDetailVM> othercharngesvm = new List<OtherChargeDetailVM>();
-                OtherChargeDetailVM charge1 = new OtherChargeDetailVM();
-                charge1.OtherChargeID = 1;
-                charge1.OtherChargeName = "Customs charge";
-                charge1.Amount = 100;
-                othercharngesvm.Add(charge1);
+                   
+                   v.otherchargesVM = otherchargesvm;
+                //OtherChargeDetailVM charge1 = new OtherChargeDetailVM();
+                //charge1.OtherChargeID = 1;
+                //charge1.OtherChargeName = "Customs charge";
+                //charge1.Amount = 100;
+                //othercharngesvm.Add(charge1);
 
-                charge1 = new OtherChargeDetailVM();
-                charge1.OtherChargeID = 2;
-                charge1.OtherChargeName = "Other charge";
-                charge1.Amount = 200;
-                othercharngesvm.Add(charge1);
-                v.othercharges = othercharngesvm;
+                //charge1 = new OtherChargeDetailVM();
+                //charge1.OtherChargeID = 2;
+                //charge1.OtherChargeName = "Other charge";
+                //charge1.Amount = 200;
+                //othercharngesvm.Add(charge1);
+                //v.otherchargesVM = othercharngesvm;
 
 
             }
@@ -133,6 +134,15 @@ namespace CMSV2.Controllers
                 {
                     ViewBag.Enquiry = db.InScanMasters.ToList();
                     v = GetAWBDetail(id);
+                otherchargesvm = (from c in db.InscanOtherCharges join o in db.OtherCharges on c.OtherChargeID equals o.OtherChargeID where c.InscanID == id select new OtherChargeDetailVM { InscanID = id, OtherChargeID = c.OtherChargeID, OtherChargeName = o.OtherCharge1, Amount = c.Amount }).ToList();
+                if (otherchargesvm == null)
+                { 
+                    otherchargesvm  = new List<OtherChargeDetailVM>();
+                    v.otherchargesVM = otherchargesvm;
+                }                
+                else {
+                    v.otherchargesVM = otherchargesvm;
+                }
                     ViewBag.AWBNo = v.HAWBNo;
                     if (v.CourierStatusId == null)
                         ViewBag.CourierStatusId = 0;
@@ -356,9 +366,7 @@ namespace CMSV2.Controllers
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
                         AddAWBTrackStatus(inscan.InScanID);
-                        if (v.PaymentModeId == 1 || v.PaymentModeId==2 )
-                            _dao.AWBAccountsPosting(inscan.InScanID);
-
+                      
                         //if (v.PaymentModeId == 2)
                         //{ SaveConsignee(v); }
 
@@ -441,6 +449,56 @@ namespace CMSV2.Controllers
                             db.SaveChanges();
                         }
                     }
+
+                    //Other charge data update into inscanothercharge table
+                        if (v.otherchargesVM != null)
+                        {
+                            for (int j = 0; j < v.otherchargesVM.Count; j++)
+                            {
+                            //InscanOtherCharge objOtherCharge = new InscanOtherCharge();
+                            int oid = Convert.ToInt32(v.otherchargesVM[j].OtherChargeID);
+                                InscanOtherCharge objOtherCharge = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID && cc.OtherChargeID == oid).FirstOrDefault();
+                            if (objOtherCharge == null)
+                            {
+                                objOtherCharge = new InscanOtherCharge();
+                                var maxid = (from c in db.InscanOtherCharges orderby c.InscanOtherChargeID descending select c.InscanOtherChargeID).FirstOrDefault();
+                                objOtherCharge.InscanOtherChargeID = maxid + 1;
+                                objOtherCharge.InscanID = inscan.InScanID;
+                                objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
+                                objOtherCharge.Amount = v.otherchargesVM[j].Amount;
+                                db.InscanOtherCharges.Add(objOtherCharge);
+                                db.SaveChanges();
+                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                            }
+                            else
+                            {
+                                //objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
+                                objOtherCharge.Amount = v.otherchargesVM[j].Amount;
+                                db.Entry(objOtherCharge).State = EntityState.Modified;
+                                db.SaveChanges();
+                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                            }
+                            }
+
+                        var otherchargeitems = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID);
+                        var exportdetailsid = v.otherchargesVM.Select(s => s.OtherChargeID).ToList();
+                        foreach (var e_details in otherchargeitems)
+                        {
+                            var _found = v.otherchargesVM.Where(cc => cc.OtherChargeID == e_details.OtherChargeID).FirstOrDefault();
+                            if (_found == null)
+                            {
+                                db.Entry(e_details).State = EntityState.Deleted;
+                                
+                            }
+                        }
+
+                        db.SaveChanges();
+
+                    }
+                    //accounts posting  for payment mode pickupcash and cod
+                    if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
+                        _dao.AWBAccountsPosting(inscan.InScanID);
+
 
                     return RedirectToAction("Index");
 
@@ -1193,11 +1251,33 @@ namespace CMSV2.Controllers
         public JsonResult GetShipperName(string term)
         {
             var shipperlist = (from c1 in db.InScanMasters
-                                where c1.Consignor.ToLower().StartsWith(term.ToLower()) 
-                                orderby c1.Consignor ascending
-                                select new { ShipperName=c1.Consignor, ContactPerson= c1.ConsignorContact, Phone=c1.ConsignorPhone,LocationName=c1.ConsignorLocationName, CityName= c1.ConsignorCityName , CountryName=c1.ConsignorCountryName,Address1= c1.ConsignorAddress1_Building , Address2=c1.ConsignorAddress2_Street,PinCode= c1.ConsignorAddress3_PinCode }).Distinct();
+                               where c1.Consignor.ToLower().StartsWith(term.ToLower())
+                               orderby c1.Consignor ascending
+                               select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
             return Json(shipperlist, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public ActionResult GetOtherChargeAll(string term)
+        {
+            //MastersModel MM = new MastersModel();
+            int CompanyId= CommanFunctions.ParseInt(Session["CurrentCompanyID"].ToString());
+
+            if (!String.IsNullOrEmpty(term))
+            {
+                var othercharges = db.OtherCharges.Where(cc => cc.AcCompanyID== CompanyId && cc.OtherCharge1.ToLower().StartsWith(term.ToLower())).OrderBy(cc => cc.OtherCharge1).ToList();                               
+
+                //MM.GetAnalysisHeadSelectList(Common.ParseInt(Session["AcCompanyID"].ToString()), term);
+                return Json(othercharges, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var othercharges = db.OtherCharges.Where(cc => cc.AcCompanyID == CompanyId).OrderBy(cc => cc.OtherCharge1).ToList();
+                term = "";
+                return Json(othercharges, JsonRequestBehavior.AllowGet);                
+            }
+        }
+
         public class selectdata
         {
             public int id { get; set; }

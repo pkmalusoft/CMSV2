@@ -111,6 +111,11 @@ namespace CMSV2.Controllers
                 {
                     _ExportShipment.Shipments = new List<ExportShipmentDetail>();
                 }
+
+                if (_ExportShipment.ShipmentsVM == null)
+                {
+                    _ExportShipment.ShipmentsVM = new List<ExportShipmentDetailVM>();
+                }
             }
             else
             {
@@ -140,10 +145,10 @@ namespace CMSV2.Controllers
                 _ExportShipment.DestinationAirportCity = exportshipment.DestinationAirportCity;
                 _ExportShipment.ShipmentTypeId = exportshipment.ShipmentTypeId;
                 _ExportShipment.Shipments = db.ExportShipmentDetails.Where(cc => cc.ExportID == _ExportShipment.ID).ToList();
-                List<CMSV2.Models.ExportShipmentDetail> _details = new List<ExportShipmentDetail>(); // _ExportShipment.Shipments;
+                List<CMSV2.Models.ExportShipmentDetailVM> _details = new List<ExportShipmentDetailVM>(); // _ExportShipment.Shipments;
                 foreach (var item in _ExportShipment.Shipments)
                 {
-                    ExportShipmentDetail ee = new ExportShipmentDetail();
+                    ExportShipmentDetailVM ee = new ExportShipmentDetailVM();
                     ee.ShipmentDetailID = item.ShipmentDetailID;
                     ee.ExportID = item.ExportID;
                     ee.AWB = item.AWB;
@@ -166,22 +171,19 @@ namespace CMSV2.Controllers
                     ee.FwdAgentAWBNo = item.FwdAgentAWBNo;
                     ee.OtherCharge = item.OtherCharge;
                     ee.InscanId = item.InscanId;
-                    
+                    InScanMaster ins = db.InScanMasters.Find(ee.InscanId);
+                    ee.ConsignorPhone = ins.ConsignorPhone;
+                    ee.ConsigneePhone = ins.ConsigneePhone;
+                    ee.OriginCountry = ins.ConsignorCountryName;
+                    ee.PaymentMode = db.tblPaymentModes.Find(ins.PaymentModeId).PaymentModeText;
                     _details.Add(ee);
                 }
-                
+                _ExportShipment.ShipmentsVM = _details;
+                _ExportShipment.TotalAWB = _details.Count;
                 Session["PreviousShipments"] = _details;
             }                               
                 
-                string selectedVal = _ExportShipment.Type;
-
-            //    var types = new List<SelectListItem>
-            //{
-            //    new SelectListItem{Text = "Select Shipment Type", Value = null, Selected = selectedVal == null},
-            //    new SelectListItem{Text = "Transhipment", Value = "Transhipment", Selected = selectedVal == "Transhipment"},
-            //    new SelectListItem{Text = "Import", Value = "Import", Selected = selectedVal == "Import"},
-            //};
-            //    ViewBag.Type = types; // db.tblStatusTypes.ToList();
+                string selectedVal = _ExportShipment.Type;           
 
             ViewBag.Type = db.tblShipmentTypes.ToList();
             //ViewBag.Type = db.tblStatusTypes.ToList(); // db.tblStatusTypes.ToList();
@@ -199,10 +201,20 @@ namespace CMSV2.Controllers
         }
         public bool AddShippmentToTable(FormCollection data)
         {
-            var shipmentmodel = new ExportShipmentDetail();
+            var shipmentmodel = new ExportShipmentDetailVM();
             shipmentmodel.CurrencyID =Convert.ToInt32(Session["CurrencyId"].ToString()); // Convert.ToInt32(data["tCurrencyID"]);
             shipmentmodel.AWB = data["tAWB"];
             shipmentmodel.InscanId = Convert.ToInt32(data["tInScanId"]);
+            if (shipmentmodel.InscanId != null)
+            {
+                InScanMaster ins = db.InScanMasters.Find(shipmentmodel.InscanId);
+
+                shipmentmodel.ConsignorPhone = ins.ConsignorPhone;
+                shipmentmodel.ConsigneePhone = ins.ConsigneePhone;
+                shipmentmodel.OriginCountry = ins.ConsignorCountryName;
+
+                shipmentmodel.PaymentMode = db.tblPaymentModes.Find(ins.PaymentModeId).PaymentModeText;
+            }
             shipmentmodel.HAWB = data["tHAWB"];
             shipmentmodel.BagNo = data["tBagNo"];
             shipmentmodel.PCS = Convert.ToInt32(data["tPCS"]);
@@ -246,7 +258,7 @@ namespace CMSV2.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult AddOrRemoveShipment1(ExportShipmentFormModel s_ImportShipment, int? i)
         {
-            var Prevshipmentsession = Session["PreviousShipments"] as List<ExportShipmentDetail>;
+            var Prevshipmentsession = Session["PreviousShipments"] as List<ExportShipmentDetailVM>;
            
             if (i.HasValue) //delete mode
             {
@@ -256,31 +268,31 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-                    if (s_ImportShipment.Shipments == null)
+                    if (s_ImportShipment.ShipmentsVM == null)
                     {
-                        s_ImportShipment.Shipments = new List<ExportShipmentDetail>();
+                        s_ImportShipment.ShipmentsVM = new List<ExportShipmentDetailVM>();
                     }
                     int index = 0;
                     foreach (var item in Prevshipmentsession)
                     {
                         if (i != index)
                         {
-                            s_ImportShipment.Shipments.Add(item);
+                            s_ImportShipment.ShipmentsVM.Add(item);
                         }
                         index++;
                     }
                 }
                
                 //s_ImportShipment.Shipments.RemoveAt(i.Value);
-                Session["PreviousShipments"] = s_ImportShipment.Shipments;
+                Session["PreviousShipments"] = s_ImportShipment.ShipmentsVM;
             }
             else
             {
-                if (s_ImportShipment.Shipments == null)
+                if (s_ImportShipment.ShipmentsVM == null)
                 {
-                    s_ImportShipment.Shipments = new List<ExportShipmentDetail>();
+                    s_ImportShipment.ShipmentsVM = new List<ExportShipmentDetailVM>();
                 }
-                var shipmentsession = Session["EShipmentdetails"] as ExportShipmentDetail;
+                var shipmentsession = Session["EShipmentdetails"] as ExportShipmentDetailVM;
                 var Serialnumber = Convert.ToInt32(Session["EShipSerialNumber"]);
                 var isupdate = Convert.ToBoolean(Session["EIsUpdate"]);
                 if (Prevshipmentsession==null)
@@ -291,30 +303,30 @@ namespace CMSV2.Controllers
                 {
                     foreach(var item in Prevshipmentsession)
                     {
-                        s_ImportShipment.Shipments.Add(item);
+                        s_ImportShipment.ShipmentsVM.Add(item);
                     }
                 }
                 if (isupdate == true)
                 {
-                    if (s_ImportShipment.Shipments.Count ==0)
+                    if (s_ImportShipment.ShipmentsVM.Count ==0)
                     {
-                        s_ImportShipment.Shipments.Add(shipmentsession);
+                        s_ImportShipment.ShipmentsVM.Add(shipmentsession);
                     }
                     else
                     {
-                        s_ImportShipment.Shipments[Serialnumber] = shipmentsession;
+                        s_ImportShipment.ShipmentsVM[Serialnumber] = shipmentsession;
                     }
                     //s_ImportShipment.Shipments.RemoveAt(Serialnumber);                  
                     
                 }
                 else
                 {
-                    s_ImportShipment.Shipments.Add(shipmentsession);
+                    s_ImportShipment.ShipmentsVM.Add(shipmentsession);
                 }
-                Session["EShipmentdetails"] = new ExportShipmentDetail();
+                Session["EShipmentdetails"] = new ExportShipmentDetailVM();
                 Session["EShipSerialNumber"] = "";
                 Session["EIsUpdate"] = false;
-                Session["PreviousShipments"] = s_ImportShipment.Shipments;
+                Session["PreviousShipments"] = s_ImportShipment.ShipmentsVM;
             }
             //ViewBag.Cities =db.CityMasters.ToList();
             ViewBag.FwdAgentId =db.AgentMasters.Where(cc=>cc.AgentType==4).ToList(); //  db.ForwardingAgentMasters.ToList();
@@ -787,6 +799,8 @@ namespace CMSV2.Controllers
             model.Shipments = lstdetail;
             var _exportShipment = new ExportShipment();
 
+            bool valid = ModelState.IsValid;
+
             if (1==1) // (ModelState.IsValid)
             {
                 if (model.ID == 0) // new entry mode
@@ -856,7 +870,7 @@ namespace CMSV2.Controllers
 
 
                 var max = db.ExportShipmentDetails.Select(x => x.ShipmentDetailID).DefaultIfEmpty(0).Max() + 1;
-                if (model.Shipments != null)
+                if (model.ShipmentsVM != null)
                 {
                     //model.Shipments.ForEach(x =>
                     //{
@@ -864,10 +878,36 @@ namespace CMSV2.Controllers
                     //    x.ExportID = _exportShipment.ID;
                     //    max++;
                     //});
-                    foreach (var e_details in model.Shipments)
+                    foreach (var e_details in model.ShipmentsVM)
                     {
                         if (e_details.ShipmentDetailID == 0)
                         {
+                            ExportShipmentDetail shipmentdetail = new ExportShipmentDetail
+                            {
+                                ShipmentDetailID = max,
+                                ExportID = _exportShipment.ID,
+                                InscanId = e_details.InscanId,
+                                HAWB = "",
+                                AWB = e_details.AWB,
+                                Shipper = e_details.Shipper,
+                                Reciver = e_details.Reciver,
+                                Contents = e_details.Contents,
+                                DestinationCountry = e_details.DestinationCountry,
+                                CurrencyID = e_details.CurrencyID,
+                                DestinationCity = e_details.DestinationCity,
+                                Value = e_details.Value,
+                                BagNo = e_details.BagNo,
+                                FwdAgentId=e_details.FwdAgentId,
+                                FwdAgentAWBNo=e_details.FwdAgentAWBNo,
+                                FwdCharge=e_details.FwdCharge,
+                                FwdDate=e_details.FwdDate,
+                                FwdFlight=e_details.FwdFlight,
+                                OtherCharge=e_details.OtherCharge,
+                                Weight=e_details.Weight,
+                                PCS=e_details.PCS
+                            };
+                                                      
+                            
                             if (e_details.InscanId > 0)
                             {
                                 var _inscan = db.InScanMasters.Find(e_details.InscanId);
@@ -881,7 +921,7 @@ namespace CMSV2.Controllers
                             e_details.HAWB = "";
                             e_details.ShipmentDetailID = max;
                             e_details.ExportID = _exportShipment.ID;
-                            db.ExportShipmentDetails.Add(e_details);
+                            db.ExportShipmentDetails.Add(shipmentdetail);
                             db.SaveChanges();
                             max++;
                         }
@@ -889,9 +929,10 @@ namespace CMSV2.Controllers
                         {
                             ExportShipmentDetail shipmentmodel= db.ExportShipmentDetails.Find(e_details.ShipmentDetailID);
                             shipmentmodel.CurrencyID = e_details.CurrencyID; // Convert.ToInt32(data["tCurrencyID"]);
+                            shipmentmodel.HAWB = "";
                             shipmentmodel.AWB = e_details.AWB;
                             shipmentmodel.InscanId = e_details.InscanId;
-                            shipmentmodel.HAWB = e_details.HAWB;
+                            
                             shipmentmodel.BagNo = e_details.BagNo;
                             shipmentmodel.PCS = e_details.PCS;
                             shipmentmodel.Weight = e_details.Weight;
@@ -914,27 +955,29 @@ namespace CMSV2.Controllers
                         }
 
                     }
+
                     //removed items
-                    var exportdetails = db.ExportShipmentDetails.Where(d => d.ExportID == _exportShipment.ID).ToList();
-                    var exportdetailsid = model.Shipments.Select(s => s.ImportDetailID).ToList();
-                    foreach (var e_details in exportdetails)
-                    {
-                        var _exportfound = model.Shipments.Where(cc => cc.ShipmentDetailID == e_details.ShipmentDetailID).FirstOrDefault();
-                        if (_exportfound == null)
+                    
+                        var exportdetails = db.ExportShipmentDetails.Where(d => d.ExportID == _exportShipment.ID).ToList();
+                        var exportdetailsid = model.ShipmentsVM.Select(s => s.ImportDetailID).ToList();
+                        foreach (var e_details in exportdetails)
                         {
-                            //re update inscan status 
-                            var _inscan = db.InScanMasters.Find(e_details.InscanId);
-                            _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "INSCAN").FirstOrDefault().ID;
-                            _inscan.ManifestID = null;
-                            _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
-                            db.Entry(_inscan).State = EntityState.Modified;
-                            db.SaveChanges();
+                            var _exportfound = model.ShipmentsVM.Where(cc => cc.ShipmentDetailID == e_details.ShipmentDetailID).FirstOrDefault();
+                            if (_exportfound == null)
+                            {
+                                //re update inscan status 
+                                var _inscan = db.InScanMasters.Find(e_details.InscanId);
+                                _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "INSCAN").FirstOrDefault().ID;
+                                _inscan.ManifestID = null;
+                                _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                                db.Entry(_inscan).State = EntityState.Modified;
+                                db.SaveChanges();
 
-                            db.Entry(e_details).State = EntityState.Deleted;
-                            db.SaveChanges();
+                                db.Entry(e_details).State = EntityState.Deleted;
+                                db.SaveChanges();
+                            }
                         }
-                    }
-
+                    
 
                     //var importdetails = db.ImportShipmentDetails.Where(d => importdetailsid.Contains(d.ShipmentDetailID)).ToList();
                     //if (importdetails.Count > 0) {
@@ -944,44 +987,8 @@ namespace CMSV2.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            else
-            {
-                foreach(var item in ModelState.Values)
-                {
-                    if (item.Errors.Count>0)
-                    {
-                        var ss = item.Errors[0];
-                    }
-                }
-
-                model.ConsignorAddress = company.Address1 + ", " + company.CountryName + ", Tel: " + company.Phone;
-                model.ConsigneeAddress = agent.Address1 + ", " + agent.Address2 + ", " + ", Tel: " + agent.Phone; //agent.Address3 +
-
-                if (model.Shipments == null)
-                {
-                    model.Shipments = new List<ExportShipmentDetail>();
-                }
-
-
-                ViewBag.OriginCityID = new SelectList(new List<CityMaster>(), "CityID", "City");
-                var agents = db.AgentMasters.ToList(); // new SelectList(db.ForwardingAgentMasters.OrderBy(x => x.FAgentName), "FAgentID", "FAgentName").ToList();
-                ViewBag.AgentList = agents;
-                ViewBag.CurrencyID = db.CurrencyMasters.ToList();
-                string selectedVal = model.Type;
-                //    var types = new List<SelectListItem>
-                //{
-                //    new SelectListItem{Text = "Select Shipment Type", Value = null, Selected = selectedVal == null},
-                //    new SelectListItem{Text = "Transhipment", Value = "Transhipment", Selected = selectedVal == "Transhipment"},
-                //    new SelectListItem{Text = "Import", Value = "Import", Selected = selectedVal == "Import"},
-                //};
-                ViewBag.Type = db.tblShipmentTypes.ToList();
-                ViewBag.Currencies = db.CurrencyMasters.ToList();
-                ViewBag.AgentName = emp.EmployeeName;
-                ViewBag.CompanyName = company.AcCompany1;
-                ViewBag.FwdAgentId = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); //. ForwardingAgentMasters.ToList(); // .Where(d => d.IsForwardingAgent == true).ToList();
-
-                return View(model);
-            }
+          
+            
             //return RedirectToAction(Token.Function, Token.Controller);
         }
         //public ActionResult EditExport(int? id)
@@ -1179,25 +1186,25 @@ namespace CMSV2.Controllers
         {
             if (i.HasValue)
             {
-                var Prevshipmentsession = Session["PreviousShipments"] as List<ExportShipmentDetail>;
+                var Prevshipmentsession = Session["PreviousShipments"] as List<ExportShipmentDetailVM>;
                 if (Prevshipmentsession == null)
                 {
 
                 }
                 else
                 {
-                    if (s_ImportShipment.Shipments == null)
+                    if (s_ImportShipment.ShipmentsVM == null)
                     {
-                        s_ImportShipment.Shipments = new List<ExportShipmentDetail>();
+                        s_ImportShipment.ShipmentsVM = new List<ExportShipmentDetailVM>();
                         foreach (var item in Prevshipmentsession)
                         {
-                            s_ImportShipment.Shipments.Add(item);
+                            s_ImportShipment.ShipmentsVM.Add(item);
                         }
                     }
                     
                 }
-                s_ImportShipment.Shipments = Session["PreviousShipments"] as List<ExportShipmentDetail>;
-                CMSV2.Models.ExportShipmentDetail s = s_ImportShipment.Shipments[Convert.ToInt32(i)];
+                s_ImportShipment.ShipmentsVM = Session["PreviousShipments"] as List<ExportShipmentDetailVM>;
+                CMSV2.Models.ExportShipmentDetail s = s_ImportShipment.ShipmentsVM[Convert.ToInt32(i)];
                
                 return Json(new { success = true, data = s, ival = i.Value }, JsonRequestBehavior.AllowGet);
             }
@@ -1754,10 +1761,11 @@ namespace CMSV2.Controllers
             //return RedirectToAction(Token.Function, Token.Controller);
         }
 
-        public JsonResult GetAWBDetail(string id)
+        public JsonResult GetAWBDetail(string id,int exportid=0)
         {
             ExportAWBList obj = new ExportAWBList();
-            var lst = (from c in db.InScanMasters where c.AWBNo == id &&  c.IsDeleted==false &&  c.ManifestID==null select c).FirstOrDefault();
+            
+            var lst = (from c in db.InScanMasters where c.AWBNo == id &&  c.IsDeleted==false && ( c.ManifestID==null || c.ManifestID==exportid ) select c).FirstOrDefault();
             if (lst == null)
             {
                 return Json(new { status = "failed", data = obj, message = "AWB No. Not found" }, JsonRequestBehavior.AllowGet);

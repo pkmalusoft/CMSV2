@@ -133,7 +133,7 @@ namespace CMSV2.Models
 
         public string AWBTermsConditions { get; set; }
 
-        public List<OtherChargeDetailVM> othercharges { get; set; }
+        public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 
     }
@@ -151,6 +151,7 @@ namespace CMSV2.Models
         public string AWBNo { get; set; }
     }
     public class OtherChargeDetailVM : InscanOtherCharge
-    { public string OtherChargeName { get; set; }
+    { 
+        public string OtherChargeName { get; set; }
     }
 }

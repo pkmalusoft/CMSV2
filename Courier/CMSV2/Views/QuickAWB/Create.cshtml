@@ -5,6 +5,9 @@
     var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     var _mindate = @CMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
     var _maxdate = @CMSV2.Models.CommanFunctions.GetMaxFinancialDate();
+    int otherchargecount = 0;
+    
+    
 }
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -19,6 +22,53 @@
             position: absolute;
             cursor: default;
             z-index: 1001 !important
+        }
+        .autocomplete:focus{
+           background-color: #dbffcf;
+        }
+    .bg_box,.bg_box1{
+            background: #f3fbff;
+            padding: 5px 20px;
+            padding-bottom: 20px;
+        }
+      .detailBox:nth-of-type(2) .bg_box{
+            background: #f3fef0;
+        }
+        .charges{
+            border:1px solid #ccc;
+            width: 100%;
+        }
+        .charges td label{
+            color:#0997d0!important;
+            font-weight: bold;
+        }
+        .charges td,.charges th{
+            padding:5px;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .details1:nth-of-type(1) .bg_box1{
+            background:#fcf6ff;
+        }
+        .details1:nth-of-type(2) .bg_box1{
+            background:#f5f3ff;
+        }
+        .form-control{
+            height:30px!important;
+            border-radius: 5px!important;
+        }
+        .flexTitle{
+            display: flex;
+            justify-content: space-between;
+        }
+        h3{
+            margin:5px 0;
+            font-size: 19px;
+        }
+        hr{
+            margin-top:5px;
+            margin-bottom: 5px;
+            font-size:20px;
         }
 </style>
 <script type="text/javascript">
@@ -357,7 +407,7 @@
                 $("#Consignee").autocomplete({
                     source: function (request, response) {
                         $.ajax({
-                            url: '/QuickAWB/GetConsigneeName',
+                            url: '/QuickAWB/GetReceiverName', //'/QuickAWB/GetConsigneeName',
                             datatype: "json",
                             data: {
                                 term: request.term
@@ -570,7 +620,21 @@
              return false;
 
           return true;
-       }
+    }
+    function AddCharge() {        
+        alert($('#OtherChargeID').val());
+        alert($('#txtotherchargeamt_99').val());
+    }
+    function UpdateCharge(index) {
+        alert($('#othercharges_' + index + '__OtherChargeID').val());
+        alert($('#txtotherchargeamt_'+index).val());
+
+
+    }
+  
+    function ShowOtherChargesModal() {
+        $('#OtherChargesModal').modal('show');
+    }
     function ShowStatusModal() {
 
           $.ajax({
@@ -750,13 +814,67 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#HAWBNo").focus();
+        
+        $("#OtherChargeName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/QuickAWB/GetOtherChargeAll',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.OtherCharge1,
+                                value: val.OtherCharge1,
+                                OtherChargeID: val.OtherChargeID,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#OtherChargeName").val(i.item.label);
+                $('#OtherChargeID').val(i.item.OtherChargeID);
+                $('#OtherChargeAcHeadID').val(i.item.AcHeadID);
+            }
+        });
+        $(".Allocate").on("click", function () {
+           
+            $('#popup').modal('show');
+            //$('#popupbackground').show();
+        });
+        
+        $('#popup').on('shown.bs.modal', function () {
+            
+         
+            //$("#OtherChargeName").keydown(function (event) {
+            //    if (event.keyCode == 9) {
+            //        if ($("#OtherChargeName").val().length == 0) {
+            //            event.preventDefault();
+            //            $("#AllocationClose").focus();
+            //        }
+            //    }
+            //});
+
+        });
+
+        $("#AllocationClose").on("click", function () {
+            $('#popup').modal('hide');
+            //$('#popupbackground').hide();
+        });
+      
 
         function CalcTotal() {
             var x = $("#CourierCharge").val();
-            var y = $("#PackingCharge").val();
+            //var y = $("#PackingCharge").val();
             var z = $("#OtherCharge").val();
-            var a = $("#CustomCharge").val();
-            var tot = parseFloat(x) + parseFloat(y) + parseFloat(z) + parseFloat(a);
+            //var a = $("#CustomCharge").val();
+            var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a) + parseFloat(y) +;
 
             $("#totalCharge").val(tot.toFixed(2));
         }
@@ -774,6 +892,12 @@
             CalcTotal();
         });
         $("#OtherCharge").blur(function () {
+            if ($(this).val() == null) {
+                $(this).val('0.00');
+            }
+            CalcTotal();
+        });
+        $("#OtherCharge").change(function () {
             if ($(this).val() == null) {
                 $(this).val('0.00');
             }
@@ -1234,10 +1358,10 @@
                 @if (@Model.InScanID == 0)
                 {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 11 }) }
 
-            else
-            {
+                else
+                {
                 @Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @Disabled = "disabled" })
-            }
+                }
 
             </div>
             <div class="col-md-2">
@@ -1269,279 +1393,315 @@
         </div>
 
         <div class="row no-margin">
-            <div class="col-md-3">
-                <h3 style="color:white">CONSIGNOR/SHIPPER DETAILS</h3>
-            </div>
+            <div class="col-md-6 detailBox">
+                <div class="bg_box">
+                    <div class="row">
+                        <div class="flexTitle">
+                            <div class="">
+                                <h3 style="color:white; margin-top:10px">CONSIGNOR/SHIPPER DETAILS</h3>
+                            </div>
+                            <div class="checkboxdesign text-right" style="float:right">
+                                @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
+                                <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+                            </div>
+                        </div>
 
-        </div>
-        @*<div class="row no-margin">
-                <div class="col-md-3 checkboxdesign" style="padding-top: 20px">
-                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
-                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+
+                        <hr />
+                    </div>
+
+                    @*<div class="row no-margin">
+                                <div class="col-md-3 checkboxdesign" style="padding-top: 20px">
+                                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
+                                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+
+                            </div>
+                        </div>*@
+
+                    <div class="row no-margin" style="margin-top:10px!important">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Name</label>
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+                            @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Telephone No</label>
+                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Street</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
+
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Location</label>
+                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Origin City</label>
+                            @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
+                            @*<input class="form-control" id="ConsignorCityName" name="ConsignorCityName" type="text" readonly />*@
+                            @*@Html.DropDownListFor(model => model.origincity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Origin Country</label>
+                            @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
+                            @*<input class="form-control" id="ConsignorCountryName" name="ConsignorCountryName" type="text" readonly />*@
+                            @*@Html.DropDownListFor(model => model.origincountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                        </div>
+
+                    </div>
 
                 </div>
-            </div>*@
-        <div class="row no-margin" style="margin-top:20px">
-            <div class="col-md-6">
-                <label class="headinglabel required">Shipper Name</label>
-                <div class="checkboxdesign text-right" style="float:right">
-                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
-                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
+            </div>
+
+
+            <div class="col-md-6 detailBox">
+                <div class="bg_box">
+                    <div class="">
+                        <h3 style="color:white; margin-top:10px; margin-bottom: 0;">RECEIVER/CONSIGNEE DETAILLS</h3><hr />
+                    </div>
+
+                    <div class="row no-margin" style="padding-top: 10px;margin-top: 4px!important; ">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Name</label>
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px">
+
+
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Telephone No</label>
+                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel">Street</label>
+                            @Html.TextBoxFor(model => model.ConsigneeAddress2_Street, new { @class = "form-control txttarget" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsigneeAddress3_PinCode, new { @class = "form-control txttarget" })
+                        </div>
+                    </div>
+
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Consingee Location</label>
+                            @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
+                            @*<input class="form-control  " id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
+                            @*@Html.TextBoxFor(model => model.destlocation, new { @class = "form-control txttarget" })*@
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Consignee City</label>
+                            @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
+                            @*<input class="form-control" id="ConsigneeCityName" name="CityName" type="text" onFocus="geoCitylocate()" />*@
+                            @*@Html.DropDownListFor(model => model.destinationCity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Consignee Country</label>
+                            @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
+                            @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
+                            @*@Html.DropDownListFor(model => model.destinationCountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                        </div>
+                    </div>
                 </div>
-                @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "margin-top:10px" })
-            </div>
-
-
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
-            <div class="col-md-3">
-                <label class="headinglabel required">Contact Person</label>
-                @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true" })
-                @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Telephone</label>
-                @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Flat/Building</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Street</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
-            <div class="col-md-3">
-                <label class="headinglabel required">PinCode</label>
-                @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Location</label>
-                @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geolocate1()" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin City</label>
-                @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
-                @*<input class="form-control" id="ConsignorCityName" name="ConsignorCityName" type="text" readonly />*@
-                @*@Html.DropDownListFor(model => model.origincity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin Country</label>
-                @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
-                @*<input class="form-control" id="ConsignorCountryName" name="ConsignorCountryName" type="text" readonly />*@
-                @*@Html.DropDownListFor(model => model.origincountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-        </div>
-
-
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
-                <h3 style="color:white">RECEIVER/CONSIGNEE DETAILLS</h3><hr />
             </div>
         </div>
         <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-6">
-                <label class="headinglabel required">Consignee</label>
-                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px">
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Contact Person</label>
-                @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Telephone No</label>
-                @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Flat/Building</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Street</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress2_Street, new { @class = "form-control txttarget" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Pincode</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress3_PinCode, new { @class = "form-control txttarget" })
-            </div>
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-6">
-                <label class="headinglabel required">Consingee Location</label>
-                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget", @onFocus = "geolocate()", @required = "true" })
-                @*<input class="form-control" id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
-                @*@Html.TextBoxFor(model => model.destlocation, new { @class = "form-control txttarget" })*@
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee City</label>
-                @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
-                @*<input class="form-control" id="ConsigneeCityName" name="CityName" type="text" onFocus="geoCitylocate()" />*@
-                @*@Html.DropDownListFor(model => model.destinationCity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee Country</label>
-                @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
-                @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
-                @*@Html.DropDownListFor(model => model.destinationCountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
-                <h3 style="color:white">SHIPMENT DETAILS</h3><hr />
-            </div>
-
-        </div>
-
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
-                <label class="headinglabel required">Description</label>
-                @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true" })
-            </div>
-
-            <div class="col-md-1">
-                <label class="headinglabel required">Pieces</label>
-                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
-            </div>
-            <div class="col-md-1">
-                <label class="headinglabel required">Weight</label>
-                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Courier Movement Type</label>
-                @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel required">Parcel Type</label>
-                @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Product Type</label>
-                @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px" id="divCostUpdate">
-
-            <h3 style="color:white">COST UPDATION</h3><hr />
-
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Customer Rate Type</label>
-                @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel">Material Cost</label>
-                @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Courier Charge</label>
-                @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel">Packing Charge</label>
-                @Html.TextBoxFor(model => model.PackingCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel">Customs Charge</label>
-                @Html.TextBoxFor(model => model.CustomCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel">Other Charge</label>
-                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-            </div>
-
-        </div>
+            <div class="col-md-6 details1">
+                <div class="bg_box1">
+                    <div class="col-md-12">
+                        <h3 style="color:white">SHIPMENT DETAILS</h3><hr />
+                    </div>
 
 
 
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-md-2">
-                <label class="headinglabel">Total</label>
-                @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
-            </div>
-            <div class="col-md-4">
-                <label class="headinglabel">Remarks</label>
-                @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Picked up By</label>
-                @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-            </div>
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Description</label>
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true" })
+                        </div>
 
-            <div class="col-md-3">
-                <label class="headinglabel">Depot Received By</label>
-                @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-            </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Pieces</label>
+                            @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Weight</label>
+                            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
+                        </div>
+                        <div class="col-md-5">
+                            <label class="headinglabel required">Courier Movement Type</label>
+                            @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px">
 
-        </div>
-
-
-        <div class="row no-margin" style="padding-top: 10px" id="divforwardingagent">
-
-            <h3 style="color:white">FORWARDING AGENT DETAILS</h3><hr />
-
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-
-            <div class="col-md-3">
-                <label class="headinglabel">Forwarding Agent</label>
-                @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "AgentID", "Name"), "Select", new { @class = "form-control" })
-            </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Product Type</label>
+                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Parcel Type</label>
+                            @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
 
 
-            <div class="col-md-3">
-                <label class="headinglabel">Forwarding AWB</label>
-                @Html.TextBoxFor(model => model.FAWBNo, new { @class = "form-control" })
-            </div>
+                    </div>
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-md-12">
+                            <label class="headinglabel">Remarks</label>
+                            @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top:10px">
 
-            <div class="col-md-3">
-                <label class="headinglabel">Forwarding Charge</label>
-                @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
-            </div>
-        </div>
-        @*        <div class="col-md-3" style="padding-top:25px">
+                    </div>
+                </div>
 
-            <input type="button" value="Add" id="btnAddFAgent" class="btn btn-primary" />
-               </div>*@
-
-        @*</div>
-            <div class="row no-margin" style="padding-top: 10px">
                 <div class="col-md-12">
-                    <table class="table table=bordered table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                 <th>Forwarding Agent Name</th>
-                                 <th>Forwarding Agent AWB</th>
-                                 <th>Forwarding Agent Charge</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="row no-margin" style="padding-top: 10px" id="divforwardingagent">
+
+                        <h3 style="color:white">FORWARDING AGENT DETAILS</h3><hr />
+
+                    </div>
+
+                    <div class="row no-margin" style="padding-top: 10px">
+
+                        <div class="col-md-6">
+                            <label class="headinglabel">Forwarding Agent</label>
+                            @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label class="headinglabel">Forwarding Agent Number</label>
+                            @Html.TextBoxFor(model => model.FAWBNo, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-6">
+                            <label class="headinglabel">Forwarding Agent Flight</label>
+                            @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel">Forwarding Rate</label>
+                            @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
+                        </div>
+                    </div>
                 </div>
-                </div>*@
+            </div>
+
+
+            <div class="col-md-6 details1" id="divCostUpdate">
+                <div class="bg_box1">
+                    <h3 style="color:white">COST UPDATION</h3><hr />
+
+
+                    <div class="row no-margin" style="padding-top: 10px">
+
+
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Customer Rate Type</label>
+                            @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Courier Charge</label>
+                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="headinglabel">Material Cost</label>
+                            @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <label class="headinglabel">Total Other Charge</label>
+                                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                                @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
+                            </div>
+                            <div class="col-md-2">
+                                @*<label class="headinglabel">Add Other Charge</label>*@
+                                <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="headinglabel">Total</label>
+                                @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-md-12">
+                    <h3 style="color:white">AUDIT DETAILS</h3><hr />
+
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <label class="headinglabel">Picked up By</label>
+                                @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="headinglabel">Depot Received By</label>
+                                @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-12 btn-right">
 
@@ -1551,181 +1711,383 @@
             </div>
         </div>
 
-    }
+        <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
 
-    <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #f5f5f5;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">
-                        Change Status
-                    </h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row" style="padding-top: 5px">
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Shipment Status
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        @Html.DropDownList("StatusTypeId", new SelectList(@ViewBag.StatusTypeList, "ID", "Name", 0), "Select", new { @class = "form-control", @id = "ChangeStatusTypeId", @name = "ChangeStatusTypeId" })
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top:10px">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Courier Status
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        @Html.DropDownList("CourierStatusId", new SelectList(@ViewBag.CourierStatusList, "CourierStatusID", "CourierStatus", @ViewBag.CourierStatusId), "Select", new { @class = "form-control", @id = "ChangeCourierStatusId", @name = "ChangeCourierStatusId" })
-                                        @*<input type="text" id="ChangeCourierStatusId" class="form-control" value="2" width="100%" />*@
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="padding-top: 5px">
-                    <input type="hidden" id="hdnCountryID" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btnsavestatus">Save</button>
-                </div>
-            </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="CustomerNotifiyModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #f5f5f5;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">
-                        Customer Notification
-                    </h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row" style="padding-top: 5px">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-xs-5 col-sm-3">
-                                        To Customer
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        <input type="hidden" id="hdnNotificationId" value="0" />
-                                        <input class="form-control" type="text" id="txtcustomername" />
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top:10px;">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Customer Email
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        <input class="form-control" type="text" id="txtcustomeremail" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4 checkboxdesign">
-                                        @Html.CheckBox("SMS", new { @name = "SMS" })
-                                        <label class="headinglabel">SMS</label>
-                                    </div>
-                                    <div class="col-md-4 checkboxdesign">
-                                        @Html.CheckBox("Email", new { @name = "Email" })
-                                        <label class="headinglabel">Email</label>
-                                    </div>
-                                    <div class="col-md-4 checkboxdesign">
-                                        @Html.CheckBox("WhatsApp", new { @name = "WhatsApp" })
-                                        <label class="headinglabel">Whats App</label>
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top:10px">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Enter your Message
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        <textarea id="notifymessage" cols="65" rows="5"></textarea>
-                                    </div>
-                                </div>
-                                <div class="row no-margin" style="padding-top:10px">
-
-                                    <div class="col-md-12">
-                                        <table id="notificationdetails" class="table table-responsive table-bordered" style="background-color:white">
-                                            <thead>
-                                            <th>S No.</th>
-                                            <th>Message</th>
-                                            <th>Date</th>
-                                            <th>Employee Name</th>
-                                            </thead>
-                                            <tbody id="notificationdetailsbody"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            Other Charges
+                        </h4>
                     </div>
-                </div>
-                <div class="modal-footer" style="padding-top: 5px">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btncustomernotifysave" onclick="savecustomernotification();">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
 
-    <div class="modal fade" id="StaffNotesModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #f5f5f5;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">
-                        Staff Notes
-                    </h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row" style="padding-top: 5px">
-                            <div class="col-sm-12">
-                                <div class="row" style="margin-top:10px">
-                                    <div class="col-xs-12 col-sm-12">
-                                        <input type="hidden" id="hdnStaffNotesId" value="0" />
-                                        <label for="staffnotes" class="control-label">Enter your Notes</label>
-                                        <textarea id="staffnotes" class="col-md-12" cols="65" rows="5"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row no-margin" style="padding-top:10px">
-
-                            <div class="col-md-12">
-                                <table id="notesdetails" class="table table-responsive table-bordered" style="background-color:white">
+                                <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
+                                <table id="ExpAllocationTable" class="table table-bordered table-responsive">
                                     <thead>
-                                    <th>S No.</th>
-                                    <th>Notes</th>
-                                    <th>Date</th>
-                                    <th>Employee Name</th>
+                                        <tr>
+                                            <th>Other Charge</th>
+                                            <th>Amount </th>
+                                            <th>Delete </th>
+                                        </tr>
                                     </thead>
-                                    <tbody id="notesdetailsbody"></tbody>
+                                    <tbody id="OtherChargeTable">
+                                        @foreach (var item in Model.otherchargesVM)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.OtherChargeName                                                                                                
+                                                <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
+                                             </td>
+                                                <td>@item.Amount
+                                                    <input type="hidden" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                            otherchargecount++;
+                                        }
+                                        </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>                                                
+                                                @Html.DropDownList("OtherChargeID", new SelectList(@ViewBag.OtherCharge, "OtherChargeID", "OtherCharge1"), "Select", new { @class = "form-control" })
+                                                @*<input type="text" id="OtherChargeName" value="" class="form-control" autocomplete="off" style="height:27px;" />
+                                                <input type="hidden" id="OtherChargeID" value="" class="form-control" autocomplete="off" />*@
+                                                <input type="hidden" id="OtherChargeAcHeadID" value="" class="form-control" autocomplete="off" />
+                                            </td>
+                                            <td>                                                
+                                                <input type="text" class="text-right form-control txtNum" id="ExpAmount" value="0" />
+                                            </td>
+                                            <td>                                                
+                                                <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;" index="1" id="AddExpAllocation" class="addmore">+</button>&nbsp;&nbsp;
+                                                @*<button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;border:none" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>*@
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
-
                     </div>
-                </div>
-                <div class="modal-footer" style="padding-top: 5px">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" name="Command" value="SaveNotes" class="btn btn-primary" id="btnstaffnotessave" onclick="savestaffnotes()">Save</button>
+                    <div class="modal-footer" style="padding-top: 5px">                        
+                        <button type="button" id="AllocationClose" class="btn btn-default" data-dismiss="modal">Close</button>                        
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    }
+        <script type="text/javascript">
+                                $(document).ready(function () {
+                                    
+                                    $('#AddExpAllocation').click(function () {
+                                        var Total = 0;
+                                        var MainTotal = 0;
+                                        var selectedval = $("#OtherChargeID").val();
+                                        debugger;
+                                        if (selectedval == 0) {
+                                            alert('Please select Other Charge Name!');
+                                            return;
+                                        }                                        
+                                        var exists = false;
+                                        $('#OtherChargeTable').find('.OChargeID').each(function () {
+                                            debugger;
+                                            if ($(this).val() === selectedval) {
+                                                alert('Duplicate Other charge name selection not allowed!');
+                                                exists = true;
+                                                return;
+                                            }
+                                        });
+
+                                        if (exists == true)
+                                            return;
+
+
+                                        var amountzero = false;
+                                        if (parseFloat($('#ExpAmount').val()) == 0) {
+                                            amountzero = true;
+                                        }
+
+                                        if (amountzero == true) {
+                                            alert("Enter Amount!");
+                                            return;
+                                        }
+                                        $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
+                                                                                        
+                                            if (isNaN(parseFloat($(this).val())) === false) {
+                                                Total += parseFloat($(this).val());
+                                            }
+                                        });
+
+                                        
+
+
+                                        if (isNaN(parseFloat($('#ExpAmount').val())) === false) {
+                                            Total += parseFloat($('#ExpAmount').val());
+                                        }
+                                        $('#OtherCharge').val(Total);
+                                        var x = $("#CourierCharge").val();                                        
+                                        var z = $("#OtherCharge").val();                                        
+                                        var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a) + parseFloat(y) +;
+
+                                        $("#totalCharge").val(tot.toFixed(2));
+
+                                        //if (isNaN(parseFloat($('#amount').val())) === false) {
+                                        //    MainTotal += parseFloat($('#amount').val());
+                                        //}
+                                        //if (Total > MainTotal) {
+                                        //    alert('Amount cannot exceed total allocated amount');
+                                        //    return;
+                                        //}
+
+                                        var othercharngename = $("#OtherChargeID option:selected").text();
+                                        @*if (@otherchargecount>0)
+                                            $('#RowCount').val(@otherchargecount);*@
+
+                                        var RowCount = parseInt($('#RowCount').val());
+                                        var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
+                                        RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden"   name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
+                                        RowHtml = RowHtml + '<td><a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
+                                        RowHtml = RowHtml + '</tr>';
+                                        $('#OtherChargeTable').append(RowHtml);
+                                        $('#RowCount').val(RowCount + 1);
+                                        ///otherchargecount++;
+                                        $("#OtherChargeName").val('');
+                                        $("#OtherChargeID").val(0);
+                                        $("#ExpAmount").val(0);
+                                        $('#OtherChargeName').focus()
+                                    });
+
+                                    $('.txtNum').blur(function () {
+                                        if (isNaN(parseInt($(this).val()))) {
+                                            $(this).val('0.00');
+                                        } else {
+                                            var amt = parseFloat($(this).val());
+                                            $(this).val(amt.toFixed(2));
+                                        }
+                                    });
+
+                                    $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
+                                        
+                                        $(this).parent().parent().remove();
+                                        var index = 0;
+                                        $('#OtherChargeTable').find('.OChargeID').each(function () {
+                                            debugger;
+                                            $(this).attr('name','otherchargesVM[' + index + '].OtherChargeID');
+                                            index++;
+                                        });
+                                        var index = 0;
+                                        $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
+                                            debugger;
+                                            $(this).attr('name','otherchargesVM[' + index + '].OtherChargeID');
+                                            index++;
+                                        });
+                                        $('#RowCount').val(index);
+                                    });
+
+                                    $('#details').on("click", "#DeleteAllocationRow", function () {
+
+                                        $(this).parent().parent().remove();
+                                    });
+                                });
+                                function ClearData() {
+                                    $("#ReceivedFrom").val('');
+                                    $("#SelectedReceivedFrom").val(0);
+                                    $("#amount").val('');
+                                    $("#remark1").val('');
+                                    $("#AcHeadAllocation").val('');
+                                    $("#SelectedAcHeadAllocation").val(0);
+                                    $("#ExpAmount").val('');
+                                    $("#ExpAllocationTable").find("tr:gt(0)").remove();
+                                }
+                            </script>
+                            
+
+                            
+
+                            <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: #f5f5f5;">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="exampleModalLabel">
+                                                Change Status
+                                            </h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="row" style="padding-top: 5px">
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-xs-5 col-sm-3">
+                                                                Shipment Status
+                                                            </div>
+                                                            <div class="col-xs-7 col-sm-9">
+                                                                @Html.DropDownList("StatusTypeId", new SelectList(@ViewBag.StatusTypeList, "ID", "Name", 0), "Select", new { @class = "form-control", @id = "ChangeStatusTypeId", @name = "ChangeStatusTypeId" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="margin-top:10px">
+                                                            <div class="col-xs-5 col-sm-3">
+                                                                Courier Status
+                                                            </div>
+                                                            <div class="col-xs-7 col-sm-9">
+                                                                @Html.DropDownList("CourierStatusId", new SelectList(@ViewBag.CourierStatusList, "CourierStatusID", "CourierStatus", @ViewBag.CourierStatusId), "Select", new { @class = "form-control", @id = "ChangeCourierStatusId", @name = "ChangeCourierStatusId" })
+                                                                @*<input type="text" id="ChangeCourierStatusId" class="form-control" value="2" width="100%" />*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="padding-top: 5px">
+                                            <input type="hidden" id="hdnCountryID" />
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btnsavestatus">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="CustomerNotifiyModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: #f5f5f5;">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="exampleModalLabel">
+                                                Customer Notification
+                                            </h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="row" style="padding-top: 5px">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-xs-5 col-sm-3">
+                                                                To Customer
+                                                            </div>
+                                                            <div class="col-xs-7 col-sm-9">
+                                                                <input type="hidden" id="hdnNotificationId" value="0" />
+                                                                <input class="form-control" type="text" id="txtcustomername" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="margin-top:10px;">
+                                                            <div class="col-xs-5 col-sm-3">
+                                                                Customer Email
+                                                            </div>
+                                                            <div class="col-xs-7 col-sm-9">
+                                                                <input class="form-control" type="text" id="txtcustomeremail" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4 checkboxdesign">
+                                                                @Html.CheckBox("SMS", new { @name = "SMS" })
+                                                                <label class="headinglabel">SMS</label>
+                                                            </div>
+                                                            <div class="col-md-4 checkboxdesign">
+                                                                @Html.CheckBox("Email", new { @name = "Email" })
+                                                                <label class="headinglabel">Email</label>
+                                                            </div>
+                                                            <div class="col-md-4 checkboxdesign">
+                                                                @Html.CheckBox("WhatsApp", new { @name = "WhatsApp" })
+                                                                <label class="headinglabel">Whats App</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="margin-top:10px">
+                                                            <div class="col-xs-5 col-sm-3">
+                                                                Enter your Message
+                                                            </div>
+                                                            <div class="col-xs-7 col-sm-9">
+                                                                <textarea id="notifymessage" cols="65" rows="5"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row no-margin" style="padding-top:10px">
+
+                                                            <div class="col-md-12">
+                                                                <table id="notificationdetails" class="table table-responsive table-bordered" style="background-color:white">
+                                                                    <thead>
+                                                                    <th>S No.</th>
+                                                                    <th>Message</th>
+                                                                    <th>Date</th>
+                                                                    <th>Employee Name</th>
+                                                                    </thead>
+                                                                    <tbody id="notificationdetailsbody"></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="padding-top: 5px">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" name="Command" value="SaveStatus" class="btn btn-primary" id="btncustomernotifysave" onclick="savecustomernotification();">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="modal fade" id="StaffNotesModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: #f5f5f5;">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="exampleModalLabel">
+                                                Staff Notes
+                                            </h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="row" style="padding-top: 5px">
+                                                    <div class="col-sm-12">
+                                                        <div class="row" style="margin-top:10px">
+                                                            <div class="col-xs-12 col-sm-12">
+                                                                <input type="hidden" id="hdnStaffNotesId" value="0" />
+                                                                <label for="staffnotes" class="control-label">Enter your Notes</label>
+                                                                <textarea id="staffnotes" class="col-md-12" cols="65" rows="5"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row no-margin" style="padding-top:10px">
+
+                                                    <div class="col-md-12">
+                                                        <table id="notesdetails" class="table table-responsive table-bordered" style="background-color:white">
+                                                            <thead>
+                                                            <th>S No.</th>
+                                                            <th>Notes</th>
+                                                            <th>Date</th>
+                                                            <th>Employee Name</th>
+                                                            </thead>
+                                                            <tbody id="notesdetailsbody"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="padding-top: 5px">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" name="Command" value="SaveNotes" class="btn btn-primary" id="btnstaffnotessave" onclick="savestaffnotes()">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+    </section>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>

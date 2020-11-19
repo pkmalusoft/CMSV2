@@ -452,9 +452,9 @@ input::-webkit-inner-spin-button {
                                 </div>
                             </div>
                             <div class="form-group">
-                                @Html.LabelFor(model => model.TotalAWB, htmlAttributes: new { @class = "headinglabel required" })
+                                @Html.LabelFor(model => model.TotalAWB, "Total AWB", htmlAttributes: new { @class = "headinglabel required" })
                                 <div>
-                                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control", @min = 1, @required = "true" })
+                                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control", @min = 1, @required = "true",@readonly="readonly" })
                                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -462,9 +462,12 @@ input::-webkit-inner-spin-button {
                     </div>
                 </div>
             </div>
-            <br />
+            
             <div class="col-md-12" id="Details">
                 <hr />
+                <div class="row">
+                    <span style="color:red;display:none" id="DetailsError">* Please fill all required fields</span>
+                </div>
                 <div class="row form-group">
 
                     <div class="col-md-1 reve_rates1">
@@ -549,7 +552,7 @@ input::-webkit-inner-spin-button {
                     <input type="hidden" id="tfwdcharge" name="tfwdcharge" value="0" />
                     <input type="hidden" id="totherchrg" name="totherchrg" value="0" />
                     <input type="hidden" id="tfwdflight" name="tfwdflight" value="" />
-                    <div class="row form-group" id="addbtndiv" style="text-align:right;margin-top:10px">
+                    <div class="row form-group" id="addbtndiv" style="text-align:right;margin-top:32px">
                         <button type="button" class="btn btn-primary small_btn btnwidth" onclick="addShipment1()" id="Newbtn"><i class="fa fa-plus"></i></button>
                         @*<button type="button" class="btn btn-secondary small_btn waves-effect waves-light" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>*@
                     </div>
@@ -558,7 +561,7 @@ input::-webkit-inner-spin-button {
                         <button type="button" class="btn btn-danger small_btn btnwidth float-right" style="margin:0 0 0 0 !important" onclick="CancelDetails()"><i class="fa fa-times"></i></button>
                     </div>
 
-                    <span style="color:red;display:none" id="DetailsError">* Please fill all required fields</span>
+                 
                 </div>
             </div>
                 </div>
@@ -584,9 +587,12 @@ input::-webkit-inner-spin-button {
                                 Receiver
                             </th>
                             <th width="15%">
-                                Destination
+                                Content
                             </th>
 							 <th width="5%">
+                                Payment Mode
+                            </th>
+                            <th>
                                 PCS
                             </th>
 							 <th width="7%">
@@ -594,11 +600,7 @@ input::-webkit-inner-spin-button {
                             </th>
                             <th width="5%">
                                 Bags
-                            </th>
-                            <th>
-                                Contents
-                            </th>                           
-                           
+                            </th>  
                             <th>
                                 Value
                             </th>
@@ -762,7 +764,7 @@ input::-webkit-inner-spin-button {
                 type: "POST",
                 url: "/ExportShipment/GetAWBDetail",
                 datatype: "Json",
-                data: { id:  $('#tAWB').val() },
+                data: { id: $('#tAWB').val(), exportid:$('#ID').val() },
                 success: function (response) {
                     if (response.status == "ok") {
                         var data = response.data;
@@ -908,10 +910,18 @@ input::-webkit-inner-spin-button {
 
 
         function addShipment1() {
-            $("#Newbtn").text("Add");
+            //$("#Newbtn").text("Add");
+            //$("#Newbtn").html('<i class="fa fa - plus"></i>');
             var validation = ValidateDetails();
             if (validation == 1) {
                 var data1 = new FormData();
+                if ($('#TotalAWB').val() == '') {
+                    $('#TotalAWB').val(0);
+                }
+                var itemcount = parseFloat($('#TotalAWB').val());
+                itemcount = itemcount + 1;
+                $('#TotalAWB').val(itemcount);
+
                 $("#DetailsError").css("display", "none");
 
                 data1.append("tSerialNum", $("#tSerialNum").val());
@@ -1002,7 +1012,7 @@ input::-webkit-inner-spin-button {
                                 $("#totherchrg").val(0);
                                 $("#tfwdflight").val('');
                                 $("#tId").val(0);
-
+                                
                             }
                         });
                         //$("#listContainer").html(data);
@@ -1022,6 +1032,7 @@ input::-webkit-inner-spin-button {
 
                 data1.append("tSerialNum", $("#tSerialNum").val());
                 data1.append("isupdate", true);
+                data1.append('tInscanId', $('#tInScanId').val());
                 data1.append("tHAWB", $("#tHAWB").val()); 
                 data1.append("tAWB", $("#tAWB").val());
                 data1.append("tBagNo", $("#tBagNo").val());
@@ -1146,8 +1157,20 @@ input::-webkit-inner-spin-button {
                     var detailslen = $('#DetailsTable > tbody > tr').length;
                     if (detailslen == 0) {
 
-                        $("#Newbtn").text("New");
+                        //$("#Newbtn").text("New");
+                        //$("#Newbtn").html('<i class="fa fa - plus"></i>');
                     }
+                    if ($('#TotalAWB').val() == '') {
+                        $('#TotalAWB').val(0);
+                    }
+                    var itemcount = parseFloat($('#TotalAWB').val());
+                    if (itemcount > 0) {
+                        itemcount = itemcount - 1;
+                        $('#TotalAWB').val(itemcount);
+                    } else {
+                        $('#TotalAWB').val(0);
+                    }
+
                     CancelDetails();
                 }
                });
@@ -1188,6 +1211,7 @@ input::-webkit-inner-spin-button {
                         $("#totherchrg").val(data.OtherCharge);
                         $("#tfwdflight").val(data.FwdFlight);
                         $("#tId").val(data.ShipmentDetailID);
+                        $("#tInScanId").val(data.InscanId);
 
                         $("#txtFwdAgent").val(data.FwdAgentId);
                         $("#txtFwdAgentAWBNo").val(data.FwdAgentAWBNo);

@@ -68,13 +68,13 @@ namespace CMSV2.Controllers
             if (ModelState.IsValid)
             {
 
-
-                var query = (from t in db.RevenueTypes where t.RevenueType1 == vm.OtherCharge1 select t).ToList();
+                int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                var query = (from t in db.OtherCharges where t.OtherCharge1 == vm.OtherCharge1 select t).ToList();
 
                 if (query.Count > 0)
                 {
                     ViewBag.accounthead = db.AcHeads.ToList();
-                    ViewBag.SuccessMsg = "Revenue Type is already exist";
+                    ViewBag.SuccessMsg = "OtherCharge name is already exist!";
                     return View();
                 }
                 else
@@ -88,6 +88,7 @@ namespace CMSV2.Controllers
                     data.Reimbursement = vm.Reimbursement;
                     data.TaxApplicable = vm.TaxApplicable;
                     data.AcHeadID = vm.AcHeadID;
+                    data.AcCompanyID = companyId;
                     db.OtherCharges.Add(data);
                     db.SaveChanges();
                 }

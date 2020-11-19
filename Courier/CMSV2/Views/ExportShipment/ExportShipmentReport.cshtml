@@ -5,6 +5,12 @@
     var i = 1;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _decimal = @Session["Decimal"].ToString();
+    decimal pcstot = 0;
+    decimal weighttot = 0;
+    decimal nettotal = 0;
+    decimal fwdcharge = 0;
+    decimal fwdothercharge = 0;
+    var currency = "";
 }
 
 <script type="text/javascript">
@@ -354,38 +360,75 @@
                 <tbody class="input-table">
                     @foreach (var shipment in Model.ShipmentsVM)
                     {
+                        pcstot = pcstot + Convert.ToInt32(@shipment.PCS);
+                        weighttot = weighttot + Convert.ToDecimal(@shipment.Weight);
+                        nettotal = nettotal + Convert.ToDecimal(@shipment.Value);
+                        fwdcharge = fwdcharge + Convert.ToDecimal(shipment.FwdCharge);
+                        fwdothercharge = fwdothercharge + Convert.ToDecimal(shipment.OtherCharge);
+                        currency = @shipment.CurrenySymbol;
                         <tr>
                             <td>@i</td>
                             <td>@shipment.AWB</td>
                             <td>
                                 @shipment.Shipper<br />
-                            @shipment.ConsignorPhone <br />
-                            @shipment.OriginCountry
-                        </td>
-                        <td>
-                            @shipment.Reciver <br />
-                            @shipment.ConsigneePhone <br />
-                            @shipment.DestinationCity
-                        </td>
-                        <td>@shipment.Contents</td>
-                         <td>@shipment.PaymentMode</td>
-                        <td>@shipment.PCS</td>
-                        <td>@shipment.Weight.ToString("0.000")</td>
-                        <td>@shipment.BagNo</td>
-                        <td>@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
-                        <td>
-                            @shipment.ForwardAgentName<br />
-                            @shipment.FwdAgentAWBNo <br />
-                            @shipment.FwdDate <br />
-                            @shipment.FwdCharge <br />
-                            @shipment.FwdFlight <br />
-                            @shipment.OtherCharge <br />
-                        </td>
-                        
-                    </tr>
-                    i++;
-                }
+                                @shipment.ConsignorPhone <br />
+                                @shipment.OriginCountry
+                            </td>
+                            <td>
+                                @shipment.Reciver <br />
+                                @shipment.ConsigneePhone <br />
+                                @shipment.DestinationCity
+                            </td>
+                            <td>@shipment.Contents</td>
+                            <td>@shipment.PaymentMode</td>
+                            <td style="text-align:right">@shipment.PCS</td>
+                            <td style="text-align:right">@shipment.Weight.ToString("0.000")</td>
+                            <td>@shipment.BagNo</td>
+                            <td style="text-align:right" >@shipment.Value.ToString("0.00") @shipment.CurrenySymbol</td>
+                            <td>
+                                @shipment.ForwardAgentName<br />
+                                @shipment.FwdAgentAWBNo <br />
+                                @shipment.FwdDate <br />
+                                @CMSV2.Models.CommanFunctions.GetFormatNumber(@shipment.FwdCharge, _decimal)  <br />
+                                @shipment.FwdFlight <br />
+                                @CMSV2.Models.CommanFunctions.GetFormatNumber(@shipment.OtherCharge, _decimal)
+                            </td>
+
+                        </tr>
+                        i++;
+                    }
                 </tbody>
+                <tfoot>
+                    <tr style="border:1px solid #afa7a7;font-weight:bold">
+                        <td></td>
+                        <td></td>
+                        <td>
+                            Grand Total
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:right" >@pcstot </td>
+                        <td style="text-align:right">@CMSV2.Models.CommanFunctions.GetFormatNumber(@weighttot,"3")</td>
+                        <td></td>
+                        <td style="text-align:right">@CMSV2.Models.CommanFunctions.GetFormatNumber(@nettotal,_decimal) @currency</td>
+                        <td style="text-align:right">
+                            @if (@fwdcharge > 0)
+                            {
+                            <label>Fwd Charge : </label> @CMSV2.Models.CommanFunctions.GetFormatNumber(@fwdcharge, _decimal)<br />
+                                    }
+                            @if (@fwdothercharge > 0)
+                            { 
+                            <label>Other Charge : </label>@CMSV2.Models.CommanFunctions.GetFormatNumber(@fwdothercharge, _decimal)
+                                    
+                             }
+                        </td>
+
+                    </tr>
+
+                </tfoot>
             </table>
 
         </div>

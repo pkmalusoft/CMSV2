@@ -7,39 +7,39 @@
     var _decimal = @Session["Decimal"].ToString();
 }
    
-@foreach (var item in Model.Shipments)
+@foreach (var item in Model.ShipmentsVM)
 {
     <tr>
         <td>
 
-            @Html.HiddenFor(model => model.Shipments[i].ShipmentDetailID, new { @Value = @item.ShipmentDetailID })
-            @Html.HiddenFor(model => model.Shipments[i].InscanId, new { @Value = @item.InscanId })
-            @Html.HiddenFor(model => model.Shipments[i].HAWB, new { @Value = @item.HAWB })
-            @Html.HiddenFor(model => model.Shipments[i].AWB, new { @Value = @item.AWB })
-            @Html.HiddenFor(model => model.Shipments[i].BagNo, new { @Value = @item.BagNo })
-            @Html.HiddenFor(model => model.Shipments[i].Contents, new { @Value = @item.Contents })
-            @Html.HiddenFor(model => model.Shipments[i].Shipper, new { @Value = @item.Shipper })
-            @Html.HiddenFor(model => model.Shipments[i].Reciver, new { @Value = @item.Reciver })
-            @Html.HiddenFor(model => model.Shipments[i].PCS, new { @Value = @item.PCS })
-            @Html.HiddenFor(model => model.Shipments[i].Weight, new { @Value = @item.Weight })
-            @Html.HiddenFor(model => model.Shipments[i].Value, new { @Value = @item.Value })
-            @Html.HiddenFor(model => model.Shipments[i].CurrencyID, new { @Value = @item.CurrencyID })
-            @Html.HiddenFor(model => model.Shipments[i].ImportDetailID, new { @Value = @item.ImportDetailID })
-            @Html.HiddenFor(model => model.Shipments[i].ExportID, new { @Value = @item.ExportID })
-            @*@Html.HiddenFor(model => model.Shipments[i].FwdAgentAWBNo, new { @Value = $"{item.FwdAgentAWBNo}" })
-            @Html.HiddenFor(model => model.Shipments[i].FwdAgentId, new { @Value = $"{item.FwdAgentId}" })
-            @Html.HiddenFor(model => model.Shipments[i].FwdCharge, new { @Value = $"{item.FwdCharge}" })
-            @Html.HiddenFor(model => model.Shipments[i].OtherCharge, new { @Value = $"{item.OtherCharge}" })
-            @Html.HiddenFor(model => model.Shipments[i].FwdFlight, new { @Value = $"{item.FwdFlight}" })
-            @Html.HiddenFor(model => model.Shipments[i].FwdDate, new { @Value = $"{item.FwdDate}" })*@
-            @Html.HiddenFor(model => model.Shipments[i].DestinationCountry, new { @Value = @item.DestinationCountry })
-            @Html.HiddenFor(model => model.Shipments[i].DestinationCity, new { @Value = @item.DestinationCity })
-            @Html.HiddenFor(model => model.Shipments[i].FwdAgentId, new { @Value = @item.FwdAgentId })
-            @Html.HiddenFor(model => model.Shipments[i].FwdAgentAWBNo, new { @Value = @item.FwdAgentAWBNo })
-            @Html.HiddenFor(model => model.Shipments[i].FwdDate, new { @Value = @item.FwdDate })
-            @Html.HiddenFor(model => model.Shipments[i].FwdFlight, new { @Value = @item.FwdFlight })
-            @Html.HiddenFor(model => model.Shipments[i].FwdCharge, new { @Value = @item.FwdCharge })
-            @Html.HiddenFor(model => model.Shipments[i].OtherCharge, new { @Value = @item.OtherCharge })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].ShipmentDetailID, new { @Value = @item.ShipmentDetailID })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].InscanId, new { @Value = @item.InscanId })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].HAWB, new { @Value = @item.HAWB })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].AWB, new { @Value = @item.AWB })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].BagNo, new { @Value = @item.BagNo })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].Contents, new { @Value = @item.Contents })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].Shipper, new { @Value = @item.Shipper })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].Reciver, new { @Value = @item.Reciver })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].PCS, new { @Value = @item.PCS })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].Weight, new { @Value = @item.Weight })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].Value, new { @Value = @item.Value })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].CurrencyID, new { @Value = @item.CurrencyID })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].ImportDetailID, new { @Value = @item.ImportDetailID })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].ExportID, new { @Value = @item.ExportID })
+            @*@Html.HiddenFor(model => model.ShipmentsVM[i].FwdAgentAWBNo, new { @Value = $"{item.FwdAgentAWBNo}" })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdAgentId, new { @Value = $"{item.FwdAgentId}" })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdCharge, new { @Value = $"{item.FwdCharge}" })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].OtherCharge, new { @Value = $"{item.OtherCharge}" })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdFlight, new { @Value = $"{item.FwdFlight}" })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdDate, new { @Value = $"{item.FwdDate}" })*@
+            @Html.HiddenFor(model => model.ShipmentsVM[i].DestinationCountry, new { @Value = @item.DestinationCountry })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].DestinationCity, new { @Value = @item.DestinationCity })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdAgentId, new { @Value = @item.FwdAgentId })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdAgentAWBNo, new { @Value = @item.FwdAgentAWBNo })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdDate, new { @Value = @item.FwdDate })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdFlight, new { @Value = @item.FwdFlight })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].FwdCharge, new { @Value = @item.FwdCharge })
+            @Html.HiddenFor(model => model.ShipmentsVM[i].OtherCharge, new { @Value = @item.OtherCharge })
 
             @(i + 1)
         </td>
@@ -50,68 +50,70 @@
         <td>
             @item.AWB
 
-            @*@Html.EditorFor(model => model.Shipments[i].AWB, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = $"{item.AWB}" } })*@
+            @*@Html.EditorFor(model => model.ShipmentsVM[i].AWB, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = $"{item.AWB}" } })*@
         </td>
         <td>
-            @item.Shipper
-        </td>
-
-        <td>
-            @item.Reciver
+            @item.Shipper<br />
+            @item.OriginCountry<br />
+            @item.ConsignorPhone
         </td>
         <td>
-            @item.DestinationCountry
+            @item.Reciver<br />
+            @item.DestinationCountry<br />
+            @item.ConsigneePhone
+        </td>
+        <td>
+            @item.Contents
+        </td>
+        <td>
+            @item.PaymentMode
         </td>
         <td>
             @item.PCS
         </td>
-        <td>
+        <td style="text-align:right">
             @*@item.Weight*@
             @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Weight, "3")
         </td>
         <td>
             @item.BagNo
         </td>
-        <td>
-            @item.Contents
-        </td>
-
-        <td>
+        <td style="text-align:right">
             @*@item.Value*@
             @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Value, _decimal)
         </td>
 
         @*<td>
 
-            @Html.DropDownListFor(model => model.Shipments[i].FwdAgentId, new SelectList(ViewBag.FwdAgentId, "AgentID", "Name", item.FwdAgentId), "Select Fwd Agent", htmlAttributes: new { @class = "form-control ForwardAgent", @required = "true", @Value = @item.FwdAgentId })
+            @Html.DropDownListFor(model => model.ShipmentsVM[i].FwdAgentId, new SelectList(ViewBag.FwdAgentId, "AgentID", "Name", item.FwdAgentId), "Select Fwd Agent", htmlAttributes: new { @class = "form-control ForwardAgent", @required = "true", @Value = @item.FwdAgentId })
         </td>
 
         <td>
-            @Html.EditorFor(model => model.Shipments[i].FwdAgentAWBNo, new { htmlAttributes = new { @class = "tbl-control ForwardAwb", @required = "true", @Value = @item.FwdAgentAWBNo } })
+            @Html.EditorFor(model => model.ShipmentsVM[i].FwdAgentAWBNo, new { htmlAttributes = new { @class = "tbl-control ForwardAwb", @required = "true", @Value = @item.FwdAgentAWBNo } })
 
         </td>
         <td>
-            @Html.EditorFor(model => model.Shipments[i].FwdDate, new { htmlAttributes = new { @class = "tbl-control ForwardDate", @required = "true", @Value = item.FwdDate } })
+            @Html.EditorFor(model => model.ShipmentsVM[i].FwdDate, new { htmlAttributes = new { @class = "tbl-control ForwardDate", @required = "true", @Value = item.FwdDate } })
 
         </td>
         <td>
-            @Html.EditorFor(model => model.Shipments[i].FwdFlight, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.FwdFlight } })
+            @Html.EditorFor(model => model.ShipmentsVM[i].FwdFlight, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.FwdFlight } })
 
         </td>
         <td>
-            @Html.EditorFor(model => model.Shipments[i].FwdCharge, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.FwdCharge } })
+            @Html.EditorFor(model => model.ShipmentsVM[i].FwdCharge, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.FwdCharge } })
 
         </td>
         <td>
-            @Html.EditorFor(model => model.Shipments[i].OtherCharge, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.OtherCharge } })
+            @Html.EditorFor(model => model.ShipmentsVM[i].OtherCharge, new { htmlAttributes = new { @class = "tbl-control", @required = "true", @Value = @item.OtherCharge } })
 
         </td>*@
 
 
         <td style="width:101px; font-size:13px;">
-            <a onclick="EditShipment('@i')" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>
-            <a onclick="ShowForwardAgentModal('@i')" href="javascript:void(0);"><i class="fa fa-file"></i></a>
-            <a onclick="deleteShipment('@i')" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+            <a onclick="EditShipment('@i')" href="javascript:void(0);" title="Edit AWB" ><i class="fa fa-pencil"></i></a>
+            <a onclick="ShowForwardAgentModal('@i')" href="javascript:void(0);" title="Forwarding Agent Details" ><i class="fa fa-file"></i></a>
+            <a onclick="deleteShipment('@i')" href="javascript:void(0);" title="Delete AWB" ><i class="fa fa-times"></i></a>
         </td>
     </tr>
     i++;
