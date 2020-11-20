@@ -24,4 +24,10 @@ namespace CMSV2.Models
 
     public long MenuAccessID { get; set; }
   }
+
+    public class MenuAccessLevelVM:MenuAccessLevel
+    {
+        public string ParentMenuName { get; set; }
+        public string MenuName { get; set; }
+    }
 }

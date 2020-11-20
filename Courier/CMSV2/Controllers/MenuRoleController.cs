@@ -163,5 +163,32 @@ namespace CMSV2.Controllers
             }
             
         }
+
+
+        public ActionResult AccessRights(int id=2)
+        {
+            ViewBag.RoleId = id;
+            ViewBag.Roles = db.RoleMasters.Where(cc => cc.RoleName != "Admin").ToList();
+            List<MenuAccessLevelVM> lst = (from c in db.MenuAccessLevels join t1 in db.Menus on c.MenuID equals t1.MenuID
+                                           join t2 in db.RoleMasters on c.RoleID equals t2.RoleID
+                                           join t3 in db.Menus on c.ParentID equals t3.MenuID
+                                    where c.RoleID==id select new MenuAccessLevelVM { MenuAccessID=c.MenuAccessID, RoleID = c.RoleID,  ParentMenuName=t3.Title, MenuName = t1.Title ,IsAdd=c.IsAdd,IsModify=c.IsModify,IsDelete=c.IsDelete,Isprint=c.Isprint,IsView=c.IsView }).ToList();
+            return View(lst);
+        }
+
+        [HttpPost]
+        public JsonResult SaveAccessLevel(MenuAccessLevelVM item)        
+        {
+            var menuaccesslevel = db.MenuAccessLevels.Find(item.MenuAccessID);
+            menuaccesslevel.IsAdd = item.IsAdd;
+            menuaccesslevel.IsModify = item.IsModify;
+            menuaccesslevel.Isprint = item.Isprint;
+            menuaccesslevel.IsDelete = item.IsDelete;
+            db.Entry(menuaccesslevel).State = EntityState.Modified;
+            db.SaveChanges();            
+
+            return Json(new { status ="ok"}, JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

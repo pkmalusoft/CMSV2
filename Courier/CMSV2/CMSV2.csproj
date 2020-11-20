@@ -1987,6 +1987,11 @@
     </Compile>
     <Compile Include="Models\ZoneNameVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportsXSD\CustomerReceipt.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CustomerReceipt.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -3022,6 +3027,17 @@
     <Content Include="ReportsXSD\AccTrialBalance.xss">
       <DependentUpon>AccTrialBalance.xsd</DependentUpon>
     </Content>
+    <Content Include="ReportsXSD\CustomerReceipt.xsc">
+      <DependentUpon>CustomerReceipt.xsd</DependentUpon>
+    </Content>
+    <None Include="ReportsXSD\CustomerReceipt.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CustomerReceipt.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ReportsXSD\CustomerReceipt.xss">
+      <DependentUpon>CustomerReceipt.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\AccLedger.xsd" />
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />
@@ -3034,6 +3050,7 @@
     <Content Include="Reports\DefaultReport.rpt" />
     <Content Include="Reports\DefaultReport.pdf" />
     <Content Include="Reports\EmpostFeeReport.rpt" />
+    <Content Include="Reports\CustomerReceipt.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3464,6 +3481,7 @@
     <Content Include="Views\Reports\PrintSearch.cshtml" />
     <Content Include="Views\QuickAWB\Create.cshtml" />
     <Content Include="Views\Reports\ReportFrame.cshtml" />
+    <Content Include="Views\MenuRole\AccessRights.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

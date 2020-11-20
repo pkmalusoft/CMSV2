@@ -44,14 +44,14 @@
             });
         });
 
-        $(".print").click(function () {
+        @*$(".print").click(function () {
             var row = $(this).parent("a").parent("td").parent("tr");
             var id = $(row).find("td").eq(0).find('input[type=hidden]').val();
             var url = '@spath' + "/Reports/ReceiptVocher.aspx?recpayid=" + id;
 
             //var src = "http://localhost:1052/Reports/ReceiptVocher.aspx?recpayid=" + id;
             window.open(url, "_blank");
-        });
+        });*@
 
 
     });
@@ -117,7 +117,7 @@
                             |
                             @if (isprint)
                             {
-                                <a href="#"><i class="fa fa-print " aria-hidden="true" onclick="funExportToPDF(@item.RecPayID)"></i></a>
+                                <a href="#"><i class="fa fa-print " aria-hidden="true" onclick="funExportToPDF1(@item.RecPayID)"></i></a>
                             }
                             |
                             @if (isprint)
@@ -138,13 +138,13 @@
             <div id="printerDiv"><iframe id="frmPDF"></iframe></div>
         </div>
         <script type="text/javascript">
-      function funExportToPDF(id) {
-          //showLoading();
+      function funExportToPDF1(id) {
+
         $.ajax({
-             url: '@Url.Action("ExportToPDF", "CustomerReceipt")',
+             url: '@Url.Action("ReceiptReport", "CustomerReceipt")',
 
             type: "GET",
-            data: { recpayid:id},
+            data: { id:id},
                     dataType: "json",
             success: function (result) {
                 if (result.success == true) {
@@ -152,6 +152,7 @@
 
                     setTimeout(function () {
                         //hideLoading();
+                        
                         frame = document.getElementById("frmPDF");
                         framedoc = frame.contentWindow;
                         framedoc.focus();
@@ -159,7 +160,7 @@
                     }, 1000);
                 } else {
                     alert(result.message);
-                    hideLoading();
+                    //hideLoading();
                 }
             },
         });

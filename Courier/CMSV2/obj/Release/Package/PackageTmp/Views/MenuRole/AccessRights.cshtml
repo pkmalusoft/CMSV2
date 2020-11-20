@@ -1,0 +1,226 @@
+﻿@model IEnumerable<CMSV2.Models.MenuAccessLevelVM>
+@{
+    ViewBag.Title = "AccessRights";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+<script type="text/javascript">
+    function save(item) {
+        debugger;
+        //console.log(JSON.stringify(items));
+        $.ajax({
+            type: "POST",
+            url: "/MenuRole/SaveAccessLevel",
+            contentType: 'application/json',
+            data:  JSON.stringify(item) ,
+            success: function (response) {
+                if (response.status == "ok") {
+
+                    $.notify(response.message, "success");
+                   // window.location = "/InScan/index";
+                }
+                else {
+
+                    $.notify(response.message, "warning");
+
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var items = [];
+
+        $('#btnsave').click(function () {
+            debugger;
+            console.log(items);
+            //save(items);
+            $.each(items, function (key, value) {
+                debugger;
+                save(value);
+            });
+            //$('#details').find('.menuaccess').each(function () {
+            //    var menuaccessid = $(this).val();
+            //    var addrights = $('#IsAdd_' + $(this).val()).prop('checked');
+            //    var modifyright = $('#IsModify_' + $(this).val()).prop('checked');
+            //    var saveobj = {
+            //        MenuAccessID: menuaccessid,
+            //        IsAdd: addrights,
+            //        IsModify: modifyright,
+            //        Isprint: false,
+            //        IsDelete: true
+            //    }
+            //    items.push(saveobj);
+            //});
+
+
+        });
+
+
+          $(".checkfilter").change(function () {
+              $('#btnsave').RemoveAttr('disabled');
+              $('#btncancel').RemoveAttr('disabled');
+            var id = $(this).attr('id');
+              var menuaccessid = id.split('_')[1];              
+              var addrights = $('#IsAdd_' + menuaccessid).prop('checked');
+              var modifyright = $('#IsModify_' + menuaccessid).prop('checked');
+              var modifyprint = $('#Isprint_' + menuaccessid).prop('checked');
+              var modifydelete = $('#IsDelete_' + menuaccessid).prop('checked');
+              var saveobj = {
+                  MenuAccessID: menuaccessid,
+                  IsAdd: addrights,
+                  IsModify: modifyright,
+                  Isprint: false,
+                  IsDelete: true
+              }
+              if (items.length == 0)
+                  items.push(saveobj);
+              else {
+                  var exists = false;
+                  $.each(items, function (key, value) {
+                      debugger;
+                      if (value.MenuAccessID == menuaccessid) {
+                          items[key] = JSON.stringify(saveobj);
+                          exists = true;
+                          return;
+                      }
+                  });
+                  setTimeout(function () {
+                      if(exists == false)
+                  items.push(saveobj);
+                  },200)
+                  
+              }
+            
+             
+            
+        });
+        //table.columns().every(function () {
+        //    var that = this;
+
+        //    $('input', this.footer()).on('keyup change', function () {
+        //        if (that.search() !== this.value) {
+        //            that
+        //                .search(this.value)
+        //                .draw();
+        //        }
+        //    });
+        //});
+    });
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Menu Access Rights</h1>
+
+</section>
+
+<div class="clearfix"></div>
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        @*  <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
+            </div>*@
+        <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                      });
+        </script>
+    }
+<div class="row no-margin">
+    <div class="col-md-3">
+        <label class="headinglabel required"> User Role</label>
+        @Html.DropDownList("RoleId", new SelectList(@ViewBag.Roles, "RoleID", "RoleName", @ViewBag.RoleId), "Select", new { @class = "form-control" })
+
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>        
+    </div>
+    <div class="cold-md-9">
+        <input type="button" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+        <a class="btn btn-danger btnwidth float-right" id="btncancel"  href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()">Cancel</a>
+        @*@Html.ActionLink("Cancel", "AccessRights", null, new { @class = "btn btn-danger btnwidth float-right" })*@
+    </div>
+</div>
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Parent Menu")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Menu Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("IsAdd")
+                    </th>
+                    <th>
+                        @Html.DisplayName("IsEdit")
+                    </th>
+                    <th>
+                        @Html.DisplayName("IsPrint")
+                    </th>
+                    <th>
+                        @Html.DisplayName("IsDelete")
+                    </th>                    
+                </tr>
+
+            </thead>
+
+            <tbody id="details">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParentMenuName)
+                        </td>
+                        <td class="">
+                            @Html.HiddenFor(modelItem => item.MenuID)
+                            @Html.HiddenFor(modelItem => item.RoleID)
+                            @Html.HiddenFor(modelItem => item.MenuAccessID)
+                            <input type="hidden" class="menuaccess" value="@item.MenuAccessID" />
+                            @Html.DisplayFor(modelItem => item.MenuName)
+                        </td>
+                        <td>
+                            <div class="col-md-1 checkboxdesign">
+                                @Html.CheckBoxFor(modelIte => item.IsAdd, new { name = "", @id= "IsAdd_"+ item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-1 checkboxdesign">
+                                @Html.CheckBoxFor(modelIte => item.IsModify, new { name = "", @id = "IsModify_" + item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-1 checkboxdesign">
+                                @Html.CheckBoxFor(modelIte => item.Isprint, new { name = "", @id = "Isprint_" + item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-1 checkboxdesign">
+                                @Html.CheckBoxFor(modelIte => item.IsDelete, new { name = "", @id = "IsDelete_" + item.MenuAccessID,@class = "checkfilter calfield", style = "margin-left:10px;" })
+                            </div>
+                        </td>
+                        <!--<td>-->
+                            @*<a href="@Url.Action("Delete", new { id = item.MenuID })"><i class="fa fa-times"></i></a>*@
+
+                            <!--<a href="#" onclick="Delete(ID=@item.MenuAccessID)"><i class="fa fa-times"></i></a>
+                        </td>-->
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</section>

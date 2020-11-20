@@ -566,6 +566,20 @@ namespace CMSV2.Controllers
 
         }
 
+        public JsonResult ReceiptReport(int id)
+        {
+            string reportpath = "";
+            //int k = 0;
+            if (id != 0)
+            {
+                reportpath=AccountsReportsDAO.GenerateCustomerReceipt(id);                
+                
+            }
+
+            return Json(new { path =  reportpath , result = "ok" }, JsonRequestBehavior.AllowGet);
+
+        }
+
         public string getSuccessID()
         {
             string ID = "";
