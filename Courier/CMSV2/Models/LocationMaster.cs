@@ -23,7 +23,6 @@ namespace CMSV2.Models
             this.CustomerMasters = new HashSet<CustomerMaster>();
             this.EmployeeMasters = new HashSet<EmployeeMaster>();
             this.JobEnquiries = new HashSet<JobEnquiry>();
-            this.SupplierMasters = new HashSet<SupplierMaster>();
         }
     
         public int LocationID { get; set; }
@@ -44,7 +43,5 @@ namespace CMSV2.Models
         public virtual ICollection<EmployeeMaster> EmployeeMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JobEnquiry> JobEnquiries { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SupplierMaster> SupplierMasters { get; set; }
     }
 }

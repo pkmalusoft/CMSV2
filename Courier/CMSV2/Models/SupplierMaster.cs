@@ -32,20 +32,27 @@ namespace CMSV2.Models
         public string Fax { get; set; }
         public string Email { get; set; }
         public string WebSite { get; set; }
-        public Nullable<int> CountryID { get; set; }
-        public Nullable<int> CityID { get; set; }
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<bool> StatusActive { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
         public string MobileNo { get; set; }
-        public Nullable<int> LocationID { get; set; }
         public Nullable<int> BranchID { get; set; }
         public Nullable<int> SupplierTypeID { get; set; }
+        public string RegistrationNo { get; set; }
+        public string CountryName { get; set; }
+        public string CityName { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<int> MaxCreditDays { get; set; }
+        public Nullable<double> MaxCreditLimit { get; set; }
+        public string RevenueTypeIds { get; set; }
+        public Nullable<int> ExportCode { get; set; }
+        public Nullable<bool> StatusInventory { get; set; }
+        public Nullable<bool> StatusReserved { get; set; }
+        public string POBoxNo { get; set; }
+        public string Remarks { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
-        public virtual CityMaster CityMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }
-        public virtual LocationMaster LocationMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

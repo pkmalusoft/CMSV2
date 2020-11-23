@@ -1236,6 +1236,7 @@ new AcGroupModel()
                 acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
                 acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
                 acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
+                acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
                 acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
 
                 if (v.AcJDetailVM[i].AmountIncludingTax==true && v.AcJDetailVM[i].TaxAmount>0)
@@ -1419,7 +1420,7 @@ new AcGroupModel()
                 acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
                 acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
                 acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
-
+                acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
                 if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
                 {
                     v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
@@ -1813,6 +1814,26 @@ new AcGroupModel()
                 //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
                 //AccountHeadList = db.AcHeadSelectAll(branchID).ToList();
                 return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult Supplier(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term))
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.SupplierMasters where c.SupplierName.ToLower().StartsWith(term.ToLower()) orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierInfo = c.SupplierName + "( " + c.RegistrationNo + ")" }).ToList();
+                
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
+
+
+            }
+            else
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.SupplierMasters  orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierInfo = c.SupplierName +  "( " + c.RegistrationNo + ")" }).ToList();
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
             }
         }
 

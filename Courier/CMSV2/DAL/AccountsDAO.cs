@@ -102,7 +102,7 @@ namespace CMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax WHERE AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax,SupplierId=@SupplierId WHERE AcJournalDetailID = @AcJournalDetailID";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -128,7 +128,10 @@ namespace CMSV2.DAL
 
             cmd.Parameters.Add("@AmountIncludingTax", SqlDbType.Bit);
             cmd.Parameters["@AmountIncludingTax"].Value = ObjectAcJournalDetail.AmountIncludingTax;
-            
+
+            cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
+            cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
+
 
             try
             {
@@ -191,7 +194,7 @@ namespace CMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID)";
+            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID,AmountIncludingTax,SupplireId) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID,@AmountIncludingTax,@SupplierId)";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -217,6 +220,9 @@ namespace CMSV2.DAL
 
             cmd.Parameters.Add("@AmountIncludingTax", SqlDbType.Bit);
             cmd.Parameters["@AmountIncludingTax"].Value = ObjectAcJournalDetail.AmountIncludingTax;
+            
+            cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
+            cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
             try
             {
                 cmd.Connection.Open();
@@ -468,8 +474,9 @@ namespace CMSV2.DAL
                     
                     obj.Rem = ds.Tables[0].Rows[i]["Remarks"].ToString();
                     obj.AcHead = ds.Tables[0].Rows[i]["AcHead"].ToString();
-                    
-                    
+                    obj.SupplierID = Convert.ToInt32(ds.Tables[0].Rows[i]["SupplierId"].ToString());
+                    obj.SupplierName = ds.Tables[0].Rows[i]["SupplierName"].ToString();
+
                     objList.Add(obj);
                 }
             }

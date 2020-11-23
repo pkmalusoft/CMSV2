@@ -178,7 +178,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SubStatu" Width="1.5" PointX="35.75" PointY="35.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Supplier" Width="1.5" PointX="8.75" PointY="38.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="10.75" PointY="38.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierMaster" Width="1.5" PointX="13.5" PointY="89.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierType" Width="1.5" PointX="11.25" PointY="91.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SystemControlSequence" Width="1.5" PointX="36.75" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TaxConfiguration" Width="1.5" PointX="33.75" PointY="38.125" IsExpanded="true" />
@@ -293,12 +292,10 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Quotation_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_BranchMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Products_Category" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerMaster_CityMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_EmployeeMaster_CityMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_LocationMaster_CityMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CityMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblDepot_CityMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRate_CourierService" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRate_CourierService1" ManuallyRouted="false" />
@@ -310,7 +307,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_S_ExportShipmentDetails_S_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_CurrencyMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerEnquiry_CustomerMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerEnquiry_EmployeeMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" ManuallyRouted="false" />
@@ -386,22 +382,17 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_JobEnquiry_LocationMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_JobEnquiryDetails_JobEnquiry" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_JobEnquiryDetails_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_LocationMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ProductItemMaster_ProductItemMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Products_Type" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrderDetails_Products" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_QuotationDetails_Products" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoiceDetails_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoiceDetails_PurchaseInvoice" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrderDetails_PurchaseOrder" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_QuotationDetails_Quotation" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoiceDetails_SalesInvoice" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSalesInvoiceOtherCharges_SalesInvoice" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblAgentCollectionRateDetail_tblAgentCollectionRate" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblAgentDeliveryRateDetail_tblAgentDeliveryRate" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblAgentInvoiceDetail_tblAgentInvoice" ManuallyRouted="false" />
@@ -422,6 +413,13 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CODReceiptDetail" Width="1.5" PointX="44.625" PointY="9.625" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__CODReceip__Recei__5D8BC399" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AccountHeadControl" Width="1.5" PointX="41.375" PointY="18.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierMaster" Width="1.5" PointX="13.5" PointY="89.125" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CurrencyMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -22,7 +22,6 @@ namespace CMSV2.Models
             this.CustomerMasters = new HashSet<CustomerMaster>();
             this.EmployeeMasters = new HashSet<EmployeeMaster>();
             this.LocationMasters = new HashSet<LocationMaster>();
-            this.SupplierMasters = new HashSet<SupplierMaster>();
             this.tblDepots = new HashSet<tblDepot>();
         }
     
@@ -43,8 +42,6 @@ namespace CMSV2.Models
         public virtual ICollection<EmployeeMaster> EmployeeMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocationMaster> LocationMasters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SupplierMaster> SupplierMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDepot> tblDepots { get; set; }
     }

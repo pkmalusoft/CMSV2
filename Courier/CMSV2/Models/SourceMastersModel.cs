@@ -359,6 +359,21 @@ namespace CMSV2.Models
                 return 0;
         }
         #endregion
+        public int GetMaxNumberSupplier()
+        {
 
+            var query = db.Suppliers.OrderByDescending(item => item.SupplierID).FirstOrDefault();
+
+            if (query == null)
+            {
+                return 1;
+            }
+            else
+            {
+                return query.SupplierID + 1;
+            }
+
+
+        }
     }
 }

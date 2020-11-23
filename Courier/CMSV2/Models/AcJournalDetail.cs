@@ -30,5 +30,6 @@ namespace CMSV2.Models
         public Nullable<decimal> TaxPercent { get; set; }
         public Nullable<decimal> TaxAmount { get; set; }
         public bool AmountIncludingTax { get; set; }
+        public Nullable<int> SupplierId { get; set; }
     }
 }

@@ -16,6 +16,9 @@ namespace CMSV2.Models
         public decimal TaxAmount { get; set; }
         public int AcJournalDetID { get; set; }        
         public bool AmountIncludingTax { get; set; }
+        public int SupplierID { get; set; }
+        public string SupplierName { get; set; }
+
         public List<AcExpenseAllocationVM> AcExpAllocationVM { get; set; }
     }
 }

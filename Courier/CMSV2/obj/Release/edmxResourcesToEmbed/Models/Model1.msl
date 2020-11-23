@@ -175,6 +175,7 @@
     <EntitySetMapping Name="AcJournalDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalDetail">
         <MappingFragment StoreEntitySet="AcJournalDetail">
+          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
           <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
@@ -3096,31 +3097,6 @@
           <ScalarProperty Name="AcDiscJournalID" ColumnName="AcDiscJournalID" />
           <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="FyearID" ColumnName="FyearID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SupplierMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
-        <MappingFragment StoreEntitySet="SupplierMaster">
-          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
-          <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
-          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Fax" ColumnName="Fax" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
-          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="SupplierTypeID" ColumnName="SupplierTypeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9038,6 +9014,40 @@
         <MappingFragment StoreEntitySet="AccountHeadControl">
           <ScalarProperty Name="ControlName" ColumnName="ControlName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplierMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
+        <MappingFragment StoreEntitySet="SupplierMaster">
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="POBoxNo" ColumnName="POBoxNo" />
+          <ScalarProperty Name="StatusReserved" ColumnName="StatusReserved" />
+          <ScalarProperty Name="StatusInventory" ColumnName="StatusInventory" />
+          <ScalarProperty Name="ExportCode" ColumnName="ExportCode" />
+          <ScalarProperty Name="RevenueTypeIds" ColumnName="RevenueTypeIds" />
+          <ScalarProperty Name="MaxCreditLimit" ColumnName="MaxCreditLimit" />
+          <ScalarProperty Name="MaxCreditDays" ColumnName="MaxCreditDays" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+          <ScalarProperty Name="SupplierTypeID" ColumnName="SupplierTypeID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

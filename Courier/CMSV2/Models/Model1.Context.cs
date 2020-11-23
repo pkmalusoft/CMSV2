@@ -200,7 +200,6 @@ namespace CMSV2.Models
         public virtual DbSet<SubStatu> SubStatus { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
-        public virtual DbSet<SupplierMaster> SupplierMasters { get; set; }
         public virtual DbSet<SupplierType> SupplierTypes { get; set; }
         public virtual DbSet<SystemControlSequence> SystemControlSequences { get; set; }
         public virtual DbSet<TaxConfiguration> TaxConfigurations { get; set; }
@@ -272,6 +271,7 @@ namespace CMSV2.Models
         public virtual DbSet<CODReceipt> CODReceipts { get; set; }
         public virtual DbSet<CODReceiptDetail> CODReceiptDetails { get; set; }
         public virtual DbSet<AccountHeadControl> AccountHeadControls { get; set; }
+        public virtual DbSet<SupplierMaster> SupplierMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

@@ -1,0 +1,395 @@
+﻿@model CMSV2.Models.SupplierMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+.formDesign .col-md-4{
+		padding-bottom:10px;
+		}
+    .jobform {
+        background-color: #fff;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+        border-radius: 25px;
+        margin-bottom: 27px;
+        /*padding: 20px;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 853px;*/
+        padding-top: 14px;
+        padding-left: 8px;
+        padding-right: 8px;
+        width: 96%;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 14px;
+        color: #2d2828 !important;
+        display: inline;
+    }
+
+    .btn-group {
+        width: 100% !important;
+    }
+
+    .multiselect {
+        width: 100% !important;
+    }
+</style>
+<script src="~/Content/bootstrap-multiselect.js"></script>
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        $("#SupplierName").focus();
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        if ('@Model.SupplierType' == 0 || '@Model.SupplierType' == null) {
+
+        } else {
+            $("#SupplierType").val('@Model.SupplierType');
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Supplier/GetID",
+            datatype: "Json",
+            data: { supid: $("#SupplierID").val() },
+            success: function (data) {
+                $("#revids").val(data);
+
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Supplier/GetRevenue",
+            datatype: "Json",
+            success: function (data) {
+
+                debugger;
+                // $(".divcountry").show();
+                // $(".divcity").hide();
+                $('#RevenueItems').empty();
+
+                $.each(data, function (index, value) {
+
+                    var o_st = $("#revids").val().split(",");
+
+                    var flag = 0;
+                    for (var j = 0; j < o_st.length; j++) {
+
+                        if (o_st[j] == value.RevenueTypeID) {
+                            flag = 1;
+                            break;
+                        }
+
+                    }
+
+                    if (flag == 1) {
+                        $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '" selected=true>' + value.RevenueType1 + '</option>');
+                    }
+                    else {
+                        $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '">' + value.RevenueType1 + '</option>');
+                    }
+
+                });
+
+
+
+                $('#RevenueItems').multiselect({
+                    enableClickableOptGroups: true,
+                    enableCollapsibleOptGroups: true,
+                    enableFiltering: true,
+                    includeSelectAllOption: true
+                });
+
+                $(".multiselect-container").css({ "height": "200px", "overflow-y": "scroll" });
+
+
+
+            }
+        });
+
+
+
+        $("#btnsave").click(function () {
+            var sup = $("#SupplierName").val();
+            var ref = $("#ReferenceCode").val();
+            var con = $("#ContactPerson").val();
+            var add = $("#Address1").val();
+            var phone = $("#Phone").val();
+
+            var email = $("#Email").val();
+
+            var x = "";
+            //$("#RevenueItems").change(function () {
+            //    x = "";
+
+            //    x = $("#RevenueItems").val();
+
+            //    $("#RevenuTypeIds").val(x);
+
+
+            //});
+
+
+            x = $("#RevenueItems").val();
+
+            $("#RevenueTypeIds").val(x);
+
+            var regex = /^[0-9 ]+$/
+            var isValid = regex.test(ExpCode);
+
+
+
+            if (sup == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (ref == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (con == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (add == "") {
+
+                $("#alert").show();
+                return false;
+            }
+            else if (phone == "") {
+
+                $("#alert").show();
+                return false;
+            }
+            else if (email == "") {
+
+                $("#alert").show();
+                return false;
+            }
+            else if (!isValid) {
+                alert("Exporter Code must be a Number.");
+                return false;
+            }
+            else {
+                $("#alert").hide();
+                return true;
+            }
+
+
+        });
+        @*$("#SupplierName").focusout(function () {
+            var customerval = $("#SupplierName").val();
+            if (customerval == "" || customerval == null) {
+
+            } else {
+                var custstrarray = customerval.split(' ');
+                if (custstrarray.length > 1) {
+             
+                    var refString = custstrarray[0].charAt(0) + custstrarray[1].charAt(0) + "-" + '@ViewBag.custnum';
+                    $("#ReferenceCode").val(refString);
+
+                } else {
+                   
+                    var refString = customerval.charAt(0) + customerval.charAt(1) + "-" + '@ViewBag.custnum';
+                    $("#ReferenceCode").val(refString);
+                }
+            }
+        });*@
+    });
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Supplier</h1>
+
+</section>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+    <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+
+    <section class="">
+
+        <input type="hidden" id="revids" />
+        <fieldset>
+            @Html.HiddenFor(model => model.SupplierID)
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="required headinglabel">Supplier Code</label>
+
+                    @Html.TextBoxFor(model => model.ReferenceCode, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.ReferenceCode)
+                </div>
+                <div class="col-md-3">
+                    <label class="required headinglabel">Supplier Name</label>
+
+                    @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.SupplierName)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel">PO.BoxNo</label>
+                    @Html.TextBoxFor(model => model.POBoxNo, new { @class = "form-control textright" })
+                    @Html.ValidationMessageFor(model => model.POBoxNo)
+                </div>
+                <div class="col-md-3">
+                    <label class=" headinglabel">Fax ID</label>
+
+                    @Html.TextBoxFor(model => model.Fax, new { @class = "form-control textright" })
+                    @Html.ValidationMessageFor(model => model.Fax)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="required headinglabel">Contact Person</label>
+
+                    @Html.TextBoxFor(model => model.ContactPerson, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.ContactPerson)
+                </div>
+                <div class="col-md-3">
+                    <label class="required headinglabel">Address 1 (Building)</label>
+                    @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Address 2 (Street)</label>
+
+                    @Html.TextBoxFor(model => model.Address2, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Location</label>
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", @onFocus = "geolocate()", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.LocationName)
+
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="required headinglabel">City</label>
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", onFocus = "geoCitylocate()" })
+                    @Html.ValidationMessageFor(model => model.CityName)
+
+                </div>
+                <div class="col-md-3">
+                    <label class="required headinglabel">Country</label>
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", onFocus = "geoCountrylocate()" })
+                    @Html.ValidationMessageFor(model => model.CountryName)
+
+
+                </div>
+                <div class="col-md-3">
+                    <label class="required headinglabel">Tele Phone -1</label>
+
+                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control textright txttarget" })
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="required headinglabel">Tele Phone -2</label>
+
+                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control textright txttarget" })
+                    @Html.ValidationMessageFor(model => model.MobileNo)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+
+                <div class="col-md-3">
+                    <label class="required headinglabel">Email</label>
+
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">WebSite</label>
+
+                    @Html.TextBoxFor(model => model.WebSite, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.WebSite)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Max Credit Days</label>
+
+                    @Html.TextBoxFor(model => model.MaxCreditDays, new { @class = "form-control textright" })
+                    @Html.ValidationMessageFor(model => model.MaxCreditDays)
+                </div>
+                <div class="col-md-3">
+                    <label class=" headinglabel">Max Credit Limit</label>
+                    @Html.TextBoxFor(model => model.MaxCreditLimit, new { @class = "form-control textright" })
+                    @Html.ValidationMessageFor(model => model.MaxCreditLimit)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+
+                <div class="col-md-3">
+                    <label class="required headinglabel">Exporter Code</label>
+                    @Html.TextBoxFor(model => model.ExportCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ExportCode)
+                </div>
+                <div class="col-md-3">
+                    <label class="required headinglabel">Supplier Type</label>
+                    @Html.DropDownListFor(model => model.SupplierTypeID, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SupplierTypeID)
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">TRN No.</label>
+                    @Html.TextBoxFor(model => model.RegistrationNo, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.RegistrationNo)
+                </div>
+
+                <div class="col-md-3" style="padding-top:15px">
+
+                    @Html.CheckBox("StatusActive", new { @name = "StatusActive" }) &nbsp <label class="headinglabel">Status Active</label>
+                    @Html.ValidationMessageFor(model => model.StatusActive)
+                </div>
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-4">
+                    <label class="headinglabel">Remark</label>
+                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="headinglabel">Revenue Type Ids</label><h6></h6>
+                    @*@Html.TextBoxFor(model => model.RevenuTypeIds, new { @class = "form-control" })*@
+                    @*@Html.DropDownListFor(model => model.RevenuTypeIds, new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"),"Select Revenue", new {multiple="multiple", @class = "form-control" })*@
+
+                    @Html.DropDownList("RevenueItems", new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"), new { @class = "multiselect form-control", multiple = "multiple" })
+                    @Html.HiddenFor(model => model.RevenueTypeIds)
+
+                    @*@Html.ValidationMessageFor(model => model.RevenuTypeIds)*@
+                </div>
+
+            </div>
+
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12" style="text-align: right;    margin-top: 20px;">
+                    <input type="submit" value="Update" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;
+                    <a href='@Url.Action("Index", "Supplier", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
+            </div>
+
+
+        </fieldset>
+      
+
+    </section>
+
+}
+    @*@section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }*@

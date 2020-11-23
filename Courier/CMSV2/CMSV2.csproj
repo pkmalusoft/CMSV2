@@ -273,6 +273,7 @@
     <Compile Include="Controllers\SourceMasterController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\StatusTypeController.cs" />
+    <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\TaxconfigurationController.cs" />
     <Compile Include="Controllers\TransitStationController.cs" />
     <Compile Include="Controllers\TransitStationMasterController.cs" />
@@ -1745,6 +1746,7 @@
     <Compile Include="Models\SupplierMasterSelect_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplierMasterVM.cs" />
     <Compile Include="Models\SupplierType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3482,6 +3484,14 @@
     <Content Include="Views\QuickAWB\Create.cshtml" />
     <Content Include="Views\Reports\ReportFrame.cshtml" />
     <Content Include="Views\MenuRole\AccessRights.cshtml" />
+    <Content Include="Views\Supplier\Create.cshtml" />
+    <Content Include="Views\Supplier\CreateSupplierType.cshtml" />
+    <Content Include="Views\Supplier\Delete.cshtml" />
+    <Content Include="Views\Supplier\Details.cshtml" />
+    <Content Include="Views\Supplier\Edit.cshtml" />
+    <Content Include="Views\Supplier\EditSupplierType.cshtml" />
+    <Content Include="Views\Supplier\Index.cshtml" />
+    <Content Include="Views\Supplier\SupplierType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

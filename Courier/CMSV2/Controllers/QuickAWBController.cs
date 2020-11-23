@@ -417,10 +417,18 @@ namespace CMSV2.Controllers
                         
                     }
 
-                    if (v.InScanID == 0)
-                    {                        
-                        db.InScanInternationalDeatils.Add(isid);
-                    }
+                    //if (v.InScanID == 0)
+                    //{
+                    //    try
+                    //    {
+                    //        db.InScanInternationalDeatils.Add(isid);
+                    //        db.SaveChanges();
+                    //    }
+                    //    catch(Exception ex1)
+                    //    {
+                    //        string err = ex1.Message;
+                    //    }
+                    //}
 
                     if (v.FagentID >0)
                     {
@@ -440,6 +448,10 @@ namespace CMSV2.Controllers
                         if (isi.InScanInternationalID == 0)
                         {
                             db.InScanInternationals.Add(isi);
+                            db.SaveChanges();
+
+                            isid.InscanInternationalID = isi.InScanInternationalID;
+                            db.InScanInternationalDeatils.Add(isid);
                             db.SaveChanges();
                         }
                         else

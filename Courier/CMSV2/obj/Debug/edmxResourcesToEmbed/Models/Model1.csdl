@@ -213,6 +213,7 @@
     <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="TaxAmount" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="AmountIncludingTax" Type="Boolean" Nullable="false" />
+    <Property Name="SupplierId" Type="Int32" />
   </EntityType>
   <EntityType Name="AcJournalMaster">
     <Key>
@@ -702,9 +703,9 @@
     <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_BranchMaster" FromRole="BranchMaster" ToRole="PurchaseInvoice" />
     <NavigationProperty Name="Quotations" Relationship="Self.FK_Quotation_BranchMaster" FromRole="BranchMaster" ToRole="Quotation" />
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_BranchMaster" FromRole="BranchMaster" ToRole="SalesInvoice" />
-    <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
     <Property Name="CODReceiptPrefix" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
     <Property Name="CODReceiptFormat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="BusinessType">
     <Key>
@@ -808,7 +809,6 @@
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_CityMaster" FromRole="CityMaster" ToRole="CustomerMaster" />
     <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_CityMaster" FromRole="CityMaster" ToRole="EmployeeMaster" />
     <NavigationProperty Name="LocationMasters" Relationship="Self.FK_LocationMaster_CityMaster" FromRole="CityMaster" ToRole="LocationMaster" />
-    <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_CityMaster" FromRole="CityMaster" ToRole="SupplierMaster" />
     <NavigationProperty Name="tblDepots" Relationship="Self.FK_tblDepot_CityMaster" FromRole="CityMaster" ToRole="tblDepot" />
   </EntityType>
   <EntityType Name="ColoaderAllocation">
@@ -975,7 +975,7 @@
     <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="PurchaseInvoice" />
     <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster" FromRole="CurrencyMaster" ToRole="ExportShipmentDetails" />
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="SalesInvoice" />
-    <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="SupplierMaster" />
+    <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="CustomerContract">
     <Key>
@@ -2479,7 +2479,6 @@
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_LocationMaster" FromRole="LocationMaster" ToRole="CustomerMaster" />
     <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="LocationMaster" ToRole="EmployeeMaster" />
     <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_LocationMaster" FromRole="LocationMaster" ToRole="JobEnquiry" />
-    <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_LocationMaster" FromRole="LocationMaster" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="Lock">
     <Key>
@@ -2917,9 +2916,9 @@
     <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_PurchaseInvoice_CurrencyMaster" FromRole="PurchaseInvoice" ToRole="CurrencyMaster" />
     <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster" FromRole="PurchaseInvoice" ToRole="EmployeeMaster" />
     <NavigationProperty Name="EmployeeMaster1" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster1" FromRole="PurchaseInvoice" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="SupplierMaster" Relationship="Self.FK_PurchaseInvoice_SupplierMaster" FromRole="PurchaseInvoice" ToRole="SupplierMaster" />
     <NavigationProperty Name="PurchaseInvoiceDetails" Relationship="Self.FK_PurchaseInvoiceDetails_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseInvoiceDetails" />
     <NavigationProperty Name="tblPurchaseInvoiceOtherCharges" Relationship="Self.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="tblPurchaseInvoiceOtherCharges" />
+    <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster" FromRole="PurchaseInvoice" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="PurchaseInvoiceDetail">
     <Key>
@@ -2952,8 +2951,8 @@
     <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="FYearID" Type="Int32" />
     <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_PurchaseOrder_EmployeeMaster" FromRole="PurchaseOrder" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="SupplierMaster" Relationship="Self.FK_PurchaseOrder_SupplierMaster" FromRole="PurchaseOrder" ToRole="SupplierMaster" />
     <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetails_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetails" />
+    <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" FromRole="PurchaseOrder" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="PurchaseOrderDetail">
     <Key>
@@ -3223,38 +3222,6 @@
     <Property Name="AcHeadID" Type="Int32" />
     <Property Name="FyearID" Type="Int32" />
   </EntityType>
-  <EntityType Name="SupplierMaster">
-    <Key>
-      <PropertyRef Name="SupplierID" />
-    </Key>
-    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="SupplierName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CountryID" Type="Int32" />
-    <Property Name="CityID" Type="Int32" />
-    <Property Name="CurrencyID" Type="Int32" />
-    <Property Name="StatusActive" Type="Boolean" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="LocationID" Type="Int32" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="SupplierTypeID" Type="Int32" />
-    <NavigationProperty Name="BranchMaster" Relationship="Self.FK_SupplierMaster_BranchMaster" FromRole="SupplierMaster" ToRole="BranchMaster" />
-    <NavigationProperty Name="CityMaster" Relationship="Self.FK_SupplierMaster_CityMaster" FromRole="SupplierMaster" ToRole="CityMaster" />
-    <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_SupplierMaster_CurrencyMaster" FromRole="SupplierMaster" ToRole="CurrencyMaster" />
-    <NavigationProperty Name="LocationMaster" Relationship="Self.FK_SupplierMaster_LocationMaster" FromRole="SupplierMaster" ToRole="LocationMaster" />
-    <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_SupplierMaster" FromRole="SupplierMaster" ToRole="PurchaseInvoice" />
-    <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_SupplierMaster" FromRole="SupplierMaster" ToRole="PurchaseOrder" />
-    <NavigationProperty Name="SupplierType" Relationship="Self.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
-    <NavigationProperty Name="tblSupplierAdjustments" Relationship="Self.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
-  </EntityType>
   <EntityType Name="SupplierType">
     <Key>
       <PropertyRef Name="SupplierTypeID" />
@@ -3262,7 +3229,7 @@
     <Property Name="SupplierTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="SupplierType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="AcHeadID" Type="Int32" />
-    <NavigationProperty Name="SupplierMasters" Relationship="Self.FK_SupplierMaster_SupplierType" FromRole="SupplierType" ToRole="SupplierMaster" />
+    <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierType" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="SystemControlSequence">
     <Key>
@@ -3590,8 +3557,8 @@
     <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_tblSupplierAdjustment_AcFinancialYear" FromRole="tblSupplierAdjustment" ToRole="AcFinancialYear" />
     <NavigationProperty Name="AcJournalMaster" Relationship="Self.FK_tblSupplierAdjustment_AcJournalMaster" FromRole="tblSupplierAdjustment" ToRole="AcJournalMaster" />
-    <NavigationProperty Name="SupplierMaster" Relationship="Self.FK_tblSupplierAdjustment_SupplierMaster" FromRole="tblSupplierAdjustment" ToRole="SupplierMaster" />
     <NavigationProperty Name="tblSupplierAdjustmentDetails" Relationship="Self.FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment" FromRole="tblSupplierAdjustment" ToRole="tblSupplierAdjustmentDetail" />
+    <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="tblSupplierAdjustment" ToRole="SupplierMaster" />
   </EntityType>
   <EntityType Name="tblSupplierAdjustmentDetail">
     <Key>
@@ -4759,18 +4726,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SupplierMaster_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Products_Category">
     <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
     <End Role="Products" Type="Self.Product" Multiplicity="*" />
@@ -4815,18 +4770,6 @@
         <PropertyRef Name="CityID" />
       </Principal>
       <Dependent Role="LocationMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
         <PropertyRef Name="CityID" />
       </Dependent>
     </ReferentialConstraint>
@@ -4961,18 +4904,6 @@
         <PropertyRef Name="CurrencyID" />
       </Principal>
       <Dependent Role="SalesInvoice">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
         <PropertyRef Name="CurrencyID" />
       </Dependent>
     </ReferentialConstraint>
@@ -5885,18 +5816,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SupplierMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_ProductItemMaster_ProductItemMaster">
     <End Role="ProductCategoryMaster" Type="Self.ProductCategoryMaster" Multiplicity="0..1" />
     <End Role="ProductItemMaster" Type="Self.ProductItemMaster" Multiplicity="*" />
@@ -5957,18 +5876,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PurchaseInvoice_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="SupplierID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PurchaseInvoiceDetails_PurchaseInvoice">
     <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -5994,18 +5901,6 @@
       </Principal>
       <Dependent Role="tblPurchaseInvoiceOtherCharges">
         <PropertyRef Name="PurchaseInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrder_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="PurchaseOrder">
-        <PropertyRef Name="SupplierID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6058,30 +5953,6 @@
       </Principal>
       <Dependent Role="tblSalesInvoiceOtherCharges">
         <PropertyRef Name="ExpenseID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_SupplierType">
-    <End Role="SupplierType" Type="Self.SupplierType" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierType">
-        <PropertyRef Name="SupplierTypeID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="SupplierTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSupplierAdjustment_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="tblSupplierAdjustment" Type="Self.tblSupplierAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="tblSupplierAdjustment">
-        <PropertyRef Name="SupplierID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6453,7 +6324,6 @@
     <EntitySet Name="SubStatus" EntityType="Self.SubStatu" />
     <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
     <EntitySet Name="SupplierInvoices" EntityType="Self.SupplierInvoice" />
-    <EntitySet Name="SupplierMasters" EntityType="Self.SupplierMaster" />
     <EntitySet Name="SupplierTypes" EntityType="Self.SupplierType" />
     <EntitySet Name="SystemControlSequences" EntityType="Self.SystemControlSequence" />
     <EntitySet Name="TaxConfigurations" EntityType="Self.TaxConfiguration" />
@@ -6706,10 +6576,6 @@
       <End Role="BranchMaster" EntitySet="BranchMasters" />
       <End Role="SalesInvoice" EntitySet="SalesInvoices" />
     </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_BranchMaster" Association="Self.FK_SupplierMaster_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMasters" />
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-    </AssociationSet>
     <AssociationSet Name="FK_Products_Category" Association="Self.FK_Products_Category">
       <End Role="Category" EntitySet="Categories" />
       <End Role="Products" EntitySet="Products" />
@@ -6725,10 +6591,6 @@
     <AssociationSet Name="FK_LocationMaster_CityMaster" Association="Self.FK_LocationMaster_CityMaster">
       <End Role="CityMaster" EntitySet="CityMasters" />
       <End Role="LocationMaster" EntitySet="LocationMasters" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_CityMaster" Association="Self.FK_SupplierMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMasters" />
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
     </AssociationSet>
     <AssociationSet Name="FK_tblDepot_CityMaster" Association="Self.FK_tblDepot_CityMaster">
       <End Role="CityMaster" EntitySet="CityMasters" />
@@ -6773,10 +6635,6 @@
     <AssociationSet Name="FK_SalesInvoice_CurrencyMaster" Association="Self.FK_SalesInvoice_CurrencyMaster">
       <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
       <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_CurrencyMaster" Association="Self.FK_SupplierMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomerEnquiry_CustomerMaster" Association="Self.FK_CustomerEnquiry_CustomerMaster">
       <End Role="CustomerMaster" EntitySet="CustomerMasters" />
@@ -7078,10 +6936,6 @@
       <End Role="Products" EntitySet="Products" />
       <End Role="JobEnquiryDetails" EntitySet="JobEnquiryDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_LocationMaster" Association="Self.FK_SupplierMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMasters" />
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-    </AssociationSet>
     <AssociationSet Name="FK_ProductItemMaster_ProductItemMaster" Association="Self.FK_ProductItemMaster_ProductItemMaster">
       <End Role="ProductCategoryMaster" EntitySet="ProductCategoryMasters" />
       <End Role="ProductItemMaster" EntitySet="ProductItemMasters" />
@@ -7102,10 +6956,6 @@
       <End Role="Products" EntitySet="Products" />
       <End Role="SalesInvoiceDetails" EntitySet="SalesInvoiceDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_SupplierMaster" Association="Self.FK_PurchaseInvoice_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
-    </AssociationSet>
     <AssociationSet Name="FK_PurchaseInvoiceDetails_PurchaseInvoice" Association="Self.FK_PurchaseInvoiceDetails_PurchaseInvoice">
       <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
       <End Role="PurchaseInvoiceDetails" EntitySet="PurchaseInvoiceDetails" />
@@ -7113,10 +6963,6 @@
     <AssociationSet Name="FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" Association="Self.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice">
       <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
       <End Role="tblPurchaseInvoiceOtherCharges" EntitySet="tblPurchaseInvoiceOtherCharges" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrder_SupplierMaster" Association="Self.FK_PurchaseOrder_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
     </AssociationSet>
     <AssociationSet Name="FK_PurchaseOrderDetails_PurchaseOrder" Association="Self.FK_PurchaseOrderDetails_PurchaseOrder">
       <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
@@ -7133,14 +6979,6 @@
     <AssociationSet Name="FK_tblSalesInvoiceOtherCharges_SalesInvoice" Association="Self.FK_tblSalesInvoiceOtherCharges_SalesInvoice">
       <End Role="SalesInvoice" EntitySet="SalesInvoices" />
       <End Role="tblSalesInvoiceOtherCharges" EntitySet="tblSalesInvoiceOtherCharges" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_SupplierType" Association="Self.FK_SupplierMaster_SupplierType">
-      <End Role="SupplierType" EntitySet="SupplierTypes" />
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSupplierAdjustment_SupplierMaster" Association="Self.FK_tblSupplierAdjustment_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
-      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustments" />
     </AssociationSet>
     <AssociationSet Name="FK_tblAgentCollectionRateDetail_tblAgentCollectionRate" Association="Self.FK_tblAgentCollectionRateDetail_tblAgentCollectionRate">
       <End Role="tblAgentCollectionRate" EntitySet="tblAgentCollectionRates" />
@@ -9719,6 +9557,31 @@
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetails" />
     </AssociationSet>
     <EntitySet Name="AccountHeadControls" EntityType="DB_9F57C4_couriertest_newModel.AccountHeadControl" />
+    <EntitySet Name="SupplierMasters" EntityType="DB_9F57C4_couriertest_newModel.SupplierMaster" />
+    <AssociationSet Name="FK_SupplierMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMasters" />
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierMaster_CurrencyMaster" Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CurrencyMaster">
+      <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseInvoice_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster">
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster">
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierMaster_SupplierType" Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType">
+      <End Role="SupplierType" EntitySet="SupplierTypes" />
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblSupplierAdjustment_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster">
+      <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustments" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13296,4 +13159,115 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ControlName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="SupplierMaster">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="StatusActive" Type="Boolean" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="SupplierTypeID" Type="Int32" />
+    <Property Name="RegistrationNo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CountryName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="CityName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="LocationName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MaxCreditDays" Type="Int32" />
+    <Property Name="MaxCreditLimit" Type="Double" />
+    <Property Name="RevenueTypeIds" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="ExportCode" Type="Int32" />
+    <Property Name="StatusInventory" Type="Boolean" />
+    <Property Name="StatusReserved" Type="Boolean" />
+    <Property Name="POBoxNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="SupplierMaster" ToRole="BranchMaster" />
+    <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_CurrencyMaster" FromRole="SupplierMaster" ToRole="CurrencyMaster" />
+    <NavigationProperty Name="PurchaseInvoices" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster" FromRole="SupplierMaster" ToRole="PurchaseInvoice" />
+    <NavigationProperty Name="PurchaseOrders" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" FromRole="SupplierMaster" ToRole="PurchaseOrder" />
+    <NavigationProperty Name="SupplierType" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
+    <NavigationProperty Name="tblSupplierAdjustments" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
+  </EntityType>
+  <Association Name="FK_SupplierMaster_BranchMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="SupplierMaster">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierMaster_CurrencyMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CurrencyMaster">
+        <PropertyRef Name="CurrencyID" />
+      </Principal>
+      <Dependent Role="SupplierMaster">
+        <PropertyRef Name="CurrencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseInvoice_SupplierMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.PurchaseInvoice" Role="PurchaseInvoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierMaster">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="PurchaseInvoice">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_SupplierMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierMaster">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierMaster_SupplierType">
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierType" Role="SupplierType" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierType">
+        <PropertyRef Name="SupplierTypeID" />
+      </Principal>
+      <Dependent Role="SupplierMaster">
+        <PropertyRef Name="SupplierTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblSupplierAdjustment_SupplierMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.tblSupplierAdjustment" Role="tblSupplierAdjustment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierMaster">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="tblSupplierAdjustment">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

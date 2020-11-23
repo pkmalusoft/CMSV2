@@ -27,6 +27,10 @@ namespace CMSV2.Models
         public string remark1 { get; set; }
         public int TotalAmt { get; set; }
 
+        public int SupplierId { get; set; }
+        public int SupplierName { get; set; }
+        public int SupplierTRNNo { get; set; }
+
         public string AcJournalDetail { get; set; }
         public string AcHeadAllocation { get; set; }
 

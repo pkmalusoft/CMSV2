@@ -189,6 +189,7 @@
     <Property Name="TaxPercent" Type="numeric" Precision="10" Scale="2" />
     <Property Name="TaxAmount" Type="numeric" Precision="18" Scale="2" />
     <Property Name="AmountIncludingTax" Type="bit" Nullable="false" />
+    <Property Name="SupplierId" Type="int" />
   </EntityType>
   <EntityType Name="AcJournalMaster">
     <Key>
@@ -3126,15 +3127,24 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have
     <Property Name="Fax" Type="nvarchar" MaxLength="50" />
     <Property Name="Email" Type="nvarchar" MaxLength="50" />
     <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
-    <Property Name="CountryID" Type="int" />
-    <Property Name="CityID" Type="int" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="StatusActive" Type="bit" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="MobileNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="LocationID" Type="int" />
     <Property Name="BranchID" Type="int" />
     <Property Name="SupplierTypeID" Type="int" />
+    <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
+    <Property Name="CountryName" Type="varchar" MaxLength="500" />
+    <Property Name="CityName" Type="varchar" MaxLength="500" />
+    <Property Name="LocationName" Type="varchar" MaxLength="500" />
+    <Property Name="MaxCreditDays" Type="int" />
+    <Property Name="MaxCreditLimit" Type="float" />
+    <Property Name="RevenueTypeIds" Type="varchar" MaxLength="1000" />
+    <Property Name="ExportCode" Type="int" />
+    <Property Name="StatusInventory" Type="bit" />
+    <Property Name="StatusReserved" Type="bit" />
+    <Property Name="POBoxNo" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="400" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -5078,18 +5088,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_InScanInternationalDeatils_InScan">
-    <End Role="InScan" Type="Self.InScan" Multiplicity="1" />
-    <End Role="InScanInternationalDeatils" Type="Self.InScanInternationalDeatils" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScan">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="InScanInternationalDeatils">
-        <PropertyRef Name="InScanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_InScanInternationalDeatils_InScanInternational">
     <End Role="InScanInternational" Type="Self.InScanInternational" Multiplicity="1" />
     <End Role="InScanInternationalDeatils" Type="Self.InScanInternationalDeatils" Multiplicity="*" />
@@ -5099,18 +5097,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Principal>
       <Dependent Role="InScanInternationalDeatils">
         <PropertyRef Name="InscanInternationalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InScanInternationalDeatils_OtherCharge">
-    <End Role="OtherCharge" Type="Self.OtherCharge" Multiplicity="0..1" />
-    <End Role="InScanInternationalDeatils" Type="Self.InScanInternationalDeatils" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="OtherCharge">
-        <PropertyRef Name="OtherChargeID" />
-      </Principal>
-      <Dependent Role="InScanInternationalDeatils">
-        <PropertyRef Name="Type" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -5706,18 +5692,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SupplierMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_SupplierMaster_CurrencyMaster">
     <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
     <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
@@ -5727,18 +5701,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Principal>
       <Dependent Role="SupplierMaster">
         <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="LocationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -9424,16 +9386,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       <End Role="InScan" EntitySet="InScan" />
       <End Role="InScanDomestic" EntitySet="InScanDomestic" />
     </AssociationSet>
-    <AssociationSet Name="FK_InScanInternationalDeatils_InScan" Association="Self.FK_InScanInternationalDeatils_InScan">
-      <End Role="InScan" EntitySet="InScan" />
-      <End Role="InScanInternationalDeatils" EntitySet="InScanInternationalDeatils" />
-    </AssociationSet>
     <AssociationSet Name="FK_InScanInternationalDeatils_InScanInternational" Association="Self.FK_InScanInternationalDeatils_InScanInternational">
       <End Role="InScanInternational" EntitySet="InScanInternational" />
-      <End Role="InScanInternationalDeatils" EntitySet="InScanInternationalDeatils" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InScanInternationalDeatils_OtherCharge" Association="Self.FK_InScanInternationalDeatils_OtherCharge">
-      <End Role="OtherCharge" EntitySet="OtherCharge" />
       <End Role="InScanInternationalDeatils" EntitySet="InScanInternationalDeatils" />
     </AssociationSet>
     <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="Self.FK_InscanOtherCharge_InScan">
@@ -9632,16 +9586,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       <End Role="BranchMaster" EntitySet="BranchMaster" />
       <End Role="SupplierMaster" EntitySet="SupplierMaster" />
     </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_CityMaster" Association="Self.FK_SupplierMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-    </AssociationSet>
     <AssociationSet Name="FK_SupplierMaster_CurrencyMaster" Association="Self.FK_SupplierMaster_CurrencyMaster">
       <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_LocationMaster" Association="Self.FK_SupplierMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
       <End Role="SupplierMaster" EntitySet="SupplierMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_SupplierMaster_SupplierType" Association="Self.FK_SupplierMaster_SupplierType">

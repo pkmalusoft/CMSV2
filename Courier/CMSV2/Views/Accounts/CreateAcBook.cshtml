@@ -3,15 +3,20 @@
     ViewBag.Title = "Cash and Bank Book";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
 <style>
     #details tr {
         height: 32px;
     }
-    #details tr:first-of-type {
-        background: #35b8eb;
-        color: #fff;
-    }
+
+        #details tr:first-of-type {
+            background: #35b8eb;
+            color: #fff;
+        }
 
     .headinglabel {
         font-family: Calibri;
@@ -28,9 +33,9 @@
         width: 100%;
         margin: 0 auto;
         max-width: 900px;*/
-        padding-top: 14px;
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
         width: 96%;
     }
 
@@ -55,23 +60,30 @@
         var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
-        var ed = new Date(enddate);
+        var ed = new Date(enddate);        
         var Receivedfromval = 0;
+       
         $(function () {
-            $("#transdate").datepicker({
-                dateFormat: 'dd-M-yy',
-                changeYear: true, changeMonth: true,
-                minDate: sd,
-                maxDate: ed,
+            //$("#transdate").datepicker({
+            //    dateFormat: 'dd-M-yy',
+            //    changeYear: true, changeMonth: true,
+            //    minDate: sd,
+            //    maxDate: ed,
+            //});
+
+              $('#transdate').datetimepicker({
+                //maxDate: ed,
+                //minDate: sd,
+                format: 'DD-MM-YYYY'
             });
+           
         });
 
         $(function () {
-            $("#chequedate").datepicker({
-                dateFormat: 'dd-M-yy',
-                changeYear: true, changeMonth: true,
-                minDate: sd,
-                maxDate: ed,
+            $("#chequedate").datetimepicker({
+                //maxDate: ed,
+                //minDate: sd,
+                format: 'DD-MM-YYYY'
             });
         });
         $("#ReceivedFrom").keydown(function (event) {
@@ -87,7 +99,7 @@
         //    if (e.which == 8 || e.which == 46) {
         //        $('#SelectedReceivedFrom').val(0)
         //        //Keypressfunc(Receivedfromval, e.which);
-        //    } 
+        //    }
 
         //});
         //$("#ReceivedFrom").keydown(function (e,ui,data) {
@@ -117,11 +129,14 @@
         function GetCurrentDate() {
             var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             var startdate = '@Session["FyearFrom"].ToString()';
-            var sd = new Date(startdate);
-            var curr_date = sd.getDate();
-            var curr_month = sd.getMonth();
-            var curr_year = sd.getFullYear();
-            return (curr_date + "-" + m_names[curr_month] + "-" + curr_year);
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
+
+            var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+            //var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+            return (curr_date + "-" + curr_month + "-" + curr_year);
         }
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
@@ -328,17 +343,21 @@
                 if ($("#AmountIncludingTax").is(':checked')) {
                     amounttaxcheck = '<i class="fa fa-check"></i>';
                 }
-                var objHtml = '<tr>' + '<td style="padding-left:10px">' + $("#ReceivedFrom").val() + '<input type="hidden" class=JAcHead value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px">' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px">' + parseFloat($("#TaxPercent").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px">' + parseFloat($("#TaxAmount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px">' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJDetailVM[' + i + '].Rem"></td>';
+                
+                var objHtml = '<tr>' + '<td style="padding-left:10px">' + $("#ReceivedFrom").val() + '<input type="hidden" class=JAcHead value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px">' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px">' + parseFloat($("#TaxPercent").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px">' + parseFloat($("#TaxAmount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px">' + $("#SupplierName").val() + '<input type="hidden" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID"></td>' + '<td style="padding-left:10px">' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJDetailVM[' + i + '].Rem"></td>';
                 objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                 objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
                 objHtml = objHtml + '</tr>';
+                console.log(objHtml);
                 $("#details").append(objHtml);
                 $('#RowCount').val("0");
                 $("#ExpAllocationTable").find("tr:gt(0)").remove();
                 $("#ReceivedFrom").val("");
                 $("#TaxPercent").val("");
                 $("#TaxAmount").val("");
-                $("#SelectedReceivedFrom").val("0");
+                $("#SelectedReceivedFrom").val("0");                
+                $("#SupplierID").val(0);
+                $("#SupplierName").val('');
                 $("#amount").val('');
                 $("#remark1").val('');
             }
@@ -477,7 +496,7 @@
                 }
             }
         });
-        
+
         $("#TaxPercent").change(function () {
             if ($("#AmountIncludingTax").is(':checked')) {
                 if ($("#TaxPercent").val() > 0 && $("#amount").val() > 0) {
@@ -546,7 +565,7 @@
                     }
                 })
             }, minLength: 1,
-            autoFocus: true, 
+            autoFocus: true,
             select: function (e, i) {
                 e.preventDefault();
                 $("#AcHeadAllocation").val(i.item.label);
@@ -582,23 +601,55 @@
                 })
             },
             minLength: 1,
-            autoFocus:true,           
+            autoFocus:true,
             select: function (e, i) {
                 e.preventDefault();
                 $("#ReceivedFrom").val(i.item.label);
                 $('#SelectedReceivedFrom').val(i.item.AcHeadID);
                 $('#TaxPercent').val(i.item.TaxPercent);
-                
+
             },
-           
+
         });
-       
+
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/Supplier',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierInfo,
+                                value: val.SupplierInfo,
+                                SupplierID: val.SupplierID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierID').val(i.item.SupplierID);
+
+
+
+            },
+
+        });
+
     });
 </script>
 
 
 <section class="content-header">
-    <h1 class="headingfont">Cash and Bank Book</h1>
+    <h1 class="headingfont">Cash and Bank Book - Create</h1>
 </section>
 
 
@@ -627,7 +678,7 @@
                     @Html.HiddenFor(Model => Model.TransactionType)
                 </div>
             </div>
-             <div class="row no-margin" style="padding-top:10px">
+            <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-4">
                     <label class="headinglabel">Payment Type</label>
                     @Html.DropDownListFor(model => model.paytype, ViewBag.paytypes as SelectList, new { @class = "form-control" })
@@ -639,7 +690,7 @@
                     @Html.TextBoxFor(model => model.reference, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.reference)
                 </div>
-                  <div class="col-md-4">
+                <div class="col-md-4">
                     <label class="headinglabel">Cash/Bank Accounts</label>
                     <input type="text" id="AcHead" value="" class="form-control" autocomplete="off" />
                     @Html.HiddenFor(model => model.SelectedAcHead, new { Value = "0", id = "SelectedAcHead" })
@@ -647,7 +698,7 @@
             </div>
             <div class="row no-margin" style="padding-top:10px">
 
-              
+
                 <div class="col-md-12">
                     <label class="headinglabel">Narration</label>
                     @Html.TextAreaFor(model => model.remarks, new { @class = "form-control" })
@@ -700,19 +751,20 @@
         <div class="row no-margin">
             <h4 style="color:#0094ff">Add Details</h4>
             <hr style="margin-bottom:0px" />
-        </div>        
+        </div>
         <div class="row no-margin">
             <div class="col-md-3">
                 <label class="headinglabel label1">Received From</label>
+                <div class="checkboxdesign text-right" style="float:right">
+                    @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" }) &nbsp
+                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Inc. Tax</label>
+                </div>
                 <input type="text" id="ReceivedFrom" name="ReceivedFrom" class="form-control" autocomplete="off" />
                 @Html.HiddenFor(model => model.SelectedReceivedFrom, new { Value = "0", id = "SelectedReceivedFrom" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <label class="headinglabel">Amount</label>
-                <div class="checkboxdesign text-right" style="float:right">
-                    @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" }) &nbsp
-                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Including Tax</label>
-                </div>
+                
                 @Html.TextBoxFor(model => model.amount, new { @class = "form-control textright txtNum" })
                 @Html.ValidationMessageFor(model => model.amount)
             </div>
@@ -726,10 +778,15 @@
                 @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control textright txtNum", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.TaxAmount)
             </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Remark</label>
+            <div class="col-md-2">
+                <label class="headinglabel">Remark/Reference</label>
                 @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.remark1)
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel label1">Supplier</label>
+                <input type="text" id="SupplierName" name="SupplierName" class="form-control" autocomplete="off" />
+                @Html.HiddenFor(model => model.SupplierId, new { Value = "0", id = "SupplierID" })
             </div>
             <div class="col-md-2">
                 <label class="headinglabel">Exp. Allocation</label>
@@ -749,11 +806,14 @@
         <div class="row no-margin" style="padding-top:10px">
             <table class="table table-bordered table-responsive" id="details" style="background-color:white">
                 <tr>
-                    <td style="width:25%">AcHead</td>
+                    <td style="width:15%">AcHead</td>
+                    <td style="width:2%">Tax</td>
                     <td style="width:10%">Amount</td>
                     <td style="width:5%">Tax%</td>
-                    <td style="width:5%">Tax Amt</td>
-                    <td style="width:15%">Remark</td>
+                    <td style="width:5%">Tax Amt.</td>
+                    <td style="width:10%">Supplier</td>
+                    <td style="width:15%">Remark/Ref No.</td>
+
                     <td style="width:15%">Exp. Allocation</td>
                     <td style="width:5%">Delete</td>
                 </tr>
@@ -872,6 +932,8 @@
                     });
                 });
                 function ClearData() {
+                    $("#SupplierID").val(0);
+                    $("#SupplierName").val('');
                     $("#ReceivedFrom").val('');
                     $("#SelectedReceivedFrom").val(0);
                     $("#amount").val('');
