@@ -13,11 +13,13 @@
         height: 32px;
     }
 
-        #details tr:first-of-type {
+        #details tr:first-of-type ,#ExpAllocationTable tr:first-of-type{
             background: #35b8eb;
             color: #fff;
         }
-
+    .taxCheck input{
+        margin-right: 6px;
+    }
     .headinglabel {
         font-family: Calibri;
         font-size: 16px;
@@ -700,7 +702,7 @@
 
 
                 <div class="col-md-12">
-                    <label class="headinglabel">Narration</label>
+                    <label class="headinglabel">Remarks/Narration</label>
                     @Html.TextAreaFor(model => model.remarks, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.remarks)
                     <span id="balance"></span>
@@ -753,18 +755,18 @@
             <hr style="margin-bottom:0px" />
         </div>
         <div class="row no-margin">
-            <div class="col-md-3">
-                <label class="headinglabel label1">Received From</label>
-                <div class="checkboxdesign text-right" style="float:right">
-                    @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" }) &nbsp
-                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Inc. Tax</label>
-                </div>
+            <div class="col-md-2">
+                <label class="headinglabel label1">Paid to</label>
+               
                 <input type="text" id="ReceivedFrom" name="ReceivedFrom" class="form-control" autocomplete="off" />
                 @Html.HiddenFor(model => model.SelectedReceivedFrom, new { Value = "0", id = "SelectedReceivedFrom" })
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <label class="headinglabel">Amount</label>
-                
+                 <div class="checkboxdesign taxCheck text-right" style="float:right; margin-right:2px">
+                    @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" })
+                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important;padding-left: 0!important;margin-top: 9px;font-size:13px">Including Tax</label>
+                </div>
                 @Html.TextBoxFor(model => model.amount, new { @class = "form-control textright txtNum" })
                 @Html.ValidationMessageFor(model => model.amount)
             </div>
@@ -774,26 +776,27 @@
                 @Html.ValidationMessageFor(model => model.TaxPercent)
             </div>
             <div class="col-md-1">
-                <label class="headinglabel">Tax Amount</label>
+                <label class="headinglabel">Tax Amt</label>
                 @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control textright txtNum", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.TaxAmount)
             </div>
             <div class="col-md-2">
-                <label class="headinglabel">Remark/Reference</label>
-                @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.remark1)
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel label1">Supplier</label>
+                <label class="headinglabel">Supplier</label>
                 <input type="text" id="SupplierName" name="SupplierName" class="form-control" autocomplete="off" />
                 @Html.HiddenFor(model => model.SupplierId, new { Value = "0", id = "SupplierID" })
             </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Reference</label>
+                @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.remark1)
+            </div>
+            
             <div class="col-md-2">
                 <label class="headinglabel">Exp. Allocation</label>
                 <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
             </div>
             <div class="col-md-2">
-                <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" onclick="ClearData()">-</button>&nbsp;&nbsp;
+               
                 <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" class="addmore">+</button>
             </div>
 
@@ -835,7 +838,7 @@
         <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
 
         </div>
-        <div class="col-md-6 col-md-offset-3" data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;padding:10px" id="popup">
+        <div class="col-md-6 " data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;border-radius: 5px;margin:auto;padding:20px" id="popup">
             <div class="row">
                 <div class="col-md-5">
                     <label class="headinglabel">Analysis Head</label>
@@ -847,12 +850,9 @@
                     <input type="text" class="text-right form-control txtNum" id="ExpAmount" value="0" />
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel">Action</label>
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;" index="1" id="AddExpAllocation" class="addmore">+</button>&nbsp;&nbsp;
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;border:none" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>
-
-
+                    <button type="button" style="margin-top:30px; " index="1" id="AddExpAllocation" class="addmore small_btn btn btn-primary"><i style="font-size:21px" class="fa fa-plus"></i></button>
                 </div>
+                 <button type="button" class="btn btn-danger"style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-11px;right:-10px;outline:" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>
             </div>
             <br />
             @*<div class="row">

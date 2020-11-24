@@ -1,61 +1,61 @@
 ﻿@model IEnumerable<CMSV2.Models.CustomerInvoiceVM>
-    @{
-        int i = 0;
-        var _decimal = @Session["Decimal"].ToString();
+@{
+    int i = 0;
+    var _decimal = @Session["Decimal"].ToString();  
     }
 
-    <thead>
+<thead>
+    <tr>
+        <th>
+            Invoice No.
+        </th>
+        <th>
+            Invoice Date
+        </th>
+        <th>
+            Customer Name
+        </th>
+        <th>Invoice Amount</th>
+        <th width="5%"></th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                Invoice No.
-            </th>
-            <th>
-                Invoice Date
-            </th>
-            <th>
-                Customer Name
-            </th>
-            <th>Invoice Amount</th>
-            <th width="5%"></th>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerInvoiceNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceDate)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceTotal)
+
+            </td>
+            <td style="font-size:13px" >
+                @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
+                <a  class="aprint" target="_blank" href="InvoicePrint?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>
+
+                <a class="aview"  href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a><br />                
+                
+                <a  class="aedit" href="Edit?id=@item.CustomerInvoiceID"><i class="fa fa-pencil"></i></a>
+                
+                <a class="adelete"  href="#" onclick="Delete(@item.CustomerInvoiceID)"><i class="fa fa-times"></i></a>
+
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerInvoiceNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InvoiceDate)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InvoiceTotal)                   
-
-                </td>
-                <td style="font-size:13px">
-                    @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
-                    <a target="_blank" href="InvoicePrint?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>
-
-                    <a href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a><br />
-
-                    <a href="Edit?id=@item.CustomerInvoiceID"><i class="fa fa-pencil"></i></a>
-
-                    <a href="#" onclick="Delete(@item.CustomerInvoiceID)"><i class="fa fa-times"></i></a>
-
-                </td>
-            </tr>
+    }
+</tbody>
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure? You want to Delete this Invoice?")) {
+            window.location.href = "/CustomerInvoice/DeleteConfirmed/?id=" + ID;
         }
-    </tbody>
-    <script type="text/javascript">
-        function Delete(ID) {
-            if (confirm("Are you sure? You want to Delete this Invoice?")) {
-                window.location.href = "/CustomerInvoice/DeleteConfirmed/?id=" + ID;
-            }
-        }
-    </script>
-    
+    }
+</script>
+

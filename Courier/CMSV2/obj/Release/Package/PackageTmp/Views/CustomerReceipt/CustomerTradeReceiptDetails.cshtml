@@ -3,7 +3,7 @@
     ViewBag.Title = "ClientRecieptDetails";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var isadd = true;
-    string path = Request.Url.AbsolutePath.ToLower();
+    string path = "/CustomerReceipt/CustomerTradeReceiptDetails/0";
 
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
     {
@@ -234,11 +234,18 @@
                 <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
             </div>*@
 
-        <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+    <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+        @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+        {
+            <a href='@Url.Action("CustomerTradeReceipt", "CustomerReceipt", new { id = 0 })' class="btn btn-primary  btnwidth" data-toggle="tooltip" disabled  data-placement="right" title="Click here">Create New</a>
+        }
+        else
+        {
             <a href='@Url.Action("CustomerTradeReceipt", "CustomerReceipt", new { id = 0 })' class="btn btn-primary  btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Create New</a>
+        }
 
 
-        </div>
+    </div>
     </div>
     <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px" id="result">
 

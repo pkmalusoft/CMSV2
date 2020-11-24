@@ -73,9 +73,12 @@
             margin-bottom: 5px;
             font-size:20px;
         }
+        #DeleteAllocationRow{
+            color:#dd4b39!important;
+        }
         #AllocationClose{
             color: #fff;
-            background-color: #35b8eb !important;
+            background-color: #3e3f3f !important;
             border-radius: 5px;
             border: 0;
             font-size: 14px;
@@ -1277,7 +1280,8 @@
         <div class="col-md-5 pull-right text-right">
             <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
             @*<h5>Delivered</h5>*@
-            <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important'>@ViewBag.StatusType</h4><h5 class="pull-right" id="h4courierstatus" style='color:red'>@ViewBag.CourierStatus</h5>
+            <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important;display:inline-block;padding-right:5px;margin:0'>@ViewBag.StatusType</h4>
+            <h5 class="" id="h4courierstatus" style='color:red;display:inline-block;'>@ViewBag.CourierStatus</h5>
         </div>
 
     </div>
@@ -1371,7 +1375,13 @@
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
             <div class="col-md-4">
+                 <div class="flexTitle">
                 <label class="headinglabel required">Customer</label>
+                 <div class="checkboxdesign text-right" style="float:right">
+                                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">copy address to shipper</label>
+                                </div>
+                            </div>
                 @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget" })
                 @Html.TextBoxFor(model => model.customer, new { @class = "form-control txttarget", @required = "true" })
                 @*<input type="text" id="Consignor" name="Consignor" class="form-control" autocomplete="off" />*@
@@ -1389,10 +1399,7 @@
                             <div class="flexTitle">
                                 <h3 style="color:white; margin-top:10px">CONSIGNOR/SHIPPER DETAILS</h3>
 
-                                <div class="checkboxdesign text-right" style="float:right">
-                                    @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
-                                    <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Copy Address from Customer</label>
-                                </div>
+                               
                             </div>
 
                         </div>
@@ -1737,8 +1744,8 @@
                                                             @item.Amount
                                                             <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
                                                         </td>
-                                                        <td>
-                                                            <a href="javascript:void(0)" id="DeleteAllocationRow" class="deleteallocrow" ><i class="fa fa-times"></i></a>
+                                                        <td style="text-align: center;">
+                                                            <a href="javascript:void(0)" id="DeleteAllocationRow"  ><i class="fa fa-times"></i></a>
                                                         </td>
                                                     </tr>
                                                     otherchargecount++;
