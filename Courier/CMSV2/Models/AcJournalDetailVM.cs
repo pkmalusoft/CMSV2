@@ -5,8 +5,17 @@ using System.Web;
 
 namespace CMSV2.Models
 {
+    public class VoucherTypeVM
+    {
+        public string TypeName { get; set; }
+    }
+    public class AcJournalMasterVM:AcJournalMaster
+    {
+        public decimal Amount { get; set; }
+    }
     public class AcJournalDetailVM
     {
+        public bool IsDeleted { get; set; }
         public int AcHeadID { get; set; }
         public string AcHead { get; set; }
         public string Rem { get; set; }

@@ -739,10 +739,30 @@ new AcGroupModel()
 
 
 
-        public ActionResult AcJournalVoucherIndex()
+        public ActionResult AcJournalVoucherIndex(string FromDate, string ToDate)
         {
+            DateTime pFromDate;
+            DateTime pToDate;
+            int pStatusId = 0;
+            
+            if (FromDate == null || ToDate == null)
+            {
+                pFromDate = DateTimeOffset.Now.Date;//.AddDays(-1); // FromDate = DateTime.Now;
+                pToDate = DateTime.Now.Date; // ToDate = DateTime.Now;
+            }
+            else
+            {
+                pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
+                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
 
-            return View(db.AcJournalMasterSelectAllJV(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString())));
+            }
+            List<AcJournalMaster> lst = AccountsDAO.AcJournalMasterSelect(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString()), pFromDate.Date, pToDate.Date);
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
+            return View(lst);
+
+
+//            return View(db.AcJournalMasterSelectAllJV(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString())));
         }
 
         public ActionResult AcJournalVoucherCreate()
@@ -783,26 +803,29 @@ new AcGroupModel()
 
             for (int i = 0; i < data.acJournalDetailsList.Count; i++)
             {
-                AcJournalDetail acjournalDetails = new AcJournalDetail();
-                if (data.acJournalDetailsList[i].IsDebit == 1)
+                if (data.acJournalDetailsList[i].IsDeleted != true)
                 {
-                    acjournalDetails.Amount = Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
-                }
-                else
-                {
-                    acjournalDetails.Amount = (-1) * Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
-                }
+                    AcJournalDetail acjournalDetails = new AcJournalDetail();
+                    if (data.acJournalDetailsList[i].IsDebit == 1)
+                    {
+                        acjournalDetails.Amount = Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
+                    }
+                    else
+                    {
+                        acjournalDetails.Amount = (-1) * Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
+                    }
 
-                acjournalDetails.AcJournalID = acJournalMaster.AcJournalID;
-                acjournalDetails.AcHeadID = data.acJournalDetailsList[i].acHeadID;
-                acjournalDetails.Remarks = data.acJournalDetailsList[i].AcRemark;
-                acjournalDetails.BranchID = Convert.ToInt32(Session["CurrentCompanyID"]);
-                int maxAcJDetailID = 0;
-                maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+                    acjournalDetails.AcJournalID = acJournalMaster.AcJournalID;
+                    acjournalDetails.AcHeadID = data.acJournalDetailsList[i].acHeadID;
+                    acjournalDetails.Remarks = data.acJournalDetailsList[i].AcRemark;
+                    acjournalDetails.BranchID = Convert.ToInt32(Session["CurrentCompanyID"]);
+                    int maxAcJDetailID = 0;
+                    maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
 
-                acjournalDetails.AcJournalDetailID = maxAcJDetailID + 1;
-                db.AcJournalDetails.Add(acjournalDetails);
-                db.SaveChanges();
+                    acjournalDetails.AcJournalDetailID = maxAcJDetailID + 1;
+                    db.AcJournalDetails.Add(acjournalDetails);
+                    db.SaveChanges();
+                }
             }
             ViewBag.SuccessMsg = "You have successfully added Journal Voucher.";
             return RedirectToAction("AcJournalVoucherIndex");
@@ -856,7 +879,8 @@ new AcGroupModel()
             obj.StatusDelete = false;
             //obj.ShiftID = null;
             obj.Remarks = data.Remark;
-            obj.AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            obj.BranchID= Convert.ToInt32(Session["CurrentBranchID"].ToString());
             obj.Reference = data.Refference;
             db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
@@ -873,27 +897,30 @@ new AcGroupModel()
 
             for (int i = 0; i < data.acJournalDetailsList.Count; i++)
             {
-                AcJournalDetail acjournalDetails = new AcJournalDetail();
-                int maxAcJDetailID = 0;
-                maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-
-                acjournalDetails.AcJournalDetailID = maxAcJDetailID + 1;
-                if (data.acJournalDetailsList[i].IsDebit == 1)
+                if (data.acJournalDetailsList[i].IsDeleted != true)
                 {
-                    acjournalDetails.Amount = Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
-                }
-                else
-                {
-                    acjournalDetails.Amount = (-1) * Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
-                }
+                    AcJournalDetail acjournalDetails = new AcJournalDetail();
+                    int maxAcJDetailID = 0;
+                    maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+
+                    acjournalDetails.AcJournalDetailID = maxAcJDetailID + 1;
+                    if (data.acJournalDetailsList[i].IsDebit == 1)
+                    {
+                        acjournalDetails.Amount = Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
+                    }
+                    else
+                    {
+                        acjournalDetails.Amount = (-1) * Convert.ToDecimal(data.acJournalDetailsList[i].Amount);
+                    }
 
 
-                acjournalDetails.AcJournalID = obj.AcJournalID;
-                acjournalDetails.AcHeadID = data.acJournalDetailsList[i].acHeadID;
-                acjournalDetails.Remarks = data.acJournalDetailsList[i].AcRemark;
-                acjournalDetails.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
-                db.AcJournalDetails.Add(acjournalDetails);
-                db.SaveChanges();
+                    acjournalDetails.AcJournalID = obj.AcJournalID;
+                    acjournalDetails.AcHeadID = data.acJournalDetailsList[i].acHeadID;
+                    acjournalDetails.Remarks = data.acJournalDetailsList[i].AcRemark;
+                    acjournalDetails.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                    db.AcJournalDetails.Add(acjournalDetails);
+                    db.SaveChanges();
+                }
             }
             ViewBag.SuccessMsg = "You have successfully added Journal Voucher.";
             return RedirectToAction("AcJournalVoucherIndex");
@@ -939,9 +966,41 @@ new AcGroupModel()
         }
 
 
-        public ActionResult IndexAcBook()
+        public ActionResult IndexAcBook(string VoucherType, string FromDate, string ToDate)
         {
-            return View(db.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())).OrderByDescending(cc=>cc.TransDate));
+            DateTime pFromDate;
+            DateTime pToDate;
+            int pStatusId = 0;
+            
+            if (VoucherType == "" || VoucherType == null)
+                VoucherType = "All";
+
+            if (FromDate == null || ToDate == null)
+            {
+                pFromDate = DateTimeOffset.Now.Date;//.AddDays(-1); // FromDate = DateTime.Now;
+                pToDate = DateTime.Now.Date; // ToDate = DateTime.Now;
+            }
+            else
+            {
+                pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
+                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+
+            }
+            List<AcJournalMasterVM> lst = AccountsDAO.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString()), pFromDate.Date, pToDate.Date,VoucherType);
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            var typeitems  = (from c in db.AcJournalMasters select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
+            foreach(VoucherTypeVM Item in typeitems)
+            {
+                lsttype.Add(Item);
+            }
+            ViewBag.VoucherType = VoucherType;
+            ViewBag.VoucherTypes = lsttype;
+            return View(lst);
+
+           //return View(db.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())).OrderByDescending(cc=>cc.TransDate));
         }
 
 
@@ -1224,59 +1283,62 @@ new AcGroupModel()
 
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
-                AcJournalDetail acJournalDetail = new AcJournalDetail();
-
-                maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-
-                acJournalDetail.AcJournalDetailID = maxAcJDetailID + 1;
-                acJournalDetail.AcHeadID = v.AcJDetailVM[i].AcHeadID;
-
-                acJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
-                acJournalDetail.AcJournalID = ajm.AcJournalID;
-                acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
-                acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
-                acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
-                acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
-                acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
-
-                if (v.AcJDetailVM[i].AmountIncludingTax==true && v.AcJDetailVM[i].TaxAmount>0)
+                if (v.AcJDetailVM[i].IsDeleted != true)
                 {
-                    v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
-                }
-                if (StatusTrans == "P")
-                {
-                    acJournalDetail.Amount = (v.AcJDetailVM[i].Amt);
-                }
-                else
-                {
-                    acJournalDetail.Amount = -v.AcJDetailVM[i].Amt;
-                }
+                    AcJournalDetail acJournalDetail = new AcJournalDetail();
 
-                db.AcJournalDetails.Add(acJournalDetail);
-                //  db.Entry(acJournalDetail).State = EntityState.Added;
-                db.SaveChanges();
-                db.Entry(acJournalDetail).State = EntityState.Detached;
+                    maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
 
-                if (v.AcJDetailVM[i].AcExpAllocationVM != null)
-                {
-                    for (int j = 0; j < v.AcJDetailVM[i].AcExpAllocationVM.Count; j++)
+                    acJournalDetail.AcJournalDetailID = maxAcJDetailID + 1;
+                    acJournalDetail.AcHeadID = v.AcJDetailVM[i].AcHeadID;
+
+                    acJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                    acJournalDetail.AcJournalID = ajm.AcJournalID;
+                    acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
+                    acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
+                    acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
+                    acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
+                    acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
+
+                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
                     {
-                        AcAnalysisHeadAllocation objAcAnalysisHeadAllocation = new AcAnalysisHeadAllocation();
-                        var maxid = (from c in db.AcAnalysisHeadAllocations orderby c.AcAnalysisHeadAllocationID descending select c.AcAnalysisHeadAllocationID).FirstOrDefault();
-                        objAcAnalysisHeadAllocation.AcAnalysisHeadAllocationID = maxid +1;
-                        objAcAnalysisHeadAllocation.AcjournalDetailID = acJournalDetail.AcJournalDetailID;
-                        objAcAnalysisHeadAllocation.AnalysisHeadID = v.AcJDetailVM[i].AcExpAllocationVM[j].AcHead;
-                        objAcAnalysisHeadAllocation.Amount = v.AcJDetailVM[i].AcExpAllocationVM[j].ExpAllocatedAmount;
-                        db.AcAnalysisHeadAllocations.Add(objAcAnalysisHeadAllocation);
-                        db.SaveChanges();
-                        db.Entry(objAcAnalysisHeadAllocation).State = EntityState.Detached;
+                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    }
+                    if (StatusTrans == "P")
+                    {
+                        acJournalDetail.Amount = (v.AcJDetailVM[i].Amt);
+                    }
+                    else
+                    {
+                        acJournalDetail.Amount = -v.AcJDetailVM[i].Amt;
+                    }
+
+                    db.AcJournalDetails.Add(acJournalDetail);
+                    //  db.Entry(acJournalDetail).State = EntityState.Added;
+                    db.SaveChanges();
+                    db.Entry(acJournalDetail).State = EntityState.Detached;
+
+                    if (v.AcJDetailVM[i].AcExpAllocationVM != null)
+                    {
+                        for (int j = 0; j < v.AcJDetailVM[i].AcExpAllocationVM.Count; j++)
+                        {
+                            AcAnalysisHeadAllocation objAcAnalysisHeadAllocation = new AcAnalysisHeadAllocation();
+                            var maxid = (from c in db.AcAnalysisHeadAllocations orderby c.AcAnalysisHeadAllocationID descending select c.AcAnalysisHeadAllocationID).FirstOrDefault();
+                            objAcAnalysisHeadAllocation.AcAnalysisHeadAllocationID = maxid + 1;
+                            objAcAnalysisHeadAllocation.AcjournalDetailID = acJournalDetail.AcJournalDetailID;
+                            objAcAnalysisHeadAllocation.AnalysisHeadID = v.AcJDetailVM[i].AcExpAllocationVM[j].AcHead;
+                            objAcAnalysisHeadAllocation.Amount = v.AcJDetailVM[i].AcExpAllocationVM[j].ExpAllocatedAmount;
+                            db.AcAnalysisHeadAllocations.Add(objAcAnalysisHeadAllocation);
+                            db.SaveChanges();
+                            db.Entry(objAcAnalysisHeadAllocation).State = EntityState.Detached;
+                        }
                     }
                 }
-
             }
 
             ViewBag.SuccessMsg = "You have successfully added Record";
-            return View("IndexAcBook", db.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+           // return View("IndexAcBook", db.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+            return RedirectToAction("IndexAcBook");
 
         }
 
@@ -1315,7 +1377,7 @@ new AcGroupModel()
             ajm.ShiftID = null;
             ajm.PaymentType = v.paytype;
 
-            //ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ajm.Reference = v.reference;
 
@@ -1396,90 +1458,92 @@ new AcGroupModel()
 
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
-                AcJournalDetail acJournalDetail = new AcJournalDetail();
-                int IdExists = 0;
-                if (v.AcJDetailVM[i].AcJournalDetID > 0)
+                if (v.AcJDetailVM[i].IsDeleted != true)
                 {
-                    //  IdExists = (from c in db.AcJournalDetails where c.AcJournalDetailID == v.AcJDetailVM[i].AcJournalDetID select c.AcJournalDetailID).FirstOrDefault();
-                    IdExists = v.AcJDetailVM[i].AcJournalDetID;
-                }
-                //  AcJournalDetID
-                if (IdExists > 0)
-                {
-                    acJournalDetail.AcJournalDetailID = v.AcJDetailVM[i].AcJournalDetID;
-                }
-                else
-                {
-                    maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-                    acJournalDetail.AcJournalDetailID = maxAcJDetailID + 1;
-                }
-                acJournalDetail.AcHeadID = v.AcJDetailVM[i].AcHeadID;
-                acJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
-                acJournalDetail.AcJournalID = ajm.AcJournalID;
-                acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
-                acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
-                acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
-                acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
-                acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
-                if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
-                {
-                    v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
-                }
-
-                if (StatusTrans == "P")
-                {
-                    acJournalDetail.Amount = (v.AcJDetailVM[i].Amt);
-                }
-                else
-                {
-                    acJournalDetail.Amount = -v.AcJDetailVM[i].Amt;
-                }
-                if (acJournalDetail.AnalysisHeadID == null)
-                {
-                    acJournalDetail.AnalysisHeadID = 0;
-                }
-                if (IdExists > 0)
-                {
-                     AccountsDAO.UpdateAcJournalDetail(acJournalDetail);
-                }
-                else
-                {
-                    AccountsDAO.InsertAcJournalDetail(acJournalDetail);
-                }
-
-                if (v.AcJDetailVM[i].AcExpAllocationVM != null)
-                {
-                    for (int k = 0; k < v.AcJDetailVM[i].AcExpAllocationVM.Count; k++)
+                    AcJournalDetail acJournalDetail = new AcJournalDetail();
+                    int IdExists = 0;
+                    if (v.AcJDetailVM[i].AcJournalDetID > 0)
                     {
-                        Nullable<int> AllocationIdExists = 0;
-                        AcAnalysisHeadAllocation objAcAnalysisHeadAllocations = new AcAnalysisHeadAllocation();
-                        if (v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID != null && v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID > 0)
+                        //  IdExists = (from c in db.AcJournalDetails where c.AcJournalDetailID == v.AcJDetailVM[i].AcJournalDetID select c.AcJournalDetailID).FirstOrDefault();
+                        IdExists = v.AcJDetailVM[i].AcJournalDetID;
+                    }
+                    //  AcJournalDetID
+                    if (IdExists > 0)
+                    {
+                        acJournalDetail.AcJournalDetailID = v.AcJDetailVM[i].AcJournalDetID;
+                    }
+                    else
+                    {
+                        maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+                        acJournalDetail.AcJournalDetailID = maxAcJDetailID + 1;
+                    }
+                    acJournalDetail.AcHeadID = v.AcJDetailVM[i].AcHeadID;
+                    acJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                    acJournalDetail.AcJournalID = ajm.AcJournalID;
+                    acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
+                    acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
+                    acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
+                    acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
+                    acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
+                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
+                    {
+                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    }
+
+                    if (StatusTrans == "P")
+                    {
+                        acJournalDetail.Amount = (v.AcJDetailVM[i].Amt);
+                    }
+                    else
+                    {
+                        acJournalDetail.Amount = -v.AcJDetailVM[i].Amt;
+                    }
+                    if (acJournalDetail.AnalysisHeadID == null)
+                    {
+                        acJournalDetail.AnalysisHeadID = 0;
+                    }
+                    if (IdExists > 0)
+                    {
+                        AccountsDAO.UpdateAcJournalDetail(acJournalDetail);
+                    }
+                    else
+                    {
+                        AccountsDAO.InsertAcJournalDetail(acJournalDetail);
+                    }
+
+                    if (v.AcJDetailVM[i].AcExpAllocationVM != null)
+                    {
+                        for (int k = 0; k < v.AcJDetailVM[i].AcExpAllocationVM.Count; k++)
                         {
-                            AllocationIdExists = v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID;
+                            Nullable<int> AllocationIdExists = 0;
+                            AcAnalysisHeadAllocation objAcAnalysisHeadAllocations = new AcAnalysisHeadAllocation();
+                            if (v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID != null && v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID > 0)
+                            {
+                                AllocationIdExists = v.AcJDetailVM[i].AcExpAllocationVM[k].AcAnalysisHeadAllocationID;
+                            }
+                            if (AllocationIdExists > 0)
+                            {
+                                objAcAnalysisHeadAllocations.AcAnalysisHeadAllocationID = (int)AllocationIdExists;
+                            }
+                            else
+                            {
+                                objAcAnalysisHeadAllocations.AcAnalysisHeadAllocationID = 0;
+                            }
+                            objAcAnalysisHeadAllocations.AcjournalDetailID = acJournalDetail.AcJournalDetailID;
+                            objAcAnalysisHeadAllocations.Amount = v.AcJDetailVM[i].AcExpAllocationVM[k].ExpAllocatedAmount;
+                            objAcAnalysisHeadAllocations.AnalysisHeadID = v.AcJDetailVM[i].AcExpAllocationVM[k].AcHead;
+                            if (AllocationIdExists > 0)
+                            {
+                                AccountsDAO.UpdateAcAnalysisHeadAllocation(objAcAnalysisHeadAllocations);
+                            }
+                            else
+                            {
+                                AccountsDAO.InsertAcAnalysisHeadAllocation(objAcAnalysisHeadAllocations);
+                            }
+                            //  AcJournalDetID
                         }
-                        if (AllocationIdExists > 0)
-                        {
-                            objAcAnalysisHeadAllocations.AcAnalysisHeadAllocationID = (int)AllocationIdExists;
-                        }
-                        else
-                        {
-                            objAcAnalysisHeadAllocations.AcAnalysisHeadAllocationID = 0;
-                        }
-                        objAcAnalysisHeadAllocations.AcjournalDetailID = acJournalDetail.AcJournalDetailID;
-                        objAcAnalysisHeadAllocations.Amount = v.AcJDetailVM[i].AcExpAllocationVM[k].ExpAllocatedAmount;
-                        objAcAnalysisHeadAllocations.AnalysisHeadID = v.AcJDetailVM[i].AcExpAllocationVM[k].AcHead;
-                        if (AllocationIdExists > 0)
-                        {
-                            AccountsDAO.UpdateAcAnalysisHeadAllocation(objAcAnalysisHeadAllocations);
-                        }
-                        else
-                        {
-                            AccountsDAO.InsertAcAnalysisHeadAllocation(objAcAnalysisHeadAllocations);
-                        }
-                        //  AcJournalDetID
                     }
                 }
-
             }
 
             string DeleteJournalDetails = Request["deletedJournalDetails"];
@@ -1705,7 +1769,7 @@ new AcGroupModel()
                 TransType = "P";
             }
 
-            //var acjlist = db.AcJournalDetailSelectByAcJournalID(id, TransType).ToList();
+            //var acjlist = db.AcJournalDetailSelectByAcJournalID(id, TransType).ToList();i
 
 
             List<AcJournalDetailVM> AcJDetailVM = new List<AcJournalDetailVM>();

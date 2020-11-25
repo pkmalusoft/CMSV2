@@ -334,7 +334,7 @@
                 return false;
             }
             else {
-                debugger;
+                
                 var str = "";
                 var totalamt = 0;
                 var i = $('#details > tbody > tr').length - 1;
@@ -346,7 +346,7 @@
                     amounttaxcheck = '<i class="fa fa-check"></i>';
                 }
                 
-                var objHtml = '<tr>' + '<td style="padding-left:10px">' + $("#ReceivedFrom").val() + '<input type="hidden" class=JAcHead value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px">' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px">' + parseFloat($("#TaxPercent").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px">' + parseFloat($("#TaxAmount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px">' + $("#SupplierName").val() + '<input type="hidden" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID"></td>' + '<td style="padding-left:10px">' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJDetailVM[' + i + '].Rem"></td>';
+                var objHtml = '<tr>' + '<td style="padding-left:10px">' + $("#ReceivedFrom").val() + '<input type="hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px">' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px">' + parseFloat($("#TaxPercent").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px">' + parseFloat($("#TaxAmount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px">' + $("#SupplierName").val() + '<input type="hidden" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID"></td>' + '<td style="padding-left:10px">' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJDetailVM[' + i + '].Rem"></td>';
                 objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                 objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
                 objHtml = objHtml + '</tr>';
@@ -382,7 +382,11 @@
         });
 
         $('#details').on("click", "#DeleteNewRow", function () {
-            $(this).parent().parent().remove();
+            debugger;
+            //$(this).parent().parent().remove();
+            $(this).parent().parent().addClass('hide');
+            var obj = $(this).parent().parent().find('.hdndeleted');
+            $(obj).val(true);
         });
 
         $(".Allocate").on("click", function () {

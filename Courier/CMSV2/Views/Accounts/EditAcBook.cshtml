@@ -476,7 +476,7 @@
                     var totalamt = 0;
                     debugger;
                     var i = $('#details > tbody > tr').length - 1;
-                    alert(i);
+                    
                     var s = 'name="AcExpAllocationVM';
                     var ExpTableHtml = $('#ExpAllocationTable').clone().attr("id", i + "_ExpAllocationTable").css('display', 'none').addClass('CostAllocationDetail').wrap('<p>').parent().html();
                     ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
@@ -489,7 +489,7 @@
                                     amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="false"  name="AcJDetailVM[' + i + '].AmountIncludingTax" />';
                                 }
 
-                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value="' + $("#ReceivedFrom").val() + '" name="AcJDetailVM[' + i + '].AcHead"></td><td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px"><input id="JAcAmount_' + i + '" type="text" class="JAcAmt text-right txtNum" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px"><input type="text" class="JAcAmt text-right txtNum" readonly="readonly" id="JAcTaxAmount_' + i + '" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '"' + $("#SupplierName").val() + '/><input type="hidden"  id="JAcSupplierId_' + i + '" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text"  value="' + $("#remark1").val() +'"  name="AcJDetailVM[' + i + '].Rem"></td>';
+                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type = "hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value="' + $("#ReceivedFrom").val() + '" name="AcJDetailVM[' + i + '].AcHead"></td><td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px"><input id="JAcAmount_' + i + '" type="text" class="JAcAmt text-right txtNum" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px"><input type="text" class="JAcAmt text-right txtNum" readonly="readonly" id="JAcTaxAmount_' + i + '" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '"' + $("#SupplierName").val() + '/><input type="hidden"  id="JAcSupplierId_' + i + '" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text"  value="' + $("#remark1").val() +'"  name="AcJDetailVM[' + i + '].Rem"></td>';
                     objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                     objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
                     objHtml = objHtml + '</tr>';
@@ -785,7 +785,7 @@
                                     amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="false"  name="AcJDetailVM[' + i + '].AmountIncludingTax"  />';
                                 }
                                 //'<input type="hidden" value=' + value.AmountIncludingTax + ' name="AcJDetailVM[' + i + '].AmountIncludingTax">
-                                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + value.AcHeadID + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value=" ' + value.AcHead + '" name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '</td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.Amt).toFixed(2) + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxPercent).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class=textright style="padding-right:10px"><input type="text" readonly="readonly"  id="JAcTaxAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxAmount).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '" value="' + value.SupplierName + '" /><input type="hidden"  id="JAcSupplierId_' + i + '" value=' +  value.SupplierID + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text" value="' + value.Rem + '" name="AcJDetailVM[' + i + '].Rem"></td>';
+                                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type ="hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + value.AcHeadID + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value=" ' + value.AcHead + '" name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '</td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.Amt).toFixed(2) + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxPercent).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class=textright style="padding-right:10px"><input type="text" readonly="readonly"  id="JAcTaxAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxAmount).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '" value="' + value.SupplierName + '" /><input type="hidden"  id="JAcSupplierId_' + i + '" value=' +  value.SupplierID + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text" value="' + value.Rem + '" name="AcJDetailVM[' + i + '].Rem"></td>';
                                 objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                                 objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a><input type="hidden" class="AcJournalDetID" name="AcJDetailVM[' + i + '].AcJournalDetID" value=' + value.AcJournalDetID + ' /></td>';
                                 objHtml = objHtml + '</tr>';
@@ -1176,17 +1176,16 @@
                     @Html.HiddenFor(model => model.paytype)
                 </div>
                 <div class="col-md-4">
-                    <label class="headinglabel">Cash/Bank Accounts</label>
-                    @Html.TextBoxFor(model => model.AcHead, new { @id = "AcHead", @class = "form-control", autocomplete = "off" })
-                    @Html.HiddenFor(model => model.SelectedAcHead, new
-                    {@*Value = "0"*@id = "SelectedAcHead"
-})
-                </div>
-                <div class="col-md-4">
                     <label class="headinglabel">Reference</label>
                     @Html.TextBoxFor(model => model.reference, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.reference)
                 </div>
+                <div class="col-md-4">
+                    <label class="headinglabel">Cash/Bank Accounts</label>
+                    @Html.TextBoxFor(model => model.AcHead, new { @id = "AcHead", @class = "form-control", autocomplete = "off" })
+                    @Html.HiddenFor(model => model.SelectedAcHead, new  {@*Value = "0"*@id = "SelectedAcHead" })
+                </div>
+
 
             </div>
             <div class="row no-margin" style="padding-top:10px">
@@ -1255,15 +1254,16 @@
                                                                                @Html.ValidationMessageFor(model => model.TaxAmount)
                                                                            </div>
                                                                            <div class="col-md-2">
-                                                                               <label class="headinglabel">Remark</label>
-                                                                               @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
-                                                                               @Html.ValidationMessageFor(model => model.remark1)
-                                                                           </div>
-                                                                           <div class="col-md-2">
                                                                                <label class="headinglabel">Supplier</label>
                                                                                <input type="text" id="SupplierName" name="SupplierName" class="form-control" autocomplete="off" />
                                                                                @Html.HiddenFor(model => model.SupplierId, new { Value = "0", id = "SupplierID" })
                                                                            </div>
+                                                                           <div class="col-md-2">
+                                                                               <label class="headinglabel">Remark</label>
+                                                                               @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
+                                                                               @Html.ValidationMessageFor(model => model.remark1)
+                                                                           </div>
+
                                                                            <div class="col-md-2">
                                                                                <label class="headinglabel">Exp. Allocation</label>
                                                                                <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
@@ -1439,7 +1439,10 @@
                             ExistingDelIds = DeletedAllocatedId;
                         }
                         $('#deletedJournalDetails').val(ExistingDelIds);
-                        $(this).parent().parent().remove();
+                        //$(this).parent().parent().remove();
+                        $(this).parent().parent().addClass('hide');
+                        var obj = $(this).parent().parent().find('.hdndeleted');
+                        $(obj).val(true);
                     });
 
                     $('#details').on("click", "#DeleteAllocationRow", function () {

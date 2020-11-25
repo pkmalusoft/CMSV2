@@ -1,126 +1,231 @@
-﻿@model IEnumerable<CMSV2.Models.AcJournalMasterSelectAllJV_Result>
+﻿@model IEnumerable<CMSV2.Models.AcJournalMaster>
 
-    @{
-        ViewBag.Title = "AcJournalVoucherIndex";
-        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-        var isadd = true;
-        var ismodify = true;
-        var isdelete = true;
+@{
+    ViewBag.Title = "AcJournalVoucherIndex";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
 
-        string path = Request.Url.AbsolutePath.ToLower();
+    string path = Request.Url.AbsolutePath.ToLower();
 
-        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
-        {
-            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
-            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
 
-        }
     }
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
 
-    <style>
-        tfoot {
-            display: table-header-group;
-        }
-    </style>
-    <script type="text/javascript">
-        $(document).ready(function () {
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+    .subtable tr td{
+        padding:5px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-            $('#dataTables-example tfoot th').each(function () {
-                var title = $(this).text();
-                $(this).html('<input type="text" />');
-            });
+    });
+
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#ToDate').datepicker("setDate", new Date());
+    });
+
+    $(document).ready(function () {
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
 
 
-            var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        //var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({
+            "aaSorting": [],
+            //"dom": '<"top"i>rt<"top"flp><"clear">',
+            //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //"pagingType": "simple"
+        });
+        table.draw();
+        table.columns().every(function () {
+            var that = this;
 
-            table.columns().every(function () {
-                var that = this;
-
-                $('input', this.footer()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search(this.value)
-                            .draw();
-                    }
-                });
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
             });
         });
 
-    </script>
+        function format(d) {
+            // `d` is the original data object for the row
+            debugger;
+            var JournalDetailId = d[5];
+            var DataHtml = '';
+            $.ajax({
+                type: "POST",
+                url: "/Accounts/AcBookDetails",
+                datatype: "Json",
+                data: { DetailId: JournalDetailId },
+                success: function (data) {
+                    debugger;
+                    DataHtml = '<table class="subtable">';
+                    $.each(data, function (index, value) {
+                        debugger;
+                        DataHtml = DataHtml + '<tr><td>' + value.AcHead + '</td><td class="textright">' + value.Amount + '</td><td>' + value.Remarks + '</td></tr>';
+                    });
+                    debugger;
+                    DataHtml = DataHtml + '</table>';
+                    $('#pr_' + JournalDetailId).append(DataHtml);
+                }
+            });
 
-    <section class="content-header">
-        <h1 class="headingfont">Account Journal Voucher</h1>
+            return '<p id="pr_' + JournalDetailId + '"></p>';
+        }
 
-    </section>
-    <div class="col-md-12">
-        <p class="indexbtnpadding pull-right">
-            @if (isadd)
-            {
-                @Html.ActionLink("Create New", "AcJournalVoucherCreate", null, new { @class = "btn btn-primary btnwidth" })
+        $('#dataTables-example tbody').on('click', 'td.details-control', function () {
+            debugger;
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            console.log(row);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_open.png');
             }
-        </p>
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_close.png');
+            }
+        });
+    });
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Account Journal Voucher</h1>
+</section>
+<div class="row no-margin">
+    <div class=" d-flex">
+        <div class="col-md-1">
+            <label class="headinglabel">From </label>
+            <input id="FromDate" class="form-control text-right " name="FromDate" type="text" value="@ViewBag.FromDate" />
+            @*@Html.TextBox("FromDate",new { @class = "form-control  text-right txttarget" })*@
+        </div>
+
+        <div class="col-md-1">
+            <label class="headinglabel">To</label>
+            <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget text-right" })*@
+        </div>
+
+        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("AcJournalVoucherIndex", "Accounts")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+        </div>
+        <div class="pull-left" style="padding-top:32px;padding-right:15px">
+            <p class="indexbtnpadding">
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
+                {
+                    @Html.ActionLink("Create New", "AcJournalVoucherCreate", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create New", "AcJournalVoucherCreate", null, new { @class = "btn btn-primary btnwidth" })
+                }
+            </p>
+        </div>
     </div>
-    <section class="content">
-        @if (ViewBag.SuccessMsg != null)
-        {
-            <script type="text/javascript">
+</div>
+
+<section class="content">
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script type="text/javascript">
          $(document).ready(function () {
              $.notify("@ViewBag.SuccessMsg ", "success");
          });
-            </script>
-        }
+        </script>
+    }
 
-        <div class="table-responsive tblbackground" style="padding:15px">
-            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
-                <thead>
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    <th>Voucher No</th>
+                    <th>Transaction Date </th>
+                    <th>Voucher Type</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                    <th style="display:none;"></th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Voucher No</th>
+                    <th>Transaction Date </th>
+                    <th>Voucher Type</th>
+                    <th>Remark</th>
+                    <th>Action</th>
+                    <th style="display:none"></th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <th>Voucher No</th>
-                        <th>Voucher Type</th>
-                        <th>Transaction Date </th>
-                        <th>Remark</th>
-                        <th>Action</th>
+
+                        @*<td class="textright">@item.VoucherNo</td>*@
+                        <td class="details-control">
+                            <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
+                            @Html.DisplayFor(modelItem => item.VoucherNo)
+                        </td>
+                        <td class="tdtarget">
+                            <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;width:10px;margin:1px;" />
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
+                        </td>
+                        <td>@item.VoucherType</td>
+                        <td>@item.Remarks</td>
+
+
+                        <td>
+                            @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
+                                @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
+                                @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+                            @if (ismodify)
+                            {
+                                <a href="@Url.Action("AcJournalVoucherEdit", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                            }
+                            @*<a href="@Url.Action("Delete", new { id = item.CountryID })"><i class="fa fa-times"></i></a>*@
+                            @* <a href="#" onclick="Delete(ID=@item.AcGroupID)"><i class="fa fa-times"></i></a>*@
+
+                        </td>
+                        <td style="display:none;">
+                            @item.AcJournalID
+                        </td>
                     </tr>
-                </thead>
-
-                <tfoot>
-                    <tr>
-                        <th>Voucher No</th>
-                        <th>Voucher Type</th>
-                        <th>Transaction Date </th>
-                        <th>Remark</th>
-                        <th style="display:none"></th>
-                    </tr>
-                </tfoot>
-
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-
-                            <td class="textright">@item.VoucherNo</td>
-                            <td>@item.VoucherType</td>
-                            <td>@CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TransDate)</td>
-                            <td>@item.Remarks</td>
-
-
-                            <td>
-                                @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
-                                    @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
-                                @if (ismodify)
-                                {
-                                    <a href="@Url.Action("AcJournalVoucherEdit", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
-                                }
-                                @*<a href="@Url.Action("Delete", new { id = item.CountryID })"><i class="fa fa-times"></i></a>*@
-                                @* <a href="#" onclick="Delete(ID=@item.AcGroupID)"><i class="fa fa-times"></i></a>*@
-
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </section>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
