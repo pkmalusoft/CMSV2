@@ -12,6 +12,8 @@ namespace CMSV2.Models
         public string Rem { get; set; }
         public decimal Amt { get; set; }
 
+        public bool IsDeleted { get; set; }
         public int AcMemoDetailID { get; set; }
+        
     }
 }

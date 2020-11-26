@@ -3,6 +3,20 @@
     @{
         ViewBag.Title = "Index";
         Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+        var isadd = true;
+        var ismodify = true;
+        var isdelete = true;
+
+        string path = "/InBound/Index";
+
+        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+        {
+            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+        }
     }
 
     <style>
@@ -334,7 +348,7 @@
             </div>
         <div class="pull-left" style="padding-top:32px;">
             <p class="indexbtnpadding">
-                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false)
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
                 {
                     @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled", @title = "Create Not allowed in this Financial year!" })
                 }
@@ -457,14 +471,19 @@
                                 @Html.DisplayFor(modelItem => item.DriverName)
                             </td>
                             <td>
-                                @*<a href="#" title="Change Satus" onclick="ShowStatusModal('@item.EnquiryID','@item.PickupRequestStatusId')"><i class="fa fa-file"></i></a> |*@
-                                <a href="@Url.Action("Create", new { id = item.QuickInscanID })"><i class="fa fa-pencil"></i></a> |
-                                @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
-                                <a href="#" onclick="Delete(ID=@item.QuickInscanID)"><i class="fa fa-times"></i></a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                                @if (ismodify)
+                                {
+
+                                    <a href="@Url.Action("Create", new { id = item.QuickInscanID })"><i class="fa fa-pencil"></i></a> 
+                                }
+                                @if (isdelete)
+                                {
+                                   <a href = "#" onclick = "Delete(ID=@item.QuickInscanID)" ><i class="fa fa-times"></i></a>
+                                }
+                        </td>
+                    </tr>
+                }
+</tbody>
 
             </table>
         </div>

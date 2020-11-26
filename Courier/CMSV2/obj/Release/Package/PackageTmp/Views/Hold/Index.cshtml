@@ -3,6 +3,20 @@
     @{
         ViewBag.Title = "Index";
         Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+        var isadd = true;
+        var ismodify = true;
+        var isdelete = true;
+
+        string path = "/Hold/Index";
+
+        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+        {
+            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+        }
     }
 
     <style>
@@ -176,7 +190,14 @@
             </div>
             <div class="pull-left" style="padding-top:32px;padding-right:15px">
                 <p class="indexbtnpadding">
-                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth",@disabled="disabled" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                    }
                 </p>
             </div>
         </div>
@@ -296,7 +317,9 @@
                     @Html.DisplayFor(modelItem => item.CourierStatus)
                 </td>
                 <td>
-                    <a href="@Url.Action("Create", new { id = item.InScanID })"><i class="fa fa-pencil"></i></a>
+                    @if (ismodify)
+                    {<a href="@Url.Action("Create", new { id = item.InScanID })"><i class="fa fa-pencil"></i></a>
+                    }
                     @if (item.CourierStatus == "OnHold")
                     {<a href="#" title="Change Satus to Release" onclick="ShowStatusModal('@item.InScanID','@item.AWBNo')">|<i class="fa fa-file"></i></a>}
 

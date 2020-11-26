@@ -99,7 +99,31 @@
         });
 
 
-
+        $("#ReceivedFrom").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#ReceivedFrom").val(i.item.label);
+                $('#SelectedReceivedFrom').val(i.item.AcHeadID);
+            }
+        });
 
 
         $("#AcHead").change(function () {
@@ -138,15 +162,29 @@
 
 
         $("#btnAdd").click(function () {
-            if ($("#ReceivedFrom option:selected").val() == "") {
-                alert("Please Select Head");
+            debugger;
+            var amt = parseFloat($("#amount").val());
+            
+            if ($("#ReceivedFrom").val() == "" || $("#SelectedReceivedFrom").val() == 0) {
+                alert("Please Select Head!");
                 $("#ReceivedFrom").focus();
-                return false;
+                return;
             }
             else if ($("#amount").val() == "") {
                 alert("Please Enter The Amount");
                 $("#amount").focus();
-                return false;
+                return;
+            }
+           else if(isNaN(amt))
+           {
+               alert("Please Enter The Amount");
+               $("#amount").focus();
+               return;
+            }
+            else if (amt==0) {
+                alert("Please Enter The Amount");
+                $("#amount").focus();
+                return;
             }
             else {
 
@@ -154,11 +192,13 @@
                 var totalamt = 0;
                 var i = $('#details tr').length - 1;
 
-                $("#details").append('<tr>' + '<td>' + $("#ReceivedFrom option:selected").text() + '<input type="hidden" value=' + $("#ReceivedFrom option:selected").val() + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom option:selected").text() + ' name="AcJMDetailVM[' + i + '].AcHead"></td>' +
-                    '<td class=textright>' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" value=' + $("#amount").val() + ' name="AcJMDetailVM[' + i + '].Amt"></td>' + '<td>' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJMDetailVM[' + i + '].Rem"></td></tr>');
+                $("#details").append('<tr>' + '<td>' + $("#ReceivedFrom").val() + ' <input type = "hidden" name = "AcJMDetailVM[[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom option:selected").text() + ' name="AcJMDetailVM[' + i + '].AcHead"></td>' +
+                    '<td class=textright>' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" value=' + $("#amount").val() + ' name="AcJMDetailVM[' + i + '].Amt"></td>' + '<td>' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJMDetailVM[' + i + '].Rem"></td>' +
+                    '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr > ');
 
 
-                $("#ReceivedFrom").val($("#ReceivedFrom option:first").val());
+                $("#ReceivedFrom").val('');
+                $("#SelectedReceivedFrom").val(0);
                 $("#amount").val('');
                 $("#remark1").val('');
 
@@ -170,13 +210,18 @@
                     totalamt = parseInt(totalamt) + parseInt(Amount);
                 });
 
-                alert(totalamt);
+                
                 $("#TotalAmt").val(totalamt);
             }
             return false;
         });
 
-
+        $("#details").on("click", "#DeleteNewRow", function () {
+            //$(this).parent().parent().remove();
+            $(this).parent().parent().addClass('hide');
+            var obj = $(this).parent().parent().find('.hdndeleted');
+            $(obj).val(true);
+        });
         $("#btnsave").click(function () {
             if ($("#transdate").val() == "") {
                 $("#alert").show();
@@ -208,7 +253,7 @@
 </section>
 
 
-<section class="content jobform">
+<section class="content">
 
     @using (Html.BeginForm())
     {
@@ -217,10 +262,9 @@
         <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
         <fieldset>
 
-
             <div class="row no-margin">
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="headinglabel">Transaction Type</label>
                     @Html.DropDownListFor(model => model.transtype, ViewBag.transtypes as SelectList, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.transtype)
@@ -228,22 +272,23 @@
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="required headinglabel">Transaction Date</label>
-                    @Html.TextBoxFor(model => model.transdate, new { @class = "form-control", placeholder = "dd-mmm-yyyy" })
+                    @Html.TextBoxFor(model => model.transdate, new { @class = "form-control", placeholder = "dd-mmm-yyyy", @autocomplete = "off" })
                     @Html.ValidationMessageFor(model => model.transdate)
 
                 </div>
-            </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="required headinglabel">Deposit Bank</label>
                     @Html.DropDownListFor(model => model.AcHead, new SelectList(ViewBag.heads, "AcHeadID", "AcHead"), new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.AcHead)
 
                 </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="headinglabel">Remarks</label>
                     @Html.TextAreaFor(model => model.remarks, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.remarks)
@@ -273,23 +318,21 @@
             <h3 style="color:white">Bank Details</h3><hr />
             <div class="row no-margin">
 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="headinglabel">Bank Name</label>
                     @Html.TextBoxFor(model => model.bankname, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.bankname)
 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="required headinglabel">Cheque No</label>
-                    @Html.TextBoxFor(model => model.chequeno, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.chequeno, new { @class = "form-control", @autocomplete = "off" })
                     @Html.ValidationMessageFor(model => model.chequeno)
 
                 </div>
-            </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="required headinglabel">Cheque Date</label>
-                    @Html.TextBoxFor(model => model.chequedate, new { @class = "form-control", placeholder = "dd-mmm-yyyy" })
+                    @Html.TextBoxFor(model => model.chequedate, new { @class = "form-control", placeholder = "dd-mmm-yyyy", @autocomplete = "off" })
                     @Html.ValidationMessageFor(model => model.chequedate)
 
                 </div>
@@ -301,6 +344,7 @@
 
                 </div>
             </div>
+           
 
 
 
@@ -311,13 +355,15 @@
             <h3 style="color:white">Add Details</h3><hr />           
 
             <div class="row no-margin">
+                <div class="col-md-11">
+                    <div class="col-md-4">
+                        <label class="headinglabel label1">Received From</label>
+                        <input type="text" id="ReceivedFrom" name="ReceivedFrom" class="form-control" autocomplete="off" />
+                        @Html.HiddenFor(model => model.ReceivedFrom, new { Value = "0", id = "SelectedReceivedFrom" })
+                        @*@Html.DropDownListFor(model => model.ReceivedFrom, new SelectList(ViewBag.headsreceived, "AcHeadID", "AcHead"), new { @class = "form-control txttarget" })*@
+                        @Html.ValidationMessageFor(model => model.ReceivedFrom)
 
-                <div class="col-md-4">
-                    <label class="headinglabel label1">Received From</label>
-                    @Html.DropDownListFor(model => model.ReceivedFrom, new SelectList(ViewBag.headsreceived, "AcHeadID", "AcHead"), new { @class = "form-control txttarget" })
-                    @Html.ValidationMessageFor(model => model.ReceivedFrom)
-
-                </div>
+                    </div>
 
 
                 <div class="col-md-4">
@@ -333,9 +379,13 @@
 
                 </div>
             </div>
+            <div class="col-md-1 text-right" style="margin-top:10px">
+                 <button type="button" class="btn btn-primary btnwid small_btn" value="Add" id="btnAdd"><i class="fa fa-plus"></i></button>
+            </div>
+            </div>
             <div class="row no-margin" style="padding-top:10px;text-align:right;">
                 <div class="col-md-12 butdivs">
-                    <input type="button" class="btn btn-primary btnwid" value="Add" id="btnAdd">
+                   
 
                 </div>
             </div>
@@ -344,18 +394,21 @@
             <hr />
 
             <div class="row no-margin" style="padding-top:10px">
-                <table class="table table-bordered table-responsive" id="details" style="background-color:white">
+                <table class="table table-bordered table-responsive" id="details" >
 
                     <thead>
                     <th>AcHead</th>
                     <th>Amount</th>
                     <th>Remark</th>
+                    <th></th>
 
                     </thead>
-
+                    <tbody>
+                          @Html.HiddenFor(model => model.TotalAmt)
+                      </tbody>
                 </table>
 
-                @Html.HiddenFor(model => model.TotalAmt)
+              
             </div>
 
             <div class="row no-margin" style="padding-top:10px">

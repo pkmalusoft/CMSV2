@@ -7,7 +7,7 @@
     var ismodify = true;
     var isdelete = true;
 
-    string path = Request.Url.AbsolutePath.ToLower();
+    string path ="/Accounts/AcJournalVoucherIndex"; // Request.Url.AbsolutePath.ToLower();
 
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
     {

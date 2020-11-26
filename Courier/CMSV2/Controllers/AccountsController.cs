@@ -2125,8 +2125,8 @@ new AcGroupModel()
             ViewBag.transtypes = transtypes;
 
             //ViewBag.heads = db.AcHeadSelectForBank(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
-
-            ViewBag.heads = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentBranchID"].ToString())).OrderBy(cc=>cc.AcHead);
+            var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+            ViewBag.heads = x1; // db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentBranchID"].ToString())).OrderBy(cc=>cc.AcHead);
             ViewBag.headsreceived = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentBranchID"].ToString())).OrderBy(cc=>cc.AcHead);
 
 
@@ -2167,6 +2167,7 @@ new AcGroupModel()
             acm.Remarks = pdctrans.remarks;
             acm.UserID = Convert.ToInt32(Session["UserID"].ToString());
             acm.AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            //acm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
 
             db.AcMemoJournalMasters.Add(acm);
             db.SaveChanges();
@@ -2212,29 +2213,29 @@ new AcGroupModel()
             db.AcMemoJournalDetails.Add(acmd);
             db.SaveChanges();
 
-
             for (int i = 0; i < pdctrans.AcJMDetailVM.Count; i++)
             {
-
-                AcMemoJournalDetail a = new AcMemoJournalDetail();
-                a.AcMemoJournalID = acm.AcMemoJournalID;
-                a.AcHeadID = pdctrans.AcJMDetailVM[i].AcHeadID;
-
-                if (StatusTrans == "P")
+                if (pdctrans.AcJMDetailVM[i].IsDeleted!=true)
                 {
-                    a.Amount = pdctrans.AcJMDetailVM[i].Amt;
+                    AcMemoJournalDetail a = new AcMemoJournalDetail();
+                    a.AcMemoJournalID = acm.AcMemoJournalID;
+                    a.AcHeadID = pdctrans.AcJMDetailVM[i].AcHeadID;
+
+                    if (StatusTrans == "P")
+                    {
+                        a.Amount = pdctrans.AcJMDetailVM[i].Amt;
+                    }
+                    else
+                    {
+                        a.Amount = -pdctrans.AcJMDetailVM[i].Amt;
+                    }
+
+                    a.Remarks = pdctrans.AcJMDetailVM[i].Rem;
+                    a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+
+                    db.AcMemoJournalDetails.Add(a);
+                    db.SaveChanges();
                 }
-                else
-                {
-                    a.Amount = -pdctrans.AcJMDetailVM[i].Amt;
-                }
-
-                a.Remarks = pdctrans.AcJMDetailVM[i].Rem;
-                a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-
-                db.AcMemoJournalDetails.Add(a);
-                db.SaveChanges();
-
             }
 
             ViewBag.SuccessMsg = "You have successfully added Record";
@@ -2285,9 +2286,9 @@ new AcGroupModel()
                                  "ID", "trans", 1);
 
             ViewBag.transtypes = transtypes;
-
+            var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
             //ViewBag.heads = db.AcHeadSelectForBank(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
-            ViewBag.heads = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
+            ViewBag.heads = x1; // db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
             ViewBag.headsreceived = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
 
 
@@ -2384,7 +2385,7 @@ new AcGroupModel()
             acmd.AcMemoJournalID = acm.AcMemoJournalID;
             acmd.AcHeadID = pdctrans.AcHead;
             acmd.Amount = total * (-1);
-            acmd.BranchID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            acmd.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             acmd.Remarks = acm.Remarks;
             db.AcMemoJournalDetails.Add(acmd);
             db.SaveChanges();
@@ -2393,18 +2394,19 @@ new AcGroupModel()
 
             for (int i = 0; i < pdctrans.AcJMDetailVM.Count; i++)
             {
+                if (pdctrans.AcJMDetailVM[i].IsDeleted!=true)
+                {
+                    AcMemoJournalDetail a = new AcMemoJournalDetail();
 
-                AcMemoJournalDetail a = new AcMemoJournalDetail();
+                    a.AcMemoJournalID = acm.AcMemoJournalID;
+                    a.AcHeadID = pdctrans.AcJMDetailVM[i].AcHeadID;
+                    a.Amount = pdctrans.AcJMDetailVM[i].Amt;
+                    a.Remarks = pdctrans.AcJMDetailVM[i].Rem;
+                    a.BranchID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
-                a.AcMemoJournalID = acm.AcMemoJournalID;
-                a.AcHeadID = pdctrans.AcJMDetailVM[i].AcHeadID;
-                a.Amount = pdctrans.AcJMDetailVM[i].Amt;
-                a.Remarks = pdctrans.AcJMDetailVM[i].Rem;
-                a.BranchID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-
-                db.AcMemoJournalDetails.Add(a);
-                db.SaveChanges();
-
+                    db.AcMemoJournalDetails.Add(a);
+                    db.SaveChanges();
+                }
             }
 
             ViewBag.SuccessMsg = "You have successfully updated Record";

@@ -75,44 +75,60 @@ namespace CMSV2.Models
         public bool GetAddpermission(int RoleId, string href)
         {
             var menus = db.Menus;
-            var menuid = menus.Where(d => d.Link.Contains(href)).FirstOrDefault().MenuID;
-            var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsAdd == true).FirstOrDefault();
-            if (permission != null)
+            var menu = menus.Where(d => d.Link.Contains(href)).FirstOrDefault();
+            if (menu != null)
             {
-                return true;
+                var menuid = menu.MenuID;
+                var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsAdd == true).FirstOrDefault();
+                if (permission != null)
+                {
+                    return true;
+                }
             }
             return false;
         }
         public bool GetModifypermission(int RoleId, string href)
         {
             var menus = db.Menus;
-            var menuid = menus.Where(d => d.Link.Contains(href)).FirstOrDefault().MenuID;
-            var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsModify == true).FirstOrDefault();
-            if (permission != null)
+            var menu = menus.Where(d => d.Link.Contains(href)).FirstOrDefault();
+            if (menu != null)
             {
-                return true;
+                var menuid = menu.MenuID;
+                var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsModify == true).FirstOrDefault();
+                if (permission != null)
+                {
+                    return true;
+                }
             }
             return false;
         }
         public bool GetDeletepermission(int RoleId, string href)
         {
             var menus = db.Menus;
-            var menuid = menus.Where(d => d.Link.Contains(href)).FirstOrDefault().MenuID;
-            var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsDelete == true).FirstOrDefault();
-            if (permission != null)
+            var menu = menus.Where(d => d.Link.Contains(href)).FirstOrDefault();
+            if (menu != null)
             {
-                return true;
+                var menuid = menu.MenuID;
+                var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.IsDelete == true).FirstOrDefault();
+                if (permission != null)
+                {
+                    return true;
+                }
             }
             return false;
         }
         public bool GetPrintpermission(int RoleId, string href)
         {
             var menus = db.Menus;
-            var menuid = menus.Where(d => d.Link.Contains(href)).FirstOrDefault().MenuID;
-            var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.Isprint == true).FirstOrDefault();
-            if (permission != null)
+            var menu = menus.Where(d => d.Link.Contains(href)).FirstOrDefault();
+            if (menu != null)
             {
-                return true;
+                var menuid = menu.MenuID;
+                var permission = db.MenuAccessLevels.Where(d => d.RoleID == RoleId && d.MenuID == menuid && d.Isprint == true).FirstOrDefault();
+                if (permission != null)
+                {
+                    return true;
+                }
             }
             return false;
         }
