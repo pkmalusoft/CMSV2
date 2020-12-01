@@ -545,8 +545,11 @@ namespace CMSV2.Controllers
                 {
                     db.CustomerMasters.Remove(customermaster);
                     db.SaveChanges();
-                    db.UserRegistrations.Remove(a);
-                    db.SaveChanges();
+                    if (a != null)
+                    {
+                        db.UserRegistrations.Remove(a);
+                        db.SaveChanges();
+                    }
                     TempData["SuccessMsg"] = "You have successfully Deleted Customer.";
                     return RedirectToAction("Index");
 

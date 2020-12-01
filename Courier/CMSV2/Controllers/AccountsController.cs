@@ -2816,7 +2816,7 @@ new AcGroupModel()
             data.Pagecontrol = acheadcontrol.Pagecontrol;
             if (ModelState.IsValid)
             {
-                var duplicate = db.AcHeadControls.Where(cc => cc.Pagecontrol == acheadcontrol.Pagecontrol && cc.AccountName == acheadcontrol.AccountName).FirstOrDefault();
+                var duplicate = db.AcHeadControls.Where(cc => cc.Pagecontrol == acheadcontrol.Pagecontrol && cc.AccountName == acheadcontrol.AccountName && cc.AccountNature==acheadcontrol.AccountNature).FirstOrDefault();
                 if (duplicate!=null)
                 {
                     ViewBag.ErrorMsg = "An Entry Exist to this Page control with same Account Control Name!";
@@ -3094,19 +3094,46 @@ new AcGroupModel()
                 ViewBag.ReportName = "Accounts Ledger";
                 ViewBag.ReportId = "1";
                 Session["ReportId"] = "1";
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("AccLedger"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
             }
             else if (id == 2)
             {
                 ViewBag.ReportName = "Trial Balance";
                 ViewBag.ReportId = "2";
                 Session["ReportId"] = "2";
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("AccTrialBal"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
             }
             else if (id == 3)
             {
                 ViewBag.ReportName = "Trading Account";
                 ViewBag.ReportId = "3";
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("AccTrading"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
                 Session["ReportId"] = "3";
+                
             }
+       
+            
             return View();
             
         }
@@ -3116,7 +3143,11 @@ new AcGroupModel()
             if (Session["ReportOutput"] != null)
                 ViewBag.ReportOutput = Session["ReportOutput"].ToString();
             else
-                ViewBag.ReportOutput = "~/Reports/DefaultReport.pdf";
+            {
+                string reportpath = AccountsReportsDAO.GenerateDefaultReport();
+                ViewBag.ReportOutput = reportpath; // "~/Reports/DefaultReport.pdf";
+                //ViewBag.ReportOutput = "~/Reports/DefaultReport.pdf";
+            }
             return PartialView();
         }
         public ActionResult ReportParam()
@@ -3414,7 +3445,7 @@ new AcGroupModel()
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(Server.MapPath("~/Reports"), "DefaultReport.rpt"));
 
-            rd.SetDataSource(ds);
+            //rd.SetDataSource(ds);
 
 
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);

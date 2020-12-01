@@ -102,6 +102,10 @@ namespace CMSV2.Models
         public Nullable<int> AcFinancialYearID { get; set; }
         public Nullable<int> AcJournalID { get; set; }
         public Nullable<int> ManifestID { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> LastModifiedBy { get; set; }
+        public Nullable<System.DateTime> LastModifiedDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }

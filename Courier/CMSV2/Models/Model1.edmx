@@ -2159,6 +2159,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="AcJournalID" Type="int" />
           <Property Name="ManifestID" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="LastModifiedBy" Type="int" />
+          <Property Name="LastModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="InScanMasterNew">
           <Key>
@@ -11972,6 +11976,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <NavigationProperty Name="InscanOtherCharges" Relationship="Self.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
           <Property Name="AcJournalID" Type="Int32" />
           <Property Name="ManifestID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedBy" Type="Int32" />
+          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="InScanMasterNew">
           <Key>
@@ -25050,6 +25058,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ManifestID" ColumnName="ManifestID" />
                 <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />

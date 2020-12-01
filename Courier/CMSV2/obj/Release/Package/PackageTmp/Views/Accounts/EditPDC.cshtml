@@ -7,7 +7,16 @@
         #details tr {
             height: 32px;
         }
-
+         #details td input{
+            background:transparent;
+            border-color:transparent;
+         }
+         #DeleteNewRow {
+            color:#dd4b39;
+         }
+        #details td input:focus{
+            border-color:#07a7e3;
+        } 
         .headinglabel {
             font-family: Calibri;
             font-size: 16px;
@@ -67,7 +76,7 @@
 
                     $.each(data, function (index, value) {
                         var i = $('#details tr').length - 1;
-                        $("#details").append('<tr>' + '<td>' + value.AcHead + '<input type="hidden" name="AcJMDetailVM[[' + i + '].IsDeleted" class= "hdndeleted" /><input type="hidden" value=' + value.AcHeadID + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + value.AcHead + ' name="AcJMDetailVM[' + i + '].AcHead"><input type="hidden" value=' + value.AcMemoDetailID + ' name="AcJMDetailVM[' + i + '].AcMemoDetailID"></td>' +
+                        $("#details").append('<tr>' + '<td>' + value.AcHead + '<input type="hidden" name="AcJMDetailVM[' + i + '].IsDeleted" class= "hdndeleted" /><input type="hidden" value=' + value.AcHeadID + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + value.AcHead + ' name="AcJMDetailVM[' + i + '].AcHead"><input type="hidden" value=' + value.AcMemoDetailID + ' name="AcJMDetailVM[' + i + '].AcMemoDetailID"></td>' +
                             '<td style="text-align:center"><input class="textbox textright" type="text" value=' + parseFloat(value.Amt).toFixed(2) + ' name="AcJMDetailVM[' + i + '].Amt"></td>' + '<td>' + value.Rem + '<input type="hidden" value=' + value.Rem + ' name="AcJMDetailVM[' + i + '].Rem"></td>' + 
                             '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr > ');
                     });
@@ -223,7 +232,7 @@
                     var totalamt = 0;
                     var i = $('#details tr').length - 1;
 
-                    $("#details").append('<tr>' + '<td>' + $("#ReceivedFrom").val() + '<input type ="hidden" name="AcJMDetailVM[[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJMDetailVM[' + i + '].AcHead"></td>' +
+                    $("#details").append('<tr>' + '<td>' + $("#ReceivedFrom").val() + '<input type ="hidden" name="AcJMDetailVM[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJMDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJMDetailVM[' + i + '].AcHead"></td>' +
                         '<td style="text-align:center"><input type="text" class="textright"  value=' + parseFloat($("#amount").val()).toFixed(2) + ' name="AcJMDetailVM[' + i + '].Amt"></td>' + '<td>' + $("#remark1").val() + '<input type="hidden" value=' + $("#remark1").val() + ' name="AcJMDetailVM[' + i + '].Rem"></td>' + 
                         '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr > ');
 
@@ -394,7 +403,7 @@
            
            <h3 style="color:white">Add Details</h3><hr />
            <div class="row no-margin">
-
+                <div class="col-md-11">
                <div class="col-md-4">
                    <label class="headinglabel label1">Received From</label>
                    <input type="text" id="ReceivedFrom" name="ReceivedFrom" class="form-control" autocomplete="off" />
@@ -418,17 +427,17 @@
 
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top:10px;text-align:right">
-                <div class="col-md-12 butdivs">
-                    <button type="button" class="btn btn-primary btnwid small_btn" value="Add" id="btnAdd"><i class="fa fa-plus"></i></button>
-               </div>
-           </div>
+            <div class="col-md-1 text-right" style="margin-top:11px;padding-top:21px">
+                 <button type="button" class="btn btn-primary btnwid small_btn" value="Add" id="btnAdd"><i class="fa fa-plus"></i></button>
+            </div>
+            </div>
+            
 
 
             <hr />
 
            <div class="row no-margin" style="padding-top:10px">
-               <table class="table table-bordered table-responsive" id="details" style="background-color:white">
+               <table class="table table-bordered table-responsive" id="details" >
 
                    <thead>
                    <th width="30%">AcHead</th>
@@ -437,10 +446,12 @@
                    <th width="5%" ></th>
 
                    </thead>
-
+                   <tbody>
+                       @Html.HiddenFor(model => model.TotalAmt)
+                   </tbody>
                </table>
 
-               @Html.HiddenFor(model => model.TotalAmt)
+               
            </div>
 
            <div class="row no-margin" style="padding-top:10px">

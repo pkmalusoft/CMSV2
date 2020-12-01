@@ -382,7 +382,7 @@
                                         ContactPerson: val.ContactPerson,
                                         Address1: val.Address1,
                                         Address2: val.Address2,
-                                        Pincode: val.Pincode,
+                                        Pincode: val.PinCode,
                                         Phone: val.Phone,
                                         CountryName: val.CountryName,
                                         CityName: val.CityName,
@@ -405,7 +405,7 @@
                         $("#ConsigneeAddress1_Building").val(i.item.Address1);
                         $("#ConsigneeAddress2_Street").val(i.item.Address2);
                         $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-
+                        
                         $("#ConsigneePhone").val(i.item.Phone);
                         $("#ConsigneeCountryName").val(i.item.CountryName);
                         $("#ConsigneeCityName").val(i.item.CityName);
@@ -433,7 +433,7 @@
                                         ContactPerson: val.ContactPerson,
                                         Address1: val.Address1,
                                         Address2: val.Address2,
-                                        Pincode: val.Pincode,
+                                        Pincode: val.PinCode,
                                         Phone: val.Phone,
                                         CountryName: val.CountryName,
                                         CityName: val.CityName,
@@ -455,8 +455,8 @@
                         $("#ConsigneeContact").val(i.item.ContactPerson);
                         $("#ConsigneeAddress1_Building").val(i.item.Address1);
                         $("#ConsigneeAddress2_Street").val(i.item.Address2);
-                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-
+                        
+                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);                        
                         $("#ConsigneePhone").val(i.item.Phone);
                         $("#ConsigneeCountryName").val(i.item.CountryName);
                         $("#ConsigneeCityName").val(i.item.CityName);
@@ -561,7 +561,7 @@
                                 ContactPerson: val.ContactPerson,
                                 Address1: val.Address1,
                                 Address2: val.Address2,
-                                Pincode: val.Pincode,
+                                Pincode: val.PinCode,
                                 Phone: val.Phone,
                                 CountryName: val.CountryName,
                                 CityName: val.CityName,
@@ -583,6 +583,7 @@
                 $("#ConsignorContact").val(i.item.ContactPerson);
                 $("#ConsignorAddress1_Building").val(i.item.Address1);
                 $("#ConsignorAddress2_Street").val(i.item.Address2);
+              
                 $("#ConsignorAddress3_PinCode").val(i.item.Pincode);
 
                 $("#ConsignorPhone").val(i.item.Phone);
@@ -1677,23 +1678,38 @@
         </div>
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-12">
-                
-                    <h3 style="color:white">AUDIT DETAILS</h3><hr />
 
-                    <div class="row no-margin" style="padding-top: 10px">
+                <h3 style="color:white">AUDIT DETAILS</h3><hr />
 
-                        <div class="col-md-6">
-                            <label class="headinglabel">Picked up By</label>
-                            @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                        </div>
+                <div class="row no-margin" style="padding-top: 10px">
 
-                        <div class="col-md-6">
-                            <label class="headinglabel">Depot Received By</label>
-                            @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                        </div>
-
+                    <div class="col-md-6">
+                        <label class="headinglabel">Picked up By</label>
+                        @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                     </div>
+
+                    <div class="col-md-6">
+                        <label class="headinglabel">Depot Received By</label>
+                        @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                    </div>
+
                 </div>
+                <div class="row no-margin" style="padding-top: 10px">
+
+                    <div class="col-md-6">
+                        <label class="headinglabel">Created By & Date  </label>
+                        @Html.DisplayFor(model => model.CreatedByName, new { @class = "form-control" }) &nbsp;&nbsp;
+                        @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="headinglabel">Last Modified By & Date  </label>
+                        @Html.DisplayFor(model => model.LastModifiedByName, new { @class = "form-control" }) &nbsp;&nbsp;
+                        @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
+                    </div>
+
+                </div>
+            </div>
             </div>                    
 
                 <div class="row no-margin" style="padding-top: 10px">
@@ -1740,8 +1756,8 @@
                                                             @item.OtherChargeName
                                                             <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
                                                         </td>
-                                                        <td>
-                                                            @item.Amount
+                                                        <td style="text-align:right">                                                            
+                                                            @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "2")
                                                             <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
                                                         </td>
                                                         <td style="text-align: center;">

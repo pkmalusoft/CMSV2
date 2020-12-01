@@ -2154,6 +2154,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="ManifestID" Type="int" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="LastModifiedBy" Type="int" />
+    <Property Name="LastModifiedDate" Type="datetime" />
   </EntityType>
   <EntityType Name="InScanMasterNew">
     <Key>

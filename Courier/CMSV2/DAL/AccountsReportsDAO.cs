@@ -151,7 +151,7 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
-            string period = "For the Period Ending :" + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "As on :" + reportparam.ToDate.Date.ToString("dd MMMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -161,7 +161,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
@@ -219,7 +219,7 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trading Account";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
-            string period = "For the Period Ending :" + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "As on :" + reportparam.ToDate.Date.ToString("dd MMMMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -229,7 +229,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "AccTrading_" + DateTime.Now.ToString("ddMMyyHHmmSS") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
@@ -257,8 +257,8 @@ namespace CMSV2.DAL
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "sp_EmpostAnalysisReport";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);           
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
@@ -285,8 +285,8 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Empost Analysis Report");
-            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Empost Fees Statement");
+            string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -395,6 +395,70 @@ namespace CMSV2.DAL
             //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+
+        public static string GenerateDefaultReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+                    
+            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
+            //if (TextBox1.Text.Trim() != "")
+            //    comd.Parameters[0].Value = TextBox1.Text;
+            //else
+            //    comd.Parameters[0].Value = DBNull.Value;
+            //SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            //sqlAdapter.SelectCommand = comd;
+            //DataSet ds = new DataSet();
+            //sqlAdapter.Fill(ds, "AccLedger");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();           
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "DefaultReport.rpt"));
+
+            //rd.SetDataSource(ds);
+
+
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue("Default Report");
+            string period = "Reprot Period as on Date "; // + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            //string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "DefaultReport.pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            reportpath = "~/ReportsPDF/" + reportname;
+            return reportpath;
+            //Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //return stream;
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+            //SaveStreamAsFile(reportpath, stream, reportname);
+            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
+            //return reportpath;
         }
     }
 }

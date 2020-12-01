@@ -34,8 +34,7 @@
                   $(this).val(1);
                 var menus = $('[id^=menu_]');
                 var parentid = $(this).attr('id').split('_')[1];
-                 $.each(menus, function (index, item) {
-                    debugger;                
+                 $.each(menus, function (index, item) {                              
                      var selectedmenuid = $(item).attr('parentid')
                      if (parentid == selectedmenuid) {
                          $(item).val(1);
@@ -48,8 +47,7 @@
                 $(this).val(0);
                   var menus = $('[id^=menu_]');
                 var parentid = $(this).attr('id').split('_')[1];
-                 $.each(menus, function (index, item) {
-                    debugger;                
+                 $.each(menus, function (index, item) {                    
                      var selectedmenuid = $(item).attr('parentid')
                      if (parentid == selectedmenuid) {
                          $(item).val(0);
@@ -61,8 +59,7 @@
         });
 
         $('#RoleId').change(function () {
-
-            debugger;
+                        
             $.ajax({
                 type: "Get",
                 url: "/MenuRole/GetRoleAccess",
@@ -70,17 +67,14 @@
                 data: { 'RoleId': $('#RoleId').val() },
                 success: function (response) {
                     debugger;
-                    console.log(response);
+                    $('#hdntitle').html('Menu Assigns - Modify');
                     var menus = $('[id^=menu_]');
-                    $.each(menus, function (index, item) {
-                        debugger;
-
+                    $.each(menus, function (index, item) {                        
                         $(item).val(0);
                         $(item).prop('checked', false);
                     });
 
-                    $.each(response.data, function (index, item) {
-                        debugger;
+                    $.each(response.data, function (index, item) {            
                         var menuid = item.MenuID;
                         $('#menu_' + menuid).prop('checked', true);
                         $('#menu_' + menuid).val(1);
@@ -93,8 +87,7 @@
         $("#btnsave").click(function () {
             var selectedmenuid = "";
             var menus = $('[id^=menu_]');
-            $.each(menus, function (index, item) {
-                debugger;
+            $.each(menus, function (index, item) {                
                 if ($(item).val() == 1) {
                     selectedmenuid += $(item).attr('id').split('_')[1] + ',' ;                    
                 }
@@ -139,7 +132,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont"> @ViewBag.Title     </h1>
+    <h1 class="headingfont" id="hdntitle">Menu Assigns - @ViewBag.Title     </h1>
 </section>
 
 <section class="content">

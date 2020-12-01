@@ -16,6 +16,14 @@ namespace CMSV2.Controllers
         public ActionResult EmposFeeReport()
         {
             ViewBag.ReportName = "Empos Fee Analysis Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("EmpostFee_"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
             return View();
         }
         public ActionResult ReportFrame()
@@ -23,7 +31,10 @@ namespace CMSV2.Controllers
             if (Session["ReportOutput"] != null)
                 ViewBag.ReportOutput = Session["ReportOutput"].ToString();
             else
-                ViewBag.ReportOutput = "~/Reports/DefaultReport.pdf";
+            {
+                string reportpath = AccountsReportsDAO.GenerateDefaultReport();
+                ViewBag.ReportOutput = reportpath; // "~/Reports/DefaultReport.pdf";
+            }
             return PartialView();
         }
         public ActionResult PrintSearch()
@@ -82,6 +93,8 @@ namespace CMSV2.Controllers
 
 
         }
+
+    
 
 
     }

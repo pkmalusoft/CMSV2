@@ -18,7 +18,7 @@ namespace CMSV2.Controllers
 
         public ActionResult Index(int? StatusId, string FromDate, string ToDate)
         {
-            SessionDataModel.ClearTableVariable();
+                SessionDataModel.ClearTableVariable();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -36,7 +36,8 @@ namespace CMSV2.Controllers
             }
             if (FromDate == null || ToDate == null)
             {
-                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
+                pFromDate = localDateTime1.Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
@@ -167,6 +168,7 @@ namespace CMSV2.Controllers
                 int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
                 int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
                 int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+                int userid = Convert.ToInt32(Session["UserID"].ToString());
                 string AWBNo = string.Empty;
 
                 string aw = (from c in db.InScans orderby c.AWBNo descending select c.AWBNo).FirstOrDefault();
@@ -210,7 +212,13 @@ namespace CMSV2.Controllers
                         inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
                         inscan.ConsignorPhone = v.ConsignorPhone;
                         inscan.ConsignorContact = v.ConsignorContact;
-                        
+                        inscan.CreatedBy = userid;
+                        DateTime univDateTime = DateTime.Now;
+                        DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
+                        inscan.CreatedDate = localDateTime;
+                        inscan.LastModifiedBy = userid;
+                        inscan.LastModifiedDate = localDateTime;
+
                         if (v.PaymentModeId != null)
                         {
                             if (v.PaymentModeId == 3)
@@ -252,6 +260,9 @@ namespace CMSV2.Controllers
                             }
                         }
                         inscan.TransactionDate = v.TransactionDate;
+                        DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);                        
+                        inscan.LastModifiedBy = userid;
+                        inscan.LastModifiedDate = localDateTime1;
                     }
                     inscan.Weight = v.Weight;            
                     //inscan.AcJournalID = ajm.AcJournalID;
@@ -409,8 +420,8 @@ namespace CMSV2.Controllers
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
                         
-                        if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
-                            _dao.AWBAccountsPosting(inscan.InScanID);
+                        //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
+                        //    _dao.AWBAccountsPosting(inscan.InScanID);
                         
                         //SaveConsignee(v);
                         TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
@@ -507,8 +518,8 @@ namespace CMSV2.Controllers
                         db.SaveChanges();
 
                     }
-                    //accounts posting  for payment mode pickupcash and cod
-                    if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
+                    //accounts posting  for payment mode pickupcash and cod and Account on 30/nov/2020
+                    //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         _dao.AWBAccountsPosting(inscan.InScanID);
 
 
@@ -814,6 +825,22 @@ namespace CMSV2.Controllers
                 inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;
 
 
+            if (data.CreatedBy != null)
+            {
+                inscan.CreatedByDate = Convert.ToDateTime(data.CreatedDate).ToString("dd-MMM-yyyy HH:mm"); ;
+                if (data.CreatedBy != null)
+                    inscan.CreatedByName = db.EmployeeMasters.Find(data.CreatedBy).EmployeeName;
+            }
+
+            if (data.LastModifiedBy != null)
+            {
+                inscan.LastModifiedDate = Convert.ToDateTime(data.LastModifiedDate).ToString("dd-MMM-yyyy HH:mm");
+                
+                if (data.LastModifiedBy!=null)
+                    inscan.LastModifiedByName = db.EmployeeMasters.Find(data.LastModifiedBy).EmployeeName;
+            }
+            
+
                 var d = (from c in db.InScanInternationals where c.InScanID == inscan.InScanID select c).FirstOrDefault();
                 if (d != null)
                 {
@@ -1004,15 +1031,15 @@ namespace CMSV2.Controllers
             }
             if ((FromDate == null || ToDate == null) && datePicker==null)
             {
-                pFromDate = DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
-                pToDate = DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+                pFromDate = DateTimeOffset.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                pToDate = DateTimeOffset.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
             {
                 if (datePicker == null)
                 {
                     pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
-                    pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+                    pToDate = Convert.ToDateTime(ToDate); //.AddDays(1);
                     datePicker = new DatePicker();
                     datePicker.FromDate = pFromDate;
                     datePicker.ToDate = pToDate;
@@ -1070,7 +1097,24 @@ namespace CMSV2.Controllers
             {
                 lst=lst.Where(tt => tt.MovementTypeID != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementTypeID.Value)).ToList(); 
             }
+            int qindex = 0;
+            foreach(QuickAWBVM item in lst)
+            {
+                if (lst[qindex].OtherCharge>0)
+                {
+                    int? _inscanid = lst[qindex].InScanID;
+                    var othercharge = (from c in db.InscanOtherCharges join m in db.OtherCharges on c.OtherChargeID equals m.OtherChargeID where c.InscanID == _inscanid && m.TaxApplicable == true select c).ToList();
+                    decimal? plAmount = othercharge.Sum(i => i.Amount);
+                    lst[qindex].OtherCharge = plAmount;
+                    lst[qindex].totalCharge = lst[qindex].CourierCharge + plAmount;
 
+                }
+                else
+                {
+                    lst[qindex].totalCharge = lst[qindex].CourierCharge;
+                }
+                qindex = qindex + 1;
+            }
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();

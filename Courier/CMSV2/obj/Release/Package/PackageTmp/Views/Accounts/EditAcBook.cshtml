@@ -12,12 +12,20 @@
     #details tr {
         height: 32px;
     }
-
-        #details tr:first-of-type {
+    #details td input{
+        background:transparent;
+        border-color:transparent;
+    }
+    #details td input:focus{
+        border-color:#07a7e3;
+    } 
+        #details tr:first-of-type,#ExpAllocationTable tr:first-of-type {
             background: #35b8eb;
             color: #fff;
         }
-
+    #DeleteNewRow {
+        color: #dd4b39;
+    }
     .headinglabel {
         font-family: Calibri;
         font-size: 16px;
@@ -1128,7 +1136,7 @@
 </section>
 
 
-<section class="content jobform">
+<section class="content ">
 
     @using (Html.BeginForm())
     {
@@ -1269,8 +1277,8 @@
                                                                                <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
                                                                            </div>
                                                                            <div class="col-md-2">
-                                                                               <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" onclick="ClearData()">-</button>&nbsp;&nbsp;
-                                                                               <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" class="addmore">+</button>
+                                                                               <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data"  onclick="ClearData()">-</button>&nbsp;&nbsp;
+                                                                               <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                                                                            </div>
                                                                            @*<div class="col-md-12 butdivs">
             <br />
@@ -1281,7 +1289,7 @@
             <br />
 
             <div class="row no-margin" style="padding-top:10px">
-                <table class="table table-bordered table-responsive" id="details" style="background-color:white">
+                <table class="table table-bordered table-responsive" id="details" >
                     <tr>
                         <td style="width:25%">AcHead</td>
                         <td style="width:2%">Tax.Incl</td>
@@ -1315,7 +1323,7 @@
         <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
 
         </div>
-        <div class="col-md-6 col-md-offset-3" data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;padding:10px" id="popup">
+        <div class="col-md-6 col-md-offset-3" data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;border-radius: 5px;padding:20px" id="popup">
 
             <div class="row">
                 <div class="col-md-5">
@@ -1328,9 +1336,9 @@
                     <input type="text" class="text-right form-control txtNum" id="ExpAmount" value="0" />
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel">Action</label>
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;" index="1" id="AddExpAllocation" class="addmore">+</button>&nbsp;&nbsp;
-                    <button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;border:none" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>
+                    <button type="button" style="margin-top:32px;" index="1" id="AddExpAllocation" class="addmore small_btn btn btn-primary"><i style="font-size:21px" class="fa fa-plus"></i></button>
+
+                    <button type="button" class="btn btn-danger" style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-31px;right:-25px;" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>
 
 
                 </div>
@@ -1339,7 +1347,7 @@
             @*<div class="row">
                     <div class="col-md-12 text-right">
                         <input type="button" value="Add" class="btn btn-primary" style="margin:10px;" id="AddExpAllocation" />
-                        <input type="button" value="Close" class="btn btn-danger" style="margin:10px;" id="AllocationClose" />
+                        <button type="button" value="Close" class="btn btn-danger" style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-11px;right:-10px;" id="AllocationClose" ><i style="font-size:21px" class="fa fa-times"></i></button>
                     </div>
                 </div>*@
             <div class="row">
@@ -1354,6 +1362,11 @@
                     </table>
                 </div>
             </div>
+            <div class="pull-right">
+                <button class="btn btn-secondary" style="background-color: #313030">Close</button>
+            </div>
+            <div class="clearfix"></div>
+
             <script type="text/javascript">
                 $(document).ready(function () {
                     $('#AddExpAllocation').click(function () {
@@ -1475,6 +1488,8 @@
                     $("#AcHeadAllocation").val('');
                     $("#SelectedAcHeadAllocation").val(0);
                     $("#ExpAmount").val('');
+                    $('#TaxPercent').val('');
+                    $('#TaxAmount').val('');
                     $("#ExpAllocationTable").find("tr:gt(0)").remove();
                 }
             </script>

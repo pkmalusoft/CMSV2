@@ -133,6 +133,10 @@ namespace CMSV2.Models
 
         public string AWBTermsConditions { get; set; }
 
+        public string CreatedByName { get; set; }
+        public string LastModifiedByName { get; set; }
+        public string CreatedByDate { get; set; }
+        public string LastModifiedDate { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

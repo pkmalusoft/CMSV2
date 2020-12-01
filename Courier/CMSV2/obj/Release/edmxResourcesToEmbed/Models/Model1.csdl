@@ -2276,6 +2276,10 @@
     <NavigationProperty Name="InscanOtherCharges" Relationship="Self.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
     <Property Name="AcJournalID" Type="Int32" />
     <Property Name="ManifestID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="InScanMasterNew">
     <Key>

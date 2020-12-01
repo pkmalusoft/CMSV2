@@ -3021,7 +3021,6 @@
     <Content Include="Content\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Reports\AccLedger.rpt" />
-    <Content Include="Reports\AccLedger.pdf" />
     <Content Include="ReportsPDF\AccLedger_2810201826.pdf" />
     <Content Include="ReportsXSD\AccTrialBalance.xsc">
       <DependentUpon>AccTrialBalance.xsd</DependentUpon>
@@ -3049,10 +3048,11 @@
     </Content>
     <Content Include="Reports\CustomerMaster.rpt" />
     <Content Include="Reports\Report1.rpt" />
-    <Content Include="Reports\DefaultReport.rpt" />
+    <Content Include="Reports\DefaultReportold.rpt" />
     <Content Include="Reports\DefaultReport.pdf" />
     <Content Include="Reports\EmpostFeeReport.rpt" />
     <Content Include="Reports\CustomerReceipt.rpt" />
+    <Content Include="Reports\DefaultReport.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
