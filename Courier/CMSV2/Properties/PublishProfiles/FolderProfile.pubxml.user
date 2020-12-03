@@ -26,10 +26,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/21/2020 16:24:54</publishTime>
     </File>
     <File Include="bin/CMSV2.dll">
-      <publishTime>12/01/2020 18:04:13</publishTime>
+      <publishTime>12/03/2020 19:33:17</publishTime>
     </File>
     <File Include="bin/CMSV2.pdb">
-      <publishTime>12/01/2020 18:04:13</publishTime>
+      <publishTime>12/03/2020 19:33:17</publishTime>
     </File>
     <File Include="bin/CrystalDecisions.CrystalReports.Engine.dll">
       <publishTime>07/08/2014 10:50:00</publishTime>
@@ -3304,6 +3304,21 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Reports/AccTrialBalance.rpt">
       <publishTime>10/29/2020 16:24:09</publishTime>
     </File>
+    <File Include="Reports/AWBRegister.rpt">
+      <publishTime>03/12/2020 14:16:45</publishTime>
+    </File>
+    <File Include="Reports/AWBRegister_MovementWise.rpt">
+      <publishTime>03/12/2020 14:14:14</publishTime>
+    </File>
+    <File Include="Reports/AWBRegister_ParcelType.rpt">
+      <publishTime>03/12/2020 14:12:27</publishTime>
+    </File>
+    <File Include="Reports/AWBRegister_Payment.rpt">
+      <publishTime>03/12/2020 14:13:52</publishTime>
+    </File>
+    <File Include="Reports/AWBRegister_Summary.rpt">
+      <publishTime>03/12/2020 12:42:57</publishTime>
+    </File>
     <File Include="Reports/Customer.xsc">
       <publishTime>10/27/2020 15:04:34</publishTime>
     </File>
@@ -3326,10 +3341,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/31/2020 12:35:03</publishTime>
     </File>
     <File Include="Reports/EmpostFeeReport.rpt">
-      <publishTime>12/01/2020 15:53:49</publishTime>
+      <publishTime>12/03/2020 19:32:50</publishTime>
     </File>
     <File Include="Reports/Report1.rpt">
       <publishTime>10/27/2020 15:04:34</publishTime>
+    </File>
+    <File Include="Reports/TaxRegister.rpt">
+      <publishTime>03/12/2020 19:24:40</publishTime>
     </File>
     <File Include="ReportsPDF/AccLedger_2810201826.pdf">
       <publishTime>10/28/2020 18:26:24</publishTime>
@@ -4334,7 +4352,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/28/2020 19:43:30</publishTime>
     </File>
     <File Include="Views/QuickAWB/PrintSearch.cshtml">
-      <publishTime>10/27/2020 15:27:40</publishTime>
+      <publishTime>02/12/2020 14:12:52</publishTime>
     </File>
     <File Include="Views/ReExportShipment/Create.cshtml">
       <publishTime>10/27/2020 15:27:40</publishTime>
@@ -4375,6 +4393,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/ReExportShipment/ViewImport.cshtml">
       <publishTime>10/27/2020 15:27:40</publishTime>
     </File>
+    <File Include="Views/Reports/AWBRegister.cshtml">
+      <publishTime>02/12/2020 14:06:47</publishTime>
+    </File>
+    <File Include="Views/Reports/AWBReportParam.cshtml">
+      <publishTime>03/12/2020 14:43:12</publishTime>
+    </File>
     <File Include="Views/Reports/EmposFeeReport.cshtml">
       <publishTime>11/09/2020 18:13:32</publishTime>
     </File>
@@ -4383,6 +4407,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Views/Reports/ReportFrame.cshtml">
       <publishTime>09/11/2020 19:00:28</publishTime>
+    </File>
+    <File Include="Views/Reports/TaxRegister.cshtml">
+      <publishTime>12/03/2020 18:08:58</publishTime>
+    </File>
+    <File Include="Views/Reports/TaxReportParam.cshtml">
+      <publishTime>12/03/2020 19:30:04</publishTime>
     </File>
     <File Include="Views/ReturnShipment/Create.cshtml">
       <publishTime>10/27/2020 15:26:52</publishTime>
@@ -4658,7 +4688,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/27/2020 14:56:19</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/01/2020 15:00:06</publishTime>
+      <publishTime>02/12/2020 18:02:29</publishTime>
     </File>
   </ItemGroup>
 </Project>

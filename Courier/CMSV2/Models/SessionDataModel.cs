@@ -42,6 +42,23 @@ namespace CMSV2.Models
         {
             System.Web.HttpContext.Current.Session["AccountsParam"] = reportparam;            
         }
+
+        public static AWBReportParam GetAWBReportParam()
+        {
+            return (AWBReportParam)System.Web.HttpContext.Current.Session["AWBReportParam"];
+        }
+        public static void SetAWBReportParam(AWBReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AWBReportParam"] = reportparam;
+        }
+        public static TaxReportParam GetTaxReportParam()
+        {
+            return (TaxReportParam)System.Web.HttpContext.Current.Session["TaxReportParam"];
+        }
+        public static void SetTaxReportParam(TaxReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["TaxReportParam"] = reportparam;
+        }
         public static void SetCookie(byte[] arr)
         {
             System.Web.HttpContext.Current.Session["sessionVariable"] = arr;

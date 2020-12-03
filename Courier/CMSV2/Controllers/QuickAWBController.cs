@@ -96,7 +96,7 @@ namespace CMSV2.Controllers
                 ViewBag.ProductType = db.ProductTypes.ToList();
                 ViewBag.parceltype = db.ParcelTypes.ToList();
                 ViewBag.customerrate = db.CustomerRateTypes.ToList();
-                ViewBag.CourierDescription = db.CourierDescriptions.ToList(); // not used
+               //not using ViewBag.CourierDescription = db.CourierDescriptions.ToList(); // not used
                 ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
                 ViewBag.CourierStatusList = db.CourierStatus.ToList();
                 ViewBag.StatusTypeList = db.tblStatusTypes.ToList();

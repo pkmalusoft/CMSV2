@@ -259,15 +259,16 @@ namespace CMSV2.DAL
             comd.CommandText = "sp_EmpostAnalysisReport";
             comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
-            comd.Parameters.AddWithValue("@BranchId", branchid);           
-
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@FYearId", yearid);
+            
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
             sqlAdapter.Fill(ds, "EmpostAnalysisReport");
 
             //generate XSD to design report
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "EmpostAnalysisReport.xsd"));
+           // System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "EmpostAnalysisReport.xsd"));
             //ds.WriteXmlSchema(writer);
             //writer.Close();
 
@@ -459,6 +460,243 @@ namespace CMSV2.DAL
             //SaveStreamAsFile(reportpath, stream, reportname);
             //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
             //return reportpath;
+        }
+
+
+        public static string GenerateAWBRegister()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            AWBReportParam reportparam = SessionDataModel.GetAWBReportParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_AWBRegisterReport";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@FYearId",yearid);
+            if (reportparam.PaymentModeId == null)
+            {
+                comd.Parameters.AddWithValue("@PaymentModeId", 0);
+            }
+            else
+            {
+                comd.Parameters.AddWithValue("@PaymentModeId", reportparam.PaymentModeId);
+            }
+            if (reportparam.ParcelTypeId == null)
+            {
+                comd.Parameters.AddWithValue("@ParcelTypeId", 0);
+            }
+            else
+            {
+                comd.Parameters.AddWithValue("@ParcelTypeId", reportparam.ParcelTypeId);
+            }
+            comd.Parameters.AddWithValue("@MovementId", reportparam.MovementId);
+
+            comd.Parameters.AddWithValue("@SortBy", reportparam.SortBy);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AWBRegister");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AWBRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            if (reportparam.ReportType == "Date")
+            {
+
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister.rpt"));
+            }
+            else if (reportparam.ReportType == "Movement")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_MovementWise.rpt"));
+            }
+            else if (reportparam.ReportType == "PaymentMode")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Payment.rpt"));
+            }
+            else if (reportparam.ReportType == "ParcelType")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_ParcelType.rpt"));
+            }
+            else if (reportparam.ReportType == "Summary")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Summary.rpt"));
+            }
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Airway Bill Register");
+            string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+
+            rd.ParameterFields["GroupBy"].CurrentValues.AddValue(reportparam.ReportType);
+            rd.ParameterFields["SortBy"].CurrentValues.AddValue(reportparam.SortBy);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            
+            string reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+
+
+        public static string GenerateTaxRegister()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            TaxReportParam reportparam = SessionDataModel.GetTaxReportParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_TaxRegisterReport";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@FYearId", yearid);
+            if (reportparam.TransactionType == null)
+            {
+                comd.Parameters.AddWithValue("@VoucherType", "All");
+            }
+            else
+            {
+                comd.Parameters.AddWithValue("@VoucherType", reportparam.TransactionType);
+            }
+            comd.Parameters.AddWithValue("@SortBy", reportparam.SortBy);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "TaxRegister");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "TaxRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "TaxRegister.rpt"));            
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Tax Register");
+            string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+
+          //  rd.ParameterFields["GroupBy"].CurrentValues.AddValue(reportparam.ReportType);
+           // rd.ParameterFields["SortBy"].CurrentValues.AddValue(reportparam.SortBy);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+
+            string reportname = "TaxRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
         }
     }
 }
