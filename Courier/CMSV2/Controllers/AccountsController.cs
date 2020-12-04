@@ -990,8 +990,8 @@ new AcGroupModel()
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
-            lsttype.Add(new VoucherTypeVM { TypeName = "All" });
-            var typeitems  = (from c in db.AcJournalMasters select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
+            lsttype.Add(new VoucherTypeVM { TypeName = "All" }); 
+            var typeitems  = (from c in db.AcJournalMasters where (c.VoucherType=="CBP" || c.VoucherType == "CBR" || c.VoucherType=="BKR" || c.VoucherType=="BKP") select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
             foreach(VoucherTypeVM Item in typeitems)
             {
                 lsttype.Add(Item);
@@ -1163,7 +1163,7 @@ new AcGroupModel()
 
             string cheque = "";
             string StatusTrans = "";
-
+            int branchid=Convert.ToInt32(Session["CurrentBranchID"].ToString());
             if (v.paytype > 1)
             {
                 cheque = v.chequeno;
@@ -1280,7 +1280,7 @@ new AcGroupModel()
 
 
             //int maxAcJDetailID = 0;
-
+            decimal totalTaxAmount = 0;
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
                 if (v.AcJDetailVM[i].IsDeleted != true)
@@ -1297,6 +1297,7 @@ new AcGroupModel()
                     acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
                     acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
                     acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
+                    totalTaxAmount = Convert.ToDecimal(totalTaxAmount) + Convert.ToDecimal(acJournalDetail.TaxAmount);
                     acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
                     acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
 
@@ -1332,8 +1333,36 @@ new AcGroupModel()
                             db.SaveChanges();
                             db.Entry(objAcAnalysisHeadAllocation).State = EntityState.Detached;
                         }
+
+
+
                     }
                 }
+            }
+            //Insert Tax Payable Account Ledger
+            int? vataccountid= db.BranchMasters.Find(branchid).VATAccountId;
+            if (vataccountid != null && totalTaxAmount>0)
+            {
+                ac = new AcJournalDetail();
+                maxAcJDetailID = 0;
+                maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+
+                ac.AcJournalDetailID = maxAcJDetailID + 1;
+                ac.AcJournalID = ajm.AcJournalID;
+                ac.AcHeadID = vataccountid;
+                if (StatusTrans == "P")
+                {
+                    ac.Amount = (totalTaxAmount);
+                }
+                else
+                {
+                    ac.Amount = -totalTaxAmount;
+                }
+                ac.Remarks = "Tax Payable";
+                ac.BranchID = branchid;
+                db.AcJournalDetails.Add(ac);
+                db.SaveChanges();
+
             }
 
             ViewBag.SuccessMsg = "You have successfully added Record";

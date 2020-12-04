@@ -78,5 +78,6 @@ namespace CMSV2.Models
         public string VATRegistrationNo { get; set; }
         public decimal VATPercent { get; set; }
         public int AcFinancialYearID { get; set; }
+        public int VATAccountId { get; set; }
   }
 }

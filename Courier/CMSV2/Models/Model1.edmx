@@ -644,6 +644,7 @@
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="CODReceiptPrefix" Type="varchar" MaxLength="4" />
           <Property Name="CODReceiptFormat" Type="varchar" MaxLength="10" />
+          <Property Name="VATAccountId" Type="int" />
         </EntityType>
         <EntityType Name="BusinessType">
           <Key>
@@ -10406,6 +10407,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <Property Name="CODReceiptPrefix" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
           <Property Name="CODReceiptFormat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
+          <Property Name="VATAccountId" Type="Int32" />
         </EntityType>
         <EntityType Name="BusinessType">
           <Key>
@@ -23609,6 +23611,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySetMapping Name="BranchMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.BranchMaster">
               <MappingFragment StoreEntitySet="BranchMaster">
+                <ScalarProperty Name="VATAccountId" ColumnName="VATAccountId" />
                 <ScalarProperty Name="CODReceiptFormat" ColumnName="CODReceiptFormat" />
                 <ScalarProperty Name="CODReceiptPrefix" ColumnName="CODReceiptPrefix" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />

@@ -639,6 +639,7 @@
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="CODReceiptPrefix" Type="varchar" MaxLength="4" />
     <Property Name="CODReceiptFormat" Type="varchar" MaxLength="10" />
+    <Property Name="VATAccountId" Type="int" />
   </EntityType>
   <EntityType Name="BusinessType">
     <Key>

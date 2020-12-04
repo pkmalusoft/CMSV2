@@ -94,7 +94,8 @@ namespace CMSV2.DAL
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
             }
-                        
+            rd.Close();
+            rd.Dispose();
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 
@@ -233,6 +234,8 @@ namespace CMSV2.DAL
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            rd.Close();
+            rd.Dispose();
             return reportpath;
 
             //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
@@ -319,7 +322,8 @@ namespace CMSV2.DAL
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
             }
-
+            rd.Close();
+            rd.Dispose();
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 
@@ -389,6 +393,8 @@ namespace CMSV2.DAL
              //reportparam.ReportFileName = reportname;
              rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             reportpath = "~/ReportsPDF/" + reportname;
+            rd.Close();
+            rd.Dispose();
             return reportname;
 
             //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
@@ -449,6 +455,8 @@ namespace CMSV2.DAL
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
 
             rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
             reportpath = "~/ReportsPDF/" + reportname;
             return reportpath;
             //Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
@@ -584,7 +592,8 @@ namespace CMSV2.DAL
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
             }
-
+            rd.Close();
+            rd.Dispose();
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 
@@ -688,7 +697,8 @@ namespace CMSV2.DAL
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
             }
-
+            rd.Close();
+            rd.Dispose();
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 

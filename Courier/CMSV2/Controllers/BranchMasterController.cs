@@ -46,6 +46,11 @@ namespace CMSV2.Controllers
             ViewBag.years = db.AcFinancialYears.ToList();
             ViewBag.designation = db.Designations.ToList();
             ViewBag.currency = db.CurrencyMasters.ToList();
+            List<AcHeadSelectAll_Result> x = null;
+            //x = db.AcHeadSelectAll(AcCompanyID).ToList();
+            var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID  select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).OrderBy(c=>c.AcHead).ToList();
+
+            ViewBag.heads = x1;
             return View();
         }
 
@@ -97,6 +102,7 @@ namespace CMSV2.Controllers
                     a.InvoicePrefix = item.InvoicePrefix;
                     a.InvoiceFormat = item.InvoiceFormat;
                     a.AcFinancialYearID = item.AcFinancialYearID;
+                    a.VATAccountId = item.VATAccountId;
                 }
                 else
                 {
@@ -132,6 +138,7 @@ namespace CMSV2.Controllers
                     a.VATPercent = item.VATPercent;
                     a.VATRegistrationNo = item.VATRegistrationNo;
                     a.AcFinancialYearID = item.AcFinancialYearID;
+                    a.VATAccountId = item.VATAccountId;
                 }
 
 
@@ -157,8 +164,11 @@ namespace CMSV2.Controllers
             //ViewBag.city = db.CityMasters.ToList().Where(x=>x.CountryID==data.CountryID);
             //ViewBag.location = db.LocationMasters.ToList().Where(x=>x.CityID==data.CityID);
             ViewBag.designation = db.Designations.ToList();
-            ViewBag.currency = db.CurrencyMasters.ToList();
-           
+            ViewBag.currency = db.CurrencyMasters.ToList();            
+            var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).OrderBy(c => c.AcHead).ToList();
+
+            ViewBag.heads = x1;
+
             if (data == null)
             {
                 return HttpNotFound();
@@ -195,6 +205,14 @@ namespace CMSV2.Controllers
                     v.InvoicePrefix = data.InvoicePrefix;
                     v.InvoiceFormat = data.InvoiceFormat;
                     v.AcFinancialYearID =Convert.ToInt32(data.AcFinancialYearID);
+                if (data.VATAccountId!=null)
+                {
+                    v.VATAccountId =Convert.ToInt32( data.VATAccountId);
+                }
+                else
+                {
+                    v.VATAccountId = 0;
+                }
                 if (data.VATPercent == null)
                 { v.VATPercent = 0; }
                 else
@@ -250,18 +268,24 @@ namespace CMSV2.Controllers
                     a.VATPercent = b.VATPercent;
                     a.VATRegistrationNo = b.VATRegistrationNo;
                     a.AcFinancialYearID = b.AcFinancialYearID;
-            
-
-
-            if (ModelState.IsValid)
+            if (b.VATAccountId == 0)
             {
+                a.VATAccountId = null;
+            }
+            else
+            {
+                a.VATAccountId = b.VATAccountId;
+            }
+
+            //if (ModelState.IsValid)
+            //{
                 db.Entry(a).State = EntityState.Modified;
                 db.SaveChanges();
                 TempData["SuccessMsg"] = "You have successfully Updated Branch.";
                 return RedirectToAction("Index");
-            }
+            //}
          
-            return View();
+            //return View();
         
         }
 

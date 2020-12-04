@@ -630,6 +630,7 @@
     <EntitySetMapping Name="BranchMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.BranchMaster">
         <MappingFragment StoreEntitySet="BranchMaster">
+          <ScalarProperty Name="VATAccountId" ColumnName="VATAccountId" />
           <ScalarProperty Name="CODReceiptFormat" ColumnName="CODReceiptFormat" />
           <ScalarProperty Name="CODReceiptPrefix" ColumnName="CODReceiptPrefix" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />

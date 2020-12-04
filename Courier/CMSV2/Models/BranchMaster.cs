@@ -62,6 +62,7 @@ namespace CMSV2.Models
         public Nullable<int> AcFinancialYearID { get; set; }
         public string CODReceiptPrefix { get; set; }
         public string CODReceiptFormat { get; set; }
+        public Nullable<int> VATAccountId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AcGroup> AcGroups { get; set; }
