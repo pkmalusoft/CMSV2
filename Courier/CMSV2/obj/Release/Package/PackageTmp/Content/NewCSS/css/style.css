@@ -5841,3 +5841,39 @@ p.indexbtnpadding{
 {
     margin-top:40px!important;
 }
+.small_btn{
+    min-width: 40px!important;
+    width:40px!important;
+    margin-top:21px;
+    border-radius:5px!important;
+}
+.divider{
+    padding-top:10px;
+}
+.gridBox input{
+    background:transparent;
+    border-color:transparent;
+    padding:5px;
+}
+.gridBox input:focus{
+    border-color:#35b8eb;
+}
+
+@media(max-width:1150px){
+body .headinglabel {
+    font-size: 12px;
+}
+header .navbar-custom-menu{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px 0;
+}
+header .navbar-nav>li {
+   float:none;
+}
+}
+@media(max-width: 1024px){
+    .content-header + .row .d-flex .col-md-1, .content-header + form .d-flex .col-md-1 {
+        width: 95px;
+    }
+}

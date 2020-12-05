@@ -130,7 +130,10 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 <div class="row no-margin d-flex">
-    <div class="col-md-2 hide">
+    <div class="col-md-5 ">
+        <div class="form-group">
+            <div class="row">
+        <div class="col-md-2 hide">
         <label class="headinglabel">Filters</label>
         @Html.DropDownList("Filters", new List<SelectListItem>
             {
@@ -141,16 +144,17 @@
 
              }, "Select", new { @class = "form-control", @id = "Filters" })
     </div>
-    <div class="col-md-2">
+    <div class="col-md-6">
         <label class="headinglabel required ">From Date</label>
         @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
     </div>
-    <div class="col-md-2">
+    <div class="col-md-6">
         <label class="headinglabel required">To Date</label>
         @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
     </div>
-
-    <div class="col-md-4">
+</div>
+</div>
+    <div class="col-md-12">
         <div id="divactype" class="hide">
             <label class="headinglabel">Account Type</label>
             @Html.DropDownListFor(model => model.AcTypeId, new SelectList(ViewBag.AccountType, "Id", "AccountType"), "Select", new { @class = "form-control txttarget" })
@@ -161,16 +165,15 @@
             @Html.DropDownListFor(model => model.AcGroupId, new SelectList(ViewBag.groups, "AcGroupID", "AcGroup"), "Select", new { @class = "form-control" })
         </div>
         <div id="divachead">
-            <label class="headinglabel required">Account Head</label>
+            <label class="headinglabel required">Chart of Accounts</label>
             @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control", @autocomplete = "off", @id = "AcHeadName", @required = "true" })
             @Html.HiddenFor(model => model.AcHeadId, new { id = "SelectedAcHead" })
         </div>
     </div>
-
 </div>
 
-        <div class="row no-margin d-flex">
-            <div class="col-md-2">
+ <div class="col-md-3 col-md-offset-1">
+            <div class="col-md-9">
                 <label class="headinglabel  required">Output</label>
                 @Html.DropDownList("Output", new List<SelectListItem>
                 {
@@ -221,6 +224,9 @@
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
                 </div>*@
         </div>
+</div>
+
+       
     }
 
 

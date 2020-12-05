@@ -829,16 +829,28 @@ namespace CMSV2.Controllers
             {
                 inscan.CreatedByDate = Convert.ToDateTime(data.CreatedDate).ToString("dd-MMM-yyyy HH:mm"); ;
                 if (data.CreatedBy != null)
-                    inscan.CreatedByName = db.EmployeeMasters.Find(data.CreatedBy).EmployeeName;
+                {
+                    var emp = db.EmployeeMasters.Where(CC => CC.UserID == data.CreatedBy).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        inscan.CreatedByName = emp.EmployeeName;
+                    }
+                }
             }
 
             if (data.LastModifiedBy != null)
             {
                 inscan.LastModifiedDate = Convert.ToDateTime(data.LastModifiedDate).ToString("dd-MMM-yyyy HH:mm");
-                
-                if (data.LastModifiedBy!=null)
-                    inscan.LastModifiedByName = db.EmployeeMasters.Find(data.LastModifiedBy).EmployeeName;
-            }
+
+                if (data.LastModifiedBy != null)
+                {                                            
+                        var emp = db.EmployeeMasters.Where(CC => CC.UserID == data.LastModifiedBy).FirstOrDefault();
+                        if (emp != null)
+                        {
+                            inscan.LastModifiedByName  = emp.EmployeeName;
+                        }
+                    }
+             }
             
 
                 var d = (from c in db.InScanInternationals where c.InScanID == inscan.InScanID select c).FirstOrDefault();

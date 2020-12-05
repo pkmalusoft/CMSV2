@@ -1248,12 +1248,17 @@ new AcGroupModel()
             }
 
             decimal TotalAmt = 0;
-
+            decimal totalTaxAmount = 0;
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
-
-                TotalAmt = TotalAmt + Convert.ToDecimal(v.AcJDetailVM[i].Amt);
-
+                if (v.AcJDetailVM[i].IsDeleted != true)
+                {
+                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
+                    {
+                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    }
+                    TotalAmt = TotalAmt + Convert.ToDecimal(v.AcJDetailVM[i].Amt);
+                }   totalTaxAmount = Convert.ToDecimal(totalTaxAmount) + Convert.ToDecimal(v.AcJDetailVM[i].TaxAmount);
             }
 
 
@@ -1266,11 +1271,11 @@ new AcGroupModel()
             ac.AcHeadID = v.SelectedAcHead;
             if (StatusTrans == "P")
             {
-                ac.Amount = -(TotalAmt);
+                ac.Amount = -(TotalAmt+totalTaxAmount);
             }
             else
             {
-                ac.Amount = TotalAmt;
+                ac.Amount = TotalAmt+totalTaxAmount;
             }
             ac.Remarks = v.AcJDetailVM[0].Rem;
             ac.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -1280,7 +1285,7 @@ new AcGroupModel()
 
 
             //int maxAcJDetailID = 0;
-            decimal totalTaxAmount = 0;
+          
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
                 if (v.AcJDetailVM[i].IsDeleted != true)
@@ -1297,14 +1302,14 @@ new AcGroupModel()
                     acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
                     acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
                     acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
-                    totalTaxAmount = Convert.ToDecimal(totalTaxAmount) + Convert.ToDecimal(acJournalDetail.TaxAmount);
+                 
                     acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
                     acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
 
-                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
-                    {
-                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
-                    }
+                    //if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
+                    //{
+                    //    v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    //}
                     if (StatusTrans == "P")
                     {
                         acJournalDetail.Amount = (v.AcJDetailVM[i].Amt);
@@ -1340,8 +1345,8 @@ new AcGroupModel()
                 }
             }
             //Insert Tax Payable Account Ledger
-            int? vataccountid= db.BranchMasters.Find(branchid).VATAccountId;
-            if (vataccountid != null && totalTaxAmount>0)
+            int? vataccountid = db.BranchMasters.Find(branchid).VATAccountId;
+            if (vataccountid != null && totalTaxAmount > 0)
             {
                 ac = new AcJournalDetail();
                 maxAcJDetailID = 0;
@@ -1380,6 +1385,7 @@ new AcGroupModel()
         [HttpPost]
         public ActionResult EditAcBook(AcBookVM v)
         {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             string cheque = "";
             string StatusTrans = "";
 
@@ -1460,10 +1466,18 @@ new AcGroupModel()
             }
 
             decimal TotalAmt = 0;
-
+            decimal totalTaxAmount = 0;
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
-                TotalAmt = TotalAmt + Convert.ToDecimal(v.AcJDetailVM[i].Amt);
+                if (v.AcJDetailVM[i].IsDeleted != true)
+                {
+                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
+                    {
+                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    }
+                    TotalAmt = TotalAmt + Convert.ToDecimal(v.AcJDetailVM[i].Amt);
+                    totalTaxAmount = Convert.ToDecimal(totalTaxAmount) + Convert.ToDecimal(v.AcJDetailVM[i].TaxAmount);
+                }
             }
             var ac = (from c in db.AcJournalDetails where c.AcJournalID == ajm.AcJournalID select c).FirstOrDefault();
             ac.AcJournalDetailID = ac.AcJournalDetailID;
@@ -1471,11 +1485,11 @@ new AcGroupModel()
             ac.AcHeadID = v.SelectedAcHead;
             if (StatusTrans == "P")
             {
-                ac.Amount = -(TotalAmt);
+                ac.Amount = -(TotalAmt+totalTaxAmount);
             }
             else
             {
-                ac.Amount = TotalAmt;
+                ac.Amount = TotalAmt+totalTaxAmount;
             }
             ac.Remarks = v.AcJDetailVM[0].Rem;
             ac.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -1484,7 +1498,7 @@ new AcGroupModel()
             db.SaveChanges();
 
             int maxAcJDetailID = 0;
-
+          
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
                 if (v.AcJDetailVM[i].IsDeleted != true)
@@ -1509,15 +1523,22 @@ new AcGroupModel()
                     acJournalDetail.AcHeadID = v.AcJDetailVM[i].AcHeadID;
                     acJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
                     acJournalDetail.AcJournalID = ajm.AcJournalID;
-                    acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
+                    if (v.AcJDetailVM[i].Rem == null)
+                    {
+                        acJournalDetail.Remarks = "";
+                    }
+                    else
+                    {
+                        acJournalDetail.Remarks = v.AcJDetailVM[i].Rem;
+                    }
                     acJournalDetail.TaxPercent = v.AcJDetailVM[i].TaxPercent;
-                    acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;
+                    acJournalDetail.TaxAmount = v.AcJDetailVM[i].TaxAmount;                 
                     acJournalDetail.AmountIncludingTax = v.AcJDetailVM[i].AmountIncludingTax;
                     acJournalDetail.SupplierId = v.AcJDetailVM[i].SupplierID;
-                    if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
-                    {
-                        v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
-                    }
+                    //if (v.AcJDetailVM[i].AmountIncludingTax == true && v.AcJDetailVM[i].TaxAmount > 0)
+                    //{
+                    //    v.AcJDetailVM[i].Amt = v.AcJDetailVM[i].Amt - v.AcJDetailVM[i].TaxAmount;
+                    //}
 
                     if (StatusTrans == "P")
                     {
@@ -1573,6 +1594,54 @@ new AcGroupModel()
                         }
                     }
                 }
+            }
+            //
+            //Insert Tax Payable Account Ledger
+            try
+            {
+                int? vataccountid = db.BranchMasters.Find(branchid).VATAccountId;
+                if (vataccountid != null && totalTaxAmount > 0)
+                {
+                    bool newentry = false;
+                    ac = new AcJournalDetail();
+                    ac = db.AcJournalDetails.Where(cc => cc.AcJournalID == v.AcJournalID && cc.AcHeadID == vataccountid).FirstOrDefault();
+                    if (ac == null)
+                    {
+                        ac = new AcJournalDetail();
+                        maxAcJDetailID = 0;
+                        maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+                        ac.AcJournalDetailID = maxAcJDetailID + 1;
+                        ac.AcJournalID = ajm.AcJournalID;
+                        ac.AcHeadID = vataccountid;
+                        newentry = true;
+                    }
+
+                    if (StatusTrans == "P")
+                    {
+                        ac.Amount = (totalTaxAmount);
+                    }
+                    else
+                    {
+                        ac.Amount = -totalTaxAmount;
+                    }
+                    ac.Remarks = "Tax Payable";
+                    ac.BranchID = branchid;
+                    if (newentry)
+                    {
+                        db.AcJournalDetails.Add(ac);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        db.Entry(ac).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                }
+            }
+            catch (Exception ex2)
+            {
+
             }
 
             string DeleteJournalDetails = Request["deletedJournalDetails"];

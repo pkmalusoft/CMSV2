@@ -31,8 +31,8 @@ namespace CMSV2.DAL
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "sp_accledger";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
@@ -122,7 +122,7 @@ namespace CMSV2.DAL
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_AccTrailBalance";
-            comd.Parameters.AddWithValue("@AsOnDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@AsOnDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
 

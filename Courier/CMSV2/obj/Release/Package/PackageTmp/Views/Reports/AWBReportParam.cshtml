@@ -106,13 +106,21 @@
             if ($("#chkDateWise").is(':checked')) {
                 $("#chkAWBWise").removeAttr('checked');
                 $('#SortBy').val('Date Wise');
-            }            
+            }
+            else {
+                $("#chkAWBWise").prop('checked','checked');
+                $('#SortBy').val('AWB Wise');
+            }
         });
 
         $("#chkAWBWise").click(function () {
             if ($("#chkAWBWise").is(':checked')) {
                 $("#chkDateWise").removeAttr('checked');
                 $('#SortBy').val('AWB Wise');
+            }
+            else {
+                $("#chkDateWise").prop('checked', 'checked');
+                $('#SortBy').val('Date Wise');
             }
         });
         $('#GroupBy').change(function () {

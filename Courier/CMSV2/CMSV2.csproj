@@ -3480,10 +3480,18 @@
     <Content Include="Views\Reports\AWBReportParam.cshtml" />
     <Content Include="Views\Reports\TaxRegister.cshtml" />
     <Content Include="Views\Reports\TaxReportParam.cshtml" />
+    <Content Include="Views\TaxConfiqration\Create.cshtml" />
+    <Content Include="Views\TaxConfiqration\Delete.cshtml" />
+    <Content Include="Views\TaxConfiqration\Details.cshtml" />
+    <Content Include="Views\TaxConfiqration\Edit.cshtml" />
+    <Content Include="Views\TaxConfiqration\Index.cshtml" />
+    <Content Include="Views\CityMaster\Table.cshtml" />
+    <Content Include="Views\Employee\Employee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ReportsXSD\" />
+    <Folder Include="Views\UserRegistration\New folder\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

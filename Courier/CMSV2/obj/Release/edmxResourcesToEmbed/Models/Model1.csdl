@@ -706,6 +706,7 @@
     <Property Name="CODReceiptPrefix" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
     <Property Name="CODReceiptFormat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
+    <Property Name="VATAccountId" Type="Int32" />
   </EntityType>
   <EntityType Name="BusinessType">
     <Key>

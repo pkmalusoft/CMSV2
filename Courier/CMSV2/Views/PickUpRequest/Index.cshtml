@@ -1,52 +1,43 @@
 ﻿@model IEnumerable<CMSV2.Models.PickupRequestVM>
 
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-    var isadd = true;
-    var ismodify = true;
-    string path = "/PickUpRequest/Index";
-
-    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
-    {
-        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
-        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
-        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
-
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     }
-}
-<style>
-    tfoot {
-        display: table-header-group;
-    }
-</style>
-<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-<script type="text/javascript">
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+      
+    </style>
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+    <script type="text/javascript">
 
 
-    $(function () {
-        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $(function () {
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+            
+        });
 
-    });
+        $(function () {
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-    $(function () {
-        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+            $('#ToDate').datepicker("setDate", new Date());
+        });
 
-        $('#ToDate').datepicker("setDate", new Date());
-    });
-
-    $(function () {
+        $(function () {
         $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
+        
 
 
+    </script>
 
-</script>
-
-<script type="text/javascript">
+    <script type="text/javascript">
         @*function LoadList() {
             debugger;
 
@@ -65,7 +56,7 @@
                 alert('Could not change Status,Shipment Type out of Pickup Request!');
                 return;
             }
-
+              
             $("#InScanID").val(InScanID);
             $("#PickupRequestStatusId").val(PickupRequestStatusId);
             $('#ChangeStatusId').val($("#PickupRequestStatusId").val());
@@ -104,11 +95,11 @@
                     $('#divcollected').removeClass('hide');
                     $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
                     $('#PickedEmployeeId').val(_detail.PickedUpId).trigger('change');
-                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);
+                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);  
                     var myDate = new Date(_detail.PickedUpDateTime.match(/\d+/)[0] * 1);
                     console.log(myDate);
                     var cmon = myDate.getMonth() + 1;
-                   var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                   var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();        
                     $('#txtpickuptime').val(collectdate);
                 }
                 else {
@@ -149,7 +140,7 @@
                     $.notify("Select Reason!", "warning");
                     return;
                 }
-            }
+            }               
             var statusobj = {
                 InScanID: $('#InScanID').val(),
                 ChangeStatusId: $('#ChangeStatusId').val(),
@@ -164,7 +155,7 @@
                 datatype: "Json",
                 data: statusobj,
                 success: function (response) {
-
+                    
                     if (response.status=="ok")
                     {
                         $.notify("Status Updated Successfully!", "success");
@@ -176,14 +167,14 @@
                         $.notify("Save Failed :" + response.message, "warning");
 
                                         $('#StatusModal').modal('hide');
-
+                    
                 }
             });
-
+                                     
 
         }
         $(document).ready(function () {
-
+         
             $("select").css({ "border-radius": "5px" });
 
             $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
@@ -220,9 +211,9 @@
         });
 
 
-
+          
             $("#ChangeStatusId").change(function () {
-
+                
                 var changestatus = $("#ChangeStatusId").val();
 
                 if ($("#PickupRequestStatusId") == changestatus)
@@ -261,10 +252,10 @@
 
             });
 
+    
+    
 
-
-
-
+       
             // var table = $('#dataTables-example').DataTable({
             // "footerCallback": function ( row, data, start, end, display ) {
             //    var api = this.api(), data;
@@ -329,44 +320,44 @@
 
             if ($("#ToDate").val()=="")
                 $("#ToDate").val('@ViewBag.ToDate');
-
-
+                              
+       
        });
 
+        
+    </script>
+    <section class="content-header">
+        <h1 class="headingfont">PickUp Request</h1>
+    </section>
+    
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-2">
+                <input type="hidden" id="PickupRequestStatusId" />
+                <input type="hidden" id="InScanID" />
+                <label class="headinglabel">Status</label>
+                @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+            </div>
+            <div class="col-md-1">
+                <label class="headinglabel">From </label>
+                <input id="FromDate" class="form-control text-right "  name="FromDate" type="text" value="@ViewBag.FromDate" />
+                @*@Html.TextBox("FromDate",new { @class = "form-control  text-right txttarget" })*@
+            </div>
 
-</script>
-<section class="content-header">
-    <h1 class="headingfont">PickUp Request</h1>
-</section>
-
-<div class="row no-margin">
-    <div class=" d-flex">
-        <div class="col-md-2">
-            <input type="hidden" id="PickupRequestStatusId" />
-            <input type="hidden" id="InScanID" />
-            <label class="headinglabel">Status</label>
-            @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
-        </div>
-        <div class="col-md-1">
-            <label class="headinglabel">From </label>
-            <input id="FromDate" class="form-control text-right " name="FromDate" type="text" value="@ViewBag.FromDate" />
-            @*@Html.TextBox("FromDate",new { @class = "form-control  text-right txttarget" })*@
-        </div>
-
-        <div class="col-md-1">
-            <label class="headinglabel">To</label>
-            <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
-            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget text-right" })*@
-        </div>
-
-        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
-            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "PickupRequest")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
-        </div>
-        <div class="pull-left" style="padding-top:32px;padding-right:15px">
+            <div class="col-md-1">
+                <label class="headinglabel">To</label>
+                <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+                @*@Html.TextBox("ToDate", new { @class = "form-control txttarget text-right" })*@
+            </div>
+			
+            <div class="pull-left" style="padding-top:32px; padding-left:5px;" >
+              <a  class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "PickupRequest")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            </div>
+        <div class="pull-left" style="padding-top:32px;">
             <p class="indexbtnpadding">
-                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false)
                 {
-                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth",@disabled="disabled" })
                 }
                 else
                 {
@@ -374,23 +365,23 @@
                 }
             </p>
         </div>
+            </div>
     </div>
-</div>
 
 
 
-<section class="content">
+    <section class="content">
 
 
-    @if (TempData["SuccessMsg"] != null)
-    {
-        <script type="text/javascript">
+        @if (TempData["SuccessMsg"] != null)
+        {
+            <script type="text/javascript">
                  $(document).ready(function () {
                      $.notify("@TempData["SuccessMsg"]", "success");
                  });
-        </script>
-    }
-    @*<div class="row no-margin">
+            </script>
+        }
+        @*<div class="row no-margin">
             <div class="col-md-3">
                  <label class="headinglabel">Sort By</label>
                         @Html.DropDownList("Filter", new List<SelectListItem>
@@ -412,219 +403,215 @@
 
 
 
-    <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+        <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
 
 
-            <thead>
-                <tr>
-                    <th>
-                        @Html.Label("Request No")
-
-                    </th>
-
-
-                    <th style="width:8%">
-                        @Html.Label("Request Date")
-                    </th>
-                    <th style="width:15%">
-                        @Html.Label("Shipper")
-                    </th>
-
-
-                    <th style="width:15%">
-                        @Html.Label("Consignee")
-                    </th>
-
-                    <th>
-                        @Html.Label("Collected By")
-                    </th>
-                    <th>
-                        @Html.Label("Assigned To")
-                    </th>
-                    <th style="width:8%">
-                        @Html.Label("AWB")
-                    </th>
-                    <th>
-                        @Html.Label("Status")
-                    </th>
-
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tfoot>
-                <tr>
-                    <th>
-                        @Html.Label("Enquiry No")
-
-                    </th>
-
-
-                    <th>
-                        @Html.Label("Request Date")
-                    </th>
-                    <th>
-                        @Html.Label("Shipper")
-                    </th>
-
-
-                    <th>
-                        @Html.Label("Consignee")
-                    </th>
-
-                    <th>
-                        @Html.Label("Collected By")
-                    </th>
-                    <th>
-                        @Html.Label("Assigned To")
-                    </th>
-                    <th>
-                        @Html.Label("AWB")
-                    </th>
-                    <th>
-                        @Html.Label("PickupRequestStatus")
-                    </th>
-
-                    <th style="display:none"></th>
-                </tr>
-            </tfoot>
-            <tbody>
-                @foreach (var item in Model)
-                {
-
+                <thead>
                     <tr>
+                        <th>
+                            @Html.Label("Request No")
+
+                        </th>
 
 
-                        <td style="text-align:right">
-                            @Html.DisplayFor(modelItem => item.EnquiryNo)
-                        </td>
-                        <td style="text-align:right">
-                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.EnquiryDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Consignor)
-                        </td>
+                        <th style="width:8%">
+                            @Html.Label("Request Date")
+                        </th>
+                        <th style="width:15%">
+                            @Html.Label("Shipper")
+                        </th>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Consignee)
-                        </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.eCollectedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.eAssignedTo)
-                        </td>
-                        <td>
-                            @item.AWBNo
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PickupRequestStatus)
-                        </td>
-                        <td>
-                            <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.EnquiryID','@item.PickupRequestStatusId','@item.ShipmentType')"><i class="fa fa-file"></i></a>  |
-                            @if (ismodify)
-                            {
-                                <a href="@Url.Action("Create", new { id = item.EnquiryID })"><i class="fa fa-pencil"></i>|</a> 
-                            }                
-                                                                                                                           
-                            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
-                            <a href="#" onclick="Delete(ID=@item.EnquiryID)"><i class="fa fa-times"></i></a>
-                        </td>
+                        <th style="width:15%">
+                            @Html.Label("Consignee")
+                        </th>
+
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+                        <th>
+                            @Html.Label("Assigned To")
+                        </th>
+                        <th style="width:8%">
+                            @Html.Label("AWB")
+                        </th>
+                        <th>
+                            @Html.Label("Status")
+                        </th>
+
+                        <th>Action</th>
                     </tr>
-                }
-            </tbody>
+                </thead>
 
-        </table>
-    </div>
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.Label("Enquiry No")
 
-
-
-    <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #f5f5f5;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">
-                        Change Status
-                    </h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row" style="padding-top: 5px">
-                            <div class="col-sm-12">
-                                <div class="row">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Current Status
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus"), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "ChangeStatusId" })
-                                        @*  @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })*@
-                                    </div>
-                                </div>
-                                <div class="row hide" id="divassigned" style="margin-top:10px">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Assigned Employee
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        @Html.DropDownList("AssignedEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.AssignedEmployeeId), "Select", new { @class = "form-control", @id = "AssignedEmployeeId", @name = "AssignedEmployeeId" })
-
-                                    </div>
-                                </div>
-                                <div class="row hide" id="divnoshow" style="margin-top:10px">
-                                    <div class="col-xs-5 col-sm-3">
-                                        Reason
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9">
-                                        @Html.DropDownList("NoshowReason", new List<SelectListItem>
-                                                {
-                                        new SelectListItem{ Text="Telephone not Answering", Value = "1" },
-                                        new SelectListItem{ Text="Shop Closed", Value = "2" },
-                                                        new SelectListItem{ Text="Vehicle Damaged", Value = "3" }
-
-                                    }, "", new { @class = "form-control", @id = "SubStatusReason" })
+                        </th>
 
 
-                                    </div>
-                                </div>
-                                <div id="divcollected" class="hide">
-                                    <div class="row" style="margin-top:10px">
+                        <th>
+                            @Html.Label("Request Date")
+                        </th>
+                        <th>
+                            @Html.Label("Shipper")
+                        </th>
+
+
+                        <th>
+                            @Html.Label("Consignee")
+                        </th>
+
+                        <th>
+                            @Html.Label("Collected By")
+                        </th>
+                        <th>
+                            @Html.Label("Assigned To")
+                        </th>
+                        <th>
+                            @Html.Label("AWB")
+                        </th>
+                        <th>
+                            @Html.Label("PickupRequestStatus")
+                        </th>
+
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+
+
+                            <td style="text-align:right">
+                                @Html.DisplayFor(modelItem => item.EnquiryNo)
+                            </td>
+                            <td style="text-align:right">
+                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.EnquiryDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Consignor)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Consignee)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.eCollectedBy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.eAssignedTo)
+                            </td>
+                            <td>
+                                @item.AWBNo
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PickupRequestStatus)
+                            </td>
+                            <td>                                
+                                <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.EnquiryID','@item.PickupRequestStatusId','@item.ShipmentType')"><i class="fa fa-file"></i></a>  |
+                                <a href="@Url.Action("Create", new { id = item.EnquiryID })"><i class="fa fa-pencil"></i></a> |
+                                @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+                                <a href="#" onclick="Delete(ID=@item.EnquiryID)"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+        <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">
+                            Change Status
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row" style="padding-top: 5px">
+                                <div class="col-sm-12">
+                                    <div class="row">
                                         <div class="col-xs-5 col-sm-3">
-                                            Picked By
+                                            Current Status
                                         </div>
                                         <div class="col-xs-7 col-sm-9">
-                                            @Html.DropDownList("PickedByEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.PickedByEmployeeId), "Select", new { @class = "form-control", @id = "PickedEmployeeId", @name = "PickedEmployeeId" })
+                                            @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus"), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "ChangeStatusId" })
+                                            @*  @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })*@
                                         </div>
                                     </div>
-                                    <div class="row" style="margin-top:10px">
+                                    <div class="row hide" id="divassigned" style="margin-top:10px">
                                         <div class="col-xs-5 col-sm-3">
-                                            Picked Date Time
+                                            Assigned Employee
                                         </div>
-                                        <div class="col-xs-7 col-sm-4">
-                                            <input type="text" id="txtpickuptime" value="" class="form-control" />
-                                            @*@Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })*@
+                                        <div class="col-xs-7 col-sm-9">
+                                            @Html.DropDownList("AssignedEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.AssignedEmployeeId), "Select", new { @class = "form-control", @id = "AssignedEmployeeId", @name = "AssignedEmployeeId" })
+
+                                        </div>
+                                    </div>
+                                    <div class="row hide" id="divnoshow" style="margin-top:10px">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Reason
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            @Html.DropDownList("NoshowReason", new List<SelectListItem>
+                                                    {
+                                            new SelectListItem{ Text="Telephone not Answering", Value = "1" },
+                                            new SelectListItem{ Text="Shop Closed", Value = "2" },
+                                                            new SelectListItem{ Text="Vehicle Damaged", Value = "3" }
+
+                                        }, "", new { @class = "form-control", @id = "SubStatusReason" })
+
+
+                                        </div>
+                                    </div>
+                                    <div id="divcollected" class="hide">
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-xs-5 col-sm-3">
+                                                Picked By
+                                            </div>
+                                            <div class="col-xs-7 col-sm-9">
+                                                @Html.DropDownList("PickedByEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.PickedByEmployeeId), "Select", new { @class = "form-control", @id = "PickedEmployeeId", @name = "PickedEmployeeId" })
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-xs-5 col-sm-3">
+                                                Picked Date Time
+                                            </div>
+                                            <div class="col-xs-7 col-sm-4">
+                                                <input type="text" id="txtpickuptime" value="" class="form-control" />
+                                                @*@Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })*@
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer" style="padding-top: 5px">
-                    <lable style="color:red" id="lblstatuserror" class="pull-left"></lable>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus" onclick="SaveStatus();">Save Status</button>
+                    <div class="modal-footer" style="padding-top: 5px">
+                        <lable style="color:red" id="lblstatuserror" class="pull-left"></lable>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus" onclick="SaveStatus();">Save Status</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<script type="text/javascript">
-    function Delete(ID) {
-        if (confirm("Are you sure? You want to Delete PickUp Request?")) {
-            window.location.href = "/PickUpRequest/DeleteConfirmed/?id=" + ID;
+    </section>
+    <script type="text/javascript">
+        function Delete(ID) {
+            if (confirm("Are you sure? You want to Delete PickUp Request?")) {
+                window.location.href = "/PickUpRequest/DeleteConfirmed/?id=" + ID;
+            }
         }
-    }
-</script>
+    </script>

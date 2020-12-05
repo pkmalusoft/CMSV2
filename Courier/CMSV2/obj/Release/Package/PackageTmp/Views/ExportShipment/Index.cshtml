@@ -103,12 +103,12 @@
                             <label for="FromDate" class="col-3 control-label">To</label>
                             <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
                         </div>
-                        <div class="col-md-2 m-top col-sm-3  m-top">
+                        <div class="col-md-1 m-top col-sm-3  m-top">
                             @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
                             <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                         </div>
                   
-                        <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+                        <div class="m-top filter_btns text-md-right text-right m-top" style="margin-bottom:10px;">
                             @*@if (ViewBag.Token.Create)
         {
             @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" });

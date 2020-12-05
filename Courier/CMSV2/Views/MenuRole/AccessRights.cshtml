@@ -48,7 +48,7 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable({ "paging":false});
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
         var items = [];
 
         $('#btnsave').click(function () {
@@ -159,7 +159,7 @@
                       });
         </script>
     }
-<div class="row no-margin">
+<div class="row no-margin" style="padding-bottom: 30px">
     <div class="col-md-3">
         <label class="headinglabel required"> User Role</label>
         @Html.DropDownList("RoleId", new SelectList(@ViewBag.Roles, "RoleID", "RoleName", @ViewBag.RoleId), "Select", new { @class = "form-control" })
@@ -170,7 +170,7 @@
     </div>
     <div class="cold-md-9" style="padding-top:30px">
         <input type="button" value="Save" id="btnsave" disabled class="btn btn-primary btnwidth " />&nbsp;&nbsp;
-        <a class="btn btn-danger btnwidth float-right" id="btncancel"  href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()">Cancel</a>
+        <a class="btn btn-danger btnwidth float-right" id="btncancel"  href="Javascript:void(0)" style="" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()">Cancel</a>
         @*@Html.ActionLink("Cancel", "AccessRights", null, new { @class = "btn btn-danger btnwidth float-right" })*@
     </div>
 </div>

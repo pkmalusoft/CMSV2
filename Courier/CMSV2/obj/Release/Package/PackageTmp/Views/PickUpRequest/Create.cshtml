@@ -1084,15 +1084,15 @@
                 <label class="headinglabel">Collected Time</label>
                 @Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control"})
             </div>
-
-
-        </div>
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-6">
+             <div class="col-md-6">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
             </div>
-            <div class="col-md-6 btn-right">
+
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+           
+            <div class="col-md-12 btn-right">
 
                 <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "PickUpRequest", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 

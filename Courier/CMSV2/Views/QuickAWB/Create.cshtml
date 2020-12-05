@@ -1561,7 +1561,7 @@
                             @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                         </div>
                         <div class="col-md-2">
-                            <label class="headinglabel required">Courier Movement Type</label>
+                            <label class="headinglabel required">Movement Type</label>
                             @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
                         </div>
 
