@@ -102,7 +102,7 @@ namespace CMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax,SupplierId=@SupplierId WHERE AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax,TaxPercent=@TaxPercent,TaxAmount=@TaxAmount, SupplierId=@SupplierId WHERE AcJournalDetailID = @AcJournalDetailID";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -128,6 +128,12 @@ namespace CMSV2.DAL
 
             cmd.Parameters.Add("@AmountIncludingTax", SqlDbType.Bit);
             cmd.Parameters["@AmountIncludingTax"].Value = ObjectAcJournalDetail.AmountIncludingTax;
+
+            cmd.Parameters.Add("@TaxPercent", SqlDbType.Decimal);
+            cmd.Parameters["@TaxPercent"].Value = ObjectAcJournalDetail.TaxPercent;
+
+            cmd.Parameters.Add("@TaxAmount", SqlDbType.Money);
+            cmd.Parameters["@TaxAmount"].Value = ObjectAcJournalDetail.TaxAmount;
 
             cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
             cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
@@ -194,7 +200,7 @@ namespace CMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID,AmountIncludingTax,SupplierId) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID,@AmountIncludingTax,@SupplierId)";
+            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID,AmountIncludingTax,TaxPercent,TaxAmount,SupplierId) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID,@AmountIncludingTax,@TaxPercent,@TaxAmount,@SupplierId)";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -220,7 +226,13 @@ namespace CMSV2.DAL
 
             cmd.Parameters.Add("@AmountIncludingTax", SqlDbType.Bit);
             cmd.Parameters["@AmountIncludingTax"].Value = ObjectAcJournalDetail.AmountIncludingTax;
-            
+
+            cmd.Parameters.Add("@TaxPercent", SqlDbType.Decimal);
+            cmd.Parameters["@TaxPercent"].Value = ObjectAcJournalDetail.TaxPercent;
+
+            cmd.Parameters.Add("@TaxAmount", SqlDbType.Money);
+            cmd.Parameters["@TaxAmount"].Value = ObjectAcJournalDetail.TaxAmount;
+
             cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
             cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
             try

@@ -72,7 +72,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
@@ -82,14 +82,14 @@ namespace CMSV2.DAL
             else if (reportparam.Output=="EXCEL")
             {
                 
-                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if(reportparam.Output=="WORD")
             {
-                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
@@ -162,7 +162,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
@@ -300,7 +300,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
@@ -310,14 +310,14 @@ namespace CMSV2.DAL
             else if (reportparam.Output == "EXCEL")
             {
 
-                reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if (reportparam.Output == "WORD")
             {
-                reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportname = "EmpostFee_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
@@ -387,7 +387,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "CustomerReceipt_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "CustomerReceipt_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             
              //reportparam.ReportFileName = reportname;
@@ -570,7 +570,7 @@ namespace CMSV2.DAL
             //Response.ClearContent();
             //Response.ClearHeaders();
             
-            string reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
@@ -580,14 +580,14 @@ namespace CMSV2.DAL
             else if (reportparam.Output == "EXCEL")
             {
 
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if (reportparam.Output == "WORD")
             {
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
@@ -620,7 +620,7 @@ namespace CMSV2.DAL
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "sp_TaxRegisterReport";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@FYearId", yearid);
@@ -675,7 +675,7 @@ namespace CMSV2.DAL
             //Response.ClearContent();
             //Response.ClearHeaders();
 
-            string reportname = "TaxRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "TaxRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
@@ -685,14 +685,14 @@ namespace CMSV2.DAL
             else if (reportparam.Output == "EXCEL")
             {
 
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportname = "TaxRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if (reportparam.Output == "WORD")
             {
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportname = "TaxRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);

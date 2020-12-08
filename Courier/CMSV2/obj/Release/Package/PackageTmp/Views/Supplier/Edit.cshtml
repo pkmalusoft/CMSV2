@@ -66,55 +66,55 @@
             }
         });
 
-        $.ajax({
-            type: "POST",
-            url: "/Supplier/GetRevenue",
-            datatype: "Json",
-            success: function (data) {
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Supplier/GetRevenue",
+        //    datatype: "Json",
+        //    success: function (data) {
 
-                debugger;
-                // $(".divcountry").show();
-                // $(".divcity").hide();
-                $('#RevenueItems').empty();
+        //        debugger;
+        //        // $(".divcountry").show();
+        //        // $(".divcity").hide();
+        //        $('#RevenueItems').empty();
 
-                $.each(data, function (index, value) {
+        //        $.each(data, function (index, value) {
 
-                    var o_st = $("#revids").val().split(",");
+        //            var o_st = $("#revids").val().split(",");
 
-                    var flag = 0;
-                    for (var j = 0; j < o_st.length; j++) {
+        //            var flag = 0;
+        //            for (var j = 0; j < o_st.length; j++) {
 
-                        if (o_st[j] == value.RevenueTypeID) {
-                            flag = 1;
-                            break;
-                        }
+        //                if (o_st[j] == value.RevenueTypeID) {
+        //                    flag = 1;
+        //                    break;
+        //                }
 
-                    }
+        //            }
 
-                    if (flag == 1) {
-                        $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '" selected=true>' + value.RevenueType1 + '</option>');
-                    }
-                    else {
-                        $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '">' + value.RevenueType1 + '</option>');
-                    }
+        //            if (flag == 1) {
+        //                $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '" selected=true>' + value.RevenueType1 + '</option>');
+        //            }
+        //            else {
+        //                $('#RevenueItems').append('<option value="' + value.RevenueTypeID + '">' + value.RevenueType1 + '</option>');
+        //            }
 
-                });
-
-
-
-                $('#RevenueItems').multiselect({
-                    enableClickableOptGroups: true,
-                    enableCollapsibleOptGroups: true,
-                    enableFiltering: true,
-                    includeSelectAllOption: true
-                });
-
-                $(".multiselect-container").css({ "height": "200px", "overflow-y": "scroll" });
+        //        });
 
 
 
-            }
-        });
+        //        $('#RevenueItems').multiselect({
+        //            enableClickableOptGroups: true,
+        //            enableCollapsibleOptGroups: true,
+        //            enableFiltering: true,
+        //            includeSelectAllOption: true
+        //        });
+
+        //        $(".multiselect-container").css({ "height": "200px", "overflow-y": "scroll" });
+
+
+
+        //    }
+        //});
 
 
 
@@ -139,9 +139,9 @@
             //});
 
 
-            x = $("#RevenueItems").val();
+            //x = $("#RevenueItems").val();
 
-            $("#RevenueTypeIds").val(x);
+            //$("#RevenueTypeIds").val(x);
 
             var regex = /^[0-9 ]+$/
             var isValid = regex.test(ExpCode);
@@ -257,7 +257,7 @@
                     @Html.ValidationMessageFor(model => model.ContactPerson)
                 </div>
                 <div class="col-md-3">
-                    <label class="required headinglabel">Address 1 (Building)</label>
+                    <label class="headinglabel">Address 1 (Building)</label>
                     @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
@@ -297,7 +297,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="required headinglabel">Tele Phone -2</label>
+                    <label class="headinglabel">Mobile</label>
 
                     @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control textright txttarget" })
                     @Html.ValidationMessageFor(model => model.MobileNo)
@@ -318,7 +318,7 @@
                     @Html.ValidationMessageFor(model => model.WebSite)
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel">Max Credit Days</label>
+                    <label class="required headinglabel">Max Credit Days</label>
 
                     @Html.TextBoxFor(model => model.MaxCreditDays, new { @class = "form-control textright" })
                     @Html.ValidationMessageFor(model => model.MaxCreditDays)
@@ -332,7 +332,7 @@
             <div class="row no-margin" style="padding-top:10px">
 
                 <div class="col-md-3">
-                    <label class="required headinglabel">Exporter Code</label>
+                    <label class="headinglabel">Exporter Code</label>
                     @Html.TextBoxFor(model => model.ExportCode, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ExportCode)
                 </div>
@@ -343,7 +343,7 @@
 
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel">TRN No.</label>
+                    <label class="required headinglabel">TRN No.</label>
                     @Html.TextBoxFor(model => model.RegistrationNo, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.RegistrationNo)
                 </div>
@@ -355,7 +355,7 @@
                 </div>
 
             </div>
-            <div class="row no-margin" style="padding-top:10px">
+            @*<div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-4">
                     <label class="headinglabel">Remark</label>
                     @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
@@ -365,16 +365,14 @@
 
                 <div class="col-md-4">
                     <label class="headinglabel">Revenue Type Ids</label><h6></h6>
-                    @*@Html.TextBoxFor(model => model.RevenuTypeIds, new { @class = "form-control" })*@
-                    @*@Html.DropDownListFor(model => model.RevenuTypeIds, new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"),"Select Revenue", new {multiple="multiple", @class = "form-control" })*@
-
+                    
                     @Html.DropDownList("RevenueItems", new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"), new { @class = "multiselect form-control", multiple = "multiple" })
                     @Html.HiddenFor(model => model.RevenueTypeIds)
 
-                    @*@Html.ValidationMessageFor(model => model.RevenuTypeIds)*@
+                    
                 </div>
 
-            </div>
+            </div>*@
 
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12" style="text-align: right;    margin-top: 20px;">
