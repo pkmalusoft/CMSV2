@@ -1134,6 +1134,9 @@ namespace CMSV2.Controllers
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
             ViewBag.StatusId = StatusId;
+            decimal? plCourierCharge =lst.Sum(i => i.CourierCharge);
+            decimal? pltotal = lst.Sum(i => i.totalCharge);
+            decimal? plothertotal = lst.Sum(i => i.OtherCharge);
 
             return View(lst);
 

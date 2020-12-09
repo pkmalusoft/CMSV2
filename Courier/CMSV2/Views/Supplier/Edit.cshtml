@@ -124,35 +124,15 @@
             var con = $("#ContactPerson").val();
             var add = $("#Address1").val();
             var phone = $("#Phone").val();
-
-            var email = $("#Email").val();
-
-            var x = "";
-            //$("#RevenueItems").change(function () {
-            //    x = "";
-
-            //    x = $("#RevenueItems").val();
-
-            //    $("#RevenuTypeIds").val(x);
-
-
-            //});
-
-
-            //x = $("#RevenueItems").val();
-
-            //$("#RevenueTypeIds").val(x);
-
+            var ExpCode = $("#ExportCode").val();
+            var maxcreditdays = $('#MaxCreditDays').val();
             var regex = /^[0-9 ]+$/
             var isValid = regex.test(ExpCode);
 
+            var email = $("#Email").val();
 
 
             if (sup == "") {
-                $("#alert").show();
-                return false;
-            }
-            else if (ref == "") {
                 $("#alert").show();
                 return false;
             }
@@ -160,8 +140,15 @@
                 $("#alert").show();
                 return false;
             }
-            else if (add == "") {
-
+            else if ($('#LocationName').val() == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if ($('#CityName').val() == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if ($('#CountryName').val() == "") {
                 $("#alert").show();
                 return false;
             }
@@ -175,7 +162,17 @@
                 $("#alert").show();
                 return false;
             }
-            else if (!isValid) {
+            //else if (maxcreditdays == "" || maxcreditdays == "0") {
+            //    $("#alert").show();
+            //    return false;
+
+            //}
+            else if (ref == "") {
+                $("#alert").show();
+                return false;
+            }
+
+            else if ($('#ExportCode').val() != "" && !isValid) {
                 alert("Exporter Code must be a Number.");
                 return false;
             }
@@ -207,7 +204,7 @@
     });
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Supplier</h1>
+    <h1 class="headingfont">Supplier - Modify</h1>
 
 </section>
 @using (Html.BeginForm())
@@ -318,7 +315,7 @@
                     @Html.ValidationMessageFor(model => model.WebSite)
                 </div>
                 <div class="col-md-3">
-                    <label class="required headinglabel">Max Credit Days</label>
+                    <label class="headinglabel">Max Credit Days</label>
 
                     @Html.TextBoxFor(model => model.MaxCreditDays, new { @class = "form-control textright" })
                     @Html.ValidationMessageFor(model => model.MaxCreditDays)

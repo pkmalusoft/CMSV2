@@ -236,7 +236,7 @@ namespace CMSV2.Controllers
                 reportparam.FromDate = pFromDate;
                 reportparam.ToDate = pToDate;
                 reportparam.Output = "PDF";
-                reportparam.SortBy = "Date Wise";
+                reportparam.SortBy = "NonZeroTax";
                 reportparam.ReportType = "Date";
             }
             else
@@ -256,12 +256,14 @@ namespace CMSV2.Controllers
 
             SessionDataModel.SetTaxReportParam(reportparam);
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
-            lsttype.Add(new VoucherTypeVM { TypeName = "All" });
-            var typeitems = (from c in db.AcJournalMasters select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
-            foreach (VoucherTypeVM Item in typeitems)
-            {
-                lsttype.Add(Item);
-            }
+            lsttype.Add(new VoucherTypeVM { TypeName = "Receipts & Payments" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Receipts" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Payments" });
+            //var typeitems = (from c in db.AcJournalMasters select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
+            //foreach (VoucherTypeVM Item in typeitems)
+            //{
+            //    lsttype.Add(Item);
+            //}
             
             ViewBag.VoucherTypes = lsttype;
             return View(reportparam);

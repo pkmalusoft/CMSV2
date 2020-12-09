@@ -183,7 +183,7 @@ namespace CMSV2.Controllers
                 string custform = "000000";
                 string maxcustomercode = (from d in db.SupplierMasters orderby d.SupplierID descending select d.ReferenceCode).FirstOrDefault();
                 string last6digit = "";
-                if (maxcustomercode == null)
+                    if (maxcustomercode == null)
                 {
                     //maxcustomercode="AA000000";
                     last6digit = "0";
