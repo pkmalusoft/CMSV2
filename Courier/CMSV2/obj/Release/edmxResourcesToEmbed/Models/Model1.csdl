@@ -1666,6 +1666,9 @@
     <NavigationProperty Name="ImportShipmentDetails1" Relationship="Self.FK__ImportShi__Expor__39B87777" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
     <NavigationProperty Name="ImportShipmentDetails2" Relationship="Self.FK__ImportShi__Expor__3AAC9BB0" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
     <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_ExportShipment" FromRole="ExportShipment" ToRole="ExportShipmentDetails" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="AcCompanyId" Type="Int32" />
+    <Property Name="ACJournalID" Type="Int32" />
   </EntityType>
   <EntityType Name="ExportShipmentDetail">
     <Key>

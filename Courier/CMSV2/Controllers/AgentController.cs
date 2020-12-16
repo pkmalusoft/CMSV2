@@ -151,6 +151,7 @@ namespace CMSV2.Controllers
                 u.Phone = item.Phone;
                 u.IsActive = true;
                 u.RoleID = roleid;
+                
                 db.UserRegistrations.Add(u);
                 db.SaveChanges();
             }
@@ -190,6 +191,7 @@ namespace CMSV2.Controllers
                     a.StatusActive = Convert.ToBoolean(item.StatusActive);
 
                 a.BranchID = BranchID;
+                a.AcHeadID = item.AcHeadID;
             }
             else
             {
@@ -215,6 +217,7 @@ namespace CMSV2.Controllers
                 a.Email = item.Email;
                 a.Password = "";
                 a.AgentType = item.AgentType;
+                a.AcHeadID = item.AcHeadID;
                 a.UserID = u.UserID;
                 a.BranchID = BranchID;
                 if (item.StatusActive == null)
@@ -362,7 +365,7 @@ namespace CMSV2.Controllers
             //a.AcHeadID = item.AcHeadID;
             a.CreditLimit = item.CreditLimit;
             a.AgentType = item.AgentType;
-
+            a.AcHeadID = item.AcHeadID;
             if (item.StatusActive!=null)
                 a.StatusActive =Convert.ToBoolean(item.StatusActive);
             if (a.BranchID==null)

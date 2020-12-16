@@ -220,7 +220,38 @@
             }
         });
 
+        $("#AcHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID, TaxPercent: val.TaxPercent
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHeadName").val(i.item.label);
+                $('#AcHeadID').val(i.item.AcHeadID);
+                
+
+            },
+
+        });
         $("#EmployeeName").focus();
+
 
         $("#btnsave1").click(function () {
             var name = $("#EmployeeName").val();
@@ -402,10 +433,10 @@
                 </div>
 
                 @*        <div class="col-md-3">
-                                  <label class="headinglabel">Status</label>
-                     @Html.TextBoxFor(model => model.StatusActive, new {@class="form-control" })
-                    @Html.ValidationMessageFor(model => model.StatusActive)
-                         </div>*@
+                      <label class="headinglabel">Status</label>
+         @Html.TextBoxFor(model => model.StatusActive, new {@class="form-control" })
+        @Html.ValidationMessageFor(model => model.StatusActive)
+             </div>*@
                 <div class="col-md-3">
                     <label class="headinglabel required">Location</label>
                     @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", id = "autocomplete", @onFocus = "geolocate()", @required = "true" })
@@ -424,10 +455,12 @@
                     @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @onFocus = "geoCountrylocate()", @required = "true" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
-
-
-
-
+                <div class="col-md-3">
+                    <label class="headinglabel required">Account Head</label>                    
+                    @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AcHeadName)
+                    @Html.HiddenFor(mode => Model.AcHeadID)
+                </div>
 
             </div>
 

@@ -593,7 +593,28 @@ new AcGroupModel()
         }
 
 
+        public ActionResult DeleteAcBook(int id)
+        {
+            
+            AcJournalMaster a = (from c in db.AcJournalMasters where c.AcJournalID == id select c).FirstOrDefault();
+            a.StatusDelete = true;
+            db.Entry(a).State = EntityState.Modified;
+            db.SaveChanges();
+            ViewBag.SuccessMsg = "You have successfully deleted Cash Bank Book Voucher!";
+            return RedirectToAction("IndexAcBook");
+            //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+        }
+        public ActionResult DeleteJVBook(int id)
+        {
 
+            AcJournalMaster a = (from c in db.AcJournalMasters where c.AcJournalID == id select c).FirstOrDefault();
+            a.StatusDelete = true;
+            db.Entry(a).State = EntityState.Modified;
+            db.SaveChanges();
+            ViewBag.SuccessMsg = "You have successfully deleted Journal Voucher!";
+            return RedirectToAction("AcJournalVoucherIndex");
+            //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+        }
 
         //Methods for Expense Analysis Head
 
@@ -3178,7 +3199,7 @@ new AcGroupModel()
                 return Json(AnalysisHeadSelectList, JsonRequestBehavior.AllowGet);
             }
         }
-
+        #region
         public ActionResult Ledger(int id)
         {
             //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
@@ -3579,6 +3600,97 @@ new AcGroupModel()
             //return reportpath;
         }
 
+        public ActionResult ProfitLossReport()
+        {
+                ViewBag.ReportName = "Profit and Loss Report";
+               
+               
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("ProfileLossReport"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
+            
+            return View();
+
+        }
+        public ActionResult ReportParamDate()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            //ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            //ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pFromDate;
+            DateTime pToDate;
+
+            if (reportparam == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam();
+                reportparam.FromDate = pFromDate;
+                reportparam.ToDate = pToDate;
+                reportparam.AcHeadId = 0;
+                reportparam.AcHeadName = "";
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00")
+                {
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+
+            return View(reportparam);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReportParamDate([Bind(Include = "FromDate,ToDate,Output,Filters")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),            
+                Output = picker.Output
+            };
+
+            //model.Output = "EXCEL";
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            //Stream stream= GenerateReport();
+            //GenerateDefaultReport();
+
+            AccountsReportsDAO.GenerateProfitLostReport();
+
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return RedirectToAction("ProfitLossReport", "Accounts", new { id = 1 });
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+
+
+            //return PartialView(model);
+            //return View(model);
+
+            //return PartialView("InvoiceSearch",model);
+
+        }
+
+        #endregion
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
             DirectoryInfo info = new DirectoryInfo(filePath);

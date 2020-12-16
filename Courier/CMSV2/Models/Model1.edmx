@@ -1559,6 +1559,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.DRSEmployee' does no
           <Property Name="LastEditedByLoginID" Type="int" />
           <Property Name="ShipmentTypeId" Type="int" />
           <Property Name="AcFinancialYearID" Type="int" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="AcCompanyId" Type="int" />
+          <Property Name="ACJournalID" Type="int" />
         </EntityType>
         <EntityType Name="ExportShipmentDetails">
           <Key>
@@ -11367,6 +11370,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <NavigationProperty Name="ImportShipmentDetails1" Relationship="Self.FK__ImportShi__Expor__39B87777" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
           <NavigationProperty Name="ImportShipmentDetails2" Relationship="Self.FK__ImportShi__Expor__3AAC9BB0" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
           <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_ExportShipment" FromRole="ExportShipment" ToRole="ExportShipmentDetails" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="AcCompanyId" Type="Int32" />
+          <Property Name="ACJournalID" Type="Int32" />
         </EntityType>
         <EntityType Name="ExportShipmentDetail">
           <Key>
@@ -24507,6 +24513,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySetMapping Name="ExportShipments">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ExportShipment">
               <MappingFragment StoreEntitySet="ExportShipment">
+                <ScalarProperty Name="ACJournalID" ColumnName="ACJournalID" />
+                <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
                 <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />

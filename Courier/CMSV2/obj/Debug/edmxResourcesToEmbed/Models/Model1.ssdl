@@ -1554,6 +1554,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.DRSEmployee' does no
     <Property Name="LastEditedByLoginID" Type="int" />
     <Property Name="ShipmentTypeId" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="AcCompanyId" Type="int" />
+    <Property Name="ACJournalID" Type="int" />
   </EntityType>
   <EntityType Name="ExportShipmentDetails">
     <Key>

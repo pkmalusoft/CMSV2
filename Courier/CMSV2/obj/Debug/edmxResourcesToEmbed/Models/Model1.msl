@@ -1526,6 +1526,9 @@
     <EntitySetMapping Name="ExportShipments">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ExportShipment">
         <MappingFragment StoreEntitySet="ExportShipment">
+          <ScalarProperty Name="ACJournalID" ColumnName="ACJournalID" />
+          <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
           <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />

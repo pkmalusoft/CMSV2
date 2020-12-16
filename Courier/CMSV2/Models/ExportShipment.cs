@@ -55,6 +55,9 @@ namespace CMSV2.Models
         public Nullable<int> LastEditedByLoginID { get; set; }
         public Nullable<int> ShipmentTypeId { get; set; }
         public Nullable<int> AcFinancialYearID { get; set; }
+        public Nullable<int> BranchID { get; set; }
+        public Nullable<int> AcCompanyId { get; set; }
+        public Nullable<int> ACJournalID { get; set; }
     
         public virtual EmployeeMaster EmployeeMaster { get; set; }
         public virtual EmployeeMaster EmployeeMaster1 { get; set; }

@@ -790,6 +790,8 @@ namespace CMSV2.Controllers
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             var userid = Convert.ToInt32(Session["UserID"]);
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             var today = DateTime.Now.Date;
             var emp = db.EmployeeMasters.Where(u=>u.UserID==userid).Select(x => new { Address = x.Address1 + ", " + x.Address2 + ", " + x.Address3, x.CountryID, x.EmployeeID, x.EmployeeCode, x.EmployeeName }).FirstOrDefault();
             var company = db.AcCompanies.FirstOrDefault(); // db.S_AcCompany.Select(x => new { Address = x.Address1 + ", " + x.Address2 + ", " + x.Address3, x.CountryID,x.Country, x.Phone, x.AcCompany }).FirstOrDefault();
@@ -837,7 +839,9 @@ namespace CMSV2.Controllers
                         RunNo = model.RunNo,
                         TotalAWB = model.TotalAWB,
                         ShipmentTypeId = model.ShipmentTypeId,
-                        Type = "import"
+                        Type = "import",
+                        AcCompanyId =companyid,
+                        BranchID=branchid
 
                     };
                 }
@@ -985,6 +989,10 @@ namespace CMSV2.Controllers
                     //    db.SaveChanges();
                     //}
                 }
+
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateExportManifestPosting(_exportShipment.ID);
+
                 return RedirectToAction("Index");
             }
           
@@ -1784,7 +1792,15 @@ namespace CMSV2.Controllers
                 obj.Contents = lst.CargoDescription;
                 obj.AWB = lst.AWBNo;
                 obj.InScanId = lst.InScanID;
-                obj.Value = Convert.ToDecimal(lst.CourierCharge);
+                if (lst.PaymentModeId==3 || lst.PaymentModeId==1)
+                    {
+                    obj.Value = 0;
+                }
+                else
+                {
+                    obj.Value = Convert.ToDecimal(lst.CourierCharge);
+                }
+                
 
                     return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
 
