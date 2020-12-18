@@ -157,6 +157,7 @@ namespace CMSV2.Controllers
         }
         public ActionResult Create()
         {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             DatePicker datePicker = SessionDataModel.GetTableVariable();
@@ -178,7 +179,7 @@ namespace CMSV2.Controllers
             myDt = DateTime.SpecifyKind(saveNow, DateTimeKind.Unspecified);
 
             _custinvoice.InvoiceDate = myDt;// DateTimeKind. DateTimeOffset.Now.UtcDateTime.AddHours(5.30); // DateTime.Now;            
-            _custinvoice.CustomerInvoiceNo = _dao.GetMaxInvoiceNo(companyid, branchid);
+            _custinvoice.CustomerInvoiceNo = _dao.GetMaxInvoiceNo(companyid, branchid,yearid);
             //_custinvoice.FromDate = datePicker.FromDate;
             //_custinvoice.ToDate = datePicker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
@@ -287,7 +288,7 @@ namespace CMSV2.Controllers
                 _custinvoice.FuelAmt = model.FuelAmt;
                 _custinvoice.OtherCharge = model.OtherCharge;
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
-                _custinvoice.AcFinancialYearID = yearid;
+                _custinvoice.AcFinancialYearID = yearid;                
                 _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
 
@@ -488,6 +489,7 @@ namespace CMSV2.Controllers
                         where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
                         && (c.InvoiceID == null || c.InvoiceID==0)
                         && c.PaymentModeId == 3 //account
+                        && c.IsDeleted==false
                         && c.CustomerID == Id
                         select new CustomerInvoiceDetailVM
                         {
@@ -783,6 +785,83 @@ namespace CMSV2.Controllers
 
             Session["InvoiceListing"] = _details;
             return View(_custinvoice);
+
+        }
+
+
+
+        public ActionResult MultipleInvoice()
+        {
+            return View();
+        }
+        public ActionResult InvoiceAll()
+        {
+
+            DatePicker datePicker = SessionDataModel.GetTableVariable();
+
+            if (datePicker == null)
+            {
+                datePicker = new DatePicker();
+                datePicker.FromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date;
+                datePicker.ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                datePicker.MovementId = "1,2,3,4";
+            }
+            if (datePicker != null)
+            {
+               
+                if (datePicker.MovementId == null)
+                    datePicker.MovementId = "1,2,3,4";
+            }
+            else
+            {
+             
+            }
+
+
+            //ViewBag.Movement = new MultiSelectList(db.CourierMovements.ToList(),"MovementID","MovementType");
+            ViewBag.Movement = db.CourierMovements.ToList();
+
+            ViewBag.Token = datePicker;
+            SessionDataModel.SetTableVariable(datePicker);
+            return View(datePicker);
+
+        }
+
+        [HttpPost]        
+        public JsonResult GenerateInvoice(InvoiceAllParam picker)
+        {
+            try
+            {
+
+
+                picker.MovementId = "";
+                if (picker.SelectedValues != null)
+                {
+                    foreach (var item in picker.SelectedValues)
+                    {
+                        if (picker.MovementId == "")
+                        {
+                            picker.MovementId = item.ToString();
+                        }
+                        else
+                        {
+                            picker.MovementId = picker.MovementId + "," + item.ToString();
+                        }
+
+                    }
+                }
+
+
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateInvoiceAll(picker);
+                return Json(new {  status="ok", message="Invoice Generated Successfully!"}, JsonRequestBehavior.AllowGet);
+
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status="Failed", message= ex.Message}, JsonRequestBehavior.AllowGet);
+            }
+            
 
         }
 

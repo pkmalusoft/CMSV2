@@ -22,11 +22,22 @@ input::-webkit-inner-spin-button {
     padding-left: 2px;
     padding-right: 2px;
 }
+ .reve_ratessm{
+	width:11%;
+	float: right;
+}
 #Details input,#Details select{
 	font-size:12px;
 	}
+    #Details .headinglabel {
+   
+    font-size: 14px;
+}
+#Details .form-control{
+   padding: 6px 8px;
+}
 .reve_rates1 {
-       width: 4%;
+       width: 5%;
     }
 .reve_rates2 {
     width:6%;
@@ -35,10 +46,10 @@ input::-webkit-inner-spin-button {
 	width:8%;
 }
 .reve_rates3{
-	width:10%;
+	width:9.5%;
 }
 .reve_rates4{
-	width:12%;
+	width:17.5%;
 }
     /*.reve_rates {
         min-width: 16%;
@@ -489,7 +500,7 @@ input::-webkit-inner-spin-button {
                         <input type="number" id="tPCS" name="tPCS" class="form-control text-right" value="0" />
                     </div>
                     <div class="col-md-1 reve_rates2">
-                        <label class="headinglabel required">Weight</label>
+                        <label class="headinglabel required">Wt</label>
                         <input type="number" id="tWeight" name="tWeight" class="form-control text-right" value="0" min="0" onchange="setThreeNumberDecimal(this)" />
                     </div>
                     <div class="col-md-2 reve_rates3">
@@ -502,7 +513,7 @@ input::-webkit-inner-spin-button {
                         <label class="headinglabel required">Value</label>
                         <input type="number" id="tValue" name="tValue" class="form-control text-right" value="0" min="0" onchange="setTwoNumberDecimal(this)" />
                     </div>
-                    <div class="col-md-2 reve_rates4">
+                    <div class="col-md-2 reve_rates3">
                         <label class="headinglabel required">Currency</label>
                         <select id="tCurrencyID" name="tCurrencyID" class="form-control">
                             <option value="">Select Currency</option>
@@ -543,7 +554,7 @@ input::-webkit-inner-spin-button {
                         <input id="tDestinationCountryID" name="tDestinationCountryID" type="text" class="form-control">
                     </div>
 
-                <div class="col-md-1 reve_rates3 form-group bt-right">
+                <div class="col-md-1 reve_ratessm form-group bt-right">
 
                     <input type="hidden" id="tId" name="tId" value="0" />
                     <input type="hidden" id="tfwdagent" name="tfwdagent" value="0" />
@@ -553,10 +564,10 @@ input::-webkit-inner-spin-button {
                     <input type="hidden" id="totherchrg" name="totherchrg" value="0" />
                     <input type="hidden" id="tfwdflight" name="tfwdflight" value="" />
                     <div class="row form-group" id="addbtndiv" style="text-align:right;margin-top:10px">
-                        <button type="button" class="btn btn-primary small_btn btnwidth" onclick="addShipment1()" id="Newbtn"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-primary small_btn btnwidth" onclick="addShipment1()" style="margin:0 0 0 0 !important" id="Newbtn"><i class="fa fa-plus"></i></button>
                         @*<button type="button" class="btn btn-secondary small_btn waves-effect waves-light" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>*@
                     </div>
-                    <div class="" id="updatebtndiv" style="text-align:right;margin-top:30px;display:none">                        
+                    <div class="" id="updatebtndiv" style="text-align:right;margin-top:10px;display:none">                        
                         <button type="button" class="btn small_btn btn-primary btnwidth" style="margin:0 0 0 0 !important" onclick="UpdateDetails()" id="Updatebtn"><i class="fa fa-check"></i></button>&nbsp;&nbsp;
                         <button type="button" class="btn btn-danger small_btn btnwidth float-right" style="margin:0 0 0 0 !important" onclick="CancelDetails()"><i class="fa fa-times"></i></button>
                     </div>

@@ -1010,42 +1010,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CustomerInvoices">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
-        <MappingFragment StoreEntitySet="CustomerInvoice">
-          <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
-          <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="CustomerInvoiceTax" ColumnName="CustomerInvoiceTax" />
-          <ScalarProperty Name="StatusContractCustomer" ColumnName="StatusContractCustomer" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-          <ScalarProperty Name="ClearingCharge" ColumnName="ClearingCharge" />
-          <ScalarProperty Name="ClearingChargeHeadID" ColumnName="ClearingChargeHeadID" />
-          <ScalarProperty Name="OtherChargeHeadID" ColumnName="OtherChargeHeadID" />
-          <ScalarProperty Name="FuelSurChargeHeadID" ColumnName="FuelSurChargeHeadID" />
-          <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
-          <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
-          <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
-          <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
-          <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
-          <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
-          <ScalarProperty Name="calogidate" ColumnName="calogidate" />
-          <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
-          <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
-          <ScalarProperty Name="Revenue" ColumnName="Revenue" />
-          <ScalarProperty Name="CCharge" ColumnName="CCharge" />
-          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
-          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CustomerInvoiceDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail">
         <MappingFragment StoreEntitySet="CustomerInvoiceDetails">
@@ -9056,6 +9020,41 @@
           <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
           <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
           <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerInvoices">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
+        <MappingFragment StoreEntitySet="CustomerInvoice">
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+          <ScalarProperty Name="CCharge" ColumnName="CCharge" />
+          <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+          <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
+          <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
+          <ScalarProperty Name="calogidate" ColumnName="calogidate" />
+          <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
+          <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
+          <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
+          <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
+          <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
+          <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
+          <ScalarProperty Name="FuelSurChargeHeadID" ColumnName="FuelSurChargeHeadID" />
+          <ScalarProperty Name="OtherChargeHeadID" ColumnName="OtherChargeHeadID" />
+          <ScalarProperty Name="ClearingChargeHeadID" ColumnName="ClearingChargeHeadID" />
+          <ScalarProperty Name="ClearingCharge" ColumnName="ClearingCharge" />
+          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="StatusContractCustomer" ColumnName="StatusContractCustomer" />
+          <ScalarProperty Name="CustomerInvoiceTax" ColumnName="CustomerInvoiceTax" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
+          <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

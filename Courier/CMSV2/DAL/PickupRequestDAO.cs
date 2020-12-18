@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using CMSV2.Models;
 
 namespace CMSV2.DAL
 {
@@ -167,7 +168,7 @@ namespace CMSV2.DAL
 
         }
 
-        public string GetMaxInvoiceNo(int Companyid, int BranchId)
+        public string GetMaxInvoiceNo(int Companyid, int BranchId,int FYearId)
         {
             DataTable dt = new DataTable();
             string MaxPickUpNo = "";
@@ -186,6 +187,7 @@ namespace CMSV2.DAL
 
                         cmd.Parameters.AddWithValue("@CompanyId", Companyid);
                         cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        cmd.Parameters.AddWithValue("@FYearId", FYearId);
                         con.Open();
                         SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
                         SqlDA.Fill(dt);
@@ -197,7 +199,7 @@ namespace CMSV2.DAL
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
 
             }
@@ -490,6 +492,48 @@ namespace CMSV2.DAL
                     {
                         cmd.CommandText = "SP_ExportManifestPosting " + Id.ToString();
                         cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
+
+
+        public string GenerateInvoiceAll(InvoiceAllParam obj)
+        {
+            int companyId = Convert.ToInt32(HttpContext.Current.Session["CurrentCompanyID"].ToString());
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GenerateMultipleInvoice ";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@FromDate", obj.FromDate);
+                        cmd.Parameters.AddWithValue("@ToDate", obj.ToDate);
+                        cmd.Parameters.AddWithValue("@InvoiceDate", obj.InvoiceDate);
+                        cmd.Parameters.AddWithValue("@MovementId", obj.MovementId);
+                        cmd.Parameters.AddWithValue("@Companyid", companyId);
+                        cmd.Parameters.AddWithValue("@FYearId",  yearid);
+                        cmd.Parameters.AddWithValue("@BranchId", branchid);
+
                         cmd.Connection = con;
                         con.Open();
                         cmd.ExecuteNonQuery();

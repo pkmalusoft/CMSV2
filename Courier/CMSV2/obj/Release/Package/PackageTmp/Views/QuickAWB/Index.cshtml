@@ -394,7 +394,7 @@
                                 }
                                 @if (isprint)
                                 {
-                                    <a href="@Url.Action("AWBPrint", "QuickAWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>                                                                
+                                    <a target="_blank" href="@Url.Action("AWBPrintReport", "QuickAWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>                                                                
                                 }
                             </td>
                         </tr>

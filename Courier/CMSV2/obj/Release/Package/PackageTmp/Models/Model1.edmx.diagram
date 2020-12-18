@@ -68,7 +68,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CurrencyMaster" Width="1.5" PointX="3" PointY="79.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerContract" Width="1.5" PointX="27.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerEnquiry" Width="1.5" PointX="26.75" PointY="77.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" Width="1.5" PointX="17.75" PointY="57.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Width="1.5" PointX="20" PointY="45.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerMaster" Width="1.5" PointX="19.5" PointY="77.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" Width="1.5" PointX="27.75" PointY="11.125" IsExpanded="true" />
@@ -309,7 +308,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerEnquiry_CustomerMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerEnquiry_EmployeeMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerMaster_LocationMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRateAssign_CustomerMaster" ManuallyRouted="false" />
@@ -420,6 +418,8 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" Width="1.5" PointX="42.375" PointY="22.125" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -90,7 +90,6 @@ namespace CMSV2.Models
         public virtual DbSet<CurrencyMaster> CurrencyMasters { get; set; }
         public virtual DbSet<CustomerContract> CustomerContracts { get; set; }
         public virtual DbSet<CustomerEnquiry> CustomerEnquiries { get; set; }
-        public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
         public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
         public virtual DbSet<CustomerMaster> CustomerMasters { get; set; }
         public virtual DbSet<CustomerMultiContract> CustomerMultiContracts { get; set; }
@@ -272,6 +271,7 @@ namespace CMSV2.Models
         public virtual DbSet<CODReceiptDetail> CODReceiptDetails { get; set; }
         public virtual DbSet<AccountHeadControl> AccountHeadControls { get; set; }
         public virtual DbSet<SupplierMaster> SupplierMasters { get; set; }
+        public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

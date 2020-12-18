@@ -1989,6 +1989,11 @@
     </Compile>
     <Compile Include="Models\ZoneNameVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportsXSD\AWBPrint.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AWBPrint.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -2062,6 +2067,7 @@
     <Content Include="Content\img\Launchpad\sup.png" />
     <Content Include="Content\img\Launchpad\Supplier.png" />
     <Content Include="Content\img\Launchpad\Type.png" />
+    <Content Include="Content\img\loading-gif-free-download-6.gif" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\img\LoginBackground.png" />
     <Content Include="Content\img\logo.ico" />
@@ -3017,6 +3023,17 @@
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Reports\AccLedger.rpt" />
     <Content Include="ReportsPDF\AccLedger_2810201826.pdf" />
+    <Content Include="ReportsXSD\AWBPrint.xsc">
+      <DependentUpon>AWBPrint.xsd</DependentUpon>
+    </Content>
+    <None Include="ReportsXSD\AWBPrint.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>AWBPrint.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ReportsXSD\AWBPrint.xss">
+      <DependentUpon>AWBPrint.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\AccLedger.xsd" />
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />
@@ -3025,6 +3042,7 @@
     <Content Include="Reports\AWBRegister_Payment.rpt" />
     <Content Include="Reports\AWBRegister_Summary.rpt" />
     <Content Include="Reports\AWBRegister.rpt" />
+    <Content Include="Reports\AWBPrint.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3037,6 +3055,7 @@
     <Content Include="Reports\CustomerReceipt.rpt" />
     <Content Include="Reports\DefaultReport.rpt" />
     <Content Include="Reports\TaxRegister.rpt" />
+    <Content Include="Reports\DayBook.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3178,7 +3197,6 @@
     <Content Include="Views\CustomerInvoice\Index.cshtml" />
     <Content Include="Views\CustomerInvoice\InvoiceList.cshtml" />
     <Content Include="Views\CustomerInvoice\InvoicePrint.cshtml" />
-    <Content Include="Views\CustomerInvoice\InvoiceSearch - Copy.cshtml" />
     <Content Include="Views\CustomerInvoice\InvoiceSearch.cshtml" />
     <Content Include="Views\CustomerInvoice\Table.cshtml" />
     <Content Include="Views\CustomerMasterNew\Create.cshtml" />
@@ -3489,10 +3507,13 @@
     <Content Include="Views\Employee\Employee.cshtml" />
     <Content Include="Views\Accounts\ReportParamDate.cshtml" />
     <Content Include="Views\Accounts\ProfitLossReport.cshtml" />
+    <Content Include="Views\CustomerInvoice\MultipleInvoice.cshtml" />
+    <Content Include="Views\CustomerInvoice\InvoiceSearch - Copy %282%29.cshtml" />
+    <Content Include="Views\QuickAWB\AWBPrintReport.cshtml" />
+    <Content Include="Views\Accounts\DayBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ReportsXSD\" />
     <Folder Include="Views\UserRegistration\New folder\" />
   </ItemGroup>
   <ItemGroup>

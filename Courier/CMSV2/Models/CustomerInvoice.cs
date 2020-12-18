@@ -28,7 +28,6 @@ namespace CMSV2.Models
         public Nullable<bool> StatusContractCustomer { get; set; }
         public Nullable<int> AcJournalID { get; set; }
         public bool StatusClose { get; set; }
-        public int FYearID { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
         public Nullable<decimal> OtherCharge { get; set; }
         public Nullable<decimal> ClearingCharge { get; set; }

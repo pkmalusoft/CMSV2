@@ -304,6 +304,41 @@ namespace CMSV2.Models
 
 
         #region reportheading
+        public static string GetCompanyname(int branchId)
+        {
+            Entities1 db = new Entities1();
+            string reportheader = "";
+            
+            reportheader = db.BranchMasters.Find(branchId).BranchName;
+            
+
+            return reportheader;
+
+
+        }
+        public static string GetCompanyLocation(int branchId)
+        {
+            Entities1 db = new Entities1();
+            string reportheader = "";
+
+            reportheader = db.BranchMasters.Find(branchId).LocationName;
+
+
+            return reportheader;
+
+
+        }
+        public static string GetCompanyAddress(int branchId)
+        {
+            Entities1 db = new Entities1();
+            string reportheader = "";
+
+            var branch = db.BranchMasters.Find(branchId);
+            reportheader = branch.Address1 + "," + branch.Address2 + "," + branch.Address3;
+            return reportheader;
+
+
+        }
         public static string GetReportHeader1(int branchId)
         {
             Entities1 db = new Entities1();

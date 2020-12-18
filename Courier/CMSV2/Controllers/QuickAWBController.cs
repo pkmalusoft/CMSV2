@@ -1873,7 +1873,18 @@ namespace CMSV2.Controllers
             return x;
         }
 
+        public ActionResult AWBPrintReport(int id = 0)
+        {
+            int uid = Convert.ToInt32(Session["UserID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
+            AccountsReportsDAO.GenerateAWBReport(id);
+            ViewBag.ReportName = "AWB Print";
+            return View();
+
+        }
         public JsonResult GetCustomerData(int id)
         {
             CustM objCust = new CustM();

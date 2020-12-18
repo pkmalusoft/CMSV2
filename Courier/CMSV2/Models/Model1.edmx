@@ -1036,7 +1036,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
           <Property Name="StatusContractCustomer" Type="bit" />
           <Property Name="AcJournalID" Type="int" />
           <Property Name="StatusClose" Type="bit" Nullable="false" />
-          <Property Name="FYearID" Type="int" Nullable="false" />
           <Property Name="AcCompanyID" Type="int" />
           <Property Name="OtherCharge" Type="money" />
           <Property Name="ClearingCharge" Type="money" />
@@ -10756,42 +10755,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_CustomerEnquiry_CustomerMaster" FromRole="CustomerEnquiry" ToRole="CustomerMaster" />
           <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_CustomerEnquiry_EmployeeMaster" FromRole="CustomerEnquiry" ToRole="EmployeeMaster" />
         </EntityType>
-        <EntityType Name="CustomerInvoice">
-          <Key>
-            <PropertyRef Name="CustomerInvoiceID" />
-          </Key>
-          <Property Name="CustomerInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerInvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerID" Type="Int32" Nullable="false" />
-          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CustomerInvoiceTax" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusContractCustomer" Type="Boolean" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
-          <Property Name="FYearID" Type="Int32" Nullable="false" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ClearingCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ClearingChargeHeadID" Type="Int32" />
-          <Property Name="OtherChargeHeadID" Type="Int32" />
-          <Property Name="FuelSurChargeHeadID" Type="Int32" />
-          <Property Name="FuelPer" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AdminPer" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="FuelAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AdminAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ChargeableWT" Type="Double" />
-          <Property Name="CalogiRef" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="calogidate" Type="DateTime" Precision="3" />
-          <Property Name="statusColoader" Type="Boolean" />
-          <Property Name="CostAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Revenue" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <NavigationProperty Name="CustomerInvoiceDetails" Relationship="Self.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetails" />
-        </EntityType>
         <EntityType Name="CustomerInvoiceDetail">
           <Key>
             <PropertyRef Name="CustomerInvoiceDetailID" />
@@ -10810,8 +10773,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <Property Name="RecPayStatus" Type="Int32" />
           <Property Name="RecPayDetailId" Type="Int32" />
           <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CustomerInvoice" Relationship="Self.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetails" ToRole="CustomerInvoice" />
           <NavigationProperty Name="InScanMaster" Relationship="Self.FK_CustomerInvoiceDetails_InScan" FromRole="CustomerInvoiceDetails" ToRole="InScanMaster" />
+          <NavigationProperty Name="CustomerInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetail" ToRole="CustomerInvoice" />
         </EntityType>
         <EntityType Name="CustomerMaster">
           <Key>
@@ -14644,20 +14607,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
-          <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerInvoice">
-              <PropertyRef Name="CustomerInvoiceID" />
-            </Principal>
-            <Dependent Role="CustomerInvoiceDetails">
-              <PropertyRef Name="CustomerInvoiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerInvoiceDetails_InScan">
           <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
           <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetail" Multiplicity="*" />
@@ -15926,7 +15875,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySet Name="CurrencyMasters" EntityType="Self.CurrencyMaster" />
           <EntitySet Name="CustomerContracts" EntityType="Self.CustomerContract" />
           <EntitySet Name="CustomerEnquiries" EntityType="Self.CustomerEnquiry" />
-          <EntitySet Name="CustomerInvoices" EntityType="Self.CustomerInvoice" />
           <EntitySet Name="CustomerInvoiceDetails" EntityType="Self.CustomerInvoiceDetail" />
           <EntitySet Name="CustomerMasters" EntityType="Self.CustomerMaster" />
           <EntitySet Name="CustomerMultiContracts" EntityType="Self.CustomerMultiContract" />
@@ -16355,10 +16303,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <AssociationSet Name="FK_CustomerEnquiry_EmployeeMaster" Association="Self.FK_CustomerEnquiry_EmployeeMaster">
             <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
             <End Role="CustomerEnquiry" EntitySet="CustomerEnquiries" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
-            <End Role="CustomerInvoice" EntitySet="CustomerInvoices" />
-            <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="Self.FK_CustomerInvoiceDetails_InScan">
             <End Role="InScanMaster" EntitySet="InScanMasters" />
@@ -19293,6 +19237,11 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <AssociationSet Name="FK_tblSupplierAdjustment_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster">
             <End Role="SupplierMaster" EntitySet="SupplierMasters" />
             <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustments" />
+          </AssociationSet>
+          <EntitySet Name="CustomerInvoices" EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" />
+          <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice">
+            <End Role="CustomerInvoice" EntitySet="CustomerInvoices" />
+            <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
@@ -22982,6 +22931,55 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CustomerInvoice">
+          <Key>
+            <PropertyRef Name="CustomerInvoiceID" />
+          </Key>
+          <Property Name="CustomerInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerInvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerInvoiceTax" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="StatusContractCustomer" Type="Boolean" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClearingCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClearingChargeHeadID" Type="Int32" />
+          <Property Name="OtherChargeHeadID" Type="Int32" />
+          <Property Name="FuelSurChargeHeadID" Type="Int32" />
+          <Property Name="FuelPer" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AdminPer" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FuelAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AdminAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ChargeableWT" Type="Double" />
+          <Property Name="CalogiRef" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="calogidate" Type="DateTime" Precision="3" />
+          <Property Name="statusColoader" Type="Boolean" />
+          <Property Name="CostAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Revenue" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+        </EntityType>
+        <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
+          <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoice" Role="CustomerInvoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Role="CustomerInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerInvoice">
+              <PropertyRef Name="CustomerInvoiceID" />
+            </Principal>
+            <Dependent Role="CustomerInvoiceDetail">
+              <PropertyRef Name="CustomerInvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23994,42 +23992,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
                 <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
                 <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
                 <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerInvoices">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
-              <MappingFragment StoreEntitySet="CustomerInvoice">
-                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
-                <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="CustomerInvoiceTax" ColumnName="CustomerInvoiceTax" />
-                <ScalarProperty Name="StatusContractCustomer" ColumnName="StatusContractCustomer" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-                <ScalarProperty Name="ClearingCharge" ColumnName="ClearingCharge" />
-                <ScalarProperty Name="ClearingChargeHeadID" ColumnName="ClearingChargeHeadID" />
-                <ScalarProperty Name="OtherChargeHeadID" ColumnName="OtherChargeHeadID" />
-                <ScalarProperty Name="FuelSurChargeHeadID" ColumnName="FuelSurChargeHeadID" />
-                <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
-                <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
-                <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
-                <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
-                <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
-                <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
-                <ScalarProperty Name="calogidate" ColumnName="calogidate" />
-                <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
-                <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
-                <ScalarProperty Name="Revenue" ColumnName="Revenue" />
-                <ScalarProperty Name="CCharge" ColumnName="CCharge" />
-                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -32043,6 +32005,41 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
                 <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
                 <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerInvoices">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
+              <MappingFragment StoreEntitySet="CustomerInvoice">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+                <ScalarProperty Name="CCharge" ColumnName="CCharge" />
+                <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+                <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
+                <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
+                <ScalarProperty Name="calogidate" ColumnName="calogidate" />
+                <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
+                <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
+                <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
+                <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
+                <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
+                <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
+                <ScalarProperty Name="FuelSurChargeHeadID" ColumnName="FuelSurChargeHeadID" />
+                <ScalarProperty Name="OtherChargeHeadID" ColumnName="OtherChargeHeadID" />
+                <ScalarProperty Name="ClearingChargeHeadID" ColumnName="ClearingChargeHeadID" />
+                <ScalarProperty Name="ClearingCharge" ColumnName="ClearingCharge" />
+                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="StatusContractCustomer" ColumnName="StatusContractCustomer" />
+                <ScalarProperty Name="CustomerInvoiceTax" ColumnName="CustomerInvoiceTax" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
+                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

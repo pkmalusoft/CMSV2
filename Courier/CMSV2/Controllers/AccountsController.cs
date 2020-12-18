@@ -3617,6 +3617,52 @@ new AcGroupModel()
             return View();
 
         }
+
+        public ActionResult DayBook()
+        {
+            ViewBag.ReportName = "Day Book Report";
+
+
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("ProfileLossReport"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View();
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = picker.Output
+            };
+
+            //model.Output = "EXCEL";
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+           
+
+            AccountsReportsDAO.GenerateDayBookReport();
+
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return View();            
+
+        }
+
         public ActionResult ReportParamDate()
         {
             AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
@@ -3653,6 +3699,7 @@ new AcGroupModel()
 
             return View(reportparam);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ReportParamDate([Bind(Include = "FromDate,ToDate,Output,Filters")] AccountsReportParam picker)

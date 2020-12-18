@@ -122,7 +122,14 @@ namespace CMSV2.Models
 
         public int paymentId { get; set; }
     }
-
+    public class InvoiceAllParam
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public string MovementId { get; set; }
+        public int[] SelectedValues { get; set; }
+    }
     public class AccountsReportParam
     {
         public int  AcHeadId { get; set; }        
