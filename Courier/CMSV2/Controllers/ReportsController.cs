@@ -58,7 +58,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00")
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
@@ -241,7 +241,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00")
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;

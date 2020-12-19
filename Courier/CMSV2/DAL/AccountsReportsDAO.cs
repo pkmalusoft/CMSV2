@@ -896,6 +896,7 @@ namespace CMSV2.DAL
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));          
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
+            comd.Parameters.AddWithValue("@VoucherType", reportparam.VoucherTypeId);
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;

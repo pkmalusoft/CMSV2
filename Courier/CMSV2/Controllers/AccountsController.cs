@@ -3294,7 +3294,7 @@ new AcGroupModel()
                 }
             else
             {
-                if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00")
+                if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
@@ -3621,8 +3621,15 @@ new AcGroupModel()
         public ActionResult DayBook()
         {
             ViewBag.ReportName = "Day Book Report";
-
-
+            //List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Cash Receipt & Payments" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Journal Vouchers" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "AWB Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Invoice Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "COD Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Customer Receipt Posting" });
+                        
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
@@ -3631,13 +3638,22 @@ new AcGroupModel()
                     Session["ReportOutput"] = null;
                 }
             }
-
-            return View();
+            AccountsReportParam model = SessionDataModel.GetAccountsParam();
+            if (model == null)
+            {
+                model = new AccountsReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    Output = "PDF"
+                };
+            }
+            return View(model);
 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters")] AccountsReportParam picker)
+        public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters,SelectedValues")] AccountsReportParam picker)
         {
             AccountsReportParam model = new AccountsReportParam
             {
@@ -3645,7 +3661,22 @@ new AcGroupModel()
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 Output = picker.Output
             };
+            model.VoucherTypeId = ""; 
+            if (picker.SelectedValues != null)
+            {
+                foreach (var item in picker.SelectedValues)
+                {
+                    if (model.VoucherTypeId == "")
+                    {
+                        model.VoucherTypeId= item.ToString();
+                    }
+                    else
+                    {
+                        model.VoucherTypeId = model.VoucherTypeId + "," + item.ToString();
+                    }
 
+                }
+            }
             //model.Output = "EXCEL";
             ViewBag.Token = model;
             SessionDataModel.SetAccountsParam(model);

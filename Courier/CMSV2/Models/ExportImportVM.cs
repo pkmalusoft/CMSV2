@@ -143,7 +143,8 @@ namespace CMSV2.Models
         public string ReportType { get; set; } //sumary details
         public string ReportFileName { get; set; }
         public string Filters { get; set; }
-
+        public string VoucherTypeId { get; set; }
+        public int[] SelectedValues { get; set; }
 
     }
 
