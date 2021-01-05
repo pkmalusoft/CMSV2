@@ -79,7 +79,7 @@
                 <th style="width: 10%">Receipt Date</th>
                 <th>Receipt Number</th>
                 <th style="width: 25%">Client</th>
-                <th>Amount</th>
+                <th class="right_text">Amount</th>
                 <th>Currency</th>
                 <th style="width:120px;">Action</th>
             </tr>
@@ -90,7 +90,7 @@
                 <th>Receipt Date</th>
                 <th>Receipt Number</th>
                 <th>Customer</th>
-                <th class="right_text">Amount</th>
+                <th >Amount</th>
                 <th>Currency</th>
                 <th style="width:120px;"></th>
             </tr>
@@ -113,7 +113,7 @@
                         @*@customers.Where(d => d.CustomerID == item.CustomerID).FirstOrDefault().CustomerName*@
                         @Html.DisplayFor(modelItem => item.PartyName)
                     </td>
-                    <td class="tdtarget " style="text-align:right!important">@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td class="tdtarget right_text" style="text-align:right!important">@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td class="tdtarget">@Html.DisplayFor(modelItem => item.Remarks)</td>
 
                     <td>

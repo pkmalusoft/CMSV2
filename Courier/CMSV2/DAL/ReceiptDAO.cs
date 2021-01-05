@@ -11,12 +11,13 @@ namespace CMSV2.DAL
     public class ReceiptDAO
     {
         //CustomerInvoiceDetailForReceipt
-        public static List<ReceiptVM> GetCustomerReceipts()
+        public static List<ReceiptVM> GetCustomerReceipts(int FYearId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetAllRecieptsDetails";
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
 
             //cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
             //cmd.Parameters["@AcJournalDetailID"].Value = AcJournalDetailID;
@@ -371,17 +372,71 @@ namespace CMSV2.DAL
         //}
 
 
-        public static void DeleteCustomerReceipt(int RecPayID)
+        public static DataTable DeleteCustomerReceipt(int RecPayID)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_DeleteCustomerReciepts";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
-            cmd.Connection.Open();
-            cmd.ExecuteNonQuery();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
 
 
+        }
+
+        public static DataTable DeleteInvoice(int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteCustomerInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerInvoiceId", InvoiceId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public static DataTable DeleteInscan(int InscanId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteInscan";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@InScanId", InscanId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }

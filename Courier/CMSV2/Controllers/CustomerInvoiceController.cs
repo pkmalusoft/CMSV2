@@ -613,28 +613,49 @@ namespace CMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            CustomerInvoice a = db.CustomerInvoices.Find(id);
-            if (a == null)  
+            //int k = 0;
+            if (id != 0)
             {
-                return HttpNotFound();
-            }
-            else
-            {
-                var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
-                foreach(InScanMaster _inscan in _inscans)
+                DataTable dt = ReceiptDAO.DeleteInvoice(id);
+                if (dt != null)
                 {
-                    _inscan.InvoiceID = null;
-                    db.Entry(_inscan).State = EntityState.Modified;
-                    db.SaveChanges();
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
                 }
-                a.IsDeleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully deleted Pickup Request.";
-
-
-                return RedirectToAction("Index");
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
+
+            return RedirectToAction("Index");
+
+            //CustomerInvoice a = db.CustomerInvoices.Find(id);
+            //if (a == null)  
+            //{
+            //    return HttpNotFound();
+            //}
+            //else
+            //{
+            //    var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
+            //    foreach(InScanMaster _inscan in _inscans)
+            //    {
+            //        _inscan.InvoiceID = null;
+            //        db.Entry(_inscan).State = EntityState.Modified;
+            //        db.SaveChanges();
+            //    }
+            //    a.IsDeleted = true;
+            //    db.Entry(a).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    TempData["SuccessMsg"] = "You have successfully deleted Pickup Request.";
+
+
+            //    return RedirectToAction("Index");
+            //}
         }
         public ActionResult Details(int id)        
         {

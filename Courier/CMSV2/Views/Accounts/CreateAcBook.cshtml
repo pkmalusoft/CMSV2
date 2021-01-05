@@ -64,9 +64,10 @@
         var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
-        var ed = new Date(enddate);        
+        var ed = new Date(enddate);
         var Receivedfromval = 0;
-       
+        var datevalid = false;
+        var dateerror = "";
         $(function () {
             //$("#transdate").datepicker({
             //    dateFormat: 'dd-M-yy',
@@ -78,9 +79,9 @@
               $('#transdate').datetimepicker({
                 //maxDate: ed,
                 //minDate: sd,
-                format: 'DD-MM-YYYY'
+                 format: 'DD-MM-YYYY',
             });
-           
+
         });
 
         $(function () {
@@ -98,6 +99,7 @@
                 }
             }
         });
+
         //$("#ReceivedFrom").keydown(function (e) {
 
         //    if (e.which == 8 || e.which == 46) {
@@ -130,6 +132,7 @@
         //});
         $("#chequedate").val(GetCurrentDate())
         $("#transdate").val(GetCurrentDate())
+        $('#transdate').trigger('change');
         function GetCurrentDate() {
             var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             var startdate = '@Session["FyearFrom"].ToString()';
@@ -281,41 +284,61 @@
             }
         });
 
+       
+        $('#transdate').keydown(function (e) {
+            
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                if ($("#transdate").val() != "") {
+                    $.ajax({
+                        url: "@Url.Action("CheckDateValidate", "Accounts")",
+                        data: { entrydate: $("#transdate").val() },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+                            
+                            if (response.Status == "OK") {
+                                datevalid = true;
+                                dateerror = response.Message;
+                            }
+                            else {
+                                datevalid = false;
+                                dateerror = response.Message;
+                            }
 
-        //$("#AcHead").change(function () {
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/Accounts/GetBalance",
-        //        datatype: "Json",
-        //        data:{acheadid:$("#AcHead option:selected").val()},
-        //        success: function (data) {
+                        },
+                        error: function () {
+                            alert("Failed! Please try again.");
+                        }
+                    });
+                }
+            }
+        });
+        $('#transdate').change(function () {
+            
+          if ($("#transdate").val() != "") {
+                 $.ajax({
+                url: "@Url.Action("CheckDateValidate", "Accounts")",
+                     data: { entrydate: $("#transdate").val()},
+                type: "GET",
+                dataType: "json",
+                success: function (response) {                    
+                    if (response.Status == "OK") {
+                        datevalid = true;
+                        dateerror = response.Message;
+                    }
+                    else {
+                        datevalid = false;
+                        dateerror = response.Message;
+                    }
 
-        //            $("#balance").html(data.d);
-        //        }
-        //    });
-        //});
-
-
-        //$("#btnAdd").click(function () {
-
-        //    var str = "";
-        //    var totalamt = 0;
-        //    $("#details tr:last-child").after('<tr><td>' + $("#ReceivedFrom option:selected").val() + '</td><td>' + $("#ReceivedFrom option:selected").text() + '</td><td>' + $("#amount").val() + '</td><td>' + $("#remark1").val() + '</td></tr>');
-
-        //    $("#details").find('tr:not(:first-child)').each(function (i, el) {
-        //        var $tds = $(this).find('td'),
-        //          acheadid = $tds.eq(0).text(),
-        //           Amount = $tds.eq(2).text(),
-
-        //        Remark = $tds.eq(3).text();
-        //        str = str + acheadid + "~" + Amount + "~" + Remark + "~";
-        //        totalamt = parseInt(totalamt) + parseInt(Amount);
-        //    });
-
-        //    $("#AcJournalDetail").val(str);
-        //    $("#TotalAmt").val(totalamt);
-        //    return false;
-        //});
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });
+            }
+        });
+             
 
 
         $("#btnAdd").click(function () {
@@ -342,7 +365,7 @@
 
             }
             else {
-                
+
                 var str = "";
                 var totalamt = 0;
                 var i = $('#details > tbody > tr').length - 1;
@@ -357,14 +380,14 @@
                 var objHtml = '<tr>' + '<td style="padding-left:10px">' + $("#ReceivedFrom").val() + '<input type="hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="hidden" value=' + $("#ReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px">' + parseFloat($("#amount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px">' + parseFloat($("#TaxPercent").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px">' + parseFloat($("#TaxAmount").val()).toFixed(2) + '<input type="hidden" class="JAcAmt" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px">' + $("#SupplierName").val() + '<input type="hidden" value="' + $("#SupplierID").val() + '" name="AcJDetailVM[' + i + '].SupplierID"></td>' + '<td style="padding-left:10px">' + remark1 + '<input type="hidden" value="' + remark1 + '" name="AcJDetailVM[' + i + '].Rem"></td>';
                 objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                 objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                objHtml = objHtml + '</tr>';                
+                objHtml = objHtml + '</tr>';
                 $("#details").append(objHtml);
                 $('#RowCount').val("0");
                 $("#ExpAllocationTable").find("tr:gt(0)").remove();
                 $("#ReceivedFrom").val("");
                 $("#TaxPercent").val("");
                 $("#TaxAmount").val("");
-                $("#SelectedReceivedFrom").val("0");                
+                $("#SelectedReceivedFrom").val("0");
                 $("#SupplierID").val(0);
                 $("#SupplierName").val('');
                 $("#amount").val('');
@@ -448,10 +471,13 @@
 
         $("#btnsave").click(function () {
             debugger;
+
+
+
             var tlen = $('#details > tbody > tr').length - 1;
             var deletedcount = 0
             $('#details > tbody > tr').find('.hdndeleted').each(function (index,item) {
-                          
+
                 if ($(item).val() == 'true')
                     deletedcount = deletedcount + 1;
             });
@@ -459,6 +485,11 @@
                 alert("Please Select Transaction Date");
                 return false;
 
+            }
+            else if (datevalid == false)
+            {
+                alert(dateerror);
+                return false;
             }
             else if ($("#AcHead").val() == "") {
                 alert("Please Select Account Head");
@@ -468,9 +499,9 @@
                 alert("Please add Transaction Details");
                 return false;
             }
-            else if (tlen == deletedcount) {                              
+            else if (tlen == deletedcount) {
                     alert("Please add Transaction Details");
-                    return false;                
+                    return false;
             }
             else {
                 return true;

@@ -5734,17 +5734,18 @@ body .tblbackground{
 .treeview-menu,.treeview-menu ul{
 	padding-left:0;
 }
-.dataTables_paginate {
+.dataTables_paginate >span {
     display: none;
 }
+/*.paginate_button {
+    display:none!important;
+}*/
+/*.dataTables_info {
+    display: none!important;
+}*/
 
-.dataTables_info {
-    display: none
-}
-
-.select2-selection{
-    height:40px !important;
-    
+.select2-selection {
+    height: 40px !important;
 }
 
 .select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {

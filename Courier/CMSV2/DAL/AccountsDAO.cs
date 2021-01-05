@@ -594,7 +594,37 @@ namespace CMSV2.DAL
             return objList;
         }
 
+        public static StatusModel CheckDateValidate(string EntryDate,int FyearId)
+        {
+            DateTime pFromDate = Convert.ToDateTime(EntryDate);
+            StatusModel obj = new StatusModel();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_CheckDateValiate";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EntryDate", pFromDate.ToString("MM/dd/yyyy"));
+                cmd.Parameters.AddWithValue("@FYearId", FyearId);
 
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    obj.Status = ds.Tables[0].Rows[0][0].ToString();
+                    obj.Message = ds.Tables[0].Rows[0][1].ToString();
+                }
+            }
+            catch(Exception ex)
+            {
+                obj.Status = "Failed";
+                obj.Message = ex.Message;
+
+            }
+            return obj;
+        }
 
         
     }

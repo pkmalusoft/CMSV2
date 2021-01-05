@@ -494,9 +494,10 @@ namespace CMSV2.Controllers
         [HttpGet]
         public ActionResult CustomerRecieptDetails(int ID)
         {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
             List<ReceiptVM> Reciepts = new List<ReceiptVM>();
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
+            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
             //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
 
             if (ID > 0)
@@ -559,10 +560,23 @@ namespace CMSV2.Controllers
             //int k = 0;
             if (id != 0)
             {
-                ReceiptDAO.DeleteCustomerReceipt(id);
+               DataTable dt= ReceiptDAO.DeleteCustomerReceipt(id);
+                if (dt !=null)                     
+                {
+                    if (dt.Rows.Count>0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                            TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+                    
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-
-            return RedirectToAction("CustomerTradeReceiptDetails", "CustomerReciept", new { ID = 10 });
+            
+            return RedirectToAction("CustomerTradeReceiptDetails", "CustomerReceipt", new { ID = 10 });
 
         }
 
@@ -667,12 +681,13 @@ namespace CMSV2.Controllers
         {
             DateTime d = DateTime.Now;
             DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
             DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
 
             int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
             DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var cust = ReceiptDAO.GetCustomerReceipts().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+            var cust = ReceiptDAO.GetCustomerReceipts(FyearId).Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
             //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
 
             string view = this.RenderPartialView("_GetAllCustomer", cust);
@@ -813,9 +828,10 @@ namespace CMSV2.Controllers
         [HttpGet]
         public ActionResult CustomerTradeReceiptDetails(int ID)
         {
+            int FyearId=Convert.ToInt32(Session["fyearid"]);
             List<ReceiptVM> Reciepts = new List<ReceiptVM>();
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
+            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
             var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
             if (ID > 0)
             {

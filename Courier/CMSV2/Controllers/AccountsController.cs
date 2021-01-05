@@ -2020,6 +2020,13 @@ new AcGroupModel()
             }
         }
 
+        public ActionResult CheckDateValidate(string entrydate)
+        {
+          int fyearid= Convert.ToInt32(Session["fyearid"].ToString());
+            StatusModel result= AccountsDAO.CheckDateValidate(entrydate, fyearid);
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+      }
 
 
         #region BankReconciliation
@@ -3320,19 +3327,33 @@ new AcGroupModel()
 
             //model.Output = "EXCEL";
             ViewBag.Token = model;
+            
             SessionDataModel.SetAccountsParam(model);
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
             //Stream stream= GenerateReport();
             //GenerateDefaultReport();
-            
-            AccountsReportsDAO.GenerateLedgerReport();
-            if (model.Output!="PDF")
-                return RedirectToAction("Download","Accounts",new { file = "a" });
-            else
-                return RedirectToAction("Ledger", "Accounts", new { id = 1 });
+            var reportid = Session["ReportId"].ToString();
 
+            if (reportid == "1") //ledger
+            {
+                AccountsReportsDAO.GenerateLedgerReport();
+                if (model.Output != "PDF")
+                    return RedirectToAction("Download", "Accounts", new { file = "a" });
+                else
+                    return RedirectToAction("Ledger", "Accounts", new { id = 1 });
+            }
+            else if (reportid=="2")
+            {
+                AccountsReportsDAO.GenerateTrialBalanceReport();                
+                return RedirectToAction("Ledger", "Accounts", new { id = reportid });
+
+            }
+            else
+            {
+                return RedirectToAction("Ledger", "Accounts", new { id = 1 });
+            }
             //return File(stream, "application/pdf", "AccLedger.pdf");
 
 

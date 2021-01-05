@@ -93,7 +93,8 @@
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
         var ed = new Date(enddate);
-        
+        var datevalid = false;
+        var dateerror = "";
         var v = $("#paytype option:selected").val();
         if (v == "1") {
             accounturl = '/Accounts/GetHeadsForCash';
@@ -218,7 +219,7 @@
                 $("#partyname").prop('disabled', true);
             }
         }
-            $("#transtype").change(function () {
+        $("#transtype").change(function () {
                 var v = $("#transtype option:selected").val();
                 if (v == "1") {
                     $(".label1").html("Received From");
@@ -272,7 +273,63 @@
                     $("#partyname").val('');
                 }
             });
+          $('#transdate').keydown(function (e) {
+            debugger;
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                if ($("#transdate").val() != "") {
+                    $.ajax({
+                        url: "@Url.Action("CheckDateValidate", "Accounts")",
+                        data: { entrydate: $("#transdate").val() },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+                            debugger;
+                            console.log(response);
+                            if (response.Status == "OK") {
+                                datevalid = true;
+                                dateerror = response.Message;
+                            }
+                            else {
+                                datevalid = false;
+                                dateerror = response.Message;
+                            }
 
+                        },
+                        error: function () {
+                            alert("Failed! Please try again.");
+                        }
+                    });
+                }
+            }
+        });
+        $('#transdate').change(function () {
+            
+          if ($("#transdate").val() != "") {
+                 $.ajax({
+                url: "@Url.Action("CheckDateValidate", "Accounts")",
+                     data: { entrydate: $("#transdate").val()},
+                type: "GET",
+                dataType: "json",
+                     success: function (response) {
+                         debugger;
+                    console.log(response);
+                    if (response.Status == "OK") {
+                        datevalid = true;
+                        dateerror = response.Message;
+                    }
+                    else {
+                        datevalid = false;
+                        dateerror = response.Message;
+                    }
+
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });
+            }
+        });
+        $('#transdate').trigger('change');
 
         $("#paytype").change(function () {
             debugger;
@@ -491,7 +548,7 @@
                     var totalamt = 0;
                     debugger;
                     var i = $('#details > tbody > tr').length - 1;
-                    
+
                     var s = 'name="AcExpAllocationVM';
                     var ExpTableHtml = $('#ExpAllocationTable').clone().attr("id", i + "_ExpAllocationTable").css('display', 'none').addClass('CostAllocationDetail').wrap('<p>').parent().html();
                     ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
@@ -577,7 +634,7 @@
                     },
                     select: function (e, i) {
                         e.preventDefault();
-                        $("#JAcSupplierName_" +i).val(i.item.label);                        
+                        $("#JAcSupplierName_" +i).val(i.item.label);
                         $("#JAcSupplierId_" + i).val(i.item.SupplierID);
 
                     },
@@ -719,7 +776,7 @@
             });
 
 
-        $("#btnsave").click(function () {            
+        $("#btnsave").click(function () {
             var tlen = $('#details > tbody > tr').length - 1;
             var deletedcount = 0
             $('#details > tbody > tr').find('.hdndeleted').each(function (index, item) {
@@ -750,7 +807,7 @@
             });
 
         $("#btnUpdate").click(function () {
-            
+
                 var ind = $("#currindex").val();
                 var amt = $("#amount").val();
                 $("#details").find("tr:eq('" + ind + "')").find("td:eq(1)").empty();
@@ -798,7 +855,7 @@
                                     xcountval = xcountval + 1;
                                 });
                                 innerTblcount = innerTblcount + 1;
-                                
+
                                 ExpTableHtml = ExpTableHtml + '</table>';
                               //  $('#ExpAllocationTable').append(ExpTableHtml);
                                 ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
@@ -879,7 +936,7 @@
 
                                     },
                                 });
-                                
+
                                 //ChkAmountIncludingTax_2
                                 $("#ChkAmountIncludingTax_" + i).click(function () {
 
