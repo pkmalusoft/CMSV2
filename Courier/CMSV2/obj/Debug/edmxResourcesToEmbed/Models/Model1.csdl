@@ -2248,6 +2248,7 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <Property Name="LastModifiedBy" Type="Int32" />
     <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="AcHeadID" Type="Int32" />
   </EntityType>
   <EntityType Name="InScanMasterNew">
     <Key>
@@ -8390,6 +8391,7 @@
     <FunctionImport Name="GetMaxInvoiceNo" ReturnType="Collection(String)">
       <Parameter Name="CompanyId" Mode="In" Type="Int32" />
       <Parameter Name="BranchId" Mode="In" Type="Int32" />
+      <Parameter Name="FYearId" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="GetMaxNumber">
       <Parameter Name="FieldName" Mode="In" Type="String" />

@@ -3344,9 +3344,9 @@ new AcGroupModel()
                 else
                     return RedirectToAction("Ledger", "Accounts", new { id = 1 });
             }
-            else if (reportid=="2")
+            else if (reportid=="3")
             {
-                AccountsReportsDAO.GenerateTrialBalanceReport();                
+                AccountsReportsDAO.GenerateTradingAccountReport();                
                 return RedirectToAction("Ledger", "Accounts", new { id = reportid });
 
             }

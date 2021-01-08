@@ -88,11 +88,11 @@ namespace CMSV2.Models
     }
         public static bool CheckCreateEntryValid()
         {
-            Entities1 db = new Entities1();
-            int currentfyearid = db.AcFinancialYears.Where(cc => cc.CurrentFinancialYear == true).FirstOrDefault().AcFinancialYearID;
-            int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
-            if (currentfyearid != fyearid)
-                return false;
+            //Entities1 db = new Entities1();
+            //int currentfyearid = db.AcFinancialYears.Where(cc => cc.CurrentFinancialYear == true).FirstOrDefault().AcFinancialYearID;
+            //int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            //if (currentfyearid != fyearid)
+            //    return false;
             return true;
         }
 
@@ -204,5 +204,6 @@ namespace CMSV2.Models
     {
         public string Status { get; set; }
         public string Message { get; set; }
+        public string ValidDate  { get; set; }
     }
 }

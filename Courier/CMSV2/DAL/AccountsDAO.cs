@@ -615,6 +615,7 @@ namespace CMSV2.DAL
                 {
                     obj.Status = ds.Tables[0].Rows[0][0].ToString();
                     obj.Message = ds.Tables[0].Rows[0][1].ToString();
+                    obj.ValidDate = Convert.ToDateTime(ds.Tables[0].Rows[0][2].ToString()).ToString("dd-MM-yyyy");
                 }
             }
             catch(Exception ex)

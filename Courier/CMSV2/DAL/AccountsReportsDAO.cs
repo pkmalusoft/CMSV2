@@ -121,9 +121,8 @@ namespace CMSV2.DAL
             comd = new SqlCommand();
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
-            comd.CommandText = "SP_AccTrialBalance";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.CommandText = "SP_AccTrailBalance";            
+            comd.Parameters.AddWithValue("@AsOnDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
 
@@ -153,7 +152,7 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
-            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "Period as on " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -191,7 +190,8 @@ namespace CMSV2.DAL
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_AccTradingAccount";
-            comd.Parameters.AddWithValue("@AsOnDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
 
@@ -220,8 +220,8 @@ namespace CMSV2.DAL
             rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trading Account";
-            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
-            string period = "As on :" + reportparam.ToDate.Date.ToString("dd MMMMM yyyy");
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);            
+            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;

@@ -113,21 +113,8 @@ namespace CMSV2.Controllers
                     ViewBag.CourierStatusId = 0;
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
-                    ViewBag.EditMode = "false";
-                   
-                   v.otherchargesVM = otherchargesvm;
-                //OtherChargeDetailVM charge1 = new OtherChargeDetailVM();
-                //charge1.OtherChargeID = 1;
-                //charge1.OtherChargeName = "Customs charge";
-                //charge1.Amount = 100;
-                //othercharngesvm.Add(charge1);
-
-                //charge1 = new OtherChargeDetailVM();
-                //charge1.OtherChargeID = 2;
-                //charge1.OtherChargeName = "Other charge";
-                //charge1.Amount = 200;
-                //othercharngesvm.Add(charge1);
-                //v.otherchargesVM = othercharngesvm;
+                    ViewBag.EditMode = "false";                   
+                   v.otherchargesVM = otherchargesvm;             
 
 
             }
@@ -266,7 +253,10 @@ namespace CMSV2.Controllers
                     }
                     inscan.Weight = v.Weight;            
                     //inscan.AcJournalID = ajm.AcJournalID;
-                    
+                    if (v.AcheadID!=null)
+                    {
+                        inscan.AcHeadID = v.AcheadID;
+                    }
 
                     if (v.CourierCharge != null)
                     {
@@ -671,7 +661,16 @@ namespace CMSV2.Controllers
                 inscan.CourierStatusId = data.CourierStatusID;
                 inscan.remarks = data.Remarks;
                 int statustypeid = 0;
-                 
+                if (data.AcHeadID!=null && data.AcHeadID != 0)
+                {
+                    var achead = db.AcHeads.Find(data.AcHeadID);
+                    if (achead!=null)
+                    {
+                    inscan.AcheadID = data.AcHeadID.Value;
+                    inscan.AcHeadName = achead.AcHead1;
+                    }
+                }
+
             if (data.StatusTypeId != null && data.StatusTypeId!=0)
                 statustypeid =Convert.ToInt32(data.StatusTypeId);
 

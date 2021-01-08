@@ -4983,7 +4983,7 @@ namespace CMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetMaxInScanSheetNo", companyIdParameter, branchIdParameter, sourceTypeParameter);
         }
     
-        public virtual ObjectResult<string> GetMaxInvoiceNo(Nullable<int> companyId, Nullable<int> branchId)
+        public virtual ObjectResult<string> GetMaxInvoiceNo(Nullable<int> companyId, Nullable<int> branchId, Nullable<int> fYearId)
         {
             var companyIdParameter = companyId.HasValue ?
                 new ObjectParameter("CompanyId", companyId) :
@@ -4993,7 +4993,11 @@ namespace CMSV2.Models
                 new ObjectParameter("BranchId", branchId) :
                 new ObjectParameter("BranchId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetMaxInvoiceNo", companyIdParameter, branchIdParameter);
+            var fYearIdParameter = fYearId.HasValue ?
+                new ObjectParameter("FYearId", fYearId) :
+                new ObjectParameter("FYearId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetMaxInvoiceNo", companyIdParameter, branchIdParameter, fYearIdParameter);
         }
     
         public virtual int GetMaxNumber(string fieldName, string tableName)

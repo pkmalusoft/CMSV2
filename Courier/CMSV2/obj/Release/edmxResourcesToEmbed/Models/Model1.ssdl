@@ -2161,6 +2161,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
     <Property Name="CreatedDate" Type="datetime" />
     <Property Name="LastModifiedBy" Type="int" />
     <Property Name="LastModifiedDate" Type="datetime" />
+    <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="InScanMasterNew">
     <Key>
@@ -7410,6 +7411,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="GetMaxInvoiceNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CompanyId" Type="int" Mode="In" />
     <Parameter Name="BranchId" Type="int" Mode="In" />
+    <Parameter Name="FYearId" Type="int" Mode="In" />
   </Function>
   <Function Name="GetMaxJobCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />
   <Function Name="GetMaxJobEnquiryCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />

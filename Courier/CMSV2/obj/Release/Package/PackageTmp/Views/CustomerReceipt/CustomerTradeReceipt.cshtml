@@ -8,7 +8,10 @@
     var CustomerNotification = ViewBag.CustomerNotification as IEnumerable<CMSV2.Models.CustomerNotificationModel>;
     var CustomerDetails = ViewBag.CustomerDetail; /*as  CMSV2.Models.CustomerMaster()*/
 }
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
 @*<script src="@Url.Content("~/Scripts/angular.js")"></script>
     <script src="@Url.Content("~/MyJsFiles/CustomerReceiptJS.js")"></script>*@
@@ -17,10 +20,11 @@
         height: 32px;
     }
 
-    #tbl1 tr:first-of-type {
+        #tbl1 tr:first-of-type {
             background: #35b8eb;
             color: #fff;
         }
+
     .form_field {
         background-color: #fff;
         border-radius: 10px;
@@ -110,10 +114,10 @@
         //$.ajax({
         //    type: "GET",
         //    url: "/PickUpRequest/GetCustomerName",
-        //    datatype: "Json",            
+        //    datatype: "Json",
         //    success: function (response) {
-        //        debugger;                
-        //        customernames = response.data;                
+        //        debugger;
+        //        customernames = response.data;
         //        $("#CustomerName").autocomplete({
         //            source: customernames
         //        });
@@ -129,7 +133,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {                                                       
+                        response($.map(data, function (val, item) {
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,
@@ -141,7 +145,7 @@
                 })
             },
             minLength: 1,
-            autoFocus:true,           
+            autoFocus:true,
             select: function (e, i) {
                 e.preventDefault();
                 $("#customerName").val(i.item.label);
@@ -156,16 +160,16 @@
                 //else {
                 //    $("#Consignor1").css('color', 'black');
                 //}
-                
+
             },
-           
+
         });
-        
+
         $("#customerName").change(function () {
             var ID = $('#CustomerID').val();
        $.ajax({
            type: "POST",
-           url: '/CustomerReceipt/GetTradeInvoiceOfCustomer/' + ID,                          
+           url: '/CustomerReceipt/GetTradeInvoiceOfCustomer/' + ID,
            data: {'ID': ID, 'amountreceived': $('#FMoney').val()},
            success: function (data) {
                $('#tbl1 tr:gt(0)').remove();
@@ -207,13 +211,13 @@
         //           }
         //           else {
         //               $('#CustomerId').val(response.data);
-             
+
         //           }
         //       }
-                                    
+
         //   });
-                  
-                                                  
+
+
         //});
         //$.ajax({
         //    type: "POST",
@@ -548,42 +552,42 @@
 </script>
 
 <section class="content-header">
-<div class="row">
-    <div class="col-md-5 pull-left">
-        <h1 class="headingfont">Customer Receipt - Create</h1>
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            <h1 class="headingfont">Customer Receipt - Create</h1>
+        </div>
+        <div class="col-md-5 pull-right text-right">
+            <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
+            @*<h5>Delivered</h5>*@
+            <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important'>@ViewBag.StatusType</h4><h5 class="pull-right" id="h4courierstatus" style='color:red'>@ViewBag.CourierStatus</h5>
+        </div>
+
     </div>
-    <div class="col-md-5 pull-right text-right">
-        <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
-        @*<h5>Delivered</h5>*@
-        <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important'>@ViewBag.StatusType</h4><h5 class="pull-right" id="h4courierstatus" style='color:red'>@ViewBag.CourierStatus</h5>
-    </div>
+    <div class="row">
+        <div class="pull-right setting">
+            <div class="navbar-custom-menu" id="divsetting">
+                <ul class="nav navbar-nav">
 
-</div>
-<div class="row">
-    <div class="pull-right setting">
-        <div class="navbar-custom-menu" id="divsetting">
-            <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
 
-                <!-- User Account Menu -->
-                <li class="dropdown user user-menu">
-                    <!-- Menu Toggle Button -->
-
-                    <ul class="dropdown-menu extended logout" style="top:0%!important">
-                        <li><a style="color:#35b8eb;cursor:pointer" onclick="Printreceipt(1)">Print</a></li>
-                        <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowStaffNotes()">Staff Notes</a></li>
-                        <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowCustomerNotification()">Customer Notification</a></li>
-                    </ul>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
-                    </a>
-                </li>
-            </ul>
+                        <ul class="dropdown-menu extended logout" style="top:0%!important">
+                            <li><a style="color:#35b8eb;cursor:pointer" onclick="Printreceipt(1)">Print</a></li>
+                            <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowStaffNotes()">Staff Notes</a></li>
+                            <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowCustomerNotification()">Customer Notification</a></li>
+                        </ul>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 </section>
 
-    <!-- Main content -->
+<!-- Main content -->
 <section class="content">
     @using (Html.BeginForm())
     {
@@ -594,182 +598,182 @@
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.StatusEntry)
-    <div class="row no-margin" style="padding-top:10px">
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Document No</label>
-            @Html.TextBoxFor(model => model.DocumentNo, new { @Value = ViewBag.DocumentNos, @class = "form-control", @readonly = "readonly" })
-
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Date</label>
-            @Html.TextBoxFor(model => model.RecPayDate, new { Value = Model.RecPayDate.Value.ToString("dd-MMM-yyyy"), @class = "form-control text-right" })
-
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Payment Mode</label>
-            <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
-                <option value="1">Bank</option>
-                <option value="2">Cash</option>
-            </select>
-        </div>
-        <div class="col-xs-12 col-sm-4">
-            <div id="divCash">
-                <label class=" required headinglabel">Cash</label>
-                @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
-                new SelectListItem{Text="Cash Account",Value="Cash Account"},
-                new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
-                new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
-                new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
-                new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
-                "Select", new { @class = "form-control" })*@
-                @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
-
-            </div>
-            <div id="divBank">
-                <div class="form-title">
-                    <label class=" required headinglabel">Bank</label>
-                </div>
-                <div class="form-field">
-                    @* @Html.DropDownListFor(model => model.ChequeBank, new List<SelectListItem> {
-                    new SelectListItem{Text="BANK OF BARODA",Value="BANK OF BARODA"},
-                    new SelectListItem{Text="Unpresented Cheques",Value="Unpresented Cheques"}},
-                    "Select", new { @class = "form-control" })*@
-
-                    @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
-                </div>
-            </div>
-        </div>
-        @if (Model.RecPayID <= 0)
-        {
+        <div class="row no-margin" style="padding-top:10px">
             <div class="col-xs-12 col-sm-2">
-                <label class=" required headinglabel">Amount</label>
-                @Html.TextBoxFor(model => model.FMoney, new { ng_model = "Amt", @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
+                <label class="headinglabel">Document No</label>
+                @Html.TextBoxFor(model => model.DocumentNo, new { @Value = ViewBag.DocumentNos, @class = "form-control", @readonly = "readonly" })
+
             </div>
-        }
-        else
-        {
             <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">Amount</label>
-                @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright", @readonly = "readonly" })
+                <label class="headinglabel">Date</label>
+                @Html.TextBoxFor(model => model.RecPayDate, new { Value = Model.RecPayDate.Value.ToString("dd-MMM-yyyy"), @class = "form-control text-right" })
+
             </div>
-        }
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Payment Mode</label>
+                <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
+                    <option value="1">Bank</option>
+                    <option value="2">Cash</option>
+                </select>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div id="divCash">
+                    <label class=" required headinglabel">Cash</label>
+                    @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
+                        new SelectListItem{Text="Cash Account",Value="Cash Account"},
+                        new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
+                        new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
+                        new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
+                        new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
+                        "Select", new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
 
-    </div>
-    <div class="row no-margin" style="padding-top:10px">
-        <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">Cheque No.</label>
-            @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
+                </div>
+                <div id="divBank">
+                    <div class="form-title">
+                        <label class=" required headinglabel">Bank</label>
+                    </div>
+                    <div class="form-field">
+                        @* @Html.DropDownListFor(model => model.ChequeBank, new List<SelectListItem> {
+                            new SelectListItem{Text="BANK OF BARODA",Value="BANK OF BARODA"},
+                            new SelectListItem{Text="Unpresented Cheques",Value="Unpresented Cheques"}},
+                            "Select", new { @class = "form-control" })*@
 
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">Cheque Date</label>
-            @if (Model.ChequeDate != null)
+                        @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            @if (Model.RecPayID <= 0)
             {
-                @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
+                <div class="col-xs-12 col-sm-2">
+                    <label class=" required headinglabel">Amount</label>
+                    @Html.TextBoxFor(model => model.FMoney, new { ng_model = "Amt", @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Amount</label>
+                    @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright", @readonly = "readonly" })
+                </div>
+            }
+
+        </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque No.</label>
+                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque Date</label>
+                @if (Model.ChequeDate != null)
+                {
+                    @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
+                }
+                else
+                {
+
+                    @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
+                }
+            </div>
+            @if (Model.RecPayID <= 0)
+            {
+
+                <div class="col-xs-12 col-sm-2">
+                    <label class=" required headinglabel">Currency</label>
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Exchange Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
+
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class=" required headinglabel">Client</label>
+                    @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
+                </div>
+
             }
             else
             {
 
-                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Currency</label>
+
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Exchange Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { @readonly = "readonly", @class = "form-control" })
+
+                </div>
+                <div class="col-xs-12 col-sm-4">
+
+                    <label class=" required headinglabel">Client</label>
+                    @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
+                </div>
+
             }
+
         </div>
-        @if (Model.RecPayID <= 0)
-        {
 
-            <div class="col-xs-12 col-sm-2">
-                <label class=" required headinglabel">Currency</label>
-                @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+        <div class="row no-margin" style="padding-top:10px">
+            @if (Model.RecPayID == 0)
+            {
+                <div class="col-xs-6 col-sm-6">
+                    <label class="headinglabel">Remarks</label>
+                    @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
+                </div>
 
-            </div>
-            <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">Exchange Rate</label>
-                @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
+                @*
 
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label class=" required headinglabel">Client</label>
-                @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
-            </div>
+                    <div class="col-xs-12 col-sm-2">
+                            <input type="checkbox" class="chkAllocate" />&nbsp;&nbsp;&nbsp;<label class="headinglabel">Auto Allocate</label>
 
-        }
-        else
-        {
+                    </div>
+                *@
 
-            <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">Currency</label>
+            }
+            else
+            {
 
-                @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { @class = "form-control" })
-            </div>
-            <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">Exchange Rate</label>
-                @Html.TextBoxFor(model => model.EXRate, new { @readonly = "readonly", @class = "form-control" })
 
-            </div>
-            <div class="col-xs-12 col-sm-4">
 
-                <label class=" required headinglabel">Client</label>
-                @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
-            </div>
+                <div class="col-xs-12 col-sm-12">
+                    <label class="headinglabel">Remarks</label>
+                    @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
 
-                }
 
-            </div>
+                    @Html.HiddenFor(model => model.AcCompanyID)
+                    @Html.HiddenFor(model => model.AcJournalID)
+                    @Html.HiddenFor(model => model.BusinessCentreID)
+                    @Html.HiddenFor(model => model.DocumentNo)
+                    @Html.HiddenFor(model => model.RecPayID)
+                    @Html.HiddenFor(model => model.FMoney)
+                    @Html.HiddenFor(model => model.FYearID)
+                    @Html.HiddenFor(model => model.RecPayDate)
+                    @Html.HiddenFor(model => model.RecPayID)
+                    @Html.HiddenFor(model => model.Remarks)
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @Html.HiddenFor(model => model.CurrencyId)
+                    @Html.HiddenFor(model => model.EXRate)
+                    @Html.HiddenFor(model => model.FMoney)
 
-    <div class="row no-margin" style="padding-top:10px">
-        @if (Model.RecPayID == 0)
-        {
+                </div>
+
+            }
+
             <div class="col-xs-6 col-sm-6">
-                <label class="headinglabel">Remarks</label>
-                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
+                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
             </div>
-
-            @*
-
-            <div class="col-xs-12 col-sm-2">
-                    <input type="checkbox" class="chkAllocate" />&nbsp;&nbsp;&nbsp;<label class="headinglabel">Auto Allocate</label>
-
-            </div>
-            *@
-
-        }
-        else
-        {
-
-
-
-            <div class="col-xs-12 col-sm-12">
-                <label class="headinglabel">Remarks</label>
-                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
-
-
-                @Html.HiddenFor(model => model.AcCompanyID)
-                @Html.HiddenFor(model => model.AcJournalID)
-                @Html.HiddenFor(model => model.BusinessCentreID)
-                @Html.HiddenFor(model => model.DocumentNo)
-                @Html.HiddenFor(model => model.RecPayID)
-                @Html.HiddenFor(model => model.FMoney)
-                @Html.HiddenFor(model => model.FYearID)
-                @Html.HiddenFor(model => model.RecPayDate)
-                @Html.HiddenFor(model => model.RecPayID)
-                @Html.HiddenFor(model => model.Remarks)
-                @Html.HiddenFor(model => model.SupplierID)
-                @Html.HiddenFor(model => model.CurrencyId)
-                @Html.HiddenFor(model => model.EXRate)
-                @Html.HiddenFor(model => model.FMoney)
-
-            </div>
-
-        }
-
-        <div class="col-xs-6 col-sm-6">
-            <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
         </div>
-        </div>
-        
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-xs-12 no-padding for-device">
-                    <div class="data-table payment-div">
-                        @* <div class="heading">
+
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 no-padding for-device">
+                <div class="data-table payment-div">
+                    @* <div class="heading">
                             <div class="title1">Invoice No</div>
                             <div class="title2">Job Code</div>
                             <div class="title3">Invoice Date</div>
@@ -778,110 +782,110 @@
                             <div class="title6">Balance</div>
                             <div class="title7">Amount</div>
                         </div>*@
-                        <div class="data">
-                            <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive" id="tbl1">
-                                @if (Model.RecPayID > 0)
+                    <div class="data">
+                        <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive" id="tbl1">
+                            @if (Model.RecPayID > 0)
+                            {
+                                <tr style="font-weight: bold">
+                                    <td>Invoice No</td>
+                                    <td>Invoice Date</td>
+                                    <td>Amount To be Received</td>
+                                    <td>Amount already Received</td>
+                                    <td>Outstanding</td>
+                                    <td>Amount Allocated</td>
+                                    <td>Adjustment Amount</td>
+                                </tr>
+
+
+                                for (int i = 0; i < Model.CustomerRcieptChildVM.Count; i++)
                                 {
-                                    <tr style="font-weight: bold">
-                                        <td>Invoice No</td>
-                                        <td>Invoice Date</td>
-                                        <td>Amount To be Received</td>
-                                        <td>Amount already Received</td>
-                                        <td>Outstanding</td>
-                                        <td>Amount Allocated</td>
-                                        <td>Adjustment Amount</td>
-                                    </tr>
+
+                                    <tr>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Model.CustomerRcieptChildVM[i].SInvoiceNo
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayDetailID)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].CurrencyId)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceNo)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Amount)
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount)
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
+                                                {
+                                                    @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                }
+                                                else
+                                                {
+                                                    @Model.CustomerRcieptChildVM[i].strDate
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                }
+                                            </div>
+                                        </td>
+
+                                        <td style="text-align: right;">
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @*   @Model.recPayDetail[i].Amount*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBeRecieved, new { @Class = "AmountToBeRecieved" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBeRecieved)
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBePaid, new { @Class = "AmountToBePaid" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBePaid)
 
 
-                                    for (int i = 0; i < Model.CustomerRcieptChildVM.Count; i++)
-                                    {
-
-                                        <tr>
-
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Model.CustomerRcieptChildVM[i].SInvoiceNo
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceID)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayID)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayDetailID)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].CurrencyId)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceNo)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Amount)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount)
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
-                                                    {
-                                                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
-                                                    }
-                                                    else
-                                                    {
-                                                        @Model.CustomerRcieptChildVM[i].strDate
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
-                                                    }
-                                                </div>
-                                            </td>
-
-                                            <td style="text-align: right;">
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @*   @Model.recPayDetail[i].Amount*@
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBeRecieved, new { @Class = "AmountToBeRecieved" })
-                                                    @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBeRecieved)
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBePaid, new { @Class = "AmountToBePaid" })
-                                                    @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBePaid)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Balance, new { @Class = "Balance" })
+                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Balance)
 
 
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Balance, new { @Class = "Balance" })
-                                                    @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Balance)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].Amount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Amount), new { @Class = "amt txtNum text-right Amount", @onChange = "CheckAmt1(this)", @readonly = "readonly" })
 
 
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].Amount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Amount), new { @Class = "amt txtNum text-right Amount", @onChange = "CheckAmt1(this)", @readonly = "readonly" })
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="data1">
+                                                @*@Model.CostUpdationDetails[i].JobCode*@
+                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @Class = "amt1 txtNum text-right AdjustmentAmount", @readonly = "readonly" })
 
 
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @Class = "amt1 txtNum text-right AdjustmentAmount", @readonly = "readonly" })
-
-
-                                                </div>
-                                            </td>
-                                            @* <td style="text-align: right;">
+                                            </div>
+                                        </td>
+                                        @* <td style="text-align: right;">
                                                 <div class="data6">{{order.Balance | currency:""}}</div>
                                             </td>*@
-                                            @*<td style="text-align: right;">
+                                        @*<td style="text-align: right;">
 
                                                  <div class="data7 readonlyamt">{{order.Amount | currency:""}}</div>
                                                 <div class="data7 textamt" style="display:none"><input type="text" ng-bind="{{order.Amount}}" value="{{order.Amount}}" /></div>
 
                                             </td>*@
-                                        </tr>
-                                        @*<tr>
+                                    </tr>
+                                    @*<tr>
                                             <td>
                                                 <div class="data1">&nbsp;</div>
                                             </td>
@@ -905,26 +909,26 @@
 
                                             </td>
                                         </tr>*@
-                                    }
                                 }
+                            }
 
-                                else
-                                {
+                            else
+                            {
 
-                                    <tr style="font-weight: bold">
-                                        <td>Invoice No</td>
-                                        <td>Invoice Date</td>
-                                        <td>Invoice Amount</td>
-                                        <td>Amount Received</td>
-                                        <td>Balance</td>
-                                        <td>Amount Allocated</td>
-                                        <td>Adjustment Amount</td>
-                                    </tr>
-
-
+                                <tr style="font-weight: bold">
+                                    <td>Invoice No</td>
+                                    <td>Invoice Date</td>
+                                    <td>Invoice Amount</td>
+                                    <td>Amount Received</td>
+                                    <td>Balance</td>
+                                    <td>Amount Allocated</td>
+                                    <td>Adjustment Amount</td>
+                                </tr>
 
 
-                                    @*<tr ng-repeat="order in Orders">
+
+
+                                @*<tr ng-repeat="order in Orders">
 
                                         <td>
                                           //  <div class="data1 textright">{{order.InvoiceNo}}</div>
@@ -954,7 +958,7 @@
 
                                         </td>
                                     </tr>*@
-                                    @*  <tr>
+                                @*  <tr>
                                         <td>
                                             <div class="data1">&nbsp;</div>
                                         </td>
@@ -977,204 +981,204 @@
                                             <div class="data7"><b>{{TotalAmt | currency:""}}</b></div>
                                         </td>
                                     </tr>*@
-                                }
-                            </table>
+                            }
+                        </table>
 
 
-                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12 btn-right">
-                    @if (Model.RecPayID > 0)
-                    {
-                        <input type="submit" class="btn btn-primary  btnwidth" value="Update" />
-                    }
-                    else
-                    {
-                        <input type="submit" class="btn btn-primary  btnwidth" value="Save" name="Command" />
-                    }
-                    <a href='@Url.Action("CustomerTradeReceiptDetails", "CustomerReceipt", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
-                </div>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-12 btn-right">
+                @if (Model.RecPayID > 0)
+                {
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Update" />
+                }
+                else
+                {
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" name="Command" />
+                }
+                <a href='@Url.Action("CustomerTradeReceiptDetails", "CustomerReceipt", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
             </div>
-        }
+        </div>
+    }
 </section>
-        <div id="wrapper">
-            <div id="page-wrapper">
-                <div class="row">
-                    <div class="col-lg-10">
-                        <div class="modal fade StaffNoteModal" id="StaffNoteModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" style="width:70%">
-                                <div class="modal-content">
+<div id="wrapper">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="modal fade StaffNoteModal" id="StaffNoteModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width:70%">
+                        <div class="modal-content">
 
-                                    <div class="modal-header" style="background-color: #f5f5f5;">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <div class="modal-header" style="background-color: #f5f5f5;">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-                                        <h4 class="modal-title" id="StaffNoteModal1">
-                                            <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Staff Notes</span>
-                                        </h4>
-                                    </div>
+                                <h4 class="modal-title" id="StaffNoteModal1">
+                                    <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Staff Notes</span>
+                                </h4>
+                            </div>
 
-                                    <div class="modal-body" id="staffmodelbody">
-                                        <div class="container-fluid">
-                                            <div class="row" style="padding-top: 5px">
-                                                <div class="col-sm-12">
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-12">
-                                                            <label>Enter Your Note</label>
-                                                            <textarea id="txtStaffnote" rows="4" cols="100"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-12">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th width="18%">Date</th>
-                                                                        <th width="15%">Staff</th>
-                                                                        <th style="text-align:center !important">Notes</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach (var staffnote in staffmodel)
-                                                                    {
-
-                                                                        <tr>
-                                                                            <td width="18%">@staffnote.Datetime</td>
-                                                                            <td width="15%">@staffnote.EmpName</td>
-                                                                            <td>@staffnote.TaskDetails</td>
-                                                                        </tr>
-
-
-                                                                    }
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-
+                            <div class="modal-body" id="staffmodelbody">
+                                <div class="container-fluid">
+                                    <div class="row" style="padding-top: 5px">
+                                        <div class="col-sm-12">
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-12">
+                                                    <label>Enter Your Note</label>
+                                                    <textarea id="txtStaffnote" rows="4" cols="100"></textarea>
                                                 </div>
                                             </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-12">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="18%">Date</th>
+                                                                <th width="15%">Staff</th>
+                                                                <th style="text-align:center !important">Notes</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var staffnote in staffmodel)
+                                                            {
+
+                                                                <tr>
+                                                                    <td width="18%">@staffnote.Datetime</td>
+                                                                    <td width="15%">@staffnote.EmpName</td>
+                                                                    <td>@staffnote.TaskDetails</td>
+                                                                </tr>
+
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    <div class="modal-footer" style="padding-top: 5px;text-align:right">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveStaffNotes()" id="SaveStaffnote">Save</button>
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="modal-footer" style="padding-top: 5px;text-align:right">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveStaffNotes()" id="SaveStaffnote">Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="wrapper">
-            <div id="page-wrapper">
-                <div class="row">
-                    <div class="col-lg-10">
-                        <div class="modal fade CustomerNotificationmodel" id="CustomerNotificationmodel" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" style="width:70%">
-                                <div class="modal-content">
+    </div>
+</div>
+<div id="wrapper">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="modal fade CustomerNotificationmodel" id="CustomerNotificationmodel" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width:70%">
+                        <div class="modal-content">
 
-                                    <div class="modal-header" style="background-color: #f5f5f5;">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <div class="modal-header" style="background-color: #f5f5f5;">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-                                        <h4 class="modal-title" id="CustomerNotificationmodel1">
-                                            <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Customer Notification</span>
-                                        </h4>
-                                    </div>
+                                <h4 class="modal-title" id="CustomerNotificationmodel1">
+                                    <span style="font-size: 18px; color: #3c8dbc !important; text-align:center">Customer Notification</span>
+                                </h4>
+                            </div>
 
-                                    <div class="modal-body" id="staffmodelbody">
-                                        <div class="container-fluid">
-                                            <div class="row" style="padding-top: 5px">
-                                                <div class="col-sm-12">
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-4">
-                                                            <label>TO  </label>
-                                                        </div>
-                                                        <div class="col-xs-7 col-sm-8">
-                                                            <label>@CustomerDetails.CustomerName </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-4">
-                                                            <label><input type="checkbox" id="Isemail" /> Email  </label>
-                                                        </div>
-                                                        <div class="col-xs-7 col-sm-8">
-                                                            <span>@CustomerDetails.Email  </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-4">
-                                                            <label><input type="checkbox" id="Issms" /> SMS  </label>
-                                                        </div>
-                                                        <div class="col-xs-7 col-sm-8">
-                                                            <span>@*@CustomerDetails.MobileNo*@ </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-4">
-                                                            <label><input type="checkbox" id="Iswhatsapp" /> WhatsApp  </label>
-                                                        </div>
-                                                        <div class="col-xs-7 col-sm-8">
-                                                            @*<span>@CustomerDetails.WhatsAppNumber </span>*@
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-12">
-                                                            <label>Enter Your Message</label>
-                                                            <textarea id="txtcustMessage" rows="4" cols="100"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-xs-7 col-sm-12">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th width="18%">Date</th>
-                                                                        <th width="15%">Staff</th>
-                                                                        <th width="15%">Is Email</th>
-                                                                        <th width="15%">Is SMS</th>
-                                                                        <th width="15%">Is WhatsApp</th>
-                                                                        <th style="text-align:center !important">Message</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @*@foreach (var CustNotify in CustomerNotification)
-                                                                        {
-
-                                                                            <tr>
-                                                                                <td width="18%">@CustNotify.Datetime</td>
-                                                                                <td width="15%">@CustNotify.EmpName</td>
-                                                                                <td width="15%">@CustNotify.IsEmail</td>
-                                                                                <td width="15%">@CustNotify.IsSms</td>
-                                                                                <td width="15%">@CustNotify.IsWhatsapp</td>
-                                                                                <td>@CustNotify.Message</td>
-                                                                            </tr>
-
-
-                                                                        }*@
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-
+                            <div class="modal-body" id="staffmodelbody">
+                                <div class="container-fluid">
+                                    <div class="row" style="padding-top: 5px">
+                                        <div class="col-sm-12">
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-4">
+                                                    <label>TO  </label>
+                                                </div>
+                                                <div class="col-xs-7 col-sm-8">
+                                                    <label>@CustomerDetails.CustomerName </label>
                                                 </div>
                                             </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-4">
+                                                    <label><input type="checkbox" id="Isemail" /> Email  </label>
+                                                </div>
+                                                <div class="col-xs-7 col-sm-8">
+                                                    <span>@CustomerDetails.Email  </span>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-4">
+                                                    <label><input type="checkbox" id="Issms" /> SMS  </label>
+                                                </div>
+                                                <div class="col-xs-7 col-sm-8">
+                                                    <span>@*@CustomerDetails.MobileNo*@ </span>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-4">
+                                                    <label><input type="checkbox" id="Iswhatsapp" /> WhatsApp  </label>
+                                                </div>
+                                                <div class="col-xs-7 col-sm-8">
+                                                    @*<span>@CustomerDetails.WhatsAppNumber </span>*@
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-12">
+                                                    <label>Enter Your Message</label>
+                                                    <textarea id="txtcustMessage" rows="4" cols="100"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-xs-7 col-sm-12">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="18%">Date</th>
+                                                                <th width="15%">Staff</th>
+                                                                <th width="15%">Is Email</th>
+                                                                <th width="15%">Is SMS</th>
+                                                                <th width="15%">Is WhatsApp</th>
+                                                                <th style="text-align:center !important">Message</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var CustNotify in CustomerNotification)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td width="18%">@CustNotify.Datetime</td>
+                                                                        <td width="15%">@CustNotify.EmpName</td>
+                                                                        <td width="15%">@CustNotify.IsEmail</td>
+                                                                        <td width="15%">@CustNotify.IsSms</td>
+                                                                        <td width="15%">@CustNotify.IsWhatsapp</td>
+                                                                        <td>@CustNotify.Message</td>
+                                                                    </tr>
+
+
+                                                                }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    <div class="modal-footer" style="padding-top: 5px;text-align:right">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveCustNotes()" id="SaveStaffnote">Send</button>
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="modal-footer" style="padding-top: 5px;text-align:right">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="button" name="SaveStaffnote" class="btn btn-primary" onclick="SaveCustNotes()" id="SaveStaffnote">Send</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    
+    </div>
+</div>
+
 
 
 
@@ -1188,14 +1192,71 @@
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
         var ed = new Date(enddate);
-        $('#RecPayDate').datepicker({
 
-            dateFormat: 'dd-M-yy',
-            minDate: sd,
-            maxDate: ed,
-            changeYear: true, changeMonth: true,
+        $('#RecPayDate').datetimepicker({
+                format: 'DD-MM-YYYY HH:mm'
+        });
+          $('#RecPayDate').keydown(function (e) {
+
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                if ($("#RecPayDate").val() != "") {
+                    $.ajax({
+                        url: "@Url.Action("CheckDateValidate", "Accounts")",
+                        data: { entrydate: $("#RecPayDate").val() },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+
+                            if (response.Status == "OK") {
+                                datevalid = true;
+                                dateerror = response.Message;
+                            }
+                            else {
+                                datevalid = false;
+                                dateerror = response.Message;
+
+                                $('#RecPayDate').val(response.ValidDate);
+                            }
+
+                        },
+                        error: function () {
+                            alert("Failed! Please try again.");
+                        }
+                    });
+                }
+            }
+        });
+        $('#RecPayDate').change(function ()    {
+
+            if ($("#RecPayDate").val() != "") {
+                 $.ajax({
+                url: "@Url.Action("CheckDateValidate", "Accounts")",
+                     data: { entrydate: $("#RecPayDate").val()},
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Status == "OK") {
+                        datevalid = true;
+                        dateerror = response.Message;
+                    }
+                    else {
+                        datevalid = false;
+                        dateerror = response.Message;
+                        alert(dateerror);
+                        $('#RecPayDate').val(response.ValidDate);
+                    }
+
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });
+            }
         });
 
+        $('#RecPayDate').on('dp.change', function (e) {
+            $('#RecPayDate').trigger('change');
+        })
 
         $('#ChequeDate').datepicker({
             dateFormat: 'dd-M-yy',

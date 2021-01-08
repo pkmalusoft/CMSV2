@@ -351,13 +351,23 @@
                 }
             });
         }
-        $('#PaymentModeId').change(function () {        
+        $('#PaymentModeId').change(function () {
             var modeid = $('#PaymentModeId').val();
+            if (modeid == 1 ) { //PKP
+                $('#divcustomer').addClass('hide');
+                $('#divcash').removeClass('hide');
+            }
+            else
+            {
+                $('#divcustomer').removeClass('hide');
+                $('#divcash').addClass('hide');
+            }
+
             if (modeid == 1 || modeid == 2) { //PKP
                 $("#customer").attr("readonly", "readonly");
                 $("#CustomerandShipperSame").attr("disabled", "disabled");
                 fillcustomerdetail(modeid);
-
+                
             }
             else {
                 $('#customer').val('');
@@ -594,6 +604,43 @@
             },
 
         });
+        var accounturl = '/Accounts/GetHeadsForCash';
+
+        $("#AcHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: accounturl,
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 0,
+            focus: function (event, i) {
+                $("#AcHeadName").val(i.item.label);
+                $('#AcheadID').val(i.item.AcHeadID);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHeadName").val(i.item.label);
+                $('#AcheadID').val(i.item.AcHeadID);
+
+            }
+        });
+
+        setTimeout(function () {
+            $('#PaymentModeId').trigger('change');
+        },500)
+        
     });
 
 </script>
@@ -635,7 +682,7 @@
 
           return true;
     }
-    function AddCharge() {        
+    function AddCharge() {
         alert($('#OtherChargeID').val());
         alert($('#txtotherchargeamt_99').val());
     }
@@ -645,7 +692,7 @@
 
 
     }
-  
+
     function ShowOtherChargesModal() {
         $('#OtherChargesModal').modal('show');
     }
@@ -828,7 +875,7 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#HAWBNo").focus();
-        
+
         $("#OtherChargeName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -858,17 +905,17 @@
             }
         });
         $(".Allocate").on("click", function () {
-           
+
             $('#popup').modal('show');
             //$('#popupbackground').show();
         });
-        
+
 
         $("#AllocationClose").on("click", function () {
             $('#popup').modal('hide');
             //$('#popupbackground').hide();
         });
-      
+
 
         function CalcTotal() {
             var x = $("#CourierCharge").val();
@@ -1132,7 +1179,67 @@
                 //}
 
         });
+        $('#TransactionDate').keydown(function (e) {
 
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                if ($("#TransactionDate").val() != "") {
+                    $.ajax({
+                        url: "@Url.Action("CheckDateValidate", "Accounts")",
+                        data: { entrydate: $("#TransactionDate").val() },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+
+                            if (response.Status == "OK") {
+                                datevalid = true;
+                                dateerror = response.Message;
+                            }
+                            else {
+                                datevalid = false;
+                                dateerror = response.Message;
+                                
+                                $('#TransactionDate').val(response.ValidDate);
+                            }
+
+                        },
+                        error: function () {
+                            alert("Failed! Please try again.");
+                        }
+                    });
+                }
+            }
+        });
+        $('#TransactionDate').change(function ()    {
+
+            if ($("#TransactionDate").val() != "") {
+                 $.ajax({
+                url: "@Url.Action("CheckDateValidate", "Accounts")",
+                     data: { entrydate: $("#TransactionDate").val()},
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Status == "OK") {
+                        datevalid = true;
+                        dateerror = response.Message;
+                    }
+                    else {
+                        datevalid = false;
+                        dateerror = response.Message;
+                        alert(dataerror);
+                        $('#TransactionDate').val(response.ValidDate);
+                    }
+
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });
+            }
+        });
+
+        $('#TransactionDate').on('dp.change', function (e) {
+            $('#TransactionDate').trigger('change');
+        })
 
         $("#EnquiryNo").change(function () {
             //$("#origincity").empty();
@@ -1140,7 +1247,7 @@
 
             //$("#originlocation").empty();
             //$('#originlocation').append('<option value="0">Select</option>');
-            
+
             if ($('#EnquiryNo').val() == 0)
                 $('#InScanID').val(0);
 
@@ -1202,11 +1309,11 @@
             });
         });
 
-        
+
         $(function () {
             $('#TransactionDate').datetimepicker({
-                maxDate:'@_maxdate',
-                minDate: '@_mindate',
+               // maxDate:'@_maxdate',
+                //minDate: '@_mindate',
                 format: 'DD-MM-YYYY HH:mm'
             });
         });
@@ -1276,7 +1383,7 @@
 <section class="content-header">
     <div class="row">
         <div class="col-md-5 pull-left">
-            <h1 class="headingfont">Quick AirWay Bill</h1>
+            <h1 class="headingfont">AirWay Bill</h1>
         </div>
         <div class="col-md-5 pull-right text-right">
             <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
@@ -1375,7 +1482,7 @@
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="divcustomer">
                  <div class="flexTitle">
                 <label class="headinglabel required">Customer</label>
                  <div class="checkboxdesign text-right" style="float:right">
@@ -1385,9 +1492,12 @@
                             </div>
                 @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget" })
                 @Html.TextBoxFor(model => model.customer, new { @class = "form-control txttarget", @required = "true" })
-                @*<input type="text" id="Consignor" name="Consignor" class="form-control" autocomplete="off" />*@
-
-                @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })*@
+                
+            </div>
+            <div class="col-md-4 hide" id="divcash">
+                <label class="headinglabel">Cash Account</label>
+                @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
+                @Html.HiddenFor(model => model.AcheadID, new { })
             </div>
         </div>
 

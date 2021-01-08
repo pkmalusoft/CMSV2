@@ -137,6 +137,9 @@ namespace CMSV2.Models
         public string LastModifiedByName { get; set; }
         public string CreatedByDate { get; set; }
         public string LastModifiedDate { get; set; }
+
+        public int AcheadID { get; set; }
+        public string AcHeadName { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

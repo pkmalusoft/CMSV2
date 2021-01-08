@@ -2047,6 +2047,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
           <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />

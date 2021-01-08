@@ -2166,6 +2166,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="LastModifiedBy" Type="int" />
           <Property Name="LastModifiedDate" Type="datetime" />
+          <Property Name="AcHeadID" Type="int" />
         </EntityType>
         <EntityType Name="InScanMasterNew">
           <Key>
@@ -7415,6 +7416,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
         <Function Name="GetMaxInvoiceNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CompanyId" Type="int" Mode="In" />
           <Parameter Name="BranchId" Type="int" Mode="In" />
+          <Parameter Name="FYearId" Type="int" Mode="In" />
         </Function>
         <Function Name="GetMaxJobCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />
         <Function Name="GetMaxJobEnquiryCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar" />
@@ -11951,6 +11953,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="LastModifiedBy" Type="Int32" />
           <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="AcHeadID" Type="Int32" />
         </EntityType>
         <EntityType Name="InScanMasterNew">
           <Key>
@@ -18093,6 +18096,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <FunctionImport Name="GetMaxInvoiceNo" ReturnType="Collection(String)">
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
             <Parameter Name="BranchId" Mode="In" Type="Int32" />
+            <Parameter Name="FYearId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetMaxNumber">
             <Parameter Name="FieldName" Mode="In" Type="String" />
@@ -25032,6 +25036,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
                 <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
                 <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />

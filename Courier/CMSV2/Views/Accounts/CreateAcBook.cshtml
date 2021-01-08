@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Cash and Bank Book";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    
 }
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -76,12 +77,13 @@
             //    maxDate: ed,
             //});
 
-              $('#transdate').datetimepicker({
-                //maxDate: ed,
-                //minDate: sd,
-                 format: 'DD-MM-YYYY',
-            });
-
+              $('#transdate').datetimepicker({                 
+                  format: 'DD-MM-YYYY'
+              });
+             
+            $('#transdate').on('dp.change', function (e) {
+                $('#transdate').trigger('change');
+            })
         });
 
         $(function () {
@@ -100,39 +102,9 @@
             }
         });
 
-        //$("#ReceivedFrom").keydown(function (e) {
-
-        //    if (e.which == 8 || e.which == 46) {
-        //        $('#SelectedReceivedFrom').val(0)
-        //        //Keypressfunc(Receivedfromval, e.which);
-        //    }
-
-        //});
-        //$("#ReceivedFrom").keydown(function (e,ui,data) {
-        //    console.log(e.which);
-        //    if (e.which === 38 || e.which == 40) {
-        //        debugger;
-        //        $('#SelectedReceivedFrom').val();
-        //    }
-        //    //if (e.which === 32 || e.which == 46 || e.which == 8) {
-        //    //    $('#SelectedReceivedFrom').val(0);
-        //    //} else if (e.which === 38 || e.which == 40) {
-        //    //    return true;
-        //    //    $('#SelectedReceivedFrom').val();
-        //    //}
-        //    var selectedId = $('#SelectedReceivedFrom').val();
-
-        //    //if (selectedId == 0 || selectedId == null) {
-        //    //    if (e.which === 9) {
-        //    //        e.preventDefault();
-        //    //        $("#btnsave").focus();
-        //    //    }
-        //    //}
-
-        //});
         $("#chequedate").val(GetCurrentDate())
         $("#transdate").val(GetCurrentDate())
-        $('#transdate').trigger('change');
+
         function GetCurrentDate() {
             var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             var startdate = '@Session["FyearFrom"].ToString()';
@@ -284,9 +256,9 @@
             }
         });
 
-       
+
         $('#transdate').keydown(function (e) {
-            
+
             if (e.keyCode == 13 || e.keyCode == 9) {
                 if ($("#transdate").val() != "") {
                     $.ajax({
@@ -295,7 +267,7 @@
                         type: "GET",
                         dataType: "json",
                         success: function (response) {
-                            
+
                             if (response.Status == "OK") {
                                 datevalid = true;
                                 dateerror = response.Message;
@@ -303,6 +275,8 @@
                             else {
                                 datevalid = false;
                                 dateerror = response.Message;
+                                alert(dateerror);
+                                $('#transdate').val(response.ValidDate);
                             }
 
                         },
@@ -314,14 +288,14 @@
             }
         });
         $('#transdate').change(function () {
-            
+
           if ($("#transdate").val() != "") {
                  $.ajax({
                 url: "@Url.Action("CheckDateValidate", "Accounts")",
                      data: { entrydate: $("#transdate").val()},
                 type: "GET",
                 dataType: "json",
-                success: function (response) {                    
+                success: function (response) {
                     if (response.Status == "OK") {
                         datevalid = true;
                         dateerror = response.Message;
@@ -329,6 +303,8 @@
                     else {
                         datevalid = false;
                         dateerror = response.Message;
+                        alert(dateerror);
+                        $('#transdate').val(response.ValidDate);
                     }
 
                 },
@@ -338,7 +314,7 @@
             });
             }
         });
-             
+
 
 
         $("#btnAdd").click(function () {
@@ -470,9 +446,6 @@
         });
 
         $("#btnsave").click(function () {
-            debugger;
-
-
 
             var tlen = $('#details > tbody > tr').length - 1;
             var deletedcount = 0
@@ -698,6 +671,11 @@
             },
 
         });
+
+        setTimeout(function () {
+            $('#transdate').trigger('change');
+        }, 1000);
+
 
     });
 </script>
