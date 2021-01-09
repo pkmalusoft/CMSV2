@@ -1,11 +1,11 @@
-﻿@model TrueBooksMVC.Models.CustomerRcieptVM
+﻿@model CMSV2.Models.CustomerRcieptVM
 
 @{
     ViewBag.Title = "CustomerReciept";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-    var staffmodel = ViewBag.StaffNoteModel as IEnumerable<TrueBooksMVC.Models.StaffNoteModel>;
+    var staffmodel = ViewBag.StaffNoteModel as IEnumerable<CMSV2.Models.StaffNoteModel>;
     var spath = System.Configuration.ConfigurationManager.AppSettings["spath"].ToString();
-    var CustomerNotification = ViewBag.CustomerNotification as IEnumerable<TrueBooksMVC.Models.CustomerNotificationModel>;
+    var CustomerNotification = ViewBag.CustomerNotification as IEnumerable<CMSV2.Models.CustomerNotificationModel>;
     var CustomerDetails = ViewBag.CustomerDetail as DAL.CUSTOMER;
 }
 

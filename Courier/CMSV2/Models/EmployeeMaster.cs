@@ -18,14 +18,6 @@ namespace CMSV2.Models
         public EmployeeMaster()
         {
             this.CustomerEnquiries = new HashSet<CustomerEnquiry>();
-            this.ExportShipments = new HashSet<ExportShipment>();
-            this.ExportShipments1 = new HashSet<ExportShipment>();
-            this.ExportShipments2 = new HashSet<ExportShipment>();
-            this.ExportShipments3 = new HashSet<ExportShipment>();
-            this.ExportShipments4 = new HashSet<ExportShipment>();
-            this.ExportShipments5 = new HashSet<ExportShipment>();
-            this.ExportShipments6 = new HashSet<ExportShipment>();
-            this.ExportShipments7 = new HashSet<ExportShipment>();
             this.JobEnquiries = new HashSet<JobEnquiry>();
             this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.PurchaseInvoices1 = new HashSet<PurchaseInvoice>();
@@ -84,22 +76,6 @@ namespace CMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerEnquiry> CustomerEnquiries { get; set; }
         public virtual Designation Designation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments4 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments5 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments6 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipment> ExportShipments7 { get; set; }
         public virtual LocationMaster LocationMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JobEnquiry> JobEnquiries { get; set; }

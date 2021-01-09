@@ -491,37 +491,37 @@ namespace CMSV2.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult CustomerRecieptDetails(int ID)
-        {
-            int FyearId = Convert.ToInt32(Session["fyearid"]);
-            List<ReceiptVM> Reciepts = new List<ReceiptVM>();
+        //[HttpGet]
+        //public ActionResult CustomerRecieptDetails(int ID)
+        //{
+        //    int FyearId = Convert.ToInt32(Session["fyearid"]);
+        //    List<ReceiptVM> Reciepts = new List<ReceiptVM>();
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
-            //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+        //    Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
+        //    //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
 
-            if (ID > 0)
-            {
-                ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
-            }
-
-
-            if (ID == 10)
-            {
-                ViewBag.SuccessMsg = "You have successfully deleted Customer Reciept.";
-            }
-
-            if (ID == 20)
-            {
-                ViewBag.SuccessMsg = "You have successfully updated Customer Reciept.";
-            }
+        //    if (ID > 0)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
+        //    }
 
 
-            Session["ID"] = ID;
+        //    if (ID == 10)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully deleted Customer Reciept.";
+        //    }
+
+        //    if (ID == 20)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully updated Customer Reciept.";
+        //    }
 
 
-            return View(Reciepts);
-        }
+        //    Session["ID"] = ID;
+
+
+        //    return View(Reciepts);
+        //}
 
         public JsonResult GetInvoiceOfCustomer(string ID)
         {
@@ -677,31 +677,31 @@ namespace CMSV2.Controllers
 
         }
 
-        public JsonResult GetAllCustomer()
-        {
-            DateTime d = DateTime.Now;
-            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
-            int FyearId = Convert.ToInt32(Session["fyearid"]);
-            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+        //public JsonResult GetAllCustomer()
+        //{
+        //    DateTime d = DateTime.Now;
+        //    DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+        //    int FyearId = Convert.ToInt32(Session["fyearid"]);
+        //    DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
 
-            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
-            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+        //    int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+        //    DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var cust = ReceiptDAO.GetCustomerReceipts(FyearId).Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
-            //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+        //    var cust = ReceiptDAO.GetCustomerReceipts(FyearId).Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+        //    //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
 
-            string view = this.RenderPartialView("_GetAllCustomer", cust);
+        //    string view = this.RenderPartialView("_GetAllCustomer", cust);
 
-            return new JsonResult
-            {
-                Data = new
-                {
-                    success = true,
-                    view = view
-                },
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+        //    return new JsonResult
+        //    {
+        //        Data = new
+        //        {
+        //            success = true,
+        //            view = view
+        //        },
+        //        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+        //    };
+        //}
 
 
 
@@ -826,13 +826,27 @@ namespace CMSV2.Controllers
 
         }
         [HttpGet]
-        public ActionResult CustomerTradeReceiptDetails(int ID)
+        public ActionResult CustomerTradeReceiptDetails(int ID, string FromDate, string ToDate)
         {
             int FyearId=Convert.ToInt32(Session["fyearid"]);
             List<ReceiptVM> Reciepts = new List<ReceiptVM>();
+            DateTime pFromDate;
+            DateTime pToDate;
+            if (FromDate == null || ToDate == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // // ToDate = DateTime.Now;
+            }
+            else
+            {
+                pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
+                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
-            var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+            }
+            
+            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId,pFromDate,pToDate); // RP.GetAllReciepts();
+
+           // var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
             if (ID > 0)
             {
                 ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
@@ -870,20 +884,18 @@ namespace CMSV2.Controllers
 
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
-
-                    ViewBag.achead = acheadforcash;
-                    ViewBag.acheadbank = acheadforbank;
-                    //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
+                    cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
+                    cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation, cust.InvoiceID, 0,cust.RecPayID); //customer invoiceid,amount
+                    Session["AWBAllocation"] = cust.AWBAllocation;
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
                     {
                         if (item.InvoiceID > 0)
                         {
-                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
+                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                             if (sInvoiceDetail != null)
                             {
                                 var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == sInvoiceDetail.CustomerInvoiceID select d).FirstOrDefault();
@@ -927,6 +939,8 @@ namespace CMSV2.Controllers
                     
 
                     cust.RecPayDate = System.DateTime.UtcNow;
+                    cust.RecPayID = 0;
+                    cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 }
             }
             else
@@ -972,18 +986,20 @@ namespace CMSV2.Controllers
                 model.EmpName = users.Where(d => d.UserID == item.UserId).FirstOrDefault().UserName;
                 customernotification.Add(model);
             }
+            cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
             ViewBag.CustomerNotification = customernotification;
             return View(cust);
 
         }
 
         [HttpPost]
-        public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived)
+        public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived,int? RecPayId)
         {
 
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).ToList();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
             var salesinvoice = new List<CustomerTradeReceiptVM>();
             foreach (var item in AllInvoices)
             {
@@ -1044,10 +1060,57 @@ namespace CMSV2.Controllers
                         }
                     }
                     salesinvoice.Add(Invoice);
+                    if (RecPayId == null)
+                    {
+                        AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), 0); //customer invoiceid,amount
+                    }
+                    else
+                    {
+                        AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), Convert.ToInt32(RecPayId)); //customer invoiceid,amount
+                    }
                 }
             }
 
+            Session["AWBAllocation"] = AWBAllocation;
             return Json(salesinvoice, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAWBAllocation(int InvoiceId)
+        {
+            List<ReceiptAllocationDetailVM> AWBAllocationall = new List<ReceiptAllocationDetailVM>();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+            AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            return Json(AWBAllocation,JsonRequestBehavior.AllowGet);
+
+        }     
+
+        [HttpPost]
+        public JsonResult SaveAWBAllocation(List<ReceiptAllocationDetailVM> RecP)
+        {
+            var dd = RecP;
+            List<ReceiptAllocationDetailVM> AWBAllocationall = new List<ReceiptAllocationDetailVM>();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+            foreach(var item in AWBAllocationall)
+            {
+                foreach (var item2 in RecP)
+                {
+                    if (item.CustomerInvoiceDetailID==item.CustomerInvoiceDetailID)
+                    {
+                        item.AllocatedAmount = item2.AllocatedAmount;                     
+                        break;
+                    }                   
+
+                }
+                AWBAllocation.Add(item);
+            }
+            Session["AWBAllocation"] = AWBAllocation;
+            //AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            //   AWBAllocation = updatelist;
+            return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+
         }
         [HttpPost]
         public ActionResult CustomerTradeReceipt(CustomerRcieptVM RecP, string Command, string Currency)
@@ -1059,7 +1122,7 @@ namespace CMSV2.Controllers
             var StaffNotes = (from d in Context1.StaffNotes where d.RecPayID== RecP.RecPayID && d.PageTypeId == 2 orderby d.NotesId descending select d).ToList();
             var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
             var users = (from d in Context1.UserRegistrations select d).ToList();
-
+            List<ReceiptAllocationDetailVM> AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
             var staffnotemodel = new List<StaffNoteModel>();
             foreach (var item in StaffNotes)
             {
@@ -1167,6 +1230,43 @@ namespace CMSV2.Controllers
                             salesinvoicedetails.RecPayDetailId = maxrecpaydetailid + 1;
                             Context1.SaveChanges();
                         }
+
+                        //add awballocation table
+                        //List<ReceiptAllocationDetailVM> AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+                        var allocationdetail = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == item.InvoiceID).ToList();
+                        foreach (var aitem in allocationdetail)
+                        {
+
+                            if (aitem.RecPayDetailID == 0)
+                            {
+                                aitem.RecPayDetailID = 0;
+                                RecPayAllocationDetail allocation = new RecPayAllocationDetail();
+                                allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                                allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                                allocation.RecPayID = RecP.RecPayID;
+                                allocation.InScanID = aitem.InScanID;
+                                allocation.RecPayDetailID = salesinvoicedetails.RecPayDetailId;
+                                allocation.AllocatedAmount = aitem.AllocatedAmount;
+                                Context1.RecPayAllocationDetails.Add(allocation);
+                                Context1.SaveChanges();
+                            }
+                            else
+                            {
+                                RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.ID == aitem.ID && cc.RecPayDetailID == salesinvoicedetails.RecPayDetailId).FirstOrDefault();
+                                allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                                allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                                allocation.RecPayID = RecP.RecPayID;
+                                allocation.InScanID = aitem.InScanID;
+                                allocation.RecPayDetailID = salesinvoicedetails.RecPayDetailId;
+                                allocation.AllocatedAmount = aitem.AllocatedAmount;
+                                Context1.Entry(allocation).State = EntityState.Modified;
+                                Context1.SaveChanges();
+                            }
+                        }
+
+
+
+
                     }
                     TotalAmount = TotalAmount + Convert.ToDecimal(item.Amount);
                 }
@@ -1181,6 +1281,7 @@ namespace CMSV2.Controllers
                 if (TotalAmount > 0)
                 {
                     int l = ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, TotalAmount, null, "C", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
+                    
                     int fyaerId = Convert.ToInt32(Session["fyearid"].ToString());
                     ReceiptDAO.InsertJournalOfCustomer(RecP.RecPayID, fyaerId);
 
@@ -1215,6 +1316,7 @@ namespace CMSV2.Controllers
                 recpay.FMoney = Fmoney;
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;
+                recpay.Remarks = RecP.Remarks;
                 Context1.Entry(recpay).State = EntityState.Modified;
                 Context1.SaveChanges();
 
@@ -1231,7 +1333,28 @@ namespace CMSV2.Controllers
                     recpd.StatusInvoice = "C";
                     Context1.Entry(recpd).State = EntityState.Modified;
                     Context1.SaveChanges();
-                    var salesinvoicedetails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
+                    //
+                    
+                    var allocationdetail = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == item.InvoiceID).ToList();
+                    foreach (var aitem in allocationdetail)
+                    {                      
+                     
+                            RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.ID == aitem.ID).FirstOrDefault();
+                            allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                            allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                            allocation.RecPayID = RecP.RecPayID;
+                            allocation.InScanID = aitem.InScanID;
+                            allocation.RecPayDetailID = recpd.RecPayDetailID;
+                            allocation.AllocatedAmount = aitem.AllocatedAmount;
+
+                            Context1.Entry(allocation).State = EntityState.Modified;
+                            Context1.SaveChanges();
+                     
+                    }
+
+                //
+
+                    var salesinvoicedetails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                     var totamount = (from d in Context1.RecPayDetails where d.InvoiceID == salesinvoicedetails.CustomerInvoiceDetailID select d).ToList();
                     var totsum = totamount.Sum(d => d.Amount) * -1;
                     var totAdsum = totamount.Sum(d => d.AdjustmentAmount);
@@ -1262,6 +1385,8 @@ namespace CMSV2.Controllers
                         salesinvoicedetails.RecPayDetailId = maxrecpaydetailid + 1;
                     }
                     Context1.SaveChanges();
+                    
+                 
                     /*  if (item.AmountToBeRecieved < item.Amount)
                       {
                           RecPayDetail recpd1 = new RecPayDetail();

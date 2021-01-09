@@ -49,6 +49,7 @@ namespace  CMSV2.Models
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }
         public List<RecPayDetail> recPayDetail { get; set; }
+        public List<ReceiptAllocationDetailVM> AWBAllocation { get; set; }
     }
 
 

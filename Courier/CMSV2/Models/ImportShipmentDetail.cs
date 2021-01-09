@@ -33,9 +33,6 @@ namespace CMSV2.Models
         public Nullable<int> StatusTypeId { get; set; }
         public Nullable<int> CourierStatusID { get; set; }
     
-        public virtual ExportShipment ExportShipment { get; set; }
-        public virtual ExportShipment ExportShipment1 { get; set; }
-        public virtual ExportShipment ExportShipment2 { get; set; }
         public virtual ImportShipment ImportShipment { get; set; }
     }
 }

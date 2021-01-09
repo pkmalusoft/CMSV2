@@ -35,5 +35,6 @@ namespace CMSV2.Models
         public Nullable<int> MaterialCostControlReceivableAcHeadID { get; set; }
         public Nullable<int> ProvisionCostControlAcID { get; set; }
         public Nullable<int> OpenJobRevenueAcID { get; set; }
+        public Nullable<int> AccruedCostControlAcID { get; set; }
     }
 }

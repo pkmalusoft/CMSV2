@@ -3473,6 +3473,74 @@ new AcGroupModel()
             return RedirectToAction("Ledger", "Accounts", new {id=reportid});
 
         }
+
+
+        public ActionResult CustomerLedger()
+        {
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    CustomerId =0,
+                    CustomerName ="",
+                    Output = "PDF",
+                    ReportType="Ledger"
+                };
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+            ViewBag.ReportName = "Customer Ledger";             
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("CustomerLedger") && model.ReportType=="Ledger")
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                    else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
+                
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerLedger(CustomerLedgerReportParam picker)
+        {
+            
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId= picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output= "PDF",
+                ReportType=picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType=="Ledger")
+            {
+                AccountsReportsDAO.GenerateCustomerLedgerReport();
+            }
+            else
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            
+            return RedirectToAction("CustomerLedger", "Accounts", new { id = 1});
+                       
+
+        }
         public Stream GenerateReport()
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());

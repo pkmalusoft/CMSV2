@@ -39,6 +39,5 @@ namespace CMSV2.Models
         public Nullable<int> ImportShipmentDetailID { get; set; }
     
         public virtual CurrencyMaster CurrencyMaster { get; set; }
-        public virtual ExportShipment ExportShipment { get; set; }
     }
 }

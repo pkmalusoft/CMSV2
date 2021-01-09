@@ -11,14 +11,16 @@ namespace CMSV2.DAL
     public class ReceiptDAO
     {
         //CustomerInvoiceDetailForReceipt
-        public static List<ReceiptVM> GetCustomerReceipts(int FYearId)
+        public static List<ReceiptVM> GetCustomerReceipts(int FYearId,DateTime FromDate,DateTime ToDate)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetAllRecieptsDetails";
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@FYearId", FYearId);
-
+            
             //cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
             //cmd.Parameters["@AcJournalDetailID"].Value = AcJournalDetailID;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -438,6 +440,55 @@ namespace CMSV2.DAL
                 return null;
             }
         }
+        public static List<ReceiptAllocationDetailVM> GetAWBAllocation(List<ReceiptAllocationDetailVM> list, int InvoiceId, decimal Amount,int RecpayId)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_GetInvoiceAWBAllocation";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+                cmd.Parameters.AddWithValue("@ReceivedAmount", Amount);
+                cmd.Parameters.AddWithValue("@RecPayId",  RecpayId);
 
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DataRow drrow = ds.Tables[0].Rows[i];
+                        ReceiptAllocationDetailVM item = new ReceiptAllocationDetailVM();
+                        item.ID= Convert.ToInt32(drrow["ID"].ToString());
+                        item.CustomerInvoiceId = Convert.ToInt32(drrow["CustomerInvoiceId"].ToString());
+                        item.CustomerInvoiceDetailID = Convert.ToInt32(drrow["CustomerInvoiceDetailID"].ToString());
+                        item.InScanID = Convert.ToInt32(drrow["InScanId"].ToString());
+                        item.RecPayID = Convert.ToInt32(drrow["RecPayID"].ToString());
+                        item.RecPayDetailID = Convert.ToInt32(drrow["RecPayDetailID"].ToString());
+                        item.CustomerInvoiceDetailID = Convert.ToInt32(drrow["CustomerInvoiceDetailID"].ToString());
+                        item.AWBNo = drrow["AWBNo"].ToString();
+                        item.AWBDate = Convert.ToDateTime(drrow["AWBDate"].ToString()).ToString("dd-MM-yyyy");
+                        item.TotalAmount = Convert.ToDecimal(drrow["TotalAmount"].ToString());
+                        item.ReceivedAmount = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                        item.PendingAmount = Convert.ToDecimal(drrow["PendingAmount"].ToString());
+                        item.AllocatedAmount = Convert.ToDecimal(drrow["AllocatedAmount"].ToString());
+                        item.Allocated = Convert.ToBoolean(drrow["Allocated"].ToString());
+
+                        list.Add(item);
+
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return list;
+            }
+
+            return list;
+        }
     }
 }

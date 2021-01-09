@@ -21,7 +21,7 @@ namespace CMSV2.Models
         public Nullable<decimal> TaxPercentage { get; set; }
         public bool Reimbursement { get; set; }
     
-        public virtual InScanMaster InScanMaster { get; set; }
         public virtual OtherCharge OtherCharge { get; set; }
+        public virtual InScanMaster InScanMaster { get; set; }
     }
 }

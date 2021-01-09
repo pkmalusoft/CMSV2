@@ -83,7 +83,6 @@ namespace CMSV2.Models
         public Nullable<int> QuickInscanID { get; set; }
         public System.DateTime TransactionDate { get; set; }
         public string StatusPaymentMode { get; set; }
-        public Nullable<int> SubReasonId { get; set; }
         public Nullable<decimal> PackingCharge { get; set; }
         public Nullable<decimal> SeviceCharge { get; set; }
         public Nullable<decimal> OtherCharge { get; set; }
@@ -91,6 +90,7 @@ namespace CMSV2.Models
         public Nullable<int> ParcelTypeId { get; set; }
         public Nullable<decimal> MaterialCost { get; set; }
         public Nullable<decimal> CustomsValue { get; set; }
+        public Nullable<int> SubReasonId { get; set; }
         public Nullable<int> StatusTypeId { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<int> PaymentModeId { get; set; }
@@ -106,6 +106,7 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<System.DateTime> LastModifiedDate { get; set; }
+        public string InvoiceTo { get; set; }
         public Nullable<int> AcHeadID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

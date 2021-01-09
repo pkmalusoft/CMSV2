@@ -12,9 +12,14 @@ namespace CMSV2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class test1
+    public partial class RecPayAllocationDetail
     {
-        public int id { get; set; }
-        public Nullable<decimal> weight1 { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> RecPayDetailID { get; set; }
+        public Nullable<int> CustomerInvoiceID { get; set; }
+        public Nullable<int> CustomerInvoiceDetailID { get; set; }
+        public Nullable<decimal> AllocatedAmount { get; set; }
+        public Nullable<int> RecPayID { get; set; }
+        public Nullable<int> InScanID { get; set; }
     }
 }

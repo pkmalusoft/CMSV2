@@ -42,6 +42,15 @@ namespace CMSV2.Models
         {
             System.Web.HttpContext.Current.Session["AccountsParam"] = reportparam;            
         }
+        public static CustomerLedgerReportParam GetCustomerLedgerReportParam()
+        {
+            return (CustomerLedgerReportParam)System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"];
+        }
+
+        public static void SetCustomerLedgerParam(CustomerLedgerReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
+        }
 
         public static AWBReportParam GetAWBReportParam()
         {

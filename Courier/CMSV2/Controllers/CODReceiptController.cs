@@ -155,7 +155,7 @@ namespace CMSV2.Controllers
                                                           ManifestID = c.ManifestID,
                                                           ManifestNumber = i.ManifestNumber,
                                                           AWBNo = c.AWBNo,
-                                                          AWBDate = ins.TransactionDate,
+                                                          AWBDate =Convert.ToDateTime(ins.TransactionDate),
                                                           Consignee = c.Consignee,
                                                           ConsigneePhone = c.ConsigneePhone,
                                                           CourierCharge = c.CourierCharge, 

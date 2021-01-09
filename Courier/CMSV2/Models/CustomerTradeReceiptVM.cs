@@ -24,5 +24,26 @@ namespace CMSV2.Models
         public decimal? AdjustmentAmount { get; set; }
 
         public decimal? Amount { get; set; }
+
+        public List<ReceiptAllocationDetailVM> AWBAllocation { get; set; }
+    }
+
+    public class ReceiptAllocationDetailVM
+    {
+        public int ID { get; set; }
+        public int RecPayID { get; set; }
+        public int RecPayDetailID { get; set; }
+        public int CustomerInvoiceId { get; set; }
+        public int CustomerInvoiceDetailID { get; set; }
+        
+        public int InScanID { get; set; }
+        public string AWBNo { get; set; }
+        public string AWBDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal ReceivedAmount { get; set; }
+        public decimal PendingAmount { get; set; }
+        public decimal AllocatedAmount { get; set; }
+        public bool Allocated { get; set; }
+
     }
 }

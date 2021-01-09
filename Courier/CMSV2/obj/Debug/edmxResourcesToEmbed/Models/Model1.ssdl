@@ -68,8 +68,8 @@
     <Property Name="InvoicePrefix" Type="varchar" MaxLength="5" />
     <Property Name="InvoiceFormat" Type="varchar" MaxLength="10" />
     <Property Name="CompanyLogo" Type="image" />
-    <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
     <Property Name="Logo" Type="nvarchar(max)" />
+    <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="AccountHeadControl">
     <Key>
@@ -127,8 +127,8 @@
     <Property Name="StatusControlAC" Type="bit" />
     <Property Name="AccountDescription" Type="varchar(max)" />
     <Property Name="AcBranchID" Type="int" />
-    <Property Name="TaxPercent" Type="numeric" Precision="10" Scale="2" />
     <Property Name="TaxApplicable" Type="bit" Nullable="false" />
+    <Property Name="TaxPercent" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <EntityType Name="AcHeadAssign">
     <Key>
@@ -155,6 +155,7 @@
     <Property Name="MaterialCostControlReceivableAcHeadID" Type="int" />
     <Property Name="ProvisionCostControlAcID" Type="int" />
     <Property Name="OpenJobRevenueAcID" Type="int" />
+    <Property Name="AccruedCostControlAcID" Type="int" />
   </EntityType>
   <EntityType Name="AcHeadControl">
     <Key>
@@ -376,6 +377,8 @@
     <Property Name="LocationID" Type="int" />
     <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Applications">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -385,6 +388,8 @@
     <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Description" Type="nvarchar" MaxLength="256" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Membership">
     <Key>
       <PropertyRef Name="UserId" />
@@ -411,6 +416,8 @@
     <Property Name="FailedPasswordAnswerAttemptWindowStart" Type="datetime" Nullable="false" />
     <Property Name="Comment" Type="ntext" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Paths">
     <Key>
       <PropertyRef Name="PathId" />
@@ -428,6 +435,8 @@
     <Property Name="PageSettings" Type="image" Nullable="false" />
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_PersonalizationPerUser">
     <Key>
       <PropertyRef Name="Id" />
@@ -448,6 +457,8 @@
     <Property Name="PropertyValuesBinary" Type="image" Nullable="false" />
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Roles">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -467,6 +478,8 @@
     <Property Name="CompatibleSchemaVersion" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Users">
     <Key>
       <PropertyRef Name="UserId" />
@@ -731,7 +744,7 @@
       <PropertyRef Name="CityID" />
     </Key>
     <Property Name="CityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityCode" Type="nvarchar" MaxLength="50" />
     <Property Name="IsHub" Type="bit" />
@@ -836,7 +849,7 @@
       <PropertyRef Name="CountryID" />
     </Key>
     <Property Name="CountryID" Type="int" Nullable="false" />
-    <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CountryName" Type="varchar" MaxLength="50" />
     <Property Name="StatusCountry" Type="char" MaxLength="1" />
     <Property Name="StatusBaseCountry" Type="char" MaxLength="2" />
     <Property Name="CountryCode" Type="nvarchar" MaxLength="5" />
@@ -848,7 +861,7 @@
       <PropertyRef Name="CourierDescriptionID" />
     </Key>
     <Property Name="CourierDescriptionID" Type="int" Nullable="false" />
-    <Property Name="CourierDescription" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierDescription" Type="varchar" MaxLength="50" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="StatusDefault" Type="bit" Nullable="false" />
     <Property Name="Weight" Type="float" />
@@ -858,7 +871,7 @@
       <PropertyRef Name="MovementID" />
     </Key>
     <Property Name="MovementID" Type="int" Nullable="false" />
-    <Property Name="MovementType" Type="nvarchar" MaxLength="50" />
+    <Property Name="MovementType" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -876,8 +889,8 @@
       <PropertyRef Name="CourierServiceID" />
     </Key>
     <Property Name="CourierServiceID" Type="int" Nullable="false" />
-    <Property Name="CourierService" Type="nvarchar" MaxLength="50" />
-    <Property Name="CourierServiceCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierService" Type="varchar" MaxLength="50" />
+    <Property Name="CourierServiceCode" Type="varchar" MaxLength="50" />
     <Property Name="CourierDescriptionID" Type="int" Nullable="false" />
     <Property Name="InScanType" Type="char" MaxLength="2" />
     <Property Name="StatusDefaultD" Type="bit" Nullable="false" />
@@ -920,7 +933,7 @@
     <Property Name="IsShipping" Type="bit" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="CreditNoteDetails">
     <Key>
       <PropertyRef Name="CreditNoteID" />
@@ -938,10 +951,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
       <PropertyRef Name="CurrencyID" />
     </Key>
     <Property Name="CurrencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CurrencyName" Type="varchar" MaxLength="50" />
     <Property Name="Symbol" Type="nvarchar" MaxLength="50" />
     <Property Name="NoOfDecimals" Type="smallint" />
-    <Property Name="MonetaryUnit" Type="nvarchar" MaxLength="50" />
+    <Property Name="MonetaryUnit" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="StatusBaseCurrency" Type="bit" />
     <Property Name="ExchangeRate" Type="money" />
@@ -1014,10 +1027,10 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="PickupRequestStatusId" Type="int" />
     <Property Name="CollectedTime" Type="datetime" />
-    <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsigneeCityName" Type="varchar" MaxLength="200" />
     <Property Name="ConsignorCountryName" Type="varchar" MaxLength="200" />
     <Property Name="ConsignorCityName" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeCityName" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="CustomerInvoice">
     <Key>
@@ -1078,20 +1091,20 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
     </Key>
     <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="CustomerCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="CustomerName" Type="nvarchar" MaxLength="256" />
-    <Property Name="CustomerType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerCode" Type="varchar" MaxLength="50" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="256" />
+    <Property Name="CustomerType" Type="varchar" MaxLength="50" />
     <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
     <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
@@ -1106,7 +1119,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
     <Property Name="CustomerRateTypeIntID" Type="int" />
     <Property Name="CourierServiceID" Type="int" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="CustomerUsername" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerUsername" Type="varchar" MaxLength="50" />
     <Property Name="Password" Type="nvarchar" MaxLength="50" />
     <Property Name="VATTRN" Type="nvarchar" MaxLength="50" />
     <Property Name="OfficeOpenTime" Type="time" Precision="7" />
@@ -1116,8 +1129,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
     <Property Name="CountryName" Type="varchar" MaxLength="200" />
     <Property Name="LocationName" Type="varchar" MaxLength="500" />
     <Property Name="CityName" Type="varchar" MaxLength="100" />
-    <Property Name="UserID" Type="int" />
     <Property Name="DepotID" Type="int" />
+    <Property Name="UserID" Type="int" />
   </EntityType>
   <EntityType Name="CustomerMultiContract">
     <Key>
@@ -1186,16 +1199,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
       <PropertyRef Name="CustomerRateTypeID" />
     </Key>
     <Property Name="CustomerRateTypeID" Type="int" Nullable="false" />
-    <Property Name="CustomerRateType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerRateType" Type="varchar" MaxLength="50" />
     <Property Name="ZoneCategoryID" Type="int" />
     <Property Name="StatusDefault" Type="bit" />
-  </EntityType>
-  <EntityType Name="CustomerType">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TypeName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="CustSuppJV">
     <Key>
@@ -1386,7 +1392,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.CreditNoteDetails' d
     <Property Name="ReturnTime" Type="datetime" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="DRSEmployee">
     <Key>
       <PropertyRef Name="DRSEmployeeID" />
@@ -1710,7 +1716,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.DRSEmployee' does no
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -2138,7 +2144,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
     <Property Name="QuickInscanID" Type="int" />
     <Property Name="TransactionDate" Type="datetime" Nullable="false" />
     <Property Name="StatusPaymentMode" Type="varchar" MaxLength="3" />
-    <Property Name="SubReasonId" Type="int" />
     <Property Name="PackingCharge" Type="money" />
     <Property Name="SeviceCharge" Type="money" />
     <Property Name="OtherCharge" Type="money" />
@@ -2146,6 +2151,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
     <Property Name="ParcelTypeId" Type="int" />
     <Property Name="MaterialCost" Type="money" />
     <Property Name="CustomsValue" Type="money" />
+    <Property Name="SubReasonId" Type="int" />
     <Property Name="StatusTypeId" Type="int" />
     <Property Name="IsDeleted" Type="bit" />
     <Property Name="PaymentModeId" Type="int" />
@@ -2161,74 +2167,11 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ImpExp' does not hav
     <Property Name="CreatedDate" Type="datetime" />
     <Property Name="LastModifiedBy" Type="int" />
     <Property Name="LastModifiedDate" Type="datetime" />
+    <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
-  <EntityType Name="InScanMasterNew">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="EnquiryNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="EnquiryDate" Type="datetime" />
-    <Property Name="RequestSource" Type="nvarchar" MaxLength="50" />
-    <Property Name="AcCompanyID" Type="int" />
-    <Property Name="BranchID" Type="int" />
-    <Property Name="DepotID" Type="int" />
-    <Property Name="CustomerID" Type="int" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsignorContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsignorCountryName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsignorCityName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsigneeContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsigneeCityName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="200" />
-    <Property Name="AssignedEmployeeID" Type="int" />
-    <Property Name="CollectedEmpID" Type="int" />
-    <Property Name="CourierCharge" Type="money" />
-    <Property Name="PickupRemarks" Type="nvarchar" MaxLength="400" />
-    <Property Name="ShipmentType" Type="nvarchar" MaxLength="40" />
-    <Property Name="VehicleID" Type="int" />
-    <Property Name="Vehicle" Type="nvarchar" MaxLength="40" />
-    <Property Name="PickupReadyTime" Type="datetime" />
-    <Property Name="EnteredByID" Type="int" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
-    <Property Name="IsEnquiry" Type="bit" />
-    <Property Name="CourierStatusID" Type="int" />
-    <Property Name="PickupRequestStatusId" Type="int" />
-    <Property Name="CollectedTime" Type="datetime" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
-    <Property Name="Weight" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="CargoDescription" Type="nvarchar" MaxLength="400" />
-    <Property Name="StatedWeight" Type="float" />
-    <Property Name="CBM_length" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_width" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_height" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="CBM" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="BagNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="PalletNo" Type="nvarchar" MaxLength="200" />
-    <Property Name="HandlingInstruction" Type="nvarchar" MaxLength="400" />
-    <Property Name="SpecialInstructions" Type="nvarchar" MaxLength="100" />
-    <Property Name="TypeOfGoodID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="MovementID" Type="int" />
-    <Property Name="ProductTypeID" Type="int" />
-    <Property Name="CustomerRateID" Type="int" />
-    <Property Name="QuickInscanID" Type="int" />
-  </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="InScanNew">
     <Key>
       <PropertyRef Name="InScanID" />
@@ -2370,7 +2313,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.InScanNew' does not 
       <PropertyRef Name="LocationID" />
     </Key>
     <Property Name="LocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Location" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location" Type="varchar" MaxLength="50" />
     <Property Name="CityID" Type="int" />
     <Property Name="IsDefault" Type="bit" />
   </EntityType>
@@ -2441,7 +2384,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.InScanNew' does not 
     <Property Name="DRSNo" Type="char" MaxLength="10" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="MCPaymentReceipt">
     <Key>
       <PropertyRef Name="McPaymentReceiptID" />
@@ -2631,7 +2574,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.MCPaymentReceipt' do
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
@@ -2876,15 +2819,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ParcelType' does not
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Description" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="QuickInScanDetail">
-    <Key>
-      <PropertyRef Name="QuickInscanDetailId" />
-    </Key>
-    <Property Name="QuickInscanDetailId" Type="int" Nullable="false" />
-    <Property Name="QuickInscanID" Type="int" />
-    <Property Name="InScanId" Type="int" />
-    <Property Name="AWBNo" Type="varchar" MaxLength="100" />
-  </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>
       <PropertyRef Name="QuickInscanID" />
@@ -2956,6 +2890,18 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ParcelType' does not
     <Property Name="FMoney" Type="money" />
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
+  </EntityType>
+  <EntityType Name="RecPayAllocationDetails">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecPayID" Type="int" />
+    <Property Name="RecPayDetailID" Type="int" />
+    <Property Name="CustomerInvoiceID" Type="int" />
+    <Property Name="CustomerInvoiceDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="AllocatedAmount" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="RecPayDetails">
     <Key>
@@ -3072,7 +3018,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.ParcelType' does not
     <Property Name="PageTypeId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -3141,10 +3087,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have
     <Property Name="MobileNo" Type="nvarchar" MaxLength="50" />
     <Property Name="BranchID" Type="int" />
     <Property Name="SupplierTypeID" Type="int" />
-    <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
-    <Property Name="CountryName" Type="varchar" MaxLength="500" />
     <Property Name="CityName" Type="varchar" MaxLength="500" />
     <Property Name="LocationName" Type="varchar" MaxLength="500" />
+    <Property Name="CountryName" Type="varchar" MaxLength="500" />
     <Property Name="MaxCreditDays" Type="int" />
     <Property Name="MaxCreditLimit" Type="float" />
     <Property Name="RevenueTypeIds" Type="varchar" MaxLength="1000" />
@@ -3153,6 +3098,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have
     <Property Name="StatusReserved" Type="bit" />
     <Property Name="POBoxNo" Type="varchar" MaxLength="50" />
     <Property Name="Remarks" Type="varchar" MaxLength="400" />
+    <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -3544,7 +3490,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.State' does not have
     <Property Name="InvoiceType" Type="char" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tempCustomer">
     <Key>
       <PropertyRef Name="ID" />
@@ -3561,7 +3507,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.tempCustomer' does n
     <Property Name="Location" Type="nvarchar" MaxLength="510" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempCustomerInvoice">
     <Key>
       <PropertyRef Name="ID" />
@@ -3591,7 +3537,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempCustomerInvoice'
     <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempInScan">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -3641,7 +3587,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempInScan' does not
     <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateDetail">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3654,7 +3600,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateDetail' does
     <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateMaster">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3700,15 +3646,8 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TempRateMaster' does
     <Property Name="PackingCharge" Type="money" />
     <Property Name="CustomCharge" Type="money" />
   </EntityType>
-  <EntityType Name="test1">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int" Nullable="false" />
-    <Property Name="weight1" Type="decimal" Precision="18" Scale="2" />
-  </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -3728,7 +3667,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.Transit' does not ha
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
@@ -3922,7 +3861,7 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       <PropertyRef Name="ZoneCategoryID" />
     </Key>
     <Property Name="ZoneCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ZoneCategory" Type="nvarchar" MaxLength="50" />
+    <Property Name="ZoneCategory" Type="varchar" MaxLength="50" />
     <Property Name="StatusBaseCategory" Type="bit" />
   </EntityType>
   <EntityType Name="ZoneChart">
@@ -3948,143 +3887,11 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       <PropertyRef Name="ZoneID" />
     </Key>
     <Property Name="ZoneID" Type="int" Nullable="false" />
-    <Property Name="ZoneName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ZoneName" Type="varchar" MaxLength="50" />
     <Property Name="StatusZone" Type="char" MaxLength="1" />
     <Property Name="ZoneType" Type="nvarchar" MaxLength="50" />
   </EntityType>
-  <Association Name="FK__aspnet_Me__Appli__24D2692A">
-    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
-    <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Applications">
-        <PropertyRef Name="ApplicationId" />
-      </Principal>
-      <Dependent Role="aspnet_Membership">
-        <PropertyRef Name="ApplicationId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Me__UserI__25C68D63">
-    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
-    <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Users">
-        <PropertyRef Name="UserId" />
-      </Principal>
-      <Dependent Role="aspnet_Membership">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Pa__Appli__26BAB19C">
-    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
-    <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Applications">
-        <PropertyRef Name="ApplicationId" />
-      </Principal>
-      <Dependent Role="aspnet_Paths">
-        <PropertyRef Name="ApplicationId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Pe__PathI__27AED5D5">
-    <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="1" />
-    <End Role="aspnet_PersonalizationAllUsers" Type="Self.aspnet_PersonalizationAllUsers" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Paths">
-        <PropertyRef Name="PathId" />
-      </Principal>
-      <Dependent Role="aspnet_PersonalizationAllUsers">
-        <PropertyRef Name="PathId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Pe__PathI__28A2FA0E">
-    <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="0..1" />
-    <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Paths">
-        <PropertyRef Name="PathId" />
-      </Principal>
-      <Dependent Role="aspnet_PersonalizationPerUser">
-        <PropertyRef Name="PathId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Pe__UserI__29971E47">
-    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="0..1" />
-    <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Users">
-        <PropertyRef Name="UserId" />
-      </Principal>
-      <Dependent Role="aspnet_PersonalizationPerUser">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Pr__UserI__2A8B4280">
-    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
-    <End Role="aspnet_Profile" Type="Self.aspnet_Profile" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Users">
-        <PropertyRef Name="UserId" />
-      </Principal>
-      <Dependent Role="aspnet_Profile">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Ro__Appli__2B7F66B9">
-    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
-    <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Applications">
-        <PropertyRef Name="ApplicationId" />
-      </Principal>
-      <Dependent Role="aspnet_Roles">
-        <PropertyRef Name="ApplicationId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Us__Appli__2C738AF2">
-    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
-    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Applications">
-        <PropertyRef Name="ApplicationId" />
-      </Principal>
-      <Dependent Role="aspnet_Users">
-        <PropertyRef Name="ApplicationId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Us__RoleI__2D67AF2B">
-    <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="1" />
-    <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Roles">
-        <PropertyRef Name="RoleId" />
-      </Principal>
-      <Dependent Role="aspnet_UsersInRoles">
-        <PropertyRef Name="RoleId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__aspnet_Us__UserI__2E5BD364">
-    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
-    <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="aspnet_Users">
-        <PropertyRef Name="UserId" />
-      </Principal>
-      <Dependent Role="aspnet_UsersInRoles">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__CODReceip__Recei__5D8BC399">
+  <Association Name="FK__CODReceip__Recei__3F1C4B12">
     <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
     <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4096,437 +3903,15 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__2E46C4CB">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
+  <Association Name="FK__CODReceip__Recei__41F8B7BD">
+    <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
+    <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
+      <Principal Role="CODReceipt">
+        <PropertyRef Name="ReceiptID" />
       </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__2F3AE904">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__302F0D3D">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__31233176">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__321755AF">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__330B79E8">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__33FF9E21">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__34F3C25A">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__38C4533E">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__39B87777">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__3AAC9BB0">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcBankDetails_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="AcBankDetails" Type="Self.AcBankDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="AcBankDetails">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcCompany_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="AcCompany" Type="Self.AcCompany" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="AcCompany">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcCompany_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="AcCompany" Type="Self.AcCompany" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="AcCompany">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcCompany_Designation">
-    <End Role="Designation" Type="Self.Designation" Multiplicity="0..1" />
-    <End Role="AcCompany" Type="Self.AcCompany" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Designation">
-        <PropertyRef Name="DesignationID" />
-      </Principal>
-      <Dependent Role="AcCompany">
-        <PropertyRef Name="DesignationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcCompany_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="AcCompany" Type="Self.AcCompany" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="AcCompany">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcGroup_AcCategory">
-    <End Role="AcCategory" Type="Self.AcCategory" Multiplicity="0..1" />
-    <End Role="AcGroup" Type="Self.AcGroup" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcCategory">
-        <PropertyRef Name="AcCategoryID" />
-      </Principal>
-      <Dependent Role="AcGroup">
-        <PropertyRef Name="AcCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcGroup_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="AcGroup" Type="Self.AcGroup" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="AcGroup">
-        <PropertyRef Name="AcCompanyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcHead_AcGroup">
-    <End Role="AcGroup" Type="Self.AcGroup" Multiplicity="0..1" />
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcGroup">
-        <PropertyRef Name="AcGroupID" />
-      </Principal>
-      <Dependent Role="AcHead">
-        <PropertyRef Name="AcGroupID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOpeningMaster_AcFinancialYear">
-    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcFinancialYear">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Principal>
-      <Dependent Role="AcOpeningMaster">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOpeningMaster_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="AcOpeningMaster">
-        <PropertyRef Name="AcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOpeningMaster_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="AcOpeningMaster">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="0..1" />
-    <End Role="AcOPInvoiceDetails" Type="Self.AcOPInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcOPInvoiceMaster">
-        <PropertyRef Name="AcOPInvoiceMasterID" />
-      </Principal>
-      <Dependent Role="AcOPInvoiceDetails">
-        <PropertyRef Name="AcOPInvoiceMasterID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
-    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcFinancialYear">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Principal>
-      <Dependent Role="AcOPInvoiceMaster">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOPInvoiceMaster_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="AcOPInvoiceMaster">
-        <PropertyRef Name="AcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="AcOPInvoiceMaster">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnalysisHead_AnalysisGroup">
-    <End Role="AnalysisGroup" Type="Self.AnalysisGroup" Multiplicity="0..1" />
-    <End Role="AnalysisHead" Type="Self.AnalysisHead" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AnalysisGroup">
-        <PropertyRef Name="AnalysisGroupID" />
-      </Principal>
-      <Dependent Role="AnalysisHead">
-        <PropertyRef Name="AnalysisGroupID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnalysisHead_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="AnalysisHead" Type="Self.AnalysisHead" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="AnalysisHead">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AreaMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="AreaMaster" Type="Self.AreaMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="AreaMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_BranchMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="BranchMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_BranchMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="BranchMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_BranchMaster_Designation">
-    <End Role="Designation" Type="Self.Designation" Multiplicity="0..1" />
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Designation">
-        <PropertyRef Name="DesignationID" />
-      </Principal>
-      <Dependent Role="BranchMaster">
-        <PropertyRef Name="DesignationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_BranchMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="BranchMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Category_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-    <End Role="Category" Type="Self.Category" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="Category">
-        <PropertyRef Name="AcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerEnquiry_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="CustomerEnquiry" Type="Self.CustomerEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="CustomerEnquiry">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerEnquiry_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="CustomerEnquiry" Type="Self.CustomerEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="CustomerEnquiry">
-        <PropertyRef Name="EmployeeID" />
+      <Dependent Role="CODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -4556,558 +3941,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CustomerMaster_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="CustomerMaster">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="CustomerMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="CustomerMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="CustomerMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_CourierService">
-    <End Role="CourierService" Type="Self.CourierService" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CourierService">
-        <PropertyRef Name="CourierServiceID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="CourierServiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_CourierService1">
-    <End Role="CourierService" Type="Self.CourierService" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CourierService">
-        <PropertyRef Name="CourierServiceID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="CourierServiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_CustomerRateType">
-    <End Role="CustomerRateType" Type="Self.CustomerRateType" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerRateType">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_CustomerRateType1">
-    <End Role="CustomerRateType" Type="Self.CustomerRateType" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerRateType">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_ZoneChart">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRate_ZoneChart1">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="CustomerRate">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRateAssign_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="CustomerRateAssign" Type="Self.CustomerRateAssign" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="CustomerRateAssign">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRateAssign_CustomerRateType">
-    <End Role="CustomerRateType" Type="Self.CustomerRateType" Multiplicity="0..1" />
-    <End Role="CustomerRateAssign" Type="Self.CustomerRateAssign" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerRateType">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Principal>
-      <Dependent Role="CustomerRateAssign">
-        <PropertyRef Name="CustomerRateTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRateDet_CustomerRate">
-    <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="CustomerRateDet" Type="Self.CustomerRateDet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerRate">
-        <PropertyRef Name="CustomerRateID" />
-      </Principal>
-      <Dependent Role="CustomerRateDet">
-        <PropertyRef Name="CustomerRateID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerRateType_ZoneCategory">
-    <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="0..1" />
-    <End Role="CustomerRateType" Type="Self.CustomerRateType" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneCategory">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Principal>
-      <Dependent Role="CustomerRateType">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRR_DRRConsignment">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="1" />
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRConsignment">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRR_DRSReceipt">
-    <End Role="DRSReceipt" Type="Self.DRSReceipt" Multiplicity="0..1" />
-    <End Role="DRR" Type="Self.DRR" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRSReceipt">
-        <PropertyRef Name="DRSReceiptID" />
-      </Principal>
-      <Dependent Role="DRR">
-        <PropertyRef Name="DRSReceiptID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRConsignment_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="1" />
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRConsignment">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRInvoice_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRInvoice" Type="Self.DRRInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRInvoice">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRInvoice_DRR1">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRInvoice" Type="Self.DRRInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRInvoice">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRPKPCAD_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRPKPCAD" Type="Self.DRRPKPCAD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRPKPCAD">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRPKPCAD_DRR1">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRPKPCAD" Type="Self.DRRPKPCAD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRPKPCAD">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRRecPay_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRRecPay" Type="Self.DRRRecPay" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRRecPay">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRRecPay_DRR1">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRRecPay" Type="Self.DRRRecPay" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRRecPay">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSDetails_CourierStatus">
-    <End Role="CourierStatus" Type="Self.CourierStatus" Multiplicity="1" />
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CourierStatus">
-        <PropertyRef Name="CourierStatusID" />
-      </Principal>
-      <Dependent Role="DRRConsignment">
-        <PropertyRef Name="CourierStatusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSEmployee_DRS">
-    <End Role="DRS" Type="Self.DRS" Multiplicity="1" />
-    <End Role="DRSEmployee" Type="Self.DRSEmployee" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRS">
-        <PropertyRef Name="DRSID" />
-      </Principal>
-      <Dependent Role="DRSEmployee">
-        <PropertyRef Name="DRSID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSEmployee_DRSEmployeeID">
-    <End Role="DRSEmployeeID" Type="Self.DRSEmployeeID" Multiplicity="1" />
-    <End Role="DRSEmployee" Type="Self.DRSEmployee" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRSEmployeeID">
-        <PropertyRef Name="DRSEmployeeID" />
-      </Principal>
-      <Dependent Role="DRSEmployee">
-        <PropertyRef Name="DRSEmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSExpense_DRS">
-    <End Role="DRS" Type="Self.DRS" Multiplicity="1" />
-    <End Role="DRSExpense" Type="Self.DRSExpense" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRS">
-        <PropertyRef Name="DRSID" />
-      </Principal>
-      <Dependent Role="DRSExpense">
-        <PropertyRef Name="DRSID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EmployeeMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EmployeeMaster_Designation">
-    <End Role="Designation" Type="Self.Designation" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Designation">
-        <PropertyRef Name="DesignationID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="DesignationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EmployeeMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Expense_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="Expense">
-        <PropertyRef Name="AcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Expense_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="Expense">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Expense_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="Expense">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ExpenseDetails_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-    <End Role="ExpenseDetails" Type="Self.ExpenseDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="ExpenseDetails">
-        <PropertyRef Name="DebitAcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ExpenseDetails_Expense">
-    <End Role="Expense" Type="Self.Expense" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="ExpenseDetails" Type="Self.ExpenseDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Expense">
-        <PropertyRef Name="ExpenseID" />
-      </Principal>
-      <Dependent Role="ExpenseDetails">
-        <PropertyRef Name="ExpenseID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ExpenseDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="ExpenseDetails" Type="Self.ExpenseDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="ExpenseDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_FAInvoiceDetails_FAInvoice">
-    <End Role="FAInvoice" Type="Self.FAInvoice" Multiplicity="0..1" />
-    <End Role="FAInvoiceDetails" Type="Self.FAInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FAInvoice">
-        <PropertyRef Name="FAInvoiceID" />
-      </Principal>
-      <Dependent Role="FAInvoiceDetails">
-        <PropertyRef Name="FAInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="1" />
-    <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentMaster_ZoneCategory">
-    <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="0..1" />
-    <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneCategory">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentMaster">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentRate_CourierService">
-    <End Role="CourierService" Type="Self.CourierService" Multiplicity="0..1" />
-    <End Role="ForwardingAgentRate" Type="Self.ForwardingAgentRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CourierService">
-        <PropertyRef Name="CourierServiceID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentRate">
-        <PropertyRef Name="CourierServiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentRate_ZoneChart">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ForwardingAgentRate" Type="Self.ForwardingAgentRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentRate">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentRate_ZoneChart1">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ForwardingAgentRate" Type="Self.ForwardingAgentRate" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentRate">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentRateDet_ForwardingAgentRate">
-    <End Role="ForwardingAgentRate" Type="Self.ForwardingAgentRate" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="ForwardingAgentRateDet" Type="Self.ForwardingAgentRateDet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ForwardingAgentRate">
-        <PropertyRef Name="FAgentRateID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentRateDet">
-        <PropertyRef Name="FAgentRateID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InScanDomestic_InScan">
-    <End Role="InScan" Type="Self.InScan" Multiplicity="1" />
-    <End Role="InScanDomestic" Type="Self.InScanDomestic" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScan">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="InScanDomestic">
-        <PropertyRef Name="InScanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InScanInternationalDeatils_InScanInternational">
-    <End Role="InScanInternational" Type="Self.InScanInternational" Multiplicity="1" />
-    <End Role="InScanInternationalDeatils" Type="Self.InScanInternationalDeatils" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanInternational">
-        <PropertyRef Name="InScanInternationalID" />
-      </Principal>
-      <Dependent Role="InScanInternationalDeatils">
-        <PropertyRef Name="InscanInternationalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_InscanOtherCharge_InScan">
     <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
     <End Role="InscanOtherCharge" Type="Self.InscanOtherCharge" Multiplicity="*" />
@@ -5129,888 +3962,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       </Principal>
       <Dependent Role="InscanOtherCharge">
         <PropertyRef Name="OtherChargeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiry_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="JobEnquiry" Type="Self.JobEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="JobEnquiry">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiry_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="JobEnquiry" Type="Self.JobEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="JobEnquiry">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiry_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="JobEnquiry" Type="Self.JobEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="JobEnquiry">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiryDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="JobEnquiryDetails" Type="Self.JobEnquiryDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="JobEnquiryDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiryDetails_JobEnquiry">
-    <End Role="JobEnquiry" Type="Self.JobEnquiry" Multiplicity="0..1" />
-    <End Role="JobEnquiryDetails" Type="Self.JobEnquiryDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="JobEnquiry">
-        <PropertyRef Name="JobEnquiryID" />
-      </Principal>
-      <Dependent Role="JobEnquiryDetails">
-        <PropertyRef Name="JobEnquiryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiryDetails_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-    <End Role="JobEnquiryDetails" Type="Self.JobEnquiryDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="JobEnquiryDetails">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_LocationMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="LocationMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MCPayment_DRRConsignment">
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="1" />
-    <End Role="MCPayment" Type="Self.MCPayment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRRConsignment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Principal>
-      <Dependent Role="MCPayment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_POD_DRRConsignment">
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="0..1" />
-    <End Role="POD" Type="Self.POD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRRConsignment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Principal>
-      <Dependent Role="POD">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ProductItemMaster_ProductItemMaster">
-    <End Role="ProductCategoryMaster" Type="Self.ProductCategoryMaster" Multiplicity="0..1" />
-    <End Role="ProductItemMaster" Type="Self.ProductItemMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductCategoryMaster">
-        <PropertyRef Name="ProductCategoryID" />
-      </Principal>
-      <Dependent Role="ProductItemMaster">
-        <PropertyRef Name="ProductCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Products_Category">
-    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Products" Type="Self.Products" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="CategoryID" />
-      </Principal>
-      <Dependent Role="Products">
-        <PropertyRef Name="CategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Products_Type">
-    <End Role="Type" Type="Self.Type" Multiplicity="0..1" />
-    <End Role="Products" Type="Self.Products" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Type">
-        <PropertyRef Name="TypeID" />
-      </Principal>
-      <Dependent Role="Products">
-        <PropertyRef Name="TypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_AcFinancialYear">
-    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcFinancialYear">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="FYearID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_EmployeeMaster1">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="SalesManID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="SupplierID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoiceDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="PurchaseInvoiceDetails" Type="Self.PurchaseInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoiceDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoiceDetails_PurchaseInvoice">
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="PurchaseInvoiceDetails" Type="Self.PurchaseInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PurchaseInvoice">
-        <PropertyRef Name="PurchaseInvoiceID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoiceDetails">
-        <PropertyRef Name="PurchaseInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrder_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseOrder">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrder_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="PurchaseOrder">
-        <PropertyRef Name="SupplierID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrderDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="PurchaseOrderDetails" Type="Self.PurchaseOrderDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="PurchaseOrderDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrderDetails_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-    <End Role="PurchaseOrderDetails" Type="Self.PurchaseOrderDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="PurchaseOrderDetails">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrderDetails_PurchaseOrder">
-    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
-    <End Role="PurchaseOrderDetails" Type="Self.PurchaseOrderDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PurchaseOrder">
-        <PropertyRef Name="PurchaseOrderID" />
-      </Principal>
-      <Dependent Role="PurchaseOrderDetails">
-        <PropertyRef Name="PurchaseOrderID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Quotation_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="1" />
-    <End Role="Quotation" Type="Self.Quotation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="Quotation">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Quotation_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="Quotation" Type="Self.Quotation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="Quotation">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Quotation_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="Quotation" Type="Self.Quotation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="Quotation">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuotationDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="QuotationDetails" Type="Self.QuotationDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="QuotationDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuotationDetails_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-    <End Role="QuotationDetails" Type="Self.QuotationDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="QuotationDetails">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuotationDetails_Quotation">
-    <End Role="Quotation" Type="Self.Quotation" Multiplicity="0..1" />
-    <End Role="QuotationDetails" Type="Self.QuotationDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Quotation">
-        <PropertyRef Name="QuotationID" />
-      </Principal>
-      <Dependent Role="QuotationDetails">
-        <PropertyRef Name="QuotationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_ExportShipmentDetails_S_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="1" />
-    <End Role="ExportShipmentDetails" Type="Self.ExportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="ExportShipmentDetails">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_ExportShipmentDetails_S_ExportShipment">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="1" />
-    <End Role="ExportShipmentDetails" Type="Self.ExportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ExportShipmentDetails">
-        <PropertyRef Name="ExportID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_ImportShipment_S_ForwardingAgentLogin1">
-    <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
-    <End Role="ImportShipment" Type="Self.ImportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserRegistration">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="ImportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_Shipment_S_ImportShipment">
-    <End Role="ImportShipment" Type="Self.ImportShipment" Multiplicity="1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ImportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ImportID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_AcFinancialYear">
-    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcFinancialYear">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="FYearID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_EmployeeMaster1">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="SalesManID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoiceDetails_ItemUnit">
-    <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
-    <End Role="SalesInvoiceDetails" Type="Self.SalesInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ItemUnit">
-        <PropertyRef Name="ItemUnitID" />
-      </Principal>
-      <Dependent Role="SalesInvoiceDetails">
-        <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoiceDetails_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-    <End Role="SalesInvoiceDetails" Type="Self.SalesInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="SalesInvoiceDetails">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoiceDetails_SalesInvoice">
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="SalesInvoiceDetails" Type="Self.SalesInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SalesInvoice">
-        <PropertyRef Name="SalesInvoiceID" />
-      </Principal>
-      <Dependent Role="SalesInvoiceDetails">
-        <PropertyRef Name="SalesInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_BranchMaster">
-    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BranchMaster">
-        <PropertyRef Name="BranchID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupplierMaster_SupplierType">
-    <End Role="SupplierType" Type="Self.SupplierType" Multiplicity="0..1" />
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierType">
-        <PropertyRef Name="SupplierTypeID" />
-      </Principal>
-      <Dependent Role="SupplierMaster">
-        <PropertyRef Name="SupplierTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblAgentCollectionRateDetail_tblAgentCollectionRate">
-    <End Role="tblAgentCollectionRate" Type="Self.tblAgentCollectionRate" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblAgentCollectionRateDetail" Type="Self.tblAgentCollectionRateDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblAgentCollectionRate">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblAgentCollectionRateDetail">
-        <PropertyRef Name="AgentCollectionRateID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblAgentDeliveryRateDetail_tblAgentDeliveryRate">
-    <End Role="tblAgentDeliveryRate" Type="Self.tblAgentDeliveryRate" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblAgentDeliveryRateDetail" Type="Self.tblAgentDeliveryRateDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblAgentDeliveryRate">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblAgentDeliveryRateDetail">
-        <PropertyRef Name="AgentDeliveryRateID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblAgentInvoiceDetail_tblAgentInvoice">
-    <End Role="tblAgentInvoice" Type="Self.tblAgentInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblAgentInvoiceDetail" Type="Self.tblAgentInvoiceDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblAgentInvoice">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblAgentInvoiceDetail">
-        <PropertyRef Name="AgentInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblAgentRecPayDetail_tblAgentRecPay">
-    <End Role="tblAgentRecPay" Type="Self.tblAgentRecPay" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblAgentRecPayDetail" Type="Self.tblAgentRecPayDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblAgentRecPay">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblAgentRecPayDetail">
-        <PropertyRef Name="AgentRecPayID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblCustomerAdjustment_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1" />
-    <End Role="tblCustomerAdjustment" Type="Self.tblCustomerAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="tblCustomerAdjustment">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblCustomerAdjustment_CustomerMaster">
-    <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="0..1" />
-    <End Role="tblCustomerAdjustment" Type="Self.tblCustomerAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerMaster">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="tblCustomerAdjustment">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblCustomerAdjustmentDetail_tblCustomerAdjustment">
-    <End Role="tblCustomerAdjustment" Type="Self.tblCustomerAdjustment" Multiplicity="0..1" />
-    <End Role="tblCustomerAdjustmentDetail" Type="Self.tblCustomerAdjustmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblCustomerAdjustment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblCustomerAdjustmentDetail">
-        <PropertyRef Name="CustomerAdjustmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblDepot_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="tblDepot">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice">
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblPurchaseInvoiceOtherCharges" Type="Self.tblPurchaseInvoiceOtherCharges" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PurchaseInvoice">
-        <PropertyRef Name="PurchaseInvoiceID" />
-      </Principal>
-      <Dependent Role="tblPurchaseInvoiceOtherCharges">
-        <PropertyRef Name="PurchaseInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSalesInvoiceOtherCharges_SalesInvoice">
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblSalesInvoiceOtherCharges" Type="Self.tblSalesInvoiceOtherCharges" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SalesInvoice">
-        <PropertyRef Name="SalesInvoiceID" />
-      </Principal>
-      <Dependent Role="tblSalesInvoiceOtherCharges">
-        <PropertyRef Name="ExpenseID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblStockIssue_tblDepot">
-    <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="0..1" />
-    <End Role="tblStockIssue" Type="Self.tblStockIssue" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblDepot">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblStockIssue">
-        <PropertyRef Name="DepotID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblStockIssue_tblDepot1">
-    <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="0..1" />
-    <End Role="tblStockIssue" Type="Self.tblStockIssue" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblDepot">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblStockIssue">
-        <PropertyRef Name="FromDepotID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblStockIssueDetail_tblStockIssue">
-    <End Role="tblStockIssue" Type="Self.tblStockIssue" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="tblStockIssueDetail" Type="Self.tblStockIssueDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblStockIssue">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblStockIssueDetail">
-        <PropertyRef Name="StockIssueID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSupplierAdjustment_AcFinancialYear">
-    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-    <End Role="tblSupplierAdjustment" Type="Self.tblSupplierAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcFinancialYear">
-        <PropertyRef Name="AcFinancialYearID" />
-      </Principal>
-      <Dependent Role="tblSupplierAdjustment">
-        <PropertyRef Name="FyearID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSupplierAdjustment_AcJournalMaster">
-    <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1" />
-    <End Role="tblSupplierAdjustment" Type="Self.tblSupplierAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcJournalMaster">
-        <PropertyRef Name="AcJournalID" />
-      </Principal>
-      <Dependent Role="tblSupplierAdjustment">
-        <PropertyRef Name="AcJournalID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSupplierAdjustment_SupplierMaster">
-    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="0..1" />
-    <End Role="tblSupplierAdjustment" Type="Self.tblSupplierAdjustment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SupplierMaster">
-        <PropertyRef Name="SupplierID" />
-      </Principal>
-      <Dependent Role="tblSupplierAdjustment">
-        <PropertyRef Name="SupplierID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment">
-    <End Role="tblSupplierAdjustment" Type="Self.tblSupplierAdjustment" Multiplicity="0..1" />
-    <End Role="tblSupplierAdjustmentDetail" Type="Self.tblSupplierAdjustmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tblSupplierAdjustment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="tblSupplierAdjustmentDetail">
-        <PropertyRef Name="SupplierAdjustmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChart_ZoneCategory">
-    <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="1" />
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneCategory">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Principal>
-      <Dependent Role="ZoneChart">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChart_ZoneCategory1">
-    <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="1" />
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneCategory">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Principal>
-      <Dependent Role="ZoneChart">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChart_ZoneMaster">
-    <End Role="ZoneMaster" Type="Self.ZoneMaster" Multiplicity="1" />
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneMaster">
-        <PropertyRef Name="ZoneID" />
-      </Principal>
-      <Dependent Role="ZoneChart">
-        <PropertyRef Name="ZoneID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChart_ZoneMaster1">
-    <End Role="ZoneMaster" Type="Self.ZoneMaster" Multiplicity="1" />
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneMaster">
-        <PropertyRef Name="ZoneID" />
-      </Principal>
-      <Dependent Role="ZoneChart">
-        <PropertyRef Name="ZoneID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChartDetails_ZoneChart">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ZoneChartDetails" Type="Self.ZoneChartDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ZoneChartDetails">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChartDetails_ZoneChart1">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ZoneChartDetails" Type="Self.ZoneChartDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ZoneChartDetails">
-        <PropertyRef Name="ZoneChartID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6046,30 +3997,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="AcCategoryUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="AcCategoryID" Type="int" Mode="In" />
     <Parameter Name="AcCategory" Type="nvarchar" Mode="In" />
-  </Function>
-  <Function Name="AcCompanyInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="AcCompany" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address1" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address2" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address3" Type="nvarchar" Mode="In" />
-    <Parameter Name="Phone" Type="nvarchar" Mode="In" />
-    <Parameter Name="EMail" Type="nvarchar" Mode="In" />
-    <Parameter Name="CountryID" Type="int" Mode="In" />
-    <Parameter Name="CityID" Type="int" Mode="In" />
-    <Parameter Name="LocationID" Type="int" Mode="In" />
-    <Parameter Name="KeyPerson" Type="nvarchar" Mode="In" />
-    <Parameter Name="DesignationID" Type="int" Mode="In" />
-    <Parameter Name="PhoneNo1" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo2" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo3" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo4" Type="nvarchar" Mode="In" />
-    <Parameter Name="MobileNo1" Type="nvarchar" Mode="In" />
-    <Parameter Name="MobileNo2" Type="nvarchar" Mode="In" />
-    <Parameter Name="Website" Type="nvarchar" Mode="In" />
-    <Parameter Name="CompanyPrefix" Type="nvarchar" Mode="In" />
-    <Parameter Name="CurrencyID" Type="int" Mode="In" />
-    <Parameter Name="IsAWBAutoGenrated" Type="bit" Mode="In" />
-    <Parameter Name="AWBFormate" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="AcCompanySelectAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="AcCompanySelectAll1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -6168,7 +4095,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <Parameter Name="AcGroupID" Type="int" Mode="In" />
     <Parameter Name="UserID" Type="int" Mode="In" />
     <Parameter Name="Prefix" Type="nchar" Mode="In" />
-    <Parameter Name="AccountDescription" Type="varchar(max)" Mode="In" />
   </Function>
   <Function Name="AcHeadSelectAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="BranchID" Type="int" Mode="In" />
@@ -6836,32 +4762,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="BranchMasterDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="BranchIDs" Type="nvarchar(max)" Mode="In" />
   </Function>
-  <Function Name="BranchMasterInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="BranchName" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address1" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address2" Type="nvarchar" Mode="In" />
-    <Parameter Name="Address3" Type="nvarchar" Mode="In" />
-    <Parameter Name="CountryID" Type="int" Mode="In" />
-    <Parameter Name="CityID" Type="int" Mode="In" />
-    <Parameter Name="LocationID" Type="int" Mode="In" />
-    <Parameter Name="KeyPerson" Type="nvarchar" Mode="In" />
-    <Parameter Name="DesignationID" Type="int" Mode="In" />
-    <Parameter Name="Phone" Type="varchar" Mode="In" />
-    <Parameter Name="PhoneNo1" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo2" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo3" Type="nvarchar" Mode="In" />
-    <Parameter Name="PhoneNo4" Type="nvarchar" Mode="In" />
-    <Parameter Name="MobileNo1" Type="nvarchar" Mode="In" />
-    <Parameter Name="MobileNo2" Type="nvarchar" Mode="In" />
-    <Parameter Name="EMail" Type="nvarchar" Mode="In" />
-    <Parameter Name="Website" Type="nvarchar" Mode="In" />
-    <Parameter Name="BranchPrefix" Type="nvarchar" Mode="In" />
-    <Parameter Name="CurrencyID" Type="int" Mode="In" />
-    <Parameter Name="CompanyID" Type="int" Mode="In" />
-    <Parameter Name="AWBFormat" Type="nvarchar" Mode="In" />
-    <Parameter Name="StatusAssociate" Type="bit" Mode="In" />
-    <Parameter Name="BranchID" Type="int" Mode="InOut" />
-  </Function>
   <Function Name="BranchMasterSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="BranchMasterSelectAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="BranchMasterSelectByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -7443,7 +5343,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="GetMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="UserName" Type="varchar" Mode="In" />
   </Function>
-  <Function Name="GetMenuAccessLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetMultipleAWBStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="DateTo" Type="date" Mode="In" />
     <Parameter Name="DateFrom" Type="date" Mode="In" />
@@ -7700,11 +5599,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <Parameter Name="intCompanyID" Type="int" Mode="In" />
     <Parameter Name="intControlHeadID" Type="int" Mode="In" />
   </Function>
-  <Function Name="proAWBDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="dteFromDate" Type="varchar" Mode="In" />
-    <Parameter Name="dteToDate" Type="varchar" Mode="In" />
-    <Parameter Name="intAcCompanyID" Type="int" Mode="In" />
-  </Function>
   <Function Name="proAWBDetailsDatewise" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="dteFromDate" Type="varchar" Mode="In" />
     <Parameter Name="dteToDate" Type="varchar" Mode="In" />
@@ -7721,11 +5615,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <Parameter Name="intAcCompanyID" Type="int" Mode="In" />
   </Function>
   <Function Name="proAWBNotInvoiced" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="dteFromDate" Type="varchar" Mode="In" />
-    <Parameter Name="dteToDate" Type="varchar" Mode="In" />
-    <Parameter Name="intAcCompanyID" Type="int" Mode="In" />
-  </Function>
-  <Function Name="proAWBNotOutscan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="dteFromDate" Type="varchar" Mode="In" />
     <Parameter Name="dteToDate" Type="varchar" Mode="In" />
     <Parameter Name="intAcCompanyID" Type="int" Mode="In" />
@@ -8236,10 +6125,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="SP_DeleteCustomerReciepts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="RecPayID" Type="int" Mode="In" />
   </Function>
-  <Function Name="SP_GetAdvanceAmountOfCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="CustomerID" Type="int" Mode="In" />
+  <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FYearId" Type="int" Mode="In" />
   </Function>
-  <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="SP_GetAllRecieptsDetailsByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="FromDate" Type="nvarchar" Mode="In" />
     <Parameter Name="Todate" Type="nvarchar" Mode="In" />
@@ -8251,12 +6139,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
   <Function Name="Sp_GetCustomerInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="AWBType" Type="varchar" Mode="In" />
   </Function>
-  <Function Name="SP_GetCustomerInvoiceDetailsForReciept" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="CustomerID" Type="int" Mode="In" />
-    <Parameter Name="FromDate" Type="date" Mode="In" />
-    <Parameter Name="ToDate" Type="date" Mode="In" />
-  </Function>
-  <Function Name="SP_GetMaxPVID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="SP_GetMaxRVID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="sp_GetTrackByAWBNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="iAWBNO" Type="nvarchar" Mode="In" />
@@ -8309,23 +6191,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <Parameter Name="CurrencyID" Type="int" Mode="In" />
     <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
     <Parameter Name="JobID" Type="int" Mode="In" />
-  </Function>
-  <Function Name="SP_InsertRecPayDetailsForSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="RecPayID" Type="int" Mode="In" />
-    <Parameter Name="InvoiceID" Type="int" Mode="In" />
-    <Parameter Name="Amount" Type="money" Mode="In" />
-    <Parameter Name="Remarks" Type="nvarchar" Mode="In" />
-    <Parameter Name="StatusInvoice" Type="nvarchar" Mode="In" />
-    <Parameter Name="StatusAdvance" Type="bit" Mode="In" />
-    <Parameter Name="statusReceipt" Type="nvarchar" Mode="In" />
-    <Parameter Name="InvDate" Type="nvarchar" Mode="In" />
-    <Parameter Name="InvNo" Type="nvarchar" Mode="In" />
-    <Parameter Name="CurrencyID" Type="int" Mode="In" />
-    <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
-    <Parameter Name="JobID" Type="int" Mode="In" />
-  </Function>
-  <Function Name="SPGetAllLocalCurrencyCustRecievable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="AcFinancialYearID" Type="int" Mode="In" />
   </Function>
   <Function Name="splitAwbNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="delimited" Type="nvarchar(max)" Mode="In" />
@@ -8601,15 +6466,9 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="AnalysisGroup" EntityType="Self.AnalysisGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AnalysisHead" EntityType="Self.AnalysisHead" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AreaMaster" EntityType="Self.AreaMaster" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_Applications" EntityType="Self.aspnet_Applications" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_Membership" EntityType="Self.aspnet_Membership" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_Paths" EntityType="Self.aspnet_Paths" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_PersonalizationAllUsers" EntityType="Self.aspnet_PersonalizationAllUsers" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_PersonalizationPerUser" EntityType="Self.aspnet_PersonalizationPerUser" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_Profile" EntityType="Self.aspnet_Profile" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_Roles" EntityType="Self.aspnet_Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_SchemaVersions" EntityType="Self.aspnet_SchemaVersions" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="aspnet_Users" EntityType="Self.aspnet_Users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_UsersInRoles" EntityType="Self.aspnet_UsersInRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_WebEvent_Events" EntityType="Self.aspnet_WebEvent_Events" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBIssue" EntityType="Self.AWBIssue" Schema="dbo" store:Type="Tables" />
@@ -8653,7 +6512,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="CustomerRateAssign" EntityType="Self.CustomerRateAssign" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CustomerRateDet" EntityType="Self.CustomerRateDet" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CustomerRateType" EntityType="Self.CustomerRateType" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="CustomerType" EntityType="Self.CustomerType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CustSuppJV" EntityType="Self.CustSuppJV" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DebitNote" EntityType="Self.DebitNote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetails" Schema="dbo" store:Type="Tables" />
@@ -8692,7 +6550,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="InScanInternational" EntityType="Self.InScanInternational" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatils" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InScanMaster" EntityType="Self.InScanMaster" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="InScanMasterNew" EntityType="Self.InScanMasterNew" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InscanOtherCharge" EntityType="Self.InscanOtherCharge" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InScantransfer" EntityType="Self.InScantransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
@@ -8737,11 +6594,11 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="PurchaseInvoiceDetails" EntityType="Self.PurchaseInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrderDetails" EntityType="Self.PurchaseOrderDetails" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="QuickInScanDetail" EntityType="Self.QuickInScanDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuickInscanMaster" EntityType="Self.QuickInscanMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Quotation" EntityType="Self.Quotation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RecPay" EntityType="Self.RecPay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RecPayAllocationDetails" EntityType="Self.RecPayAllocationDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequestType" EntityType="Self.RequestType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetails" Schema="dbo" store:Type="Tables" />
@@ -8787,7 +6644,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="tblVehicleRequiredType" EntityType="Self.tblVehicleRequiredType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TempCommission" EntityType="Self.TempCommission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tempTable" EntityType="Self.tempTable" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="test1" EntityType="Self.test1" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
@@ -8809,6 +6665,76 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <EntitySet Name="ZoneChart" EntityType="Self.ZoneChart" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ZoneChartDetails" EntityType="Self.ZoneChartDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ZoneMaster" EntityType="Self.ZoneMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="aspnet_Applications" EntityType="Self.aspnet_Applications" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_Applications].[ApplicationName] AS [ApplicationName], 
+    [aspnet_Applications].[LoweredApplicationName] AS [LoweredApplicationName], 
+    [aspnet_Applications].[ApplicationId] AS [ApplicationId], 
+    [aspnet_Applications].[Description] AS [Description]
+    FROM [dbo].[aspnet_Applications] AS [aspnet_Applications]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="aspnet_Membership" EntityType="Self.aspnet_Membership" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_Membership].[ApplicationId] AS [ApplicationId], 
+    [aspnet_Membership].[UserId] AS [UserId], 
+    [aspnet_Membership].[Password] AS [Password], 
+    [aspnet_Membership].[PasswordFormat] AS [PasswordFormat], 
+    [aspnet_Membership].[PasswordSalt] AS [PasswordSalt], 
+    [aspnet_Membership].[MobilePIN] AS [MobilePIN], 
+    [aspnet_Membership].[Email] AS [Email], 
+    [aspnet_Membership].[LoweredEmail] AS [LoweredEmail], 
+    [aspnet_Membership].[PasswordQuestion] AS [PasswordQuestion], 
+    [aspnet_Membership].[PasswordAnswer] AS [PasswordAnswer], 
+    [aspnet_Membership].[IsApproved] AS [IsApproved], 
+    [aspnet_Membership].[IsLockedOut] AS [IsLockedOut], 
+    [aspnet_Membership].[CreateDate] AS [CreateDate], 
+    [aspnet_Membership].[LastLoginDate] AS [LastLoginDate], 
+    [aspnet_Membership].[LastPasswordChangedDate] AS [LastPasswordChangedDate], 
+    [aspnet_Membership].[LastLockoutDate] AS [LastLockoutDate], 
+    [aspnet_Membership].[FailedPasswordAttemptCount] AS [FailedPasswordAttemptCount], 
+    [aspnet_Membership].[FailedPasswordAttemptWindowStart] AS [FailedPasswordAttemptWindowStart], 
+    [aspnet_Membership].[FailedPasswordAnswerAttemptCount] AS [FailedPasswordAnswerAttemptCount], 
+    [aspnet_Membership].[FailedPasswordAnswerAttemptWindowStart] AS [FailedPasswordAnswerAttemptWindowStart], 
+    [aspnet_Membership].[Comment] AS [Comment]
+    FROM [dbo].[aspnet_Membership] AS [aspnet_Membership]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="aspnet_Paths" EntityType="Self.aspnet_Paths" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_Paths].[ApplicationId] AS [ApplicationId], 
+    [aspnet_Paths].[PathId] AS [PathId], 
+    [aspnet_Paths].[Path] AS [Path], 
+    [aspnet_Paths].[LoweredPath] AS [LoweredPath]
+    FROM [dbo].[aspnet_Paths] AS [aspnet_Paths]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="aspnet_PersonalizationPerUser" EntityType="Self.aspnet_PersonalizationPerUser" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_PersonalizationPerUser].[Id] AS [Id], 
+    [aspnet_PersonalizationPerUser].[PathId] AS [PathId], 
+    [aspnet_PersonalizationPerUser].[UserId] AS [UserId], 
+    [aspnet_PersonalizationPerUser].[PageSettings] AS [PageSettings], 
+    [aspnet_PersonalizationPerUser].[LastUpdatedDate] AS [LastUpdatedDate]
+    FROM [dbo].[aspnet_PersonalizationPerUser] AS [aspnet_PersonalizationPerUser]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="aspnet_Roles" EntityType="Self.aspnet_Roles" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_Roles].[ApplicationId] AS [ApplicationId], 
+    [aspnet_Roles].[RoleId] AS [RoleId], 
+    [aspnet_Roles].[RoleName] AS [RoleName], 
+    [aspnet_Roles].[LoweredRoleName] AS [LoweredRoleName], 
+    [aspnet_Roles].[Description] AS [Description]
+    FROM [dbo].[aspnet_Roles] AS [aspnet_Roles]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="aspnet_Users" EntityType="Self.aspnet_Users" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [aspnet_Users].[ApplicationId] AS [ApplicationId], 
+    [aspnet_Users].[UserId] AS [UserId], 
+    [aspnet_Users].[UserName] AS [UserName], 
+    [aspnet_Users].[LoweredUserName] AS [LoweredUserName], 
+    [aspnet_Users].[MobileAlias] AS [MobileAlias], 
+    [aspnet_Users].[IsAnonymous] AS [IsAnonymous], 
+    [aspnet_Users].[LastActivityDate] AS [LastActivityDate]
+    FROM [dbo].[aspnet_Users] AS [aspnet_Users]</DefiningQuery>
+    </EntitySet>
     <EntitySet Name="CreditNoteDetails" EntityType="Self.CreditNoteDetails" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [CreditNoteDetails].[CreditNoteID] AS [CreditNoteID], 
@@ -9019,197 +6945,13 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     [TransportMode].[Mode] AS [Mode]
     FROM [dbo].[TransportMode] AS [TransportMode]</DefiningQuery>
     </EntitySet>
-    <AssociationSet Name="FK__aspnet_Me__Appli__24D2692A" Association="Self.FK__aspnet_Me__Appli__24D2692A">
-      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
-      <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Me__UserI__25C68D63" Association="Self.FK__aspnet_Me__UserI__25C68D63">
-      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
-      <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pa__Appli__26BAB19C" Association="Self.FK__aspnet_Pa__Appli__26BAB19C">
-      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
-      <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__PathI__27AED5D5" Association="Self.FK__aspnet_Pe__PathI__27AED5D5">
-      <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
-      <End Role="aspnet_PersonalizationAllUsers" EntitySet="aspnet_PersonalizationAllUsers" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__PathI__28A2FA0E" Association="Self.FK__aspnet_Pe__PathI__28A2FA0E">
-      <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
-      <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__UserI__29971E47" Association="Self.FK__aspnet_Pe__UserI__29971E47">
-      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
-      <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pr__UserI__2A8B4280" Association="Self.FK__aspnet_Pr__UserI__2A8B4280">
-      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
-      <End Role="aspnet_Profile" EntitySet="aspnet_Profile" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Ro__Appli__2B7F66B9" Association="Self.FK__aspnet_Ro__Appli__2B7F66B9">
-      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
-      <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__Appli__2C738AF2" Association="Self.FK__aspnet_Us__Appli__2C738AF2">
-      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
-      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__RoleI__2D67AF2B" Association="Self.FK__aspnet_Us__RoleI__2D67AF2B">
-      <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
-      <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__UserI__2E5BD364" Association="Self.FK__aspnet_Us__UserI__2E5BD364">
-      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
-      <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="Self.FK__CODReceip__Recei__5D8BC399">
+    <AssociationSet Name="FK__CODReceip__Recei__3F1C4B12" Association="Self.FK__CODReceip__Recei__3F1C4B12">
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2F3AE904" Association="Self.FK__ExportShi__Emplo__2F3AE904">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__302F0D3D" Association="Self.FK__ExportShi__Emplo__302F0D3D">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__31233176" Association="Self.FK__ExportShi__Emplo__31233176">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__321755AF" Association="Self.FK__ExportShi__LastE__321755AF">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__330B79E8" Association="Self.FK__ExportShi__LastE__330B79E8">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__33FF9E21" Association="Self.FK__ExportShi__LastE__33FF9E21">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__34F3C25A" Association="Self.FK__ExportShi__LastE__34F3C25A">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__38C4533E" Association="Self.FK__ImportShi__Expor__38C4533E">
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__39B87777" Association="Self.FK__ImportShi__Expor__39B87777">
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__3AAC9BB0" Association="Self.FK__ImportShi__Expor__3AAC9BB0">
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcBankDetails_AcJournalMaster" Association="Self.FK_AcBankDetails_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="AcBankDetails" EntitySet="AcBankDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcCompany_CityMaster" Association="Self.FK_AcCompany_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="AcCompany" EntitySet="AcCompany" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcCompany_CurrencyMaster" Association="Self.FK_AcCompany_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="AcCompany" EntitySet="AcCompany" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcCompany_Designation" Association="Self.FK_AcCompany_Designation">
-      <End Role="Designation" EntitySet="Designation" />
-      <End Role="AcCompany" EntitySet="AcCompany" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcCompany_LocationMaster" Association="Self.FK_AcCompany_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="AcCompany" EntitySet="AcCompany" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcGroup_AcCategory" Association="Self.FK_AcGroup_AcCategory">
-      <End Role="AcCategory" EntitySet="AcCategory" />
-      <End Role="AcGroup" EntitySet="AcGroup" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcGroup_BranchMaster" Association="Self.FK_AcGroup_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="AcGroup" EntitySet="AcGroup" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcHead_AcGroup" Association="Self.FK_AcHead_AcGroup">
-      <End Role="AcGroup" EntitySet="AcGroup" />
-      <End Role="AcHead" EntitySet="AcHead" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
-      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
-      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="Self.FK_AcOpeningMaster_AcHead">
-      <End Role="AcHead" EntitySet="AcHead" />
-      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="Self.FK_AcOpeningMaster_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
-      <End Role="AcOPInvoiceDetails" EntitySet="AcOPInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="Self.FK_AcOPInvoiceMaster_AcFinancialYear">
-      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
-      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="Self.FK_AcOPInvoiceMaster_AcHead">
-      <End Role="AcHead" EntitySet="AcHead" />
-      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="Self.FK_AcOPInvoiceMaster_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AnalysisHead_AnalysisGroup" Association="Self.FK_AnalysisHead_AnalysisGroup">
-      <End Role="AnalysisGroup" EntitySet="AnalysisGroup" />
-      <End Role="AnalysisHead" EntitySet="AnalysisHead" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AnalysisHead_BranchMaster" Association="Self.FK_AnalysisHead_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="AnalysisHead" EntitySet="AnalysisHead" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AreaMaster_LocationMaster" Association="Self.FK_AreaMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="AreaMaster" EntitySet="AreaMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_BranchMaster_CityMaster" Association="Self.FK_BranchMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_BranchMaster_CurrencyMaster" Association="Self.FK_BranchMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_BranchMaster_Designation" Association="Self.FK_BranchMaster_Designation">
-      <End Role="Designation" EntitySet="Designation" />
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_BranchMaster_LocationMaster" Association="Self.FK_BranchMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
-      <End Role="AcHead" EntitySet="AcHead" />
-      <End Role="Category" EntitySet="Category" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerEnquiry_CustomerMaster" Association="Self.FK_CustomerEnquiry_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="CustomerEnquiry" EntitySet="CustomerEnquiry" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerEnquiry_EmployeeMaster" Association="Self.FK_CustomerEnquiry_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="CustomerEnquiry" EntitySet="CustomerEnquiry" />
+    <AssociationSet Name="FK__CODReceip__Recei__41F8B7BD" Association="Self.FK__CODReceip__Recei__41F8B7BD">
+      <End Role="CODReceipt" EntitySet="CODReceipt" />
+      <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
       <End Role="CustomerInvoice" EntitySet="CustomerInvoice" />
@@ -9219,186 +6961,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
       <End Role="InScanMaster" EntitySet="InScanMaster" />
       <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK_CustomerMaster_BranchMaster" Association="Self.FK_CustomerMaster_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerMaster_CityMaster" Association="Self.FK_CustomerMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerMaster_CurrencyMaster" Association="Self.FK_CustomerMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerMaster_LocationMaster" Association="Self.FK_CustomerMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_CourierService" Association="Self.FK_CustomerRate_CourierService">
-      <End Role="CourierService" EntitySet="CourierService" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_CourierService1" Association="Self.FK_CustomerRate_CourierService1">
-      <End Role="CourierService" EntitySet="CourierService" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_CustomerRateType" Association="Self.FK_CustomerRate_CustomerRateType">
-      <End Role="CustomerRateType" EntitySet="CustomerRateType" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_CustomerRateType1" Association="Self.FK_CustomerRate_CustomerRateType1">
-      <End Role="CustomerRateType" EntitySet="CustomerRateType" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_ZoneChart" Association="Self.FK_CustomerRate_ZoneChart">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRate_ZoneChart1" Association="Self.FK_CustomerRate_ZoneChart1">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRateAssign_CustomerMaster" Association="Self.FK_CustomerRateAssign_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="CustomerRateAssign" EntitySet="CustomerRateAssign" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRateAssign_CustomerRateType" Association="Self.FK_CustomerRateAssign_CustomerRateType">
-      <End Role="CustomerRateType" EntitySet="CustomerRateType" />
-      <End Role="CustomerRateAssign" EntitySet="CustomerRateAssign" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRateDet_CustomerRate" Association="Self.FK_CustomerRateDet_CustomerRate">
-      <End Role="CustomerRate" EntitySet="CustomerRate" />
-      <End Role="CustomerRateDet" EntitySet="CustomerRateDet" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerRateType_ZoneCategory" Association="Self.FK_CustomerRateType_ZoneCategory">
-      <End Role="ZoneCategory" EntitySet="ZoneCategory" />
-      <End Role="CustomerRateType" EntitySet="CustomerRateType" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRR_DRRConsignment" Association="Self.FK_DRR_DRRConsignment">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRConsignment" EntitySet="DRRConsignment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRR_DRSReceipt" Association="Self.FK_DRR_DRSReceipt">
-      <End Role="DRSReceipt" EntitySet="DRSReceipt" />
-      <End Role="DRR" EntitySet="DRR" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRConsignment_DRR" Association="Self.FK_DRRConsignment_DRR">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRConsignment" EntitySet="DRRConsignment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRInvoice_DRR" Association="Self.FK_DRRInvoice_DRR">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRInvoice" EntitySet="DRRInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRInvoice_DRR1" Association="Self.FK_DRRInvoice_DRR1">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRInvoice" EntitySet="DRRInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRPKPCAD_DRR" Association="Self.FK_DRRPKPCAD_DRR">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRPKPCAD" EntitySet="DRRPKPCAD" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRPKPCAD_DRR1" Association="Self.FK_DRRPKPCAD_DRR1">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRPKPCAD" EntitySet="DRRPKPCAD" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRRecPay_DRR" Association="Self.FK_DRRRecPay_DRR">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRRecPay" EntitySet="DRRRecPay" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRRecPay_DRR1" Association="Self.FK_DRRRecPay_DRR1">
-      <End Role="DRR" EntitySet="DRR" />
-      <End Role="DRRRecPay" EntitySet="DRRRecPay" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSDetails_CourierStatus" Association="Self.FK_DRSDetails_CourierStatus">
-      <End Role="CourierStatus" EntitySet="CourierStatus" />
-      <End Role="DRRConsignment" EntitySet="DRRConsignment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSEmployee_DRS" Association="Self.FK_DRSEmployee_DRS">
-      <End Role="DRS" EntitySet="DRS" />
-      <End Role="DRSEmployee" EntitySet="DRSEmployee" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSEmployee_DRSEmployeeID" Association="Self.FK_DRSEmployee_DRSEmployeeID">
-      <End Role="DRSEmployeeID" EntitySet="DRSEmployeeID" />
-      <End Role="DRSEmployee" EntitySet="DRSEmployee" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSExpense_DRS" Association="Self.FK_DRSExpense_DRS">
-      <End Role="DRS" EntitySet="DRS" />
-      <End Role="DRSExpense" EntitySet="DRSExpense" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_CityMaster" Association="Self.FK_EmployeeMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_Designation" Association="Self.FK_EmployeeMaster_Designation">
-      <End Role="Designation" EntitySet="Designation" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_LocationMaster" Association="Self.FK_EmployeeMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Expense_AcHead" Association="Self.FK_Expense_AcHead">
-      <End Role="AcHead" EntitySet="AcHead" />
-      <End Role="Expense" EntitySet="Expense" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Expense_AcJournalMaster" Association="Self.FK_Expense_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="Expense" EntitySet="Expense" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Expense_CurrencyMaster" Association="Self.FK_Expense_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="Expense" EntitySet="Expense" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ExpenseDetails_AcHead" Association="Self.FK_ExpenseDetails_AcHead">
-      <End Role="AcHead" EntitySet="AcHead" />
-      <End Role="ExpenseDetails" EntitySet="ExpenseDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ExpenseDetails_Expense" Association="Self.FK_ExpenseDetails_Expense">
-      <End Role="Expense" EntitySet="Expense" />
-      <End Role="ExpenseDetails" EntitySet="ExpenseDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ExpenseDetails_ItemUnit" Association="Self.FK_ExpenseDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="ExpenseDetails" EntitySet="ExpenseDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_FAInvoiceDetails_FAInvoice" Association="Self.FK_FAInvoiceDetails_FAInvoice">
-      <End Role="FAInvoice" EntitySet="FAInvoice" />
-      <End Role="FAInvoiceDetails" EntitySet="FAInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentMaster_CurrencyMaster" Association="Self.FK_ForwardingAgentMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentMaster_ZoneCategory" Association="Self.FK_ForwardingAgentMaster_ZoneCategory">
-      <End Role="ZoneCategory" EntitySet="ZoneCategory" />
-      <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentRate_CourierService" Association="Self.FK_ForwardingAgentRate_CourierService">
-      <End Role="CourierService" EntitySet="CourierService" />
-      <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentRate_ZoneChart" Association="Self.FK_ForwardingAgentRate_ZoneChart">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentRate_ZoneChart1" Association="Self.FK_ForwardingAgentRate_ZoneChart1">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentRateDet_ForwardingAgentRate" Association="Self.FK_ForwardingAgentRateDet_ForwardingAgentRate">
-      <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRate" />
-      <End Role="ForwardingAgentRateDet" EntitySet="ForwardingAgentRateDet" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InScanDomestic_InScan" Association="Self.FK_InScanDomestic_InScan">
-      <End Role="InScan" EntitySet="InScan" />
-      <End Role="InScanDomestic" EntitySet="InScanDomestic" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InScanInternationalDeatils_InScanInternational" Association="Self.FK_InScanInternationalDeatils_InScanInternational">
-      <End Role="InScanInternational" EntitySet="InScanInternational" />
-      <End Role="InScanInternationalDeatils" EntitySet="InScanInternationalDeatils" />
-    </AssociationSet>
     <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="Self.FK_InscanOtherCharge_InScan">
       <End Role="InScanMaster" EntitySet="InScanMaster" />
       <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
@@ -9406,294 +6968,6 @@ warning 6002: The table/view 'DB_9F57C4_couriertest_new.dbo.TransportMode' does 
     <AssociationSet Name="FK_InscanOtherCharge_OtherCharge" Association="Self.FK_InscanOtherCharge_OtherCharge">
       <End Role="OtherCharge" EntitySet="OtherCharge" />
       <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiry_CustomerMaster" Association="Self.FK_JobEnquiry_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="JobEnquiry" EntitySet="JobEnquiry" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiry_EmployeeMaster" Association="Self.FK_JobEnquiry_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="JobEnquiry" EntitySet="JobEnquiry" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiry_LocationMaster" Association="Self.FK_JobEnquiry_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-      <End Role="JobEnquiry" EntitySet="JobEnquiry" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiryDetails_ItemUnit" Association="Self.FK_JobEnquiryDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="JobEnquiryDetails" EntitySet="JobEnquiryDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiryDetails_JobEnquiry" Association="Self.FK_JobEnquiryDetails_JobEnquiry">
-      <End Role="JobEnquiry" EntitySet="JobEnquiry" />
-      <End Role="JobEnquiryDetails" EntitySet="JobEnquiryDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiryDetails_Products" Association="Self.FK_JobEnquiryDetails_Products">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="JobEnquiryDetails" EntitySet="JobEnquiryDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_LocationMaster_CityMaster" Association="Self.FK_LocationMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="LocationMaster" EntitySet="LocationMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
-      <End Role="DRRConsignment" EntitySet="DRRConsignment" />
-      <End Role="MCPayment" EntitySet="MCPayment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_POD_DRRConsignment" Association="Self.FK_POD_DRRConsignment">
-      <End Role="DRRConsignment" EntitySet="DRRConsignment" />
-      <End Role="POD" EntitySet="POD" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ProductItemMaster_ProductItemMaster" Association="Self.FK_ProductItemMaster_ProductItemMaster">
-      <End Role="ProductCategoryMaster" EntitySet="ProductCategoryMaster" />
-      <End Role="ProductItemMaster" EntitySet="ProductItemMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Products_Category" Association="Self.FK_Products_Category">
-      <End Role="Category" EntitySet="Category" />
-      <End Role="Products" EntitySet="Products" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Products_Type" Association="Self.FK_Products_Type">
-      <End Role="Type" EntitySet="Type" />
-      <End Role="Products" EntitySet="Products" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_AcFinancialYear" Association="Self.FK_PurchaseInvoice_AcFinancialYear">
-      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_AcJournalMaster" Association="Self.FK_PurchaseInvoice_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_BranchMaster" Association="Self.FK_PurchaseInvoice_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_CurrencyMaster" Association="Self.FK_PurchaseInvoice_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_EmployeeMaster" Association="Self.FK_PurchaseInvoice_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_EmployeeMaster1" Association="Self.FK_PurchaseInvoice_EmployeeMaster1">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_SupplierMaster" Association="Self.FK_PurchaseInvoice_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoiceDetails_ItemUnit" Association="Self.FK_PurchaseInvoiceDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="PurchaseInvoiceDetails" EntitySet="PurchaseInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoiceDetails_PurchaseInvoice" Association="Self.FK_PurchaseInvoiceDetails_PurchaseInvoice">
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-      <End Role="PurchaseInvoiceDetails" EntitySet="PurchaseInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrder_EmployeeMaster" Association="Self.FK_PurchaseOrder_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrder_SupplierMaster" Association="Self.FK_PurchaseOrder_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrderDetails_ItemUnit" Association="Self.FK_PurchaseOrderDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="PurchaseOrderDetails" EntitySet="PurchaseOrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrderDetails_Products" Association="Self.FK_PurchaseOrderDetails_Products">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="PurchaseOrderDetails" EntitySet="PurchaseOrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrderDetails_PurchaseOrder" Association="Self.FK_PurchaseOrderDetails_PurchaseOrder">
-      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-      <End Role="PurchaseOrderDetails" EntitySet="PurchaseOrderDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Quotation_BranchMaster" Association="Self.FK_Quotation_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="Quotation" EntitySet="Quotation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Quotation_CustomerMaster" Association="Self.FK_Quotation_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="Quotation" EntitySet="Quotation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Quotation_EmployeeMaster" Association="Self.FK_Quotation_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="Quotation" EntitySet="Quotation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuotationDetails_ItemUnit" Association="Self.FK_QuotationDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="QuotationDetails" EntitySet="QuotationDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuotationDetails_Products" Association="Self.FK_QuotationDetails_Products">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="QuotationDetails" EntitySet="QuotationDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuotationDetails_Quotation" Association="Self.FK_QuotationDetails_Quotation">
-      <End Role="Quotation" EntitySet="Quotation" />
-      <End Role="QuotationDetails" EntitySet="QuotationDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_ExportShipmentDetails_S_CurrencyMaster" Association="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="ExportShipmentDetails" EntitySet="ExportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_ExportShipmentDetails_S_ExportShipment" Association="Self.FK_S_ExportShipmentDetails_S_ExportShipment">
-      <End Role="ExportShipment" EntitySet="ExportShipment" />
-      <End Role="ExportShipmentDetails" EntitySet="ExportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_ImportShipment_S_ForwardingAgentLogin1" Association="Self.FK_S_ImportShipment_S_ForwardingAgentLogin1">
-      <End Role="UserRegistration" EntitySet="UserRegistration" />
-      <End Role="ImportShipment" EntitySet="ImportShipment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_Shipment_S_ImportShipment" Association="Self.FK_S_Shipment_S_ImportShipment">
-      <End Role="ImportShipment" EntitySet="ImportShipment" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_AcFinancialYear" Association="Self.FK_SalesInvoice_AcFinancialYear">
-      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_AcJournalMaster" Association="Self.FK_SalesInvoice_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_BranchMaster" Association="Self.FK_SalesInvoice_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_CurrencyMaster" Association="Self.FK_SalesInvoice_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_CustomerMaster" Association="Self.FK_SalesInvoice_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_EmployeeMaster" Association="Self.FK_SalesInvoice_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_EmployeeMaster1" Association="Self.FK_SalesInvoice_EmployeeMaster1">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoiceDetails_ItemUnit" Association="Self.FK_SalesInvoiceDetails_ItemUnit">
-      <End Role="ItemUnit" EntitySet="ItemUnit" />
-      <End Role="SalesInvoiceDetails" EntitySet="SalesInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoiceDetails_Products" Association="Self.FK_SalesInvoiceDetails_Products">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="SalesInvoiceDetails" EntitySet="SalesInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoiceDetails_SalesInvoice" Association="Self.FK_SalesInvoiceDetails_SalesInvoice">
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-      <End Role="SalesInvoiceDetails" EntitySet="SalesInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_BranchMaster" Association="Self.FK_SupplierMaster_BranchMaster">
-      <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_CurrencyMaster" Association="Self.FK_SupplierMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupplierMaster_SupplierType" Association="Self.FK_SupplierMaster_SupplierType">
-      <End Role="SupplierType" EntitySet="SupplierType" />
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblAgentCollectionRateDetail_tblAgentCollectionRate" Association="Self.FK_tblAgentCollectionRateDetail_tblAgentCollectionRate">
-      <End Role="tblAgentCollectionRate" EntitySet="tblAgentCollectionRate" />
-      <End Role="tblAgentCollectionRateDetail" EntitySet="tblAgentCollectionRateDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblAgentDeliveryRateDetail_tblAgentDeliveryRate" Association="Self.FK_tblAgentDeliveryRateDetail_tblAgentDeliveryRate">
-      <End Role="tblAgentDeliveryRate" EntitySet="tblAgentDeliveryRate" />
-      <End Role="tblAgentDeliveryRateDetail" EntitySet="tblAgentDeliveryRateDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblAgentInvoiceDetail_tblAgentInvoice" Association="Self.FK_tblAgentInvoiceDetail_tblAgentInvoice">
-      <End Role="tblAgentInvoice" EntitySet="tblAgentInvoice" />
-      <End Role="tblAgentInvoiceDetail" EntitySet="tblAgentInvoiceDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblAgentRecPayDetail_tblAgentRecPay" Association="Self.FK_tblAgentRecPayDetail_tblAgentRecPay">
-      <End Role="tblAgentRecPay" EntitySet="tblAgentRecPay" />
-      <End Role="tblAgentRecPayDetail" EntitySet="tblAgentRecPayDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblCustomerAdjustment_AcJournalMaster" Association="Self.FK_tblCustomerAdjustment_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="tblCustomerAdjustment" EntitySet="tblCustomerAdjustment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblCustomerAdjustment_CustomerMaster" Association="Self.FK_tblCustomerAdjustment_CustomerMaster">
-      <End Role="CustomerMaster" EntitySet="CustomerMaster" />
-      <End Role="tblCustomerAdjustment" EntitySet="tblCustomerAdjustment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblCustomerAdjustmentDetail_tblCustomerAdjustment" Association="Self.FK_tblCustomerAdjustmentDetail_tblCustomerAdjustment">
-      <End Role="tblCustomerAdjustment" EntitySet="tblCustomerAdjustment" />
-      <End Role="tblCustomerAdjustmentDetail" EntitySet="tblCustomerAdjustmentDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblDepot_CityMaster" Association="Self.FK_tblDepot_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="tblDepot" EntitySet="tblDepot" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" Association="Self.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice">
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />
-      <End Role="tblPurchaseInvoiceOtherCharges" EntitySet="tblPurchaseInvoiceOtherCharges" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSalesInvoiceOtherCharges_SalesInvoice" Association="Self.FK_tblSalesInvoiceOtherCharges_SalesInvoice">
-      <End Role="SalesInvoice" EntitySet="SalesInvoice" />
-      <End Role="tblSalesInvoiceOtherCharges" EntitySet="tblSalesInvoiceOtherCharges" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblStockIssue_tblDepot" Association="Self.FK_tblStockIssue_tblDepot">
-      <End Role="tblDepot" EntitySet="tblDepot" />
-      <End Role="tblStockIssue" EntitySet="tblStockIssue" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblStockIssue_tblDepot1" Association="Self.FK_tblStockIssue_tblDepot1">
-      <End Role="tblDepot" EntitySet="tblDepot" />
-      <End Role="tblStockIssue" EntitySet="tblStockIssue" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblStockIssueDetail_tblStockIssue" Association="Self.FK_tblStockIssueDetail_tblStockIssue">
-      <End Role="tblStockIssue" EntitySet="tblStockIssue" />
-      <End Role="tblStockIssueDetail" EntitySet="tblStockIssueDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSupplierAdjustment_AcFinancialYear" Association="Self.FK_tblSupplierAdjustment_AcFinancialYear">
-      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
-      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSupplierAdjustment_AcJournalMaster" Association="Self.FK_tblSupplierAdjustment_AcJournalMaster">
-      <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />
-      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSupplierAdjustment_SupplierMaster" Association="Self.FK_tblSupplierAdjustment_SupplierMaster">
-      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
-      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment" Association="Self.FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment">
-      <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustment" />
-      <End Role="tblSupplierAdjustmentDetail" EntitySet="tblSupplierAdjustmentDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChart_ZoneCategory" Association="Self.FK_ZoneChart_ZoneCategory">
-      <End Role="ZoneCategory" EntitySet="ZoneCategory" />
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChart_ZoneCategory1" Association="Self.FK_ZoneChart_ZoneCategory1">
-      <End Role="ZoneCategory" EntitySet="ZoneCategory" />
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChart_ZoneMaster" Association="Self.FK_ZoneChart_ZoneMaster">
-      <End Role="ZoneMaster" EntitySet="ZoneMaster" />
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChart_ZoneMaster1" Association="Self.FK_ZoneChart_ZoneMaster1">
-      <End Role="ZoneMaster" EntitySet="ZoneMaster" />
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChartDetails_ZoneChart" Association="Self.FK_ZoneChartDetails_ZoneChart">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChartDetails_ZoneChart1" Association="Self.FK_ZoneChartDetails_ZoneChart1">
-      <End Role="ZoneChart" EntitySet="ZoneChart" />
-      <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

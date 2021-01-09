@@ -14,15 +14,6 @@ namespace CMSV2.Models
     
     public partial class ExportShipment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ExportShipment()
-        {
-            this.ImportShipmentDetails = new HashSet<ImportShipmentDetail>();
-            this.ImportShipmentDetails1 = new HashSet<ImportShipmentDetail>();
-            this.ImportShipmentDetails2 = new HashSet<ImportShipmentDetail>();
-            this.ExportShipmentDetails = new HashSet<ExportShipmentDetail>();
-        }
-    
         public int ID { get; set; }
         public string ManifestNumber { get; set; }
         public string ConsignorName { get; set; }
@@ -58,22 +49,5 @@ namespace CMSV2.Models
         public Nullable<int> BranchID { get; set; }
         public Nullable<int> AcCompanyId { get; set; }
         public Nullable<int> ACJournalID { get; set; }
-    
-        public virtual EmployeeMaster EmployeeMaster { get; set; }
-        public virtual EmployeeMaster EmployeeMaster1 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster2 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster3 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster4 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster5 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster6 { get; set; }
-        public virtual EmployeeMaster EmployeeMaster7 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExportShipmentDetail> ExportShipmentDetails { get; set; }
     }
 }

@@ -12,7 +12,7 @@
 
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
     {
-        TrueBooksMVC.Models.SourceMastersModel obj = new TrueBooksMVC.Models.SourceMastersModel();
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
         isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
         ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
         isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);

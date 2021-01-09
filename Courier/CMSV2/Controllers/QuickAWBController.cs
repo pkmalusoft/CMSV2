@@ -646,7 +646,7 @@ namespace CMSV2.Controllers
             InScanMaster data = (from c in db.InScanMasters where c.InScanID == id select c).FirstOrDefault();            
             
                 inscan.InScanID = data.InScanID;
-                inscan.TransactionDate = data.TransactionDate;
+                inscan.TransactionDate =Convert.ToDateTime(data.TransactionDate);
                 inscan.AcCompanyID = Convert.ToInt32(data.AcCompanyID);
                 //inscan.EnquiryID =Convert.ToInt32(data.EnquiryID);
                 inscan.HAWBNo = data.AWBNo;

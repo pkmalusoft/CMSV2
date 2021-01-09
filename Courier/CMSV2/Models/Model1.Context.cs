@@ -98,7 +98,6 @@ namespace CMSV2.Models
         public virtual DbSet<CustomerRateAssign> CustomerRateAssigns { get; set; }
         public virtual DbSet<CustomerRateDet> CustomerRateDets { get; set; }
         public virtual DbSet<CustomerRateType> CustomerRateTypes { get; set; }
-        public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<CustSuppJV> CustSuppJVs { get; set; }
         public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
@@ -117,7 +116,6 @@ namespace CMSV2.Models
         public virtual DbSet<EmployeeMaster> EmployeeMasters { get; set; }
         public virtual DbSet<Expense> Expenses { get; set; }
         public virtual DbSet<ExpenseDetail> ExpenseDetails { get; set; }
-        public virtual DbSet<ExportShipment> ExportShipments { get; set; }
         public virtual DbSet<ExportShipmentDetail> ExportShipmentDetails { get; set; }
         public virtual DbSet<FAInvoice> FAInvoices { get; set; }
         public virtual DbSet<FAInvoiceDetail> FAInvoiceDetails { get; set; }
@@ -136,8 +134,6 @@ namespace CMSV2.Models
         public virtual DbSet<InScanDomestic> InScanDomestics { get; set; }
         public virtual DbSet<InScanInternational> InScanInternationals { get; set; }
         public virtual DbSet<InScanInternationalDeatil> InScanInternationalDeatils { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
-        public virtual DbSet<InScanMasterNew> InScanMasterNews { get; set; }
         public virtual DbSet<InscanOtherCharge> InscanOtherCharges { get; set; }
         public virtual DbSet<InScantransfer> InScantransfers { get; set; }
         public virtual DbSet<Item> Items { get; set; }
@@ -182,7 +178,6 @@ namespace CMSV2.Models
         public virtual DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
-        public virtual DbSet<QuickInScanDetail> QuickInScanDetails { get; set; }
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<Quotation> Quotations { get; set; }
         public virtual DbSet<QuotationDetail> QuotationDetails { get; set; }
@@ -231,7 +226,6 @@ namespace CMSV2.Models
         public virtual DbSet<tblVehicleRequiredType> tblVehicleRequiredTypes { get; set; }
         public virtual DbSet<TempCommission> TempCommissions { get; set; }
         public virtual DbSet<tempTable> tempTables { get; set; }
-        public virtual DbSet<test1> test1 { get; set; }
         public virtual DbSet<Type> Types { get; set; }
         public virtual DbSet<TypeOfGood> TypeOfGoods { get; set; }
         public virtual DbSet<UMDesignation> UMDesignations { get; set; }
@@ -272,6 +266,9 @@ namespace CMSV2.Models
         public virtual DbSet<AccountHeadControl> AccountHeadControls { get; set; }
         public virtual DbSet<SupplierMaster> SupplierMasters { get; set; }
         public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
+        public virtual DbSet<RecPayAllocationDetail> RecPayAllocationDetails { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
+        public virtual DbSet<ExportShipment> ExportShipments { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
@@ -832,7 +829,7 @@ namespace CMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AcHeadDelete", acHeadIDsParameter);
         }
     
-        public virtual int AcHeadInsert(Nullable<int> acHeadID, string acHeadKey, string acHead, Nullable<int> acGroupID, Nullable<int> userID, string prefix, string accountDescription)
+        public virtual int AcHeadInsert(Nullable<int> acHeadID, string acHeadKey, string acHead, Nullable<int> acGroupID, Nullable<int> userID, string prefix)
         {
             var acHeadIDParameter = acHeadID.HasValue ?
                 new ObjectParameter("AcHeadID", acHeadID) :
@@ -858,11 +855,7 @@ namespace CMSV2.Models
                 new ObjectParameter("Prefix", prefix) :
                 new ObjectParameter("Prefix", typeof(string));
     
-            var accountDescriptionParameter = accountDescription != null ?
-                new ObjectParameter("AccountDescription", accountDescription) :
-                new ObjectParameter("AccountDescription", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AcHeadInsert", acHeadIDParameter, acHeadKeyParameter, acHeadParameter, acGroupIDParameter, userIDParameter, prefixParameter, accountDescriptionParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AcHeadInsert", acHeadIDParameter, acHeadKeyParameter, acHeadParameter, acGroupIDParameter, userIDParameter, prefixParameter);
         }
     
         public virtual ObjectResult<AcHeadSelectAll_Result> AcHeadSelectAll(Nullable<int> branchID)
@@ -7741,9 +7734,13 @@ namespace CMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("SP_GetAdvanceAmountOfCustomer", customerIDParameter);
         }
     
-        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails()
+        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails(Nullable<int> fYearId)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails");
+            var fYearIdParameter = fYearId.HasValue ?
+                new ObjectParameter("FYearId", fYearId) :
+                new ObjectParameter("FYearId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails", fYearIdParameter);
         }
     
         public virtual ObjectResult<SP_GetAllRecieptsDetailsByDate_Result> SP_GetAllRecieptsDetailsByDate(string fromDate, string todate, Nullable<int> fyearId)

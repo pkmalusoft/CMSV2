@@ -179,6 +179,7 @@
     <Property Name="MaterialCostControlReceivableAcHeadID" Type="Int32" />
     <Property Name="ProvisionCostControlAcID" Type="Int32" />
     <Property Name="OpenJobRevenueAcID" Type="Int32" />
+    <Property Name="AccruedCostControlAcID" Type="Int32" />
   </EntityType>
   <EntityType Name="AcHeadControl">
     <Key>
@@ -800,7 +801,7 @@
       <PropertyRef Name="CityID" />
     </Key>
     <Property Name="CityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CountryID" Type="Int32" />
     <Property Name="CityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsHub" Type="Boolean" />
@@ -868,7 +869,7 @@
       <PropertyRef Name="CountryID" />
     </Key>
     <Property Name="CountryID" Type="Int32" Nullable="false" />
-    <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="StatusCountry" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <Property Name="StatusBaseCountry" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
     <Property Name="CountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
@@ -880,7 +881,7 @@
       <PropertyRef Name="CourierDescriptionID" />
     </Key>
     <Property Name="CourierDescriptionID" Type="Int32" Nullable="false" />
-    <Property Name="CourierDescription1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CourierDescription1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="DepartmentID" Type="Int32" />
     <Property Name="StatusDefault" Type="Boolean" Nullable="false" />
     <Property Name="Weight" Type="Double" />
@@ -890,7 +891,7 @@
       <PropertyRef Name="MovementID" />
     </Key>
     <Property Name="MovementID" Type="Int32" Nullable="false" />
-    <Property Name="MovementType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MovementType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -908,8 +909,8 @@
       <PropertyRef Name="CourierServiceID" />
     </Key>
     <Property Name="CourierServiceID" Type="Int32" Nullable="false" />
-    <Property Name="CourierService1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CourierServiceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CourierService1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CourierServiceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CourierDescriptionID" Type="Int32" Nullable="false" />
     <Property Name="InScanType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
     <Property Name="StatusDefaultD" Type="Boolean" Nullable="false" />
@@ -960,10 +961,10 @@
       <PropertyRef Name="CurrencyID" />
     </Key>
     <Property Name="CurrencyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="NoOfDecimals" Type="Int16" />
-    <Property Name="MonetaryUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MonetaryUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CountryID" Type="Int32" />
     <Property Name="StatusBaseCurrency" Type="Boolean" />
     <Property Name="ExchangeRate" Type="Decimal" Precision="19" Scale="4" />
@@ -1070,8 +1071,8 @@
     <Property Name="RecPayStatus" Type="Int32" />
     <Property Name="RecPayDetailId" Type="Int32" />
     <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
-    <NavigationProperty Name="InScanMaster" Relationship="Self.FK_CustomerInvoiceDetails_InScan" FromRole="CustomerInvoiceDetails" ToRole="InScanMaster" />
     <NavigationProperty Name="CustomerInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetail" ToRole="CustomerInvoice" />
+    <NavigationProperty Name="InScanMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="CustomerInvoiceDetail" ToRole="InScanMaster" />
   </EntityType>
   <EntityType Name="CustomerMaster">
     <Key>
@@ -1079,20 +1080,20 @@
     </Key>
     <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="CustomerCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CustomerName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-    <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CustomerRateTypeID" Type="Int32" />
-    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CountryID" Type="Int32" />
     <Property Name="CityID" Type="Int32" />
     <Property Name="LocationID" Type="Int32" />
@@ -1107,7 +1108,7 @@
     <Property Name="CustomerRateTypeIntID" Type="Int32" />
     <Property Name="CourierServiceID" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
-    <Property Name="CustomerUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="VATTRN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="OfficeOpenTime" Type="Time" Precision="7" />
@@ -1207,20 +1208,13 @@
       <PropertyRef Name="CustomerRateTypeID" />
     </Key>
     <Property Name="CustomerRateTypeID" Type="Int32" Nullable="false" />
-    <Property Name="CustomerRateType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerRateType1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ZoneCategoryID" Type="Int32" />
     <Property Name="StatusDefault" Type="Boolean" />
     <NavigationProperty Name="CustomerRates" Relationship="Self.FK_CustomerRate_CustomerRateType" FromRole="CustomerRateType" ToRole="CustomerRate" />
     <NavigationProperty Name="CustomerRates1" Relationship="Self.FK_CustomerRate_CustomerRateType1" FromRole="CustomerRateType" ToRole="CustomerRate" />
     <NavigationProperty Name="CustomerRateAssigns" Relationship="Self.FK_CustomerRateAssign_CustomerRateType" FromRole="CustomerRateType" ToRole="CustomerRateAssign" />
     <NavigationProperty Name="ZoneCategory" Relationship="Self.FK_CustomerRateType_ZoneCategory" FromRole="CustomerRateType" ToRole="ZoneCategory" />
-  </EntityType>
-  <EntityType Name="CustomerType">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CustSuppJV">
     <Key>
@@ -1525,14 +1519,6 @@
     <NavigationProperty Name="CityMaster" Relationship="Self.FK_EmployeeMaster_CityMaster" FromRole="EmployeeMaster" ToRole="CityMaster" />
     <NavigationProperty Name="CustomerEnquiries" Relationship="Self.FK_CustomerEnquiry_EmployeeMaster" FromRole="EmployeeMaster" ToRole="CustomerEnquiry" />
     <NavigationProperty Name="Designation" Relationship="Self.FK_EmployeeMaster_Designation" FromRole="EmployeeMaster" ToRole="Designation" />
-    <NavigationProperty Name="ExportShipments" Relationship="Self.FK__ExportShi__Emplo__2E46C4CB" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments1" Relationship="Self.FK__ExportShi__Emplo__2F3AE904" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments2" Relationship="Self.FK__ExportShi__Emplo__302F0D3D" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments3" Relationship="Self.FK__ExportShi__Emplo__31233176" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments4" Relationship="Self.FK__ExportShi__LastE__321755AF" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments5" Relationship="Self.FK__ExportShi__LastE__330B79E8" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments6" Relationship="Self.FK__ExportShi__LastE__33FF9E21" FromRole="EmployeeMaster" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipments7" Relationship="Self.FK__ExportShi__LastE__34F3C25A" FromRole="EmployeeMaster" ToRole="ExportShipment" />
     <NavigationProperty Name="LocationMaster" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="EmployeeMaster" ToRole="LocationMaster" />
     <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_EmployeeMaster" FromRole="EmployeeMaster" ToRole="JobEnquiry" />
     <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster" FromRole="EmployeeMaster" ToRole="PurchaseInvoice" />
@@ -1582,58 +1568,6 @@
     <NavigationProperty Name="Expense" Relationship="Self.FK_ExpenseDetails_Expense" FromRole="ExpenseDetails" ToRole="Expense" />
     <NavigationProperty Name="ItemUnit" Relationship="Self.FK_ExpenseDetails_ItemUnit" FromRole="ExpenseDetails" ToRole="ItemUnit" />
   </EntityType>
-  <EntityType Name="ExportShipment">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
-    <Property Name="ManifestNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ConsignorName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="OriginAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="DestinationAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="FlightDate" Type="DateTime" Precision="3" />
-    <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Bags" Type="Int32" />
-    <Property Name="RunNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="TotalAWB" Type="Int32" Nullable="false" />
-    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="EmployeeID" Type="Int32" />
-    <Property Name="AgentID" Type="Int32" />
-    <Property Name="LastEditedByLoginID" Type="Int32" />
-    <Property Name="ShipmentTypeId" Type="Int32" />
-    <Property Name="AcFinancialYearID" Type="Int32" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK__ExportShi__Emplo__2E46C4CB" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster1" Relationship="Self.FK__ExportShi__Emplo__2F3AE904" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster2" Relationship="Self.FK__ExportShi__Emplo__302F0D3D" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster3" Relationship="Self.FK__ExportShi__Emplo__31233176" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster4" Relationship="Self.FK__ExportShi__LastE__321755AF" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster5" Relationship="Self.FK__ExportShi__LastE__330B79E8" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster6" Relationship="Self.FK__ExportShi__LastE__33FF9E21" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster7" Relationship="Self.FK__ExportShi__LastE__34F3C25A" FromRole="ExportShipment" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="ImportShipmentDetails" Relationship="Self.FK__ImportShi__Expor__38C4533E" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
-    <NavigationProperty Name="ImportShipmentDetails1" Relationship="Self.FK__ImportShi__Expor__39B87777" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
-    <NavigationProperty Name="ImportShipmentDetails2" Relationship="Self.FK__ImportShi__Expor__3AAC9BB0" FromRole="ExportShipment" ToRole="ImportShipmentDetails" />
-    <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_ExportShipment" FromRole="ExportShipment" ToRole="ExportShipmentDetails" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="AcCompanyId" Type="Int32" />
-    <Property Name="ACJournalID" Type="Int32" />
-  </EntityType>
   <EntityType Name="ExportShipmentDetail">
     <Key>
       <PropertyRef Name="ShipmentDetailID" />
@@ -1662,7 +1596,6 @@
     <Property Name="InscanId" Type="Int32" />
     <Property Name="ImportShipmentDetailID" Type="Int32" />
     <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster" FromRole="ExportShipmentDetails" ToRole="CurrencyMaster" />
-    <NavigationProperty Name="ExportShipment" Relationship="Self.FK_S_ExportShipmentDetails_S_ExportShipment" FromRole="ExportShipmentDetails" ToRole="ExportShipment" />
   </EntityType>
   <EntityType Name="FAInvoice">
     <Key>
@@ -1948,9 +1881,6 @@
     <Property Name="QuickInscanID" Type="Int32" />
     <Property Name="StatusTypeId" Type="Int32" />
     <Property Name="CourierStatusID" Type="Int32" />
-    <NavigationProperty Name="ExportShipment" Relationship="Self.FK__ImportShi__Expor__38C4533E" FromRole="ImportShipmentDetails" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipment1" Relationship="Self.FK__ImportShi__Expor__39B87777" FromRole="ImportShipmentDetails" ToRole="ExportShipment" />
-    <NavigationProperty Name="ExportShipment2" Relationship="Self.FK__ImportShi__Expor__3AAC9BB0" FromRole="ImportShipmentDetails" ToRole="ExportShipment" />
     <NavigationProperty Name="ImportShipment" Relationship="Self.FK_S_Shipment_S_ImportShipment" FromRole="ImportShipmentDetails" ToRole="ImportShipment" />
   </EntityType>
   <EntityType Name="InScan">
@@ -2157,163 +2087,6 @@
     <NavigationProperty Name="InScanInternational" Relationship="Self.FK_InScanInternationalDeatils_InScanInternational" FromRole="InScanInternationalDeatils" ToRole="InScanInternational" />
     <NavigationProperty Name="OtherCharge" Relationship="Self.FK_InScanInternationalDeatils_OtherCharge" FromRole="InScanInternationalDeatils" ToRole="OtherCharge" />
   </EntityType>
-  <EntityType Name="InScanMaster">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
-    <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="DepotID" Type="Int32" />
-    <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="AssignedEmployeeID" Type="Int32" />
-    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ShipmentType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="Vehicle" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
-    <Property Name="EnteredByID" Type="Int32" />
-    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="IsEnquiry" Type="Boolean" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="PickupRequestStatusId" Type="Int32" />
-    <Property Name="PickedUpEmpID" Type="Int32" />
-    <Property Name="PickedupDate" Type="DateTime" Precision="3" />
-    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
-    <Property Name="CargoDescription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="StatedWeight" Type="Double" />
-    <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="BagNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PalletNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="HandlingInstruction" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="SpecialInstructions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="TypeOfGoodID" Type="Int32" />
-    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="MovementID" Type="Int32" />
-    <Property Name="ProductTypeID" Type="Int32" />
-    <Property Name="CustomerRateID" Type="Int32" />
-    <Property Name="QuickInscanID" Type="Int32" />
-    <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="SubReasonId" Type="Int32" />
-    <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="SeviceCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="ParcelTypeId" Type="Int32" />
-    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="StatusTypeId" Type="Int32" />
-    <Property Name="IsDeleted" Type="Boolean" />
-    <Property Name="PaymentModeId" Type="Int32" />
-    <Property Name="DepotReceivedBy" Type="Int32" />
-    <Property Name="DocumentTypeId" Type="Int32" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
-    <Property Name="DRSID" Type="Int32" />
-    <Property Name="AcFinancialYearID" Type="Int32" />
-    <NavigationProperty Name="CustomerInvoiceDetails" Relationship="Self.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetails" />
-    <NavigationProperty Name="InscanOtherCharges" Relationship="Self.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="ManifestID" Type="Int32" />
-    <Property Name="CreatedBy" Type="Int32" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-    <Property Name="LastModifiedBy" Type="Int32" />
-    <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
-    <Property Name="AcHeadID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="InScanMasterNew">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="EnquiryDate" Type="DateTime" Precision="3" />
-    <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="DepotID" Type="Int32" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress1" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress2" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress1" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress2" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="AssignedEmployeeID" Type="Int32" />
-    <Property Name="CollectedEmpID" Type="Int32" />
-    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ShipmentType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="Vehicle" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
-    <Property Name="EnteredByID" Type="Int32" />
-    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="IsEnquiry" Type="Boolean" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="PickupRequestStatusId" Type="Int32" />
-    <Property Name="CollectedTime" Type="DateTime" Precision="3" />
-    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Weight" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CargoDescription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="StatedWeight" Type="Double" />
-    <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="BagNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PalletNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="HandlingInstruction" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="SpecialInstructions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="TypeOfGoodID" Type="Int32" />
-    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="MovementID" Type="Int32" />
-    <Property Name="ProductTypeID" Type="Int32" />
-    <Property Name="CustomerRateID" Type="Int32" />
-    <Property Name="QuickInscanID" Type="Int32" />
-  </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
       <PropertyRef Name="InscanOtherChargeID" />
@@ -2324,8 +2097,8 @@
     <Property Name="InscanID" Type="Int32" />
     <Property Name="TaxPercentage" Type="Decimal" Precision="6" Scale="2" />
     <Property Name="Reimbursement" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="InScanMaster" Relationship="Self.FK_InscanOtherCharge_InScan" FromRole="InscanOtherCharge" ToRole="InScanMaster" />
     <NavigationProperty Name="OtherCharge" Relationship="Self.FK_InscanOtherCharge_OtherCharge" FromRole="InscanOtherCharge" ToRole="OtherCharge" />
+    <NavigationProperty Name="InScanMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InscanOtherCharge" ToRole="InScanMaster" />
   </EntityType>
   <EntityType Name="InScantransfer">
     <Key>
@@ -2442,7 +2215,7 @@
       <PropertyRef Name="LocationID" />
     </Key>
     <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CityID" Type="Int32" />
     <Property Name="IsDefault" Type="Boolean" />
     <NavigationProperty Name="AcCompanies" Relationship="Self.FK_AcCompany_LocationMaster" FromRole="LocationMaster" ToRole="AcCompany" />
@@ -2941,15 +2714,6 @@
     <NavigationProperty Name="ItemUnit" Relationship="Self.FK_PurchaseOrderDetails_ItemUnit" FromRole="PurchaseOrderDetails" ToRole="ItemUnit" />
     <NavigationProperty Name="Product" Relationship="Self.FK_PurchaseOrderDetails_Products" FromRole="PurchaseOrderDetails" ToRole="Products" />
     <NavigationProperty Name="PurchaseOrder" Relationship="Self.FK_PurchaseOrderDetails_PurchaseOrder" FromRole="PurchaseOrderDetails" ToRole="PurchaseOrder" />
-  </EntityType>
-  <EntityType Name="QuickInScanDetail">
-    <Key>
-      <PropertyRef Name="QuickInscanDetailId" />
-    </Key>
-    <Property Name="QuickInscanDetailId" Type="Int32" Nullable="false" />
-    <Property Name="QuickInscanID" Type="Int32" />
-    <Property Name="InScanId" Type="Int32" />
-    <Property Name="AWBNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>
@@ -3643,13 +3407,6 @@
     <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="CustomCharge" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="test1">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" />
-    <Property Name="weight1" Type="Decimal" Precision="18" Scale="2" />
-  </EntityType>
   <EntityType Name="Type">
     <Key>
       <PropertyRef Name="TypeID" />
@@ -3837,7 +3594,7 @@
       <PropertyRef Name="ZoneCategoryID" />
     </Key>
     <Property Name="ZoneCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ZoneCategory1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ZoneCategory1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="StatusBaseCategory" Type="Boolean" />
     <NavigationProperty Name="CustomerRateTypes" Relationship="Self.FK_CustomerRateType_ZoneCategory" FromRole="ZoneCategory" ToRole="CustomerRateType" />
     <NavigationProperty Name="ForwardingAgentMasters" Relationship="Self.FK_ForwardingAgentMaster_ZoneCategory" FromRole="ZoneCategory" ToRole="ForwardingAgentMaster" />
@@ -3879,7 +3636,7 @@
       <PropertyRef Name="ZoneID" />
     </Key>
     <Property Name="ZoneID" Type="Int32" Nullable="false" />
-    <Property Name="ZoneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ZoneName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="StatusZone" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <Property Name="ZoneType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="ZoneCharts" Relationship="Self.FK_ZoneChart_ZoneMaster" FromRole="ZoneMaster" ToRole="ZoneChart" />
@@ -4905,18 +4662,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CustomerInvoiceDetails_InScan">
-    <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
-    <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="CustomerInvoiceDetails">
-        <PropertyRef Name="InscanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_CustomerMaster_LocationMaster">
     <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
     <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
@@ -5255,102 +5000,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__2E46C4CB">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__2F3AE904">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__302F0D3D">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__Emplo__31233176">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__321755AF">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__330B79E8">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__33FF9E21">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__34F3C25A">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_EmployeeMaster_LocationMaster">
     <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
@@ -5470,54 +5119,6 @@
       </Principal>
       <Dependent Role="ExpenseDetails">
         <PropertyRef Name="ItemUnitID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__38C4533E">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__39B87777">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ImportShi__Expor__3AAC9BB0">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
-    <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ImportShipmentDetails">
-        <PropertyRef Name="ExportShipmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_ExportShipmentDetails_S_ExportShipment">
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="1" />
-    <End Role="ExportShipmentDetails" Type="Self.ExportShipmentDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ExportShipment">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ExportShipmentDetails">
-        <PropertyRef Name="ExportID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -5652,18 +5253,6 @@
       </Principal>
       <Dependent Role="InScanInternationalDeatils">
         <PropertyRef Name="Type" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InscanOtherCharge_InScan">
-    <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
-    <End Role="InscanOtherCharge" Type="Self.InscanOtherCharge" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="InscanOtherCharge">
-        <PropertyRef Name="InscanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6181,7 +5770,6 @@
     <EntitySet Name="CustomerRateAssigns" EntityType="Self.CustomerRateAssign" />
     <EntitySet Name="CustomerRateDets" EntityType="Self.CustomerRateDet" />
     <EntitySet Name="CustomerRateTypes" EntityType="Self.CustomerRateType" />
-    <EntitySet Name="CustomerTypes" EntityType="Self.CustomerType" />
     <EntitySet Name="CustSuppJVs" EntityType="Self.CustSuppJV" />
     <EntitySet Name="DebitNotes" EntityType="Self.DebitNote" />
     <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetail" />
@@ -6200,7 +5788,6 @@
     <EntitySet Name="EmployeeMasters" EntityType="Self.EmployeeMaster" />
     <EntitySet Name="Expenses" EntityType="Self.Expense" />
     <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetail" />
-    <EntitySet Name="ExportShipments" EntityType="Self.ExportShipment" />
     <EntitySet Name="ExportShipmentDetails" EntityType="Self.ExportShipmentDetail" />
     <EntitySet Name="FAInvoices" EntityType="Self.FAInvoice" />
     <EntitySet Name="FAInvoiceDetails" EntityType="Self.FAInvoiceDetail" />
@@ -6219,8 +5806,6 @@
     <EntitySet Name="InScanDomestics" EntityType="Self.InScanDomestic" />
     <EntitySet Name="InScanInternationals" EntityType="Self.InScanInternational" />
     <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatil" />
-    <EntitySet Name="InScanMasters" EntityType="Self.InScanMaster" />
-    <EntitySet Name="InScanMasterNews" EntityType="Self.InScanMasterNew" />
     <EntitySet Name="InscanOtherCharges" EntityType="Self.InscanOtherCharge" />
     <EntitySet Name="InScantransfers" EntityType="Self.InScantransfer" />
     <EntitySet Name="Items" EntityType="Self.Item" />
@@ -6265,7 +5850,6 @@
     <EntitySet Name="PurchaseInvoiceDetails" EntityType="Self.PurchaseInvoiceDetail" />
     <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
     <EntitySet Name="PurchaseOrderDetails" EntityType="Self.PurchaseOrderDetail" />
-    <EntitySet Name="QuickInScanDetails" EntityType="Self.QuickInScanDetail" />
     <EntitySet Name="QuickInscanMasters" EntityType="Self.QuickInscanMaster" />
     <EntitySet Name="Quotations" EntityType="Self.Quotation" />
     <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetail" />
@@ -6314,7 +5898,6 @@
     <EntitySet Name="tblVehicleRequiredTypes" EntityType="Self.tblVehicleRequiredType" />
     <EntitySet Name="TempCommissions" EntityType="Self.TempCommission" />
     <EntitySet Name="tempTables" EntityType="Self.tempTable" />
-    <EntitySet Name="test1" EntityType="Self.test1" />
     <EntitySet Name="Types" EntityType="Self.Type" />
     <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGood" />
     <EntitySet Name="UMDesignations" EntityType="Self.UMDesignation" />
@@ -6602,10 +6185,6 @@
       <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
       <End Role="CustomerEnquiry" EntitySet="CustomerEnquiries" />
     </AssociationSet>
-    <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="Self.FK_CustomerInvoiceDetails_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMasters" />
-      <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
-    </AssociationSet>
     <AssociationSet Name="FK_CustomerMaster_LocationMaster" Association="Self.FK_CustomerMaster_LocationMaster">
       <End Role="LocationMaster" EntitySet="LocationMasters" />
       <End Role="CustomerMaster" EntitySet="CustomerMasters" />
@@ -6718,38 +6297,6 @@
       <End Role="DRSEmployeeID" EntitySet="DRSEmployeeIDs" />
       <End Role="DRSEmployee" EntitySet="DRSEmployees" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2F3AE904" Association="Self.FK__ExportShi__Emplo__2F3AE904">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__302F0D3D" Association="Self.FK__ExportShi__Emplo__302F0D3D">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__31233176" Association="Self.FK__ExportShi__Emplo__31233176">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__321755AF" Association="Self.FK__ExportShi__LastE__321755AF">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__330B79E8" Association="Self.FK__ExportShi__LastE__330B79E8">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__33FF9E21" Association="Self.FK__ExportShi__LastE__33FF9E21">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__34F3C25A" Association="Self.FK__ExportShi__LastE__34F3C25A">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-    </AssociationSet>
     <AssociationSet Name="FK_EmployeeMaster_LocationMaster" Association="Self.FK_EmployeeMaster_LocationMaster">
       <End Role="LocationMaster" EntitySet="LocationMasters" />
       <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
@@ -6789,22 +6336,6 @@
     <AssociationSet Name="FK_ExpenseDetails_ItemUnit" Association="Self.FK_ExpenseDetails_ItemUnit">
       <End Role="ItemUnit" EntitySet="ItemUnits" />
       <End Role="ExpenseDetails" EntitySet="ExpenseDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__38C4533E" Association="Self.FK__ImportShi__Expor__38C4533E">
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__39B87777" Association="Self.FK__ImportShi__Expor__39B87777">
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__3AAC9BB0" Association="Self.FK__ImportShi__Expor__3AAC9BB0">
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-      <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_ExportShipmentDetails_S_ExportShipment" Association="Self.FK_S_ExportShipmentDetails_S_ExportShipment">
-      <End Role="ExportShipment" EntitySet="ExportShipments" />
-      <End Role="ExportShipmentDetails" EntitySet="ExportShipmentDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_FAInvoiceDetails_FAInvoice" Association="Self.FK_FAInvoiceDetails_FAInvoice">
       <End Role="FAInvoice" EntitySet="FAInvoices" />
@@ -6849,10 +6380,6 @@
     <AssociationSet Name="FK_InScanInternationalDeatils_OtherCharge" Association="Self.FK_InScanInternationalDeatils_OtherCharge">
       <End Role="OtherCharge" EntitySet="OtherCharges" />
       <End Role="InScanInternationalDeatils" EntitySet="InScanInternationalDeatils" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="Self.FK_InscanOtherCharge_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMasters" />
-      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharges" />
     </AssociationSet>
     <AssociationSet Name="FK_InscanOtherCharge_OtherCharge" Association="Self.FK_InscanOtherCharge_OtherCharge">
       <End Role="OtherCharge" EntitySet="OtherCharges" />
@@ -7163,7 +6690,6 @@
       <Parameter Name="AcGroupID" Mode="In" Type="Int32" />
       <Parameter Name="UserID" Mode="In" Type="Int32" />
       <Parameter Name="Prefix" Mode="In" Type="String" />
-      <Parameter Name="AccountDescription" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="AcHeadSelectAll" ReturnType="Collection(DB_9F57C4_couriertest_newModel.AcHeadSelectAll_Result)">
       <Parameter Name="BranchID" Mode="In" Type="Int32" />
@@ -9192,7 +8718,9 @@
     <FunctionImport Name="SP_GetAdvanceAmountOfCustomer" ReturnType="Collection(Decimal)">
       <Parameter Name="CustomerID" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)" />
+    <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)">
+      <Parameter Name="FYearId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <FunctionImport Name="SP_GetAllRecieptsDetailsByDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetailsByDate_Result)">
       <Parameter Name="FromDate" Mode="In" Type="String" />
       <Parameter Name="Todate" Mode="In" Type="String" />
@@ -9542,6 +9070,17 @@
       <End Role="CustomerInvoice" EntitySet="CustomerInvoices" />
       <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
     </AssociationSet>
+    <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
+    <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
+    <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan">
+      <End Role="InScanMaster" EntitySet="InScanMasters" />
+      <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan">
+      <End Role="InScanMaster" EntitySet="InScanMasters" />
+      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharges" />
+    </AssociationSet>
+    <EntitySet Name="ExportShipments" EntityType="DB_9F57C4_couriertest_newModel.ExportShipment" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13279,4 +12818,174 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="RecPayAllocationDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RecPayDetailID" Type="Int32" />
+    <Property Name="CustomerInvoiceID" Type="Int32" />
+    <Property Name="CustomerInvoiceDetailID" Type="Int32" />
+    <Property Name="AllocatedAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="InScanMaster">
+    <Key>
+      <PropertyRef Name="InScanID" />
+    </Key>
+    <Property Name="InScanID" Type="Int32" Nullable="false" />
+    <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
+    <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="DepotID" Type="Int32" />
+    <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="AssignedEmployeeID" Type="Int32" />
+    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ShipmentType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="VehicleID" Type="Int32" />
+    <Property Name="Vehicle" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
+    <Property Name="EnteredByID" Type="Int32" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnquiry" Type="Boolean" />
+    <Property Name="CourierStatusID" Type="Int32" />
+    <Property Name="PickupRequestStatusId" Type="Int32" />
+    <Property Name="PickedUpEmpID" Type="Int32" />
+    <Property Name="PickedupDate" Type="DateTime" Precision="3" />
+    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="CargoDescription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="StatedWeight" Type="Double" />
+    <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="BagNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PalletNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="HandlingInstruction" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="SpecialInstructions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="TypeOfGoodID" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="MovementID" Type="Int32" />
+    <Property Name="ProductTypeID" Type="Int32" />
+    <Property Name="CustomerRateID" Type="Int32" />
+    <Property Name="QuickInscanID" Type="Int32" />
+    <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="SeviceCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ParcelTypeId" Type="Int32" />
+    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="SubReasonId" Type="Int32" />
+    <Property Name="StatusTypeId" Type="Int32" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="PaymentModeId" Type="Int32" />
+    <Property Name="DepotReceivedBy" Type="Int32" />
+    <Property Name="DocumentTypeId" Type="Int32" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="ManifestID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetail" />
+    <NavigationProperty Name="InscanOtherCharges" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
+  </EntityType>
+  <Association Name="FK_CustomerInvoiceDetails_InScan">
+    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Role="CustomerInvoiceDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InScanMaster">
+        <PropertyRef Name="InScanID" />
+      </Principal>
+      <Dependent Role="CustomerInvoiceDetail">
+        <PropertyRef Name="InscanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InscanOtherCharge_InScan">
+    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.InscanOtherCharge" Role="InscanOtherCharge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InScanMaster">
+        <PropertyRef Name="InScanID" />
+      </Principal>
+      <Dependent Role="InscanOtherCharge">
+        <PropertyRef Name="InscanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ExportShipment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ManifestNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ConsignorName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="OriginAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="DestinationAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="FlightDate" Type="DateTime" Precision="3" />
+    <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Bags" Type="Int32" />
+    <Property Name="RunNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TotalAWB" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EmployeeID" Type="Int32" />
+    <Property Name="AgentID" Type="Int32" />
+    <Property Name="LastEditedByLoginID" Type="Int32" />
+    <Property Name="ShipmentTypeId" Type="Int32" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="AcCompanyId" Type="Int32" />
+    <Property Name="ACJournalID" Type="Int32" />
+  </EntityType>
 </Schema>
