@@ -548,6 +548,50 @@ namespace CMSV2.DAL
             return "OK";
 
         }
+
+        public static List<QuickAWBVM> GetAWBList(int StatusId,DateTime FromDate,DateTime ToDate,int BranchId,int DepotId, string AWBNo)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAWBList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@pStatusId",StatusId);
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@BranchId", BranchId);
+            cmd.Parameters.AddWithValue("@DepotId", DepotId);
+            cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<QuickAWBVM> objList = new List<QuickAWBVM>();
+            QuickAWBVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new QuickAWBVM();
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanID"].ToString());
+                    obj.HAWBNo = ds.Tables[0].Rows[i]["HAWBNo"].ToString();
+                    obj.shippername= ds.Tables[0].Rows[i]["shippername"].ToString();
+                    obj.consigneename = ds.Tables[0].Rows[i]["consigneename"].ToString();
+                    obj.destination = ds.Tables[0].Rows[i]["destination"].ToString();
+                    obj.InScanDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InScanDate"].ToString());
+                    obj.CourierStatus = ds.Tables[0].Rows[i]["CourierStatus"].ToString();
+                    obj.StatusType = ds.Tables[0].Rows[i]["StatusType"].ToString();
+                    obj.totalCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["totalCharge"].ToString());                    
+                    obj.paymentmode = ds.Tables[0].Rows[i]["paymentmode"].ToString();
+                    obj.ConsigneePhone= ds.Tables[0].Rows[i]["ConsigneePhone"].ToString();
+                    obj.CreatedByName = ds.Tables[0].Rows[i]["CreatedByName"].ToString();
+                    obj.LastModifiedByName= ds.Tables[0].Rows[i]["LastModifiedByName"].ToString();
+                    obj.CreatedByDate = ds.Tables[0].Rows[i]["CreatedByDate"].ToString();
+                    obj.LastModifiedDate = ds.Tables[0].Rows[i]["LastModifiedDate"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
     }
 
 }

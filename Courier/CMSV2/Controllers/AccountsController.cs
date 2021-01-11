@@ -3477,6 +3477,8 @@ new AcGroupModel()
 
         public ActionResult CustomerLedger()
         {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
             CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
             if (model == null)
             {
@@ -3490,7 +3492,11 @@ new AcGroupModel()
                     ReportType="Ledger"
                 };
             }
+            
             SessionDataModel.SetCustomerLedgerParam(model);
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
             ViewBag.ReportName = "Customer Ledger";             
                 if (Session["ReportOutput"] != null)
                 {
@@ -3530,8 +3536,9 @@ new AcGroupModel()
             Response.ClearHeaders();
             if (model.ReportType=="Ledger")
             {
-                AccountsReportsDAO.GenerateCustomerLedgerReport();
-            }
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }            
             else
             {
                 AccountsReportsDAO.GenerateCustomerOutStandingReport();

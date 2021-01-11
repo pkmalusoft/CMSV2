@@ -777,9 +777,10 @@ namespace CMSV2.Controllers
             int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
             DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var sdate = DateTime.Parse(fdate);
-            var edate = DateTime.Parse(tdate);
-
+            //var sdate = DateTime.Parse(fdate);
+            //var edate = DateTime.Parse(tdate);
+            var sdate = Convert.ToDateTime(fdate);
+            var edate = Convert.ToDateTime(tdate);
 
             //var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.IsTradingReceipt == true && x.FYearID == FYearID).OrderByDescending(x => x.RecPayDate).ToList();
             //var cust = Context1.SP_GetAllRecieptsDetailsByDate(fdate, tdate, FYearID).ToList();
@@ -836,6 +837,9 @@ namespace CMSV2.Controllers
             {
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // // ToDate = DateTime.Now;
+
+                pFromDate = AccountsDAO.CheckParamDate(pFromDate, FyearId).Date;
+                pToDate = AccountsDAO.CheckParamDate(pToDate, FyearId).Date.AddDays(1);
             }
             else
             {
@@ -843,7 +847,8 @@ namespace CMSV2.Controllers
                 pToDate = Convert.ToDateTime(ToDate).AddDays(1);
 
             }
-            
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId,pFromDate,pToDate); // RP.GetAllReciepts();
 
            // var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
@@ -872,6 +877,7 @@ namespace CMSV2.Controllers
         [HttpGet]
         public ActionResult CustomerTradeReceipt(int id)
         {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
             CustomerRcieptVM cust = new CustomerRcieptVM();
             cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
             if (Session["UserID"] != null)
@@ -880,6 +886,7 @@ namespace CMSV2.Controllers
 
                 if (id > 0)
                 {
+                    ViewBag.Title = "Customer Receipt - Modify";
                     cust = RP.GetRecPayByRecpayID(id);
 
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
@@ -895,10 +902,13 @@ namespace CMSV2.Controllers
                     {
                         if (item.InvoiceID > 0)
                         {
-                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
+                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d ).ToList();
+                            var awbDetail = (from d in Context1.RecPayAllocationDetails where d.CustomerInvoiceID == item.InvoiceID && d.RecPayDetailID == item.RecPayDetailID select d).ToList();
                             if (sInvoiceDetail != null)
                             {
-                                var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == sInvoiceDetail.CustomerInvoiceID select d).FirstOrDefault();
+                                var invoicetotal = sInvoiceDetail.Sum(d => d.CourierCharge) + sInvoiceDetail.Sum(d=>d.OtherCharge);
+                                var awbtotal = awbDetail.Sum(d => d.AllocatedAmount);
+                                var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                                 var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == item.InvoiceID select d).ToList();
                                 var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                                 var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
@@ -913,11 +923,11 @@ namespace CMSV2.Controllers
                                 customerinvoice.InvoiceID = Convert.ToInt32(item.InvoiceID);
                                 customerinvoice.SInvoiceNo = Sinvoice.CustomerInvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
-                                customerinvoice.AmountToBePaid = Convert.ToDecimal(totamtpaid);
+                                customerinvoice.AmountToBePaid =(Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount);
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
-                                customerinvoice.Balance = Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
+                                customerinvoice.Balance = (Convert.ToDecimal(invoicetotal)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
                                 customerinvoice.RecPayDetailID = item.RecPayDetailID;
-                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(sInvoiceDetail.NetValue);
+                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(awbtotal); // Convert.ToDecimal(sInvoiceDetail.NetValue);
                                 customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
                                 customerinvoice.AdjustmentAmount = Convert.ToDecimal(item.AdjustmentAmount);
                                 cust.CustomerRcieptChildVM.Add(customerinvoice);
@@ -929,6 +939,7 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
+                    ViewBag.Title = "Customer Receipt - Create";
                     BindAllMasters(2);
 
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
@@ -936,9 +947,9 @@ namespace CMSV2.Controllers
 
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
-                    
 
-                    cust.RecPayDate = System.DateTime.UtcNow;
+                    DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+                    cust.RecPayDate = pFromDate;
                     cust.RecPayID = 0;
                     cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 }
@@ -996,7 +1007,7 @@ namespace CMSV2.Controllers
         public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived,int? RecPayId)
         {
 
-            DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
+           DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).ToList();
             List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();

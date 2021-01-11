@@ -12,7 +12,7 @@
     decimal fwdothercharge = 0;
     var currency = "";
 }
-
+<script src="~/Content/plugins/excel/jquery.table2excel.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
@@ -24,6 +24,22 @@
 
 </script>
 <script>
+    function ExportExcel() {
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date.toString() + curr_month.toString() + curr_year.toString() + '_' + d.getHours() + d.getMinutes();
+        $("#dataTables-example").table2excel({
+            filename: "ExportManifestMaster_" + reqdate + ".xls"
+        });
+        $("#table2").table2excel({
+            filename: "ExportManifestDetail_" + reqdate + ".xls"
+        });
+        
+    }
      function setTwoNumberDecimal(obj) {
         if ($(obj).val() == null || $(obj).val() == "") {
             $(obj).val(0);
@@ -60,6 +76,7 @@
 <div class="row no-margin" style="padding-top: 10px">
     <div class="col-md-12 btn-right">
         <input type="button" value="Print" class="btn btn-primary btnwidth" onclick="printDiv()" />&nbsp;&nbsp;
+        <a class="btn btn-primary btnwidth" title="Export to Excel" style="width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>
         @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
     </div>
 </div>
@@ -219,7 +236,7 @@
     <section class="invoiceInfo">
         <div class="invoiceRow d-flex">
 
-            <table>
+            <table id="dataTables-example">
                 <tr>
                     <th>Manifest No.</th>
                     <th>Consignor Name</th>
@@ -301,7 +318,7 @@
     </section>
     <section class="particulars" style="margin-top:10px">
         <div class="particularInner">
-            <table>
+            <table id="table2">
                 <thead>
                     <tr>
                         <th>

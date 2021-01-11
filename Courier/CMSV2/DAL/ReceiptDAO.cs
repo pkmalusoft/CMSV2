@@ -60,8 +60,8 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_GetAllRecieptsDetailsByDate";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@FromDate", FromDate);
-            cmd.Parameters.AddWithValue("@Todate", ToDate);
+            cmd.Parameters.AddWithValue("@FromDate",Convert.ToDateTime(FromDate).ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@Todate", Convert.ToDateTime(ToDate).ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@FyearId", FyearID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);

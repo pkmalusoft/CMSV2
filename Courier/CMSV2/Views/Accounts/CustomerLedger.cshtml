@@ -40,9 +40,10 @@
 
         }*@
         $('#ReportType').change(function () {
-            if ($('#ReportType').val() != "Ledger") {
+            if ($('#ReportType').val() == "OutStanding") {
                 $("#CustomerName").val('');
                 $("#CustomerName").attr('readonly', 'readonly');
+                $("#CustomerName").removeAttr('required');
             }
             else {
                 $("#CustomerName").removeAttr('readonly');
@@ -88,6 +89,7 @@
             },
 
         });
+        $('#ReportType').trigger('change');
     });
 </script>
 
@@ -137,8 +139,8 @@
                 <label class="headinglabel">Report Type</label>
                 @Html.DropDownList("ReportType", new List<SelectListItem>
                {
-                   new SelectListItem{ Text="Ledger", Value = "Ledger" },
-                   new SelectListItem{ Text="Outstanding", Value = "OutStanding" }
+                   new SelectListItem{ Text="Ledger", Value = "Ledger" },                   
+                   new SelectListItem{ Text="OutStanding", Value = "OutStanding" }
 
                 }, "Select", new { @class = "form-control" })
             </div>

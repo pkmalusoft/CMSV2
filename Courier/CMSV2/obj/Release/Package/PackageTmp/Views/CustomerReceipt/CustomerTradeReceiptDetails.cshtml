@@ -83,19 +83,24 @@
 
 
         $(function () {
-            $('#FromDate').datetimepicker({ format: 'DD-MMM-YYYY' });
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         });
 
         $(function () {
-            $('#ToDate').datetimepicker({ format: 'DD-MMM-YYYY' });
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
             $('#ToDate').datepicker("setDate", new Date());
         });
 
+        if ($("#FromDate").val()=="")
+                $("#FromDate").val('@ViewBag.FromDate');
 
-        $("#FromDate").val(GetCurrentDate());
-        $("#ToDate").val(GetEndDate());
+        if ($("#ToDate").val()=="")
+             $("#ToDate").val('@ViewBag.ToDate');
+
+        //$("#FromDate").val(GetCurrentDate());
+        //$("#ToDate").val(GetEndDate());
 
         function GetCurrentDate() {
             var m_names = new Array("Jan", "Feb", "Mar",

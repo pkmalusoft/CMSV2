@@ -356,11 +356,14 @@
             if (modeid == 1 ) { //PKP
                 $('#divcustomer').addClass('hide');
                 $('#divcash').removeClass('hide');
+                $('#AcHeadName').attr('required', 'required');
             }
             else
             {
                 $('#divcustomer').removeClass('hide');
+                $('#divcustomer').removeClass('hide');
                 $('#divcash').addClass('hide');
+                $('#AcHeadName').removeAttr('required');
             }
 
             if (modeid == 1 || modeid == 2) { //PKP

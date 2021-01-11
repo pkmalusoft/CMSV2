@@ -41,6 +41,13 @@
         {
             width:50px!important;
         }
+        .colorred
+        {
+            color:#c6250f;
+        }
+        .colorblue {
+            color: #273ef3;
+        }
         /* .dataTables_paginate 
          {
              display:block!important;
@@ -106,7 +113,7 @@
 
 
             var table = $('#dataTables-example').DataTable({
-                "aaSorting": [],
+                "aaSorting": []
                 //"dom": '<"top"i>rt<"top"flp><"clear">',
                 	//dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
                  //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -241,7 +248,7 @@
                 <p class="indexbtnpadding">
                     @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                     {
-                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth",@Title="Create Not allowed in the previous financial year" })
+                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
                     }
                     else
                     {
@@ -287,11 +294,8 @@
                         </th>
                         <th width="15%">
                             @Html.Label("Receiver/Consignee")
-                        </th>
-                        <th width="3%" class="tdphone">
-                            Phone No.
-                        </th>
-                        <th width="15%">
+                        </th>                        
+                        <th width="5%">
                             @Html.Label("Destination")
                         </th>
                         <th>
@@ -303,8 +307,8 @@
                         <th width="15%">
                             @Html.Label("Status")
                         </th>
-
-                        <th width="15%">Action</th>
+                        <th width="12%">Audit</th>
+                        <th width="10%">Action</th>
                     </tr>
                 </thead>
 
@@ -361,10 +365,9 @@
 
                             <td>
                                 @Html.DisplayFor(modelItem => item.consigneename)
-                            </td>
-                            <td class="tdphone">
+                                <br />
                                 @Html.DisplayFor(modelItem => item.ConsigneePhone)
-                            </td>
+                            </td>                            
                             <td class="textright">
                                 @Html.DisplayFor(modelItem => item.destination)
                             </td>
@@ -378,6 +381,11 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.CourierStatus)
                             </td>
+                            <td>
+                                <span class="colorblue" title="Created Detail" >@Html.DisplayFor(modelItem => item.CreatedByDate) - @Html.DisplayFor(modelItem => item.CreatedByName) </span>
+                                <br />
+                                <span class="colorred" title="Modified Detail" >@Html.DisplayFor(modelItem => item.LastModifiedDate) - @Html.DisplayFor(modelItem => item.LastModifiedByName)</span>
+</td>
                             <td>
                                 <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.InScanID')"><i class="fa fa-file"></i></a> |
                                 @if (ismodify)

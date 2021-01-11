@@ -47,25 +47,24 @@ namespace CMSV2.Controllers
 
             }
 
+            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(pStatusId, pFromDate, pToDate, branchid, depotId, "");
             
-                //List<QuickAWBVM> lst = (from c in db.InScans join t1 in db.CityMasters on c.ConsignorCityID equals t1.CityID join t2 in db.CityMasters on c.ConsigneeCityID equals t2.CityID join t3 in db.CustomerMasters on c.CustomerID equals t3.CustomerID select new QuickAWBVM { HAWBNo = c.AWBNo, customer = t3.CustomerName, shippername = c.ConsignorContact, consigneename = c.Consignee, origin = t1.City, destination = t2.City,InScanID=c.InScanID,InScanDate=c.InScanDate }).ToList();
-                //List<QuickAWBVM> lst = (from c in db.InScans select new QuickAWBVM { HAWBNo = c.AWBNo,shippername = c.Consignor, consigneename = c.Consignee, destination = c.DestinationLocation, InScanID = c.InScanID, InScanDate = c.InScanDate }).ToList();
-            List<QuickAWBVM> lst = (from c in db.InScanMasters
-                                    join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
-                                    from subpet in gj.DefaultIfEmpty()
-                                    join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
-                                    from subpet1 in  gj1.DefaultIfEmpty()
-                                    //join source in db.RequestTypes on c.RequestSource equals source.Id.ToString() into gj2
-                                    //from subpet3 in gj2.DefaultIfEmpty()
-                                    join pay in db.tblPaymentModes  on c.PaymentModeId equals pay.ID into gj2
-                                    from subpet2 in gj2.DefaultIfEmpty()
-                                    where c.BranchID == branchid   && c.DepotID==depotId 
-                                    //&& c.AcFinancialYearID==yearid                                
-                                    && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-                                     && (c.CourierStatusID == pStatusId || (pStatusId == 0 && c.CourierStatusID >= 4 && c.PickupRequestStatusId != null) || (pStatusId == 0 && c.PickupRequestStatusId == null))
-                                    && c.IsDeleted==false
-                                    orderby c.TransactionDate descending, c.AWBNo descending
-                                    select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone }).ToList();  //, requestsource=subpet3.RequestTypeName 
+            //List<QuickAWBVM> lst = (from c in db.InScanMasters
+            //                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
+            //                        from subpet in gj.DefaultIfEmpty()
+            //                        join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
+            //                        from subpet1 in  gj1.DefaultIfEmpty()
+            //                        //join source in db.RequestTypes on c.RequestSource equals source.Id.ToString() into gj2
+            //                        //from subpet3 in gj2.DefaultIfEmpty()
+            //                        join pay in db.tblPaymentModes  on c.PaymentModeId equals pay.ID into gj2
+            //                        from subpet2 in gj2.DefaultIfEmpty()
+            //                        where c.BranchID == branchid   && c.DepotID==depotId 
+            //                        //&& c.AcFinancialYearID==yearid                                
+            //                        && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
+            //                         && (c.CourierStatusID == pStatusId || (pStatusId == 0 && c.CourierStatusID >= 4 && c.PickupRequestStatusId != null) || (pStatusId == 0 && c.PickupRequestStatusId == null))
+            //                        && c.IsDeleted==false
+            //                        orderby c.TransactionDate descending, c.AWBNo descending
+            //                        select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,CreatedByName="",LastModifiedByName="" }).ToList();  //, requestsource=subpet3.RequestTypeName 
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
@@ -102,7 +101,9 @@ namespace CMSV2.Controllers
                 ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
                 ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.OtherCharge = db.OtherCharges.ToList();
+
             List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
+
             QuickAWBVM v = new QuickAWBVM();
                 if (id == 0)
                 {

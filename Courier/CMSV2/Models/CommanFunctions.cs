@@ -83,7 +83,7 @@ namespace CMSV2.Models
         public static string GetShortDateFormat(object iInputDate)
     {
       if (iInputDate != null)
-        return string.Format("{0:dd MMM yyyy}", (object) Convert.ToDateTime(iInputDate));
+        return string.Format("{0:dd/MM/yyyy}", (object) Convert.ToDateTime(iInputDate));
       return "";
     }
         public static bool CheckCreateEntryValid()
