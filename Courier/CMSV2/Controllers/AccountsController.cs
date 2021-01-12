@@ -3539,12 +3539,16 @@ new AcGroupModel()
                 //AccountsReportsDAO.GenerateCustomerLedgerReport();
                 AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
             }            
-            else
+            else if (model.ReportType=="OutStanding")
             {
                 AccountsReportsDAO.GenerateCustomerOutStandingReport();
             }
-            
-            return RedirectToAction("CustomerLedger", "Accounts", new { id = 1});
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("CustomerLedger", "Accounts");
                        
 
         }

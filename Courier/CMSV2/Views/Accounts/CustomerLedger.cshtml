@@ -44,9 +44,17 @@
                 $("#CustomerName").val('');
                 $("#CustomerName").attr('readonly', 'readonly');
                 $("#CustomerName").removeAttr('required');
+                $('#lblcustomername').removeClass('required');
+            }
+            else if ($('#ReportType').val() == "AWBOutStanding") {
+                $("#CustomerName").val('');
+                $("#CustomerName").removeAttr('readonly');
+                $("#CustomerName").removeAttr('required');
+                $('#lblcustomername').removeClass('required');
             }
             else {
                 $("#CustomerName").removeAttr('readonly');
+                $('#lblcustomername').addClass('required');
             }
         });
         $("#CustomerName").autocomplete({
@@ -117,7 +125,7 @@
             </div>
             <div class="col-md-12" id="divachead1">
                 <div id="divachead">
-                    <label class="headinglabel required">Customer Name</label>
+                    <label class="headinglabel required" id="lblcustomername" >Customer Name</label>
                     @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
                     @Html.HiddenFor(model => model.CustomerId)
                 </div>
@@ -140,8 +148,8 @@
                 @Html.DropDownList("ReportType", new List<SelectListItem>
                {
                    new SelectListItem{ Text="Ledger", Value = "Ledger" },                   
-                   new SelectListItem{ Text="OutStanding", Value = "OutStanding" }
-
+                   new SelectListItem{ Text="OutStanding", Value = "OutStanding" },
+                   new SelectListItem{ Text="AWB OutStanding", Value = "AWBOutStanding" }
                 }, "Select", new { @class = "form-control" })
             </div>
             <div class="col-md-2">
