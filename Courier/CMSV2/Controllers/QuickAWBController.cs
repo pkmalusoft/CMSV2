@@ -114,7 +114,23 @@ namespace CMSV2.Controllers
                     ViewBag.CourierStatusId = 0;
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
-                    ViewBag.EditMode = "false";                   
+                    ViewBag.EditMode = "false";
+                    int userId = Convert.ToInt32(Session["UserID"].ToString());
+                    var useremp = (from e in db.EmployeeMasters where e.UserID == userId select e).First();
+                    if (useremp!=null)
+                    {
+                    if (useremp.AcHeadID != null)
+                    {
+                        v.AcheadID = Convert.ToInt32(useremp.AcHeadID);
+                        var achead = db.AcHeads.Find(Convert.ToInt32(v.AcheadID));
+
+                        if (achead != null)
+                        {
+                            v.AcHeadName = achead.AcHead1;
+                        }
+                    }
+                }
+                    
                    v.otherchargesVM = otherchargesvm;             
 
 
@@ -822,8 +838,7 @@ namespace CMSV2.Controllers
 
                 inscan.MovementTypeID = data.MovementID;
                 inscan.ReceivedBy = data.DepotReceivedBy; // "tesT"; // data.ReceivedBy.Value;
-                inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;
-
+                inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;           
 
             if (data.CreatedBy != null)
             {
@@ -1083,6 +1098,7 @@ namespace CMSV2.Controllers
                   //&& (c.CourierStatusID == pStatusId || pStatusId == 0)
                   && c.IsDeleted == false
                    && (c.PaymentModeId == datePicker.paymentId ||  datePicker.paymentId == 0)
+                   && (c.AcHeadID==datePicker.AcHeadId || datePicker.AcHeadId==0)
                    orderby c.TransactionDate descending, c.AWBNo descending
                    select new QuickAWBVM
                    {
@@ -1134,6 +1150,7 @@ namespace CMSV2.Controllers
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
             ViewBag.StatusId = StatusId;
+            ViewBag.AcHeads = (from c in db.EmployeeMasters join a in db.AcHeads on c.AcHeadID equals a.AcHeadID select new { AcHeadId = a.AcHeadID, HeadName = a.AcHead1 }).ToList();
             decimal? plCourierCharge =lst.Sum(i => i.CourierCharge);
             decimal? pltotal = lst.Sum(i => i.totalCharge);
             decimal? plothertotal = lst.Sum(i => i.OtherCharge);
@@ -1157,6 +1174,7 @@ namespace CMSV2.Controllers
                 datePicker.FromDate = DateTime.Now.Date;
                 datePicker.ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                 datePicker.MovementId = "1,2,3,4";
+                datePicker.AcHeadId = 0;
             }
             if (datePicker != null)
             {
@@ -1175,6 +1193,7 @@ namespace CMSV2.Controllers
             ViewBag.Movement = db.CourierMovements.ToList();
             ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.Token = datePicker;
+            ViewBag.AcHeads = (from c in db.EmployeeMasters join a in db.AcHeads on c.AcHeadID equals a.AcHeadID select new { AcHeadId = a.AcHeadID, HeadName = a.AcHead1 }).ToList();
             SessionDataModel.SetTableVariable(datePicker);
             return View(datePicker);
 
@@ -1182,7 +1201,7 @@ namespace CMSV2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PrintSearch([Bind(Include = "FromDate,ToDate,paymentid,MovementId,SelectedValues")] DatePicker picker)
+        public ActionResult PrintSearch([Bind(Include = "FromDate,ToDate,paymentid,MovementId,SelectedValues,AcHeadId")] DatePicker picker)
         {
             DatePicker model = new DatePicker
             {
@@ -1194,7 +1213,8 @@ namespace CMSV2.Controllers
                 CustomerId = picker.CustomerId,
                 MovementId = picker.MovementId,
                 SelectedValues = picker.SelectedValues,
-                paymentId=picker.paymentId
+                paymentId=picker.paymentId,
+                AcHeadId=picker.AcHeadId
             };
             model.MovementId = "";
             if (picker.SelectedValues != null)

@@ -46,6 +46,7 @@ namespace CMSV2.Models
 
         public bool StatusCommision { get; set; }
 
+        public int AcHeadID { get; set; }
         public bool StatusActive { get; set; }
 
         public bool StatusDefault { get; set; }

@@ -26,7 +26,11 @@ namespace CMSV2.Controllers
                 d.DepartmentID = item.DepartmentID;
                 d.Department = item.Department1;
                 d.AcCompanyID = item.AcCompanyID.Value;
-                d.UserID = item.UserID.Value;
+                if (item.UserID != null)
+                {
+                    d.UserID = item.UserID.Value;
+                }
+
                 d.StatusDefaultI = item.StatusDefaultI;
                 d.StatusDefaultID = item.StatusDefaultD;
                 d.StatusDefaultCorgo = item.StatusDefaultCargo.Value;

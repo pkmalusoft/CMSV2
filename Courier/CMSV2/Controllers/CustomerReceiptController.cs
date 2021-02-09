@@ -895,13 +895,13 @@ namespace CMSV2.Controllers
                     ViewBag.acheadbank = acheadforbank;
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
                     cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
-                    cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation, cust.InvoiceID, 0,cust.RecPayID); //customer invoiceid,amount
-                    Session["AWBAllocation"] = cust.AWBAllocation;
+                    
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
                     {
                         if (item.InvoiceID > 0)
                         {
+                            cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation,Convert.ToInt32(item.InvoiceID),Convert.ToDecimal(item.Amount), cust.RecPayID); //customer invoiceid,amount
                             var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d ).ToList();
                             var awbDetail = (from d in Context1.RecPayAllocationDetails where d.CustomerInvoiceID == item.InvoiceID && d.RecPayDetailID == item.RecPayDetailID select d).ToList();
                             if (sInvoiceDetail != null)
@@ -934,7 +934,7 @@ namespace CMSV2.Controllers
                             }
                         }
                     }
-                    
+                    Session["AWBAllocation"] = cust.AWBAllocation;
                     BindMasters_ForEdit(cust);
                 }
                 else
@@ -1086,6 +1086,8 @@ namespace CMSV2.Controllers
             return Json(salesinvoice, JsonRequestBehavior.AllowGet);
         }
 
+
+
         [HttpGet]
         public JsonResult GetAWBAllocation(int InvoiceId)
         {
@@ -1095,7 +1097,27 @@ namespace CMSV2.Controllers
             AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
             return Json(AWBAllocation,JsonRequestBehavior.AllowGet);
 
-        }     
+        }
+        [HttpGet]
+        public JsonResult GetAWBReAllocation(int InvoiceId,decimal amount,int RecPayId)
+        {
+            List<ReceiptAllocationDetailVM> AWBAllocationall = new List<ReceiptAllocationDetailVM>();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+            //AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            AWBAllocationall.RemoveAll(cc => cc.CustomerInvoiceId == InvoiceId);
+            if (RecPayId == 0)
+            {
+                AWBAllocationall = ReceiptDAO.GetAWBAllocation(AWBAllocationall, InvoiceId, Convert.ToDecimal(amount), 0); //customer invoiceid,amount
+            }
+            else
+            {
+                AWBAllocationall = ReceiptDAO.GetAWBAllocation(AWBAllocationall, Convert.ToInt32(InvoiceId), Convert.ToDecimal(amount), Convert.ToInt32(RecPayId)); //customer invoiceid,amount
+            }
+            AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+
+        }
 
         [HttpPost]
         public JsonResult SaveAWBAllocation(List<ReceiptAllocationDetailVM> RecP)
@@ -1108,7 +1130,7 @@ namespace CMSV2.Controllers
             {
                 foreach (var item2 in RecP)
                 {
-                    if (item.CustomerInvoiceDetailID==item.CustomerInvoiceDetailID)
+                    if (item.CustomerInvoiceDetailID==item2.CustomerInvoiceDetailID)
                     {
                         item.AllocatedAmount = item2.AllocatedAmount;                     
                         break;
@@ -1350,7 +1372,21 @@ namespace CMSV2.Controllers
                     foreach (var aitem in allocationdetail)
                     {                      
                      
-                            RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.ID == aitem.ID).FirstOrDefault();
+                      RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.RecPayID==RecP.RecPayID &&  cc.CustomerInvoiceDetailID == aitem.CustomerInvoiceDetailID).FirstOrDefault();
+                        if (allocation == null)
+                        {
+                            allocation = new RecPayAllocationDetail();
+                            allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                            allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                            allocation.RecPayID = RecP.RecPayID;
+                            allocation.InScanID = aitem.InScanID;
+                            allocation.RecPayDetailID = aitem.RecPayDetailID;
+                            allocation.AllocatedAmount = aitem.AllocatedAmount;
+                            Context1.RecPayAllocationDetails.Add(allocation);
+                            Context1.SaveChanges();
+                        }
+                        else
+                        {
                             allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
                             allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
                             allocation.RecPayID = RecP.RecPayID;
@@ -1360,7 +1396,7 @@ namespace CMSV2.Controllers
 
                             Context1.Entry(allocation).State = EntityState.Modified;
                             Context1.SaveChanges();
-                     
+                        }
                     }
 
                 //

@@ -32,8 +32,12 @@ namespace CMSV2.Controllers
             ViewBag.City = db.CityMasters.ToList();
             if (Session["depotcountry"] == null)
             {
-                Session["depotcountry"]= (from c in db.BranchMasters where c.BranchID == branchid select c.CountryID).FirstOrDefault().Value;
-                ViewBag.depotcountry = Convert.ToInt32(Session["depotcountry"].ToString());
+                var depot= (from c in db.BranchMasters where c.BranchID == branchid select c.CountryID).FirstOrDefault();
+                if (depot != null)
+                {
+                    Session["depotcountry"] = depot.Value;
+                    ViewBag.depotcountry = Convert.ToInt32(Session["depotcountry"].ToString());
+                }
             }
             else
             {

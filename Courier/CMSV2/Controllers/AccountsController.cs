@@ -3301,6 +3301,10 @@ new AcGroupModel()
                 }
             else
             {
+                //if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+                //{
+                //    model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                //}
                 if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
@@ -3492,8 +3496,14 @@ new AcGroupModel()
                     ReportType="Ledger"
                 };
             }
-            
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+
             SessionDataModel.SetCustomerLedgerParam(model);
+
             model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
             model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
@@ -3539,7 +3549,7 @@ new AcGroupModel()
                 //AccountsReportsDAO.GenerateCustomerLedgerReport();
                 AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
             }            
-            else if (model.ReportType=="OutStanding")
+            else if (model.ReportType=="OutStanding") 
             {
                 AccountsReportsDAO.GenerateCustomerOutStandingReport();
             }

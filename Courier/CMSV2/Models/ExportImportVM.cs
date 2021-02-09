@@ -121,6 +121,8 @@ namespace CMSV2.Models
         public int[] SelectedValues { get; set; }
 
         public int paymentId { get; set; }
+        public int AcHeadId { get; set; }
+
     }
     public class InvoiceAllParam
     {

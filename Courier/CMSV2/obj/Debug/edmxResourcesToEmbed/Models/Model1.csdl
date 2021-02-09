@@ -8719,6 +8719,8 @@
       <Parameter Name="CustomerID" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)">
+      <Parameter Name="FromDate" Mode="In" Type="String" />
+      <Parameter Name="ToDate" Mode="In" Type="String" />
       <Parameter Name="FYearId" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="SP_GetAllRecieptsDetailsByDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetailsByDate_Result)">
@@ -12894,7 +12896,7 @@
     <Property Name="ProductTypeID" Type="Int32" />
     <Property Name="CustomerRateID" Type="Int32" />
     <Property Name="QuickInscanID" Type="Int32" />
-    <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TransactionDate" Type="DateTime" Precision="3" Nullable="false" />
     <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
     <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="SeviceCharge" Type="Decimal" Precision="19" Scale="4" />

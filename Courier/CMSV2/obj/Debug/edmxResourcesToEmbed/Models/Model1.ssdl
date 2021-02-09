@@ -378,7 +378,7 @@
     <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Applications">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -389,7 +389,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Applications' does not h
     <Property Name="Description" Type="nvarchar" MaxLength="256" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Membership">
     <Key>
       <PropertyRef Name="UserId" />
@@ -417,7 +417,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Membership' does not hav
     <Property Name="Comment" Type="ntext" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Paths">
     <Key>
       <PropertyRef Name="PathId" />
@@ -436,7 +436,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Paths' does not have a p
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_PersonalizationPerUser">
     <Key>
       <PropertyRef Name="Id" />
@@ -458,7 +458,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_PersonalizationPerUser' 
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Roles">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -479,7 +479,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Roles' does not have a p
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Users">
     <Key>
       <PropertyRef Name="UserId" />
@@ -933,7 +933,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.aspnet_Users' does not have a p
     <Property Name="IsShipping" Type="bit" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="CreditNoteDetails">
     <Key>
       <PropertyRef Name="CreditNoteID" />
@@ -1392,7 +1392,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.CreditNoteDetails' does not hav
     <Property Name="ReturnTime" Type="datetime" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="DRSEmployee">
     <Key>
       <PropertyRef Name="DRSEmployeeID" />
@@ -1716,7 +1716,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.DRSEmployee' does not have a pr
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -2171,7 +2171,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.ImpExp' does not have a primary
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="InScanNew">
     <Key>
       <PropertyRef Name="InScanID" />
@@ -2384,7 +2384,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.InScanNew' does not have a prim
     <Property Name="DRSNo" Type="char" MaxLength="10" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="MCPaymentReceipt">
     <Key>
       <PropertyRef Name="McPaymentReceiptID" />
@@ -2574,7 +2574,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.MCPaymentReceipt' does not have
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
@@ -3018,7 +3018,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.ParcelType' does not have a pri
     <Property Name="PageTypeId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -3490,7 +3490,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.State' does not have a primary 
     <Property Name="InvoiceType" Type="char" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tempCustomer">
     <Key>
       <PropertyRef Name="ID" />
@@ -3507,7 +3507,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.tempCustomer' does not have a p
     <Property Name="Location" Type="nvarchar" MaxLength="510" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempCustomerInvoice">
     <Key>
       <PropertyRef Name="ID" />
@@ -3537,7 +3537,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempCustomerInvoice' does not h
     <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempInScan">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -3587,7 +3587,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempInScan' does not have a pri
     <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateDetail">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3600,7 +3600,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateDetail' does not have a
     <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateMaster">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3647,7 +3647,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.TempRateMaster' does not have a
     <Property Name="CustomCharge" Type="money" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -3667,7 +3667,7 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.Transit' does not have a primar
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
@@ -6126,6 +6126,8 @@ warning 6002: The table/view 'DB_A69D99_iccs.dbo.TransportMode' does not have a 
     <Parameter Name="RecPayID" Type="int" Mode="In" />
   </Function>
   <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FromDate" Type="varchar" Mode="In" />
+    <Parameter Name="ToDate" Type="varchar" Mode="In" />
     <Parameter Name="FYearId" Type="int" Mode="In" />
   </Function>
   <Function Name="SP_GetAllRecieptsDetailsByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">

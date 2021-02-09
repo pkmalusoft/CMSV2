@@ -1499,7 +1499,7 @@
             </div>
             <div class="col-md-4 hide" id="divcash">
                 <label class="headinglabel">Cash Account</label>
-                @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off",@readonly="true" })
                 @Html.HiddenFor(model => model.AcheadID, new { })
             </div>
         </div>

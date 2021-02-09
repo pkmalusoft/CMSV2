@@ -7734,13 +7734,21 @@ namespace CMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("SP_GetAdvanceAmountOfCustomer", customerIDParameter);
         }
     
-        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails(Nullable<int> fYearId)
+        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails(string fromDate, string toDate, Nullable<int> fYearId)
         {
+            var fromDateParameter = fromDate != null ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(string));
+    
+            var toDateParameter = toDate != null ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(string));
+    
             var fYearIdParameter = fYearId.HasValue ?
                 new ObjectParameter("FYearId", fYearId) :
                 new ObjectParameter("FYearId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails", fYearIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails", fromDateParameter, toDateParameter, fYearIdParameter);
         }
     
         public virtual ObjectResult<SP_GetAllRecieptsDetailsByDate_Result> SP_GetAllRecieptsDetailsByDate(string fromDate, string todate, Nullable<int> fyearId)

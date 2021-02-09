@@ -449,13 +449,17 @@
             </div>
 
             <div class="row no-margin" style="padding-top:10px">
-
+                <div class="col-md-3">
+                    <label class="headinglabel required">Account Head</label>
+                    @Html.DropDownListFor(model => model.AcHeadID, new SelectList(ViewBag.AcHead, "AcHeadID", "AcHead1"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AcHeadID)
+                </div>
                 @*<div class="col-md-3" style="padding:20px">
 
-                    @Html.CheckBox("StatusCommision", new { @name = "StatusCommision" }) &nbsp;&nbsp;
-                    <label class="headinglabel">Allow Commission</label>
-                    @Html.ValidationMessageFor(model => model.StatusCommision)
-                </div>*@
+            @Html.CheckBox("StatusCommision", new { @name = "StatusCommision" }) &nbsp;&nbsp;
+            <label class="headinglabel">Allow Commission</label>
+            @Html.ValidationMessageFor(model => model.StatusCommision)
+        </div>*@
 
                 <div class="col-md-3" style="padding-top:15px">
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive" }) &nbsp;&nbsp;
@@ -464,10 +468,10 @@
                 </div>
 
                 @*<div class="col-md-3" style="padding-top:15px">
-                    @Html.CheckBox("StatusDefault", new { @name = "StatusDefault" }) &nbsp;&nbsp;
-                    <label class="headinglabel">Default</label>
-                    @Html.ValidationMessageFor(model => model.StatusDefault)
-                </div>*@
+            @Html.CheckBox("StatusDefault", new { @name = "StatusDefault" }) &nbsp;&nbsp;
+            <label class="headinglabel">Default</label>
+            @Html.ValidationMessageFor(model => model.StatusDefault)
+        </div>*@
             </div>
             <div class="row no-margin" style="padding-top: 10px">
 

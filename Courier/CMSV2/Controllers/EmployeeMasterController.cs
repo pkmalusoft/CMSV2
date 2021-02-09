@@ -88,6 +88,7 @@ namespace CMSV2.Controllers
             EmployeeVM v = new EmployeeVM();
             v.JoinDate = DateTime.Now.Date;
             v.StatusActive = true;
+            ViewBag.AcHead = db.AcHeads.OrderBy(c => c.AcHead1).ToList();
             return View(v);
         }
 
@@ -129,6 +130,7 @@ namespace CMSV2.Controllers
                 a.statusDefault = v.StatusDefault;
                 a.StatusActive = v.StatusActive;
                 a.Type = "E";
+            a.AcHeadID = v.AcHeadID;
 
                        UserRegistration u = new UserRegistration();
 
@@ -206,8 +208,8 @@ namespace CMSV2.Controllers
              //ViewBag.Depots = db.tblDepots.ToList();
              ViewBag.roles = db.RoleMasters.ToList();
 
-
-             List<DepotClass> lst = new List<DepotClass>();
+            ViewBag.AcHead = db.AcHeads.OrderBy(c => c.AcHead1).ToList();
+            List<DepotClass> lst = new List<DepotClass>();
              var data = db.tblDepots.Where(c=>c.BranchID==BranchID).ToList();
 
              foreach (var i in data)
@@ -250,9 +252,11 @@ namespace CMSV2.Controllers
                         v.Password = user.Password;
                     }
                 }
-                
-                
-                
+                if (a.AcHeadID!=null && a.AcHeadID!=0)
+                {
+                    v.AcHeadID =Convert.ToInt32(a.AcHeadID);
+                }
+
                 v.CountryName = a.CountryName;
                 v.CityName = a.CityName;                
                 v.DesignationID = a.DesignationID.Value;
@@ -301,8 +305,8 @@ namespace CMSV2.Controllers
             v.CountryName = a.CountryName;
             v.AcCompanyID = companyid;
              v.DesignationID = a.DesignationID;
-         
-          
+
+            v.AcHeadID = a.AcHeadID;
             v.BranchID = BranchID;
             v.DepotID = a.Depot;
             //if (v.Password!=a.Password)
@@ -395,12 +399,22 @@ namespace CMSV2.Controllers
                     u = (from b in db.UserRegistrations where b.UserID == a.UserID select b).FirstOrDefault();
                     if (u.Password != a.Password)
                         u.Password = a.Password;
-
+                    
                     if (u.RoleID != a.RoleID)
                         u.RoleID = a.RoleID;
+                    if (u.Password==null)
+                    {
+                        u.Password = "1234";
+                    }
+                    try
+                    {
+                        db.Entry(u).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    catch(Exception ex1)
+                    {
 
-                    db.Entry(x).State = EntityState.Modified;
-                    db.SaveChanges();
+                    }
                 }
             }
 
@@ -408,7 +422,7 @@ namespace CMSV2.Controllers
 
 
             db.Entry(v).State=EntityState.Modified;
-                 db.SaveChanges();
+            db.SaveChanges();
             TempData["SuccessMsg"] = "You have successfully Update Employee.";
             return RedirectToAction("Index");
              
