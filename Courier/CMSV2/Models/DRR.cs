@@ -23,8 +23,6 @@ namespace CMSV2.Models
             this.DRRInvoices1 = new HashSet<DRRInvoice>();
             this.DRRPKPCADs = new HashSet<DRRPKPCAD>();
             this.DRRPKPCADs1 = new HashSet<DRRPKPCAD>();
-            this.DRRRecPays = new HashSet<DRRRecPay>();
-            this.DRRRecPays1 = new HashSet<DRRRecPay>();
         }
     
         public int DRRID { get; set; }
@@ -55,9 +53,5 @@ namespace CMSV2.Models
         public virtual ICollection<DRRPKPCAD> DRRPKPCADs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DRRPKPCAD> DRRPKPCADs1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DRRRecPay> DRRRecPays { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DRRRecPay> DRRRecPays1 { get; set; }
     }
 }

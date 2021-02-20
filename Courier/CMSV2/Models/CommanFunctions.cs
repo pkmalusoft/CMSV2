@@ -86,6 +86,13 @@ namespace CMSV2.Models
         return string.Format("{0:dd/MM/yyyy}", (object) Convert.ToDateTime(iInputDate));
       return "";
     }
+
+        public static string GetShortDateFormat1(object iInputDate)
+        {
+            if (iInputDate != null)
+                return string.Format("{0:dd-MM-yyyy}", (object)Convert.ToDateTime(iInputDate));
+            return "";
+        }
         public static bool CheckCreateEntryValid()
         {
             //Entities1 db = new Entities1();

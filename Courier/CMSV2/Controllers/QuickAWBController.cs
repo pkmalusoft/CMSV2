@@ -384,6 +384,17 @@ namespace CMSV2.Controllers
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
                         AddAWBTrackStatus(inscan.InScanID);
+
+                        if (inscan.MaterialCost >0)
+                        {
+                            MaterialCostMaster mc = new MaterialCostMaster();
+                            mc.MCDate = inscan.TransactionDate;
+                            mc.InScanID = inscan.InScanID;                            
+                            mc.MaterialCost =Convert.ToDecimal(inscan.MaterialCost);
+                            mc.Status = "INSCAN";
+                            db.MaterialCostMasters.Add(mc);
+                            db.SaveChanges();
+                        }
                       
                         //if (v.PaymentModeId == 2)
                         //{ SaveConsignee(v); }
@@ -426,10 +437,31 @@ namespace CMSV2.Controllers
 
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
-                        
+
+                        MaterialCostMaster mc = new MaterialCostMaster();
+                        mc = db.MaterialCostMasters.Where(cc => cc.InScanID == inscan.InScanID).FirstOrDefault();
+                        if (mc!=null)
+                        {
+                            if (mc.MaterialCost != inscan.MaterialCost && mc.Status=="INSCAN")
+                            {
+                                mc.MaterialCost = Convert.ToDecimal(inscan.MaterialCost);                                
+                                db.Entry(mc).State = EntityState.Modified;
+
+                            }
+                        }
+                        else if(mc==null && inscan.MaterialCost>0)
+                        {
+                            mc = new MaterialCostMaster();
+                            mc.MCDate = inscan.TransactionDate;
+                            mc.InScanID = inscan.InScanID;
+                            mc.Status = "INSCAN";
+                            mc.MaterialCost = Convert.ToDecimal(inscan.MaterialCost);
+                            db.MaterialCostMasters.Add(mc);
+                        }
+
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         //    _dao.AWBAccountsPosting(inscan.InScanID);
-                        
+
                         //SaveConsignee(v);
                         TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
                         

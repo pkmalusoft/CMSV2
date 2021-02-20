@@ -280,7 +280,8 @@
     <Property Name="SupplierID" Type="int" />
     <Property Name="AssetMasterID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="InvRemarks" Type="nvarchar" MaxLength="500" />
+    <Property Name="InvRemarks" Type="varchar" MaxLength="500" />
+    <Property Name="AcJournalId" Type="int" />
   </EntityType>
   <EntityType Name="AcOPInvoiceDetails">
     <Key>
@@ -288,13 +289,14 @@
     </Key>
     <Property Name="AcOPInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcOPInvoiceMasterID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="InvoiceDate" Type="datetime" />
     <Property Name="LastTransDate" Type="datetime" />
     <Property Name="Amount" Type="money" />
     <Property Name="StatusClose" Type="bit" />
     <Property Name="AcMemoJournalID" Type="int" />
-    <Property Name="AcJournalID" Type="int" />
+    <Property Name="RecPayStatus" Type="int" />
+    <Property Name="RecPayDetailId" Type="int" />
   </EntityType>
   <EntityType Name="AcOPInvoiceMaster">
     <Key>
@@ -304,11 +306,12 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="OPDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
-    <Property Name="StatusSDSC" Type="nvarchar" MaxLength="2" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
+    <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
     <Property Name="PartyID" Type="int" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="StatusSC" Type="nvarchar" MaxLength="1" />
+    <Property Name="StatusSC" Type="varchar" MaxLength="1" />
+    <Property Name="AcJournalID" Type="int" />
   </EntityType>
   <EntityType Name="AcType">
     <Key>
@@ -378,7 +381,7 @@
     <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Applications">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -389,7 +392,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Applications' does n
     <Property Name="Description" Type="nvarchar" MaxLength="256" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Membership">
     <Key>
       <PropertyRef Name="UserId" />
@@ -417,7 +420,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Membership' does not
     <Property Name="Comment" Type="ntext" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Paths">
     <Key>
       <PropertyRef Name="PathId" />
@@ -436,7 +439,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Paths' does not have
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_PersonalizationPerUser">
     <Key>
       <PropertyRef Name="Id" />
@@ -458,7 +461,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_PersonalizationPerUs
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Roles">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -479,7 +482,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Roles' does not have
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Users">
     <Key>
       <PropertyRef Name="UserId" />
@@ -933,7 +936,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Users' does not have
     <Property Name="IsShipping" Type="bit" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="CreditNoteDetails">
     <Key>
       <PropertyRef Name="CreditNoteID" />
@@ -1392,7 +1395,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.CreditNoteDetails' does not
     <Property Name="ReturnTime" Type="datetime" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="DRSEmployee">
     <Key>
       <PropertyRef Name="DRSEmployeeID" />
@@ -1440,6 +1443,44 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have 
     <Property Name="User1" Type="int" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
+  </EntityType>
+  <EntityType Name="DRSRecPay">
+    <Key>
+      <PropertyRef Name="DRSRecPayID" />
+    </Key>
+    <Property Name="DRSRecPayID" Type="int" Nullable="false" />
+    <Property Name="DRSRecPayDate" Type="datetime" Nullable="false" />
+    <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DRSID" Type="int" Nullable="false" />
+    <Property Name="BankName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="FYearID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="EXRate" Type="money" />
+    <Property Name="ReceivedAmount" Type="money" />
+    <Property Name="CourierEMPID" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="100" />
+    <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="DRSRecPayDetails">
+    <Key>
+      <PropertyRef Name="DRSRecPayDetailID" />
+    </Key>
+    <Property Name="DRSRecPayDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DRSRecPayID" Type="int" Nullable="false" />
+    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="CourierCharge" Type="money" Nullable="false" />
+    <Property Name="MaterialCost" Type="money" Nullable="false" />
+    <Property Name="CCReceived" Type="money" />
+    <Property Name="MCReceived" Type="money" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusClose" Type="bit" Nullable="false" />
+    <Property Name="Discount" Type="money" />
   </EntityType>
   <EntityType Name="EmployeeMaster">
     <Key>
@@ -1716,7 +1757,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have 
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -2171,7 +2212,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ImpExp' does not have a pri
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="InScanNew">
     <Key>
       <PropertyRef Name="InScanID" />
@@ -2354,6 +2395,19 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a 
     <Property Name="StatusUpdated" Type="bit" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
+  <EntityType Name="MaterialCostMaster">
+    <Key>
+      <PropertyRef Name="MCID" />
+    </Key>
+    <Property Name="MCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MCDate" Type="datetime" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="MaterialCost" Type="money" Nullable="false" />
+    <Property Name="DRSID" Type="int" />
+    <Property Name="MCPVID" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="100" />
+    <Property Name="StatusClose" Type="bit" Nullable="false" />
+  </EntityType>
   <EntityType Name="MCInvoice">
     <Key>
       <PropertyRef Name="MCInvoiceID" />
@@ -2384,7 +2438,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a 
     <Property Name="DRSNo" Type="char" MaxLength="10" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="MCPaymentReceipt">
     <Key>
       <PropertyRef Name="McPaymentReceiptID" />
@@ -2574,7 +2628,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.MCPaymentReceipt' does not 
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
@@ -2871,7 +2925,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
       <PropertyRef Name="RecPayID" />
     </Key>
     <Property Name="RecPayID" Type="int" Nullable="false" />
-    <Property Name="RecPayDate" Type="datetime" />
+    <Property Name="RecPayDate" Type="datetime" Nullable="false" />
     <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="SupplierID" Type="int" />
@@ -2887,7 +2941,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="EXRate" Type="money" />
-    <Property Name="FMoney" Type="money" />
+    <Property Name="FMoney" Type="money" Nullable="false" />
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
   </EntityType>
@@ -2921,6 +2975,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
     <Property Name="Lock" Type="bit" />
     <Property Name="JobID" Type="int" />
     <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="AcOPInvoiceDetailID" Type="int" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>
@@ -3018,7 +3073,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
     <Property Name="PageTypeId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -3057,15 +3112,49 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a prim
       <PropertyRef Name="SupplierInvoiceID" />
     </Key>
     <Property Name="SupplierInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SupplierID" Type="int" />
-    <Property Name="InvoiceDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="SupplierID" Type="int" Nullable="false" />
+    <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="AccompanyID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="20" />
     <Property Name="AcJOurnalID" Type="int" />
     <Property Name="AcDiscJournalID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="FyearID" Type="int" />
+    <Property Name="cid" Type="int" />
+    <Property Name="BranchId" Type="int" />
+    <Property Name="StatusClose" Type="bit" />
+    <Property Name="InvoiceTotal" Type="money" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceAWB">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierInvoiceId" Type="int" Nullable="false" />
+    <Property Name="SupplierInvoiceDetailId" Type="int" Nullable="false" />
+    <Property Name="AcHeadId" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceDetails">
+    <Key>
+      <PropertyRef Name="SupplierInvoiceDetailID" />
+    </Key>
+    <Property Name="SupplierInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierInvoiceID" Type="int" Nullable="false" />
+    <Property Name="Particulars" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Quantity" Type="money" Nullable="false" />
+    <Property Name="Rate" Type="money" Nullable="false" />
+    <Property Name="CurrencyID" Type="int" Nullable="false" />
+    <Property Name="CurrencyAmount" Type="money" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+    <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Value" Type="money" Nullable="false" />
+    <Property Name="RecPayStatus" Type="int" />
+    <Property Name="RecPayDetailId" Type="int" />
+    <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>
@@ -3490,7 +3579,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a prim
     <Property Name="InvoiceType" Type="char" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tempCustomer">
     <Key>
       <PropertyRef Name="ID" />
@@ -3507,7 +3596,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.tempCustomer' does not have
     <Property Name="Location" Type="nvarchar" MaxLength="510" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempCustomerInvoice">
     <Key>
       <PropertyRef Name="ID" />
@@ -3537,7 +3626,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempCustomerInvoice' does n
     <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempInScan">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -3587,7 +3676,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempInScan' does not have a
     <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateDetail">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3600,7 +3689,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateDetail' does not ha
     <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateMaster">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3647,7 +3736,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateMaster' does not ha
     <Property Name="CustomCharge" Type="money" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -3667,7 +3756,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.Transit' does not have a pr
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
@@ -3915,6 +4004,90 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_AcOpeningMaster_AcFinancialYear">
+    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
+    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AcFinancialYear">
+        <PropertyRef Name="AcFinancialYearID" />
+      </Principal>
+      <Dependent Role="AcOpeningMaster">
+        <PropertyRef Name="AcFinancialYearID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOpeningMaster_AcHead">
+    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
+    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AcHead">
+        <PropertyRef Name="AcHeadID" />
+      </Principal>
+      <Dependent Role="AcOpeningMaster">
+        <PropertyRef Name="AcHeadID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOpeningMaster_BranchMaster">
+    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
+    <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="AcOpeningMaster">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="0..1" />
+    <End Role="AcOPInvoiceDetails" Type="Self.AcOPInvoiceDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AcOPInvoiceMaster">
+        <PropertyRef Name="AcOPInvoiceMasterID" />
+      </Principal>
+      <Dependent Role="AcOPInvoiceDetails">
+        <PropertyRef Name="AcOPInvoiceMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
+    <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
+    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AcFinancialYear">
+        <PropertyRef Name="AcFinancialYearID" />
+      </Principal>
+      <Dependent Role="AcOPInvoiceMaster">
+        <PropertyRef Name="AcFinancialYearID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOPInvoiceMaster_AcHead">
+    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
+    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AcHead">
+        <PropertyRef Name="AcHeadID" />
+      </Principal>
+      <Dependent Role="AcOPInvoiceMaster">
+        <PropertyRef Name="AcHeadID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
+    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
+    <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="AcOPInvoiceMaster">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
     <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -3962,6 +4135,30 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
       </Principal>
       <Dependent Role="InscanOtherCharge">
         <PropertyRef Name="OtherChargeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierInvoice_SupplierMaster">
+    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="1" />
+    <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierMaster">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="SupplierInvoice">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierInvoiceDetails_SupplierInvoice">
+    <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="1" />
+    <End Role="SupplierInvoiceDetails" Type="Self.SupplierInvoiceDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierInvoice">
+        <PropertyRef Name="SupplierInvoiceID" />
+      </Principal>
+      <Dependent Role="SupplierInvoiceDetails">
+        <PropertyRef Name="SupplierInvoiceID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6529,6 +6726,8 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
     <EntitySet Name="DRSEmployeeID" EntityType="Self.DRSEmployeeID" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSExpense" EntityType="Self.DRSExpense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSReceipt" EntityType="Self.DRSReceipt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetails" Schema="dbo" store:Type="Tables" />
@@ -6562,6 +6761,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
     <EntitySet Name="Locks" EntityType="Self.Locks" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manifest" EntityType="Self.Manifest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MaterialCostMaster" EntityType="Self.MaterialCostMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MCInvoice" EntityType="Self.MCInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MCPayment" EntityType="Self.MCPayment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberUserIdLink" EntityType="Self.MemberUserIdLink" Schema="dbo" store:Type="Tables" />
@@ -6613,6 +6813,8 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
     <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierInvoiceAWB" EntityType="Self.SupplierInvoiceAWB" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SystemControlSequence" EntityType="Self.SystemControlSequence" Schema="dbo" store:Type="Tables" />
@@ -6955,6 +7157,34 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
+    <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
+      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
+      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="Self.FK_AcOpeningMaster_AcHead">
+      <End Role="AcHead" EntitySet="AcHead" />
+      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="Self.FK_AcOpeningMaster_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMaster" />
+      <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+      <End Role="AcOPInvoiceDetails" EntitySet="AcOPInvoiceDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="Self.FK_AcOPInvoiceMaster_AcFinancialYear">
+      <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
+      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="Self.FK_AcOPInvoiceMaster_AcHead">
+      <End Role="AcHead" EntitySet="AcHead" />
+      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="Self.FK_AcOPInvoiceMaster_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMaster" />
+      <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+    </AssociationSet>
     <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
       <End Role="CustomerInvoice" EntitySet="CustomerInvoice" />
       <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
@@ -6970,6 +7200,14 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
     <AssociationSet Name="FK_InscanOtherCharge_OtherCharge" Association="Self.FK_InscanOtherCharge_OtherCharge">
       <End Role="OtherCharge" EntitySet="OtherCharge" />
       <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="Self.FK_SupplierInvoice_SupplierMaster">
+      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
+      <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierInvoiceDetails_SupplierInvoice" Association="Self.FK_SupplierInvoiceDetails_SupplierInvoice">
+      <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+      <End Role="SupplierInvoiceDetails" EntitySet="SupplierInvoiceDetails" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

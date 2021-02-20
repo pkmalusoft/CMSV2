@@ -285,7 +285,8 @@
           <Property Name="SupplierID" Type="int" />
           <Property Name="AssetMasterID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
-          <Property Name="InvRemarks" Type="nvarchar" MaxLength="500" />
+          <Property Name="InvRemarks" Type="varchar" MaxLength="500" />
+          <Property Name="AcJournalId" Type="int" />
         </EntityType>
         <EntityType Name="AcOPInvoiceDetails">
           <Key>
@@ -293,13 +294,14 @@
           </Key>
           <Property Name="AcOPInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AcOPInvoiceMasterID" Type="int" />
-          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
           <Property Name="InvoiceDate" Type="datetime" />
           <Property Name="LastTransDate" Type="datetime" />
           <Property Name="Amount" Type="money" />
           <Property Name="StatusClose" Type="bit" />
           <Property Name="AcMemoJournalID" Type="int" />
-          <Property Name="AcJournalID" Type="int" />
+          <Property Name="RecPayStatus" Type="int" />
+          <Property Name="RecPayDetailId" Type="int" />
         </EntityType>
         <EntityType Name="AcOPInvoiceMaster">
           <Key>
@@ -309,11 +311,12 @@
           <Property Name="AcHeadID" Type="int" />
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="OPDate" Type="datetime" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
-          <Property Name="StatusSDSC" Type="nvarchar" MaxLength="2" />
+          <Property Name="Remarks" Type="varchar" MaxLength="100" />
+          <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
           <Property Name="PartyID" Type="int" />
           <Property Name="BranchID" Type="int" />
-          <Property Name="StatusSC" Type="nvarchar" MaxLength="1" />
+          <Property Name="StatusSC" Type="varchar" MaxLength="1" />
+          <Property Name="AcJournalID" Type="int" />
         </EntityType>
         <EntityType Name="AcType">
           <Key>
@@ -383,7 +386,7 @@
           <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_Applications">
           <Key>
             
@@ -396,7 +399,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Applications' does n
           <Property Name="Description" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_Membership">
           <Key>
             
@@ -438,7 +441,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Membership' does not
           <Property Name="Comment" Type="ntext" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_Paths">
           <Key>
             
@@ -460,7 +463,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Paths' does not have
           <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_PersonalizationPerUser">
           <Key>
             <PropertyRef Name="Id" />
@@ -484,7 +487,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_PersonalizationPerUs
           <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_Roles">
           <Key>
             
@@ -508,7 +511,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Roles' does not have
           <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="aspnet_Users">
           <Key>
             
@@ -967,7 +970,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.aspnet_Users' does not have
           <Property Name="IsShipping" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CreditNoteDetails">
           <Key>
             <PropertyRef Name="CreditNoteID" />
@@ -1426,7 +1429,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.CreditNoteDetails' does not
           <Property Name="ReturnTime" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DRSEmployee">
           <Key>
             <PropertyRef Name="DRSEmployeeID" />
@@ -1474,6 +1477,44 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have 
           <Property Name="User1" Type="int" />
           <Property Name="FYearID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
+        </EntityType>
+        <EntityType Name="DRSRecPay">
+          <Key>
+            <PropertyRef Name="DRSRecPayID" />
+          </Key>
+          <Property Name="DRSRecPayID" Type="int" Nullable="false" />
+          <Property Name="DRSRecPayDate" Type="datetime" Nullable="false" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DRSID" Type="int" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChequeDate" Type="datetime" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="FYearID" Type="int" />
+          <Property Name="AcCompanyID" Type="int" />
+          <Property Name="EXRate" Type="money" />
+          <Property Name="ReceivedAmount" Type="money" />
+          <Property Name="CourierEMPID" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="100" />
+          <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="DRSRecPayDetails">
+          <Key>
+            <PropertyRef Name="DRSRecPayDetailID" />
+          </Key>
+          <Property Name="DRSRecPayDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DRSRecPayID" Type="int" Nullable="false" />
+          <Property Name="AWBNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="CourierCharge" Type="money" Nullable="false" />
+          <Property Name="MaterialCost" Type="money" Nullable="false" />
+          <Property Name="CCReceived" Type="money" />
+          <Property Name="MCReceived" Type="money" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusClose" Type="bit" Nullable="false" />
+          <Property Name="Discount" Type="money" />
         </EntityType>
         <EntityType Name="EmployeeMaster">
           <Key>
@@ -1750,7 +1791,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.DRSEmployee' does not have 
           <Property Name="BranchId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ImpExp">
           <Key>
             <PropertyRef Name="ImpExpID" />
@@ -2205,7 +2246,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ImpExp' does not have a pri
           <Property Name="AcHeadID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="InScanNew">
           <Key>
             <PropertyRef Name="InScanID" />
@@ -2388,6 +2429,19 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a 
           <Property Name="StatusUpdated" Type="bit" Nullable="false" />
           <Property Name="AcCompanyID" Type="int" />
         </EntityType>
+        <EntityType Name="MaterialCostMaster">
+          <Key>
+            <PropertyRef Name="MCID" />
+          </Key>
+          <Property Name="MCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MCDate" Type="datetime" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="MaterialCost" Type="money" Nullable="false" />
+          <Property Name="DRSID" Type="int" />
+          <Property Name="MCPVID" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="100" />
+          <Property Name="StatusClose" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="MCInvoice">
           <Key>
             <PropertyRef Name="MCInvoiceID" />
@@ -2418,7 +2472,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.InScanNew' does not have a 
           <Property Name="DRSNo" Type="char" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MCPaymentReceipt">
           <Key>
             <PropertyRef Name="McPaymentReceiptID" />
@@ -2608,7 +2662,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.MCPaymentReceipt' does not 
           <Property Name="AcCompanyID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ParcelType">
           <Key>
             <PropertyRef Name="ID" />
@@ -2905,7 +2959,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
             <PropertyRef Name="RecPayID" />
           </Key>
           <Property Name="RecPayID" Type="int" Nullable="false" />
-          <Property Name="RecPayDate" Type="datetime" />
+          <Property Name="RecPayDate" Type="datetime" Nullable="false" />
           <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
           <Property Name="CustomerID" Type="int" />
           <Property Name="SupplierID" Type="int" />
@@ -2921,7 +2975,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
           <Property Name="FYearID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
           <Property Name="EXRate" Type="money" />
-          <Property Name="FMoney" Type="money" />
+          <Property Name="FMoney" Type="money" Nullable="false" />
           <Property Name="UserID" Type="int" />
           <Property Name="IsTradingReceipt" Type="bit" />
         </EntityType>
@@ -2955,6 +3009,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
           <Property Name="Lock" Type="bit" />
           <Property Name="JobID" Type="int" />
           <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AcOPInvoiceDetailID" Type="int" />
         </EntityType>
         <EntityType Name="RequestType">
           <Key>
@@ -3052,7 +3107,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.ParcelType' does not have a
           <Property Name="PageTypeId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="State">
           <Key>
             <PropertyRef Name="StateID" />
@@ -3091,15 +3146,49 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a prim
             <PropertyRef Name="SupplierInvoiceID" />
           </Key>
           <Property Name="SupplierInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SupplierID" Type="int" />
-          <Property Name="InvoiceDate" Type="datetime" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+          <Property Name="SupplierID" Type="int" Nullable="false" />
+          <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
+          <Property Name="Remarks" Type="varchar" MaxLength="100" />
           <Property Name="AccompanyID" Type="int" />
-          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvoiceNo" Type="varchar" MaxLength="20" />
           <Property Name="AcJOurnalID" Type="int" />
           <Property Name="AcDiscJournalID" Type="int" />
           <Property Name="AcHeadID" Type="int" />
           <Property Name="FyearID" Type="int" />
+          <Property Name="cid" Type="int" />
+          <Property Name="BranchId" Type="int" />
+          <Property Name="StatusClose" Type="bit" />
+          <Property Name="InvoiceTotal" Type="money" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="SupplierInvoiceAWB">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierInvoiceId" Type="int" Nullable="false" />
+          <Property Name="SupplierInvoiceDetailId" Type="int" Nullable="false" />
+          <Property Name="AcHeadId" Type="int" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
+        <EntityType Name="SupplierInvoiceDetails">
+          <Key>
+            <PropertyRef Name="SupplierInvoiceDetailID" />
+          </Key>
+          <Property Name="SupplierInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierInvoiceID" Type="int" Nullable="false" />
+          <Property Name="Particulars" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Quantity" Type="money" Nullable="false" />
+          <Property Name="Rate" Type="money" Nullable="false" />
+          <Property Name="CurrencyID" Type="int" Nullable="false" />
+          <Property Name="CurrencyAmount" Type="money" Nullable="false" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Value" Type="money" Nullable="false" />
+          <Property Name="RecPayStatus" Type="int" />
+          <Property Name="RecPayDetailId" Type="int" />
+          <Property Name="AcHeadID" Type="int" />
         </EntityType>
         <EntityType Name="SupplierMaster">
           <Key>
@@ -3524,7 +3613,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.State' does not have a prim
           <Property Name="InvoiceType" Type="char" MaxLength="2" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tempCustomer">
           <Key>
             <PropertyRef Name="ID" />
@@ -3541,7 +3630,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.tempCustomer' does not have
           <Property Name="Location" Type="nvarchar" MaxLength="510" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempCustomerInvoice">
           <Key>
             <PropertyRef Name="ID" />
@@ -3571,7 +3660,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempCustomerInvoice' does n
           <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempInScan">
           <Key>
             <PropertyRef Name="DepartmentID" />
@@ -3621,7 +3710,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempInScan' does not have a
           <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempRateDetail">
           <Key>
             <PropertyRef Name="RateMasterID" />
@@ -3634,7 +3723,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateDetail' does not ha
           <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TempRateMaster">
           <Key>
             <PropertyRef Name="RateMasterID" />
@@ -3681,7 +3770,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TempRateMaster' does not ha
           <Property Name="CustomCharge" Type="money" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Transit">
           <Key>
             <PropertyRef Name="TransitID" />
@@ -3701,7 +3790,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.Transit' does not have a pr
           <Property Name="VehicleID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TransportMode">
           <Key>
             <PropertyRef Name="TransportModeID" />
@@ -3949,6 +4038,90 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AcOpeningMaster_AcFinancialYear">
+          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
+          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_AcHead">
+          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
+          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_BranchMaster">
+          <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
+          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="0..1" />
+          <End Role="AcOPInvoiceDetails" Type="Self.AcOPInvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceDetails">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
+          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
+          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcHead">
+          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
+          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
+          <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
+          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
           <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -3996,6 +4169,30 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             </Principal>
             <Dependent Role="InscanOtherCharge">
               <PropertyRef Name="OtherChargeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SupplierInvoice_SupplierMaster">
+          <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="1" />
+          <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierMaster">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="SupplierInvoice">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SupplierInvoiceDetails_SupplierInvoice">
+          <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="1" />
+          <End Role="SupplierInvoiceDetails" Type="Self.SupplierInvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierInvoice">
+              <PropertyRef Name="SupplierInvoiceID" />
+            </Principal>
+            <Dependent Role="SupplierInvoiceDetails">
+              <PropertyRef Name="SupplierInvoiceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6563,6 +6760,8 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="DRSEmployeeID" EntityType="Self.DRSEmployeeID" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRSExpense" EntityType="Self.DRSExpense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRSReceipt" EntityType="Self.DRSReceipt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetails" Schema="dbo" store:Type="Tables" />
@@ -6596,6 +6795,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="Locks" EntityType="Self.Locks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manifest" EntityType="Self.Manifest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MaterialCostMaster" EntityType="Self.MaterialCostMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MCInvoice" EntityType="Self.MCInvoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MCPayment" EntityType="Self.MCPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberUserIdLink" EntityType="Self.MemberUserIdLink" Schema="dbo" store:Type="Tables" />
@@ -6647,6 +6847,8 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierInvoiceAWB" EntityType="Self.SupplierInvoiceAWB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SystemControlSequence" EntityType="Self.SystemControlSequence" Schema="dbo" store:Type="Tables" />
@@ -6989,6 +7191,34 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             <End Role="CODReceipt" EntitySet="CODReceipt" />
             <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
           </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="Self.FK_AcOpeningMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHead" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="Self.FK_AcOpeningMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMaster" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+            <End Role="AcOPInvoiceDetails" EntitySet="AcOPInvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="Self.FK_AcOPInvoiceMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="Self.FK_AcOPInvoiceMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHead" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="Self.FK_AcOPInvoiceMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMaster" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
+          </AssociationSet>
           <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
             <End Role="CustomerInvoice" EntitySet="CustomerInvoice" />
             <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
@@ -7004,6 +7234,14 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_InscanOtherCharge_OtherCharge" Association="Self.FK_InscanOtherCharge_OtherCharge">
             <End Role="OtherCharge" EntitySet="OtherCharge" />
             <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="Self.FK_SupplierInvoice_SupplierMaster">
+            <End Role="SupplierMaster" EntitySet="SupplierMaster" />
+            <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SupplierInvoiceDetails_SupplierInvoice" Association="Self.FK_SupplierInvoiceDetails_SupplierInvoice">
+            <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+            <End Role="SupplierInvoiceDetails" EntitySet="SupplierInvoiceDetails" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -7111,11 +7349,11 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="UserID" Type="Int32" />
           <Property Name="BranchID" Type="Int32" />
           <Property Name="CurrentFinancialYear" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_AcFinancialYear" FromRole="AcFinancialYear" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_AcFinancialYear" FromRole="AcFinancialYear" ToRole="SalesInvoice" />
           <NavigationProperty Name="tblSupplierAdjustments" Relationship="Self.FK_tblSupplierAdjustment_AcFinancialYear" FromRole="AcFinancialYear" ToRole="tblSupplierAdjustment" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <EntityType Name="AcGroup">
           <Key>
@@ -7158,11 +7396,11 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="TaxApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AcGroup" Relationship="Self.FK_AcHead_AcGroup" FromRole="AcHead" ToRole="AcGroup" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="Self.FK_AcOPInvoiceMaster_AcHead" FromRole="AcHead" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Category_AcHead" FromRole="AcHead" ToRole="Category" />
           <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_AcHead" FromRole="AcHead" ToRole="Expense" />
           <NavigationProperty Name="ExpenseDetails" Relationship="Self.FK_ExpenseDetails_AcHead" FromRole="AcHead" ToRole="ExpenseDetails" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" FromRole="AcHead" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <EntityType Name="AcHeadAssign">
           <Key>
@@ -7303,60 +7541,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="AcCompanyID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="AcOpeningMaster">
-          <Key>
-            <PropertyRef Name="AcOpeningID" />
-          </Key>
-          <Property Name="AcOpeningID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="OPDate" Type="DateTime" Precision="3" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="PartyID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="StatusImport" Type="Boolean" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="AssetMasterID" Type="Int32" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="InvRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
-          <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
-          <NavigationProperty Name="BranchMaster" Relationship="Self.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
-        </EntityType>
-        <EntityType Name="AcOPInvoiceDetail">
-          <Key>
-            <PropertyRef Name="AcOPInvoiceDetailID" />
-          </Key>
-          <Property Name="AcOPInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcOPInvoiceMasterID" Type="Int32" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="LastTransDate" Type="DateTime" Precision="3" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusClose" Type="Boolean" />
-          <Property Name="AcMemoJournalID" Type="Int32" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <NavigationProperty Name="AcOPInvoiceMaster" Relationship="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetails" ToRole="AcOPInvoiceMaster" />
-        </EntityType>
-        <EntityType Name="AcOPInvoiceMaster">
-          <Key>
-            <PropertyRef Name="AcOPInvoiceMasterID" />
-          </Key>
-          <Property Name="AcOPInvoiceMasterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="OPDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
-          <Property Name="PartyID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
-          <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOPInvoiceMaster_AcHead" FromRole="AcOPInvoiceMaster" ToRole="AcHead" />
-          <NavigationProperty Name="AcOPInvoiceDetails" Relationship="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceMaster" ToRole="AcOPInvoiceDetails" />
-          <NavigationProperty Name="BranchMaster" Relationship="Self.FK_AcOPInvoiceMaster_BranchMaster" FromRole="AcOPInvoiceMaster" ToRole="BranchMaster" />
         </EntityType>
         <EntityType Name="AcType">
           <Key>
@@ -7703,8 +7887,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="VATPercent" Type="Decimal" Precision="6" Scale="2" />
           <Property Name="AcFinancialYearID" Type="Int32" />
           <NavigationProperty Name="AcGroups" Relationship="Self.FK_AcGroup_BranchMaster" FromRole="BranchMaster" ToRole="AcGroup" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="Self.FK_AcOpeningMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="Self.FK_AcOPInvoiceMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="AnalysisHeads" Relationship="Self.FK_AnalysisHead_BranchMaster" FromRole="BranchMaster" ToRole="AnalysisHead" />
           <NavigationProperty Name="CityMaster" Relationship="Self.FK_BranchMaster_CityMaster" FromRole="BranchMaster" ToRole="CityMaster" />
           <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_BranchMaster_CurrencyMaster" FromRole="BranchMaster" ToRole="CurrencyMaster" />
@@ -7718,6 +7900,8 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="CODReceiptFormat" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
           <Property Name="VATAccountId" Type="Int32" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <EntityType Name="BusinessType">
           <Key>
@@ -8310,9 +8494,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <NavigationProperty Name="DRRInvoices1" Relationship="Self.FK_DRRInvoice_DRR1" FromRole="DRR" ToRole="DRRInvoice" />
           <NavigationProperty Name="DRRPKPCADs" Relationship="Self.FK_DRRPKPCAD_DRR" FromRole="DRR" ToRole="DRRPKPCAD" />
           <NavigationProperty Name="DRRPKPCADs1" Relationship="Self.FK_DRRPKPCAD_DRR1" FromRole="DRR" ToRole="DRRPKPCAD" />
-          <NavigationProperty Name="DRRRecPays" Relationship="Self.FK_DRRRecPay_DRR" FromRole="DRR" ToRole="DRRRecPay" />
-          <NavigationProperty Name="DRRRecPays1" Relationship="Self.FK_DRRRecPay_DRR1" FromRole="DRR" ToRole="DRRRecPay" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="DRRConsignment">
           <Key>
             <PropertyRef Name="DRRConsignmentID" />
@@ -8376,20 +8558,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <NavigationProperty Name="DRR" Relationship="Self.FK_DRRPKPCAD_DRR" FromRole="DRRPKPCAD" ToRole="DRR" />
           <NavigationProperty Name="DRR1" Relationship="Self.FK_DRRPKPCAD_DRR1" FromRole="DRRPKPCAD" ToRole="DRR" />
         </EntityType>
-        <EntityType Name="DRRRecPay">
-          <Key>
-            <PropertyRef Name="DRRRecPayID" />
-          </Key>
-          <Property Name="DRRRecPayID" Type="Int32" Nullable="false" />
-          <Property Name="DRRID" Type="Int32" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StatusRecPay" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <NavigationProperty Name="DRR" Relationship="Self.FK_DRRRecPay_DRR" FromRole="DRRRecPay" ToRole="DRR" />
-          <NavigationProperty Name="DRR1" Relationship="Self.FK_DRRRecPay_DRR1" FromRole="DRRRecPay" ToRole="DRR" />
-        </EntityType>
         <EntityType Name="DR">
           <Key>
             <PropertyRef Name="DRSID" />
@@ -8409,35 +8577,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="DRSEmployees" Relationship="Self.FK_DRSEmployee_DRS" FromRole="DRS" ToRole="DRSEmployee" />
           <NavigationProperty Name="DRSExpenses" Relationship="Self.FK_DRSExpense_DRS" FromRole="DRS" ToRole="DRSExpense" />
-        </EntityType>
-        <EntityType Name="DRSDetail">
-          <Key>
-            <PropertyRef Name="DRSDetailID" />
-          </Key>
-          <Property Name="DRSDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DRSID" Type="Int32" Nullable="false" />
-          <Property Name="AWBNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InScanID" Type="Int32" />
-          <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusPaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CCReceived" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="CCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CCChequeDate" Type="DateTime" Precision="3" />
-          <Property Name="MCReceived" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="MCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="MCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MCChequeDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
-          <Property Name="CourierStatusID" Type="Int32" />
-          <Property Name="StatusAWB" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="ReturnTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="DRSEmployeeID">
           <Key>
@@ -9779,50 +9918,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <NavigationProperty Name="Product" Relationship="Self.FK_QuotationDetails_Products" FromRole="QuotationDetails" ToRole="Products" />
           <NavigationProperty Name="Quotation" Relationship="Self.FK_QuotationDetails_Quotation" FromRole="QuotationDetails" ToRole="Quotation" />
         </EntityType>
-        <EntityType Name="RecPay">
-          <Key>
-            <PropertyRef Name="RecPayID" />
-          </Key>
-          <Property Name="RecPayID" Type="Int32" Nullable="false" />
-          <Property Name="RecPayDate" Type="DateTime" Precision="3" />
-          <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerID" Type="Int32" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="BusinessCentreID" Type="Int32" />
-          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="StatusRec" Type="Boolean" />
-          <Property Name="StatusEntry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StatusOrigin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FYearID" Type="Int32" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="IsTradingReceipt" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="RecPayDetail">
-          <Key>
-            <PropertyRef Name="RecPayDetailID" />
-          </Key>
-          <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
-          <Property Name="RecPayID" Type="Int32" />
-          <Property Name="InvoiceID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-          <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="StatusAdvance" Type="Boolean" />
-          <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CurrencyID" Type="Int32" />
-          <Property Name="Lock" Type="Boolean" />
-          <Property Name="JobID" Type="Int32" />
-          <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
-        </EntityType>
         <EntityType Name="RequestType">
           <Key>
             <PropertyRef Name="Id" />
@@ -9959,15 +10054,22 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             <PropertyRef Name="SupplierInvoiceID" />
           </Key>
           <Property Name="SupplierInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierID" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="AccompanyID" Type="Int32" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AcJOurnalID" Type="Int32" />
           <Property Name="AcDiscJournalID" Type="Int32" />
           <Property Name="AcHeadID" Type="Int32" />
           <Property Name="FyearID" Type="Int32" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="StatusClose" Type="Boolean" />
+          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierInvoice" ToRole="SupplierMaster" />
+          <NavigationProperty Name="SupplierInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoice" ToRole="SupplierInvoiceDetail" />
         </EntityType>
         <EntityType Name="SupplierType">
           <Key>
@@ -10982,30 +11084,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AcOpeningMaster_AcFinancialYear">
-          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcFinancialYear">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
-          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcFinancialYear">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseInvoice_AcFinancialYear">
           <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
           <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
@@ -11063,30 +11141,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             </Principal>
             <Dependent Role="AcHead">
               <PropertyRef Name="AcGroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOpeningMaster_AcHead">
-          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcHead">
-              <PropertyRef Name="AcHeadID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="AcHeadID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_AcHead">
-          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcHead">
-              <PropertyRef Name="AcHeadID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcHeadID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11187,42 +11241,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             </Principal>
             <Dependent Role="tblSupplierAdjustment">
               <PropertyRef Name="AcJournalID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOpeningMaster_BranchMaster">
-          <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BranchMaster">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceDetails" Type="Self.AcOPInvoiceDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcOPInvoiceMasterID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceDetails">
-              <PropertyRef Name="AcOPInvoiceMasterID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
-          <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BranchMaster">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="BranchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11922,30 +11940,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
               <PropertyRef Name="DRRID" />
             </Principal>
             <Dependent Role="DRRPKPCAD">
-              <PropertyRef Name="DRRID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DRRRecPay_DRR">
-          <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-          <End Role="DRRRecPay" Type="Self.DRRRecPay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DRR">
-              <PropertyRef Name="DRRID" />
-            </Principal>
-            <Dependent Role="DRRRecPay">
-              <PropertyRef Name="DRRID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DRRRecPay_DRR1">
-          <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-          <End Role="DRRRecPay" Type="Self.DRRRecPay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DRR">
-              <PropertyRef Name="DRRID" />
-            </Principal>
-            <Dependent Role="DRRRecPay">
               <PropertyRef Name="DRRID" />
             </Dependent>
           </ReferentialConstraint>
@@ -12724,9 +12718,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="AcMemoBankDetails" EntityType="Self.AcMemoBankDetail" />
           <EntitySet Name="AcMemoJournalDetails" EntityType="Self.AcMemoJournalDetail" />
           <EntitySet Name="AcMemoJournalMasters" EntityType="Self.AcMemoJournalMaster" />
-          <EntitySet Name="AcOpeningMasters" EntityType="Self.AcOpeningMaster" />
-          <EntitySet Name="AcOPInvoiceDetails" EntityType="Self.AcOPInvoiceDetail" />
-          <EntitySet Name="AcOPInvoiceMasters" EntityType="Self.AcOPInvoiceMaster" />
           <EntitySet Name="AcTypes" EntityType="Self.AcType" />
           <EntitySet Name="AgentMasters" EntityType="Self.AgentMaster" />
           <EntitySet Name="AnalysisGroups" EntityType="Self.AnalysisGroup" />
@@ -12789,9 +12780,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="DRRConsignments" EntityType="Self.DRRConsignment" />
           <EntitySet Name="DRRInvoices" EntityType="Self.DRRInvoice" />
           <EntitySet Name="DRRPKPCADs" EntityType="Self.DRRPKPCAD" />
-          <EntitySet Name="DRRRecPays" EntityType="Self.DRRRecPay" />
           <EntitySet Name="DRS" EntityType="Self.DR" />
-          <EntitySet Name="DRSDetails" EntityType="Self.DRSDetail" />
           <EntitySet Name="DRSEmployeeIDs" EntityType="Self.DRSEmployeeID" />
           <EntitySet Name="DRSExpenses" EntityType="Self.DRSExpense" />
           <EntitySet Name="DRSReceipts" EntityType="Self.DRSReceipt" />
@@ -12863,8 +12852,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySet Name="QuickInscanMasters" EntityType="Self.QuickInscanMaster" />
           <EntitySet Name="Quotations" EntityType="Self.Quotation" />
           <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetail" />
-          <EntitySet Name="RecPays" EntityType="Self.RecPay" />
-          <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetail" />
           <EntitySet Name="RequestTypes" EntityType="Self.RequestType" />
           <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetail" />
           <EntitySet Name="RevenueTypes" EntityType="Self.RevenueType" />
@@ -12967,14 +12954,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             <End Role="LocationMaster" EntitySet="LocationMasters" />
             <End Role="AcCompany" EntitySet="AcCompanies" />
           </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
-            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="Self.FK_AcOPInvoiceMaster_AcFinancialYear">
-            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseInvoice_AcFinancialYear" Association="Self.FK_PurchaseInvoice_AcFinancialYear">
             <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
             <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
@@ -12994,14 +12973,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_AcHead_AcGroup" Association="Self.FK_AcHead_AcGroup">
             <End Role="AcGroup" EntitySet="AcGroups" />
             <End Role="AcHead" EntitySet="AcHeads" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="Self.FK_AcOpeningMaster_AcHead">
-            <End Role="AcHead" EntitySet="AcHeads" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="Self.FK_AcOPInvoiceMaster_AcHead">
-            <End Role="AcHead" EntitySet="AcHeads" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
           <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
             <End Role="AcHead" EntitySet="AcHeads" />
@@ -13034,18 +13005,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_tblSupplierAdjustment_AcJournalMaster" Association="Self.FK_tblSupplierAdjustment_AcJournalMaster">
             <End Role="AcJournalMaster" EntitySet="AcJournalMasters" />
             <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="Self.FK_AcOpeningMaster_BranchMaster">
-            <End Role="BranchMaster" EntitySet="BranchMasters" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
-            <End Role="AcOPInvoiceDetails" EntitySet="AcOPInvoiceDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="Self.FK_AcOPInvoiceMaster_BranchMaster">
-            <End Role="BranchMaster" EntitySet="BranchMasters" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
           <AssociationSet Name="FK_AnalysisHead_AnalysisGroup" Association="Self.FK_AnalysisHead_AnalysisGroup">
             <End Role="AnalysisGroup" EntitySet="AnalysisGroups" />
@@ -13278,14 +13237,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_DRRPKPCAD_DRR1" Association="Self.FK_DRRPKPCAD_DRR1">
             <End Role="DRR" EntitySet="DRRs" />
             <End Role="DRRPKPCAD" EntitySet="DRRPKPCADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DRRRecPay_DRR" Association="Self.FK_DRRRecPay_DRR">
-            <End Role="DRR" EntitySet="DRRs" />
-            <End Role="DRRRecPay" EntitySet="DRRRecPays" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DRRRecPay_DRR1" Association="Self.FK_DRRRecPay_DRR1">
-            <End Role="DRR" EntitySet="DRRs" />
-            <End Role="DRRRecPay" EntitySet="DRRRecPays" />
           </AssociationSet>
           <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
             <End Role="DRRConsignment" EntitySet="DRRConsignments" />
@@ -16093,6 +16044,54 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
             <End Role="InscanOtherCharge" EntitySet="InscanOtherCharges" />
           </AssociationSet>
           <EntitySet Name="ExportShipments" EntityType="DB_9F57C4_couriertest_newModel.ExportShipment" />
+          <EntitySet Name="MaterialCostMasters" EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" />
+          <EntitySet Name="DRRRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" />
+          <EntitySet Name="SupplierInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" />
+          <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster">
+            <End Role="SupplierMaster" EntitySet="SupplierMasters" />
+            <End Role="SupplierInvoice" EntitySet="SupplierInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SupplierInvoiceDetails_SupplierInvoice" Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice">
+            <End Role="SupplierInvoice" EntitySet="SupplierInvoices" />
+            <End Role="SupplierInvoiceDetail" EntitySet="SupplierInvoiceDetails" />
+          </AssociationSet>
+          <EntitySet Name="AcOpeningMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" />
+          <EntitySet Name="AcOPInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" />
+          <EntitySet Name="AcOPInvoiceMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" />
+          <EntitySet Name="DRSRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" />
+          <EntitySet Name="DRSRecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPayDetail" />
+          <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHeads" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHeads" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMasters" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+            <End Role="AcOPInvoiceDetail" EntitySet="AcOPInvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMasters" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
+          <EntitySet Name="SupplierInvoiceAWBs" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceAWB" />
+          <EntitySet Name="DRSDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" />
+          <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
+          <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19708,6 +19707,7 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <NavigationProperty Name="PurchaseOrders" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" FromRole="SupplierMaster" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SupplierType" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
           <NavigationProperty Name="tblSupplierAdjustments" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
+          <NavigationProperty Name="SupplierInvoices" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierMaster" ToRole="SupplierInvoice" />
         </EntityType>
         <Association Name="FK_SupplierMaster_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -20000,6 +20000,338 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <Property Name="AcCompanyId" Type="Int32" />
           <Property Name="ACJournalID" Type="Int32" />
         </EntityType>
+        <EntityType Name="MaterialCostMaster">
+          <Key>
+            <PropertyRef Name="MCID" />
+          </Key>
+          <Property Name="MCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MCDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="MaterialCost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DRSID" Type="Int32" />
+          <Property Name="MCPVID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DRRRecPay">
+          <Key>
+            <PropertyRef Name="DRRRecPayID" />
+          </Key>
+          <Property Name="DRRRecPayID" Type="Int32" Nullable="false" />
+          <Property Name="DRRID" Type="Int32" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusRecPay" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="AcJournalID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SupplierInvoiceDetail">
+          <Key>
+            <PropertyRef Name="SupplierInvoiceDetailID" />
+          </Key>
+          <Property Name="SupplierInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierInvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="Particulars" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TaxPercentage" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Value" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="RecPayStatus" Type="Int32" />
+          <Property Name="RecPayDetailId" Type="Int32" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <NavigationProperty Name="SupplierInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoiceDetail" ToRole="SupplierInvoice" />
+        </EntityType>
+        <Association Name="FK_SupplierInvoice_SupplierMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="1" />
+          <End Type="DB_9F57C4_couriertest_newModel.SupplierInvoice" Role="SupplierInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierMaster">
+              <PropertyRef Name="SupplierID" />
+            </Principal>
+            <Dependent Role="SupplierInvoice">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SupplierInvoiceDetails_SupplierInvoice">
+          <End Type="DB_9F57C4_couriertest_newModel.SupplierInvoice" Role="SupplierInvoice" Multiplicity="1" />
+          <End Type="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Role="SupplierInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierInvoice">
+              <PropertyRef Name="SupplierInvoiceID" />
+            </Principal>
+            <Dependent Role="SupplierInvoiceDetail">
+              <PropertyRef Name="SupplierInvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AcOpeningMaster">
+          <Key>
+            <PropertyRef Name="AcOpeningID" />
+          </Key>
+          <Property Name="AcOpeningID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="OPDate" Type="DateTime" Precision="3" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="PartyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="StatusImport" Type="Boolean" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="AssetMasterID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="InvRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AcJournalId" Type="Int32" />
+          <NavigationProperty Name="AcFinancialYear" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
+          <NavigationProperty Name="AcHead" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
+          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
+        </EntityType>
+        <EntityType Name="AcOPInvoiceDetail">
+          <Key>
+            <PropertyRef Name="AcOPInvoiceDetailID" />
+          </Key>
+          <Property Name="AcOPInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcOPInvoiceMasterID" Type="Int32" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="LastTransDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="StatusClose" Type="Boolean" />
+          <Property Name="AcMemoJournalID" Type="Int32" />
+          <Property Name="RecPayStatus" Type="Int32" />
+          <Property Name="RecPayDetailId" Type="Int32" />
+          <NavigationProperty Name="AcOPInvoiceMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetail" ToRole="AcOPInvoiceMaster" />
+        </EntityType>
+        <EntityType Name="AcOPInvoiceMaster">
+          <Key>
+            <PropertyRef Name="AcOPInvoiceMasterID" />
+          </Key>
+          <Property Name="AcOPInvoiceMasterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="OPDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="PartyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <NavigationProperty Name="AcFinancialYear" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
+          <NavigationProperty Name="AcHead" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" FromRole="AcOPInvoiceMaster" ToRole="AcHead" />
+          <NavigationProperty Name="AcOPInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceMaster" ToRole="AcOPInvoiceDetail" />
+          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="AcOPInvoiceMaster" ToRole="BranchMaster" />
+        </EntityType>
+        <EntityType Name="DRSRecPay">
+          <Key>
+            <PropertyRef Name="DRSRecPayID" />
+          </Key>
+          <Property Name="DRSRecPayID" Type="Int32" Nullable="false" />
+          <Property Name="DRSRecPayDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DRSID" Type="Int32" Nullable="false" />
+          <Property Name="BankName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ReceivedAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CourierEMPID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusEntry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DRSRecPayDetail">
+          <Key>
+            <PropertyRef Name="DRSRecPayDetailID" />
+          </Key>
+          <Property Name="DRSRecPayDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DRSRecPayID" Type="Int32" Nullable="false" />
+          <Property Name="AWBNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="MaterialCost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="CCReceived" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="MCReceived" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+          <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <Association Name="FK_AcOpeningMaster_AcFinancialYear">
+          <End Type="DB_9F57C4_couriertest_newModel.AcFinancialYear" Role="AcFinancialYear" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
+          <End Type="DB_9F57C4_couriertest_newModel.AcFinancialYear" Role="AcFinancialYear" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_AcHead">
+          <End Type="DB_9F57C4_couriertest_newModel.AcHead" Role="AcHead" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcHead">
+          <End Type="DB_9F57C4_couriertest_newModel.AcHead" Role="AcHead" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_BranchMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" Role="AcOPInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceDetail">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SupplierInvoiceAWB">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierInvoiceId" Type="Int32" Nullable="false" />
+          <Property Name="SupplierInvoiceDetailId" Type="Int32" Nullable="false" />
+          <Property Name="AcHeadId" Type="Int32" Nullable="false" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="DRSDetail">
+          <Key>
+            <PropertyRef Name="DRSDetailID" />
+          </Key>
+          <Property Name="DRSDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DRSID" Type="Int32" Nullable="false" />
+          <Property Name="AWBNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="StatusPaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CCReceived" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="CCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CCChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="MCReceived" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="MCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="MCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MCChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
+          <Property Name="CourierStatusID" Type="Int32" />
+          <Property Name="StatusAWB" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ReturnTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="RecPay">
+          <Key>
+            <PropertyRef Name="RecPayID" />
+          </Key>
+          <Property Name="RecPayID" Type="Int32" Nullable="false" />
+          <Property Name="RecPayDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="BusinessCentreID" Type="Int32" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="StatusRec" Type="Boolean" />
+          <Property Name="StatusEntry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusOrigin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FMoney" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="IsTradingReceipt" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="RecPayDetail">
+          <Key>
+            <PropertyRef Name="RecPayDetailID" />
+          </Key>
+          <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
+          <Property Name="RecPayID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="StatusAdvance" Type="Boolean" />
+          <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="Lock" Type="Boolean" />
+          <Property Name="JobID" Type="Int32" />
+          <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20275,55 +20607,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOpeningMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
-              <MappingFragment StoreEntitySet="AcOpeningMaster">
-                <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOPInvoiceDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
-              <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
-                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
-                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-                <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOPInvoiceMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
-              <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
-                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
-                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -21299,19 +21582,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DRRRecPays">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPay">
-              <MappingFragment StoreEntitySet="DRRRecPay">
-                <ScalarProperty Name="DRRRecPayID" ColumnName="DRRRecPayID" />
-                <ScalarProperty Name="DRRID" ColumnName="DRRID" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StatusRecPay" ColumnName="StatusRecPay" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DRS">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
               <MappingFragment StoreEntitySet="DRS">
@@ -21328,36 +21598,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
                 <ScalarProperty Name="DrsType" ColumnName="DrsType" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DRSDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSDetail">
-              <MappingFragment StoreEntitySet="DRSDetails">
-                <ScalarProperty Name="DRSDetailID" ColumnName="DRSDetailID" />
-                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-                <ScalarProperty Name="AWBNO" ColumnName="AWBNO" />
-                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-                <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
-                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
-                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-                <ScalarProperty Name="CCReceived" ColumnName="CCReceived" />
-                <ScalarProperty Name="CCStatuspaymentType" ColumnName="CCStatuspaymentType" />
-                <ScalarProperty Name="CCBankName" ColumnName="CCBankName" />
-                <ScalarProperty Name="CCChequeNo" ColumnName="CCChequeNo" />
-                <ScalarProperty Name="CCChequeDate" ColumnName="CCChequeDate" />
-                <ScalarProperty Name="MCReceived" ColumnName="MCReceived" />
-                <ScalarProperty Name="MCStatuspaymentType" ColumnName="MCStatuspaymentType" />
-                <ScalarProperty Name="MCBankName" ColumnName="MCBankName" />
-                <ScalarProperty Name="MCChequeNo" ColumnName="MCChequeNo" />
-                <ScalarProperty Name="MCChequeDate" ColumnName="MCChequeDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
-                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
-                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
-                <ScalarProperty Name="StatusAWB" ColumnName="StatusAWB" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -22672,52 +22912,6 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="RecPays">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPay">
-              <MappingFragment StoreEntitySet="RecPay">
-                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-                <ScalarProperty Name="RecPayDate" ColumnName="RecPayDate" />
-                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="BusinessCentreID" ColumnName="BusinessCentreID" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="StatusRec" ColumnName="StatusRec" />
-                <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
-                <ScalarProperty Name="StatusOrigin" ColumnName="StatusOrigin" />
-                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="EXRate" ColumnName="EXRate" />
-                <ScalarProperty Name="FMoney" ColumnName="FMoney" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="IsTradingReceipt" ColumnName="IsTradingReceipt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RecPayDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
-              <MappingFragment StoreEntitySet="RecPayDetails">
-                <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
-                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
-                <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
-                <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
-                <ScalarProperty Name="InvDate" ColumnName="InvDate" />
-                <ScalarProperty Name="InvNo" ColumnName="InvNo" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-                <ScalarProperty Name="Lock" ColumnName="Lock" />
-                <ScalarProperty Name="JobID" ColumnName="JobID" />
-                <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="RequestTypes">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RequestType">
               <MappingFragment StoreEntitySet="RequestType">
@@ -22850,6 +23044,11 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
           <EntitySetMapping Name="SupplierInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
               <MappingFragment StoreEntitySet="SupplierInvoice">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
@@ -28961,6 +29160,233 @@ warning 6002: The table/view 'DB_A69D99_iccs_New.dbo.TransportMode' does not hav
                 <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
                 <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MaterialCostMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.MaterialCostMaster">
+              <MappingFragment StoreEntitySet="MaterialCostMaster">
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MCPVID" ColumnName="MCPVID" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="MCDate" ColumnName="MCDate" />
+                <ScalarProperty Name="MCID" ColumnName="MCID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRRRecPays">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPay">
+              <MappingFragment StoreEntitySet="DRRRecPay">
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="StatusRecPay" ColumnName="StatusRecPay" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="DRRID" ColumnName="DRRID" />
+                <ScalarProperty Name="DRRRecPayID" ColumnName="DRRRecPayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierInvoiceDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail">
+              <MappingFragment StoreEntitySet="SupplierInvoiceDetails">
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+                <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+                <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+                <ScalarProperty Name="SupplierInvoiceDetailID" ColumnName="SupplierInvoiceDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOpeningMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
+              <MappingFragment StoreEntitySet="AcOpeningMaster">
+                <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
+                <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOPInvoiceDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
+              <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
+                <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+                <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
+                <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
+                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOPInvoiceMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
+              <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+                <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRSRecPays">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
+              <MappingFragment StoreEntitySet="DRSRecPay">
+                <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CourierEMPID" ColumnName="CourierEMPID" />
+                <ScalarProperty Name="ReceivedAmount" ColumnName="ReceivedAmount" />
+                <ScalarProperty Name="EXRate" ColumnName="EXRate" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="DRSRecPayDate" ColumnName="DRSRecPayDate" />
+                <ScalarProperty Name="DRSRecPayID" ColumnName="DRSRecPayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRSRecPayDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPayDetail">
+              <MappingFragment StoreEntitySet="DRSRecPayDetails">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="MCReceived" ColumnName="MCReceived" />
+                <ScalarProperty Name="CCReceived" ColumnName="CCReceived" />
+                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
+                <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AWBNO" ColumnName="AWBNO" />
+                <ScalarProperty Name="DRSRecPayID" ColumnName="DRSRecPayID" />
+                <ScalarProperty Name="DRSRecPayDetailID" ColumnName="DRSRecPayDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierInvoiceAWBs">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceAWB">
+              <MappingFragment StoreEntitySet="SupplierInvoiceAWB">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcHeadId" ColumnName="AcHeadId" />
+                <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+                <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRSDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSDetail">
+              <MappingFragment StoreEntitySet="DRSDetails">
+                <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="StatusAWB" ColumnName="StatusAWB" />
+                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
+                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
+                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="MCChequeDate" ColumnName="MCChequeDate" />
+                <ScalarProperty Name="MCChequeNo" ColumnName="MCChequeNo" />
+                <ScalarProperty Name="MCBankName" ColumnName="MCBankName" />
+                <ScalarProperty Name="MCStatuspaymentType" ColumnName="MCStatuspaymentType" />
+                <ScalarProperty Name="MCReceived" ColumnName="MCReceived" />
+                <ScalarProperty Name="CCChequeDate" ColumnName="CCChequeDate" />
+                <ScalarProperty Name="CCChequeNo" ColumnName="CCChequeNo" />
+                <ScalarProperty Name="CCBankName" ColumnName="CCBankName" />
+                <ScalarProperty Name="CCStatuspaymentType" ColumnName="CCStatuspaymentType" />
+                <ScalarProperty Name="CCReceived" ColumnName="CCReceived" />
+                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
+                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
+                <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AWBNO" ColumnName="AWBNO" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="DRSDetailID" ColumnName="DRSDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecPays">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPay">
+              <MappingFragment StoreEntitySet="RecPay">
+                <ScalarProperty Name="IsTradingReceipt" ColumnName="IsTradingReceipt" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FMoney" ColumnName="FMoney" />
+                <ScalarProperty Name="EXRate" ColumnName="EXRate" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="StatusOrigin" ColumnName="StatusOrigin" />
+                <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
+                <ScalarProperty Name="StatusRec" ColumnName="StatusRec" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BusinessCentreID" ColumnName="BusinessCentreID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="RecPayDate" ColumnName="RecPayDate" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecPayDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
+              <MappingFragment StoreEntitySet="RecPayDetails">
+                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+                <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="Lock" ColumnName="Lock" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="InvNo" ColumnName="InvNo" />
+                <ScalarProperty Name="InvDate" ColumnName="InvDate" />
+                <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
+                <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
+                <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

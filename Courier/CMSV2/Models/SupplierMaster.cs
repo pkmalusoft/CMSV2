@@ -20,6 +20,7 @@ namespace CMSV2.Models
             this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.tblSupplierAdjustments = new HashSet<tblSupplierAdjustment>();
+            this.SupplierInvoices = new HashSet<SupplierInvoice>();
         }
     
         public int SupplierID { get; set; }
@@ -60,5 +61,7 @@ namespace CMSV2.Models
         public virtual SupplierType SupplierType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblSupplierAdjustment> tblSupplierAdjustments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SupplierInvoice> SupplierInvoices { get; set; }
     }
 }

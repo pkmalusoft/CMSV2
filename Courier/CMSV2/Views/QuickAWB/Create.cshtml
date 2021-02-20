@@ -1711,43 +1711,36 @@
                     <h3 style="color:white">COST UPDATION</h3><hr />
 
 
-                    <div class="row no-margin" style="padding-top: 10px">
+                                                              <div class="row no-margin" style="padding-top: 10px">
 
 
-                        <div class="col-md-2">
-                            <label class="headinglabel required">Customer Rate Type</label>
-                            @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
-                        </div>
+                                                                  <div class="col-md-2">
+                                                                      <label class="headinglabel required">Customer Rate Type</label>
+                                                                      @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
+                                                                  </div>
+                                                                  <div class="col-md-2">
+                                                                      <label class="headinglabel required">Courier Charge</label>
+                                                                      @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
+                                                                  </div>
+                                                                  <div class="col-md-2">
+                                                                      <label class="headinglabel">Total Other Charge</label>
+                                                                      @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                                                                      @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
+                                                                  </div>
+                                                                  <div class="col-md-2">
+                                                                      <label class="headinglabel">Material Cost</label>
+                                                                      @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                                                                  </div>
+                                                                  <div class="col-md-2">
+                                                                      @*<label class="headinglabel">Add Other Charge</label>*@
+                                                                      <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
+                                                                  </div>
+                                                                  <div class="col-md-2">
+                                                                      <label class="headinglabel">Total</label>
+                                                                      @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
+                                                                  </div>
 
-
-
-                        <div class="col-md-2">
-                            <label class="headinglabel required">Courier Charge</label>
-                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="headinglabel">Material Cost</label>
-                            @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-                        </div>
-
-
-
-                        <div class="col-md-2">
-                            <label class="headinglabel">Total Other Charge</label>
-                            @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-                            @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
-                        </div>
-                        <div class="col-md-2">
-                            @*<label class="headinglabel">Add Other Charge</label>*@
-                            <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="headinglabel">Total</label>
-                            @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
-                        </div>
-
-                    </div>
+                                                              </div>
 
 
 

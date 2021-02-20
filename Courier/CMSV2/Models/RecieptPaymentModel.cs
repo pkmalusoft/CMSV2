@@ -27,7 +27,7 @@ namespace CMSV2.Models
         public string DocumentNo { get; set; }
         public string PartyName { get; set; }
         public string Remarks { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
     public decimal Currency { get; set; }
    }
     public class CustomerReceivable

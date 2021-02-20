@@ -5,248 +5,455 @@ using System.Web;
 using System.Web.Mvc;
 using CMSV2.Models;
 using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.Net;
+using System.Text;
+using CMSV2.DAL;
 using System.Data.Entity;
 
 namespace CMSV2.Controllers
 {
+    [SessionExpire]
+    //   [Authorize]
     public class DRSReceiptController : Controller
     {
+        SourceMastersModel MM = new SourceMastersModel();
+        RecieptPaymentModel RP = new RecieptPaymentModel();
+        CustomerRcieptVM cust = new CustomerRcieptVM();
+        Entities1 Context1 = new Entities1();
 
-        Entities1 db = new Entities1();
-
-        public ActionResult Index()
+        EditCommanFu editfu = new EditCommanFu();       
+   
+        public JsonResult GetInvoiceOfCustomer(string ID)
         {
+            //List<SP_GetCustomerInvoiceDetailsForReciept_Result> AllInvoices = new List<SP_GetCustomerInvoiceDetailsForReciept_Result>();
 
-          
-            List<DRSReceiptVM> ls = (from c in db.DRSReceipts join e in db.EmployeeMasters on c.EmployeeID equals e.EmployeeID join t in db.VehicleMasters on c.VehicleID equals t.VehicleID select new DRSReceiptVM {DRSReceiptID=c.DRSReceiptID,DRSNo=c.DRSNo,Amount=c.Amount,DRSReceiptDate=c.DRSReceiptDate,Deliver=e.EmployeeName,Vehicle=t.VehicleNo,Remarks=c.Remarks }).ToList();
+            DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
+            var AllInvoices = ReceiptDAO.GetCustomerInvoiceDetailsForReciept(Convert.ToInt32(ID), fromdate.Date.ToString(), todate.Date.ToString()).OrderBy(x => x.InvoiceDate).ToList();
 
-
-            return View(ls);
+            return Json(AllInvoices, JsonRequestBehavior.AllowGet);
         }
 
-
-        public ActionResult Create()
+        public JsonResult GetExchangeRateByCurID(string ID)
         {
-            ViewBag.AcHeads = db.AcHeads.ToList();
-            ViewBag.Vehicle = db.VehicleMasters.ToList();
-            ViewBag.Employee = db.EmployeeMasters.ToList();
-            ViewBag.Department = db.Departments.ToList();
+            //List<SP_GetCustomerInvoiceDetailsForReciept_Result> AllInvoices = new List<SP_GetCustomerInvoiceDetailsForReciept_Result>();
 
-            return View();
+            var ER = RP.GetExchgeRateByCurID(Convert.ToInt32(ID));
 
+            return Json(ER, JsonRequestBehavior.AllowGet);
         }
+           
 
-        [HttpPost]
-        public ActionResult Create(DRSReceiptVM v)
+
+
+        public void BindAllMasters(int pagetype)
         {
-            DRSReceipt tbl = new DRSReceipt();
-            AcJournalMaster _AcJournalMaster = new AcJournalMaster();
-            AcJournalDetail _AcJournalDetail = new AcJournalDetail();
+            List<CustomerMaster> Customers = new List<CustomerMaster>();
+            Customers = MM.GetAllCustomer();
 
-            try
+            List<CurrencyMaster> Currencys = new List<CurrencyMaster>();
+            Currencys = MM.GetCurrency();
+
+            
+
+            //ViewBag.DocumentNos = DocNo;
+            if (pagetype == 1)
             {
-                int max = (from c in db.DRSReceipts orderby c.DRSReceiptID descending select c.DRSReceiptID).FirstOrDefault();
-                if (max == null)
-                {
-                    max = 1;
-                }
-                else
-                {
-                    max = max + 1;
-                }
+                var customernew = (from d in Context1.CustomerMasters where d.CustomerType == "CS" select d).ToList();
 
-
-
-                tbl.DRSReceiptID = max;
-
-
-                _AcJournalMaster.VoucherNo = tbl.DRSReceiptID.ToString();
-                tbl.DRSNo = v.DRSNo;
-                tbl.EmployeeID = v.EmployeeID;
-                tbl.DRSReceiptDate = v.DRSReceiptDate;
-                tbl.DepartmentID = v.DepartmentID;
-                tbl.VehicleID = v.VehicleID;
-                tbl.Amount = v.Amount;
-                tbl.Remarks = v.Remarks;
-                tbl.AcCompanyID = Convert.ToInt32(Session["CurrenctCompanyID"].ToString());
-                tbl.User1 = Convert.ToInt32(Session["UserID"].ToString());
-                tbl.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
-
-                db.DRSReceipts.Add(tbl);
-                db.SaveChanges();
-
-                int acjmax = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
-                if (acjmax == null)
-                    acjmax = 1;
-                else
-                    acjmax = acjmax + 1;
-
-                _AcJournalMaster.AcJournalID = acjmax;
-                _AcJournalMaster.TransDate = v.DRSReceiptDate;
-                _AcJournalMaster.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
-                _AcJournalMaster.UserID = Convert.ToInt32(Session["UserID"].ToString());
-                _AcJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrenctCompanyID"].ToString());
-
-                _AcJournalMaster.Remarks = v.Remarks;
-                _AcJournalMaster.VoucherType = "CI";
-                _AcJournalMaster.TransType = 1;
-                _AcJournalMaster.StatusDelete = Convert.ToBoolean(0);
-                db.AcJournalMasters.Add(_AcJournalMaster);
-                db.SaveChanges();
-
-                var DRSUpdate = (from a in db.DRSReceipts where a.DRSReceiptID == tbl.DRSReceiptID select a).FirstOrDefault();
-
-                var id = (from a in db.AcJournalMasters orderby a.AcJournalID descending select a).FirstOrDefault();
-                DRSUpdate.AcJournalID = id.AcJournalID;
-                db.Entry(DRSUpdate).State = EntityState.Modified;
-                db.SaveChanges();
-
-
-                int maxacjdid = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-                if (maxacjdid == null)
-                    maxacjdid = 1;
-                else
-                    maxacjdid = maxacjdid + 1;
-
-                _AcJournalDetail.AcJournalDetailID = maxacjdid;
-                _AcJournalDetail.AcJournalID = id.AcJournalID;
-                _AcJournalDetail.Amount = v.Amount;
-                _AcJournalDetail.Remarks = v.Remarks;
-                _AcJournalDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-
-                db.AcJournalDetails.Add(_AcJournalDetail);
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully Added DRS Receipt.";
-
-                return RedirectToAction("Index");
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-          
-
-          
-        }
-
-
-
-
-
-
-        public ActionResult Edit(int id=0)
-        {
-            DRSReceiptVM obj = new DRSReceiptVM();
-            ViewBag.employee = db.EmployeeMasters.ToList();
-            ViewBag.verhicle = db.VehicleMasters.ToList();
-            ViewBag.Department = db.Departments.ToList();
-
-            var data = (from d in db.DRSReceipts where d.DRSReceiptID == id select d).FirstOrDefault();
-
-            if (data == null)
-            {
-                return HttpNotFound();
+                ViewBag.Customer = new SelectList(customernew, "CustomerID", "Customer1");
             }
             else
-            
-{
-    obj.DRSReceiptID = data.DRSReceiptID;
-                //obj.DRSID = data.DRSNoS;
-    obj.DRSNo = data.DRSNo;
-                obj.EmployeeID = data.EmployeeID;
-                obj.DRSReceiptDate = data.DRSReceiptDate;
-                obj.DepartmentID = data.DepartmentID;
-                obj.VehicleID = data.VehicleID;
-                obj.Remarks = data.Remarks;
-                obj.AcCompanyID = data.AcCompanyID;
-                obj.User1 = data.User1;
-                obj.FYearID = data.FYearID;
-                obj.Amount = data.Amount;
+            {
+                var customernew = (from d in Context1.CustomerMasters where d.CustomerType == "CS" select d).ToList();
+
+                ViewBag.Customer = new SelectList(customernew, "CustomerID", "Customer1");
             }
-            return View(obj);
+
+            ViewBag.Currency = new SelectList(Currencys, "CurrencyID", "CurrencyName");
+        }
+
+        public void BindMasters_ForEdit(CustomerRcieptVM cust)
+        {
+            List<CustomerMaster> Customers = new List<CustomerMaster>();
+            Customers = MM.GetAllCustomer();
+
+            List<CurrencyMaster> Currencys = new List<CurrencyMaster>();
+            Currencys = MM.GetCurrency();
+
+
+            ViewBag.DocumentNos = cust.DocumentNo;
+
+            ViewBag.Customer = new SelectList(Customers, "CustomerID", "Customer", cust.CustomerID);
+
+            ViewBag.Currency = new SelectList(Currencys, "CurrencyID", "CurrencyName", cust.CurrencyId);
+
+        }
+
+      
+              public JsonResult GetAllCustomerByDate(string fdate, string tdate, int FYearID)
+        {
+            DateTime d = DateTime.Now;
+            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+
+            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+
+            var sdate = DateTime.Parse(fdate);
+            var edate = DateTime.Parse(tdate);
+
+            ViewBag.AllCustomers = MM.GetAllCustomer();
+
+            var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.IsTradingReceipt != true && x.FYearID == FYearID).OrderByDescending(x => x.RecPayDate).ToList();
+
+            //var recpayid = data.FirstOrDefault().RecPayID;
+            //var Recdetails = (from x in Context1.RecPayDetails where x.RecPayID == recpayid && (x.CurrencyID != null || x.CurrencyID > 0) select x).FirstOrDefault();
+
+
+            data.ForEach(s => s.Remarks = (from x in Context1.RecPayDetails where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select x).FirstOrDefault() != null ? (from x in Context1.RecPayDetails join C in Context1.CurrencyMasters on x.CurrencyID equals C.CurrencyID where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select C.CurrencyName).FirstOrDefault() : "");
+
+            //var cust = Context1.SP_GetAllRecieptsDetailsByDate(fdate, tdate, FYearID).ToList();
+
+            string view = this.RenderPartialView("_GetAllCustomerByDate", data);
+
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = true,
+                    view = view
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+
+
+        }
+
+        public ActionResult GetReceiptsByDate(string fdate, string tdate, int FYearID)
+        {
+            DateTime d = DateTime.Now;
+            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+
+            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+            var sdate = DateTime.Parse(fdate);
+            var edate = DateTime.Parse(tdate);
+
+            ViewBag.AllCustomers = Context1.CustomerMasters.ToList();
+
+            var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.IsTradingReceipt != true && x.FYearID == FYearID).OrderByDescending(x => x.RecPayDate).ToList();
+            data.ForEach(s => s.Remarks = (from x in Context1.RecPayDetails where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select x).FirstOrDefault() != null ? (from x in Context1.RecPayDetails join C in Context1.CurrencyMasters on x.CurrencyID equals C.CurrencyID where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select C.CurrencyName).FirstOrDefault() : "");
+
+
+            //var cust = Context1.SP_GetAllRecieptsDetailsByDate(fdate, tdate, FYearID).ToList();
+
+            return PartialView("_GetAllCustomerByDate", data);
+
+        }
+
+        public JsonResult GetAllTradeCustomerByDate(string fdate, string tdate, int FYearID)
+        {
+            DateTime d = DateTime.Now;
+            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+
+            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+
+            //var sdate = DateTime.Parse(fdate);
+            //var edate = DateTime.Parse(tdate);
+            var sdate = Convert.ToDateTime(fdate);
+            var edate = Convert.ToDateTime(tdate);
+
+            //var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.IsTradingReceipt == true && x.FYearID == FYearID).OrderByDescending(x => x.RecPayDate).ToList();
+            //var cust = Context1.SP_GetAllRecieptsDetailsByDate(fdate, tdate, FYearID).ToList();
+            var data = ReceiptDAO.GetCustomerReceiptsByDate(fdate, tdate, FYearID);
+            //data.ForEach(s => s.Remarks = (from x in Context1.RecPayDetails where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select x).FirstOrDefault() != null ? (from x in Context1.RecPayDetails join C in Context1.CurrencyMasters on x.CurrencyID equals C.CurrencyID where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select C.CurrencyName).FirstOrDefault() : "");
+
+            ViewBag.AllCustomers = Context1.CustomerMasters.ToList();
+            string view = this.RenderPartialView("_GetAllTradeCustomerByDate", data);
+            //string view = this.RenderPartialView("_Table", data);
+
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = true,
+                    view = view
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+
+
+        }
+        public ActionResult GetTradeReceiptsByDate(string fdate, string tdate, int FYearID)
+        {
+            DateTime d = DateTime.Now;
+            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+
+            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+            var sdate = DateTime.Parse(fdate);
+            var edate = DateTime.Parse(tdate);
+            ViewBag.AllCustomers = Context1.CustomerMasters.ToList();
+            var cust = ReceiptDAO.GetCustomerReceiptsByDate(fdate, tdate, FYearID).ToList();
+
+            //var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.FYearID == FYearID && x.IsTradingReceipt == true).OrderByDescending(x => x.RecPayDate).ToList();
+
+            //data.ForEach(s => s.Remarks = (from x in Context1.RecPayDetails where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select x).FirstOrDefault() != null ? (from x in Context1.RecPayDetails join C in Context1.CurrencyMasters on x.CurrencyID equals C.CurrencyID where x.RecPayID == s.RecPayID && (x.CurrencyID != null || x.CurrencyID > 0) select C.CurrencyName).FirstOrDefault() : "");
+
+
+
+
+            return PartialView("_GetAllTradeCustomerByDate", cust);
+
+        }
+        [HttpGet]
+        public ActionResult Index(int? id, string FromDate, string ToDate)
+        {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
+            List<DRSReceiptVM> Receipts = new List<DRSReceiptVM>();
+            DateTime pFromDate;
+            DateTime pToDate;
+            if (FromDate == null || ToDate == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date; // // ToDate = DateTime.Now;
+
+                pFromDate = AccountsDAO.CheckParamDate(pFromDate, FyearId).Date;
+                pToDate = AccountsDAO.CheckParamDate(pToDate, FyearId).Date;
+            }
+            else
+            {
+                pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
+                pToDate = Convert.ToDateTime(ToDate);
+
+            }
+
+            Receipts = ReceiptDAO.GetDRSReceipts(FyearId, pFromDate, pToDate); // RP.GetAllReciepts();
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");                      
+            return View(Receipts);
+        }
+        [HttpGet]
+        public ActionResult Create(int id=0)
+        {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
+            DRSReceiptVM cust = new DRSReceiptVM();
+            cust.Details= new List<DRSReceiptDetailVM>();            
+            if (Session["UserID"] != null)
+            {
+                var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+
+                if (id > 0)
+                {
+                    ViewBag.Title = "DRS Receipt - Modify";
+                    //cust = RP.GetRecPayByRecpayID(id);
+
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+                    
+                    cust.Details  = new List<DRSReceiptDetailVM>();                  
+                  
+                    //BindMasters_ForEdit(cust);
+                }
+                else
+                {
+                    ViewBag.Title = "DRS Receipt - Create";
+                    string DocNo = ReceiptDAO.GetMaxDRSReceiptNO();
+                    //BindAllMasters(2);
+
+                    var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+
+                    DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+                    cust.DRSRecPayDate = pFromDate;
+                    cust.DRSRecPayID = 0;
+                    cust.DocumentNo = DocNo;
+                    //cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Login");
+            }
+           
+            return View(cust);
+
         }
 
         [HttpPost]
-
-        public ActionResult Edit(DRSReceiptVM data)
+        public ActionResult Create(DRSReceiptVM vm)
         {
-            DRSReceipt obj = new DRSReceipt();
-            obj.DRSReceiptID = data.DRSReceiptID;
-            obj.DRSNo = data.DRSNo;
-            obj.EmployeeID = data.EmployeeID;
-            obj.DRSReceiptDate = data.DRSReceiptDate;
-            obj.DepartmentID = data.DepartmentID;
-            obj.VehicleID = data.VehicleID;
-            obj.Remarks = data.Remarks;
-            obj.AcCompanyID = data.AcCompanyID;
-            obj.User1 = data.User1;
-            obj.FYearID = data.FYearID;
-            obj.Amount = data.Amount;
-
-
-            if (ModelState.IsValid)
+            int fyearid = Convert.ToInt32(Session["fyearid"]);
+            int companyid = Convert.ToInt32(Session["ACCompanyID"]);
+            DRSRecPay v = new DRSRecPay();
+            int RPID = 0;
+            if (vm.DRSRecPayID==0)
             {
-                db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully Updated DRS Receipt.";
-                return RedirectToAction("Index");
-            }
-            return View();
-
-        }
-
-
-
-        public class Details
-        {
-            public string DRSID { get; set; }
-            public string DRSNo { get; set; }
-            public int VehicleID { get; set; }
-           
-            public decimal Amount { get; set; }
-            public int DeliveredBy { get; set; }
-        
-
-        }
-
-        public JsonResult GetDRSData(string id)
-        {
-
-            //var l = (from c in db.InScans where c.InScanDate >= s  && c.InScanDate <= e select c).ToList();
-            var l = (from c in db.DRS where c.DRSNo == id select c).FirstOrDefault();
-
-            Details obj = new Details();
-            if (l != null)
-            {
-                obj.DRSID = l.DRSID.ToString();
-                obj.DRSNo = l.DRSNo;
-                obj.VehicleID = l.VehicleID.Value;
-                obj.DeliveredBy = l.DeliveredBy.Value;
-
-                decimal tot = 0;
-                var amtdata = (from c in db.DRSDetails where c.DRSID == l.DRSID select c).ToList();
-                foreach (var item in amtdata)
+                vm.AcCompanyID = companyid;
+                vm.FYearID = fyearid;
+                if (vm.CashBank != null)
                 {
-                    tot = tot + Convert.ToDecimal(item.CourierCharge);
+                    vm.StatusEntry = "CS";
+                    int acheadid = Convert.ToInt32(vm.CashBank);
+                    var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
+                    vm.BankName = achead;
+                }
+                else
+                {
+                    vm.StatusEntry = "BK";
+                    int acheadid = Convert.ToInt32(vm.ChequeBank);
+                    var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
+                    vm.BankName = achead;
+                }
+                vm.CourierEMPID= Convert.ToInt32(Session["UserID"]);
+                RPID = ReceiptDAO.AddDRSReceipt(vm, Session["UserID"].ToString()); //.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
+            }
+            else
+            {
+                RPID = vm.DRSRecPayID;
+                DRSRecPay recpay = Context1.DRSRecPays.Find(RPID);
+                recpay.DRSRecPayDate = vm.DRSRecPayDate;                                
+                recpay.BankName = vm.BankName;
+                recpay.ChequeDate = vm.ChequeDate;
+                recpay.ChequeNo = vm.ChequeNo;                                                                
+                recpay.ReceivedAmount = vm.ReceivedAmount;
+                recpay.StatusEntry = vm.StatusEntry;                
+                recpay.Remarks = vm.Remarks;
+                Context1.Entry(recpay).State = EntityState.Modified;
+                Context1.SaveChanges();
+            }
+
+            foreach (var item in vm.Details)
+            {
+                if (item.DRSRecPayDetailID==0)
+                {
+                    DRSRecPayDetail detail =new DRSRecPayDetail();
+                    detail.DRSRecPayID = RPID;
+                    detail.InScanID = item.InScanID;
+                    detail.AWBNO = item.AWBNO;
+                    detail.CourierCharge = item.CourierCharge;
+                    detail.MaterialCost = item.MaterialCost;
+                    detail.CCReceived = item.CCReceived;
+                    detail.MCReceived = item.MCReceived;
+                    detail.StatusClose = item.StatusClose;
+                    detail.Discount = item.Discount;
+                    Context1.DRSRecPayDetails.Add(detail);
+                    Context1.SaveChanges();
 
                 }
-                obj.Amount = tot;
+                else
+                {
+                    DRSRecPayDetail detail = Context1.DRSRecPayDetails.Find(item.DRSRecPayDetailID);                    
+                    detail.InScanID = item.InScanID;
+                    detail.AWBNO = item.AWBNO;
+                    detail.CourierCharge = item.CourierCharge;
+                    detail.MaterialCost = item.MaterialCost;
+                    detail.CCReceived = item.CCReceived;
+                    detail.MCReceived = item.MCReceived;
+                    detail.StatusClose = item.StatusClose;
+                    detail.Discount = item.Discount;
+                    Context1.Entry(detail).State = EntityState.Modified;
+                    Context1.SaveChanges();
+                }
+
             }
 
-            return Json(obj, JsonRequestBehavior.AllowGet);
+
+            return RedirectToAction("Index", "DRSReceipt", new { id=0 });
+
         }
-
-
-
-        public ActionResult DeleteConfirmed(int id)
+        [HttpGet]
+        public JsonResult GetDRSNo(string term)
         {
-            DRSReceipt drs = db.DRSReceipts.Find(id);
-            db.DRSReceipts.Remove(drs);
-            db.SaveChanges();
-            TempData["SuccessMsg"] = "You have successfully Deleted DRS Receipt.";
-            return RedirectToAction("Index");
+            if (term.Trim() != "")
+            {
+                var drslist = (from c1 in Context1.DRS
+                               where c1.DRSNo.ToLower().Contains(term.ToLower())
+                               orderby c1.DRSNo ascending
+                               select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate }).ToList();
+
+                return Json(drslist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var drslist = (from c1 in Context1.DRS                               
+                               orderby c1.DRSNo ascending
+                               select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate  }).ToList();
+
+                return Json(drslist, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
+        [HttpGet]
+        public JsonResult GetDRSAWB(int DRSID,int RecPayId=0)
+        {
+            var details= ReceiptDAO.GetDRSAWB(DRSID, RecPayId);
+           return Json(details, JsonRequestBehavior.AllowGet);
+        }
+
+        public static string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "Zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " Million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " Thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " Hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                var unitsMap = new[] { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+                var tensMap = new[] { "Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
+                if (number < 20)
+                    words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + unitsMap[number % 10];
+                }
+            }
+            return words;
+        }
+      
     }
 }

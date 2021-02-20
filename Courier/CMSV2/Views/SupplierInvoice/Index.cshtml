@@ -1,0 +1,164 @@
+﻿@model IEnumerable<CMSV2.Models.SupplierInvoiceVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal = @Session["Decimal"].ToString();
+}
+
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+    table input {
+        width: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({
+            "aaSorting": [],
+            //"dom": '<"top"i>rt<"top"flp><"clear">',
+            //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //"pagingType": "simple"
+        });
+        table.draw();
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Supplier Invoice</h1>
+
+</section>
+<div class="col-md-12">
+    <p class="indexbtnpadding pull-right">
+        @Html.ActionLink("Create New", "Create", new { id=0}, new { @class = "btn btn-primary btnwidth" })
+    </p>
+</div>
+<div class="clearfix"></div>
+
+
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                      $(document).ready(function () {
+                          $.notify("@TempData["SuccessMsg"]", "success");
+                });
+        </script>
+    }
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%;table-layout:fixed">
+            <thead>
+                <tr>                    
+                    <th>
+                        @Html.Label("Invoice Date")
+                    </th>
+                    <th>
+                        @Html.Label("Invoice No")
+                    </th>
+                    <th>
+                        @Html.Label("Supplier Nme")
+                    </th>
+                    <th>
+                        @Html.Label("Supplier Type")
+                    </th>
+                    <th>
+                        @Html.Label("Amount")
+                    </th>                    
+                    <th> Action</th>
+                </tr>
+
+            </thead>
+            <tfoot>
+                <tr>
+            <tfoot>
+                <tr>
+                    <th>
+                        @Html.Label("Invoice Date")
+                    </th>
+                    <th>
+                        @Html.Label("Invoice No")
+                    </th>
+                    <th>
+                        @Html.Label("Supplier Name")
+                    </th>
+                    <th>
+                        @Html.Label("Supplier Type")
+                    </th>
+                    <th>
+                        @Html.Label("Amount")
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td class="text-right">
+
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InvoiceDate)
+                            
+                        </td>
+                        <td >
+                            @Html.DisplayFor(modelItem => item.InvoiceNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SupplierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SupplierType)
+                        </td>
+                        <td class="text-right">
+                            @*@Html.DisplayFor(modelItem => item.Amount)*@
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.Amount,@_decimal)
+                        </td>                        
+                        <td>
+                            <a href="@Url.Action("Create", new { id = item.SupplierInvoiceID })"><i class="fa fa-pencil"></i></a>|
+                            <a href="#" onclick="Delete(@item.SupplierInvoiceID)"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+    </div>
+</section>
+
+
+
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Invoice?")) {
+            window.location.href = "/SupplierInvoice/Delete?id=" + ID;
+        }
+    }
+</script>

@@ -5,45 +5,27 @@
 // Assembly location: D:\Courier09022018\Decompiled\obj\Release\Package\PackageTmp\bin\CMSV2.dll
 
 using System;
+using System.Collections.Generic;
 
 namespace CMSV2.Models
 {
-  public class DRSReceiptVM
+  public class DRSReceiptVM :DRSRecPay
   {
-    public int DRSReceiptID { get; set; }
-
-    public DateTime? DRSReceiptDate { get; set; }
-
     public string DRSNo { get; set; }
-
-    public Decimal? Amount { get; set; }
-
-    public string Remarks { get; set; }
-
-    public int? VehicleID { get; set; }
-
-    public int? EmployeeID { get; set; }
-
-    public int? DepartmentID { get; set; }
-
-    public int? AcJournalID { get; set; }
-
-    public string StatusRunSheet { get; set; }
-
-    public int? User1 { get; set; }
-
-    public int? FYearID { get; set; }
-
-    public int? AcCompanyID { get; set; }
-
-    public int? DRSID { get; set; }
-
-    public int? AcID { get; set; }
-
-    public string Vehicle { get; set; }
-
-    public string Account { get; set; }
-
-    public string Deliver { get; set; }
+        public string CashBank { get; set; }
+        //public string BankName { get; set; }
+        public string ChequeBank { get; set; }
+        public string CourierEmpName { get; set; }
+   
+        //public Nullable<System.DateTime> ChequeDate { get; set; }
+        public List<DRSReceiptDetailVM> Details { get; set; }
   }
+
+    public class DRSReceiptDetailVM : DRSRecPayDetail
+    {
+                public string AWBDate { get; set; }
+        public decimal TotalAmount { get; set; } 
+        public decimal Balance { get; set; }
+    }
+
 }

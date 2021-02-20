@@ -20,9 +20,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcMemoBankDetail" Width="1.5" PointX="21.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcMemoJournalDetail" Width="1.5" PointX="21.75" PointY="11.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcMemoJournalMaster" Width="1.5" PointX="21.75" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Width="1.5" PointX="22" PointY="87.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" Width="1.5" PointX="26.25" PointY="70.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Width="1.5" PointX="24" PointY="83" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcType" Width="1.5" PointX="0.75" PointY="24.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AgentMaster" Width="1.5" PointX="7.75" PointY="24.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AnalysisGroup" Width="1.5" PointX="14.25" PointY="75.625" IsExpanded="true" />
@@ -85,9 +82,7 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRConsignment" Width="1.5" PointX="5.25" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRInvoice" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRPKPCAD" Width="1.5" PointX="5.25" PointY="19.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" Width="1.5" PointX="5.25" PointY="22.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DR" Width="1.5" PointX="16.75" PointY="2.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" Width="1.5" PointX="29.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSEmployeeID" Width="1.5" PointX="16.75" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSExpense" Width="1.5" PointX="19" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSReceipt" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
@@ -159,8 +154,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" Width="1.5" PointX="35.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Quotation" Width="1.5" PointX="29.75" PointY="81.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.QuotationDetail" Width="1.5" PointX="32" PointY="90.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPay" Width="1.5" PointX="35.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" Width="1.5" PointX="35.75" PointY="13.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RequestType" Width="1.5" PointX="34.75" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ReturnDetail" Width="1.5" PointX="35.75" PointY="21.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueType" Width="1.5" PointX="35.75" PointY="24.125" IsExpanded="true" />
@@ -245,15 +238,11 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcCompany_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcCompany_Designation" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcCompany_LocationMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_AcFinancialYear" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_AcFinancialYear" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_AcFinancialYear" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcGroup_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcHead_AcGroup" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Category_AcHead" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Expense_AcHead" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ExpenseDetails_AcHead" ManuallyRouted="false" />
@@ -262,9 +251,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_AcJournalMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblCustomerAdjustment_AcJournalMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_AcJournalMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AnalysisHead_AnalysisGroup" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AnalysisHead_BranchMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AreaMaster_LocationMaster" ManuallyRouted="false" />
@@ -323,8 +309,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRRInvoice_DRR1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRRPKPCAD_DRR" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRRPKPCAD_DRR1" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRRRecPay_DRR" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRRRecPay_DRR1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_MCPayment_DRRConsignment" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_POD_DRRConsignment" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRSEmployee_DRS" ManuallyRouted="false" />
@@ -405,6 +389,27 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ExportShipment" Width="1.5" PointX="29.375" PointY="42.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" Width="1.5" PointX="42.375" PointY="42.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" Width="1.5" PointX="43.375" PointY="15.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="13" PointY="47.375" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Width="1.5" PointX="24" PointY="84.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" Width="1.5" PointX="26.25" PointY="108.25" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Width="1.5" PointX="24" PointY="80" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" Width="1.5" PointX="42.375" PointY="33.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSRecPayDetail" Width="1.5" PointX="3.375" PointY="22.75" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceAWB" Width="1.5" PointX="42.375" PointY="39.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" Width="1.5" PointX="44.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPay" Width="1.5" PointX="5.375" PointY="44.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" Width="1.5" PointX="44.375" PointY="19.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

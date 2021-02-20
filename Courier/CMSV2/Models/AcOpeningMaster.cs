@@ -27,6 +27,7 @@ namespace CMSV2.Models
         public Nullable<int> AssetMasterID { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
         public string InvRemarks { get; set; }
+        public Nullable<int> AcJournalId { get; set; }
     
         public virtual AcFinancialYear AcFinancialYear { get; set; }
         public virtual AcHead AcHead { get; set; }

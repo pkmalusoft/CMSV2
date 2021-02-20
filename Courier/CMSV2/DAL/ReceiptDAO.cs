@@ -440,6 +440,29 @@ namespace CMSV2.DAL
                 return null;
             }
         }
+
+        public static DataTable DeleteSupplierPayments(int RecPayID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteSupplierPayments";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static List<ReceiptAllocationDetailVM> GetAWBAllocation(List<ReceiptAllocationDetailVM> list, int InvoiceId, decimal Amount,int RecpayId)
         {
             try
@@ -489,6 +512,277 @@ namespace CMSV2.DAL
             }
 
             return list;
+        }
+
+        #region "DRSREceipt"
+        public static int AddDRSReceipt(DRSReceiptVM RecPy, string UserID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertDRSRecPay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayDate", RecPy.DRSRecPayDate);
+            cmd.Parameters.AddWithValue("@DocumentNo", RecPy.DocumentNo);
+            cmd.Parameters.AddWithValue("@DRSID", RecPy.DRSID);
+            cmd.Parameters.AddWithValue("@BankName", RecPy.BankName);
+            cmd.Parameters.AddWithValue("@ChequeNo", RecPy.ChequeNo);
+            cmd.Parameters.AddWithValue("@ChequeDate", RecPy.ChequeDate);
+            cmd.Parameters.AddWithValue("@Remarks", RecPy.Remarks);
+            cmd.Parameters.AddWithValue("@AcJournalID", RecPy.AcJournalID);            
+            cmd.Parameters.AddWithValue("@StatusEntry", RecPy.StatusEntry);            
+            cmd.Parameters.AddWithValue("@FYearID", RecPy.FYearID);
+            cmd.Parameters.AddWithValue("@AcCompanyID", RecPy.AcCompanyID);
+            cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
+            cmd.Parameters.AddWithValue("@FMoney", RecPy.ReceivedAmount);
+            cmd.Parameters.AddWithValue("@UserID", RecPy.CourierEMPID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+
+        }
+        public static string GetMaxDRSReceiptNO()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetMaxDRSReceiptNo";
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+        public static List<DRSReceiptVM> GetDRSReceipts(int FYearId, DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAllDRSRecieptsDetails";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+         
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<DRSReceiptVM> objList = new List<DRSReceiptVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DRSReceiptVM obj = new DRSReceiptVM();
+                    obj.DRSRecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DRSRecPayID"].ToString());
+                    obj.DRSRecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["DRSRecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
+                    obj.DRSNo= ds.Tables[0].Rows[i]["DRSNo"].ToString();
+                    obj.CourierEmpName = ds.Tables[0].Rows[i]["CourierName"].ToString();
+                    obj.Status  = ds.Tables[0].Rows[i]["Status"].ToString();
+                    if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
+                    {
+                        obj.ReceivedAmount = 0;
+                    }
+                    else
+                    {
+                       obj.ReceivedAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    }
+                    //obj.Currency = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Currency"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        public static List<DRSReceiptDetailVM> GetDRSAWB(int DRSID,int RecPayId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetDRSAWB";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DRSID", DRSID );
+            cmd.Parameters.AddWithValue("@DRSRecPayID",RecPayId);           
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<DRSReceiptDetailVM> objList = new List<DRSReceiptDetailVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DRSReceiptDetailVM obj = new DRSReceiptDetailVM();
+                    obj.DRSRecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DRSRecPayID"].ToString());
+                    obj.DRSRecPayDetailID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DRSRecPayDetailID"].ToString());
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanID"].ToString());
+                    obj.AWBDate = ds.Tables[0].Rows[i]["AWBDate"].ToString();
+                    obj.AWBNO = ds.Tables[0].Rows[i]["AWBNo"].ToString();                    
+                    obj.CourierCharge= CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CourierCharge"].ToString());
+                    obj.MaterialCost= CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["MaterialCost"].ToString());
+                    obj.CCReceived = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CCReceived"].ToString());
+                    obj.MCReceived = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["MCReceived"].ToString());
+                    obj.TotalAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TotalAmount"].ToString());
+                    obj.Discount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Discount"].ToString());
+                    //obj.Currency = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Currency"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
+
+        #region "supplierInvoice"
+
+        public static DataTable DeleteSupplierInvoice(int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteSupplierInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierInvoiceId", InvoiceId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static string SP_GetMaxSINo()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetMaxSupplierInvoiceNo";
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+        #endregion
+        public static int AddSupplierRecieptPayment(CustomerRcieptVM RecPy, string UserID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertSupplierRecPay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayDate", RecPy.RecPayDate);
+            cmd.Parameters.AddWithValue("@DocumentNo", RecPy.DocumentNo);
+            //cmd.Parameters.AddWithValue("@CustomerID", RecPy.CustomerID);
+            cmd.Parameters.AddWithValue("@SupplierID", RecPy.SupplierID);
+            cmd.Parameters.AddWithValue("@BusinessCentreID", RecPy.BusinessCentreID);
+            cmd.Parameters.AddWithValue("@BankName", RecPy.BankName);
+            cmd.Parameters.AddWithValue("@ChequeNo", RecPy.ChequeNo);
+            cmd.Parameters.AddWithValue("@ChequeDate", RecPy.ChequeDate);
+            cmd.Parameters.AddWithValue("@Remarks", RecPy.Remarks);
+            cmd.Parameters.AddWithValue("@AcJournalID", RecPy.AcJournalID);
+            cmd.Parameters.AddWithValue("@StatusRec", RecPy.StatusRec);
+            cmd.Parameters.AddWithValue("@StatusEntry", RecPy.StatusEntry);
+            cmd.Parameters.AddWithValue("@StatusOrigin", RecPy.StatusOrigin);
+            cmd.Parameters.AddWithValue("@FYearID", RecPy.FYearID);
+            cmd.Parameters.AddWithValue("@AcCompanyID", RecPy.AcCompanyID);
+            cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
+            cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
+            cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+
+        }
+
+        public static void InsertJournalOfSupplier(int RecpayID, int fyearId)
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertJournalEntryForSupplierRecPay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecpayID);
+            cmd.Parameters.AddWithValue("@AcFinnancialYearId", fyearId);
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+
+            //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
+        }
+        public static int InsertRecpayDetailsForSupplier(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int JobID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertRecPayDetailsForSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            cmd.Parameters.AddWithValue("@InvoiceID", InvoiceID);
+            cmd.Parameters.AddWithValue("@Amount", Amount);
+            cmd.Parameters.AddWithValue("@Remarks", Remarks);
+            cmd.Parameters.AddWithValue("@StatusInvoice", StatusInvoice);
+            cmd.Parameters.AddWithValue("@StatusAdvance", StatusAdvance);
+            cmd.Parameters.AddWithValue("@statusReceipt", statusReceip);
+            cmd.Parameters.AddWithValue("@InvDate", InvDate);
+            cmd.Parameters.AddWithValue("@InvNo", InvNo);
+            cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);
+            cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
+            //cmd.Parameters.AddWithValue("@InScanId", JobID);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+
         }
     }
 }

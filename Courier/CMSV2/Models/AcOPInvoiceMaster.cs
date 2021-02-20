@@ -29,6 +29,7 @@ namespace CMSV2.Models
         public Nullable<int> PartyID { get; set; }
         public Nullable<int> BranchID { get; set; }
         public string StatusSC { get; set; }
+        public Nullable<int> AcJournalID { get; set; }
     
         public virtual AcFinancialYear AcFinancialYear { get; set; }
         public virtual AcHead AcHead { get; set; }

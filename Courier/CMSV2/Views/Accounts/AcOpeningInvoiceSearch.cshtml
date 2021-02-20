@@ -1,0 +1,175 @@
+﻿@model CMSV2.Models.OpeningInvoiceSearch
+
+@{
+    Layout = null;
+    //var Customers = ViewBag.Customers as IEnumerable<LTMSV2.Models.CustomerMaster>;
+    //var Suppliers = ViewBag.Suppliers as IEnumerable<LTMSV2.Models.SupplierMaster>;
+    //var Agents = ViewBag.Agents as IEnumerable<LTMSV2.Models.ForwardingAgentMaster>;
+}
+<style>
+    .pageTabs {
+        padding-top: 0!important;
+        padding-bottom:0!important;    
+        margin:0;
+    }
+    .searchnav{
+        margin:35px 0 20px 0!Important;
+    }
+    .searchnav input{
+        margin:0;
+        height:auto!important;
+    }
+    .searchnav .form-control{
+        height:40px!important;
+    }
+    
+</style>
+<script type="text/javascript">
+    function EnableAdd() {
+        $('#btnadd').removeAttr('disabled');
+        $('#btnsave').removeAttr('disabled');
+    }
+    function DisabledAdd() {
+        $('#btnadd').attr('disabled', 'disabled');
+        $('#btnsave').attr('disabled', 'disabled');
+    }
+    $(document).ready(function () {
+        var url = '/Accounts/GetSupplierName';
+        
+        $("#PartyName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url,
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierTypeId: $('#InvoiceType').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                ID: val.SupplierID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#PartyName").val(i.item.label);
+                $('#PartyId').val(i.item.ID);
+                DisabledAdd();
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#PartyName").val(i.item.label);
+                $('#PartyId').val(i.item.ID);
+                DisabledAdd();
+            },
+        });
+        //$('input[type=radio][name=Type]').val($('#InvoiceType').val());
+        $('input:radio[name=Type][value=' + $('#InvoiceType').val() + ']').prop('checked', true);
+        $('input[type=radio][name=Type]').change(function () {
+            if (this.value == 'C') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('C');    
+                DisabledAdd();
+            }
+            else if (this.value == 'F') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('F');
+                DisabledAdd();
+            }
+            else if (this.value == 'H') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('H');
+                DisabledAdd();
+            }
+            else if (this.value == 'S') {  
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('S');
+                DisabledAdd();
+            }
+        });
+               
+     
+
+    
+    });
+   
+    function setThreeNumberDecimal(obj) {
+        $(obj).val(parseFloat($(obj).val()).toFixed(3));
+    }
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Invoice Opening Balance</h1>
+
+</section>
+<section class="">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+
+    @using (Html.BeginForm("AcOpeningInvoiceSearch", "Accounts", FormMethod.Post, new { @id = "invoiceOpeningsearch" }))
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row  flex  searchnav ">
+                <div class="col-md-2  border-right form-group  pageTabs ">
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="Customer" name="Type" value="C" checked="checked">
+                        <label for="Customer" class="headinglabel ">Customers  </label>
+                    </div>
+                    @*<div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="FwdAgent" name="Type" value="F">
+                        <label for="FwdAgent" class="headinglabel ">Forwarding Agents  </label>
+                    </div>
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="HireVehicle" name="Type" value="H">
+                        <label for="HireVehicle" class="headinglabel ">Hired Drivers  </label>
+                    </div>*@
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="Supplier" name="Type" value="S">
+                        <label for="Supplier" class="headinglabel "> Suppliers  </label>
+                    </div>
+                </div>
+                <div class="col-md-10" style="padding-left:30px">
+                <div class="col-md-2 ">
+                    <label class="headinglabel">Opening Date</label>
+                    @Html.TextBoxFor(model => model.OpeningDate, new { @class = "form-control text-right",@readonly="readonly" })
+                    @*<input type="text" class="form-control" value=@LTMSV2.Models.CommanFunctions.GetShortDateFormat(Model.OpeningDate) />*@
+                </div>
+                <div class="col-md-4">
+                    <label class="headinglabel required">Customer</label>
+                    @Html.TextBoxFor(model => model.PartyName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.PartyId)
+                    @Html.HiddenFor(model => model.InvoiceType)
+                </div>
+                <div class="col-md-1" style="padding-top: 10px">
+                    <button class="btn btn-primary small_btn" type="submit" id="btnsearch" ><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </div>
+                <div class="col-md-5 btn-right">
+                    <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                    @*<input type="button" value="Cancel" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btncancel" />*@
+                    @*<input type="button" value="Back" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btnBack" />*@
+                    <a href='@Url.Action("AcOpeningInvoiceIndex", "Accounts", new { type= "All" })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
+            </div>            
+            </div>
+        </fieldset>
+    }
+</section>

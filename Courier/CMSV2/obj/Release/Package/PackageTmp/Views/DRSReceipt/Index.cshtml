@@ -3,6 +3,22 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/DRSReceipt/Index";
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 
 <style>
@@ -43,11 +59,38 @@
 </section>
 
 
+<div class="row no-margin">
+    <div class=" d-flex">        
+        <div class="col-md-1">
+            <label class="headinglabel">From </label>
+            <input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />
+            @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+        </div>
 
-<p class="indexbtnpadding">
-    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
-</p>
+        <div class="col-md-1">
+            <label class="headinglabel">To </label>
+            <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+        </div>
 
+        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
+            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>            
+        </div>
+        <div class="pull-left" style="padding-top:32px;">
+            <p class="indexbtnpadding">
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                }
+
+            </p>
+        </div>
+    </div>
+</div>
 
 <section class="content">
       @if (TempData["SuccessMsg"] != null)
@@ -63,92 +106,83 @@
     <div class="table-responsive tblbackground" style="padding:15px">
 <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
   <thead>
-        <tr>
-         
-        <th>
-            @Html.Label("DRS No")
-        </th>
+      <tr>
 
-             <th>
-            @Html.Label("Amount")
-        </th>
-
-             <th>
-            @Html.Label("Tran Date")
-        </th>
-
-             <th>
-            @Html.Label("Delivered By")
-        </th>
-
-             <th>
-            @Html.Label("Vechile")
-        </th>
-     
-             <th>
-            @Html.Label("Remarks")
-        </th>
-        <th>Action</th>
-    </tr>
+          <th>
+              DRS Receipt No.
+          </th>
+          <th>
+              @Html.Label("Receipt Date")
+          </th>
+          <th>
+              @Html.Label("Amount")
+          </th>
+          <th>
+              @Html.Label("DRS No")
+          </th>
+          <th>
+              @Html.Label("Courier EMP")
+          </th>
+          <th>
+              @Html.Label("Status")
+          </th>
+          <th>Action</th>
+      </tr>
   </thead>
     <tfoot>
-         <tr>
-         <th>
-            @Html.Label("DRS No")
-        </th>
+        <tr>
+            <th>
+                @Html.Label("DRS Receipt No.")
+            </th>
+            <th>
+                @Html.Label("Receipt Date")
+            </th>
+            <th>
+                @Html.Label("Amount")
+            </th>
+            <th>
+                @Html.Label("DRS NO")
+            </th>
+            <th>
+                @Html.Label("Courier")
+            </th>
+            <th>
+                @Html.Label("Status")
+            </th>
 
-             <th>
-            @Html.Label("Amount")
-        </th>
-
-             <th>
-            @Html.Label("Tran Date")
-        </th>
-
-             <th>
-            @Html.Label("Delivered By")
-        </th>
-
-             <th>
-            @Html.Label("Vechile")
-        </th>
-     
-             <th>
-            @Html.Label("Remarks")
-        </th>
-     
-        <th style="display:none"></th>
-    </tr>
+            <th style="display:none"></th>
+        </tr>
     </tfoot>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DRSNo)
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.DocumentNo)
+    </td>
+    <td>
+        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.DRSRecPayDate)
+    </td>
+    <td>
+        @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.ReceivedAmount, "2")
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DRSNo)
+    </td>
+    <td>
+            @Html.DisplayFor(modelItem => item.CourierEmpName)
         </td>
          <td>
-            @Html.DisplayFor(modelItem => item.Amount)
+            @Html.DisplayFor(modelItem => item.Status)
         </td>
-         <td>
-           @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.DRSReceiptDate)
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.Deliver)
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.Vehicle)
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.Remarks)
-        </td>
-     
-        <td>
-             @*  @Html.ActionLink("Edit", "Edit", new {  id=item.DRSReceiptID  }) *@
-       <a href="@Url.Action("Edit", new { id = item.DRSReceiptID })"><i class="fa fa-pencil"></i></a> |
-   
-              <a href="#" onclick="Delete(ID=@item.DRSReceiptID)"><i class="fa fa-times"></i></a>
-        </td>
-    </tr>
+         
+
+    <td>
+        @*  @Html.ActionLink("Edit", "Edit", new {  id=item.DRSReceiptID  }) *@
+        <a href="@Url.Action("Edit", new { id = item.DRSRecPayID })"><i class="fa fa-pencil"></i></a> |
+
+        <a href="#" onclick="Delete(ID=@item.DRSRecPayID)"><i class="fa fa-times"></i></a>
+    </td>
+</tr>
 }
 
 </table>

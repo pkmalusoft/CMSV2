@@ -42,9 +42,6 @@ namespace CMSV2.Models
         public virtual DbSet<AcMemoBankDetail> AcMemoBankDetails { get; set; }
         public virtual DbSet<AcMemoJournalDetail> AcMemoJournalDetails { get; set; }
         public virtual DbSet<AcMemoJournalMaster> AcMemoJournalMasters { get; set; }
-        public virtual DbSet<AcOpeningMaster> AcOpeningMasters { get; set; }
-        public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
-        public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
         public virtual DbSet<AcType> AcTypes { get; set; }
         public virtual DbSet<AgentMaster> AgentMasters { get; set; }
         public virtual DbSet<AnalysisGroup> AnalysisGroups { get; set; }
@@ -107,9 +104,7 @@ namespace CMSV2.Models
         public virtual DbSet<DRRConsignment> DRRConsignments { get; set; }
         public virtual DbSet<DRRInvoice> DRRInvoices { get; set; }
         public virtual DbSet<DRRPKPCAD> DRRPKPCADs { get; set; }
-        public virtual DbSet<DRRRecPay> DRRRecPays { get; set; }
         public virtual DbSet<DR> DRS { get; set; }
-        public virtual DbSet<DRSDetail> DRSDetails { get; set; }
         public virtual DbSet<DRSEmployeeID> DRSEmployeeIDs { get; set; }
         public virtual DbSet<DRSExpense> DRSExpenses { get; set; }
         public virtual DbSet<DRSReceipt> DRSReceipts { get; set; }
@@ -181,8 +176,6 @@ namespace CMSV2.Models
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<Quotation> Quotations { get; set; }
         public virtual DbSet<QuotationDetail> QuotationDetails { get; set; }
-        public virtual DbSet<RecPay> RecPays { get; set; }
-        public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
         public virtual DbSet<RequestType> RequestTypes { get; set; }
         public virtual DbSet<ReturnDetail> ReturnDetails { get; set; }
         public virtual DbSet<RevenueType> RevenueTypes { get; set; }
@@ -269,6 +262,18 @@ namespace CMSV2.Models
         public virtual DbSet<RecPayAllocationDetail> RecPayAllocationDetails { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<ExportShipment> ExportShipments { get; set; }
+        public virtual DbSet<MaterialCostMaster> MaterialCostMasters { get; set; }
+        public virtual DbSet<DRRRecPay> DRRRecPays { get; set; }
+        public virtual DbSet<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
+        public virtual DbSet<AcOpeningMaster> AcOpeningMasters { get; set; }
+        public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
+        public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
+        public virtual DbSet<DRSRecPay> DRSRecPays { get; set; }
+        public virtual DbSet<DRSRecPayDetail> DRSRecPayDetails { get; set; }
+        public virtual DbSet<SupplierInvoiceAWB> SupplierInvoiceAWBs { get; set; }
+        public virtual DbSet<DRSDetail> DRSDetails { get; set; }
+        public virtual DbSet<RecPay> RecPays { get; set; }
+        public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

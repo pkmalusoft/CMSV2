@@ -15,7 +15,7 @@ namespace CMSV2.Models
     public partial class RecPay
     {
         public int RecPayID { get; set; }
-        public Nullable<System.DateTime> RecPayDate { get; set; }
+        public System.DateTime RecPayDate { get; set; }
         public string DocumentNo { get; set; }
         public Nullable<int> CustomerID { get; set; }
         public Nullable<int> SupplierID { get; set; }
@@ -31,7 +31,7 @@ namespace CMSV2.Models
         public Nullable<int> FYearID { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
         public Nullable<decimal> EXRate { get; set; }
-        public Nullable<decimal> FMoney { get; set; }
+        public decimal FMoney { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<bool> IsTradingReceipt { get; set; }
     }

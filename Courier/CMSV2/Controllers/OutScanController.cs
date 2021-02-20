@@ -245,6 +245,7 @@ namespace CMSV2.Controllers
                     db.Entry(_inscan).State = EntityState.Modified;
                     db.SaveChanges();
 
+                   
 
                 }
 
@@ -282,6 +283,17 @@ namespace CMSV2.Controllers
 
                 db.AWBTrackStatus.Add(_awbstatus);
                 db.SaveChanges();
+
+                MaterialCostMaster mc = new MaterialCostMaster();
+                mc = db.MaterialCostMasters.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
+                if (mc != null)
+                {
+                    mc.DRSID = v.DRSID;
+                    mc.Status = "OUTSCAN";
+                    db.Entry(mc).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
             }
 
 
@@ -482,12 +494,12 @@ namespace CMSV2.Controllers
             {
                 try
                 {
-                    var data = (from c in db.DRSDetails where c.DRSID == id select c).ToList();
-                    foreach (var item in data)
-                    {
-                        db.DRSDetails.Remove(item);
-                        db.SaveChanges();
-                    }
+                    //var data = (from c in db.DRSDetails where c.DRSID == id select c).ToList();
+                    //foreach (var item in data)
+                    //{
+                    //    db.DRSDetails.Remove(item);
+                    //    db.SaveChanges();
+                    //}
 
                     db.DRS.Remove(d);
                     db.SaveChanges();

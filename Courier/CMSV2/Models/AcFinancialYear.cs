@@ -17,11 +17,11 @@ namespace CMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AcFinancialYear()
         {
-            this.AcOpeningMasters = new HashSet<AcOpeningMaster>();
-            this.AcOPInvoiceMasters = new HashSet<AcOPInvoiceMaster>();
             this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.SalesInvoices = new HashSet<SalesInvoice>();
             this.tblSupplierAdjustments = new HashSet<tblSupplierAdjustment>();
+            this.AcOpeningMasters = new HashSet<AcOpeningMaster>();
+            this.AcOPInvoiceMasters = new HashSet<AcOPInvoiceMaster>();
         }
     
         public int AcFinancialYearID { get; set; }
@@ -35,14 +35,14 @@ namespace CMSV2.Models
         public bool CurrentFinancialYear { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AcOpeningMaster> AcOpeningMasters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesInvoice> SalesInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblSupplierAdjustment> tblSupplierAdjustments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AcOpeningMaster> AcOpeningMasters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
     }
 }

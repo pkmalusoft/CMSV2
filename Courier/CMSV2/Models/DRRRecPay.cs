@@ -21,8 +21,5 @@ namespace CMSV2.Models
         public string Remarks { get; set; }
         public string StatusRecPay { get; set; }
         public Nullable<int> AcJournalID { get; set; }
-    
-        public virtual DRR DRR { get; set; }
-        public virtual DRR DRR1 { get; set; }
     }
 }

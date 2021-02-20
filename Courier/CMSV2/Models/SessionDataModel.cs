@@ -51,7 +51,15 @@ namespace CMSV2.Models
         {
             System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
         }
+        public static void SetSupplierLedgerParam(SupplierLedgerReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["SupplierLedgerReportParam"] = reportparam;
+        }
 
+        public static SupplierLedgerReportParam GetSupplierLedgerReportParam()
+        {
+            return (SupplierLedgerReportParam)System.Web.HttpContext.Current.Session["SupplierLedgerReportParam"];
+        }
         public static AWBReportParam GetAWBReportParam()
         {
             return (AWBReportParam)System.Web.HttpContext.Current.Session["AWBReportParam"];
@@ -117,6 +125,15 @@ namespace CMSV2.Models
         public static string GetProfileImage()
         {
             return System.Web.HttpContext.Current.Session["profilePic"]?.ToString();
+        }
+
+        public static OpeningInvoiceSearch GetOpeningInvoiceSearch()
+        {
+            return (OpeningInvoiceSearch)System.Web.HttpContext.Current.Session["OpeningInvoiceSearch"];
+        }
+        public static void SetOpeningInvoiceSearch(OpeningInvoiceSearch reportparam)
+        {
+            System.Web.HttpContext.Current.Session["OpeningInvoiceSearch"] = reportparam;
         }
     }
 }
