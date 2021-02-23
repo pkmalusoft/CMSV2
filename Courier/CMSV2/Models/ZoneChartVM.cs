@@ -31,5 +31,20 @@ namespace CMSV2.Models
     public string countrylist { get; set; }
 
     public string citylist { get; set; }
-  }
+
+        public string LocationName { get; set; }
+        public string CountryName { get; set; }
+        public string CityName { get; set; }
+
+        public List<ZoneChartDetailsVM> Details { get; set; }
+    }
+
+    public class ZoneChartDetailsVM
+    {
+        public int LocationID{ get; set; }
+        public string LocationName { get; set; }
+        public string CityName { get; set; }
+        public string CountryName { get; set; }
+        public string PlaceID { get; set; }
+    }
 }

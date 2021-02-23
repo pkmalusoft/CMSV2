@@ -8,28 +8,241 @@
 <link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
 <script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
 <style>
-    #CountryID + .btn-group button,#CountryID + .btn-group,#CityID + .btn-group button,#CityID + .btn-group{
-	display:block;
-	width:100%;
-	}
+    #CountryID + .btn-group button, #CountryID + .btn-group, #CityID + .btn-group button, #CityID + .btn-group {
+        display: block;
+        width: 100%;
+    }
 </style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#TextBoxVenueLocation").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            $('#EventVenueId').val("");
+                            $('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#TextBoxVenueLocation').val(ui.item.label);
+                $('#EventVenueId').val(ui.item.value);
+                return false;
+            }
+        }).autocomplete("widget").addClass("CitiesAutocomplete");
+    });
+</script>
+<script type="text/javascript">
+    //    google.maps.event.addDomListener(window, 'load', function () {
+    //        var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+    //        google.maps.event.addListener(places, 'place_changed', function () {
+    //            var place = places.getPlace();
+    //    var address = place.formatted_address;
+    //    var latitude = place.geometry.location.A;
+    //    var longitude = place.geometry.location.F;
+    //    var mesg = "Address: " + address;
+    //    mesg += "\nLatitude: " + latitude;
+    //    mesg += "\nLongitude: " + longitude;
+    //    alert(mesg);
+    //});
+    //    });
+
+    var placeSearch, autocomplete, autocompleteCity, autocompleteCountry;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('LocationName'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields(['address_component', 'place_id']);
+        autocomplete.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+
+
+        autocompleteCity = new google.maps.places.Autocomplete(
+            document.getElementById('CityName'), { types: ['geocode'] });
+
+        autocompleteCountry = new google.maps.places.Autocomplete(
+            document.getElementById('CountryName'), { types: ['geocode'] });
+
+    }
+
+    function fillInAddress() {
+        debugger;
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        console.log(place.place_id);
+        console.log(place.address_components);
+
+        //for (var component in componentForm) {
+        //  document.getElementById(component).value = '';
+        //  document.getElementById(component).disabled = false;
+        //}
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        //for (var i = 0; i < place.address_components.length; i++) {
+        //  var addressType = place.address_components[i].types[0];
+        //  if (componentForm[addressType]) {
+        //    var val = place.address_components[i][componentForm[addressType]];
+        //    document.getElementById(addressType).value = val;
+        //  }
+        //      }
+
+        var postcode = '';
+        //GetEventVenuesList
+        $.ajax({
+            type: "GET",
+            url: "/ZoneChart/GetEventVenuesList",
+            datatype: "Json",
+            data: { SearchText: $('#LocationName').val() },
+            success: function (response) {
+                console.log(reposen);
+            }
+        });
+
+        $.each(place.predictions, function (index, component) {
+            debugger;
+            console.log(component);
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#CityName').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#CountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
+            });
+        });
+        $.each(place.address_components, function (index, component) {
+            var types = component.types;
+            console.log(types);
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#CityName').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#CountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
+            });
+        });
+
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+
+    function geoCitylocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocompleteCity.setBounds(circle.getBounds());
+            });
+        }
+    }
+
+    function geoCountrylocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocompleteCountry.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
 <script type="text/javascript">
     var countrylist = "";
 
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-      
+
         $(".divcountry").hide();
         $(".divcity").hide();
-        
+
         $("#ZoneID").prop("disabled", true);
-     
+
         $("#ZoneCategoryID").change(function () {
             $("#ZoneID").prop("disabled", false);
         });
 
-     
+
 
         $("#ZoneID").change(function () {
             $.ajax({
@@ -68,7 +281,7 @@
 
                             }
                         });
-                       
+
                     }
                     else if ($("#StatusZone").val() == "D") {
 
@@ -97,7 +310,7 @@
                         });
 
 
-                      
+
                     }
                 }
             });
@@ -128,7 +341,7 @@
                 return true;
             }
         });
-        
+
 
     });
 </script>
@@ -139,73 +352,89 @@
 </section>
 
 <section class="content">
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-   
-       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
-    <fieldset>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
 
-        <div class="row no-margin">
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
 
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Zone Category</label>
+                    @Html.DropDownListFor(model => model.ZoneCategoryID, new SelectList(@ViewBag.ZoneCategory, "ZoneCategoryID", "ZoneCategory1"), "Select", new { @class = "form-control" })
+                </div>
 
-            <div class="col-md-3">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Zone</label>
+                    @Html.HiddenFor(model => model.StatusZone)
+                    @Html.DropDownListFor(model => model.ZoneID, new SelectList(@ViewBag.Zones, "ZoneID", "ZoneName"), "Select", new { @class = "form-control" })
 
-                @*  @Html.HiddenFor(model => model.countries)*@
+                </div>
 
-                <label class="headinglabel required">Zone Category</label>
-                @Html.DropDownListFor(model => model.ZoneCategoryID, new SelectList(@ViewBag.ZoneCategory, "ZoneCategoryID", "ZoneCategory1"), "Select", new { @class = "form-control" })
+                <div class="col-md-3 divcountry">
+                    <label class="headinglabel required">Country</label><br />
+                    <select id="CountryID" name="country" multiple="multiple">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-md-3 divcity">
+                    <label class="headinglabel required">City</label><br />
+                    <select id="CityID" name="city" multiple="multiple">
+                        <option value=""></option>
+                    </select>
+
+                </div>
 
 
             </div>
+            <div class="row no-margin" style="padding-top: 10px">
+                
+                <div class="col-md-6">
+                    <label class="headinglabel required">Location</label>
+                    <input type="text" id="TextBoxVenueLocation" class="form-control" style="background-color:yellow" />
+                    <input type="hidden" id="EventVenueId" class="form-control" />
+                    <input type="text" id="VenueLocationMesssage" class="form-control" />
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Origin City</label>
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
 
-            <div class="col-md-3">
-                <label class="headinglabel required">Zone</label>
-                @Html.HiddenFor(model => model.StatusZone)
-                @Html.DropDownListFor(model => model.ZoneID, new SelectList(@ViewBag.Zones, "ZoneID", "ZoneName"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Origin Country</label>
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
 
+                </div>
+                <div class="col-md-3" style="padding-top:10px">
+                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+
+                </div>
 
             </div>
-            @*    @Html.DropDownListFor(model => model.CountryIDs, new SelectList(@ViewBag.Country, "CountryID","CountryName"), "Select", new {multiple="multiple", @class = "form-control" })*@
-            <div class="col-md-3 divcountry">
-                <label class="headinglabel required">Country</label><br />
-                <select id="CountryID" name="country" multiple="multiple">
-                    <option value=""></option>
-                </select>
-            </div>           
-            <div class="col-md-3 divcity">
-                <label class="headinglabel required">City</label><br />
-                <select id="CityID" name="city" multiple="multiple">
-                    <option value=""></option> 
-                </select>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
 
+                </div>
+            </div>
+
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12">
+
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+
+                    <a href='@Url.Action("Index", "ZoneChart", new { id = 0 })' class="btn btn-primary btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                </div>
             </div>
 
 
+        </fieldset>
+    }
+</section>
 
-
-        </div>
-
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-md-3">
-              
-            </div>
-        </div>
-
-      <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-md-12">
-                           
-                              <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-                               
-                          
-                        
-                          <a href='@Url.Action("Index", "ZoneChart", new { id = 0 })' class="btn btn-primary btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
-                          
-                        </div>
-                    </div>
-
-
-    </fieldset>
-}
-    </section>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>

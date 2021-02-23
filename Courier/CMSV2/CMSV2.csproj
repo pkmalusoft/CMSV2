@@ -228,6 +228,7 @@
     <Compile Include="Controllers\DepotController.cs" />
     <Compile Include="Controllers\DesignationController.cs" />
     <Compile Include="Controllers\DRSReceiptController.cs" />
+    <Compile Include="Controllers\DRSReconcController.cs" />
     <Compile Include="Controllers\EmployeeMasterController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
@@ -3033,7 +3034,6 @@
     <Content Include="Content\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Reports\AccLedger.rpt" />
-    <Content Include="ReportsPDF\AccLedger_2810201826.pdf" />
     <Content Include="ReportsXSD\AWBPrint.xsc">
       <DependentUpon>AWBPrint.xsd</DependentUpon>
     </Content>
@@ -3055,6 +3055,7 @@
     <Content Include="Reports\AWBRegister.rpt" />
     <Content Include="Reports\AWBPrint.rpt" />
     <Content Include="Reports\AWBOutStanding.rpt" />
+    <Content Include="Reports\AWBUnInvoiced.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3076,6 +3077,7 @@
     <Content Include="Reports\SupplierAgingDetail.rpt" />
     <Content Include="Reports\SupplierAgingSummary.rpt" />
     <Content Include="Reports\SupplierLedger.rpt" />
+    <Content Include="Reports\CustomerStatement.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3553,9 +3555,13 @@
     <Content Include="Views\Accounts\AcOpeningInvoiceIndex.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoiceSearch.cshtml" />
     <Content Include="Views\Accounts\AcOpeningMaster.cshtml" />
+    <Content Include="Views\DRSReconc\Create.cshtml" />
+    <Content Include="Views\DRSReconc\Index.cshtml" />
+    <Content Include="Views\Reports\CustomerStatement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ReportsPDF\" />
     <Folder Include="Views\UserRegistration\New folder\" />
   </ItemGroup>
   <ItemGroup>

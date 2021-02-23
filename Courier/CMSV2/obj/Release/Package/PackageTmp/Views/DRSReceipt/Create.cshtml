@@ -166,7 +166,9 @@
                             return {
                                 label: val.DRSNo,
                                 value: val.DRSID,
-                                DRSDate:val.DRSDate
+                                DRSDate: val.DRSDate,
+                                CheckedBy: val.CheckedBy,
+                                TotalAmount:val.TotalAmount
                             }
                         }))
                     }
@@ -178,12 +180,25 @@
                 $("#DRSNo").val(i.item.label);
                 $('#DRSID').val(i.item.value);
                 $('#DRSID').attr('label', i.item.label);
+                var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);                
+                var cmon = myDate.getMonth() + 1;
+                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear(); 
+                $('#DRSDate').val(collectdate);
+                $('#DeliveredBy').val(i.item.CheckedBy);
+                $('#DRSAmount').val(i.item.TotalAmount);
              },
             select: function (e, i) {
                 e.preventDefault();
                 $("#DRSNo").val(i.item.label);
                 $('#DRSID').val(i.item.value);
                 $('#DRSID').attr('label', i.item.label);
+                var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
+                var cmon = myDate.getMonth() + 1;
+                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();// + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                $('#DRSDate').val(collectdate);
+
+                $('#DeliveredBy').val(i.item.CheckedBy);
+                $('#DRSAmount').val(i.item.TotalAmount);
 
             },
 
@@ -473,26 +488,36 @@
         @Html.HiddenFor(model => model.DRSRecPayID)
         @Html.HiddenFor(model => model.StatusEntry)
         @Html.HiddenFor(model => model.AcJournalID)
+    <div class="row no-margin" style="padding-top:10px">
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel">DRS Receipt No.</label>
+            @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", @readonly = "readonly" })
+
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel">Date</label>
+            @Html.TextBoxFor(model => model.DRSRecPayDate, new { @class = "form-control text-right", @required = true })
+
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <label class=" required headinglabel">DRS No.</label>
+            @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" })
+            @Html.HiddenFor(mode => Model.DRSID)
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel required">DRS Date</label>
+            @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control",@readonly="true" })
+        </div>
+        <div class="col-xs-2 col-sm-2">
+            <label class="headinglabel">DRS Amount</label>
+            @Html.TextBoxFor(model => model.DRSAmount, new { @class = "form-control", @readonly = "true" })
+        </div>
+    </div>
         <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">DRS Receipt No.</label>
-                @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", @readonly = "readonly" })
-
-            </div>
-            <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel">Date</label>
-                @Html.TextBoxFor(model => model.DRSRecPayDate, new { @class = "form-control text-right", @required = true })
-
-            </div>
-
-            <div class="col-xs-12 col-sm-4">
-                <label class=" required headinglabel">DRS No.</label>
-                @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" })
-                @Html.HiddenFor(mode => Model.DRSID)
-            </div>
-
-            <div class="col-md-1">
-                <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:33px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+            <div class="col-xs-12 col-sm-3">
+                <label class="headinglabel required">Delivered By</label>
+                @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
             </div>
             <div class="col-xs-12 col-sm-3">
                 <label class="headinglabel">Payment Mode</label>
@@ -511,12 +536,7 @@
                     <div class="form-title">
                         <label class=" required headinglabel">Bank</label>
                     </div>
-                    <div class="form-field">
-                        @* @Html.DropDownListFor(model => model.ChequeBank, new List<SelectListItem> {
-                            new SelectListItem{Text="BANK OF BARODA",Value="BANK OF BARODA"},
-                            new SelectListItem{Text="Unpresented Cheques",Value="Unpresented Cheques"}},
-                            "Select", new { @class = "form-control" })*@
-
+                    <div class="form-field">                       
                         @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
                     </div>
                 </div>
@@ -539,128 +559,20 @@
                     <label class=" required headinglabel">Received Amount</label>
                     @Html.TextBoxFor(model => model.ReceivedAmount, new { ng_model = "Amt", @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
                 </div>
-
-
-
-
-            </div>
-            <div class="col-xs-8 col-sm-8">
-                <label class="headinglabel">Remarks</label>
-                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
-            </div>
-            <div class="col-xs-2 col-sm-2">
-                <label class="headinglabel">Allocated Amount</label>
-                <input type="text" id="AllocatedAmount" class="form-control" readonly />
-            </div>
-
-
-
-
-
-        </div>
-
-        <div class="row no-margin" style="padding-top:10px">
-
-
-            <div class="col-xs-5 col-sm-5">
-                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
-            </div>
-        </div>
-
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 no-padding for-device">
-                <div class="data-table payment-div">
-                    <div class="data">
-                        <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
-                            <thead>
-                                <tr style="font-weight: bold">
-                                    <th>AWB No.</th>
-                                    <th>AWB Date</th>
-                                    <th>Courier Charge</th>
-                                    <th>MC Amount</th>
-                                    <th>CC Received</th>
-                                    <th>MC Received</th>
-                                    <th>Total Amount</th>
-                                    <th>OutStanding</th>
-                                    <th>Discount</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl1">
-                                @if (Model.DRSRecPayID > 0)
-                                {
-                                    for (int i = 0; i < Model.Details.Count; i++)
-                                    {
-
-                                        <tr>
-
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Model.Details[i].InScanID
-                                                    @Html.HiddenFor(item => @Model.Details[i].AWBNO)
-
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="data1">
-                                                    @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @if (@Model.Details[i].AWBDate != null)
-                                                    {
-                                                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.Details[i].AWBDate)
-                                                        @Html.HiddenFor(item => @Model.Details[i].AWBDate)
-                                                    }
-                                                    else
-                                                    {
-                                                        @Model.Details[i].AWBDate
-                                                        @Html.HiddenFor(item => @Model.Details[i].AWBDate)
-                                                    }
-                                                </div>
-                                            </td>
-
-                                            <td style="text-align:right;">
-                                                <div class="data1">
-                                                    @Html.HiddenFor(item => @Model.Details[i].CourierCharge, new { @Class = "AmountToBeRecieved" })
-                                                    @string.Format("{0:n3}", @Model.Details[i].CourierCharge)
-                                                </div>
-                                            </td>
-
-                                            <td style="text-align:right;">
-                                                @Html.HiddenFor(item => @Model.Details[i].MaterialCost, new { @Class = "AmountToBePaid" })
-                                                @string.Format("{0:n3}", @Model.Details[i].MaterialCost)
-                                            </td>
-                                            <td style="text-align:right;">
-                                                @Html.TextBoxFor(item => @Model.Details[i].CCReceived, string.Format("{0:n3}", @Model.Details[i].CCReceived), new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.Details[i].InScanID })
-                                            </td>
-                                            <td style="text-align:right;">
-                                                @Html.TextBoxFor(item => item.Details[i].MCReceived, string.Format("{0:n3}", @Model.Details[i].MCReceived), new { @class = "amt txtNum text-right Amount", @id = "txtccreceived_" + @Model.Details[i].InScanID, onchange = "CheckAmt(this)" })
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" />
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" />
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" />
-                                            </td>
-                                            <td>
-                                            </td>
-                                        </tr>
-
-                                    }
-                                }
-                            </tbody>
-
-                        </table>
-
-
-                    </div>
+                <div class="col-xs-6 col-sm-6">
+                    <label class="headinglabel">Remarks</label>
+                    @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
                 </div>
+
+
+
             </div>
+           
+
+
         </div>
+
+     
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-12 btn-right">
                 @if (Model.DRSRecPayID > 0)
@@ -676,7 +588,7 @@
         </div>
 
 
-    }
+        }
 </section>
 
 

@@ -7,6 +7,8 @@ using CMSV2.Models;
 using System.Data;
 using CMSV2.DAL;
 using System.Data.Entity;
+using System.Configuration;
+using Newtonsoft.Json;
 
 namespace CMSV2.Controllers
 {
@@ -298,14 +300,51 @@ namespace CMSV2.Controllers
             }
             return Json(objCity, JsonRequestBehavior.AllowGet);
         }
-
+        public class Prediction
+        {
+            public string description { get; set; }
+            public string id { get; set; }
+            public string place_id { get; set; }
+            public string reference { get; set; }
+            public List<string> types { get; set; }
+        }
+        public class RootObject
+        {
+            public List<Prediction> predictions { get; set; }
+            public string status { get; set; }
+        }
         public class CityM
         {
             public int CityID { get; set; }
             public String City { get; set; }
         }
-      
 
+        [HttpGet, ActionName("GetEventVenuesList")]
+        public JsonResult GetEventVenuesList(string SearchText)
+        {
+            string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
+            string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
+            //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />
+            //< add key = "GooglePlaceAPIKey" value = "Your API Key" ></ add >
+            string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];
+
+            try
+            {
+                placeApiUrl = placeApiUrl.Replace("{0}", SearchText);
+                placeApiUrl = placeApiUrl.Replace("{1}", GooglePlaceAPIKey);// ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
+
+                var result = new System.Net.WebClient().DownloadString(placeApiUrl);
+                        var Jsonobject = JsonConvert.DeserializeObject<RootObject>(result);
+
+                List<Prediction> list = Jsonobject.predictions;
+
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
 

@@ -1089,9 +1089,9 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "CustomerLedger");
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/reportsxsd"), "CustomerLedger.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/reportsxsd"), "CustomerLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerLedger.rpt"));
@@ -1180,9 +1180,9 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "CustomerOutStanding");
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerOutStanding.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerOutStanding.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerOutStanding.rpt"));
@@ -1395,9 +1395,9 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             if (reportparam.CustomerName != "" && reportparam.CustomerName != null)
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment UnInvoiced Report for Customer " + reportparam.CustomerName);
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("AWB UnInvoiced Report for Customer " + reportparam.CustomerName);
             else
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment UnInvoiced Report for All Customer");
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("AWB UnInvoiced Report for All Customer");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -1468,19 +1468,19 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "CustomerAging");
 
             //generate XSD to design report          
-            if (reportparam.ReportType == "Detail")
-            {
-                System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerAgingDetail.xsd"));
+            //if (reportparam.ReportType == "Detail")
+            //{
+            //    System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerAgingDetail.xsd"));
 
-                ds.WriteXmlSchema(writer);
-                writer.Close();
-            }
-            else
-            {
-                System.IO.StreamWriter writer1 = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerAgingSummary.xsd"));
-                ds.WriteXmlSchema(writer1);
-                writer1.Close();
-            }
+            //    ds.WriteXmlSchema(writer);
+            //    writer.Close();
+            //}
+            //else
+            //{
+            //    System.IO.StreamWriter writer1 = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerAgingSummary.xsd"));
+            //    ds.WriteXmlSchema(writer1);
+            //    writer1.Close();
+            //}
 
 
             ReportDocument rd = new ReportDocument();
@@ -1573,9 +1573,9 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "SupplierLedger");
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierLedger.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SupplierLedger.rpt"));
@@ -1757,18 +1757,18 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "SupplierAging");
 
             //generate XSD to design report      
-            if (reportparam.ReportType == "Detail")
-            {
-                System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierAgingDetail.xsd"));
-                ds.WriteXmlSchema(writer);
-                writer.Close();
-            }
-            else
-            {
-                System.IO.StreamWriter writer1 = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierAgingSummary.xsd"));
-                ds.WriteXmlSchema(writer1);
-                writer1.Close();
-            }
+            //if (reportparam.ReportType == "Detail")
+            //{
+            //    System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierAgingDetail.xsd"));
+            //    ds.WriteXmlSchema(writer);
+            //    writer.Close();
+            //}
+            //else
+            //{
+            //    System.IO.StreamWriter writer1 = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierAgingSummary.xsd"));
+            //    ds.WriteXmlSchema(writer1);
+            //    writer1.Close();
+            //}
 
             ReportDocument rd = new ReportDocument();
 
