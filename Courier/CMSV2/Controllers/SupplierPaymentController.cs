@@ -349,48 +349,48 @@ namespace CMSV2.Controllers
 
         }
         [HttpGet]
-        public ActionResult SupplierPaymentDetails(int ID)
+        public ActionResult SupplierPaymentDetails()
         {
-            List<ReceiptVM> Reciepts = new List<ReceiptVM>();
+            //List<ReceiptVM> Reciepts = new List<ReceiptVM>();
 
-            //Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
-            Reciepts = (from r in Context1.RecPays
-                        //join d in Context1.RecPayDetails on r.RecPayID equals d.RecPayID
-                        join s in Context1.SupplierMasters on r.SupplierID equals s.SupplierID
-                        orderby r.RecPayDate descending
-                        select new ReceiptVM
-                        {
-                            RecPayDate = r.RecPayDate,
-                            DocumentNo = r.DocumentNo,
-                            RecPayID = r.RecPayID,
-                            PartyName = s.SupplierName,
-                            Amount =r.FMoney
-                        }).ToList();
-            //Reciepts.ForEach(d => d.Amount = (from s in Context1.RecPayDetails where s.RecPayID == d.RecPayID where s.Amount > 0 select s).ToList().Sum(a => a.Amount));
-            var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
-            var result = data.GroupBy(p => p.RecPayID).Select(grp => grp.FirstOrDefault());
+            ////Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
+            //Reciepts = (from r in Context1.RecPays
+            //            //join d in Context1.RecPayDetails on r.RecPayID equals d.RecPayID
+            //            join s in Context1.SupplierMasters on r.SupplierID equals s.SupplierID
+            //            orderby r.RecPayDate descending
+            //            select new ReceiptVM
+            //            {
+            //                RecPayDate = r.RecPayDate,
+            //                DocumentNo = r.DocumentNo,
+            //                RecPayID = r.RecPayID,
+            //                PartyName = s.SupplierName,
+            //                Amount =r.FMoney
+            //            }).ToList();
+            ////Reciepts.ForEach(d => d.Amount = (from s in Context1.RecPayDetails where s.RecPayID == d.RecPayID where s.Amount > 0 select s).ToList().Sum(a => a.Amount));
+            //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+            //var result = data.GroupBy(p => p.RecPayID).Select(grp => grp.FirstOrDefault());
 
-            if (ID > 0)
-            {
-                ViewBag.SuccessMsg = "You have successfully added Supplier Payment.";
-            }
-
-
-            if (ID == 10)
-            {
-                ViewBag.SuccessMsg = "You have successfully deleted Supplier Payment.";
-            }
-
-            if (ID == 20)
-            {
-                ViewBag.SuccessMsg = "You have successfully updated Supplier Payment.";
-            }
+            //if (ID > 0)
+            //{
+            //    ViewBag.SuccessMsg = "You have successfully added Supplier Payment.";
+            //}
 
 
-            Session["ID"] = ID;
+            //if (ID == 10)
+            //{
+            //    ViewBag.SuccessMsg = "You have successfully deleted Supplier Payment.";
+            //}
+
+            //if (ID == 20)
+            //{
+            //    ViewBag.SuccessMsg = "You have successfully updated Supplier Payment.";
+            //}
 
 
-            return View(result);
+            //Session["ID"] = ID;
+
+
+            return View();
         }
         [HttpGet]
         public ActionResult SupplierPayment(int id)

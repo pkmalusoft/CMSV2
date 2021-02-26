@@ -3301,17 +3301,19 @@ new AcGroupModel()
                 }
             else
             {
-                //if (model.FromDate.ToString() == "01-01-0001 00:00:00")
-                //{
-                //    model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
-                //}
+                
                 if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
                     reportparam.Output = "PDF";
                 }
-
+                if (reportparam.ToDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
+                {
+                    pToDate = CommanFunctions.GetLastDayofMonth().Date; //.AddDays(-1);
+                    reportparam.ToDate = pToDate;
+                    reportparam.Output = "PDF";
+                }
             }
                             
             return View(reportparam);

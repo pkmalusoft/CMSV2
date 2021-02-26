@@ -113,7 +113,7 @@
         var sumcredit = $('#Credit').val();
         $('#spantotaldebit').html(parseFloat(sumdebit).toFixed(2));
         $('#spantotalcredit').html(parseFloat(sumcredit).toFixed(2));
-        var balance = parseFloat(sumdebit) - parseFloat(subcredit);
+        var balance = parseFloat(sumdebit) - parseFloat(sumcredit);
         $('#spanbalance').html(parseFloat(balance).toFixed(2));
         $('#details').on("click", ".DeleteNewRow", function () {
             debugger;
