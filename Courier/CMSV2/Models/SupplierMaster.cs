@@ -51,6 +51,7 @@ namespace CMSV2.Models
         public Nullable<bool> StatusReserved { get; set; }
         public string POBoxNo { get; set; }
         public string Remarks { get; set; }
+        public Nullable<int> AcHeadID { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

@@ -19,8 +19,6 @@ namespace CMSV2.Models
         public Nullable<int> CountryID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> CityID { get; set; }
-    
-        public virtual ZoneChart ZoneChart { get; set; }
-        public virtual ZoneChart ZoneChart1 { get; set; }
+        public string PlaceID { get; set; }
     }
 }

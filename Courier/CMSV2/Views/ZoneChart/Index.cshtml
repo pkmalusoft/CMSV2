@@ -105,7 +105,7 @@
   
         <td>
         @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
-             <a href="@Url.Action("Edit", new { id = item.ZoneChartID })"><i class="fa fa-pencil"></i></a>|
+             <a href="@Url.Action("Create", new { id = item.ZoneChartID })"><i class="fa fa-pencil"></i></a>|
         <a href="#" onclick="Delete(ID=@item.ZoneChartID)"><i class="fa fa-times"></i></a>
         </td>
     </tr>

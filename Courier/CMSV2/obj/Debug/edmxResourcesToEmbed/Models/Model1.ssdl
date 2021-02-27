@@ -1465,6 +1465,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="CourierEMPID" Type="int" />
     <Property Name="Status" Type="varchar" MaxLength="100" />
     <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
+    <Property Name="DeliveredBy" Type="int" />
+    <Property Name="ReceivedBy" Type="int" />
   </EntityType>
   <EntityType Name="DRSRecPayDetails">
     <Key>
@@ -2357,6 +2359,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
     <Property Name="Location" Type="varchar" MaxLength="50" />
     <Property Name="CityID" Type="int" />
     <Property Name="IsDefault" Type="bit" />
+    <Property Name="LocationName" Type="varchar" MaxLength="1000" />
+    <Property Name="CityName" Type="varchar" MaxLength="1000" />
+    <Property Name="CountryName" Type="varchar" MaxLength="1000" />
+    <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="Locks">
     <Key>
@@ -3188,6 +3194,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
     <Property Name="POBoxNo" Type="varchar" MaxLength="50" />
     <Property Name="Remarks" Type="varchar" MaxLength="400" />
     <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
+    <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -3970,6 +3977,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <Property Name="CountryID" Type="int" />
     <Property Name="LocationID" Type="int" />
     <Property Name="CityID" Type="int" />
+    <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="ZoneMaster">
     <Key>

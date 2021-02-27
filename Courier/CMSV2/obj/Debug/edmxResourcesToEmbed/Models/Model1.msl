@@ -2021,6 +2021,10 @@
     <EntitySetMapping Name="LocationMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.LocationMaster">
         <MappingFragment StoreEntitySet="LocationMaster">
+          <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
           <ScalarProperty Name="LocationID" ColumnName="LocationID" />
           <ScalarProperty Name="Location" ColumnName="Location" />
           <ScalarProperty Name="CityID" ColumnName="CityID" />
@@ -3390,17 +3394,6 @@
           <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
           <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
           <ScalarProperty Name="ZoneID" ColumnName="ZoneID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="ZoneChartDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ZoneChartDetail">
-        <MappingFragment StoreEntitySet="ZoneChartDetails">
-          <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
-          <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
-          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -8613,6 +8606,7 @@
     <EntitySetMapping Name="SupplierMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
         <MappingFragment StoreEntitySet="SupplierMaster">
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="Remarks" ColumnName="Remarks" />
           <ScalarProperty Name="POBoxNo" ColumnName="POBoxNo" />
           <ScalarProperty Name="StatusReserved" ColumnName="StatusReserved" />
@@ -8927,6 +8921,8 @@
     <EntitySetMapping Name="DRSRecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
         <MappingFragment StoreEntitySet="DRSRecPay">
+          <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
           <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="CourierEMPID" ColumnName="CourierEMPID" />
@@ -9050,6 +9046,18 @@
           <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
           <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
           <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ZoneChartDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ZoneChartDetail">
+        <MappingFragment StoreEntitySet="ZoneChartDetails">
+          <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
+          <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -2126,6 +2126,10 @@
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_LocationMaster" FromRole="LocationMaster" ToRole="CustomerMaster" />
     <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="LocationMaster" ToRole="EmployeeMaster" />
     <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_LocationMaster" FromRole="LocationMaster" ToRole="JobEnquiry" />
+    <Property Name="LocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="CityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="CountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Lock">
     <Key>
@@ -3480,20 +3484,6 @@
     <NavigationProperty Name="ZoneCategory1" Relationship="Self.FK_ZoneChart_ZoneCategory1" FromRole="ZoneChart" ToRole="ZoneCategory" />
     <NavigationProperty Name="ZoneMaster" Relationship="Self.FK_ZoneChart_ZoneMaster" FromRole="ZoneChart" ToRole="ZoneMaster" />
     <NavigationProperty Name="ZoneMaster1" Relationship="Self.FK_ZoneChart_ZoneMaster1" FromRole="ZoneChart" ToRole="ZoneMaster" />
-    <NavigationProperty Name="ZoneChartDetails" Relationship="Self.FK_ZoneChartDetails_ZoneChart" FromRole="ZoneChart" ToRole="ZoneChartDetails" />
-    <NavigationProperty Name="ZoneChartDetails1" Relationship="Self.FK_ZoneChartDetails_ZoneChart1" FromRole="ZoneChart" ToRole="ZoneChartDetails" />
-  </EntityType>
-  <EntityType Name="ZoneChartDetail">
-    <Key>
-      <PropertyRef Name="ZoneChartDetailID" />
-    </Key>
-    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
-    <Property Name="CountryID" Type="Int32" />
-    <Property Name="LocationID" Type="Int32" />
-    <Property Name="CityID" Type="Int32" />
-    <NavigationProperty Name="ZoneChart" Relationship="Self.FK_ZoneChartDetails_ZoneChart" FromRole="ZoneChartDetails" ToRole="ZoneChart" />
-    <NavigationProperty Name="ZoneChart1" Relationship="Self.FK_ZoneChartDetails_ZoneChart1" FromRole="ZoneChartDetails" ToRole="ZoneChart" />
   </EntityType>
   <EntityType Name="ZoneMaster">
     <Key>
@@ -5426,30 +5416,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ZoneChartDetails_ZoneChart">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ZoneChartDetails" Type="Self.ZoneChartDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ZoneChartDetails">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ZoneChartDetails_ZoneChart1">
-    <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-    <End Role="ZoneChartDetails" Type="Self.ZoneChartDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneChart">
-        <PropertyRef Name="ZoneChartID" />
-      </Principal>
-      <Dependent Role="ZoneChartDetails">
-        <PropertyRef Name="ZoneChartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="aspnet_UsersInRoles">
     <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="*" />
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
@@ -5666,7 +5632,6 @@
     <EntitySet Name="WorkOrderMasters" EntityType="Self.WorkOrderMaster" />
     <EntitySet Name="ZoneCategories" EntityType="Self.ZoneCategory" />
     <EntitySet Name="ZoneCharts" EntityType="Self.ZoneChart" />
-    <EntitySet Name="ZoneChartDetails" EntityType="Self.ZoneChartDetail" />
     <EntitySet Name="ZoneMasters" EntityType="Self.ZoneMaster" />
     <EntitySet Name="CreditNoteDetails" EntityType="Self.CreditNoteDetail" />
     <EntitySet Name="DRSEmployees" EntityType="Self.DRSEmployee" />
@@ -6225,14 +6190,6 @@
     <AssociationSet Name="FK_ZoneChart_ZoneMaster1" Association="Self.FK_ZoneChart_ZoneMaster1">
       <End Role="ZoneMaster" EntitySet="ZoneMasters" />
       <End Role="ZoneChart" EntitySet="ZoneCharts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChartDetails_ZoneChart" Association="Self.FK_ZoneChartDetails_ZoneChart">
-      <End Role="ZoneChart" EntitySet="ZoneCharts" />
-      <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ZoneChartDetails_ZoneChart1" Association="Self.FK_ZoneChartDetails_ZoneChart1">
-      <End Role="ZoneChart" EntitySet="ZoneCharts" />
-      <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
     </AssociationSet>
     <AssociationSet Name="aspnet_UsersInRoles" Association="Self.aspnet_UsersInRoles">
       <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
@@ -8844,6 +8801,7 @@
     <EntitySet Name="DRSDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" />
     <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
+    <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12460,6 +12418,7 @@
     <NavigationProperty Name="SupplierType" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
     <NavigationProperty Name="tblSupplierAdjustments" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
     <NavigationProperty Name="SupplierInvoices" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierMaster" ToRole="SupplierInvoice" />
+    <Property Name="AcHeadID" Type="Int32" />
   </EntityType>
   <Association Name="FK_SupplierMaster_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -12898,6 +12857,8 @@
     <Property Name="CourierEMPID" Type="Int32" />
     <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="StatusEntry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="ReceivedBy" Type="Int32" />
   </EntityType>
   <EntityType Name="DRSRecPayDetail">
     <Key>
@@ -13083,5 +13044,16 @@
     <Property Name="JobID" Type="Int32" />
     <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ZoneChartDetail">
+    <Key>
+      <PropertyRef Name="ZoneChartDetailID" />
+    </Key>
+    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="LocationID" Type="Int32" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

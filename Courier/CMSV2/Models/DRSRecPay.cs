@@ -31,5 +31,7 @@ namespace CMSV2.Models
         public Nullable<int> CourierEMPID { get; set; }
         public string Status { get; set; }
         public string StatusEntry { get; set; }
+        public Nullable<int> DeliveredBy { get; set; }
+        public Nullable<int> ReceivedBy { get; set; }
     }
 }

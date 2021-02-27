@@ -34,6 +34,7 @@ namespace CMSV2.Models
 
         public string LocationName { get; set; }
         public string CountryName { get; set; }
+        public string PlaceID { get; set; }
         public string CityName { get; set; }
 
         public List<ZoneChartDetailsVM> Details { get; set; }
@@ -41,6 +42,7 @@ namespace CMSV2.Models
 
     public class ZoneChartDetailsVM
     {
+        public int ZoneChartDetailID { get; set; }
         public int LocationID{ get; set; }
         public string LocationName { get; set; }
         public string CityName { get; set; }

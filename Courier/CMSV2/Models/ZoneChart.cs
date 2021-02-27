@@ -21,8 +21,6 @@ namespace CMSV2.Models
             this.CustomerRates1 = new HashSet<CustomerRate>();
             this.ForwardingAgentRates = new HashSet<ForwardingAgentRate>();
             this.ForwardingAgentRates1 = new HashSet<ForwardingAgentRate>();
-            this.ZoneChartDetails = new HashSet<ZoneChartDetail>();
-            this.ZoneChartDetails1 = new HashSet<ZoneChartDetail>();
         }
     
         public int ZoneChartID { get; set; }
@@ -41,9 +39,5 @@ namespace CMSV2.Models
         public virtual ZoneCategory ZoneCategory1 { get; set; }
         public virtual ZoneMaster ZoneMaster { get; set; }
         public virtual ZoneMaster ZoneMaster1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ZoneChartDetail> ZoneChartDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ZoneChartDetail> ZoneChartDetails1 { get; set; }
     }
 }

@@ -29,6 +29,10 @@ namespace CMSV2.Models
         public string Location { get; set; }
         public Nullable<int> CityID { get; set; }
         public Nullable<bool> IsDefault { get; set; }
+        public string LocationName { get; set; }
+        public string CityName { get; set; }
+        public string CountryName { get; set; }
+        public string PlaceID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AcCompany> AcCompanies { get; set; }

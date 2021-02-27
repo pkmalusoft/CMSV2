@@ -25,13 +25,14 @@ namespace CMSV2.Controllers
             return View(lst);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ViewBag.ZoneCategory = db.ZoneCategories.ToList();
             ViewBag.Zones = db.ZoneMasters.ToList();
             ViewBag.Country = db.CountryMasters.ToList();
             ViewBag.City = db.CityMasters.ToList();
+
             if (Session["depotcountry"] == null)
             {
                 var depot= (from c in db.BranchMasters where c.BranchID == branchid select c.CountryID).FirstOrDefault();
@@ -45,66 +46,130 @@ namespace CMSV2.Controllers
             {
                 ViewBag.depotcountry = Convert.ToInt32(Session["depotcountry"].ToString());
             }
-            //Convert.ToInt32(Session["depotcountry"].ToString());
+            ZoneChartVM v = new ZoneChartVM();
+            if (id==0)
+            {
+                v.ZoneChartID = 0;
+                v.Details = new List<ZoneChartDetailsVM>();
+            }
+            else
+            {
+                
+                ZoneChart z = db.ZoneCharts.Find(id);
+                v.ZoneChartID = z.ZoneChartID;
+                v.StatusZone = (from c in db.ZoneMasters where c.ZoneID == z.ZoneID select c.StatusZone).FirstOrDefault();
+                v.ZoneCategoryID = z.ZoneCategoryID;
+                v.ZoneID = z.ZoneID;
 
-            return View();
+                var lst = (from c in db.ZoneChartDetails join loc in db.LocationMasters on c.LocationID equals loc.LocationID  where c.ZoneChartID == z.ZoneChartID select new ZoneChartDetailsVM { ZoneChartDetailID=c.ZoneChartDetailID, CountryName=loc.CountryName,CityName=loc.CityName,PlaceID=loc.PlaceID,LocationName=loc.LocationName } ).ToList();
+                v.Details = lst;
+
+            }
+            //Convert.ToInt32(Session["depotcountry"].ToString());
+            return View(v);
         }
 
         [HttpPost]
         public ActionResult Create(ZoneChartVM v)
         {
             ZoneChart z = new ZoneChart();
-         
 
-            if (v.country!=null && v.StatusZone == "I")
+            if (v.ZoneChartID == 0)
             {
                 z.ZoneCategoryID = v.ZoneCategoryID;
                 z.ZoneID = v.ZoneID;
-
-              
-                //char []sep={','};
-                //string [] lst = v.countries.Split(sep);
+                db.ZoneCharts.Add(z);
+                db.SaveChanges();
+            }
+            else
+            {
+                z = db.ZoneCharts.Find(v.ZoneChartID);
+                z.ZoneCategoryID = v.ZoneCategoryID;
+                z.ZoneID = v.ZoneID;
+                db.Entry(z).State = EntityState.Modified;
+                db.SaveChanges();
+                
+                //deleting the details items
+                var details = (from d in db.ZoneChartDetails where d.ZoneChartID== z.ZoneChartID select d).ToList();
+                db.ZoneChartDetails.RemoveRange(details);
+                db.SaveChanges();
+            }
 
                 List<ZoneChartDetail> l = new List<ZoneChartDetail>();
-                foreach (var i in v.country)
+            foreach (var i in v.Details)
+            {
+                var location = db.LocationMasters.Where(cc => cc.PlaceID == i.PlaceID).FirstOrDefault();
+                int LocationID = 0;
+                if (location==null)
                 {
-                    ZoneChartDetail s = new ZoneChartDetail();
-                    s.CountryID = Convert.ToInt32(i);
+                    LocationMaster loc = new LocationMaster();
+                    loc.CountryName = i.CountryName;
+                    loc.CityName = i.CityName;
+                    loc.LocationName = i.LocationName;
+                    loc.PlaceID = i.PlaceID;
+                    db.LocationMasters.Add(loc);
+                    db.SaveChanges();
+                    LocationID = loc.LocationID;
+                }
+                else
+                {
+                    LocationID = location.LocationID;
+                }
 
-                    l.Add(s);
+                ZoneChartDetail s = new ZoneChartDetail();
+                //s.CountryName = i.CountryName;
+                //s.ZoneChartID = z.ZoneChartID;
+                //s.CityName = i.CityName;
+                s.PlaceID = i.PlaceID;
+                //s.LocationName = i.LocationName;
+                s.LocationID = LocationID;
+                s.PlaceID = i.PlaceID;
+                s.ZoneChartID = z.ZoneChartID;
+                db.ZoneChartDetails.Add(s);
+                db.SaveChanges();
+                l.Add(s);
+
+            }
+
+            //if (v.country!=null && v.StatusZone == "I")
+            //{
+            //    z.ZoneCategoryID = v.ZoneCategoryID;
+            //    z.ZoneID = v.ZoneID;
+
+              
+            //    //char []sep={','};
+            //    //string [] lst = v.countries.Split(sep);
+
+            //    List<ZoneChartDetail> l = new List<ZoneChartDetail>();
+            //    foreach (var i in v.country)
+            //    {
+            //        ZoneChartDetail s = new ZoneChartDetail();
+            //        s.CountryID = Convert.ToInt32(i);
+
+            //        l.Add(s);
                    
-                }
+            //    }
 
-                z.ZoneChartDetails = l;
+            //    z.ZoneChartDetails = l;
 
-                db.ZoneCharts.Add(z);
-                db.SaveChanges();
-            }
+            //    db.ZoneCharts.Add(z);
+            //    db.SaveChanges();
+            //}
 
-            if (v.StatusZone == "D" && v.city!=null)
-            {
-                z.ZoneCategoryID = v.ZoneCategoryID;
-                z.ZoneID = v.ZoneID;
+            //if (v.StatusZone == "D" && v.city!=null)
+            //{
+            //    z.ZoneCategoryID = v.ZoneCategoryID;
+            //    z.ZoneID = v.ZoneID;
 
 
               
 
-                List<ZoneChartDetail> l = new List<ZoneChartDetail>();
-                foreach (var i in v.city)
-                {
-                    ZoneChartDetail s = new ZoneChartDetail();
-                    s.CountryID = Convert.ToInt32(Session["depotcountry"].ToString());
-                    s.CityID = Convert.ToInt32(i);
+              
+            //    z.ZoneChartDetails = l;
 
-                    l.Add(s);
-
-                }
-
-                z.ZoneChartDetails = l;
-
-                db.ZoneCharts.Add(z);
-                db.SaveChanges();
-            }
+            //    db.ZoneCharts.Add(z);
+            //    db.SaveChanges();
+            //}
 
             TempData["SuccessMsg"] = "You have successfully added Zone Chart.";
             return RedirectToAction("Index");
@@ -322,7 +387,7 @@ namespace CMSV2.Controllers
         [HttpGet, ActionName("GetEventVenuesList")]
         public JsonResult GetEventVenuesList(string SearchText)
         {
-            string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
+          string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
             string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
             //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />
             //< add key = "GooglePlaceAPIKey" value = "Your API Key" ></ add >

@@ -216,7 +216,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.WorkOrderMaster" Width="1.5" PointX="39.75" PointY="34.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneCategory" Width="1.5" PointX="20.25" PointY="65.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneChart" Width="1.5" PointX="22.5" PointY="60.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" Width="1.5" PointX="24.75" PointY="60.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneMaster" Width="1.5" PointX="20.25" PointY="61.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" Width="1.5" PointX="39.75" PointY="38.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSEmployee" Width="1.5" PointX="19" PointY="0.75" IsExpanded="true" />
@@ -368,8 +367,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChart_ZoneCategory1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChart_ZoneMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChart_ZoneMaster1" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChartDetails_ZoneChart" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ZoneChartDetails_ZoneChart1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.aspnet_UsersInRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CODReceipt" Width="1.5" PointX="42.375" PointY="9" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CODReceiptDetail" Width="1.5" PointX="44.625" PointY="9.625" />
@@ -410,6 +407,7 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" Width="1.5" PointX="44.375" PointY="0.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPay" Width="1.5" PointX="5.375" PointY="44.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" Width="1.5" PointX="44.375" PointY="19.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" Width="1.5" PointX="44.375" PointY="24.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

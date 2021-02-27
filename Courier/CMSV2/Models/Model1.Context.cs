@@ -238,7 +238,6 @@ namespace CMSV2.Models
         public virtual DbSet<WorkOrderMaster> WorkOrderMasters { get; set; }
         public virtual DbSet<ZoneCategory> ZoneCategories { get; set; }
         public virtual DbSet<ZoneChart> ZoneCharts { get; set; }
-        public virtual DbSet<ZoneChartDetail> ZoneChartDetails { get; set; }
         public virtual DbSet<ZoneMaster> ZoneMasters { get; set; }
         public virtual DbSet<CreditNoteDetail> CreditNoteDetails { get; set; }
         public virtual DbSet<DRSEmployee> DRSEmployees { get; set; }
@@ -274,6 +273,7 @@ namespace CMSV2.Models
         public virtual DbSet<DRSDetail> DRSDetails { get; set; }
         public virtual DbSet<RecPay> RecPays { get; set; }
         public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
+        public virtual DbSet<ZoneChartDetail> ZoneChartDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

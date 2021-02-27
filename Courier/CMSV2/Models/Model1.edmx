@@ -1499,6 +1499,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
           <Property Name="CourierEMPID" Type="int" />
           <Property Name="Status" Type="varchar" MaxLength="100" />
           <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveredBy" Type="int" />
+          <Property Name="ReceivedBy" Type="int" />
         </EntityType>
         <EntityType Name="DRSRecPayDetails">
           <Key>
@@ -2391,6 +2393,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
           <Property Name="Location" Type="varchar" MaxLength="50" />
           <Property Name="CityID" Type="int" />
           <Property Name="IsDefault" Type="bit" />
+          <Property Name="LocationName" Type="varchar" MaxLength="1000" />
+          <Property Name="CityName" Type="varchar" MaxLength="1000" />
+          <Property Name="CountryName" Type="varchar" MaxLength="1000" />
+          <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="Locks">
           <Key>
@@ -3222,6 +3228,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
           <Property Name="POBoxNo" Type="varchar" MaxLength="50" />
           <Property Name="Remarks" Type="varchar" MaxLength="400" />
           <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
+          <Property Name="AcHeadID" Type="int" />
         </EntityType>
         <EntityType Name="SupplierType">
           <Key>
@@ -4004,6 +4011,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="CountryID" Type="int" />
           <Property Name="LocationID" Type="int" />
           <Property Name="CityID" Type="int" />
+          <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="ZoneMaster">
           <Key>
@@ -9374,6 +9382,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_LocationMaster" FromRole="LocationMaster" ToRole="CustomerMaster" />
           <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="LocationMaster" ToRole="EmployeeMaster" />
           <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_LocationMaster" FromRole="LocationMaster" ToRole="JobEnquiry" />
+          <Property Name="LocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="CityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="CountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Lock">
           <Key>
@@ -10728,21 +10740,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <NavigationProperty Name="ZoneCategory1" Relationship="Self.FK_ZoneChart_ZoneCategory1" FromRole="ZoneChart" ToRole="ZoneCategory" />
           <NavigationProperty Name="ZoneMaster" Relationship="Self.FK_ZoneChart_ZoneMaster" FromRole="ZoneChart" ToRole="ZoneMaster" />
           <NavigationProperty Name="ZoneMaster1" Relationship="Self.FK_ZoneChart_ZoneMaster1" FromRole="ZoneChart" ToRole="ZoneMaster" />
-          <NavigationProperty Name="ZoneChartDetails" Relationship="Self.FK_ZoneChartDetails_ZoneChart" FromRole="ZoneChart" ToRole="ZoneChartDetails" />
-          <NavigationProperty Name="ZoneChartDetails1" Relationship="Self.FK_ZoneChartDetails_ZoneChart1" FromRole="ZoneChart" ToRole="ZoneChartDetails" />
-        </EntityType>
-        <EntityType Name="ZoneChartDetail">
-          <Key>
-            <PropertyRef Name="ZoneChartDetailID" />
-          </Key>
-          <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
-          <Property Name="CountryID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="CityID" Type="Int32" />
-          <NavigationProperty Name="ZoneChart" Relationship="Self.FK_ZoneChartDetails_ZoneChart" FromRole="ZoneChartDetails" ToRole="ZoneChart" />
-          <NavigationProperty Name="ZoneChart1" Relationship="Self.FK_ZoneChartDetails_ZoneChart1" FromRole="ZoneChartDetails" ToRole="ZoneChart" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="ZoneMaster">
           <Key>
             <PropertyRef Name="ZoneID" />
@@ -12674,30 +12672,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ZoneChartDetails_ZoneChart">
-          <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-          <End Role="ZoneChartDetails" Type="Self.ZoneChartDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZoneChart">
-              <PropertyRef Name="ZoneChartID" />
-            </Principal>
-            <Dependent Role="ZoneChartDetails">
-              <PropertyRef Name="ZoneChartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ZoneChartDetails_ZoneChart1">
-          <End Role="ZoneChart" Type="Self.ZoneChart" Multiplicity="1" />
-          <End Role="ZoneChartDetails" Type="Self.ZoneChartDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZoneChart">
-              <PropertyRef Name="ZoneChartID" />
-            </Principal>
-            <Dependent Role="ZoneChartDetails">
-              <PropertyRef Name="ZoneChartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="aspnet_UsersInRoles">
           <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="*" />
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
@@ -12914,7 +12888,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="WorkOrderMasters" EntityType="Self.WorkOrderMaster" />
           <EntitySet Name="ZoneCategories" EntityType="Self.ZoneCategory" />
           <EntitySet Name="ZoneCharts" EntityType="Self.ZoneChart" />
-          <EntitySet Name="ZoneChartDetails" EntityType="Self.ZoneChartDetail" />
           <EntitySet Name="ZoneMasters" EntityType="Self.ZoneMaster" />
           <EntitySet Name="CreditNoteDetails" EntityType="Self.CreditNoteDetail" />
           <EntitySet Name="DRSEmployees" EntityType="Self.DRSEmployee" />
@@ -13473,14 +13446,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <AssociationSet Name="FK_ZoneChart_ZoneMaster1" Association="Self.FK_ZoneChart_ZoneMaster1">
             <End Role="ZoneMaster" EntitySet="ZoneMasters" />
             <End Role="ZoneChart" EntitySet="ZoneCharts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZoneChartDetails_ZoneChart" Association="Self.FK_ZoneChartDetails_ZoneChart">
-            <End Role="ZoneChart" EntitySet="ZoneCharts" />
-            <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZoneChartDetails_ZoneChart1" Association="Self.FK_ZoneChartDetails_ZoneChart1">
-            <End Role="ZoneChart" EntitySet="ZoneCharts" />
-            <End Role="ZoneChartDetails" EntitySet="ZoneChartDetails" />
           </AssociationSet>
           <AssociationSet Name="aspnet_UsersInRoles" Association="Self.aspnet_UsersInRoles">
             <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
@@ -16092,6 +16057,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="DRSDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" />
           <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
           <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
+          <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19708,6 +19674,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <NavigationProperty Name="SupplierType" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
           <NavigationProperty Name="tblSupplierAdjustments" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
           <NavigationProperty Name="SupplierInvoices" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierMaster" ToRole="SupplierInvoice" />
+          <Property Name="AcHeadID" Type="Int32" />
         </EntityType>
         <Association Name="FK_SupplierMaster_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -20146,6 +20113,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="CourierEMPID" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StatusEntry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveredBy" Type="Int32" />
+          <Property Name="ReceivedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="DRSRecPayDetail">
           <Key>
@@ -20331,6 +20300,17 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="JobID" Type="Int32" />
           <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ZoneChartDetail">
+          <Key>
+            <PropertyRef Name="ZoneChartDetailID" />
+          </Key>
+          <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -22358,6 +22338,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="LocationMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.LocationMaster">
               <MappingFragment StoreEntitySet="LocationMaster">
+                <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="CityID" ColumnName="CityID" />
@@ -23727,17 +23711,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
                 <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
                 <ScalarProperty Name="ZoneID" ColumnName="ZoneID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ZoneChartDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ZoneChartDetail">
-              <MappingFragment StoreEntitySet="ZoneChartDetails">
-                <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
-                <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
-                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="CityID" ColumnName="CityID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -28950,6 +28923,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="SupplierMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
               <MappingFragment StoreEntitySet="SupplierMaster">
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="POBoxNo" ColumnName="POBoxNo" />
                 <ScalarProperty Name="StatusReserved" ColumnName="StatusReserved" />
@@ -29264,6 +29238,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="DRSRecPays">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
               <MappingFragment StoreEntitySet="DRSRecPay">
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
                 <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CourierEMPID" ColumnName="CourierEMPID" />
@@ -29387,6 +29363,18 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
                 <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
                 <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZoneChartDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ZoneChartDetail">
+              <MappingFragment StoreEntitySet="ZoneChartDetails">
+                <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
+                <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
