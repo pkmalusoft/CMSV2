@@ -8802,6 +8802,8 @@
     <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
     <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
+    <EntitySet Name="EmpZoneAllocations" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocation" />
+    <EntitySet Name="EmpZoneAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12646,6 +12648,10 @@
     <Property Name="AcHeadID" Type="Int32" />
     <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetail" />
     <NavigationProperty Name="InscanOtherCharges" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
+    <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="PickupLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DeliveryLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_CustomerInvoiceDetails_InScan">
     <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
@@ -13055,5 +13061,25 @@
     <Property Name="LocationID" Type="Int32" />
     <Property Name="CityID" Type="Int32" />
     <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="EmpZoneAllocation">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationID" />
+    </Key>
+    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EffectFromDate" Type="DateTime" Precision="3" />
+    <Property Name="EmployeeID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="Statusupdate" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="EmpZoneAllocationDetail">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationDetailID" />
+    </Key>
+    <Property Name="EmpZoneAllocationDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" />
+    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" />
+    <Property Name="Statusupdate" Type="Boolean" />
+    <Property Name="ZoneId" Type="Int32" />
   </EntityType>
 </Schema>

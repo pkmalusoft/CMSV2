@@ -29,7 +29,7 @@
     //    });
 
     var placeSearch, autocomplete, autocompleteCity, autocompleteCountry;
-
+    var autopickuplocation, autodeliverylocation;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -60,6 +60,15 @@
         autocompleteCountry = new google.maps.places.Autocomplete(
             document.getElementById('ConsigneeCountryName'), { types: ['geocode'] });
 
+        autopickuplocation = new google.maps.places.Autocomplete(
+            document.getElementById('PickupLocation'), { types: ['geocode'] });
+
+        autopickuplocation.addListener('place_changed', fillInPickuploadAddress);
+        autodeliverylocation = new google.maps.places.Autocomplete(
+            document.getElementById('DeliveryLocation'), { types: ['geocode'] });
+
+        autodeliverylocation.addListener('place_changed', fillInDeliveryloadAddress);
+
     }
 
     function fillInAddress() {
@@ -83,6 +92,83 @@
         //  }
         //      }
 
+        var postcode = '';
+        $.each(place.address_components, function (index, component) {
+            var types = component.types;
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#ConsigneeCityName').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#ConsigneeCountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
+            });
+        });
+
+    }
+
+    function fillInPickuploadAddress() {
+        debugger;
+        // Get the place details from the autocomplete object.
+        var place = autopickuplocation.getPlace();
+        
+        $.ajax({
+            type: "GET",
+            url: "/ZoneChart/GetEventVenuesList",
+            datatype: "Json",
+            data: { SearchText: $('#PickupLocation').val() },
+            success: function (response) {
+                debugger;
+                console.log(response);
+                $('#PickupLocationPlaceId').val(response[0].place_id);
+            }
+        });
+
+        var postcode = '';
+        $.each(place.address_components, function (index, component) {
+            var types = component.types;
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#ConsigneeCityName').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#ConsigneeCountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
+            });
+        });
+
+    }
+
+    function fillInDeliveryloadAddress() {
+        debugger;
+        // Get the place details from the autocomplete object.
+        var place = autodeliverylocation.getPlace();
+        $.ajax({
+            type: "GET",
+            url: "/ZoneChart/GetEventVenuesList",
+            datatype: "Json",
+            data: { SearchText: $('#DeliveryLocation').val() },
+            success: function (response) {
+                debugger;                
+                $('#DeliveryLocationPlaceId').val(response[0].place_id);
+            }
+        });
         var postcode = '';
         $.each(place.address_components, function (index, component) {
             var types = component.types;
@@ -980,6 +1066,18 @@
             </div>
 
 
+        </div>
+        <div class="row no-margin">
+            <div class="col-md-3">
+                <label class="headinglabel">PickUp Location</label>
+                @Html.TextBoxFor(model => model.PickupLocation, new { @class = "form-control txttarget" })
+                @Html.HiddenFor(model => model.PickupLocationPlaceId)
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Delivery Location </label>
+                @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control txttarget" })
+                @Html.HiddenFor(model => model.DeliveryLocationPlaceId)
+            </div>
         </div>
         
         <div class="row no-margin" style="padding-top: 10px">

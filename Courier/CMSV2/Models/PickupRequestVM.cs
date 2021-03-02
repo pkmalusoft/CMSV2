@@ -128,5 +128,12 @@ namespace CMSV2.Models
         public string CustomerCode { get; set; }
         public int? DocumentTypeId { get; set; }
 
+        public string PickupLocation { get; set; }
+        public string DeliveryLocation { get; set; }
+
+        public string PickupLocationPlaceId { get; set; }
+        public string DeliveryLocationPlaceId { get; set; }
+
+
     }
 }

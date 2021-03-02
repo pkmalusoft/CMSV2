@@ -255,9 +255,12 @@ namespace CMSV2.Controllers
 
                 _enquiry.PickupReadyTime = v.ReadyTime;
 
-                //_enquiry.OfficeTimeFrom = v.OfficeTimeFrom;
-                //_enquiry.OfficeTimeTo = v.OfficeTimeTo;
-                
+            //_enquiry.OfficeTimeFrom = v.OfficeTimeFrom;
+            //_enquiry.OfficeTimeTo = v.OfficeTimeTo;
+            _enquiry.PickupLocation = v.PickupLocation;
+            _enquiry.DeliveryLocation = v.DeliveryLocation;
+            _enquiry.OriginPlaceID = v.PickupLocationPlaceId;
+            _enquiry.DestinationPlaceID = v.DeliveryLocationPlaceId;
                 _enquiry.RequestSource = v.RequestSource;
 
             if (_enquiry.StatusTypeId == 1)
@@ -653,6 +656,10 @@ namespace CMSV2.Controllers
                 v.OfficeTimeTo = cm.OfficeCloseTime;
                 v.RequestSource = a.RequestSource;
             v.DocumentTypeId = a.DocumentTypeId;
+            v.PickupLocation = a.PickupLocation;
+            v.PickupLocationPlaceId = a.OriginPlaceID;
+            v.DeliveryLocation = a.DeliveryLocation;
+            v.DeliveryLocationPlaceId = a.DestinationPlaceID;
                 
             return v;
 

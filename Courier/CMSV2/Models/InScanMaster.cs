@@ -108,6 +108,10 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> LastModifiedDate { get; set; }
         public string InvoiceTo { get; set; }
         public Nullable<int> AcHeadID { get; set; }
+        public string OriginPlaceID { get; set; }
+        public string DestinationPlaceID { get; set; }
+        public string PickupLocation { get; set; }
+        public string DeliveryLocation { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }

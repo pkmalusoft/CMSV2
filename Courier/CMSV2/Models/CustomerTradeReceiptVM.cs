@@ -24,9 +24,9 @@ namespace CMSV2.Models
         public decimal? Balance { get; set; }
         public string DateTime { get; set; }
         public decimal? AdjustmentAmount { get; set; }
-        public bool Allcoated { get; set; }
+        public bool Allocated { get; set; }
         public decimal? Amount { get; set; }
-
+        
         public List<ReceiptAllocationDetailVM> AWBAllocation { get; set; }
     }
 

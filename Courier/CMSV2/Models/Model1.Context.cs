@@ -274,6 +274,8 @@ namespace CMSV2.Models
         public virtual DbSet<RecPay> RecPays { get; set; }
         public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
         public virtual DbSet<ZoneChartDetail> ZoneChartDetails { get; set; }
+        public virtual DbSet<EmpZoneAllocation> EmpZoneAllocations { get; set; }
+        public virtual DbSet<EmpZoneAllocationDetail> EmpZoneAllocationDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

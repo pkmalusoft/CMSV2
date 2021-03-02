@@ -230,6 +230,7 @@
     <Compile Include="Controllers\DRSReceiptController.cs" />
     <Compile Include="Controllers\DRSReconcController.cs" />
     <Compile Include="Controllers\EmployeeMasterController.cs" />
+    <Compile Include="Controllers\EmployeeZoneController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\ExportShipmentController.cs" />
@@ -881,6 +882,12 @@
     </Compile>
     <Compile Include="Models\EmployeeVM.cs" />
     <Compile Include="Models\EmposFeeReportModel.cs" />
+    <Compile Include="Models\EmpZoneAllocation.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmpZoneAllocationDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ExcelColumn.cs" />
     <Compile Include="Models\Expense.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -3241,7 +3248,6 @@
     <Content Include="Views\CustomerRateType\Details.cshtml" />
     <Content Include="Views\CustomerRateType\Edit.cshtml" />
     <Content Include="Views\CustomerRateType\Index.cshtml" />
-    <Content Include="Views\CustomerReceipt\CustomerReciept.cshtml" />
     <Content Include="Views\CustomerReceipt\CustomerRecieptDetails.cshtml" />
     <Content Include="Views\CustomerReceipt\CustomerTradeReceipt.cshtml" />
     <Content Include="Views\CustomerReceipt\CustomerTradeReceiptDetails.cshtml" />
@@ -3558,6 +3564,8 @@
     <Content Include="Views\DRSReconc\Create.cshtml" />
     <Content Include="Views\DRSReconc\Index.cshtml" />
     <Content Include="Views\Reports\CustomerStatement.cshtml" />
+    <Content Include="Views\EmployeeZone\Index.cshtml" />
+    <Content Include="Views\EmployeeZone\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

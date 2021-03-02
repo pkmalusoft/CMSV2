@@ -98,10 +98,18 @@ namespace CMSV2.Controllers
             }
             else
             {
-                db.ZoneCategories.Remove(a);
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully Deleted Zone Category.";
-                return RedirectToAction("Index");
+                if (a.ZoneCategory1 != "Employee")
+                {
+                    db.ZoneCategories.Remove(a);
+                    db.SaveChanges();
+                    TempData["SuccessMsg"] = "You have successfully Deleted Zone Category.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["SuccessMsg"] = "Could not delete this Employee Category!";
+                    return RedirectToAction("Index");
+                }
             }
         }
     }

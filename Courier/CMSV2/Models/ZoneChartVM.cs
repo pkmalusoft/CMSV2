@@ -49,4 +49,19 @@ namespace CMSV2.Models
         public string CountryName { get; set; }
         public string PlaceID { get; set; }
     }
+
+    public class ZoneEmpVM : EmpZoneAllocation
+    {
+        public string EmployeeName { get; set; }
+        public List<ZomeEmpDetailsVM> Details { get; set; }
+
+    }
+
+    public class ZomeEmpDetailsVM : EmpZoneAllocationDetail
+    {
+        public string ZoneName { get; set; }
+        public string LocationName { get; set; }
+        public string LocationId { get; set; }
+        public string PlaceID { get; set; }
+    }
 }

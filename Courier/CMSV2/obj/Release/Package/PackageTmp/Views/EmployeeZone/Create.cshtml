@@ -1,0 +1,313 @@
+﻿@model CMSV2.Models.ZoneEmpVM
+
+@{
+
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+        $('#EffectFromDate').datetimepicker({
+            format: 'MM-DD-YYYY'
+        });
+        $("#TextBoxVenueLocation").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            $('#EventVenueId').val("");
+                            $('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id,
+                                    types: item.types
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#TextBoxVenueLocation').val(ui.item.label);
+                $('#EventVenueId').val(ui.item.value);
+                console.log(ui.item.types)
+                return false;
+            }
+        }).autocomplete("widget").addClass("CitiesAutocomplete");
+
+        $("#txtZoneName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/EmployeeZone/GetEmpZone',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.ZoneName,
+                                value: val.ZoneId,
+                                ZoneChartId: val.ZoneChartId,
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#txtZoneName").val(i.item.label);
+                $('#txtZoneId').val(i.item.value);
+                $('#txtZoneChartId').val(i.item.ZoneChartId);
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#txtZoneName").val(i.item.label);
+                $('#txtZoneId').val(i.item.value);
+                $('#txtZoneChartId').val(i.item.ZoneChartId);
+
+            },
+
+        });
+
+
+        $("#txtLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/EmployeeZone/GetEmpZoneLocation',
+                    datatype: "json",
+                    data: {
+                        term: request.term, ZoneId: parseInt($('#txtZoneId').val()), ZoneChartId: parseInt($('#txtZoneChartId').val())
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.LocationName,
+                                value: val.ZoneChartDetailId
+                                
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#txtLocationName").val(i.item.label);
+                $('#txtZoneChartDetailId').val(i.item.value);
+               
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#txtLocationName").val(i.item.label);
+                $('#txtZoneChartDetailId').val(i.item.value);
+
+            },
+
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var countrylist = "";
+
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $('#tbl1').on("click", "#DeleteNewRow", function () {
+            debugger;
+            $(this).parent().parent().remove();
+            //$(this).parent().parent().addClass('hide');
+            //var obj = $(this).parent().parent().find('.hdndeleted');
+            //$(obj).val(true);
+        });
+
+
+        $("#btnsave").click(function () {
+            var i = $('#tbl1 > tr').length;
+            if (i == 0) {
+                alert('select Zone Locations!');
+                return false;
+            }
+            //var countrycount = $("#CountryID :selected").length;
+            //var citycount = $("#CityID :selected").length;
+            //if ($("#ZoneCategoryID option:selected").val() == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+            if ($("#ZoneID option:selected").val() == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if (countrycount == 0 && $("#StatusZone").val() == "I") {
+
+                $("#validations").show();
+                return false;
+            }
+            else if (citycount == 0 && $("#StatusZone").val() == "D") {
+                $("#validations").show();
+                return false;
+            }
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+        $('#btnadd').click(function () {
+
+            var locationname = $('#txtLocationName').val();
+            var zonename = $('#txtZoneName').val();
+            var zoneid = $('#txtZoneId').val();
+            var zonechartdetailid = $('#txtZoneChartDetailId').val();
+            
+            if (zonechartdetailid != null && zonechartdetailid != '') {
+                
+                var i = $('#tbl1 > tr').length;
+                html = '<tr>' +
+                    '<td>' + zonename + '<input type = "hidden" name="Details[' + i + '].ZoneId"  value = "' + zoneid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].ZoneChartDetailId" value=' + zonechartdetailid + ' type="hidden" /></td>' +
+                    '<td>' + locationname + '</td>' +                    
+                    '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr>';
+                $('#tbl1').append(html);
+
+                $('#txtLocationName').val('');
+                $('#txtZoneName').val('');
+                $('#txtZoneId').val('0');
+                $('#txtZoneChartDetailId').val('0');                
+                $('#txtZoneName').focus();
+            }
+            else {
+                $('#txtZoneName').focus();
+            }
+        });
+
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>
+
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    @Html.HiddenFor(mode => Model.EmpZoneAllocationID)
+                    <label class="headinglabel required">Effective date</label>
+                    @Html.TextBoxFor(model => model.EffectFromDate, new { @class = "form-control text-right", @required = "true" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Zone</label>
+                    @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+
+                </div>
+
+                <div class="col-md-6 btn-right">
+
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+
+                    <a href='@Url.Action("Index", "EmployeeChart", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top: 10px">
+
+                <div class="col-md-4">
+                    <label class="headinglabel">Zone</label>
+                    <input type="hidden" id="EventVenueId" class="form-control" />
+                    <input type="text" id="txtZoneName" class="form-control" />
+                    <input type="hidden" id="txtZoneId" class="form-control" />
+                    <input type="hidden" id="txtZoneChartId" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="headinglabel required">Location</label>
+                    <input type="text" id="txtLocationName" class="form-control" />
+                    <input type="hidden" id="txtZoneChartDetailId" class="form-control" />
+                </div>
+
+                <div class="col-md-1" style="padding-top:10px">
+                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+
+                </div>
+
+            </div>
+        </fieldset>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-xs-12 no-padding for-device">
+                <div class="data-table payment-div">
+                    <div class="data">
+                        <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
+                            <thead style="background:transparent;">
+                                <tr style="font-weight: bold; background:#07a7e3;">
+                                    <th>Zone Name</th>
+                                    <th>Location</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl1">
+                                @if (Model.EmpZoneAllocationID > 0)
+                                {
+                                    for (int i = 0; i < Model.Details.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.HiddenFor(item => @Model.Details[i].ZoneChartDetailID)
+                                                @Html.HiddenFor(item => @Model.Details[i].LocationName)
+                                                @Html.HiddenFor(item => @Model.Details[i].ZoneId)
+                                                @Html.HiddenFor(item => @Model.Details[i].ZoneName)
+                                                @Model.Details[i].ZoneName
+                                            </td>
+                                            <td>
+                                                @Model.Details[i].LocationName
+                                            </td>
+                                            <td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</section>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>

@@ -1533,6 +1533,26 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="DepotID" Type="int" />
     <Property Name="UserID" Type="int" />
   </EntityType>
+  <EntityType Name="EmpZoneAllocation">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationID" />
+    </Key>
+    <Property Name="EmpZoneAllocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EffectFromDate" Type="datetime" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="Statusupdate" Type="bit" />
+  </EntityType>
+  <EntityType Name="EmpZoneAllocationDetails">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationDetailID" />
+    </Key>
+    <Property Name="EmpZoneAllocationDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmpZoneAllocationID" Type="int" Nullable="false" />
+    <Property Name="ZoneChartDetailID" Type="int" Nullable="false" />
+    <Property Name="Statusupdate" Type="bit" />
+    <Property Name="ZoneId" Type="int" />
+  </EntityType>
   <EntityType Name="Expense">
     <Key>
       <PropertyRef Name="ExpenseID" />
@@ -2212,6 +2232,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="LastModifiedDate" Type="datetime" />
     <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
+    <Property Name="OriginPlaceID" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationPlaceID" Type="varchar" MaxLength="1000" />
+    <Property Name="PickupLocation" Type="varchar" MaxLength="1000" />
+    <Property Name="DeliveryLocation" Type="varchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6737,6 +6761,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmpZoneAllocation" EntityType="Self.EmpZoneAllocation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmpZoneAllocationDetails" EntityType="Self.EmpZoneAllocationDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ExportShipment" EntityType="Self.ExportShipment" Schema="dbo" store:Type="Tables" />

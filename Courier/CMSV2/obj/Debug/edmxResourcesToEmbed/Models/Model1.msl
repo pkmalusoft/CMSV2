@@ -8689,6 +8689,10 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="DeliveryLocation" ColumnName="DeliveryLocation" />
+          <ScalarProperty Name="PickupLocation" ColumnName="PickupLocation" />
+          <ScalarProperty Name="DestinationPlaceID" ColumnName="DestinationPlaceID" />
+          <ScalarProperty Name="OriginPlaceID" ColumnName="OriginPlaceID" />
           <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
           <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
@@ -9058,6 +9062,28 @@
           <ScalarProperty Name="CountryID" ColumnName="CountryID" />
           <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
           <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmpZoneAllocations">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmpZoneAllocation">
+        <MappingFragment StoreEntitySet="EmpZoneAllocation">
+          <ScalarProperty Name="Statusupdate" ColumnName="Statusupdate" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="EffectFromDate" ColumnName="EffectFromDate" />
+          <ScalarProperty Name="EmpZoneAllocationID" ColumnName="EmpZoneAllocationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmpZoneAllocationDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail">
+        <MappingFragment StoreEntitySet="EmpZoneAllocationDetails">
+          <ScalarProperty Name="ZoneId" ColumnName="ZoneId" />
+          <ScalarProperty Name="Statusupdate" ColumnName="Statusupdate" />
+          <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
+          <ScalarProperty Name="EmpZoneAllocationID" ColumnName="EmpZoneAllocationID" />
+          <ScalarProperty Name="EmpZoneAllocationDetailID" ColumnName="EmpZoneAllocationDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

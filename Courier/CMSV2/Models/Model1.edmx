@@ -1567,6 +1567,26 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
           <Property Name="DepotID" Type="int" />
           <Property Name="UserID" Type="int" />
         </EntityType>
+        <EntityType Name="EmpZoneAllocation">
+          <Key>
+            <PropertyRef Name="EmpZoneAllocationID" />
+          </Key>
+          <Property Name="EmpZoneAllocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EffectFromDate" Type="datetime" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="AcCompanyID" Type="int" />
+          <Property Name="Statusupdate" Type="bit" />
+        </EntityType>
+        <EntityType Name="EmpZoneAllocationDetails">
+          <Key>
+            <PropertyRef Name="EmpZoneAllocationDetailID" />
+          </Key>
+          <Property Name="EmpZoneAllocationDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpZoneAllocationID" Type="int" Nullable="false" />
+          <Property Name="ZoneChartDetailID" Type="int" Nullable="false" />
+          <Property Name="Statusupdate" Type="bit" />
+          <Property Name="ZoneId" Type="int" />
+        </EntityType>
         <EntityType Name="Expense">
           <Key>
             <PropertyRef Name="ExpenseID" />
@@ -2246,6 +2266,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
           <Property Name="LastModifiedDate" Type="datetime" />
           <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
           <Property Name="AcHeadID" Type="int" />
+          <Property Name="OriginPlaceID" Type="varchar" MaxLength="1000" />
+          <Property Name="DestinationPlaceID" Type="varchar" MaxLength="1000" />
+          <Property Name="PickupLocation" Type="varchar" MaxLength="1000" />
+          <Property Name="DeliveryLocation" Type="varchar" MaxLength="1000" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6771,6 +6795,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpZoneAllocation" EntityType="Self.EmpZoneAllocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpZoneAllocationDetails" EntityType="Self.EmpZoneAllocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExportShipment" EntityType="Self.ExportShipment" Schema="dbo" store:Type="Tables" />
@@ -16058,6 +16084,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
           <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
           <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
+          <EntitySet Name="EmpZoneAllocations" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocation" />
+          <EntitySet Name="EmpZoneAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail" />
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19902,6 +19930,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="AcHeadID" Type="Int32" />
           <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetail" />
           <NavigationProperty Name="InscanOtherCharges" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
+          <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PickupLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_CustomerInvoiceDetails_InScan">
           <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
@@ -20311,6 +20343,26 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="LocationID" Type="Int32" />
           <Property Name="CityID" Type="Int32" />
           <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="EmpZoneAllocation">
+          <Key>
+            <PropertyRef Name="EmpZoneAllocationID" />
+          </Key>
+          <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EffectFromDate" Type="DateTime" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="Statusupdate" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmpZoneAllocationDetail">
+          <Key>
+            <PropertyRef Name="EmpZoneAllocationDetailID" />
+          </Key>
+          <Property Name="EmpZoneAllocationDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" />
+          <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" />
+          <Property Name="Statusupdate" Type="Boolean" />
+          <Property Name="ZoneId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29006,6 +29058,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="DeliveryLocation" ColumnName="DeliveryLocation" />
+                <ScalarProperty Name="PickupLocation" ColumnName="PickupLocation" />
+                <ScalarProperty Name="DestinationPlaceID" ColumnName="DestinationPlaceID" />
+                <ScalarProperty Name="OriginPlaceID" ColumnName="OriginPlaceID" />
                 <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
                 <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
                 <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
@@ -29375,6 +29431,28 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="ZoneChartID" ColumnName="ZoneChartID" />
                 <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpZoneAllocations">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmpZoneAllocation">
+              <MappingFragment StoreEntitySet="EmpZoneAllocation">
+                <ScalarProperty Name="Statusupdate" ColumnName="Statusupdate" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EffectFromDate" ColumnName="EffectFromDate" />
+                <ScalarProperty Name="EmpZoneAllocationID" ColumnName="EmpZoneAllocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpZoneAllocationDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail">
+              <MappingFragment StoreEntitySet="EmpZoneAllocationDetails">
+                <ScalarProperty Name="ZoneId" ColumnName="ZoneId" />
+                <ScalarProperty Name="Statusupdate" ColumnName="Statusupdate" />
+                <ScalarProperty Name="ZoneChartDetailID" ColumnName="ZoneChartDetailID" />
+                <ScalarProperty Name="EmpZoneAllocationID" ColumnName="EmpZoneAllocationID" />
+                <ScalarProperty Name="EmpZoneAllocationDetailID" ColumnName="EmpZoneAllocationDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
