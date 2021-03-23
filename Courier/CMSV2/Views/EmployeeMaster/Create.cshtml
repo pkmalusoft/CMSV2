@@ -148,11 +148,27 @@
         $(":password").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
-        $("#EmployeeCode").focus();
-        $("#EmployeeCode").change(function () {
-            $("#EmployeeName").focus();
-        })
+        $("#EmployeeCode").attr('readonly', 'readonly');
+        $("#EmployeeName").focus();
+        //$("#EmployeeCode").change(function () {
+        //    $("#EmployeeName").focus();
+        //})
+        $("#EmployeeName").change(function () {
 
+            $.ajax({
+                type: "POST",
+                url: "/EmployeeMaster/GetEmployeeCode",
+                datatype: "Json",
+                data: { EmployeeName: $("#EmployeeName").val() },
+                success: function (result) {
+                    debugger;
+
+                    $('#EmployeeCode').val(result.data)
+                    // BindCity(data.CityID, data.LocationID);
+                }
+            });
+
+        });
         $("#Email").change(function () {
             console.log($('#Email').val());
             if ($('#Email').val().trim() != "") {

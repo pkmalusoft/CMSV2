@@ -31,6 +31,7 @@ namespace CMSV2.Models
         public string ConsignorContact { get; set; }
 
         public string ConsignorPhone { get; set; }
+        public string ConsignorMobile { get; set; }
         public string ConsignorAddress1_Building { get; set; }
         public string ConsignorAddress2_Street { get; set; }
         public string ConsignorAddress3_PinCode { get; set; }
@@ -45,6 +46,7 @@ namespace CMSV2.Models
         public string ConsigneeLocationName { get; set; }
         public string ConsigneeContact { get; set; }
         public string ConsigneePhone { get; set; }
+        public string ConsigneeMobile { get; set; }
         public string ConsigneeAddress1_Building { get; set; }
         public string ConsigneeAddress2_Street { get; set; }
         public string ConsigneeAddress3_PinCode { get; set; }
@@ -140,6 +142,21 @@ namespace CMSV2.Models
 
         public int AcheadID { get; set; }
         public string AcHeadName { get; set; }
+        public bool IsNCND { get; set; }
+        public bool IsCashOnly { get; set; }
+        public bool IsChequeOnly { get; set; }
+        public bool IsCollectMaterial { get; set; }
+        public bool IsDOCopyBack { get; set; }
+
+        public string PickupLocationPlaceId { get; set; }
+        public string PickupLocation  { get; set; }
+
+        public string DeliveryLocation { get; set; }
+        public string PickupSubLocality{ get; set; }
+        public string DeliverySubLocality { get; set; }
+        public bool AWBProcessed { get; set; }
+
+        public string DeliveryLocationPlaceId { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

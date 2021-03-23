@@ -86,7 +86,7 @@
         // Create the autocomplete object, restricting the search predictions to
         // geographical location types.
         autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('LocationName'), { types: ['geocode'] });
+            document.getElementById('LocationName'));
 
         // Avoid paying for data that you don't need by restricting the set of
         // place fields that are returned to just the address components.
@@ -131,6 +131,9 @@
             $.each(types, function (index, type) {
                 if (type == 'postal_code') {
                     postcode = component.long_name;
+                }
+                else if (type == 'sublocality' || type == 'sublocality_level_1') {                                        
+                    $('#SubLocality').val(component.long_name);
                 }
                 else if (type == 'locality') {
                     //$('#hdncity').val(component.long_name);
@@ -194,6 +197,7 @@
 </script>
 <script type="text/javascript">
     var countrylist = "";
+   
 
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
@@ -216,78 +220,7 @@
             //$(obj).val(true);
         });
 
-        //$("#ZoneID").change(function () {
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/ZoneChart/GetStatus",
-        //        datatype: "Json",
-        //        data: { id: $("#ZoneID option:selected").val() },
-        //        success: function (data) {
-
-        //            $("#StatusZone").val(data.Status);
-
-
-        //            if ($("#StatusZone").val() == "I") {
-        //                $("#CountryID").show();
-
-        //                $.ajax({
-        //                    type: "POST",
-        //                    url: "/ZoneChart/GetCountry",
-        //                    datatype: "Json",
-        //                    success: function (data) {
-        //                        $(".divcountry").show();
-        //                        $(".divcity").hide();
-        //                        $('#CountryID').empty();
-
-        //                        $.each(data, function (index, value) {
-        //                            $('#CountryID').append('<option value="' + value.CountryID + '">' + value.CountryName + '</option>');
-        //                        });
-
-        //                        $('#CountryID').multiselect({
-        //                            enableClickableOptGroups: true,
-        //                            enableCollapsibleOptGroups: true,
-        //                            enableFiltering: true,
-        //                            enableCaseInsensitiveFiltering: true,
-        //                            includeSelectAllOption: true
-        //                        });
-
-        //                    }
-        //                });
-
-        //            }
-        //            else if ($("#StatusZone").val() == "D") {
-
-        //                $.ajax({
-        //                    type: "POST",
-        //                    url: "/ZoneChart/GetCity",
-        //                    datatype: "Json",
-        //                    data: { id: 1 },
-        //                    success: function (data) {
-        //                        $('#CityID').empty();
-        //                        $(".divcountry").hide();
-        //                        $(".divcity").show();
-        //                        $.each(data, function (index, value) {
-        //                            $('#CityID').append('<option value="' + value.CityID + '">' + value.City + '</option>');
-        //                        });
-
-        //                        $('#CityID').multiselect({
-        //                            enableClickableOptGroups: true,
-        //                            enableCollapsibleOptGroups: true,
-        //                            enableFiltering: true,
-        //                            enableCaseInsensitiveFiltering: true,
-        //                            includeSelectAllOption: true
-        //                        });
-
-        //                    }
-        //                });
-
-
-
-        //            }
-        //        }
-        //    });
-        //});
-
+        
         $("#btnsave").click(function () {
             var i = $('#tbl1 > tr').length;
             if (i == 0) {
@@ -323,6 +256,7 @@
             var locationname = $('#LocationName').val();
             var countryname = $('#CountryName').val();
             var cityname = $('#CityName').val();
+            var sublocality = $('#SubLocality').val();
             if (cityname == null)
                 cityname = '';
             if (countryname == null)
@@ -331,10 +265,10 @@
                 var placeid = $('#PlaceID').val();
                 var i = $('#tbl1 > tr').length;
                 html = '<tr>' +
-                    '<td>' + locationname + '<input type = "hidden" name="Details[' + i + '].PlaceID"  value = "' + placeid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].CountryName" value=' + countryname + ' type="hidden"><input id="" name="Details[' + i + '].CityName" value=' + cityname + ' type="hidden"></td>' +
+                    '<td>' + locationname + '<input type = "hidden" name="Details[' + i + '].PlaceID"  value = "' + placeid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].CountryName" value=' + countryname + ' type="hidden"><input id="" name="Details[' + i + '].CityName" value="' + cityname + '" type="hidden"/><input id="" name="Details[' + i + '].SubLocality" value="' + sublocality + '" type="hidden"></td>' +
                     '<td>' + cityname + '</td>' +
                     '<td>' + countryname + '</td>' +
-                    '<td>' + placeid + '</td>' +
+                    '<td>' + sublocality + '</td>' +
                     '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr>';
                 $('#tbl1').append(html);
 
@@ -409,6 +343,8 @@
                 <div class="col-md-5">
                     <label class="headinglabel">Location</label>
                     <input type="hidden" id="EventVenueId" class="form-control" />
+                    @*<input type="text" id="TextBoxVenueLocation" class="form-control" style="background-color:bisque" />*@
+                    
                     @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @placeholder = "Location" })
                 </div>
                 <div class="col-md-3">
@@ -423,6 +359,7 @@
                 <div class="col-md-1 hide">
                     <label class="headinglabel required">PlaceID</label>
                     @Html.TextBoxFor(model => model.PlaceID, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    <input type="hidden" id="SubLocality" />
                 </div>
                 <div class="col-md-1" style="padding-top:10px">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
@@ -450,7 +387,7 @@
                                     <th>Location Name</th>
                                     <th>City Name</th>
                                     <th>Country Name</th>       
-                                    <th>PlaceID</th>
+                                    <th>Sub Locality</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -466,6 +403,7 @@
                                         @Html.HiddenFor(item => @Model.Details[i].CityName)
                                         @Html.HiddenFor(item => @Model.Details[i].CountryName)
                                         @Html.HiddenFor(item => @Model.Details[i].PlaceID)
+                                        @Html.HiddenFor(item => @Model.Details[i].SubLocality)
                                         @Model.Details[i].LocationName
                                     </td>
                                     <td>
@@ -475,7 +413,7 @@
                                         @Model.Details[i].CountryName
                                     </td>
                                     <td>
-                                        @Model.Details[i].PlaceID
+                                        @Model.Details[i].SubLocality
                                     </td>
                                     <td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>
                                 </tr>
@@ -492,3 +430,4 @@
 </section>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+

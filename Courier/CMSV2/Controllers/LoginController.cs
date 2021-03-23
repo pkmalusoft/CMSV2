@@ -142,6 +142,7 @@ namespace CMSV2.Controllers
                 var compdetail = db.AcCompanies.FirstOrDefault();
                 Session["CurrentCompanyID"] = compdetail.AcCompanyID;
                 Session["CurrencyId"] = compdetail.CurrencyID;
+                Session["EXRATE"] = 1;
                 Session["CompanyName"] = compdetail.AcCompany1;
                 Session["CompanyAddress"] = compdetail.Address1 + "," + compdetail.Address2 + " " + compdetail.Address3 + compdetail.CityName + " " + compdetail.CountryName;
             //int accid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());

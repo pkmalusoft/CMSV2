@@ -12,10 +12,10 @@ namespace CMSV2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblVehicleRequiredType
+    public partial class tblVehicleType
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public string VehicleDescription { get; set; }
     }
 }

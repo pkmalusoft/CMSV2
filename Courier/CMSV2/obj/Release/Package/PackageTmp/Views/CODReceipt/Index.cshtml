@@ -3,6 +3,24 @@
     //Layout = null;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     ViewBag.Title = "Index";
+
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/CODReceipt/Index";
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -27,7 +45,7 @@
         $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
 
-    var table = $('#datatable-1').DataTable();
+     var table = $('#datatable-1').DataTable();
 
 </script>
 <script type="text/javascript">
@@ -35,21 +53,40 @@
 
 
 
-        //$('#datatable-1 tfoot th').each(function () {
-        //       var title = $(this).text();
-        //       $(this).html('<input type="text" style="width:100%" />');
-        //   });
+         //$('#datatable-1 tfoot th').each(function () {
+         //       var title = $(this).text();
+         //       $(this).html('<input type="text" style="width:100%" />');
+         //   });
 
 
-        var table = $('#datatable-1').dataTable({
-            "bDestroy": true,
-            //"order": []
-            "aaSorting": [],
-            "searching": false
-        });
+            var table = $('#datatable-1').dataTable({
+                "bDestroy": true,
+                //"order": []
+                "aaSorting": [],
+                "searching": false
+           });
 
-
-
+        if ('@ismodify' == 'False')
+        {
+            $('#datatable-1').find('.aedit').each(function () {
+                debugger;
+                $(this).addClass('hide');
+            });
+        }
+        if ('@isdelete' == 'False')
+        {
+            $('#datatable-1').find('.adelete').each(function () {
+                debugger;
+                $(this).addClass('hide');
+            });
+        }
+        if ('@isprint' == 'False')
+        {
+            $('#datatable-1').find('.aprint').each(function () {
+                debugger;
+                $(this).addClass('hide');
+            });
+        }
 
     });
 
@@ -60,51 +97,48 @@
     <h1 class="headingfont">COD Receipt</h1>
 
 </section>
-
-@if (TempData["SuccessMsg"] != null)
-{
-    <script type="text/javascript">
-                 $(document).ready(function () {
-                     $.notify("@TempData["SuccessMsg"]", "success");
-                      });
-    </script>
-}
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    
+            <div class="row d-flex">
+                
+                    
+                        <div class=" col-md-1  search_field">
+                            <label for="FromDate" class="col-3 control-label">From</label>
+                            <input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
+                        </div>
+                        <div class=" col-md-1 search_field">
+                            <label for="FromDate" class="col-3 control-label">To</label>
+                            <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
+                        </div>
+                        <div class="col-md-2 m-top">
+                            @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
+                            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                        </div>
+                        @*<div>
+                            <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
+                        </div>*@
+                  
+            <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btn-sm waves-effect waves-light" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
+                }
 
-    <div class="row d-flex">
 
-
-        <div class=" col-md-1  search_field">
-            <label for="FromDate" class="col-3 control-label">From</label>
-            <input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
-        </div>
-        <div class=" col-md-1 search_field">
-            <label for="FromDate" class="col-3 control-label">To</label>
-            <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
-        </div>
-        <div class="col-md-2 m-top">
-            @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
-            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-        </div>
-        @*<div>
-                <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
-            </div>*@
-
-        <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
-            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
-
-
-        </div>
-    </div>
-    <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-        <table class="table table-responsive table-bordered tblfont" id="datatable-1">
-            @{ Html.RenderAction("Table", "CODReceipt");}
-        </table>
-    </div>
-
+            </div>
+            </div>
+            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+                <table class="table table-responsive table-bordered tblfont" id="datatable-1">
+                    @{ Html.RenderAction("Table", "CODReceipt");}
+                </table>
+            </div>
+     
 }
 
 <script>

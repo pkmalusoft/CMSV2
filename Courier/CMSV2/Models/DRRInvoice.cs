@@ -20,8 +20,5 @@ namespace CMSV2.Models
         public Nullable<int> CustomerID { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public string Remarks { get; set; }
-    
-        public virtual DRR DRR { get; set; }
-        public virtual DRR DRR1 { get; set; }
     }
 }

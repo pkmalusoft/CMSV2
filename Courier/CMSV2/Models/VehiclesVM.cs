@@ -8,6 +8,10 @@ using System;
 
 namespace CMSV2.Models
 {
+    public class VehicleTypeVM:tblVehicleType
+    {
+
+    }
   public class VehiclesVM
   {
     public int VehicleID { get; set; }
@@ -18,7 +22,7 @@ namespace CMSV2.Models
 
     public string Model { get; set; }
 
-    public string Type { get; set; }
+    public int VehicleTypeId { get; set; }
 
     public Decimal VehicleValue { get; set; }
 

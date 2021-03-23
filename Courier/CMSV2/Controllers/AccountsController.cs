@@ -3757,7 +3757,8 @@ new AcGroupModel()
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
-                    Output = "PDF"
+                    Output = "PDF",
+                    VoucherTypeId = "0"
                 };
             }
             return View(model);
@@ -3767,13 +3768,15 @@ new AcGroupModel()
         [ValidateAntiForgeryToken]
         public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters,SelectedValues")] AccountsReportParam picker)
         {
-            AccountsReportParam model = new AccountsReportParam
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                Output = picker.Output
-            };
-            model.VoucherTypeId = ""; 
+            AccountsReportParam model = SessionDataModel.GetAccountsParam();
+            if (model == null)
+                model = new AccountsReportParam();
+
+            model.FromDate = picker.FromDate;
+            model.ToDate = picker.ToDate;
+            model.Output = picker.Output;
+            model.Filters = picker.Filters;
+            model.SelectedValues = picker.SelectedValues;
             if (picker.SelectedValues != null)
             {
                 foreach (var item in picker.SelectedValues)

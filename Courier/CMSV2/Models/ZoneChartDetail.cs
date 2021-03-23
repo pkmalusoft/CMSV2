@@ -20,5 +20,6 @@ namespace CMSV2.Models
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> CityID { get; set; }
         public string PlaceID { get; set; }
+        public string SubLocality { get; set; }
     }
 }

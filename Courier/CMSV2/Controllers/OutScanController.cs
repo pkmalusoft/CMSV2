@@ -189,23 +189,20 @@ namespace CMSV2.Controllers
                 objdrs.BranchID = BranchId;
                 objdrs.AcCompanyID = CompanyId;
                 objdrs.StatusDRS = "0";
-                objdrs.StatusInbound = false;                
+                objdrs.StatusInbound = false;
                 objdrs.DrsType = "Courier";
             }
             else
             {
                 objdrs = db.DRS.Find(v.DRSID);
-                
+
             }
             objdrs.TotalAmountCollected = couriercharge;
             objdrs.TotalMaterialCost = totalmaterialcost;
             objdrs.DRSDate = v.DRSDate;
             objdrs.DeliveredBy = v.DeliveredBy;
-            objdrs.CheckedBy = v.CheckedBy;
-            
-            objdrs.VehicleID = v.VehicleID;                        
-            
-            
+            objdrs.CheckedBy = v.CheckedBy;            
+            objdrs.VehicleID = v.VehicleID;                                            
 
             if (v.DRSID==0)
             {
@@ -288,7 +285,7 @@ namespace CMSV2.Controllers
                 mc = db.MaterialCostMasters.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
                 if (mc != null)
                 {
-                    mc.DRSID = v.DRSID;
+                    mc.DRSID = objdrs.DRSID; 
                     mc.Status = "OUTSCAN";
                     db.Entry(mc).State = EntityState.Modified;
                     db.SaveChanges();
@@ -482,39 +479,30 @@ namespace CMSV2.Controllers
         //
         // GET: /InScan/Delete/5
 
-      
+
         public ActionResult DeleteConfirmed(int id)
         {
-            DR d = db.DRS.Find(id);
-            if (d == null)
+            //int k = 0;
+            if (id != 0)
             {
-                return HttpNotFound();
-            }
-            else
-            {
-                try
+                DataTable dt = ReceiptDAO.DeleteDRS(id);
+                if (dt != null)
                 {
-                    //var data = (from c in db.DRSDetails where c.DRSID == id select c).ToList();
-                    //foreach (var item in data)
-                    //{
-                    //    db.DRSDetails.Remove(item);
-                    //    db.SaveChanges();
-                    //}
-
-                    db.DRS.Remove(d);
-                    db.SaveChanges();
-                    TempData["success"] = "DRS Deleted Successfully.";
-                    return RedirectToAction("Index");
-                }
-                catch (Exception c)
-                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
 
                 }
-
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
 
-            return View();
-           
+            return RedirectToAction("Index", "OutScan");
+
         }
     }
 

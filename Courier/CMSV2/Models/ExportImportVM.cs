@@ -85,7 +85,7 @@ namespace CMSV2.Models
     }
     public class ExportShipmentVM :ExportShipment
     {
-        public string ManifestNumber { get; set; }
+        //public string ManifestNumber { get; set; }
         public string ConsignorAddress { get; set; }
         public string OriginCountry { get; set; }
         public string OriginCity { get; set; }

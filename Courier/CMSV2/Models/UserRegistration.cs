@@ -14,12 +14,6 @@ namespace CMSV2.Models
     
     public partial class UserRegistration
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserRegistration()
-        {
-            this.ImportShipments = new HashSet<ImportShipment>();
-        }
-    
         public int UserID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -27,8 +21,7 @@ namespace CMSV2.Models
         public string EmailId { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> RoleID { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImportShipment> ImportShipments { get; set; }
+        public Nullable<bool> isLogin { get; set; }
+        public Nullable<System.DateTime> loginExpiryDate { get; set; }
     }
 }

@@ -28,10 +28,12 @@ namespace CMSV2.Models
         public Nullable<int> AcCompanyID { get; set; }
         public Nullable<decimal> EXRate { get; set; }
         public Nullable<decimal> ReceivedAmount { get; set; }
-        public Nullable<int> CourierEMPID { get; set; }
         public string Status { get; set; }
         public string StatusEntry { get; set; }
         public Nullable<int> DeliveredBy { get; set; }
         public Nullable<int> ReceivedBy { get; set; }
+        public Nullable<int> BranchId { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public Nullable<int> DRRID { get; set; }
     }
 }

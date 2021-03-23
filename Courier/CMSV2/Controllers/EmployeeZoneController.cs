@@ -58,7 +58,8 @@ namespace CMSV2.Controllers
                            join z1 in db.ZoneChartDetails on c.ZoneChartDetailID equals z1.ZoneChartDetailID
                            join zone in db.ZoneMasters on c.ZoneId equals zone.ZoneID
                            join l in db.LocationMasters on z1.LocationID equals l.LocationID
-                           select new ZomeEmpDetailsVM { ZoneName=zone.ZoneName, EmpZoneAllocationDetailID = c.EmpZoneAllocationDetailID, EmpZoneAllocationID = c.EmpZoneAllocationID, LocationName = l.LocationName }).ToList();
+                           where c.EmpZoneAllocationID==id
+                           select new ZomeEmpDetailsVM { ZoneChartDetailID=c.ZoneChartDetailID, ZoneName=zone.ZoneName, EmpZoneAllocationDetailID = c.EmpZoneAllocationDetailID, EmpZoneAllocationID = c.EmpZoneAllocationID, LocationName = l.LocationName }).ToList();
                 v.Details = lst;
 
             }

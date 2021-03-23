@@ -358,7 +358,7 @@ namespace CMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output =picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
             };
@@ -437,7 +437,7 @@ namespace CMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType
             };
 
@@ -533,7 +533,7 @@ namespace CMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
             };
@@ -619,7 +619,7 @@ namespace CMSV2.Controllers
                 AsonDate = picker.AsonDate,
                 SupplierId = picker.SupplierId,
                 SupplierName = picker.SupplierName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType
             };
 

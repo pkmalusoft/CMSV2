@@ -22,5 +22,7 @@ namespace CMSV2.Models
         public Nullable<int> MCPVID { get; set; }
         public string Status { get; set; }
         public bool StatusClose { get; set; }
+        public Nullable<int> DRRID { get; set; }
+        public Nullable<decimal> MCReceivedAmt { get; set; }
     }
 }

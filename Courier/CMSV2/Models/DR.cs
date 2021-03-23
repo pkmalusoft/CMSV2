@@ -14,13 +14,6 @@ namespace CMSV2.Models
     
     public partial class DR
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DR()
-        {
-            this.DRSEmployees = new HashSet<DRSEmployee>();
-            this.DRSExpenses = new HashSet<DRSExpense>();
-        }
-    
         public int DRSID { get; set; }
         public string DRSNo { get; set; }
         public System.DateTime DRSDate { get; set; }
@@ -34,10 +27,6 @@ namespace CMSV2.Models
         public string DrsType { get; set; }
         public Nullable<int> BranchID { get; set; }
         public Nullable<decimal> TotalMaterialCost { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DRSEmployee> DRSEmployees { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DRSExpense> DRSExpenses { get; set; }
+        public Nullable<int> DRSRecPayId { get; set; }
     }
 }

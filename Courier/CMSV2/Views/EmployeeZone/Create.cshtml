@@ -11,7 +11,53 @@
 
 
 <script type="text/javascript">
-   
+    function checkduplicate(id) {
+
+        var idtext = 'hdnzonechartdetailid_';
+        var maxrow =  $('#tbl1 > tr').length;
+        $('#hdnItemCount').val(maxrow);
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var detailid = $(item).val();
+                if (detailid== id) {
+                    alert('Duplicate allocation is not allowed!');
+                    duplicate = true;
+                }
+
+                if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                    addlocation();
+                    return;
+                }
+            });
+        }
+        else {
+            addlocation();
+            return;
+        }
+    }
+
+    function addlocation()
+    {
+        var locationname = $('#txtLocationName').val();
+        var zonename = $('#txtZoneName').val();
+        var zoneid = $('#txtZoneId').val();
+        var zonechartdetailid = $('#txtZoneChartDetailId').val();
+
+        var i = $('#tbl1 > tr').length;
+        html = '<tr>' +
+            '<td>' + zonename + '<input type = "hidden" name="Details[' + i + '].ZoneId"  value = "' + zoneid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="hdnzonechartdetailid_' + i + '"  name="Details[' + i + '].ZoneChartDetailId" value=' + zonechartdetailid + ' type="hidden" /></td>' +
+            '<td>' + locationname + '</td>' +
+            '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr>';
+        $('#tbl1').append(html);
+
+        $('#txtLocationName').val('');
+        $('#txtZoneName').val('');
+        $('#txtZoneId').val('0');
+        $('#txtZoneChartDetailId').val('0');
+        $('#txtZoneName').focus();
+
+    }
     $(document).ready(function () {
         $('#EffectFromDate').datetimepicker({
             format: 'MM-DD-YYYY'
@@ -187,19 +233,7 @@
             var zonechartdetailid = $('#txtZoneChartDetailId').val();
             
             if (zonechartdetailid != null && zonechartdetailid != '') {
-                
-                var i = $('#tbl1 > tr').length;
-                html = '<tr>' +
-                    '<td>' + zonename + '<input type = "hidden" name="Details[' + i + '].ZoneId"  value = "' + zoneid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].ZoneChartDetailId" value=' + zonechartdetailid + ' type="hidden" /></td>' +
-                    '<td>' + locationname + '</td>' +                    
-                    '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr>';
-                $('#tbl1').append(html);
-
-                $('#txtLocationName').val('');
-                $('#txtZoneName').val('');
-                $('#txtZoneId').val('0');
-                $('#txtZoneChartDetailId').val('0');                
-                $('#txtZoneName').focus();
+                checkduplicate(zonechartdetailid);              
             }
             else {
                 $('#txtZoneName').focus();
@@ -224,14 +258,14 @@
         <fieldset>
 
             <div class="row no-margin">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     @Html.HiddenFor(mode => Model.EmpZoneAllocationID)
                     <label class="headinglabel required">Effective date</label>
                     @Html.TextBoxFor(model => model.EffectFromDate, new { @class = "form-control text-right", @required = "true" })
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Zone</label>
+                    <label class="headinglabel required">Employee</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
 
                 </div>
@@ -242,7 +276,7 @@
 
 
 
-                    <a href='@Url.Action("Index", "EmployeeChart", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+                    <a href='@Url.Action("Index", "EmployeeZone", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
 
                 </div>
             </div>
@@ -287,7 +321,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.HiddenFor(item => @Model.Details[i].ZoneChartDetailID)
+                                                @Html.HiddenFor(item => @Model.Details[i].ZoneChartDetailID,new { @id = "hdnzonechartdetailid_" + @i })
                                                 @Html.HiddenFor(item => @Model.Details[i].LocationName)
                                                 @Html.HiddenFor(item => @Model.Details[i].ZoneId)
                                                 @Html.HiddenFor(item => @Model.Details[i].ZoneName)

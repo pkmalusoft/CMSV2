@@ -31,16 +31,56 @@
     });
 
     $(document).ready(function () {
+        var o_st = $("#VoucherTypeId").val().split(",");
+        console.log(o_st);
+        var items = [
+            { Id: 0, Text: 'All Transactions' },
+            { Id: 1, Text: 'Cash Receipts & Payments' },
+            { Id: 2, Text: 'Journal Voucher' },            
+            { Id: 3, Text: 'AWB Posting' },
+            { Id: 4, Text: 'COD Posting' },
+            { Id: 5, Text: 'Invoice Posting' },
+            { Id: 6, Text: 'Receipt Posting' }];
+        $('#vouchertypeid').empty();
+        var flag = 0;
+        debugger;
+        for (var i = 0; i < 7; i++) {
+            var flag = 0;
+            for (var j = 0; j < o_st.length; j++) {
 
-        $('#vouchertypeid').multiselect({
-            nonSelectedText: 'Select',
-            enableClickableOptGroups: true,
-            enableCollapsibleOptGroups: true,
-            enableFiltering: false,
-            includeSelectAllOption: true,
-            enableCaseInsensitiveFiltering: false,
-            selectAllValue: 'multiselect-all'
-        });
+                if (o_st[j] == i) {
+                    flag = 1;
+                    $('#vouchertypeid').append('<option value="' + i + '" selected=true>' + items[i].Text + '</option>');
+                    break;
+                }
+            }
+            if (flag == 0) {
+
+                $('#vouchertypeid').append('<option value="' + i + '">' + items[i].Text + '</option>');
+            }
+
+            if (i == 6) {
+                $('#vouchertypeid').multiselect({
+                    nonSelectedText: 'Select',
+                    enableClickableOptGroups: true,
+                    enableCollapsibleOptGroups: true,
+                    enableFiltering: false,
+                    includeSelectAllOption: false,
+                    enableCaseInsensitiveFiltering: false
+                    //selectAllValue: 'multiselect-all'
+                });
+            }
+        }
+
+        //$('#vouchertypeid').multiselect({
+        //    nonSelectedText: 'Select',
+        //    enableClickableOptGroups: true,
+        //    enableCollapsibleOptGroups: true,
+        //    enableFiltering: false,
+        //    includeSelectAllOption: true,
+        //    enableCaseInsensitiveFiltering: false,
+        //    selectAllValue: 'multiselect-all'
+        //});
 
     });
 </script>
@@ -62,6 +102,7 @@
         <div class="col-md-2">
             <label class="headinglabel required">To Date</label>
             @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+            @Html.HiddenFor(model => model.VoucherTypeId)
         </div>
         <div class="col-md-2">
             <label class="headinglabel required ">Voucher Type</label>

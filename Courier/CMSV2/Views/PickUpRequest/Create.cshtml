@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-    var _decimal =Convert.ToInt32(@Session["Decimal"].ToString());
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     var _mindate = @CMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
     var _maxdate = @CMSV2.Models.CommanFunctions.GetMaxFinancialDate();
 }
@@ -43,7 +43,7 @@
         // Create the autocomplete object, restricting the search predictions to
         // geographical location types.
         autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'), { types: ['geocode'] });
+            document.getElementById('autocomplete'));
 
         // Avoid paying for data that you don't need by restricting the set of
         // place fields that are returned to just the address components.
@@ -51,21 +51,21 @@
 
         // When the user selects an address from the drop-down, populate the
         // address fields in the form.
-           autocomplete.addListener('place_changed', fillInAddress);
+        autocomplete.addListener('place_changed', fillInAddress);
 
 
         autocompleteCity = new google.maps.places.Autocomplete(
-            document.getElementById('ConsigneeCityName'), { types: ['geocode'] });
+            document.getElementById('ConsigneeCityName'));
 
         autocompleteCountry = new google.maps.places.Autocomplete(
-            document.getElementById('ConsigneeCountryName'), { types: ['geocode'] });
+            document.getElementById('ConsigneeCountryName'));
 
         autopickuplocation = new google.maps.places.Autocomplete(
-            document.getElementById('PickupLocation'), { types: ['geocode'] });
+            document.getElementById('PickupLocation'));
 
         autopickuplocation.addListener('place_changed', fillInPickuploadAddress);
         autodeliverylocation = new google.maps.places.Autocomplete(
-            document.getElementById('DeliveryLocation'), { types: ['geocode'] });
+            document.getElementById('DeliveryLocation'));
 
         autodeliverylocation.addListener('place_changed', fillInDeliveryloadAddress);
 
@@ -119,7 +119,7 @@
         debugger;
         // Get the place details from the autocomplete object.
         var place = autopickuplocation.getPlace();
-        
+
         $.ajax({
             type: "GET",
             url: "/ZoneChart/GetEventVenuesList",
@@ -135,12 +135,19 @@
         var postcode = '';
         $.each(place.address_components, function (index, component) {
             var types = component.types;
+            console.log(types);
             $.each(types, function (index, type) {
                 if (type == 'postal_code') {
                     postcode = component.long_name;
                 }
-                else if (type == 'locality') {
+                
+                else if (type == 'sublocality' || type == 'sublocality_level_1') {
                     //$('#hdncity').val(component.long_name);
+                    console.log(component.long_name);                   
+                    $('#PickupSubLocality').val(component.long_name);
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);                    
                     $('#ConsigneeCityName').val(component.long_name);
                 }
                 else if (type == 'country') {
@@ -164,8 +171,7 @@
             url: "/ZoneChart/GetEventVenuesList",
             datatype: "Json",
             data: { SearchText: $('#DeliveryLocation').val() },
-            success: function (response) {
-                debugger;                
+            success: function (response) {                
                 $('#DeliveryLocationPlaceId').val(response[0].place_id);
             }
         });
@@ -175,6 +181,10 @@
             $.each(types, function (index, type) {
                 if (type == 'postal_code') {
                     postcode = component.long_name;
+                }
+                else if (type == 'sublocality' || type == 'sublocality_level_1') {                    
+                    console.log(component.long_name);
+                    $('#DeliverySubLocality').val(component.long_name);
                 }
                 else if (type == 'locality') {
                     //$('#hdncity').val(component.long_name);
@@ -238,8 +248,8 @@
 </script>
 <script type="text/javascript">
 
-      function checkmobileno(inputtxt) {
-        
+    function checkmobileno(inputtxt) {
+
         //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         var phoneno = /^[0-9]{10}$/;
         if (inputtxt.match(phoneno)) {
@@ -304,7 +314,7 @@
 
 </script>
 <script type="text/javascript">
-    
+
     var consigneenames = [];
     var customernames = [];
 
@@ -314,13 +324,10 @@
             url: "/PickUpRequest/GetStatus",
             datatype: "Json",
             data: { 'InScanID': $('#InScanID').val() },
-            success: function (response) {
-                debugger;
-                console.log(response);
-                var _detail = response.data;
-                console.log(_detail);
+            success: function (response) {                                
+                var _detail = response.data;                
                 //$("#ChangeStatusId").val($('#PickupRequestStatusId').val());
-                 if (_detail.StatusType != 'PICKUP REQUEST') {
+                if (_detail.StatusType != 'PICKUP REQUEST') {
                     alert('Could not Change Status,Shipment Type out of Pickup Request!');
                     return;
                 }
@@ -346,11 +353,10 @@
                     $('#divcollected').removeClass('hide');
                     $('#AssignedEmployeeId').val(_detail.AssignedEmployee).trigger('change');
                     $('#PickedEmployeeId').val(_detail.PickedUpId).trigger('change');
-                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);  
-                    var myDate = new Date(_detail.PickedUpDateTime.match(/\d+/)[0] * 1);
-                    console.log(myDate);
+                    //var dateStr = JSON.parse(_detail.PickedUpDateTime);
+                    var myDate = new Date(_detail.PickedUpDateTime.match(/\d+/)[0] * 1);                    
                     var cmon = myDate.getMonth() + 1;
-                   var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();        
+                    var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
                     $('#txtpickuptime').val(collectdate);
                 }
                 else {
@@ -358,60 +364,59 @@
                     $('#divnoshow').addClass('hide');
                     $('#divcollected').addClass('hide');
                 }
-                 $('#StatusModal').modal('show');
+                $('#StatusModal').modal('show');
 
             }
         });
-         
-    }
-     function GetConsigneeDetail() {
-              
-         $.ajax({
-             type: "POST",
-             url: "/PickUpRequest/GetConsigneeData",
-             datatype: "Json",
-             data: { consigneename: $('#Consignee').val() },
-                success: function (data) {
-                    if (data != null && data.CustName!=null) {
-                        $("#Consignee").val(data.CustName);
-                        $("#ConsigneeContact").val(data.ContactPerson);
-                        $("#ConsigneeAddress").val(data.Address1);
-                        $("#ConsigneeAddress1").val(data.Address2);
-                        $("#ConsigneeAddress2").val(data.Address3);
-                        $("#ConsigneePhone").val(data.Phone);
-                        $("#ConsigneeCountryName").val(data.CountryName);
-                        $("#ConsigneeCityName").val(data.CityName);
-                        //$("#ConsigneeLocationName").val(data.LocationName);
-                        $("#autocomplete").val(data.LocationName);
-                        
-                    }
-                    else {
-                        debugger;
-                         console.log($('#Consignee').val());
-                        $("#ConsigneeContact").val('');
-                        $("#ConsigneeAddress").val('');
-                        $("#ConsigneeAddress1").val('');
-                        $("#ConsigneeAddress2").val('');
-                        $("#ConsigneePhone").val('');
-                        $("#ConsigneeCountryName").val('');
-                        $("#ConsigneeCityName").val('');
-                        $("#autocomplete").val(data.LocationName);
-                        //$("#ConsigneeLocationName").val('');
-                    }
-                }
-            });
 
-        }
-   
+    }
+    function GetConsigneeDetail() {
+
+        $.ajax({
+            type: "POST",
+            url: "/PickUpRequest/GetConsigneeData",
+            datatype: "Json",
+            data: { consigneename: $('#Consignee').val() },
+            success: function (data) {
+                if (data != null && data.CustName != null) {
+                    $("#Consignee").val(data.CustName);
+                    $("#ConsigneeContact").val(data.ContactPerson);
+                    $("#ConsigneeAddress").val(data.Address1);
+                    $("#ConsigneeAddress1").val(data.Address2);
+                    $("#ConsigneeAddress2").val(data.Address3);
+                    $("#ConsigneePhone").val(data.Phone);
+                    $("#ConsigneeCountryName").val(data.CountryName);
+                    $("#ConsigneeCityName").val(data.CityName);
+                    //$("#ConsigneeLocationName").val(data.LocationName);
+                    $("#autocomplete").val(data.LocationName);
+
+                }
+                else {
+                                        
+                    $("#ConsigneeContact").val('');
+                    $("#ConsigneeAddress").val('');
+                    $("#ConsigneeAddress1").val('');
+                    $("#ConsigneeAddress2").val('');
+                    $("#ConsigneePhone").val('');
+                    $("#ConsigneeCountryName").val('');
+                    $("#ConsigneeCityName").val('');
+                    $("#autocomplete").val(data.LocationName);
+                    //$("#ConsigneeLocationName").val('');
+                }
+            }
+        });
+
+    }
+
     $(document).ready(function () {
 
-    
-        
+
+
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
         $("#divvehicle").css({ "display": "none" });
 
-        
+
         setThreeNumberDecimal($('#Weight'));
 
         $("#vehreq").click(function () {
@@ -426,19 +431,19 @@
         });
 
         var m_names = new Array("Jan", "Feb", "Mar",
-"Apr", "May", "Jun", "Jul", "Aug", "Sep",
-"Oct", "Nov", "Dec");
+            "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+            "Oct", "Nov", "Dec");
 
         var d = new Date();
         var curr_date = d.getDate();
-        var curr_month = d.getMonth()+1;
+        var curr_month = d.getMonth() + 1;
         var curr_year = d.getFullYear();
 
-        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();        
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
         //var reqdate = curr_date + "-" + m_names[curr_month] + "-" + curr_year;
 
-        
-          
+
+
         //$("#EnquiryDate").prop("disabled", true);
 
         $("#VehicleID").change(function () {
@@ -447,7 +452,7 @@
         });
 
         $("#ChangeStatusId").change(function () {
-            
+
             var changestatus = $(this).val();
 
 
@@ -475,11 +480,11 @@
                 $('#divnoshow').addClass('hide');
                 $('#divcollected').removeClass('hide');
             }
-           else if ($('#PickupRequestStatusId').val() == 3 && changestatus == 4) { //collected
+            else if ($('#PickupRequestStatusId').val() == 3 && changestatus == 4) { //collected
                 $('#divassigned').addClass('hide');
                 $('#divnoshow').addClass('hide');
                 $('#divcollected').removeClass('hide');
-           }
+            }
             else {
                 $('#lblstatuserror').html('Invalid Status Change!');
             }
@@ -487,17 +492,14 @@
         })
         //$('#CustomerID').select2({});
 
-    
+
         $.ajax({
             type: "GET",
             url: "/PickUpRequest/GetConsignee",
-            datatype: "Json",            
-            success: function (response) {
-                debugger;
-                console.log(response);
-                consigneenames = response.data;
-                console.log(consigneenames);
-                $( "#Consignee" ).autocomplete({
+            datatype: "Json",
+            success: function (response) {                
+                consigneenames = response.data;                
+                $("#Consignee").autocomplete({
                     source: consigneenames
                 });
             }
@@ -506,10 +508,10 @@
         // $.ajax({
         //    type: "GET",
         //    url: "/PickUpRequest/GetCustomerName",
-        //    datatype: "Json",            
+        //    datatype: "Json",
         //    success: function (response) {
-        //        debugger;                
-        //        customernames = response.data;                
+        //        debugger;
+        //        customernames = response.data;
         //        $( "#CustomerName" ).autocomplete({
         //            source: customernames
         //        });
@@ -524,7 +526,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {                            
+                        response($.map(data, function (val, item) {
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,
@@ -556,48 +558,49 @@
         //}
         $('#CustomerName').change(function () {
             debugger;
-           var custname = $('#CustomerName').val();
-           $.ajax({
-               type: "POST",
-               url: "/PickUpRequest/GetCustomerId",
-               datatype: "Json",
-               data: { id:  custname },
-               success: function (response) {
-                   if (response.data == 0) {
-                       $('#CustomerID').val(0);
-                       $('#CustomerName').val('');
-                       return;
-                   }
-                   else {
-                       $('#CustomerID').val(response.data);
-                       $.ajax({
-                           type: "POST",
-                           url: "/PickUpRequest/GetCustomerData",
-                           datatype: "Json",
-                           data: { id: $('#CustomerID').val() },
-                           success: function (data) {
-                               debugger;
-                               $("#custcode").val(data.CustCode);
-                               $("#Consignor").val(data.CustName);
-                               $("#ConsignorContact").val(data.ContactPerson);
-                               $("#ConsignorAddress").val(data.Address1);
-                               $("#ConsignorAddress1").val(data.Address2);
-                               $("#ConsignorAddress2").val(data.Address3);
-                               $("#ConsignorPhone").val(data.Phone);
-                               $("#ConsignorCountryName").val(data.CountryName);
-                               $("#ConsignorCityName").val(data.CityName);
-                               $("#ConsignorLocationName").val(data.LocationName);
-                               $("#OfficeTimeFrom").val(data.OfficeOpenTime);
-                               $("#OfficeTimeTo").val(data.OfficeCloseTime);
+            var custname = $('#CustomerName').val();
+            $.ajax({
+                type: "POST",
+                url: "/PickUpRequest/GetCustomerId",
+                datatype: "Json",
+                data: { id: custname },
+                success: function (response) {
+                    if (response.data == 0) {
+                        $('#CustomerID').val(0);
+                        $('#CustomerName').val('');
+                        return;
+                    }
+                    else {
+                        $('#CustomerID').val(response.data);
+                        $.ajax({
+                            type: "POST",
+                            url: "/PickUpRequest/GetCustomerData",
+                            datatype: "Json",
+                            data: { id: $('#CustomerID').val() },
+                            success: function (data) {
+                                debugger;
+                                $("#custcode").val(data.CustCode);
+                                $("#Consignor").val(data.CustName);
+                                $("#ConsignorContact").val(data.ContactPerson);
+                                $("#ConsignorAddress").val(data.Address1);
+                                $("#ConsignorAddress1").val(data.Address2);
+                                $("#ConsignorAddress2").val(data.Address3);
+                                $("#ConsignorPhone").val(data.Phone);
+                                $("#ConsignorCountryName").val(data.CountryName);
+                                $("#ConsignorCityName").val(data.CityName);
+                                $("#ConsignorLocationName").val(data.LocationName);
+                                $("#OfficeTimeFrom").val(data.OfficeOpenTime);
+                                $("#OfficeTimeTo").val(data.OfficeCloseTime);
+                                $("#Email").val(data.Email);
 
-                           }
-                       });
-                   }
-               }
-                                    
-           });
-                  
-                                                  
+                            }
+                        });
+                    }
+                }
+
+            });
+
+
         });
 
         $('#btnsavestatus').click(function () {
@@ -620,7 +623,7 @@
                 }
             }
             else if (statustext == "Attempted - No Show") {
-                 if ($('#SubReasonStatusId').val()== 0) {
+                if ($('#SubReasonStatusId').val() == 0) {
                     $.notify("Select Reason!", "warning");
                     return;
                 }
@@ -630,18 +633,17 @@
                 ChangeStatusId: $('#ChangeStatusId').val(),
                 AssignedEmployee: $('#AssignedEmployeeId').val(),
                 PickedUpId: $('#PickedEmployeeId').val(), PickedUpDateTime: $('#txtpickuptime').val(),
-                SubStatusReason :$('#SubReasonStatusId').val()
+                SubStatusReason: $('#SubReasonStatusId').val()
             };
 
-             $.ajax({
+            $.ajax({
                 type: "POST",
                 url: "/PickUpRequest/SaveStatus",
                 datatype: "Json",
                 data: statusobj,
                 success: function (response) {
-                    debugger;                    
-                    if (response.status=="ok")
-                    {
+                    debugger;
+                    if (response.status == "ok") {
                         $.notify("Status Updated Successfully!", "success");
                         var statustext = $("#ChangeStatusId option:selected").text();
                         $('#PickupRequestStatusId').val($("#ChangeStatusId").val());
@@ -650,113 +652,112 @@
                     else
                         $.notify("Save Failed :" + response.message, "warning");
 
-                    
-                     $('#StatusModal').modal('hide');
+
+                    $('#StatusModal').modal('hide');
                 }
             });
-                                     
+
 
         });
 
         $("#btnsave").click(function () {
             debugger;
 
-           // $('#validations').html('* Please fill mandatory fields!');
+            // $('#validations').html('* Please fill mandatory fields!');
 
-           // if ($("#CustomerID").val() == "" || $("#CustomerID").val()==0 ||$("#CustomerID").val()=="0") {
-           //     $("#validations").show();
-           //     $('#CustomerName').focus();
-           //     return false;
-           // }
-           // else if ($("#Consignor").val() == "") {
-           //     $("#validations").show();
-           //     $("#Consignor").focus();
-           //     return false;
-           // }
-           // else if ($("#ConsignorLocationName").val() == "0") {
+            // if ($("#CustomerID").val() == "" || $("#CustomerID").val()==0 ||$("#CustomerID").val()=="0") {
+            //     $("#validations").show();
+            //     $('#CustomerName').focus();
+            //     return false;
+            // }
+            // else if ($("#Consignor").val() == "") {
+            //     $("#validations").show();
+            //     $("#Consignor").focus();
+            //     return false;
+            // }
+            // else if ($("#ConsignorLocationName").val() == "0") {
 
-           //     $("#validations").show();
-           //     $("#ConsignorLocationName").focus();
-           //     return false;
-           // }           
-           // else if ($("#ConsignorCityName").val() == "0") {
-           //     $("#validations").show();
-           //     $("#ConsignorCityName").focus();
-           //     return false;
-           // }
-           //else if ($("#ConsignorCountryName").val() == "") {
-           //     $("#validations").show();
-           //     $("#ConsignorCountryName").focus();
-           //     return false;
-           // }
-           //else if ($("#Consignee").val() == "") {
+            //     $("#validations").show();
+            //     $("#ConsignorLocationName").focus();
+            //     return false;
+            // }
+            // else if ($("#ConsignorCityName").val() == "0") {
+            //     $("#validations").show();
+            //     $("#ConsignorCityName").focus();
+            //     return false;
+            // }
+            //else if ($("#ConsignorCountryName").val() == "") {
+            //     $("#validations").show();
+            //     $("#ConsignorCountryName").focus();
+            //     return false;
+            // }
+            //else if ($("#Consignee").val() == "") {
 
-           //     $("#validations").show();
-           //     $("#Consignee").focus();
-           //     return false;
-           // }
-           //     else if ($("#autocomplete").val() == "") {
+            //     $("#validations").show();
+            //     $("#Consignee").focus();
+            //     return false;
+            // }
+            //     else if ($("#autocomplete").val() == "") {
 
-           //     $("#validations").show();
-           //     $("#autocomplete").focus();
-           //     return false;
-           // }
-           //  else if ($("#ConsigneeCityName").val() == "") {
+            //     $("#validations").show();
+            //     $("#autocomplete").focus();
+            //     return false;
+            // }
+            //  else if ($("#ConsigneeCityName").val() == "") {
 
-           //     $("#validations").show();
-           //     $("#ConsigneeCityName").focus();
-           //     return false;
-           // }
-           // else if ($("#ConsigneeCountryName").val() == "") {
-           //     $("#validations").show();
-           //     $("#ConsigneeCountryName").focus();
-           //     return false;
-           // }
-           // else if ($("#EnteredByID").val() == "") {
+            //     $("#validations").show();
+            //     $("#ConsigneeCityName").focus();
+            //     return false;
+            // }
+            // else if ($("#ConsigneeCountryName").val() == "") {
+            //     $("#validations").show();
+            //     $("#ConsigneeCountryName").focus();
+            //     return false;
+            // }
+            // else if ($("#EnteredByID").val() == "") {
 
-           //     $("#validations").show();
-           //     return false;
-           // }
-           // // else if ($('#CollectedEmpID').val() == "")
-           // //{
-           // //      $("#validations").show();
-           // //    return false;
-           // //}
-           // //else if ($('#EmployeeID').val() == "")
-           // //{
-           // //    $("#validations").show();
-           // //    return false;
-           // //}
-           //else if ($('#ReadyTime').val() < $('#EnquiryDate').val())
-           // {                 
-           //      $("#validations").show();
-           //     $('#validations').html('Invalid Ship Ready Time!');                
-           //     return false;
-           // }
-           // else {
-           //     $("#validations").hide();
-           //     return true;
-           // }
+            //     $("#validations").show();
+            //     return false;
+            // }
+            // // else if ($('#CollectedEmpID').val() == "")
+            // //{
+            // //      $("#validations").show();
+            // //    return false;
+            // //}
+            // //else if ($('#EmployeeID').val() == "")
+            // //{
+            // //    $("#validations").show();
+            // //    return false;
+            // //}
+            //else if ($('#ReadyTime').val() < $('#EnquiryDate').val())
+            // {
+            //      $("#validations").show();
+            //     $('#validations').html('Invalid Ship Ready Time!');
+            //     return false;
+            // }
+            // else {
+            //     $("#validations").hide();
+            //     return true;
+            // }
 
-          
+
             if ($('#ReadyTime').val() != '') {
-                if ($('#ReadyTime').val() < $('#EnquiryDate').val())
-            {                 
-                 $("#validations").show();
-                $('#validations').html('Invalid Ship Ready Time!');                
-                return false;
+                if ($('#ReadyTime').val() < $('#EnquiryDate').val()) {
+                    $("#validations").show();
+                    $('#validations').html('Invalid Ship Ready Time!');
+                    return false;
+                }
+                else {
+                    $("#validations").hide();
+                    return true;
+                }
             }
-            else {
-                $("#validations").hide();
-                return true;
-            }
-            }
-            
+
 
 
         });
 
-        $('#ReadyTime').on('change',function () {
+        $('#ReadyTime').on('change', function () {
             debugger;
             if ($('#ReadyTime').val() < $('#EnquiryDate').val()) {
                 alert('Ship Ready Time Should be greater than Pickup Request Time!');
@@ -764,14 +765,14 @@
         });
 
         if ($('#InScanID').val() == "0" || $('#InScanID').val() == null) {
-                     
+
             $("#EnquiryDate").val(reqdate);
             $('#divsetting').addClass('hide');
             $('#EnquiryDate').focus();
         }
         else {
 
-           
+
         }
 
     });
@@ -787,36 +788,36 @@
         <div class="col-md-5 pull-right text-right">
             <h2 class="awb"><strong>@ViewBag.AWBNo</strong></h2>
             <h5 id="h1status" style="color:red">@ViewBag.Status</h5>
-            
+
         </div>
 
     </div>
 
 
     <div class="row">
-    <div class="pull-right setting">
-        <div class="navbar-custom-menu" id="divsetting">
-            <ul class="nav navbar-nav">
+        <div class="pull-right setting">
+            <div class="navbar-custom-menu" id="divsetting">
+                <ul class="nav navbar-nav">
 
-                <!-- User Account Menu -->
-                <li class="dropdown user user-menu">
-                <ul class="dropdown-menu extended logout" style="top:0%!important">
-                    <!-- Menu Toggle Button -->
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <ul class="dropdown-menu extended logout" style="top:0%!important">
+                            <!-- Menu Toggle Button -->
 
 
-                    <li>
-                        <a style="color:#35b8eb;cursor:pointer" onclick="ShowStatusModal()">Change Status</a>
+                            <li>
+                                <a style="color:#35b8eb;cursor:pointer" onclick="ShowStatusModal()">Change Status</a>
+                            </li>
+
+                            <li><a style="color:#35b8eb">Print Request</a></li>
+                        </ul>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
+                        </a>
                     </li>
-
-                    <li><a style="color:#35b8eb">Print Request</a></li>
                 </ul>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
-                </a>
-                </li>
-            </ul>
+            </div>
         </div>
-    </div>
     </div>
 </section>
 
@@ -862,7 +863,7 @@
                                     @Html.DropDownList("SubReasonStatusId", new SelectList(@ViewBag.PickupSubReason, "Id", "StatusName", @ViewBag.SubReasonStatusId), "Select", new { @class = "form-control", @value = 1, @id = "SubReasonStatusId", @name = "SubReasonStatusId" })
                                 </div>
                             </div>
-                            <div id="divcollected" class="hide" >
+                            <div id="divcollected" class="hide">
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-xs-5 col-sm-3">
                                         Picked By
@@ -885,8 +886,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer" style="padding-top: 5px">                
-                <lable style="color:red" id="lblstatuserror" class="pull-left" ></lable>
+            <div class="modal-footer" style="padding-top: 5px">
+                <lable style="color:red" id="lblstatuserror" class="pull-left"></lable>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus">Save Status</button>
             </div>
@@ -902,24 +903,14 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-   
-      
 
-<div class="row no-margin">
-    <div class="col-md-12">
-        <h3 style="color: white">Customer Detail</h3>
-        <hr />
-    </div>
-    
-</div>
-     
 
 
         <div class="row no-margin">
 
             @*       <div class="editor-label">
-            @Html.LabelFor(model => model.CustomerID)
-        </div>*@
+                    @Html.LabelFor(model => model.CustomerID)
+                </div>*@
             <div class="col-md-3">
                 @Html.HiddenFor(model => model.InScanID)
                 @Html.HiddenFor(model => model.BranchID)
@@ -934,7 +925,7 @@
             </div>
             <div class="col-md-3">
                 <label class="headinglabel">Date</label>
-                @Html.TextBoxFor(model => model.EnquiryDate, new { @class = "form-control text-right",@required="true" })
+                @Html.TextBoxFor(model => model.EnquiryDate, new { @class = "form-control text-right", @required = "true" })
 
             </div>
             <div class="col-md-3">
@@ -942,18 +933,40 @@
                 @Html.DropDownListFor(model => model.RequestSource, new SelectList(@ViewBag.RequestType, "Id", "RequestTypeName"), "Select", new { @class = "form-control" })
 
             </div>
-
             <div class="col-md-3">
+                <label class="headinglabel required">Payment Mode</label>
+                @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
+            </div>
+
+
+
+        </div>
+
+
+        <div class="row no-margin">
+            <div class="col-md-12 sub_title_block">
+                <h3 style="color: #545a5d!important;font-weight: bold;">Customer Detail</h3>
+                <hr />
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-6">
                 <label class="headinglabel required">Customer</label>
-                @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget"})
+                @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget" })
                 @if (Session["UserType"].ToString() == "Customer")
                 {
-                   
-                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget" , @readonly="readonly",@autocomplete="off"  })
+
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget", @readonly = "readonly", @autocomplete = "off" })
                 }
                 else
                 {
-                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget",@required="true", @autocomplete = "off" })
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
                 }
 
 
@@ -962,112 +975,203 @@
             </div>
 
 
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <label class="headinglabel">Customer Code</label>
                 @*<input type="text"  class="form-control" readonly />*@
-                @Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control txttarget", @readonly = "readonly", @id="custcode" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Shipper</label>
-                @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control txttarget",@readonly="readonly" ,@required="true" })
+                @Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control txttarget", @readonly = "readonly", @id = "custcode" })
             </div>
 
-
-            <div class="col-md-3">
-                <label class="headinglabel">Office Open Time</label>
-                @Html.TextBoxFor(model => model.OfficeTimeFrom, new { @class = "form-control" ,@readonly="readonly"})
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel">Office Close Time</label>
-                @Html.TextBoxFor(model => model.OfficeTimeTo, new { @class = "form-control",@readonly="readonly" })
-            </div>
         </div>
-            
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
+
+
+
+        <div class="row no-margin">
+            <div class="col-md-12 sub_title_block">
+                <h3 style="color: white; font-weight: bold; ">Shipper Details</h3>
+                <hr />
+            </div>
+
+        </div>
+
+        <div class="row">
+
+
+            <div class="col-md-4">
+                <label class="headinglabel required">Shipper</label>
+                @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control txttarget", @readonly = "readonly", @required = "true" })
+            </div>
+
+            <div class="col-md-4">
                 <label class="headinglabel">Contact Person</label>
                 @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget" })
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-2">
                 <label class="headinglabel">Flat/Building</label>
                 @Html.TextBoxFor(model => model.ConsignorAddress, new { @class = "form-control txttarget" })
             </div>
-
-
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="headinglabel">Street Name</label>
                 @Html.TextBoxFor(model => model.ConsignorAddress1, new { @class = "form-control txttarget" })
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="headinglabel">Pincode</label>
                 @Html.TextBoxFor(model => model.ConsignorAddress2, new { @class = "form-control text-right txttarget" })
             </div>
-        </div>
-        
-        <div class="row no-margin" style="padding-top: 10px">
-
-
-            <div class="col-md-3">
-                <label class="headinglabel">Phone No</label>
-                @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control text-right" })
+            <div class="col-md-2">
+                <label class="headinglabel">Phone No.</label>
+                @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control text-right", @placeholder = "+###-###-#########" })
             </div>
 
-            <div class="col-md-3">
+
+
+            <div class="col-md-2">
+                <label class="headinglabel">Email</label>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control text-right", @placeholder = "demo@gmail.com" })
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Origin Location</label>
+                @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true" })
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Origin City</label>
+                @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control", id = "ConsignorCityName", @required = "true" })
+            </div>
+
+
+            <div class="col-md-2">
                 <label class="headinglabel required">Origin Country</label>
-                @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control", id = "ConsignorCountryName",@required="true" })
-                                
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin City</label>                
-                @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control", id = "ConsignorCityName",@required="true" })
-                
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Origin Location</label> 
-                @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget",@required="true" })
+                @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control", id = "ConsignorCountryName", @required = "true" })
             </div>
         </div>
+
+        <div class="col-md-2">
+            <label class="headinglabel">Office Open Time</label>
+            @Html.TextBoxFor(model => model.OfficeTimeFrom, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+
+        <div class="col-md-2">
+            <label class="headinglabel">Office Close Time</label>
+            @Html.TextBoxFor(model => model.OfficeTimeTo, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+
+
+
         <div class="row no-margin">
             <div class="col-md-12">
-                <h3 style="color: white">Shipment Detail Section</h3>
+                <h3 style="color: white;font-weight: bold;">Receiver Details</h3>
+                <hr />
+            </div>
+        </div>
+
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-4">
+                <label class="headinglabel required">Consignee</label>
+                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @onchange = "GetConsigneeDetail()", @required = "true" })
+            </div>
+
+            <div class="col-md-4">
+                <label class="headinglabel">Contact Person</label>
+                @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Flat/Building</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress, new { @class = "form-control txttarget" })
+            </div>
+
+
+            <div class="col-md-2">
+                <label class="headinglabel">Street Name</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress1, new { @class = "form-control txttarget" })
+            </div>
+
+        </div>
+
+        <div class="row no-margin" style="padding-top: 10px">
+            <div class="col-md-2">
+                <label class="headinglabel">Pincode</label>
+                @Html.TextBoxFor(model => model.ConsigneeAddress2, new { @class = "form-control text-right txttarget" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel required">Consignee Location</label>
+                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control", id = "autocomplete", @onFocus = "geolocate()", @required = "true" })
+                @*<input class="form-control" id="autocomplete" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
+                @*@Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget" })*@
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Consignee City</label>
+                @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control", id = "ConsigneeCityName", @onFocus = "geoCitylocate()", @required = "true" })
+                @*<input class="form-control" id="ConsigneeCityName" name="ConsigneeCityName" type="text" onFocus="geoCitylocate()" />*@
+                @*@Html.DropDownListFor(model => model.ConsigneeCityId, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Consignee Country</label>
+                @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control", id = "ConsigneeCountryName", @onFocus = "geoCountrylocate()", @required = "true" })
+                @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
+                @*@Html.DropDownListFor(model => model.ConsigneeCountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Phone No.</label>
+                @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control text-right", @placeholder = "XXX-XXX-XXXX" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Email</label>
+                <input type="text" class="form-control" placeholder="demo@gmail.com" />
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row no-margin">
+            <div class="col-md-12 sub_title_block">
+                <h3 style="color: #04bfb7!important; font-weight: bold;">Shipment Detail Section</h3>
                 <hr />
             </div>
         </div>
         <div class="row no-margin" style="padding-top: 10px">
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="headinglabel">Shipment Ready Time</label>
                 @Html.TextBoxFor(model => model.ReadyTime, new { @class = "form-control text-right" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="headinglabel">Document Type</label>
                 @Html.DropDownListFor(model => model.DocumentTypeId, new SelectList(@ViewBag.DocumentType, "Id", "DocumentTypeName"), "Select", new { @class = "form-control" })
                 @*@Html.DropDownList("DocumentType", new List<SelectListItem>
-                {
-                    new SelectListItem{ Text="Doc", Value = "Doc" },
-                    new SelectListItem{ Text="Non Doc", Value = "Non Doc" },
+            {
+                new SelectListItem{ Text="Doc", Value = "Doc" },
+                new SelectListItem{ Text="Non Doc", Value = "Non Doc" },
 
 
-                 }, "Select", new { @class = "form-control" })*@
+             }, "Select", new { @class = "form-control" })*@
 
             </div>
 
-            <div class="col-md-3 form-group">
+            <div class="col-md-2 form-group">
                 <label class="headinglabel">Weight</label>
-                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right",@onchange="setThreeNumberDecimal(this)" })
+                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @onchange = "setThreeNumberDecimal(this)" })
                 @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
             </div>
+            <div class="col-md-2 form-group">
+                <label class="headinglabel">Pieces</label>
+                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right" })
+                @Html.ValidationMessageFor(model => model.Pieces, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4 form-group">
+                <label class="headinglabel">Description</label>
+                @Html.TextBoxFor(model => model.Description, new { @class = "form-control text-right" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
 
-
-        </div>
-        <div class="row no-margin">
             <div class="col-md-3">
                 <label class="headinglabel">PickUp Location</label>
                 @Html.TextBoxFor(model => model.PickupLocation, new { @class = "form-control txttarget" })
@@ -1078,95 +1182,48 @@
                 @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control txttarget" })
                 @Html.HiddenFor(model => model.DeliveryLocationPlaceId)
             </div>
-        </div>
-        
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3 checkboxdesign" style="padding-top: 20px">
-                @Html.CheckBox("vehreq", new { @name = "vehreq" }) &nbsp
-                    <label class="headinglabel">Vehicle Required</label>
-
+            <div class="col-md-3">
+                <label class="headinglabel">PickUp Sub Location</label>
+                @Html.TextBoxFor(model => model.PickupSubLocality, new { @class = "form-control", @readonly = "readonly" })
             </div>
-            <div class="col-md-3" id="divvehicle">
+            <div class="col-md-3">
+                <label class="headinglabel">Delivery Sub Location</label>
+                @Html.TextBoxFor(model => model.DeliverySubLocality, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+            @*<div class="col-md-3 checkboxdesign no-padding">
+            @Html.CheckBox("vehreq", new { @name = "vehreq" }) &nbsp
+            <label class="headinglabel">Vehicle Required</label>
+
+        </div>*@
+
+            <div class="row no-margin" style="padding-top: 10px">
+                  
+            <div class="col-md-2">
                 <label class="headinglabel">Vehicle Type</label>
-                @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
-                @Html.HiddenFor(model => model.Vehicle)
+                @Html.DropDownListFor(model => model.VehicleTypeId, new SelectList(@ViewBag.VehicleType, "ID", "Name"), "Select", new { @class = "form-control" })
+                @Html.HiddenFor(model => model.VehicleTypeId)
             </div>
-        </div>
-        <div class="row no-margin">
-            <div class="col-md-12">
-                <h3 style="color: white">Consignee Details</h3>
-                <hr />
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Courier Charge</label>
+                @Html.TextBoxFor(model => model.CourierCharge, string.Format("{0:n2}", Model.CourierCharge) ,new { @class = "form-control text-right" , @required = "true" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Material Cost</label>
+                @Html.TextBoxFor(model => model.MaterialCost, string.Format("{0:n2}",Model.MaterialCost), new { @class = "form-control text-right" })
+                @Html.HiddenFor(model => model.MaterialCost)
             </div>
         </div>
         
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee</label>                
-                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget" ,@onchange="GetConsigneeDetail()" ,@required="true"})
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel">Contact Person</label>
-                @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Flat/Building</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress, new { @class = "form-control txttarget" })
-            </div>
-
-
-            <div class="col-md-3">
-                <label class="headinglabel">Street Name</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress1, new { @class = "form-control txttarget" })
-            </div>
-
-        </div>
-        
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
-                <label class="headinglabel">Pincode</label>
-                @Html.TextBoxFor(model => model.ConsigneeAddress2, new { @class = "form-control text-right txttarget" })
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel">Phone No</label>
-                @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control text-right", @placeholder = "XXX-XXX-XXXX" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee Location</label>
-                @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control", id = "autocomplete", @onFocus = "geolocate()" ,@required="true" })
-                @*<input class="form-control" id="autocomplete" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
-                @*@Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget" })*@
-            </div>
-           
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee City</label>
-                @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control", id = "ConsigneeCityName", @onFocus = "geoCitylocate()", @required="true" })
-                @*<input class="form-control" id="ConsigneeCityName" name="ConsigneeCityName" type="text" onFocus="geoCitylocate()" />*@
-                @*@Html.DropDownListFor(model => model.ConsigneeCityId, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
-            </div>
-
-
-        </div>
-             
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-3">
-                <label class="headinglabel required">Consignee Country</label>
-                @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control", id = "ConsigneeCountryName", @onFocus = "geoCountrylocate()" ,@required="true"})
-                @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
-                @*@Html.DropDownListFor(model => model.ConsigneeCountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-
-
-
-        </div> 
-        <hr>
+        <hr style="margin-top:10px">
         <div class="row no-margin" style="padding-top: 10px">
 
             <div class="col-md-3">
                 <label class="headinglabel required">Entered By</label>
-                @Html.TextBoxFor(model => model.employeename, new { @class = "form-control", Value = @ViewBag.empname ,@Disabled="disabled" ,@required="true"})
+                @Html.TextBoxFor(model => model.employeename, new { @class = "form-control", Value = @ViewBag.empname, @Disabled = "disabled", @required = "true" })
                 @Html.HiddenFor(model => model.EnteredByID, new { Value = @ViewBag.empid })
             </div>
 
@@ -1180,16 +1237,16 @@
             </div>
             <div class="col-md-3 hide">
                 <label class="headinglabel">Collected Time</label>
-                @Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control"})
+                @Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })
             </div>
-             <div class="col-md-6">
+            <div class="col-md-6">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
             </div>
 
         </div>
         <div class="row no-margin" style="padding-top: 10px">
-           
+
             <div class="col-md-12 btn-right">
 
                 <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "PickUpRequest", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
@@ -1199,7 +1256,7 @@
         </div>
 
 
-       
+
     }
 
 </section>

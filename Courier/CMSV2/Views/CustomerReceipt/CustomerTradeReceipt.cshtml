@@ -76,11 +76,12 @@
 
         return true;
     }
-    function ShowAWBAllocation(InvoiceId, Amount, InvoiceNo) {
+    function ShowAWBAllocation(index, Amount, InvoiceNo) {
         debugger;
-        Amount = parseFloat($('#txtinvoice_' + InvoiceId).val());
+        Amount = parseFloat($('#txtinvoice_' + index).val());
+        var InvoiceId = $('#hdnInvoiceId_' + index).val();
         $('#hdnEditCustomerInvoiceId').val(InvoiceId);
-        InvoiceId = InvoiceId.replace('TR', '');
+        //InvoiceId = InvoiceId.toString().replace('TR', '');
         $('#hdnAllocatedAmount').val(Amount);
         $('#hInvoice').html('<b>Invoice No:</b>' + InvoiceNo + ' <b> Allocated Amount :</b>' + Amount.toFixed(@_decimal));
         $('#hTotal').html(parseFloat(Amount).toFixed(@_decimal));
@@ -102,7 +103,45 @@
                         '<td>' + date + '</td>' +
                         '<td class="text-right">' + parseFloat(data[i].TotalAmount).toFixed(@_decimal) + '</td>' +
                         '<td class="text-right">' + parseFloat(recamt).toFixed(@_decimal) +  '</td>' +
-                        '<td class="text-right">' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '</td>' +
+                        '<td class="text-right"><input type="hidden" id="atxtbal_' + data[i].CustomerInvoiceId + '_' +  data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '"/>' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '</td>' +
+                        '<td class="text-right"> <input type="text" onBlur="chkAWBAmt(this)" name="AWBAllocation[' + i + '].AllocatedAmount" class="amt txtNum text-right AmountReceived" id="atxt_' + data[i].CustomerInvoiceId + '_' + data[i].CustomerInvoiceDetailID + '" detailid="' + data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].AllocatedAmount).toFixed(@_decimal) + '" />' +
+                        '<tr>');
+                }
+                $('#popup').modal('show');
+            }
+        });
+
+    }
+
+    function EditAWBAllocation(InvoiceId, Amount, InvoiceNo) {
+        debugger;
+        var Amount1 = $('#txtinvoice_' + InvoiceId).val()
+        Amount1 = Amount1.replace(',', '');
+        Amount = parseFloat(Amount1); //$('#txtinvoice_' + InvoiceId).val());
+        $('#hdnEditCustomerInvoiceId').val(InvoiceId);
+        InvoiceId = InvoiceId.toString().replace('TR', '');
+        $('#hdnAllocatedAmount').val(Amount);
+        $('#hInvoice').html('<b>Invoice No:</b>' + InvoiceNo + ' <b> Allocated Amount :</b>' + Amount.toFixed(@_decimal));
+        $('#hTotal').html(parseFloat(Amount).toFixed(@_decimal));
+        $.ajax({
+            type: "Get",
+            url: '/CustomerReceipt/GetAWBAllocation/',
+            data: { 'InvoiceId': InvoiceId },
+            success: function (data) {
+                $('#AllocationTable').html('');
+                $('#AllocationTable tr:gt(0)').remove();
+                $('#hdnItemCount').val(data.length);
+                for (var i = 0; i < data.length; i++) {
+                    var date = data[i].AWBDate;
+                    var recamt = data[i].ReceivedAmount;
+                    if (recamt == "" || recamt==null)
+                        recamt = 0;
+                    $('#AllocationTable').append('<tr>' +
+                        '<td>' + data[i].AWBNo + '<input type="hidden" name="AWBAllocation[' + i + '].CustomerInvoiceDetailID" value="' + data[i].CustomerInvoiceDetailID + '" /> <input type = "hidden" name = "AWBAllocation[' + i + '].ID" value ="' + data[i].ID + '" />  </td>' +
+                        '<td>' + date + '</td>' +
+                        '<td class="text-right">' + parseFloat(data[i].TotalAmount).toFixed(@_decimal) + '</td>' +
+                        '<td class="text-right">' + parseFloat(recamt).toFixed(@_decimal) +  '</td>' + 
+                        '<td class="text-right"><input type="hidden" id="atxtbal_' + data[i].CustomerInvoiceId + '_' +  data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '"/>' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '</td>' +
                         '<td class="text-right"> <input type="text" onBlur="chkAWBAmt(this)" name="AWBAllocation[' + i + '].AllocatedAmount" class="amt txtNum text-right AmountReceived" id="atxt_' + data[i].CustomerInvoiceId + '_' + data[i].CustomerInvoiceDetailID + '" detailid="' + data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].AllocatedAmount).toFixed(@_decimal) + '" />' +
                         '<tr>');
                 }
@@ -301,7 +340,7 @@
                         var tempdate = new Date(date).getDate() + '/' + (new Date(date).getMonth() + 1) + '/' + new Date(date).getFullYear();
                         var invoiceno = "'" + data[i].InvoiceNo + "'";
                         html = '<tr>' +
-                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input id="" name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value=' + data[i].AcOPInvoiceDetailID + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceID + ' type="hidden"></td>' +
+                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input id="" name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value=' + data[i].AcOPInvoiceDetailID + ' type="hidden"><input id="hdnInvoiceId_' + i + '" name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceID + ' type="hidden"/></td>' +
                             '<td>' + data[i].DateTime + '<input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].InvoiceAmount).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value=' + data[i].InvoiceAmount + ' type="hidden" class="AmountToBeRecieved"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].AmountReceived).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden"></td>' +
@@ -724,6 +763,11 @@
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.StatusEntry)
+        <div class="row no-margin">
+            <div class="col-xs-5 col-sm-5">
+                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
+            </div>
+        </div>
         <div class="row no-margin" style="padding-top:10px">
             <div class="col-xs-12 col-sm-2">
                 <label class="headinglabel">Document No</label>
@@ -857,11 +901,7 @@
         @Html.HiddenFor(model => model.BusinessCentreID)
         @Html.HiddenFor(model => model.FYearID)
 
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-5 col-sm-5">
-                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
-            </div>
-        </div>
+
 
         <div class="row no-margin" style="padding-top:10px">
             <div class="col-xs-12 no-padding for-device">
@@ -877,6 +917,7 @@
                                     <th>Outstanding</th>
                                     <th>Amount Allocated</th>
                                     <th>Adjustment Amount</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl1">
@@ -968,7 +1009,7 @@
                                             <td>
                                                 @if (Model.CustomerRcieptChildVM[i].InvoiceID > 0)
                                                 {
-                                                    <a href="Javascript:void(0)" onclick="ShowAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
+                                                    <a href="Javascript:void(0)" onclick="EditAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
                                                 }
                                             </td>
 
@@ -1012,8 +1053,12 @@
                     <div class="modal-body">
                         <div class="container-fluid" style="max-height:480px;overflow-y:scroll">
                             <div class="row">
+
+
                                 <div class="flex justify-content-between">
                                     <h4 id="hInvoice"></h4>
+                                    @Html.CheckBox("AutoAllocate1", new { @name = "AutoAllocate1", @onchange = "awbautoallocation1()" })
+                                    <label class="headinglabel">Auto Allocate</label>
                                     <h5 id="hTotal"> Total</h5>
                                 </div>
                             </div>
@@ -1235,13 +1280,89 @@
 
 <script type="text/javascript">
 
+    function awbautoallocation1() {
+        
+         var invoiceid = $('#hdnEditCustomerInvoiceId').val();
+            var allocatedamount =parseFloat($('#hdnAllocatedAmount').val()).toFixed(@_decimal);
+            var amt = 0;
+            var obj = [];
+            var formdata = $('form#FormReceipt').serialize();
+          //  console.log(JSON.stringify(formdata));
+            var idtext = 'atxt_' + invoiceid;
+            var maxrow = parseFloat($('#hdnItemCount').val());
+
+        //$('[id^=' + idtext + ']').each(function (index, item) {
+        if ($("#AutoAllocate1").is(':checked')) {
+            var TotalAmount = parseFloat($('#hdnAllocatedAmount').val()).toFixed(3);
+            if (TotalAmount > 0) {
+
+                var amt = 0;
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var id = $(item).attr('id');
+                    var balanceid = id.replace('atxt', 'atxtbal');
+                    var balance = $('#' + balanceid).val();
+                    var balanceval = balance.replace(',', '');
+
+                    if (parseFloat(TotalAmount) > parseFloat(balanceval)) {
+                        $(item).val(parseFloat(balanceval).toFixed(@_decimal));
+                        TotalAmount = parseFloat(TotalAmount).toFixed(@_decimal) - parseFloat(balanceval).toFixed(@_decimal);
+                       
+                    }
+                    else if (parseFloat(TotalAmount) > 0) {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
+                        TotalAmount = 0;                       
+                    }
+                    else {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));                       
+                    }
+                   
+                });
+
+            }
+            else {
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+                    
+
+                });
+
+            }
+        }
+        else {
+
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+                    //$('#chkallocate_' + idindex).prop('checked', false);
+                    //$('#chkallocate_' + idindex).removeAttr('checked');
+                    ValidateTotal();
+
+                });
+
+
+        }
+
+    }
     function autoallocation() {
-        debugger;
+        
         var idtext = 'txtinvoice_';
         if ($("#AutoAllocate").is(':checked')) {
             var TotalAmount = parseFloat($('#FMoney').val()).toFixed(3);
             if (TotalAmount > 0) {
-
+                $('#btnsearch').trigger('click');
+                return;
                 var amt = 0;
                 $('[id^=' + idtext + ']').each(function (index, item) {
                     if ($(item).val() == "" || $(item).val() == null) {

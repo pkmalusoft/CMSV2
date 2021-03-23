@@ -92,7 +92,23 @@ namespace CMSV2.Controllers
                     var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
-                    
+                    DRSRecPay dpay = Context1.DRSRecPays.Find(id);
+                    cust.DocumentNo = dpay.DocumentNo;
+                    cust.DRSRecPayID = dpay.DRSRecPayID;
+                    cust.DRSRecPayDate = dpay.DRSRecPayDate;
+                    var cashOrBankID = (from t in Context1.AcHeads where t.AcHead1 == dpay.BankName select t.AcHeadID).FirstOrDefault();
+                    cust.CashBank = (cashOrBankID).ToString();
+                    cust.ChequeBank = (cashOrBankID).ToString();
+                    cust.ChequeNo = dpay.ChequeNo;
+                    cust.ChequeDate = dpay.ChequeDate;
+                    cust.DeliveredBy = Convert.ToInt32(dpay.DeliveredBy);
+                    cust.DRSID = dpay.DRSID;
+                    var drsno= Context1.DRS.Find(cust.DRSID);
+                    cust.DRSNo = drsno.DRSNo;
+                    cust.DRSDate = drsno.DRSDate;
+                    cust.Remarks = dpay.Remarks;
+                    cust.DRSAmount =Convert.ToDecimal(drsno.TotalAmountCollected);
+                    cust.ReceivedAmount = dpay.ReceivedAmount;
                     cust.Details  = new List<DRSReceiptDetailVM>();                  
                   
                     //BindMasters_ForEdit(cust);
@@ -129,32 +145,38 @@ namespace CMSV2.Controllers
         public ActionResult Create(DRSReceiptVM vm)
         {
             int fyearid = Convert.ToInt32(Session["fyearid"]);
-            int companyid = Convert.ToInt32(Session["ACCompanyID"]);
+            int companyid = Convert.ToInt32(Session["CurrentCompanyID"]);
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+            
             DRSRecPay v = new DRSRecPay();
             int RPID = 0;
+            if (vm.CashBank != null)
+            {
+                vm.StatusEntry = "CS";
+                int acheadid = Convert.ToInt32(vm.CashBank);
+                var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
+                vm.BankName = achead;
+            }
+            else
+            {
+                vm.StatusEntry = "BK";
+                int acheadid = Convert.ToInt32(vm.ChequeBank);
+                var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
+                vm.BankName = achead;
+            }
             if (vm.DRSRecPayID==0)
             {
                 vm.AcCompanyID = companyid;
                 vm.FYearID = fyearid;
-                if (vm.CashBank != null)
-                {
-                    vm.StatusEntry = "CS";
-                    int acheadid = Convert.ToInt32(vm.CashBank);
-                    var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
-                    vm.BankName = achead;
-                }
-                else
-                {
-                    vm.StatusEntry = "BK";
-                    int acheadid = Convert.ToInt32(vm.ChequeBank);
-                    var achead = (from t in Context1.AcHeads where t.AcHeadID == acheadid select t.AcHead1).FirstOrDefault();
-                    vm.BankName = achead;
-                }
-                vm.CourierEMPID= Convert.ToInt32(Session["UserID"]);
+                vm.BranchId = branchid;
+                
+                vm.UserID= Convert.ToInt32(Session["UserID"]);
                 RPID = ReceiptDAO.AddDRSReceipt(vm, Session["UserID"].ToString()); //.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
+                
+
             }
             else
-            {
+            {               
                 RPID = vm.DRSRecPayID;
                 DRSRecPay recpay = Context1.DRSRecPays.Find(RPID);
                 recpay.DRSRecPayDate = vm.DRSRecPayDate;                                
@@ -162,13 +184,18 @@ namespace CMSV2.Controllers
                 recpay.ChequeDate = vm.ChequeDate;
                 recpay.ChequeNo = vm.ChequeNo;                                                                
                 recpay.ReceivedAmount = vm.ReceivedAmount;
-                recpay.StatusEntry = vm.StatusEntry;                
+                recpay.StatusEntry = vm.StatusEntry;
+                recpay.BranchId = branchid;
+                recpay.DeliveredBy = vm.DeliveredBy;
+                recpay.ReceivedBy = vm.ReceivedBy;
+                recpay.UserID = Convert.ToInt32(Session["UserID"]);
+                recpay.FYearID = fyearid;
                 recpay.Remarks = vm.Remarks;
                 Context1.Entry(recpay).State = EntityState.Modified;
                 Context1.SaveChanges();
             }
-
-
+            //posting
+            ReceiptDAO.SaveDRSRecPayPosting(RPID, fyearid, branchid, companyid);
 
 
             return RedirectToAction("Index", "DRSReceipt", new { id=0 });
@@ -180,17 +207,19 @@ namespace CMSV2.Controllers
             if (term.Trim() != "")
             {
                 var drslist = (from c1 in Context1.DRS
-                               where c1.DRSNo.ToLower().Contains(term.ToLower())
+                               where c1.DRSNo.ToLower().Contains(term.Trim().ToLower())
+                               && c1.DRSRecPayId==null
                                orderby c1.DRSNo ascending
-                               select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate,CheckedBy=c1.CheckedBy,TotalAmount=c1.TotalAmountCollected }).ToList();
+                               select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate,CheckedBy=c1.CheckedBy,TotalAmount=c1.TotalAmountCollected + c1.TotalMaterialCost }).ToList();
 
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var drslist = (from c1 in Context1.DRS                               
+                var drslist = (from c1 in Context1.DRS
+                               where c1.DRSRecPayId == null
                                orderby c1.DRSNo ascending
-                               select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate, CheckedBy = c1.CheckedBy, TotalAmount = c1.TotalAmountCollected }).ToList();
+                               select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate, CheckedBy = c1.CheckedBy, TotalAmount = c1.TotalAmountCollected + c1.TotalMaterialCost}).ToList();
 
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }
@@ -252,6 +281,29 @@ namespace CMSV2.Controllers
             return words;
         }
 
-       
+        public ActionResult DeleteConfirmed(int id)
+        {
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteDRSRecPay(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
+            return RedirectToAction("Index", "DRSReceipt");
+
+        }
     }
 }

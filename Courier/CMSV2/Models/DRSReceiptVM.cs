@@ -30,5 +30,33 @@ namespace CMSV2.Models
         public decimal TotalAmount { get; set; } 
         public decimal Balance { get; set; }
     }
+    
+    public class DRRVM :DRR
+    {
+        public string DRSNo { get; set; }
+        public DateTime DRSDate { get; set; }
+        public string DRSReceiptNo { get; set; }
+        public string DRSReceiptDate { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public decimal ReceivedAmount { get; set; }
+        public int DeliveredBy { get; set; }
+        public List<DRRDetailVM> Details { get; set; }
 
+    }
+
+    public class DRRDetailVM
+    {
+        public int? DRRID { get; set; }
+        public int? ReferenceId { get; set; }
+        public string Type { get; set; }
+        public string Reference { get; set; }
+        public decimal? COD { get; set; }
+        public decimal? Discount { get; set; }
+        public decimal? MCReceived { get; set; }
+        public decimal? PKPCash { get; set; }
+        public decimal? Receipt { get; set; }
+        public decimal? Expense { get; set; }
+
+        public decimal? Total { get; set; }
+    }
 }

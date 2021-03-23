@@ -71,6 +71,8 @@ namespace CMSV2.Models
         public string LocationName { get; set; }
         public Nullable<int> DepotID { get; set; }
         public Nullable<int> UserID { get; set; }
+        public string FCMTokenId { get; set; }
+        public byte[] ProfileImage { get; set; }
     
         public virtual CityMaster CityMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -42,6 +42,7 @@ namespace CMSV2.Models
         public string TransactionNo { get; set; }
         public int ID { get; set; }
         public Nullable<int> BranchID { get; set; }
+        public Nullable<int> DRRID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AcBankDetail> AcBankDetails { get; set; }

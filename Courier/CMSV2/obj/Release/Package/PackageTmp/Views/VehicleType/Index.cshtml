@@ -1,0 +1,98 @@
+﻿ @model IEnumerable<CMSV2.Models.VehicleTypeVM>
+    @{
+
+        
+        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" />');
+            });
+
+
+            var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+        });
+
+
+    </script>
+
+    <section class="content-header">
+        <h1 class="headingfont">Vehicle Type Master</h1>
+
+    </section>
+    <div class="col-md-12">
+        <p class="indexbtnpadding pull-right">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+        </p>
+    </div>    
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+
+            <thead>
+                <tr>
+
+                    <th>
+                        @Html.Label("Vehicle Type Name")
+                    </th>
+                    <th>
+                        @Html.Label("Description")
+                    </th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+
+                    <th>
+                        @Html.Label("Vehicle Name")
+                    </th>
+                    <th>
+                        @Html.Label("Description")
+                    </th>
+
+                    <th style="display:none"></th>
+                </tr>
+            </tfoot>
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleDescription)
+            </td>
+            <td>
+
+                <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+            </td>
+        </tr>
+            }
+
+        </table>
+    </div>
+    <script type="text/javascript">
+        function Delete(ID) {
+            if (confirm("Are you sure, You want to Delete VehicleType?")) {
+                window.location.href = "/VehicleType/DeleteConfirmed/?id=" + ID;
+            }
+        }
+    </script>

@@ -53,7 +53,6 @@ namespace CMSV2.Models
         public Nullable<decimal> CourierCharge { get; set; }
         public string PickupRemarks { get; set; }
         public string ShipmentType { get; set; }
-        public Nullable<int> VehicleID { get; set; }
         public string Vehicle { get; set; }
         public Nullable<System.DateTime> PickupReadyTime { get; set; }
         public Nullable<int> EnteredByID { get; set; }
@@ -112,6 +111,19 @@ namespace CMSV2.Models
         public string DestinationPlaceID { get; set; }
         public string PickupLocation { get; set; }
         public string DeliveryLocation { get; set; }
+        public bool IsNCND { get; set; }
+        public bool IsCashOnly { get; set; }
+        public bool IsChequeOnly { get; set; }
+        public bool IsCollectMaterial { get; set; }
+        public bool IsDOCopyBack { get; set; }
+        public Nullable<int> VehicleTypeId { get; set; }
+        public string PickupSubLocality { get; set; }
+        public string DeliverySubLocality { get; set; }
+        public Nullable<int> DRRId { get; set; }
+        public Nullable<int> CODReceiptId { get; set; }
+        public string ConsignorMobileNo { get; set; }
+        public string ConsigneeMobileNo { get; set; }
+        public bool AWBProcessed { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }

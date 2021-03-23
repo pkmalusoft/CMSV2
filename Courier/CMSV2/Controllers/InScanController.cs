@@ -113,6 +113,7 @@ namespace CMSV2.Controllers
                 
                 PickupRequestDAO _dao = new PickupRequestDAO();
                 vm.InScanSheetNo = _dao.GetMaxInScanSheetNo(companyid, BranchId, "Inhouse");
+                vm.QuickInscanDateTime = CommanFunctions.GetLastDayofMonth();
                 vm.DepotID = depotid;
                 ViewBag.EditMode ="false";
                 ViewBag.Title = "InScan Local - Create";
@@ -193,7 +194,7 @@ namespace CMSV2.Controllers
                         _inscan.PickedUpEmpID = null;
                         _inscan.DepotReceivedBy = null;
                         //_inscan.TransactionDate = v.QuickInscanDateTime;
-                        _inscan.VehicleID = null;
+                        _inscan.VehicleTypeId = null;
                         _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "PICKUP REQUEST").First().ID;
                         _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Assigned For Collections").FirstOrDefault().CourierStatusID;
                         db.Entry(_inscan).State = EntityState.Modified;
@@ -236,7 +237,7 @@ namespace CMSV2.Controllers
                     _inscan.PickedUpEmpID = v.CollectedByID;
                     _inscan.DepotReceivedBy = v.ReceivedByID;
                     //_inscan.TransactionDate = v.QuickInscanDateTime;
-                    _inscan.VehicleID = v.VehicleId;
+                    _inscan.VehicleTypeId = v.VehicleId;
                     _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
                     _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
                     db.Entry(_inscan).State = EntityState.Modified;
@@ -294,10 +295,12 @@ namespace CMSV2.Controllers
             //}
             //return Json(obj, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetAWBDetail(string id)
+        public JsonResult GetAWBDetail(string id,int? collectedby)
         {
+            if (collectedby == null)
+                collectedby = 0;
             AWBList obj = new AWBList();
-            var lst = (from c in db.InScanMasters where c.AWBNo == id select c).FirstOrDefault();
+            var lst = (from c in db.InScanMasters where c.AWBNo == id &&  (c.PickedUpEmpID==collectedby || collectedby==0) select c).FirstOrDefault();
             if (lst==null)
             {
                 return Json(new { status="failed", data = obj, message = "AWB No. Not found"}, JsonRequestBehavior.AllowGet);
@@ -311,7 +314,7 @@ namespace CMSV2.Controllers
                     obj.AWB = lst.AWBNo;
                     obj.InScanId = lst.InScanID;
 
-                    return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = "ok", data = obj, message = "AWB Not.found" }, JsonRequestBehavior.AllowGet);
 
                 }
                 else

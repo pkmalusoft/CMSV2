@@ -1,8 +1,8 @@
-﻿@model IEnumerable<CMSV2.Models.CODReceiptVM>
+﻿@model IEnumerable<CMSV2.Models.DCODReceiptVM>
 @{
     int i = 0;
-    var _decimal = @Session["Decimal"].ToString();
-}
+    var _decimal = @Session["Decimal"].ToString();  
+    }
 
 <thead>
     <tr>
@@ -10,15 +10,9 @@
             Receipt No.
         </th>
         <th>
-            Receipt date
-        </th>
-        <th>
-            Agent Name
-        </th>
-        <th>
-            Amount
-        </th>
-
+            Receipt Date
+        </th>        
+        <th>Receipt Amount</th>
         <th width="5%"></th>
     </tr>
 </thead>
@@ -30,34 +24,31 @@
                 @Html.DisplayFor(modelItem => item.ReceiptNo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReceiptDate)
-            </td>
+                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.ReceiptDate)
+            </td>            
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
 
-            <td>
-                @Html.DisplayFor(modelItem => item.AgentName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem=>item.allocatedtotalamount)
-            </td>
-            <td style="font-size:13px">
+            <td style="font-size:13px" >
                 @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
-                <a target="_blank" href="InvoicePrint?id=@item.ReceiptID"><i class="fa fa-print"></i></a>
+                @*<a  class="aprint" target="_blank" href="InvoicePrint?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
 
-                <a href="Details?id=@item.ReceiptID"><i class="fa fa-eye"></i></a><br />
-
-                <a href="Create?id=@item.ReceiptID"><i class="fa fa-pencil"></i></a>
-
-                <a href="#" onclick="Delete(@item.ReceiptID)"><i class="fa fa-times"></i></a>
+                @*<a class="aview"  href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a><br />*@                
+                
+                <a  class="aedit" href="Create?id=@item.ReceiptID"><i class="fa fa-pencil"></i></a>
+                
+                <a class="adelete"  href="#" onclick="Delete(@item.ReceiptID)"><i class="fa fa-times"></i></a>
 
             </td>
         </tr>
     }
 </tbody>
 <script type="text/javascript">
-        function Delete(ID) {
-            if (confirm("Are you sure? You want to Delete this Invoice?")) {
-                window.location.href = "/CustomerInvoice/DeleteConfirmed/?id=" + ID;
-            }
+    function Delete(ID) {
+        if (confirm("Are you sure? You want to Delete this Receipt?")) {
+            window.location.href = "/CODReceipt/DeleteConfirmed/?id=" + ID;
         }
+    }
 </script>
 

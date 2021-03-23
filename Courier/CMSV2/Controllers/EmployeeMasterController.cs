@@ -330,7 +330,7 @@ namespace CMSV2.Controllers
 
                     int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
 
-                    int roleid = db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
+                    int roleid = a.RoleID; // db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
                     u.UserID = max1 + 1;
                     u.UserName = a.Email;
                     u.EmailId = a.Email;
@@ -527,6 +527,65 @@ namespace CMSV2.Controllers
 
             return View("UserProfile",v);
             //return PartialView("_UserProfile", v);
+
+        }
+
+        [HttpPost]
+        public JsonResult GetEmployeeCode(string EmployeeName)
+        {
+            string status = "ok";
+            string customercode = "";
+            //List<CourierStatu> _cstatus = new List<CourierStatu>();
+            try
+            {
+                string custform = "000000";
+                string maxcustomercode = (from d in db.EmployeeMasters orderby d.EmployeeID descending select d.EmployeeCode).FirstOrDefault();
+                string last6digit = "";
+                if (maxcustomercode == null)
+                {
+                    //maxcustomercode="AA000000";
+                    last6digit = "0";
+
+                }
+                else
+                {
+                    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
+                }
+                if (last6digit != "")
+                {
+
+                    string customerfirst = EmployeeName.Substring(0, 1);
+                    string customersecond = "";
+                    try
+                    {
+                        customersecond = EmployeeName.Split(' ')[1];
+                        customersecond = customersecond.Substring(0, 1);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (customerfirst != "" && customersecond != "")
+                    {
+                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                    }
+                    else
+                    {
+                        customercode = customerfirst + "E" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                    }
+
+                }
+
+                return Json(new { data = customercode, result = status }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception ex)
+            {
+                status = ex.Message;
+            }
+
+            return Json(new { data = "", result = "failed" }, JsonRequestBehavior.AllowGet);
 
         }
         public class GetDateClass

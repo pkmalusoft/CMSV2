@@ -55,20 +55,21 @@ namespace CMSV2.Models
 
         //[RegularExpression(@"^\(\d{3}\)\s{0,1}\d{3}-\d{7}$", ErrorMessage = "Enter a valid number")]
         public string ConsignorPhone { get; set; }
-
+        public string Email { get; set; }
     public int? EmployeeID { get; set; }
 
     public string Remarks { get; set; }
 
     public Decimal? CourierCharge { get; set; }
+        public Decimal? MaterialCost { get; set; }
 
-    public int? CollectedEmpID { get; set; }
+        public int? CollectedEmpID { get; set; }
 
     public string ShipmentType { get; set; }
 
     public string Vehicle { get; set; }
 
-    public int VehicleID { get; set; }
+    public int VehicleTypeId { get; set; }
 
     public DateTime? ReadyTime { get; set; }
 
@@ -112,8 +113,9 @@ namespace CMSV2.Models
     public bool vehreq { get; set; }
 
     public string employeename { get; set; }
-
-    public string PickupRequestStatus { get; set; }
+        public string Description { get; set; }
+        public string Pieces { get; set; }
+        public string PickupRequestStatus { get; set; }
      public int? PickupRequestStatusId { get; set; }
         public int? SubReasonId { get; set; }
         public DateTime? CollectedTime { get; set; }
@@ -133,6 +135,10 @@ namespace CMSV2.Models
 
         public string PickupLocationPlaceId { get; set; }
         public string DeliveryLocationPlaceId { get; set; }
+
+        public string PickupSubLocality { get; set; }
+        public string DeliverySubLocality { get; set; }
+        public int PaymentModeId { get; set; }
 
 
     }

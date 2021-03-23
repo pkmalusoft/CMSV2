@@ -1175,7 +1175,7 @@ namespace CMSV2.Controllers
                     strposteddate1 = null;
                 }
 
-                s_ImportShipment = db.ImportShipments.Include(s => s.UserRegistration.UserID).Include(s => s.UserRegistration.UserID).Include(s => s.UserRegistration).ToList();
+              //  s_ImportShipment = db.ImportShipments.Include(s => s.UserRegistration.UserID).Include(s => s.UserRegistration.UserID).Include(s => s.UserRegistration).ToList();
 
 
                 if (datePicker.FlightDate!=null && strposteddate !=null)

@@ -463,6 +463,51 @@ namespace CMSV2.DAL
 
 
         }
+
+        public static DataTable DeleteDomesticCOD(int ReceiptId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteDomesticCODReciepts";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ReceiptID", ReceiptId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static DataTable DeleteDRS(int DRSID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteDRS";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DRSID", DRSID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static List<ReceiptAllocationDetailVM> GetAWBAllocation(List<ReceiptAllocationDetailVM> list, int InvoiceId, decimal Amount,int RecpayId)
         {
             try
@@ -514,7 +559,72 @@ namespace CMSV2.DAL
             return list;
         }
 
+        #region "ExportCODReceipt"
+        public static List<ExportShipmentVM> GetManifestId(int AgentId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetManifestId";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AgentId", AgentId);
+            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<ExportShipmentVM> objList = new List<ExportShipmentVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    ExportShipmentVM obj = new ExportShipmentVM();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.ManifestNumber = ds.Tables[0].Rows[i]["ManifestNumber"].ToString();                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
         #region "DRSREceipt"
+
+        public static DataTable DeleteDRSRecPay(int DRSRecPayId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteDRSRecpay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DRSRecPayId", DRSRecPayId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public static string SaveDRSRecPayPosting(int DRSRecPayId,int FyearId,int BranchId,int CompanyId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DRSRecPayPosting";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayId", DRSRecPayId);           
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+            return "ok";
+
+        }
         public static int AddDRSReceipt(DRSReceiptVM RecPy, string UserID)
         {
             SqlCommand cmd = new SqlCommand();
@@ -534,7 +644,9 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@AcCompanyID", RecPy.AcCompanyID);
             cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
             cmd.Parameters.AddWithValue("@FMoney", RecPy.ReceivedAmount);
-            cmd.Parameters.AddWithValue("@UserID", RecPy.CourierEMPID);
+            cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            cmd.Parameters.AddWithValue("@DeliveredBy", RecPy.DeliveredBy);
+            cmd.Parameters.AddWithValue("@BranchId", RecPy.BranchId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -696,6 +808,8 @@ namespace CMSV2.DAL
 
         }
         #endregion
+
+        #region "Supplierpayment"
         public static int AddSupplierRecieptPayment(CustomerRcieptVM RecPy, string UserID)
         {
             SqlCommand cmd = new SqlCommand();
@@ -784,5 +898,43 @@ namespace CMSV2.DAL
 
 
         }
+
+        #endregion
+        #region "Reconc"
+        public static int SaveReconc(int DRRID,DateTime  DRRDate, int DRSID, int DRSRecpayID, decimal ReconcAmount, int courierId ,int BranchId,int FYearId ,int UserId,string Details)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_SaveReconc";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DRRID", DRRID);
+            cmd.Parameters.AddWithValue("@DRRDate",DRRDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@DRSID", DRSID);
+            cmd.Parameters.AddWithValue("@DRSRecPayID", DRSRecpayID);            
+            cmd.Parameters.AddWithValue("@CourierId", courierId);
+            cmd.Parameters.AddWithValue("@Amount", ReconcAmount);
+            cmd.Parameters.AddWithValue("@BranchId", BranchId);
+            cmd.Parameters.AddWithValue("@FyearID", FYearId);
+            cmd.Parameters.AddWithValue("@UserID", UserId);
+            cmd.Parameters.AddWithValue("@FormatForXMLitem", Details);
+            //cmd.Parameters.AddWithValue("@InScanId", JobID);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+
+        }
+
+        #endregion
     }
 }

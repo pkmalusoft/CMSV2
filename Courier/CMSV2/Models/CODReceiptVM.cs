@@ -20,7 +20,7 @@ namespace CMSV2.Models
     public class CODReceiptDetailVM :CODReceiptDetail
     {
         public string ManifestNumber { get; set; }
-        public DateTime? AWBDate { get; set; }
+        public DateTime AWBDate { get; set; }
     }
     
 }

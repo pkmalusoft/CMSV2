@@ -34,5 +34,6 @@ namespace CMSV2.Models
         public decimal FMoney { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<bool> IsTradingReceipt { get; set; }
+        public Nullable<int> DRRID { get; set; }
     }
 }

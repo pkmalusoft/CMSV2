@@ -72,7 +72,8 @@ namespace CMSV2.Controllers
                                          from subpet in gj.DefaultIfEmpty()
                                          join pet1 in db.EmployeeMasters on c.AssignedEmployeeID equals pet1.EmployeeID into gj1
                                          from subpet1 in gj1.DefaultIfEmpty()
-                                         where c.BranchID==branchid &&  c.IsEnquiry == true && (c.PickupRequestDate >= pFromDate && c.PickupRequestDate < pToDate) && (c.CourierStatusID == pStatusId || pStatusId == 0)
+                                         where c.BranchID==branchid &&  c.IsEnquiry == true
+                                         && (c.PickupRequestDate >= pFromDate && c.PickupRequestDate < pToDate) && (c.CourierStatusID == pStatusId || pStatusId == 0)
                                          && c.IsDeleted==false
                                          && (c.CustomerID==Customerid || Customerid==0)
                                          orderby c.PickupRequestDate descending
@@ -114,15 +115,15 @@ namespace CMSV2.Controllers
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            ViewBag.Vehicle = db.VehicleMasters.ToList();
+            //ViewBag.Vehicle = db.VehicleMasters.ToList();
             ViewBag.Employee = db.EmployeeMasters.ToList();
             ViewBag.Customer = db.CustomerMasters.ToList();
             ViewBag.RequestType = db.RequestTypes.ToList();
             ViewBag.DocumentType = db.tblDocumentTypes.ToList();
             //ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
-            
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.PickupRequestStatus = db.CourierStatus.Where(cc=>cc.StatusTypeID==1).ToList();
-
+            ViewBag.VehicleType = db.tblVehicleTypes.ToList();
             ViewBag.PickupSubReason = db.SubStatus.ToList();
             PickupRequestVM v = new PickupRequestVM();
 
@@ -146,17 +147,22 @@ namespace CMSV2.Controllers
                     v.CustomerName = _cust.CustomerName;
                     v.CustomerCode= _cust.CustomerCode;
                     v.Consignor = _cust.CustomerName;
-                    v.ConsignorPhone = _cust.Phone;
+                    if (_cust.Phone == null)
+                        v.ConsignorPhone = _cust.Mobile;
+                    else
+                       v.ConsignorPhone = _cust.Phone;
+                    
                     v.OfficeTimeFrom = _cust.OfficeOpenTime;
                     v.OfficeTimeTo = _cust.OfficeCloseTime;
                     v.ConsignorAddress = _cust.Address1;
                     v.ConsignorAddress1 = _cust.Address2;
                     v.ConsignorAddress2 = _cust.Address3;
                     v.ConsignorCountryName = _cust.CountryName;
+                    v.ConsignorLocationName = _cust.LocationName;
                     v.ConsignorCityName = _cust.CityName;
                     v.ConsignorContact = _cust.ContactPerson;
-
-
+                    v.Email = _cust.Email;
+                    v.RequestSource ="4";
                 }
 
 
@@ -179,6 +185,7 @@ namespace CMSV2.Controllers
         public ActionResult Create(PickupRequestVM v)
         {
             PickupRequestDAO _dao = new PickupRequestDAO();
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
@@ -201,15 +208,17 @@ namespace CMSV2.Controllers
                 _enquiry.DeviceID = "WebSite";
                 _enquiry.IsDeleted = false;
                 int statustypeid= db.tblStatusTypes.Where(c => c.Name == "PICKUP REQUEST").FirstOrDefault().ID;
-                _enquiry.StatusTypeId = statustypeid; //pickuprequest                
-                
+                _enquiry.StatusTypeId = statustypeid; //pickuprequest       
+                _enquiry.AcFinancialYearID = yearid;
+
             }
             else
             {
                 _enquiry = db.InScanMasters.Find(v.InScanID);
             }
-
+            _enquiry.PaymentModeId=v.PaymentModeId;
             _enquiry.DocumentTypeId = v.DocumentTypeId;
+            _enquiry.VehicleTypeId = v.VehicleTypeId;
             _enquiry.PickupRequestDate = Convert.ToDateTime(v.EnquiryDate);
                 _enquiry.CustomerID = v.CustomerID;
 
@@ -241,11 +250,11 @@ namespace CMSV2.Controllers
                 _enquiry.PickedupDate = v.CollectedTime;
 
                 _enquiry.ShipmentType = v.ShipmentType;
-                if (v.vehreq == true)
-                {
-                    _enquiry.Vehicle = v.Vehicle;
-                    _enquiry.VehicleID = v.VehicleID;
-                }
+                //if (v.vehreq == true)
+                //{
+                //    _enquiry.Vehicle = v.Vehicle;
+                //    _enquiry.VechileTypeId = v.VehicleTypeId
+                //}
 
 
                 _enquiry.ConsigneeContact = v.ConsigneeContact;
@@ -258,10 +267,32 @@ namespace CMSV2.Controllers
             //_enquiry.OfficeTimeFrom = v.OfficeTimeFrom;
             //_enquiry.OfficeTimeTo = v.OfficeTimeTo;
             _enquiry.PickupLocation = v.PickupLocation;
+            _enquiry.PickupSubLocality = v.PickupSubLocality;
+            _enquiry.DeliverySubLocality = v.DeliverySubLocality;
             _enquiry.DeliveryLocation = v.DeliveryLocation;
             _enquiry.OriginPlaceID = v.PickupLocationPlaceId;
             _enquiry.DestinationPlaceID = v.DeliveryLocationPlaceId;
                 _enquiry.RequestSource = v.RequestSource;
+
+            _enquiry.CourierCharge = v.CourierCharge;
+            _enquiry.NetTotal = v.CourierCharge;
+
+            if (_enquiry.ConsignorCountryName==_enquiry.ConsigneeCountryName)
+                _enquiry.MovementID = 1; //Doemstic
+            else
+                _enquiry.MovementID = 2;  //Export
+
+            if (v.MaterialCost == null)
+            { _enquiry.MaterialCost = 0; 
+            }
+            else
+            {
+                
+                _enquiry.MaterialCost = v.MaterialCost;
+            }
+
+            _enquiry.CargoDescription = v.Description;
+            _enquiry.Pieces = v.Pieces;
 
             if (_enquiry.StatusTypeId == 1)
             {
@@ -555,17 +586,16 @@ namespace CMSV2.Controllers
                 v.CollectedEmpID = a.PickedUpEmpID; ;
                 v.CollectedTime = a.PickedupDate; ;
                 v.ShipmentType = a.ShipmentType;
-                if (a.VehicleID != null)
+                if (a.VehicleTypeId != null)
                 {
-                    v.VehicleID = a.VehicleID.Value;
-                    v.Vehicle = a.Vehicle;
-                    v.vehreq = true;
+                    v.VehicleTypeId = a.VehicleTypeId.Value;                    
+                    //v.vehreq = true;
                 }
-                else
-                {
-                    v.vehreq = false;
-                    v.Vehicle = "";
-                }
+                //else
+                //{
+                //    v.vehreq = false;
+                //    v.Vehicle = "";
+                //}
                 v.IsEnquiry = a.IsEnquiry;
                 v.ConsigneeContact = a.ConsigneeContact;
                 v.ConsignorContact = a.ConsignorContact;
@@ -624,6 +654,9 @@ namespace CMSV2.Controllers
             v.ConsigneeCountryName = a.ConsigneeCountryName;
             v.ConsignorCityName = a.ConsignorCityName;
             v.ConsigneeCityName = a.ConsigneeCityName;
+            
+            if (a.VehicleTypeId!=null)
+                v.VehicleTypeId = Convert.ToInt32(a.VehicleTypeId);
 
             //v.PickupRequestStatusId = a.PickupRequestStatusId;
             v.PickupRequestStatusId = a.CourierStatusID;
@@ -633,22 +666,31 @@ namespace CMSV2.Controllers
                 v.CollectedEmpID = a.PickedUpEmpID; ;
                 v.CollectedTime = a.PickedupDate; ;
                 v.ShipmentType = a.ShipmentType;
-                if (a.VehicleID != null)
-                {
-                    v.VehicleID = a.VehicleID.Value;
-                    v.Vehicle = a.Vehicle;
-                    v.vehreq = true;
-                }
-                else
-                {
-                    v.vehreq = false;
-                    v.Vehicle = "";
-                }
+
+            if (a.CourierCharge != null)
+                v.CourierCharge = a.CourierCharge.Value;
+            if (a.MaterialCost != null)
+                v.MaterialCost = a.MaterialCost.Value;
+
+            v.Pieces = a.Pieces;
+            v.Description = a.CargoDescription;
+                //if (a.VehicleID != null)
+                //{
+                //    v.VehicleID = a.VehicleID.Value;
+                //    v.Vehicle = a.Vehicle;
+                //    v.vehreq = true;
+                //}
+                //else
+                //{
+                //    v.vehreq = false;
+                //    v.Vehicle = "";
+                //}
                 v.IsEnquiry = a.IsEnquiry;
                 v.ConsigneeContact = a.ConsigneeContact;
                 v.ConsignorContact = a.ConsignorContact;
                 v.EnteredByID = a.EnteredByID;
-
+            if (a.PaymentModeId != null)
+            { v.PaymentModeId = Convert.ToInt32(a.PaymentModeId); }
                 v.ReadyTime = a.PickupReadyTime;
                 CustomerMaster cm = db.CustomerMasters.Where(cm1 => cm1.CustomerID == a.CustomerID).FirstOrDefault();
                 v.CustomerCode = cm.CustomerCode;
@@ -660,6 +702,8 @@ namespace CMSV2.Controllers
             v.PickupLocationPlaceId = a.OriginPlaceID;
             v.DeliveryLocation = a.DeliveryLocation;
             v.DeliveryLocationPlaceId = a.DestinationPlaceID;
+            v.PickupSubLocality = a.PickupSubLocality;
+            v.DeliverySubLocality = a.DeliverySubLocality;
                 
             return v;
 
@@ -702,11 +746,12 @@ namespace CMSV2.Controllers
                 _enquiry.CollectedEmpID = v.CollectedEmpID;
                 _enquiry.IsEnquiry = false;
                 _enquiry.ShipmentType = v.ShipmentType;
-                if (v.vehreq == true)
-                {
-                    _enquiry.Vehicle = v.Vehicle;
-                    _enquiry.VehicleID = v.VehicleID;
-                }
+            //if (v.vehreq == true)
+            //{
+            //    _enquiry.Vehicle = v.Vehicle;
+            //    _enquiry.VehicleID = v.VehicleID;
+            //}
+           // _enquiry.Vehicle = v.VehicleTypeId;
                 _enquiry.ConsigneeContact = v.ConsigneeContact;
                 _enquiry.ConsignorContact = v.ConsignorContact;
                 _enquiry.EnteredByID = v.EnteredByID;
@@ -753,6 +798,7 @@ namespace CMSV2.Controllers
             objCust.OfficeOpenTime = cust.OfficeOpenTime.ToString();
             objCust.OfficeCloseTime = cust.OfficeCloseTime.ToString();
             objCust.CustomerType = cust.CustomerType;
+            objCust.Email = cust.Email;
             return Json(objCust, JsonRequestBehavior.AllowGet);
         }
 
@@ -852,6 +898,7 @@ namespace CMSV2.Controllers
             public string CityName { get; set; }
             public string LocationName { get; set; }
             public string CustomerType { get; set; }
+            public string Email { get; set; }
 
         }
 

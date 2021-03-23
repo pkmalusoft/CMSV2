@@ -24,7 +24,7 @@
             var no = $("#VehicleNO").val();
             var reg = $("#RegistrationNo").val();
             var mod = $("#Model").val();
-            var type = $("#Type").val();
+            var type = $("#VehicleTypeId").val();
             var pur = $("#PurchaseDate").val();
             var value = $("#VehicleValue").val();
             var vdate = $("#ValueDate").val();
@@ -116,15 +116,15 @@
 
             
             <div class="col-md-3">
-                          <label class="headinglabel required">Model</label>
-       @Html.TextBoxFor(model => model.Model, new {@class="form-control txttarget text-right" })
-            @Html.ValidationMessageFor(model => model.Model)
-                 </div>
+               <label class="headinglabel required">Model</label>
+               @Html.TextBoxFor(model => model.Model, new {@class="form-control txttarget text-right" })
+                @Html.ValidationMessageFor(model => model.Model)
+             </div>
             <div class="col-md-3">
-                          <label class="headinglabel required">Type</label>
-       @Html.TextBoxFor(model => model.Type, new {@class="form-control txttarget" })
-            @Html.ValidationMessageFor(model => model.Type)
-                 </div>
+                <label class="headinglabel required">Type</label>
+                @Html.DropDownListFor(model => model.VehicleTypeId, new SelectList(@ViewBag.VehicleType, "ID", "Name"), "Select", new { @class = "form-control", @required = "true" })
+                @Html.ValidationMessageFor(model => model.VehicleTypeId)
+            </div>
            
          </div>
 

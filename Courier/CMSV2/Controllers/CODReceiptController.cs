@@ -4,63 +4,30 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CMSV2.Models;
-using System.Data;
-using CrystalDecisions.CrystalReports.ViewerObjectModel;
 using CMSV2.DAL;
+using System.Data;
 using System.Data.Entity;
-//using System.IO;
-//using Newtonsoft.Json;
-//using System.Text.RegularExpressions;
-//using System.Net.Mail;
-//using System.Configuration;
-//using System.Collections.Specialized;
-//using System.Net;
-//using System.Text;
-//using CMSV2.DAL;
-//using System.Data.Entity;
 
 namespace CMSV2.Controllers
 {
-    [SessionExpire]
+    [SessionExpireFilter]
     public class CODReceiptController : Controller
     {
-        SourceMastersModel MM = new SourceMastersModel();
-        RecieptPaymentModel RP = new RecieptPaymentModel();
-        CustomerRcieptVM cust = new CustomerRcieptVM();
         Entities1 db = new Entities1();
-
-        EditCommanFu editfu = new EditCommanFu();
-        // GET: CODReceipt
+        // GET: COD
         public ActionResult Index()
         {
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
-            DatePicker model = new DatePicker();
-            //string tz = "Arabian Standard Time";
-            //DateTime now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
-            if (datePicker == null)
-            {
-                model = new DatePicker
-                {
-                    FromDate = CommanFunctions.GetFirstDayofMonth().Date,
-                    ToDate = CommanFunctions.GetLastDayofMonth().Date //DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59).AddHours(8)
 
-                    //      Delete = (bool)Token.Permissions.Deletion,
-                    //    Update = (bool)Token.Permissions.Updation,
-                    //  Create = (bool)Token.Permissions.Creation
-                };
-            }
-            else
+            DatePicker model = new DatePicker
             {
-                model.FromDate = datePicker.FromDate;
-                model.ToDate = datePicker.ToDate;
-
-            }
+                FromDate = CommanFunctions.GetFirstDayofMonth().Date,
+                ToDate = CommanFunctions.GetLastDayofMonth().Date //DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59)                
+            };
             ViewBag.Token = model;
-            SessionDataModel.SetTableVariable(model);
+            SessionDataModel.SetTableVariable1(model);
             return View(model);
-            
-        }
 
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
@@ -75,424 +42,319 @@ namespace CMSV2.Controllers
                 Create = true //.ToStrin//(bool)Token.Permissions.Creation
             };
             ViewBag.Token = model;
-            SessionDataModel.SetTableVariable(model);
+            SessionDataModel.SetTableVariable1(model);
             return View(model);
 
         }
+        public ActionResult AWBSearch()
+        {
 
+            DatePicker datePicker = SessionDataModel.GetTableVariable1();
+
+            if (datePicker == null)
+            {
+                datePicker = new DatePicker();
+                datePicker.FromDate = CommanFunctions.GetLastDayofMonth(); // DateTime.Now.Date;
+                datePicker.ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                datePicker.MovementId = "1,2,3,4";
+            }
+            if (datePicker != null)
+            {
+                //ViewBag.Customer = (from c in db.InScanMasters
+                //                    join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
+                //                    where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
+                //                    select new CustmorVM { CustomerID = cust.CustomerID, CustomerName = cust.CustomerName }).Distinct();
+             
+                if (datePicker.MovementId == null)
+                    datePicker.MovementId = "1,2,3,4";
+            }
+           
+            //ViewBag.Movement = new MultiSelectList(db.CourierMovements.ToList(),"MovementID","MovementType");
+            ViewBag.Movement = db.CourierMovements.ToList();
+
+            ViewBag.Token = datePicker;
+            SessionDataModel.SetTableVariable1(datePicker);
+            return View(datePicker);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AWBSearch([Bind(Include = "FromDate,ToDate,MovementId,SelectedValues")] DatePicker picker)
+        {
+            DatePicker model = new DatePicker
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Delete = true, // (bool)Token.Permissions.Deletion,
+                Update = true, //(bool)Token.Permissions.Updation,
+                Create = true, //.ToStrin//(bool)Token.Permissions.Creation            
+                MovementId = picker.MovementId,                
+                SelectedValues = picker.SelectedValues
+            };
+            model.MovementId = "";
+            if (picker.SelectedValues != null)
+            {
+                foreach (var item in picker.SelectedValues)
+                {
+                    if (model.MovementId == "")
+                    {
+                        model.MovementId = item.ToString();
+                    }
+                    else
+                    {
+                        model.MovementId = model.MovementId + "," + item.ToString();
+                    }
+
+                }
+            }
+            ViewBag.Token = model;
+            SessionDataModel.SetTableVariable1(model);
+            return RedirectToAction("Create", "CODReceipt");
+            
+
+        }
         public ActionResult Table()
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
+            DatePicker datePicker = SessionDataModel.GetTableVariable1();
             ViewBag.Token = datePicker;
+            DateTime ToDate = datePicker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
-            List<CODReceiptVM> _Invoices = (from c in db.CODReceipts
-                                                 join cust in db.AgentMasters on c.AgentID equals cust.AgentID
-                                                 where (c.ReceiptDate >= datePicker.FromDate && c.ReceiptDate < datePicker.ToDate)
-                                                 && c.Deleted == false
-                                                 orderby c.ReceiptDate descending
-                                                 select new CODReceiptVM
+            List<DCODReceiptVM> _Receipts = (from c in db.DomesticCODReceipts                                                 
+                                                 where (c.ReceiptDate >= datePicker.FromDate && c.ReceiptDate < ToDate)                                                 
+                                                 orderby c.ReceiptNo descending
+                                                 select new DCODReceiptVM
                                                  {
                                                      ReceiptID = c.ReceiptID,
-                                                     ReceiptNo= c.ReceiptNo,
-                                                     ReceiptDate = c.ReceiptDate,
-                                                     AgentID = c.AgentID,
-                                                     AgentName = cust.Name,
-                                                     allocatedtotalamount=c.Amount
-
+                                                     ReceiptNo = c.ReceiptNo,
+                                                     ReceiptDate = c.ReceiptDate                                                     ,
+                                                     Amount = c.Amount
                                                  }).ToList();
 
-            return View("Table", _Invoices);
+            return View("Table", _Receipts);
 
         }
 
+
+
         public ActionResult Create(int id=0)
         {
-            var CODReceiptSession= Session["CODReceipt"] as CODReceiptVM;
-
-            CODReceiptVM vm = new CODReceiptVM();
-            var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
-            var companyid = Convert.ToInt32(Session["CurrentCompanyID"]);
-            
-            var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();            
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            DatePicker datePicker = SessionDataModel.GetTableVariable1();
+            ViewBag.Token = datePicker;
+            ViewBag.Movement = db.CourierMovements.ToList();
+            var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
             var acheadforbank = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
 
             ViewBag.achead = acheadforcash;
             ViewBag.acheadbank = acheadforbank;
             List<CurrencyMaster> Currencys = new List<CurrencyMaster>();
-            Currencys = MM.GetCurrency();
+            Currencys = db.CurrencyMasters.ToList();
             ViewBag.Currency = new SelectList(Currencys, "CurrencyID", "CurrencyName");
-            
-            ViewBag.Agents = db.AgentMasters.ToList();            
-            vm.ReceiptDetails = new List<CODReceiptDetailVM>();
-            vm.allocatedtotalamount = 0;
 
-            if (id>0)
+            DCODReceiptVM _receipt = new DCODReceiptVM();
+            List<DCODReceiptDetailVM> _details = new List<DCODReceiptDetailVM>();
+            PickupRequestDAO _dao = new PickupRequestDAO();
+            if (id == 0)
             {
-                ViewBag.Title = "COD Receipt - Modify";
-                var receipt = db.CODReceipts.Find(id);
-                vm.ReceiptID = receipt.ReceiptID;
-                vm.ReceiptDate = receipt.ReceiptDate;
-                vm.ReceiptNo = receipt.ReceiptNo;
-                vm.Remarks = receipt.Remarks;
-                vm.ManifestID = receipt.ManifestID;
-                vm.CurrencyID = receipt.CurrencyID;
-                vm.EXRate = receipt.EXRate;
-                vm.AchHeadID = receipt.AchHeadID;                
-                vm.Amount = receipt.Amount;
-                vm.AgentID = receipt.AgentID;                                
+                ViewBag.Title = "COD Receipt - Create";                
+                _receipt.ReceiptID = 0;
+                _receipt.ReceiptDate =CommanFunctions.GetLastDayofMonth();// DateTimeKind. DateTimeOffset.Now.UtcDateTime.AddHours(5.30); // DateTime.Now;            
+                _receipt.ReceiptNo = _dao.GetMaxDomesticReceiptNo(companyid, branchid, yearid);
+                _receipt.CurrencyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+                _receipt.EXRate = Convert.ToInt32(Session["EXRATE"].ToString());
+                if (datePicker != null)
+                {
 
-                List<CODReceiptDetailVM> receiptdetails = (from c in db.CODReceiptDetails                                                           
-                                                           join ins in db.InScanMasters on c.InScanId equals ins.InScanID
-                                                      join i in db.ExportShipments on c.ManifestID  equals i.ID
+                    _details = (from c in db.InScanMasters
+                                where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
+                                && ((c.CODReceiptId == null || c.CODReceiptId == 0) && c.ManifestID==null)
+                                && c.PaymentModeId == 2 //account                                
+                                select new DCODReceiptDetailVM
+                                {
+                                    AWBNo = c.AWBNo,
+                                    AWBDateTime = c.TransactionDate,
+                                    ConsigneeName = c.Consignee,
+                                    ConsigneeCountryName = c.ConsigneeCountryName,
+                                    CourierCharge = c.CourierCharge == null ? 0 : c.CourierCharge.Value,
+                                    //CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
+                                    OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
+                                    InScanId = c.InScanID,
+                                    MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
+                                    AWBChecked = true
+                                }).ToList(); //.Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId)).ToList();
 
-                                                      where c.ReceiptID == vm.ReceiptID                                                       
-                                                      select new CODReceiptDetailVM
-                                                      {
-                                                          InScanId = c.InScanId,
-                                                          ManifestID = c.ManifestID,
-                                                          ManifestNumber = i.ManifestNumber,
-                                                          AWBNo = c.AWBNo,
-                                                          AWBDate =Convert.ToDateTime(ins.TransactionDate),
-                                                          Consignee = c.Consignee,
-                                                          ConsigneePhone = c.ConsigneePhone,
-                                                          CourierCharge = c.CourierCharge, 
-                                                          OtherCharge = c.OtherCharge,
-                                                          TotalCharge = c.TotalCharge,
-                                                          AmountAllocate = c.AmountAllocate,
-                                                          Discount =c.Discount                                                          
-                                                      }).ToList();
+                    int _index = 0;
 
-                vm.ReceiptDetails = receiptdetails;
-                vm.allocatedtotalamount = vm.Amount;
-                Session["CODReceiptCreate"] = vm;
-            }
-            else if (CODReceiptSession!=null)
-            {
-                vm = CODReceiptSession;
+                    foreach (var item in _details)
+                    {
+                        _details[_index].TotalCharge = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                        _details[_index].AmountAllocate = _details[_index].TotalCharge;
+                        _receipt.TotalCharges = _receipt.TotalCharges + _details[_index].TotalCharge;
+
+                        _index++;
+                    }
+
+                    _receipt.Amount = _receipt.TotalCharges;
+                    _receipt.Details = _details;
+                    //_receipt.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
+                }
             }
             else
             {
-                ViewBag.Title = "COD Receipt - Create";
-                PickupRequestDAO _dao = new PickupRequestDAO();
-                vm.CurrencyID = SourceMastersModel.GetCompanyCurrencyID(companyid);
-                vm.ReceiptNo = _dao.GetMaxCODReceiptNo(companyid, branchid);
-                CODReceiptDetailVM detail = new CODReceiptDetailVM();                                               
+                DomesticCODReceipt receipt = db.DomesticCODReceipts.Find(id);
+                _receipt.ReceiptID = receipt.ReceiptID;
+                _receipt.ReceiptNo = receipt.ReceiptNo;
+                _receipt.ReceiptDate = receipt.ReceiptDate;
+                _receipt.ChequeDate = receipt.ChequeDate;
+                _receipt.ChequeNo = receipt.ChequeNo;
+                _receipt.AchHeadID = receipt.AchHeadID;
+                _receipt.CurrencyID = receipt.CurrencyID;
+                _receipt.EXRate = receipt.EXRate;
+                _receipt.Amount = receipt.Amount;
+                _receipt.Remarks = receipt.Remarks;
+                _details = (from c in db.DomesticCODReceiptDetails join  c2 in db.InScanMasters on c.InScanId equals c2.InScanID where c2.CODReceiptId== receipt.ReceiptID
+                            select new DCODReceiptDetailVM { ReceiptDetailID = c.ReceiptDetailID, ReceiptID = c.ReceiptID, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, TotalCharge = c.TotalCharge, AmountAllocate = c.AmountAllocate, Discount = c.Discount, AWBNo = c.AWBNo, InScanId = c.InScanId,AWBChecked=true,AWBDateTime=c2.TransactionDate,ConsigneeName=c2.Consignee,ConsigneeCountryName=c2.ConsigneeCountryName }).ToList();
+                _receipt.Details = _details;
             }
             
-            return View(vm);
+            Session["CODReceiptListing"] = _details;
+            return View(_receipt);
         }
 
-        [HttpPost]
-        public JsonResult GetManifest(int id)
-        {
-            var manifests = (from c in db.ExportShipments where c.AgentID == id select new { ID = c.ID, c.ManifestNumber }).ToList();
-            return Json(new { data = manifests }, JsonRequestBehavior.AllowGet);
-        }
+
 
         [HttpPost]
-        public ActionResult Create(CODReceiptVM model)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(DCODReceiptVM model)
         {
-            var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
-            var companyid = Convert.ToInt32(Session["CurrentCompanyID"]);
-            var fyearid = Convert.ToInt32(Session["fyearid"]);
-            string savemessage = "";
-            CODReceipt codreceipt = new CODReceipt();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            var userid = Convert.ToInt32(Session["UserID"]);
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            DomesticCODReceipt _receipt = new DomesticCODReceipt();
             try
             {
 
 
                 if (model.ReceiptID == 0)
                 {
-                    codreceipt.ReceiptNo = model.ReceiptNo;
-                    codreceipt.ReceiptDate = model.ReceiptDate;
-                    codreceipt.FYearID = fyearid;
-                    codreceipt.Deleted = false;
-                    codreceipt.BranchID = branchid;
-                    codreceipt.AcCompanyID = companyid;
-                    codreceipt.AgentID = model.AgentID;
-                    codreceipt.AcJournalID = 0;
-                    codreceipt.FMoney = 0;
+
+                    _receipt.ReceiptNo = model.ReceiptNo;
+                    _receipt.ReceiptDate = model.ReceiptDate;
+                    _receipt.FYearID = yearid;
+                    _receipt.AcCompanyID = companyId;
+                    _receipt.BranchID = branchid;
                 }
                 else
                 {
-                    codreceipt = db.CODReceipts.Find(model.ReceiptID);
+                    _receipt = db.DomesticCODReceipts.Find(model.ReceiptID);
                 }
 
-                codreceipt.CurrencyID = model.CurrencyID;
-                codreceipt.EXRate = model.EXRate;
-                codreceipt.ManifestID = model.ManifestID;
-                codreceipt.Amount = model.Amount;
-                codreceipt.Remarks = model.Remarks;
-                codreceipt.AchHeadID = model.AchHeadID;
-                codreceipt.ChequeNo = model.ChequeNo;
-                codreceipt.ChequeDate = model.ChequeDate;
+                _receipt.Amount = model.Amount;             
+                _receipt.CurrencyID = model.CurrencyID;
+                _receipt.EXRate = model.EXRate;
+                _receipt.ChequeNo = model.ChequeNo;
+                _receipt.ChequeDate = model.ChequeDate;
+                _receipt.AchHeadID = model.AchHeadID;
+                _receipt.Remarks = model.Remarks;
 
                 if (model.ReceiptID == 0)
                 {
-                    db.CODReceipts.Add(codreceipt);
+                    db.DomesticCODReceipts.Add(_receipt);
                     db.SaveChanges();
-                    savemessage = "You have successfully Saved the COD Receipt";
                 }
                 else
                 {
-                    db.Entry(codreceipt).State = System.Data.Entity.EntityState.Modified;
+                    db.Entry(_receipt).State = EntityState.Modified;
                     db.SaveChanges();
-                    savemessage = "You have successfully Updated the COD Receipt";
                 }
 
-                //Detail table save and udpate
-                foreach (var item in model.ReceiptDetails)
+                List<DCODReceiptDetailVM> e_Details = model.Details; //  Session["InvoiceListing"] as List<CustomerInvoiceDetailVM>;
+
+                model.Details = e_Details;
+
+                if (model.Details != null)
                 {
-                    if (item.ReceiptDetailID == 0)
-                    {
-                        if (item.AmountAllocate > 0 || item.Discount > 0)
-                        {
-                            CODReceiptDetail detail = new CODReceiptDetail();
-                            detail.ReceiptID = codreceipt.ReceiptID;
-                            detail.InScanId = item.InScanId;
-                            detail.ManifestID = item.ManifestID;
-                            detail.AWBNo = item.AWBNo;
-                            detail.Consignee = item.Consignee;
-                            detail.ConsigneePhone = item.ConsigneePhone;
-                            detail.CourierCharge = item.CourierCharge;
-                            detail.OtherCharge = item.OtherCharge;
-                            detail.TotalCharge = item.TotalCharge;
-                            detail.AmountAllocate = item.AmountAllocate;
-                            detail.Discount = item.Discount;
-                            db.CODReceiptDetails.Add(detail);
-                            db.SaveChanges();
-                        }
-                    }
-                    else
-                    {
-                        CODReceiptDetail detail = db.CODReceiptDetails.Find(item.ReceiptDetailID);
-                        if (item.AmountAllocate > 0 || item.Discount > 0)
-                        {
-                            detail.ReceiptID = codreceipt.ReceiptID;
-                            detail.InScanId = item.InScanId;
-                            detail.ManifestID = item.ManifestID;
-                            detail.AWBNo = item.AWBNo;
-                            detail.Consignee = item.Consignee;
-                            detail.ConsigneePhone = item.ConsigneePhone;
-                            detail.CourierCharge = item.CourierCharge;
-                            detail.OtherCharge = item.OtherCharge;
-                            detail.TotalCharge = item.TotalCharge;
-                            detail.AmountAllocate = item.AmountAllocate;
-                            detail.Discount = item.Discount;
-                            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            db.Entry(detail).State = System.Data.Entity.EntityState.Deleted;
-                            db.SaveChanges();
-                        }
-                    }
 
+                    foreach (var e_details in model.Details)
+                    {
+                        if (e_details.ReceiptDetailID == 0 && e_details.AWBChecked)
+                        {
+                            DomesticCODReceiptDetail _detail = new DomesticCODReceiptDetail();
+
+                            _detail.ReceiptID = _receipt.ReceiptID;
+                            _detail.AWBNo = e_details.AWBNo;
+                            _detail.InScanId = e_details.InScanId;
+                            _detail.CourierCharge = e_details.CourierCharge;
+                            _detail.OtherCharge = e_details.OtherCharge;
+                            _detail.TotalCharge = e_details.TotalCharge;
+                            _detail.AmountAllocate = e_details.AmountAllocate;
+                            _detail.Discount = e_details.Discount;
+                            db.DomesticCODReceiptDetails.Add(_detail);
+                            db.SaveChanges();
+
+                            //inscan invoice modified
+                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InScanId);
+                            _inscan.CODReceiptId = _receipt.ReceiptID;
+                            db.Entry(_inscan).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else if(e_details.ReceiptDetailID > 0 && e_details.AWBChecked)
+                        {
+                            DomesticCODReceiptDetail _detail = db.DomesticCODReceiptDetails.Find(e_details.ReceiptDetailID);
+                            _detail.AmountAllocate = e_details.AmountAllocate;
+                            _detail.Discount = e_details.Discount;
+                            db.Entry(_detail).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+
+                    }
                 }
 
+                //Accounts Posting
                 PickupRequestDAO _dao = new PickupRequestDAO();
-                _dao.GenerateCODPosting(codreceipt.ReceiptID);
+                _dao.GenerateDomesticCODPosting(_receipt.ReceiptID);
 
-                TempData["SuccessMsg"] = savemessage;
+                TempData["SuccessMsg"] = "You have successfully Saved the COD Receipt";
+                return RedirectToAction("Index");
+
             }
-
             catch(Exception ex)
             {
-                savemessage = ex.Message;
-                TempData["WarningMsg"] = savemessage;
-                
-
-                var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
-                var acheadforbank = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
-
-                ViewBag.achead = acheadforcash;
-                ViewBag.acheadbank = acheadforbank;
-                List<CurrencyMaster> Currencys = new List<CurrencyMaster>();
-                Currencys = MM.GetCurrency();
-                ViewBag.Currency = new SelectList(Currencys, "CurrencyID", "CurrencyName");
-                ViewBag.Agents = db.AgentMasters.ToList();
-                return View(model);
-
-            }
-
-            return RedirectToAction("Index", "CODReceipt");
-        }
-
-        [HttpPost]
-        public JsonResult GetManifestID(CODReceiptVM ship)
-        {
-            ship.ManifestID = "";
-            if (ship.SelectedValues != null)
-            {
-                foreach (var item in ship.SelectedValues)
-                {
-                    if (ship.ManifestID == "")
-                    {
-                        ship.ManifestID = item.ToString();
-                    }
-                    else
-                    {
-                        ship.ManifestID = ship.ManifestID + "," + item.ToString();
-                    }
-
-                }
-            }
-            return Json(new { manifestids = ship.ManifestID }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]        
-        public ActionResult GetManifestAWB(CODReceiptVM ship)
-        {
-            ship.ManifestID = "";
-            if (ship.SelectedValues != null)
-            {
-                foreach (var item in ship.SelectedValues)
-                {
-                    if (ship.ManifestID == "")
-                    {
-                        ship.ManifestID = item.ToString();
-                    }
-                    else
-                    {
-                        ship.ManifestID = ship.ManifestID + "," + item.ToString();
-                    }
-
-                }
-            }
-
-
-            List<CODReceiptDetailVM> manifests = (from c in db.ExportShipments  join d in db.ExportShipmentDetails on c.ID equals d.ExportID
-                             join i in db.InScanMasters on d.InscanId equals i.InScanID
-                             where c.AgentID == ship.AgentID &&  ship.ManifestID.Contains(c.ID.ToString()) 
-                             &&  i.PaymentModeId==2
-                             && i.IsDeleted==false
-                             && i.NetTotal>0 //COd
-                               select new CODReceiptDetailVM { InScanId  = i.InScanID,ManifestID=c.ID,ManifestNumber=c.ManifestNumber,
-                                   AWBNo=d.AWB ,AWBDate= i.TransactionDate,Consignee=i.Consignee,ConsigneePhone=i.ConsigneePhone,CourierCharge=((decimal)(i.CourierCharge != null ? i.CourierCharge : 0)),OtherCharge=i.OtherCharge,TotalCharge=(decimal)(i.NetTotal !=null ? i.NetTotal : 0)}).ToList();
-
-            
-
-            if  (ship.Amount >0)
-            {
-                decimal totalamount = ship.Amount;
-                int i = 0;
-                while(totalamount>0 && i<manifests.Count)
-                {
-                    if (manifests[i].TotalCharge<=totalamount)
-                    {
-                        manifests[i].AmountAllocate = manifests[i].TotalCharge;
-                        manifests[i].Discount = 0;
-                        totalamount = totalamount - manifests[i].AmountAllocate;
-                        i++;
-                    }
-                    else
-                    {
-                        manifests[i].AmountAllocate = totalamount;
-                        manifests[i].Discount = 0;
-                        totalamount = totalamount - manifests[i].AmountAllocate;
-                        i++;
-
-                    }
-                }
-                if (totalamount>0)
-                {
-                    ship.allocatedtotalamount = totalamount;
-                }
-                else
-                {
-                    ship.allocatedtotalamount = ship.Amount;
-                }
-
-            }
-            ship.ReceiptDetails = manifests;
-            Session["CODReceiptCreate"] = ship;
-            
-            return PartialView("ReceiptDetail", ship);            
-
-
-        }
-
-        public ActionResult DeleteConfirmed(int id)
-        {
-            CODReceipt a = db.CODReceipts.Find(id);
-            if (a == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-
-                //var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
-                //foreach (InScanMaster _inscan in _inscans)
-                //{
-                //    _inscan.InvoiceID = null;
-                //    db.Entry(_inscan).State = EntityState.Modified;
-                //    db.SaveChanges();
-                //}
-                a.Deleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully deleted COD Receipt.";
-
-
                 return RedirectToAction("Index");
             }
         }
 
-        public ActionResult Details(int id)
+
+        public ActionResult DeleteConfirmed(int id)
         {
-        
-            CODReceiptVM vm = new CODReceiptVM();
-            var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
-            var companyid = Convert.ToInt32(Session["CurrentCompanyID"]);                    
-                        
-            vm.ReceiptDetails = new List<CODReceiptDetailVM>();
-            if (id > 0)
+            //int k = 0;
+            if (id != 0)
             {
-                var receipt = db.CODReceipts.Find(id);
-                vm.ReceiptID = receipt.ReceiptID;
-                vm.ReceiptDate = receipt.ReceiptDate;
-                vm.ReceiptNo = receipt.ReceiptNo;
-                vm.Remarks = receipt.Remarks;
-                vm.ManifestID = receipt.ManifestID;
-                vm.CurrencyID = receipt.CurrencyID;
-                vm.EXRate = receipt.EXRate;
-                vm.AchHeadID = receipt.AchHeadID;
-                vm.AcHeadName = db.AcHeads.Find(receipt.AchHeadID).AcHead1;
-                vm.CurrencyName = db.CurrencyMasters.Find(receipt.CurrencyID).CurrencyName;
-                vm.Amount = receipt.Amount;
-                vm.AgentID = receipt.AgentID;
-                vm.AgentName = db.AgentMasters.Find(vm.AgentID).Name;
-                List<CODReceiptDetailVM> receiptdetails = (from c in db.CODReceiptDetails
-                                                           join ins in db.InScanMasters on c.InScanId equals ins.InScanID
-                                                           join i in db.ExportShipments on c.ManifestID equals i.ID
+                DataTable dt = ReceiptDAO.DeleteDomesticCOD(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
 
-                                                           where c.ReceiptID == vm.ReceiptID
-                                                           select new CODReceiptDetailVM
-                                                           {
-                                                               InScanId = c.InScanId,
-                                                               ManifestID = c.ManifestID,
-                                                               ManifestNumber = i.ManifestNumber,
-                                                               AWBNo = c.AWBNo,
-                                                               AWBDate = ins.TransactionDate,
-                                                               Consignee = c.Consignee,
-                                                               ConsigneePhone = c.ConsigneePhone,
-                                                               CourierCharge = c.CourierCharge,
-                                                               OtherCharge = c.OtherCharge,
-                                                               TotalCharge = c.TotalCharge,
-                                                               AmountAllocate = c.AmountAllocate,
-                                                               Discount = c.Discount
-                                                           }).ToList();
-
-                vm.ReceiptDetails = receiptdetails;            
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-            
 
-            return View(vm);
+            return RedirectToAction("Index", "CODReceipt");
+
         }
     }
 }

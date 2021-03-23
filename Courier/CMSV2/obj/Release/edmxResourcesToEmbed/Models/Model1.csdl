@@ -243,6 +243,7 @@
     <NavigationProperty Name="tblCustomerAdjustments" Relationship="Self.FK_tblCustomerAdjustment_AcJournalMaster" FromRole="AcJournalMaster" ToRole="tblCustomerAdjustment" />
     <NavigationProperty Name="tblSupplierAdjustments" Relationship="Self.FK_tblSupplierAdjustment_AcJournalMaster" FromRole="AcJournalMaster" ToRole="tblSupplierAdjustment" />
     <Property Name="BranchID" Type="Int32" />
+    <Property Name="DRRID" Type="Int32" />
   </EntityType>
   <EntityType Name="AcMemoAnalysisHeadAllocation">
     <Key>
@@ -1221,32 +1222,6 @@
     <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_Designation" FromRole="Designation" ToRole="BranchMaster" />
     <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_Designation" FromRole="Designation" ToRole="EmployeeMaster" />
   </EntityType>
-  <EntityType Name="DRR">
-    <Key>
-      <PropertyRef Name="DRRID" />
-    </Key>
-    <Property Name="DRRID" Type="Int32" Nullable="false" />
-    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DRRDate" Type="DateTime" Precision="3" />
-    <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="CheckedBy" Type="Int32" />
-    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="DRSReceiptID" Type="Int32" />
-    <Property Name="DepartmentID" Type="Int32" />
-    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="StatusRunSheet" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="UserID" Type="Int32" Nullable="false" />
-    <Property Name="FYearID" Type="Int32" />
-    <NavigationProperty Name="DRRConsignments" Relationship="Self.FK_DRR_DRRConsignment" FromRole="DRR" ToRole="DRRConsignment" />
-    <NavigationProperty Name="DRSReceipt" Relationship="Self.FK_DRR_DRSReceipt" FromRole="DRR" ToRole="DRSReceipt" />
-    <NavigationProperty Name="DRRConsignments1" Relationship="Self.FK_DRRConsignment_DRR" FromRole="DRR" ToRole="DRRConsignment" />
-    <NavigationProperty Name="DRRInvoices" Relationship="Self.FK_DRRInvoice_DRR" FromRole="DRR" ToRole="DRRInvoice" />
-    <NavigationProperty Name="DRRInvoices1" Relationship="Self.FK_DRRInvoice_DRR1" FromRole="DRR" ToRole="DRRInvoice" />
-    <NavigationProperty Name="DRRPKPCADs" Relationship="Self.FK_DRRPKPCAD_DRR" FromRole="DRR" ToRole="DRRPKPCAD" />
-    <NavigationProperty Name="DRRPKPCADs1" Relationship="Self.FK_DRRPKPCAD_DRR1" FromRole="DRR" ToRole="DRRPKPCAD" />
-  </EntityType>
   <EntityType Name="DRRConsignment">
     <Key>
       <PropertyRef Name="DRRConsignmentID" />
@@ -1278,8 +1253,6 @@
     <Property Name="MCPaymentPriority" Type="Int16" />
     <Property Name="StatusSuspenseEntry" Type="Boolean" />
     <NavigationProperty Name="CourierStatu" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="DRRConsignment" ToRole="CourierStatus" />
-    <NavigationProperty Name="DRR" Relationship="Self.FK_DRR_DRRConsignment" FromRole="DRRConsignment" ToRole="DRR" />
-    <NavigationProperty Name="DRR1" Relationship="Self.FK_DRRConsignment_DRR" FromRole="DRRConsignment" ToRole="DRR" />
     <NavigationProperty Name="MCPayments" Relationship="Self.FK_MCPayment_DRRConsignment" FromRole="DRRConsignment" ToRole="MCPayment" />
     <NavigationProperty Name="PODs" Relationship="Self.FK_POD_DRRConsignment" FromRole="DRRConsignment" ToRole="POD" />
   </EntityType>
@@ -1293,8 +1266,6 @@
     <Property Name="CustomerID" Type="Int32" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="DRR" Relationship="Self.FK_DRRInvoice_DRR" FromRole="DRRInvoice" ToRole="DRR" />
-    <NavigationProperty Name="DRR1" Relationship="Self.FK_DRRInvoice_DRR1" FromRole="DRRInvoice" ToRole="DRR" />
   </EntityType>
   <EntityType Name="DRRPKPCAD">
     <Key>
@@ -1307,28 +1278,6 @@
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
     <Property Name="StatusDRRPKPCAD" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="DRR" Relationship="Self.FK_DRRPKPCAD_DRR" FromRole="DRRPKPCAD" ToRole="DRR" />
-    <NavigationProperty Name="DRR1" Relationship="Self.FK_DRRPKPCAD_DRR1" FromRole="DRRPKPCAD" ToRole="DRR" />
-  </EntityType>
-  <EntityType Name="DR">
-    <Key>
-      <PropertyRef Name="DRSID" />
-    </Key>
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="CheckedBy" Type="Int32" Nullable="false" />
-    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="StatusInbound" Type="Boolean" />
-    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <NavigationProperty Name="DRSEmployees" Relationship="Self.FK_DRSEmployee_DRS" FromRole="DRS" ToRole="DRSEmployee" />
-    <NavigationProperty Name="DRSExpenses" Relationship="Self.FK_DRSExpense_DRS" FromRole="DRS" ToRole="DRSExpense" />
   </EntityType>
   <EntityType Name="DRSEmployeeID">
     <Key>
@@ -1348,7 +1297,6 @@
     <Property Name="DRSID" Type="Int32" Nullable="false" />
     <Property Name="ExpenseID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <NavigationProperty Name="DR" Relationship="Self.FK_DRSExpense_DRS" FromRole="DRSExpense" ToRole="DRS" />
   </EntityType>
   <EntityType Name="DRSReceipt">
     <Key>
@@ -1367,7 +1315,6 @@
     <Property Name="User1" Type="Int32" />
     <Property Name="FYearID" Type="Int32" />
     <Property Name="AcCompanyID" Type="Int32" />
-    <NavigationProperty Name="DRRs" Relationship="Self.FK_DRR_DRSReceipt" FromRole="DRSReceipt" ToRole="DRR" />
   </EntityType>
   <EntityType Name="EmployeeMaster">
     <Key>
@@ -1428,6 +1375,8 @@
     <NavigationProperty Name="Quotations" Relationship="Self.FK_Quotation_EmployeeMaster" FromRole="EmployeeMaster" ToRole="Quotation" />
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_EmployeeMaster" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
     <NavigationProperty Name="SalesInvoices1" Relationship="Self.FK_SalesInvoice_EmployeeMaster1" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
+    <Property Name="FCMTokenId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ProfileImage" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="Expense">
     <Key>
@@ -1757,7 +1706,6 @@
     <Property Name="Status" Type="Int32" />
     <Property Name="ShipmentTypeId" Type="Int32" />
     <Property Name="AcFinancialYearID" Type="Int32" />
-    <NavigationProperty Name="UserRegistration" Relationship="Self.FK_S_ImportShipment_S_ForwardingAgentLogin1" FromRole="ImportShipment" ToRole="UserRegistration" />
     <NavigationProperty Name="ImportShipmentDetails" Relationship="Self.FK_S_Shipment_S_ImportShipment" FromRole="ImportShipment" ToRole="ImportShipmentDetails" />
   </EntityType>
   <EntityType Name="ImportShipmentDetail">
@@ -3221,14 +3169,6 @@
     <Property Name="CountryID" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
   </EntityType>
-  <EntityType Name="tblVehicleRequiredType">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="IsActive" Type="Boolean" />
-  </EntityType>
   <EntityType Name="TempCommission">
     <Key>
       <PropertyRef Name="TempCommissionID" />
@@ -3391,19 +3331,6 @@
     <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="BranchID" Type="Int32" />
   </EntityType>
-  <EntityType Name="UserRegistration">
-    <Key>
-      <PropertyRef Name="UserID" />
-    </Key>
-    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="EmailId" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="IsActive" Type="Boolean" />
-    <Property Name="RoleID" Type="Int32" />
-    <NavigationProperty Name="ImportShipments" Relationship="Self.FK_S_ImportShipment_S_ForwardingAgentLogin1" FromRole="UserRegistration" ToRole="ImportShipment" />
-  </EntityType>
   <EntityType Name="UserType">
     <Key>
       <PropertyRef Name="ID" />
@@ -3419,22 +3346,6 @@
     <Property Name="VehicleID" Type="Int32" Nullable="false" />
     <Property Name="TransDate" Type="DateTime" Precision="3" />
     <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="VehicleMaster">
-    <Key>
-      <PropertyRef Name="VehicleID" />
-    </Key>
-    <Property Name="VehicleID" Type="Int32" Nullable="false" />
-    <Property Name="VehicleDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RegistrationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="VehicleValue" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="ValueDate" Type="DateTime" Precision="3" />
-    <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
-    <Property Name="RegExpirydate" Type="DateTime" Precision="3" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="VehicleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="WorkCategory">
     <Key>
@@ -3519,7 +3430,6 @@
     <Property Name="DRSID" Type="Int32" Nullable="false" />
     <Property Name="EmployeeID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <NavigationProperty Name="DR" Relationship="Self.FK_DRSEmployee_DRS" FromRole="DRSEmployee" ToRole="DRS" />
     <NavigationProperty Name="DRSEmployeeID1" Relationship="Self.FK_DRSEmployee_DRSEmployeeID" FromRole="DRSEmployee" ToRole="DRSEmployeeID" />
   </EntityType>
   <EntityType Name="ImpExp">
@@ -4602,90 +4512,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_DRR_DRRConsignment">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="1" />
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRConsignment">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRR_DRSReceipt">
-    <End Role="DRSReceipt" Type="Self.DRSReceipt" Multiplicity="0..1" />
-    <End Role="DRR" Type="Self.DRR" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRSReceipt">
-        <PropertyRef Name="DRSReceiptID" />
-      </Principal>
-      <Dependent Role="DRR">
-        <PropertyRef Name="DRSReceiptID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRConsignment_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="1" />
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRConsignment">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRInvoice_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRInvoice" Type="Self.DRRInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRInvoice">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRInvoice_DRR1">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRInvoice" Type="Self.DRRInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRInvoice">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRPKPCAD_DRR">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRPKPCAD" Type="Self.DRRPKPCAD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRPKPCAD">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRRPKPCAD_DRR1">
-    <End Role="DRR" Type="Self.DRR" Multiplicity="0..1" />
-    <End Role="DRRPKPCAD" Type="Self.DRRPKPCAD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRR">
-        <PropertyRef Name="DRRID" />
-      </Principal>
-      <Dependent Role="DRRPKPCAD">
-        <PropertyRef Name="DRRID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_MCPayment_DRRConsignment">
     <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="1" />
     <End Role="MCPayment" Type="Self.MCPayment" Multiplicity="*" />
@@ -4707,30 +4533,6 @@
       </Principal>
       <Dependent Role="POD">
         <PropertyRef Name="DRRConsignmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSEmployee_DRS">
-    <End Role="DRS" Type="Self.DR" Multiplicity="1" />
-    <End Role="DRSEmployee" Type="Self.DRSEmployee" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRS">
-        <PropertyRef Name="DRSID" />
-      </Principal>
-      <Dependent Role="DRSEmployee">
-        <PropertyRef Name="DRSID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSExpense_DRS">
-    <End Role="DRS" Type="Self.DR" Multiplicity="1" />
-    <End Role="DRSExpense" Type="Self.DRSExpense" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRS">
-        <PropertyRef Name="DRSID" />
-      </Principal>
-      <Dependent Role="DRSExpense">
-        <PropertyRef Name="DRSID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -4927,18 +4729,6 @@
       </Principal>
       <Dependent Role="ForwardingAgentRateDet">
         <PropertyRef Name="FAgentRateID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_S_ImportShipment_S_ForwardingAgentLogin1">
-    <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
-    <End Role="ImportShipment" Type="Self.ImportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserRegistration">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="ImportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -5494,11 +5284,9 @@
     <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetail" />
     <EntitySet Name="Departments" EntityType="Self.Department" />
     <EntitySet Name="Designations" EntityType="Self.Designation" />
-    <EntitySet Name="DRRs" EntityType="Self.DRR" />
     <EntitySet Name="DRRConsignments" EntityType="Self.DRRConsignment" />
     <EntitySet Name="DRRInvoices" EntityType="Self.DRRInvoice" />
     <EntitySet Name="DRRPKPCADs" EntityType="Self.DRRPKPCAD" />
-    <EntitySet Name="DRS" EntityType="Self.DR" />
     <EntitySet Name="DRSEmployeeIDs" EntityType="Self.DRSEmployeeID" />
     <EntitySet Name="DRSExpenses" EntityType="Self.DRSExpense" />
     <EntitySet Name="DRSReceipts" EntityType="Self.DRSReceipt" />
@@ -5610,7 +5398,6 @@
     <EntitySet Name="tblTaxConfigurations" EntityType="Self.tblTaxConfiguration" />
     <EntitySet Name="tblTransfers" EntityType="Self.tblTransfer" />
     <EntitySet Name="tblTransitStationMasters" EntityType="Self.tblTransitStationMaster" />
-    <EntitySet Name="tblVehicleRequiredTypes" EntityType="Self.tblVehicleRequiredType" />
     <EntitySet Name="TempCommissions" EntityType="Self.TempCommission" />
     <EntitySet Name="tempTables" EntityType="Self.tempTable" />
     <EntitySet Name="Types" EntityType="Self.Type" />
@@ -5624,10 +5411,8 @@
     <EntitySet Name="UMUserMasters" EntityType="Self.UMUserMaster" />
     <EntitySet Name="UMUserMonitors" EntityType="Self.UMUserMonitor" />
     <EntitySet Name="UserInBranches" EntityType="Self.UserInBranch" />
-    <EntitySet Name="UserRegistrations" EntityType="Self.UserRegistration" />
     <EntitySet Name="UserTypes" EntityType="Self.UserType" />
     <EntitySet Name="VehicleMaintenances" EntityType="Self.VehicleMaintenance" />
-    <EntitySet Name="VehicleMasters" EntityType="Self.VehicleMaster" />
     <EntitySet Name="WorkCategories" EntityType="Self.WorkCategory" />
     <EntitySet Name="WorkOrderMasters" EntityType="Self.WorkOrderMaster" />
     <EntitySet Name="ZoneCategories" EntityType="Self.ZoneCategory" />
@@ -5927,34 +5712,6 @@
       <End Role="Designation" EntitySet="Designations" />
       <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
     </AssociationSet>
-    <AssociationSet Name="FK_DRR_DRRConsignment" Association="Self.FK_DRR_DRRConsignment">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRConsignment" EntitySet="DRRConsignments" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRR_DRSReceipt" Association="Self.FK_DRR_DRSReceipt">
-      <End Role="DRSReceipt" EntitySet="DRSReceipts" />
-      <End Role="DRR" EntitySet="DRRs" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRConsignment_DRR" Association="Self.FK_DRRConsignment_DRR">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRConsignment" EntitySet="DRRConsignments" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRInvoice_DRR" Association="Self.FK_DRRInvoice_DRR">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRInvoice" EntitySet="DRRInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRInvoice_DRR1" Association="Self.FK_DRRInvoice_DRR1">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRInvoice" EntitySet="DRRInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRPKPCAD_DRR" Association="Self.FK_DRRPKPCAD_DRR">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRPKPCAD" EntitySet="DRRPKPCADs" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRRPKPCAD_DRR1" Association="Self.FK_DRRPKPCAD_DRR1">
-      <End Role="DRR" EntitySet="DRRs" />
-      <End Role="DRRPKPCAD" EntitySet="DRRPKPCADs" />
-    </AssociationSet>
     <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
       <End Role="DRRConsignment" EntitySet="DRRConsignments" />
       <End Role="MCPayment" EntitySet="MCPayments" />
@@ -5962,14 +5719,6 @@
     <AssociationSet Name="FK_POD_DRRConsignment" Association="Self.FK_POD_DRRConsignment">
       <End Role="DRRConsignment" EntitySet="DRRConsignments" />
       <End Role="POD" EntitySet="PODs" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSEmployee_DRS" Association="Self.FK_DRSEmployee_DRS">
-      <End Role="DRS" EntitySet="DRS" />
-      <End Role="DRSEmployee" EntitySet="DRSEmployees" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSExpense_DRS" Association="Self.FK_DRSExpense_DRS">
-      <End Role="DRS" EntitySet="DRS" />
-      <End Role="DRSExpense" EntitySet="DRSExpenses" />
     </AssociationSet>
     <AssociationSet Name="FK_DRSEmployee_DRSEmployeeID" Association="Self.FK_DRSEmployee_DRSEmployeeID">
       <End Role="DRSEmployeeID" EntitySet="DRSEmployeeIDs" />
@@ -6034,10 +5783,6 @@
     <AssociationSet Name="FK_ForwardingAgentRateDet_ForwardingAgentRate" Association="Self.FK_ForwardingAgentRateDet_ForwardingAgentRate">
       <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRates" />
       <End Role="ForwardingAgentRateDet" EntitySet="ForwardingAgentRateDets" />
-    </AssociationSet>
-    <AssociationSet Name="FK_S_ImportShipment_S_ForwardingAgentLogin1" Association="Self.FK_S_ImportShipment_S_ForwardingAgentLogin1">
-      <End Role="UserRegistration" EntitySet="UserRegistrations" />
-      <End Role="ImportShipment" EntitySet="ImportShipments" />
     </AssociationSet>
     <AssociationSet Name="FK_S_Shipment_S_ImportShipment" Association="Self.FK_S_Shipment_S_ImportShipment">
       <End Role="ImportShipment" EntitySet="ImportShipments" />
@@ -8743,18 +8488,7 @@
       <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
     </AssociationSet>
     <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
-    <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
-    <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMasters" />
-      <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMasters" />
-      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharges" />
-    </AssociationSet>
     <EntitySet Name="ExportShipments" EntityType="DB_9F57C4_couriertest_newModel.ExportShipment" />
-    <EntitySet Name="MaterialCostMasters" EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" />
-    <EntitySet Name="DRRRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" />
     <EntitySet Name="SupplierInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" />
     <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster">
       <End Role="SupplierMaster" EntitySet="SupplierMasters" />
@@ -8767,7 +8501,6 @@
     <EntitySet Name="AcOpeningMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" />
     <EntitySet Name="AcOPInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" />
     <EntitySet Name="AcOPInvoiceMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" />
-    <EntitySet Name="DRSRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" />
     <EntitySet Name="DRSRecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPayDetail" />
     <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear">
       <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
@@ -8798,12 +8531,39 @@
       <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
     </AssociationSet>
     <EntitySet Name="SupplierInvoiceAWBs" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceAWB" />
-    <EntitySet Name="DRSDetails" EntityType="DB_9F57C4_couriertest_newModel.DRSDetail" />
-    <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
-    <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
     <EntitySet Name="EmpZoneAllocations" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocation" />
+    <EntitySet Name="tblVehicleTypes" EntityType="DB_9F57C4_couriertest_newModel.tblVehicleType" />
+    <EntitySet Name="VehicleMasters" EntityType="DB_9F57C4_couriertest_newModel.VehicleMaster" />
+    <EntitySet Name="DomesticCODReceipts" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" />
+    <EntitySet Name="DomesticCODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" />
+    <AssociationSet Name="FK__DomesticC__Recei__4AE30379" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DomesticC__Recei__4BD727B2" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
+    </AssociationSet>
     <EntitySet Name="EmpZoneAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail" />
+    <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
+    <EntitySet Name="MaterialCostMasters" EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" />
+    <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
+    <EntitySet Name="DRRDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRDetail" />
+    <EntitySet Name="DRRs" EntityType="DB_9F57C4_couriertest_newModel.DRR" />
+    <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
+    <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
+    <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan">
+      <End Role="InScanMaster" EntitySet="InScanMasters" />
+      <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan">
+      <End Role="InScanMaster" EntitySet="InScanMasters" />
+      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharges" />
+    </AssociationSet>
+    <EntitySet Name="DRRRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" />
+    <EntitySet Name="DRSRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" />
+    <EntitySet Name="UserRegistrations" EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12555,128 +12315,6 @@
     <Property Name="RecPayID" Type="Int32" />
     <Property Name="InScanID" Type="Int32" />
   </EntityType>
-  <EntityType Name="InScanMaster">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
-    <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="DepotID" Type="Int32" />
-    <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="AssignedEmployeeID" Type="Int32" />
-    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="ShipmentType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="Vehicle" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
-    <Property Name="EnteredByID" Type="Int32" />
-    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="IsEnquiry" Type="Boolean" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="PickupRequestStatusId" Type="Int32" />
-    <Property Name="PickedUpEmpID" Type="Int32" />
-    <Property Name="PickedupDate" Type="DateTime" Precision="3" />
-    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
-    <Property Name="CargoDescription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="StatedWeight" Type="Double" />
-    <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="BagNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PalletNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="HandlingInstruction" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-    <Property Name="SpecialInstructions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="TypeOfGoodID" Type="Int32" />
-    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="MovementID" Type="Int32" />
-    <Property Name="ProductTypeID" Type="Int32" />
-    <Property Name="CustomerRateID" Type="Int32" />
-    <Property Name="QuickInscanID" Type="Int32" />
-    <Property Name="TransactionDate" Type="DateTime" Precision="3" Nullable="false" />
-    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="SeviceCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="ParcelTypeId" Type="Int32" />
-    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="SubReasonId" Type="Int32" />
-    <Property Name="StatusTypeId" Type="Int32" />
-    <Property Name="IsDeleted" Type="Boolean" />
-    <Property Name="PaymentModeId" Type="Int32" />
-    <Property Name="DepotReceivedBy" Type="Int32" />
-    <Property Name="DocumentTypeId" Type="Int32" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
-    <Property Name="DRSID" Type="Int32" />
-    <Property Name="AcFinancialYearID" Type="Int32" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="ManifestID" Type="Int32" />
-    <Property Name="CreatedBy" Type="Int32" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-    <Property Name="LastModifiedBy" Type="Int32" />
-    <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
-    <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetail" />
-    <NavigationProperty Name="InscanOtherCharges" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
-    <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="PickupLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="DeliveryLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <Association Name="FK_CustomerInvoiceDetails_InScan">
-    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
-    <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Role="CustomerInvoiceDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="CustomerInvoiceDetail">
-        <PropertyRef Name="InscanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InscanOtherCharge_InScan">
-    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
-    <End Type="DB_9F57C4_couriertest_newModel.InscanOtherCharge" Role="InscanOtherCharge" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="InscanOtherCharge">
-        <PropertyRef Name="InscanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="ExportShipment">
     <Key>
       <PropertyRef Name="ID" />
@@ -12716,31 +12354,6 @@
     <Property Name="BranchID" Type="Int32" />
     <Property Name="AcCompanyId" Type="Int32" />
     <Property Name="ACJournalID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="MaterialCostMaster">
-    <Key>
-      <PropertyRef Name="MCID" />
-    </Key>
-    <Property Name="MCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="MCDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="MaterialCost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="DRSID" Type="Int32" />
-    <Property Name="MCPVID" Type="Int32" />
-    <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="StatusClose" Type="Boolean" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DRRRecPay">
-    <Key>
-      <PropertyRef Name="DRRRecPayID" />
-    </Key>
-    <Property Name="DRRRecPayID" Type="Int32" Nullable="false" />
-    <Property Name="DRRID" Type="Int32" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="StatusRecPay" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="AcJournalID" Type="Int32" />
   </EntityType>
   <EntityType Name="SupplierInvoiceDetail">
     <Key>
@@ -12841,30 +12454,6 @@
     <NavigationProperty Name="AcHead" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" FromRole="AcOPInvoiceMaster" ToRole="AcHead" />
     <NavigationProperty Name="AcOPInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceMaster" ToRole="AcOPInvoiceDetail" />
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="AcOPInvoiceMaster" ToRole="BranchMaster" />
-  </EntityType>
-  <EntityType Name="DRSRecPay">
-    <Key>
-      <PropertyRef Name="DRSRecPayID" />
-    </Key>
-    <Property Name="DRSRecPayID" Type="Int32" Nullable="false" />
-    <Property Name="DRSRecPayDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="BankName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="ReceivedAmount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="CourierEMPID" Type="Int32" />
-    <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="StatusEntry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="ReceivedBy" Type="Int32" />
   </EntityType>
   <EntityType Name="DRSRecPayDetail">
     <Key>
@@ -12977,34 +12566,163 @@
     <Property Name="InScanID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="DRSDetail">
+  <EntityType Name="RecPayDetail">
     <Key>
-      <PropertyRef Name="DRSDetailID" />
+      <PropertyRef Name="RecPayDetailID" />
     </Key>
-    <Property Name="DRSDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="AWBNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="InScanID" Type="Int32" />
-    <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="StatusPaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CCReceived" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="CCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-    <Property Name="CCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CCChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="MCReceived" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="MCStatuspaymentType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-    <Property Name="MCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MCChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="StatusAWB" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+    <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="StatusAdvance" Type="Boolean" />
+    <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="Lock" Type="Boolean" />
+    <Property Name="JobID" Type="Int32" />
+    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="EmpZoneAllocation">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationID" />
+    </Key>
+    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EffectFromDate" Type="DateTime" Precision="3" />
     <Property Name="EmployeeID" Type="Int32" />
-    <Property Name="ReturnTime" Type="DateTime" Precision="3" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="Statusupdate" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblVehicleType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="VehicleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="VehicleMaster">
+    <Key>
+      <PropertyRef Name="VehicleID" />
+    </Key>
+    <Property Name="VehicleID" Type="Int32" Nullable="false" />
+    <Property Name="VehicleDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RegistrationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VehicleValue" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ValueDate" Type="DateTime" Precision="3" />
+    <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
+    <Property Name="RegExpirydate" Type="DateTime" Precision="3" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="VehicleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VehicleTypeId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DomesticCODReceipt">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ReceiptDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="AchHeadID" Type="Int32" Nullable="false" />
+    <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Deleted" Type="Boolean" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="DRRID" Type="Int32" />
+    <NavigationProperty Name="DomesticCODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+    <NavigationProperty Name="DomesticCODReceiptDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+  </EntityType>
+  <EntityType Name="DomesticCODReceiptDetail">
+    <Key>
+      <PropertyRef Name="ReceiptDetailID" />
+    </Key>
+    <Property Name="ReceiptDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" />
+    <Property Name="InScanId" Type="Int32" Nullable="false" />
+    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="AmountAllocate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="DomesticCODReceipt" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
+    <NavigationProperty Name="DomesticCODReceipt1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
+  </EntityType>
+  <Association Name="FK__DomesticC__Recei__4AE30379">
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DomesticC__Recei__4BD727B2">
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="EmpZoneAllocationDetail">
+    <Key>
+      <PropertyRef Name="EmpZoneAllocationDetailID" />
+    </Key>
+    <Property Name="EmpZoneAllocationDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" />
+    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" />
+    <Property Name="Statusupdate" Type="Boolean" />
+    <Property Name="ZoneId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ZoneChartDetail">
+    <Key>
+      <PropertyRef Name="ZoneChartDetailID" />
+    </Key>
+    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="LocationID" Type="Int32" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="SubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="MaterialCostMaster">
+    <Key>
+      <PropertyRef Name="MCID" />
+    </Key>
+    <Property Name="MCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MCDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="InScanID" Type="Int32" Nullable="false" />
+    <Property Name="MaterialCost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="MCPVID" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+    <Property Name="DRRID" Type="Int32" />
+    <Property Name="MCReceivedAmt" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="RecPay">
     <Key>
@@ -13030,56 +12748,245 @@
     <Property Name="FMoney" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="UserID" Type="Int32" />
     <Property Name="IsTradingReceipt" Type="Boolean" />
+    <Property Name="DRRID" Type="Int32" />
   </EntityType>
-  <EntityType Name="RecPayDetail">
+  <EntityType Name="DRRDetail">
     <Key>
-      <PropertyRef Name="RecPayDetailID" />
+      <PropertyRef Name="ID" />
     </Key>
-    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-    <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-    <Property Name="StatusAdvance" Type="Boolean" />
-    <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CurrencyID" Type="Int32" />
-    <Property Name="Lock" Type="Boolean" />
-    <Property Name="JobID" Type="Int32" />
-    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DRRID" Type="Int32" />
+    <Property Name="TransactionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ReferenceId" Type="Int32" />
+    <Property Name="Reference" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="CODAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="MCReceived" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Receipt" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="PKPCash" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Expense" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="ZoneChartDetail">
+  <EntityType Name="DRR">
     <Key>
-      <PropertyRef Name="ZoneChartDetailID" />
+      <PropertyRef Name="DRRID" />
     </Key>
-    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ZoneChartID" Type="Int32" Nullable="false" />
-    <Property Name="CountryID" Type="Int32" />
-    <Property Name="LocationID" Type="Int32" />
-    <Property Name="CityID" Type="Int32" />
-    <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DRRID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DRRDate" Type="DateTime" Precision="3" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="DRSRecPayID" Type="Int32" />
+    <Property Name="CourierId" Type="Int32" />
+    <Property Name="ReconciledAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="StatusDRR" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="StatusRunSheet" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="FYearID" Type="Int32" />
   </EntityType>
-  <EntityType Name="EmpZoneAllocation">
+  <EntityType Name="DR">
     <Key>
-      <PropertyRef Name="EmpZoneAllocationID" />
+      <PropertyRef Name="DRSID" />
     </Key>
-    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="EffectFromDate" Type="DateTime" Precision="3" />
-    <Property Name="EmployeeID" Type="Int32" />
+    <Property Name="DRSID" Type="Int32" Nullable="false" />
+    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="CheckedBy" Type="Int32" Nullable="false" />
+    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="VehicleID" Type="Int32" />
+    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="Statusupdate" Type="Boolean" />
+    <Property Name="StatusInbound" Type="Boolean" />
+    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="DRSRecPayId" Type="Int32" />
   </EntityType>
-  <EntityType Name="EmpZoneAllocationDetail">
+  <EntityType Name="InScanMaster">
     <Key>
-      <PropertyRef Name="EmpZoneAllocationDetailID" />
+      <PropertyRef Name="InScanID" />
     </Key>
-    <Property Name="EmpZoneAllocationDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="EmpZoneAllocationID" Type="Int32" Nullable="false" />
-    <Property Name="ZoneChartDetailID" Type="Int32" Nullable="false" />
-    <Property Name="Statusupdate" Type="Boolean" />
-    <Property Name="ZoneId" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" Nullable="false" />
+    <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
+    <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="DepotID" Type="Int32" />
+    <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="AssignedEmployeeID" Type="Int32" />
+    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="ShipmentType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="Vehicle" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
+    <Property Name="EnteredByID" Type="Int32" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsEnquiry" Type="Boolean" />
+    <Property Name="CourierStatusID" Type="Int32" />
+    <Property Name="PickupRequestStatusId" Type="Int32" />
+    <Property Name="PickedUpEmpID" Type="Int32" />
+    <Property Name="PickedupDate" Type="DateTime" Precision="3" />
+    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="CargoDescription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="StatedWeight" Type="Double" />
+    <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="BagNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PalletNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="HandlingInstruction" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="SpecialInstructions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="TypeOfGoodID" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="MovementID" Type="Int32" />
+    <Property Name="ProductTypeID" Type="Int32" />
+    <Property Name="CustomerRateID" Type="Int32" />
+    <Property Name="QuickInscanID" Type="Int32" />
+    <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="PackingCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="SeviceCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ParcelTypeId" Type="Int32" />
+    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="SubReasonId" Type="Int32" />
+    <Property Name="StatusTypeId" Type="Int32" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="PaymentModeId" Type="Int32" />
+    <Property Name="DepotReceivedBy" Type="Int32" />
+    <Property Name="DocumentTypeId" Type="Int32" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="ManifestID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="PickupLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DeliveryLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="IsNCND" Type="Boolean" Nullable="false" />
+    <Property Name="IsCashOnly" Type="Boolean" Nullable="false" />
+    <Property Name="IsChequeOnly" Type="Boolean" Nullable="false" />
+    <Property Name="IsCollectMaterial" Type="Boolean" Nullable="false" />
+    <Property Name="IsDOCopyBack" Type="Boolean" Nullable="false" />
+    <Property Name="VehicleTypeId" Type="Int32" />
+    <Property Name="PickupSubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DeliverySubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DRRId" Type="Int32" />
+    <Property Name="CODReceiptId" Type="Int32" />
+    <Property Name="ConsignorMobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ConsigneeMobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AWBProcessed" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" FromRole="InScanMaster" ToRole="CustomerInvoiceDetail" />
+    <NavigationProperty Name="InscanOtherCharges" Relationship="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" FromRole="InScanMaster" ToRole="InscanOtherCharge" />
+  </EntityType>
+  <Association Name="FK_CustomerInvoiceDetails_InScan">
+    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Role="CustomerInvoiceDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InScanMaster">
+        <PropertyRef Name="InScanID" />
+      </Principal>
+      <Dependent Role="CustomerInvoiceDetail">
+        <PropertyRef Name="InscanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InscanOtherCharge_InScan">
+    <End Type="DB_9F57C4_couriertest_newModel.InScanMaster" Role="InScanMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.InscanOtherCharge" Role="InscanOtherCharge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InScanMaster">
+        <PropertyRef Name="InScanID" />
+      </Principal>
+      <Dependent Role="InscanOtherCharge">
+        <PropertyRef Name="InscanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DRRRecPay">
+    <Key>
+      <PropertyRef Name="DRRRecPayID" />
+    </Key>
+    <Property Name="DRRRecPayID" Type="Int32" Nullable="false" />
+    <Property Name="DRRID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StatusRecPay" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+    <Property Name="AcJournalID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DRSRecPay">
+    <Key>
+      <PropertyRef Name="DRSRecPayID" />
+    </Key>
+    <Property Name="DRSRecPayID" Type="Int32" Nullable="false" />
+    <Property Name="DRSRecPayDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DRSID" Type="Int32" Nullable="false" />
+    <Property Name="BankName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ReceivedAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="StatusEntry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="ReceivedBy" Type="Int32" />
+    <Property Name="BranchId" Type="Int32" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="DRRID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserRegistration">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RoleID" Type="Int32" />
+    <Property Name="isLogin" Type="Boolean" />
+    <Property Name="loginExpiryDate" Type="DateTime" Precision="0" />
   </EntityType>
 </Schema>

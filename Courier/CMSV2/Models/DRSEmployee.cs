@@ -19,7 +19,6 @@ namespace CMSV2.Models
         public int EmployeeID { get; set; }
         public decimal Amount { get; set; }
     
-        public virtual DR DR { get; set; }
         public virtual DRSEmployeeID DRSEmployeeID1 { get; set; }
     }
 }

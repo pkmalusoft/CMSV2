@@ -246,6 +246,46 @@ namespace CMSV2.DAL
 
         }
 
+
+        public string GetMaxDomesticReceiptNo(int Companyid, int BranchId, int FYearId)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "GetMaxDomesticCODReceiptNo";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@CompanyId", Companyid);
+                        cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        cmd.Parameters.AddWithValue("@FYearId", FYearId);
+                        con.Open();
+                        SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
+                        SqlDA.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            MaxPickUpNo = dt.Rows[0][0].ToString();
+
+
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return MaxPickUpNo;
+
+        }
+
         // Generate a random password of a given length (optional)  
         public string RandomPassword(int size = 0)
         {
@@ -461,6 +501,35 @@ namespace CMSV2.DAL
                     using (SqlCommand cmd = new SqlCommand())
                     {
                         cmd.CommandText = "SP_CODReceiptPosting " + Id.ToString();
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
+
+        //Generate Domestic COD Receipt posting
+        public string GenerateDomesticCODPosting(int Id)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_DomesticCODReceiptPosting " + Id.ToString();
                         cmd.CommandType = CommandType.Text;
                         cmd.Connection = con;
                         con.Open();

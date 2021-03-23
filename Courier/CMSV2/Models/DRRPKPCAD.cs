@@ -21,8 +21,5 @@ namespace CMSV2.Models
         public Nullable<decimal> Amount { get; set; }
         public string StatusPaymentMode { get; set; }
         public string StatusDRRPKPCAD { get; set; }
-    
-        public virtual DRR DRR { get; set; }
-        public virtual DRR DRR1 { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace CMSV2.Controllers
                 v.ZoneCategoryID = z.ZoneCategoryID;
                 v.ZoneID = z.ZoneID;
 
-                var lst = (from c in db.ZoneChartDetails join loc in db.LocationMasters on c.LocationID equals loc.LocationID  where c.ZoneChartID == z.ZoneChartID select new ZoneChartDetailsVM { ZoneChartDetailID=c.ZoneChartDetailID, CountryName=loc.CountryName,CityName=loc.CityName,PlaceID=loc.PlaceID,LocationName=loc.LocationName } ).ToList();
+                var lst = (from c in db.ZoneChartDetails join loc in db.LocationMasters on c.LocationID equals loc.LocationID  where c.ZoneChartID == z.ZoneChartID select new ZoneChartDetailsVM { ZoneChartDetailID=c.ZoneChartDetailID, CountryName=loc.CountryName,CityName=loc.CityName,PlaceID=loc.PlaceID,LocationName=loc.LocationName, SubLocality=c.SubLocality} ).ToList();
                 v.Details = lst;
 
             }
@@ -124,6 +124,7 @@ namespace CMSV2.Controllers
                 //s.LocationName = i.LocationName;
                 s.LocationID = LocationID;
                 s.PlaceID = i.PlaceID;
+                s.SubLocality = i.SubLocality;
                 s.ZoneChartID = z.ZoneChartID;
                 db.ZoneChartDetails.Add(s);
                 db.SaveChanges();
@@ -298,6 +299,7 @@ namespace CMSV2.Controllers
                     s.CountryID = Convert.ToInt32(Session["depotcountry"].ToString());
                     s.CityID = Convert.ToInt32(i);
                     s.ZoneChartID = z.ZoneChartID;
+                    
 
                     db.ZoneChartDetails.Add(s);
                     db.SaveChanges();
@@ -387,8 +389,10 @@ namespace CMSV2.Controllers
         [HttpGet, ActionName("GetEventVenuesList")]
         public JsonResult GetEventVenuesList(string SearchText)
         {
+            
           string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
-            string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
+            //string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
+            string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&language=en&key={1}";
             //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />
             //< add key = "GooglePlaceAPIKey" value = "Your API Key" ></ add >
             string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];

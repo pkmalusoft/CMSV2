@@ -213,6 +213,7 @@
     <Property Name="TransactionNo" Type="nvarchar" MaxLength="100" />
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="BranchID" Type="int" />
+    <Property Name="DRRID" Type="int" />
   </EntityType>
   <EntityType Name="AcMemoAnalysisHeadAllocation">
     <Key>
@@ -1262,21 +1263,58 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="Designation" Type="nvarchar" MaxLength="50" />
     <Property Name="StatusDesignation" Type="char" MaxLength="2" />
   </EntityType>
+  <EntityType Name="DomesticCODReceipt">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptNo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="ReceiptDate" Type="datetime" Nullable="false" />
+    <Property Name="AchHeadID" Type="int" Nullable="false" />
+    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Deleted" Type="bit" />
+    <Property Name="FYearID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="EXRate" Type="money" />
+    <Property Name="FMoney" Type="money" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="CurrencyID" Type="int" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="DRRID" Type="int" />
+  </EntityType>
+  <EntityType Name="DomesticCODReceiptDetail">
+    <Key>
+      <PropertyRef Name="ReceiptDetailID" />
+    </Key>
+    <Property Name="ReceiptDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptID" Type="int" Nullable="false" />
+    <Property Name="InScanId" Type="int" Nullable="false" />
+    <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="CourierCharge" Type="money" Nullable="false" />
+    <Property Name="OtherCharge" Type="money" />
+    <Property Name="TotalCharge" Type="money" Nullable="false" />
+    <Property Name="AmountAllocate" Type="money" Nullable="false" />
+    <Property Name="Discount" Type="money" />
+  </EntityType>
   <EntityType Name="DRR">
     <Key>
       <PropertyRef Name="DRRID" />
     </Key>
-    <Property Name="DRRID" Type="int" Nullable="false" />
-    <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="DRSDate" Type="datetime" Nullable="false" />
+    <Property Name="DRRID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DRRDate" Type="datetime" />
-    <Property Name="DeliveredBy" Type="int" />
-    <Property Name="CheckedBy" Type="int" />
-    <Property Name="TotalAmountCollected" Type="money" Nullable="false" />
-    <Property Name="DRSReceiptID" Type="int" />
-    <Property Name="DepartmentID" Type="int" />
-    <Property Name="StatusDRS" Type="char" MaxLength="1" />
+    <Property Name="DRSID" Type="int" />
+    <Property Name="DRSRecPayID" Type="int" />
+    <Property Name="CourierId" Type="int" />
+    <Property Name="ReconciledAmount" Type="money" Nullable="false" />
+    <Property Name="BranchID" Type="int" />
     <Property Name="AcJournalID" Type="int" />
+    <Property Name="StatusDRR" Type="char" MaxLength="1" />
     <Property Name="StatusRunSheet" Type="char" MaxLength="1" />
     <Property Name="UserID" Type="int" Nullable="false" />
     <Property Name="FYearID" Type="int" />
@@ -1311,6 +1349,23 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="StatusConsignment" Type="char" MaxLength="3" />
     <Property Name="MCPaymentPriority" Type="smallint" />
     <Property Name="StatusSuspenseEntry" Type="bit" />
+  </EntityType>
+  <EntityType Name="DRRDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DRRID" Type="int" />
+    <Property Name="TransactionType" Type="varchar" MaxLength="10" />
+    <Property Name="ReferenceId" Type="int" />
+    <Property Name="Reference" Type="varchar" MaxLength="1000" />
+    <Property Name="CODAmount" Type="money" />
+    <Property Name="Discount" Type="money" />
+    <Property Name="MCReceived" Type="money" />
+    <Property Name="Receipt" Type="money" />
+    <Property Name="PKPCash" Type="money" />
+    <Property Name="Expense" Type="money" />
+    <Property Name="Total" Type="money" />
   </EntityType>
   <EntityType Name="DRRInvoice">
     <Key>
@@ -1364,35 +1419,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="DrsType" Type="nvarchar" MaxLength="50" />
     <Property Name="BranchID" Type="int" />
     <Property Name="TotalMaterialCost" Type="money" />
-  </EntityType>
-  <EntityType Name="DRSDetails">
-    <Key>
-      <PropertyRef Name="DRSDetailID" />
-    </Key>
-    <Property Name="DRSDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
-    <Property Name="InScanID" Type="int" />
-    <Property Name="CourierCharge" Type="money" Nullable="false" />
-    <Property Name="MaterialCost" Type="money" />
-    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
-    <Property Name="CCReceived" Type="money" />
-    <Property Name="CCStatuspaymentType" Type="char" MaxLength="2" />
-    <Property Name="CCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="CCChequeNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="CCChequeDate" Type="datetime" />
-    <Property Name="MCReceived" Type="money" />
-    <Property Name="MCStatuspaymentType" Type="char" MaxLength="2" />
-    <Property Name="MCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReceivedTime" Type="datetime" />
-    <Property Name="CourierStatusID" Type="int" />
-    <Property Name="StatusAWB" Type="char" MaxLength="2" />
-    <Property Name="EmployeeID" Type="int" />
-    <Property Name="ReturnTime" Type="datetime" />
+    <Property Name="DRSRecPayId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1462,11 +1489,13 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="EXRate" Type="money" />
     <Property Name="ReceivedAmount" Type="money" />
-    <Property Name="CourierEMPID" Type="int" />
     <Property Name="Status" Type="varchar" MaxLength="100" />
     <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
     <Property Name="DeliveredBy" Type="int" />
     <Property Name="ReceivedBy" Type="int" />
+    <Property Name="BranchId" Type="int" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="DRRID" Type="int" />
   </EntityType>
   <EntityType Name="DRSRecPayDetails">
     <Key>
@@ -1532,6 +1561,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="LocationName" Type="varchar" MaxLength="500" />
     <Property Name="DepotID" Type="int" />
     <Property Name="UserID" Type="int" />
+    <Property Name="FCMTokenId" Type="text" />
+    <Property Name="ProfileImage" Type="image" />
   </EntityType>
   <EntityType Name="EmpZoneAllocation">
     <Key>
@@ -2177,7 +2208,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="CourierCharge" Type="money" />
     <Property Name="PickupRemarks" Type="nvarchar" MaxLength="400" />
     <Property Name="ShipmentType" Type="nvarchar" MaxLength="40" />
-    <Property Name="VehicleID" Type="int" />
     <Property Name="Vehicle" Type="nvarchar" MaxLength="40" />
     <Property Name="PickupReadyTime" Type="datetime" />
     <Property Name="EnteredByID" Type="int" />
@@ -2236,6 +2266,19 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="DestinationPlaceID" Type="varchar" MaxLength="1000" />
     <Property Name="PickupLocation" Type="varchar" MaxLength="1000" />
     <Property Name="DeliveryLocation" Type="varchar" MaxLength="1000" />
+    <Property Name="IsNCND" Type="bit" Nullable="false" />
+    <Property Name="IsCashOnly" Type="bit" Nullable="false" />
+    <Property Name="IsChequeOnly" Type="bit" Nullable="false" />
+    <Property Name="IsCollectMaterial" Type="bit" Nullable="false" />
+    <Property Name="IsDOCopyBack" Type="bit" Nullable="false" />
+    <Property Name="VehicleTypeId" Type="int" />
+    <Property Name="PickupSubLocality" Type="varchar" MaxLength="1000" />
+    <Property Name="DeliverySubLocality" Type="varchar" MaxLength="1000" />
+    <Property Name="DRRId" Type="int" />
+    <Property Name="CODReceiptId" Type="int" />
+    <Property Name="ConsignorMobileNo" Type="varchar" MaxLength="50" />
+    <Property Name="ConsigneeMobileNo" Type="varchar" MaxLength="50" />
+    <Property Name="AWBProcessed" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2437,6 +2480,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
     <Property Name="MCPVID" Type="int" />
     <Property Name="Status" Type="varchar" MaxLength="100" />
     <Property Name="StatusClose" Type="bit" Nullable="false" />
+    <Property Name="DRRID" Type="int" />
+    <Property Name="MCReceivedAmt" Type="money" />
   </EntityType>
   <EntityType Name="MCInvoice">
     <Key>
@@ -2974,6 +3019,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Property Name="FMoney" Type="money" Nullable="false" />
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
+    <Property Name="DRRID" Type="int" />
   </EntityType>
   <EntityType Name="RecPayAllocationDetails">
     <Key>
@@ -3587,13 +3633,13 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
     <Property Name="CountryID" Type="int" />
     <Property Name="IsActive" Type="bit" />
   </EntityType>
-  <EntityType Name="tblVehicleRequiredType">
+  <EntityType Name="tblVehicleType">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="200" />
-    <Property Name="IsActive" Type="bit" />
+    <Property Name="VehicleDescription" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="TempCommission">
     <Key>
@@ -3922,6 +3968,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <Property Name="EmailId" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="RoleID" Type="int" />
+    <Property Name="isLogin" Type="bit" />
+    <Property Name="loginExpiryDate" Type="date" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -3947,13 +3995,13 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <Property Name="VehicleDescription" Type="nvarchar" MaxLength="50" />
     <Property Name="RegistrationNo" Type="nvarchar" MaxLength="50" />
     <Property Name="Model" Type="nvarchar" MaxLength="50" />
-    <Property Name="Type" Type="nvarchar" MaxLength="50" />
     <Property Name="VehicleValue" Type="money" />
     <Property Name="ValueDate" Type="datetime" />
     <Property Name="PurchaseDate" Type="datetime" />
     <Property Name="RegExpirydate" Type="datetime" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="VehicleNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="VehicleTypeId" Type="int" />
   </EntityType>
   <EntityType Name="WorkCategory">
     <Key>
@@ -4002,6 +4050,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <Property Name="LocationID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
+    <Property Name="SubLocality" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="ZoneMaster">
     <Key>
@@ -4032,6 +4081,30 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
         <PropertyRef Name="ReceiptID" />
       </Principal>
       <Dependent Role="CODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DomesticC__Recei__4AE30379">
+    <End Role="DomesticCODReceipt" Type="Self.DomesticCODReceipt" Multiplicity="1" />
+    <End Role="DomesticCODReceiptDetail" Type="Self.DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DomesticC__Recei__4BD727B2">
+    <End Role="DomesticCODReceipt" Type="Self.DomesticCODReceipt" Multiplicity="1" />
+    <End Role="DomesticCODReceiptDetail" Type="Self.DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
         <PropertyRef Name="ReceiptID" />
       </Dependent>
     </ReferentialConstraint>
@@ -6748,13 +6821,15 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Designation" EntityType="Self.Designation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DomesticCODReceipt" EntityType="Self.DomesticCODReceipt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DomesticCODReceiptDetail" EntityType="Self.DomesticCODReceiptDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRR" EntityType="Self.DRR" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRConsignment" EntityType="Self.DRRConsignment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DRRDetail" EntityType="Self.DRRDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRInvoice" EntityType="Self.DRRInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRPKPCAD" EntityType="Self.DRRPKPCAD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRRecPay" EntityType="Self.DRRRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRS" EntityType="Self.DRS" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRSDetails" EntityType="Self.DRSDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSEmployeeID" EntityType="Self.DRSEmployeeID" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSExpense" EntityType="Self.DRSExpense" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSReceipt" EntityType="Self.DRSReceipt" Schema="dbo" store:Type="Tables" />
@@ -6879,7 +6954,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="tblTaxConfiguration" EntityType="Self.tblTaxConfiguration" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTransfer" EntityType="Self.tblTransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTransitStationMaster" EntityType="Self.tblTransitStationMaster" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="tblVehicleRequiredType" EntityType="Self.tblVehicleRequiredType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVehicleType" EntityType="Self.tblVehicleType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TempCommission" EntityType="Self.TempCommission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tempTable" EntityType="Self.tempTable" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
@@ -7190,6 +7265,14 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <AssociationSet Name="FK__CODReceip__Recei__41F8B7BD" Association="Self.FK__CODReceip__Recei__41F8B7BD">
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DomesticC__Recei__4AE30379" Association="Self.FK__DomesticC__Recei__4AE30379">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipt" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DomesticC__Recei__4BD727B2" Association="Self.FK__DomesticC__Recei__4BD727B2">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipt" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetail" />
     </AssociationSet>
     <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
       <End Role="AcFinancialYear" EntitySet="AcFinancialYear" />

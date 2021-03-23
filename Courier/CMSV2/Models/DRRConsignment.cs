@@ -49,8 +49,6 @@ namespace CMSV2.Models
         public Nullable<bool> StatusSuspenseEntry { get; set; }
     
         public virtual CourierStatu CourierStatu { get; set; }
-        public virtual DRR DRR { get; set; }
-        public virtual DRR DRR1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MCPayment> MCPayments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

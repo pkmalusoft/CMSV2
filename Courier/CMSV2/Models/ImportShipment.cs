@@ -54,7 +54,6 @@ namespace CMSV2.Models
         public Nullable<int> ShipmentTypeId { get; set; }
         public Nullable<int> AcFinancialYearID { get; set; }
     
-        public virtual UserRegistration UserRegistration { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails { get; set; }
     }

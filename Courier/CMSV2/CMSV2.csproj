@@ -207,6 +207,7 @@
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
+    <Compile Include="Controllers\ManifestReceiptController.cs" />
     <Compile Include="Controllers\CompanyMasterController.cs" />
     <Compile Include="Controllers\ConsignmentEntryDomesticController.cs" />
     <Compile Include="Controllers\ConsignmentEntryFAgentAssignController.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Controllers\MovementTypeController.cs" />
     <Compile Include="Controllers\OtherChargeController.cs" />
     <Compile Include="Controllers\OutScanController.cs" />
+    <Compile Include="Controllers\VehicleTypeController.cs" />
     <Compile Include="Controllers\ParcelTypeController.cs" />
     <Compile Include="Controllers\PickUpEnquiryController.cs" />
     <Compile Include="Controllers\PickUpRequestController.cs" />
@@ -825,6 +827,13 @@
     <Compile Include="Models\DestinationSelectAll_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DomesticCOD.cs" />
+    <Compile Include="Models\DomesticCODReceipt.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DomesticCODReceiptDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DR.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -832,6 +841,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRRConsignment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DRRDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRRInvoice.cs">
@@ -844,9 +856,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRSAWB.cs" />
-    <Compile Include="Models\DRSDetail.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DRSEmployee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1866,7 +1875,7 @@
     <Compile Include="Models\tblTransitStationMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblVehicleRequiredType.cs">
+    <Compile Include="Models\tblVehicleType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TempCommission.cs">
@@ -3499,13 +3508,13 @@
     <Content Include="Views\Accounts\ReportParam.cshtml" />
     <Content Include="Views\Accounts\ReportFrame.cshtml" />
     <Content Include="Views\Accounts\ReportParamAsonDate.cshtml" />
-    <Content Include="Views\CODReceipt\Table.cshtml" />
-    <Content Include="Views\CODReceipt\Index.cshtml" />
-    <Content Include="Views\CODReceipt\Create.cshtml" />
+    <Content Include="Views\ManifestReceipt\Table.cshtml" />
+    <Content Include="Views\ManifestReceipt\Index.cshtml" />
+    <Content Include="Views\ManifestReceipt\Create.cshtml" />
     <Content Include="Views\QuickAWB\Details.cshtml" />
     <Content Include="Views\QuickAWB\Create - Copy.cshtml" />
-    <Content Include="Views\CODReceipt\ReceiptDetail.cshtml" />
-    <Content Include="Views\CODReceipt\Details.cshtml" />
+    <Content Include="Views\ManifestReceipt\ReceiptDetail.cshtml" />
+    <Content Include="Views\ManifestReceipt\Details.cshtml" />
     <Content Include="Views\QuickAWB\OtherCharge.cshtml" />
     <Content Include="Views\ExportShipment\Details - Copy.cshtml" />
     <Content Include="Views\ExportShipment\ExportShipmentReport - Copy.cshtml" />
@@ -3566,6 +3575,15 @@
     <Content Include="Views\Reports\CustomerStatement.cshtml" />
     <Content Include="Views\EmployeeZone\Index.cshtml" />
     <Content Include="Views\EmployeeZone\Create.cshtml" />
+    <Content Include="Views\VehicleType\Create.cshtml" />
+    <Content Include="Views\VehicleType\Index.cshtml" />
+    <Content Include="Views\DRSReconc\Create - Copy.cshtml" />
+    <Content Include="Views\DRSReconc\Create - Copy %282%29.cshtml" />
+    <Content Include="Views\CODReceipt\AWBSearch.cshtml" />
+    <Content Include="Views\CODReceipt\Index.cshtml" />
+    <Content Include="Views\CODReceipt\Table.cshtml" />
+    <Content Include="Views\CODReceipt\Create.cshtml" />
+    <Content Include="Views\CODReceipt\ReceiptList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

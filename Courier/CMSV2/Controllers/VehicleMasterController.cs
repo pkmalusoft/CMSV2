@@ -54,6 +54,7 @@ namespace CMSV2.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.VehicleType = db.tblVehicleTypes.ToList();
             return View();
         }
 
@@ -75,7 +76,7 @@ namespace CMSV2.Controllers
                     v.VehicleDescription = vm.VehicleDescription;
                     v.RegistrationNo = vm.RegistrationNo;
                     v.Model = vm.Model;
-                    v.Type = vm.Type;
+                    v.VehicleTypeId= vm.VehicleTypeId;
                     v.VehicleValue = vm.VehicleValue;
                     v.ValueDate = vm.ValueDate;
                     v.PurchaseDate = vm.PurchaseDate;
@@ -90,7 +91,7 @@ namespace CMSV2.Controllers
                     v.VehicleDescription = vm.VehicleDescription;
                     v.RegistrationNo = vm.RegistrationNo;
                     v.Model = vm.Model;
-                    v.Type = vm.Type;
+                    v.VehicleTypeId = vm.VehicleTypeId;
                     v.VehicleValue = vm.VehicleValue;
                     v.ValueDate = vm.ValueDate;
                     v.PurchaseDate = vm.PurchaseDate;
@@ -114,6 +115,7 @@ namespace CMSV2.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.VehicleType = db.tblVehicleTypes.ToList();
             VehiclesVM v = new VehiclesVM();
             var data = (from d in db.VehicleMasters where d.VehicleID == id select d).FirstOrDefault();
 
@@ -127,7 +129,9 @@ namespace CMSV2.Controllers
                 v.VehicleDescription = data.VehicleDescription;
                 v.RegistrationNo = data.RegistrationNo;
                 v.Model = data.Model;
-                v.Type = data.Type;
+
+                if (data.VehicleTypeId!=null)
+                    v.VehicleTypeId =Convert.ToInt32(data.VehicleTypeId);
                 v.VehicleValue = data.VehicleValue.Value;
                 v.ValueDate = data.ValueDate.Value;
                 v.PurchaseDate = data.PurchaseDate.Value;
@@ -149,7 +153,7 @@ namespace CMSV2.Controllers
                 v.VehicleDescription = data.VehicleDescription;
                 v.RegistrationNo = data.RegistrationNo;
                 v.Model = data.Model;
-                v.Type = data.Type;
+                v.VehicleTypeId = data.VehicleTypeId;
                 v.VehicleValue = data.VehicleValue;
                 v.ValueDate = data.ValueDate;
                 v.PurchaseDate = data.PurchaseDate;

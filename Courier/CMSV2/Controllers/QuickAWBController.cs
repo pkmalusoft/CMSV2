@@ -35,10 +35,9 @@ namespace CMSV2.Controllers
                 pStatusId = Convert.ToInt32(StatusId);
             }
             if (FromDate == null || ToDate == null)
-            {
-                DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
-                pFromDate = localDateTime1.Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
-                pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+            {                
+                pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date; // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
             {
@@ -67,7 +66,7 @@ namespace CMSV2.Controllers
             //                        select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,CreatedByName="",LastModifiedByName="" }).ToList();  //, requestsource=subpet3.RequestTypeName 
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.CourierStatusList = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
@@ -213,8 +212,7 @@ namespace CMSV2.Controllers
                         //inscan.ShipperName = v.ShipperName;
                         inscan.ConsignorAddress1_Building = v.ConsignorAddress1_Building;
                         inscan.ConsignorAddress2_Street = v.ConsignorAddress2_Street;
-                        inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
-                        inscan.ConsignorPhone = v.ConsignorPhone;
+                                    
                         inscan.ConsignorContact = v.ConsignorContact;
                         inscan.CreatedBy = userid;
                         DateTime univDateTime = DateTime.Now;
@@ -268,7 +266,11 @@ namespace CMSV2.Controllers
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime1;
                     }
-                    inscan.Weight = v.Weight;            
+                    inscan.Weight = v.Weight;
+
+                    inscan.ConsignorPhone = v.ConsignorPhone;
+                    inscan.ConsignorMobileNo = v.ConsignorMobile;
+                    inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
                     //inscan.AcJournalID = ajm.AcJournalID;
                     if (v.AcheadID!=null)
                     {
@@ -317,7 +319,8 @@ namespace CMSV2.Controllers
                     inscan.ConsigneeAddress2_Street = v.ConsigneeAddress2_Street;
                     inscan.ConsigneeAddress3_PinCode = v.ConsigneeAddress3_PinCode;
 
-                    inscan.ConsigneePhone = v.ConsigneePhone;                    
+                    inscan.ConsigneePhone = v.ConsigneePhone;
+                    inscan.ConsigneeMobileNo = v.ConsigneeMobile;
                     inscan.ConsigneeContact = v.ConsigneeContact;
                     
 
@@ -331,7 +334,7 @@ namespace CMSV2.Controllers
                     inscan.OtherCharge = v.OtherCharge;
                     inscan.CargoDescription = v.Description;
                     inscan.Remarks = v.remarks;
-                    
+                   // inscan.AWBProcessed = Convert.ToBoolean(v.AWBProcessed);
 
                     if (v.CustomCharge !=null )
                     {
@@ -355,8 +358,17 @@ namespace CMSV2.Controllers
 
                     inscan.DepotReceivedBy = v.ReceivedBy;
 
-                    
-
+                    inscan.IsNCND = v.IsNCND;
+                    inscan.IsCashOnly = v.IsCashOnly;
+                    inscan.IsChequeOnly = v.IsChequeOnly;
+                    inscan.IsCollectMaterial = v.IsCollectMaterial;
+                    inscan.IsDOCopyBack = v.IsDOCopyBack;
+                    inscan.PickupLocation = v.PickupLocation;
+                    inscan.DeliveryLocation = v.DeliveryLocation;
+                    inscan.PickupSubLocality = v.PickupSubLocality;
+                    inscan.DeliverySubLocality = v.DeliverySubLocality;
+                    inscan.OriginPlaceID = v.PickupLocationPlaceId;
+                    inscan.DestinationPlaceID = v.DeliveryLocationPlaceId;
                     InScanInternationalDeatil isid = new InScanInternationalDeatil();
                     InScanInternational isi = new InScanInternational();
                     if (v.InScanID == 0)
@@ -446,7 +458,7 @@ namespace CMSV2.Controllers
                             {
                                 mc.MaterialCost = Convert.ToDecimal(inscan.MaterialCost);                                
                                 db.Entry(mc).State = EntityState.Modified;
-
+                                db.SaveChanges();
                             }
                         }
                         else if(mc==null && inscan.MaterialCost>0)
@@ -457,6 +469,7 @@ namespace CMSV2.Controllers
                             mc.Status = "INSCAN";
                             mc.MaterialCost = Convert.ToDecimal(inscan.MaterialCost);
                             db.MaterialCostMasters.Add(mc);
+                            db.SaveChanges();
                         }
 
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
@@ -856,8 +869,10 @@ namespace CMSV2.Controllers
                 inscan.ConsigneeAddress3_PinCode = data.ConsigneeAddress3_PinCode;
 
                 inscan.ConsigneePhone = data.ConsigneePhone;
-                inscan.ConsignorPhone = data.ConsignorPhone;
-                inscan.ConsigneeContact = data.ConsigneeContact;
+            inscan.ConsigneeMobile = data.ConsigneeMobileNo;
+            inscan.ConsignorPhone = data.ConsignorPhone;
+            inscan.ConsignorMobile = data.ConsignorMobileNo;
+            inscan.ConsigneeContact = data.ConsigneeContact;
                 inscan.ConsignorContact = data.ConsignorContact;
 
                 // inscan.Pieces = data.Pieces;
@@ -871,7 +886,18 @@ namespace CMSV2.Controllers
                 inscan.MovementTypeID = data.MovementID;
                 inscan.ReceivedBy = data.DepotReceivedBy; // "tesT"; // data.ReceivedBy.Value;
                 inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;           
-
+            inscan.IsNCND = data.IsNCND;
+            inscan.IsCashOnly = data.IsCashOnly;
+            inscan.IsChequeOnly = data.IsChequeOnly;
+            inscan.IsCollectMaterial = data.IsCollectMaterial;
+            inscan.IsDOCopyBack = data.IsDOCopyBack;
+            inscan.AWBProcessed = data.AWBProcessed;
+            inscan.PickupLocation = data.PickupLocation;
+            inscan.DeliveryLocation = data.DeliveryLocation;
+            inscan.PickupSubLocality = data.PickupSubLocality;
+            inscan.DeliverySubLocality = data.DeliverySubLocality;
+            inscan.PickupLocationPlaceId = data.OriginPlaceID;
+            inscan.DeliveryLocationPlaceId = data.DestinationPlaceID;
             if (data.CreatedBy != null)
             {
                 inscan.CreatedByDate = Convert.ToDateTime(data.CreatedDate).ToString("dd-MMM-yyyy HH:mm"); ;

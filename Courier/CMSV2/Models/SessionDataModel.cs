@@ -29,11 +29,19 @@ namespace CMSV2.Models
             System.Web.HttpContext.Current.Session["TableFilter"] = datePicker;
         }
 
+        public static DatePicker GetTableVariable1()
+        {
+            return (DatePicker)System.Web.HttpContext.Current.Session["TableFilter1"];
+        }
+        public static void SetTableVariable1(DatePicker datePicker)
+        {
+            System.Web.HttpContext.Current.Session["TableFilter1"] = datePicker;
+        }
+
         public static DatePicker GetTableVariable()
         {
             return (DatePicker)System.Web.HttpContext.Current.Session["TableFilter"];
         }
-
         public static AccountsReportParam GetAccountsParam()
         {
             return (AccountsReportParam)System.Web.HttpContext.Current.Session["AccountsParam"];
