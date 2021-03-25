@@ -47,6 +47,7 @@ namespace  CMSV2.Models
         public decimal Balance { get; set; }
         public decimal Amount { get; set;}
         public decimal AllocatedAmount { get; set; }
+        public int SupplierTypeId { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }

@@ -854,26 +854,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CreditNotes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
-        <MappingFragment StoreEntitySet="CreditNote">
-          <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
-          <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
-          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-          <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
-          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="statusclose" ColumnName="statusclose" />
-          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CurrencyMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CurrencyMaster">
         <MappingFragment StoreEntitySet="CurrencyMaster">
@@ -1119,20 +1099,6 @@
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
           <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DebitNotes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
-        <MappingFragment StoreEntitySet="DebitNote">
-          <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
-          <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
-          <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="customerID" ColumnName="customerID" />
-          <ScalarProperty Name="FyearID" ColumnName="FyearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9083,19 +9049,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRRRecPays">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPay">
-        <MappingFragment StoreEntitySet="DRRRecPay">
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="StatusRecPay" ColumnName="StatusRecPay" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
-          <ScalarProperty Name="DRRRecPayID" ColumnName="DRRRecPayID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DRSRecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
         <MappingFragment StoreEntitySet="DRSRecPay">
@@ -9135,6 +9088,97 @@
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CreditNotes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
+        <MappingFragment StoreEntitySet="CreditNote">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+          <ScalarProperty Name="statusclose" ColumnName="statusclose" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
+          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+          <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
+          <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRRRecPays">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPay">
+        <MappingFragment StoreEntitySet="DRRRecPay">
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FMoney" ColumnName="FMoney" />
+          <ScalarProperty Name="EXRate" ColumnName="EXRate" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="StatusOrigin" ColumnName="StatusOrigin" />
+          <ScalarProperty Name="StatusEntry" ColumnName="StatusEntry" />
+          <ScalarProperty Name="StatusRec" ColumnName="StatusRec" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+          <ScalarProperty Name="RecPayDate" ColumnName="RecPayDate" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRRRecPayDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPayDetail">
+        <MappingFragment StoreEntitySet="DRRRecPayDetails">
+          <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DebitNotes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
+        <MappingFragment StoreEntitySet="DebitNote">
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="DebitNoteDate" ColumnName="DebitNoteDate" />
+          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+          <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
+          <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcJournalAWBs">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalAWB">
+        <MappingFragment StoreEntitySet="AcJournalAWB">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

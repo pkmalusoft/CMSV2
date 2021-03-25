@@ -124,6 +124,20 @@ namespace CMSV2.Models
         public int AcHeadId { get; set; }
 
     }
+
+    public class MCDatePicker
+    {
+        public string SearchOption { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }        
+        public string AWBNo { get; set; }
+        public int InScanID { get; set; }
+
+        public string Shipper { get; set; }
+               
+        
+
+    }
     public class InvoiceAllParam
     {
         public DateTime FromDate { get; set; }

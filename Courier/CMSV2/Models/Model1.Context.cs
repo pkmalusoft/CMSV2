@@ -83,7 +83,6 @@ namespace CMSV2.Models
         public virtual DbSet<CourierSchedule> CourierSchedules { get; set; }
         public virtual DbSet<CourierService> CourierServices { get; set; }
         public virtual DbSet<CourierStatu> CourierStatus { get; set; }
-        public virtual DbSet<CreditNote> CreditNotes { get; set; }
         public virtual DbSet<CurrencyMaster> CurrencyMasters { get; set; }
         public virtual DbSet<CustomerContract> CustomerContracts { get; set; }
         public virtual DbSet<CustomerEnquiry> CustomerEnquiries { get; set; }
@@ -96,7 +95,6 @@ namespace CMSV2.Models
         public virtual DbSet<CustomerRateDet> CustomerRateDets { get; set; }
         public virtual DbSet<CustomerRateType> CustomerRateTypes { get; set; }
         public virtual DbSet<CustSuppJV> CustSuppJVs { get; set; }
-        public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
@@ -275,9 +273,13 @@ namespace CMSV2.Models
         public virtual DbSet<DRR> DRRs { get; set; }
         public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
-        public virtual DbSet<DRRRecPay> DRRRecPays { get; set; }
         public virtual DbSet<DRSRecPay> DRSRecPays { get; set; }
         public virtual DbSet<UserRegistration> UserRegistrations { get; set; }
+        public virtual DbSet<CreditNote> CreditNotes { get; set; }
+        public virtual DbSet<DRRRecPay> DRRRecPays { get; set; }
+        public virtual DbSet<DRRRecPayDetail> DRRRecPayDetails { get; set; }
+        public virtual DbSet<DebitNote> DebitNotes { get; set; }
+        public virtual DbSet<AcJournalAWB> AcJournalAWBs { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

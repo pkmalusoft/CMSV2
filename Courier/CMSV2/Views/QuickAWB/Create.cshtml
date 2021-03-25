@@ -41,8 +41,14 @@
 
     .bg_box, .bg_box1 {
         padding: 5px 0;
-        padding-bottom: 20px;
+        
     }
+     .bg_box h3, .bg_box1 h3,{
+        margin-bottom: 5px;
+       
+     }
+
+
     /*.detailBox:nth-of-type(2) .bg_box{
             background: #f3fef0;
         }*/
@@ -82,6 +88,7 @@
     h3 {
         margin: 5px 0;
         font-size: 19px;
+         font-weight: bold;
     }
 
     hr {
@@ -1605,7 +1612,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="flexTitle">
-                                <h3 style="color:white; margin-top:10px">CONSIGNOR/SHIPPER DETAILS</h3>
+                                <h3 style="color:white; margin-top:10px">Consignor/Shipper Details</h3>
 
 
                             </div>
@@ -1686,20 +1693,19 @@
             <div class="col-md-12 detailBox">
                 <div class="bg_box">
                     <div class="col-md-12">
-                        <h3 style="color:white; margin-top:5px; margin-bottom: 0;">RECEIVER/CONSIGNEE DETAILLS</h3><hr />
+                        <h3 style="color:white; margin-top:5px;">Receiver/Consignee Details</h3><hr />
                     </div>
                     <div class="clearfix"></div>
                     <div class="row no-margin" style="padding-top: 10px; ">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label class="headinglabel required">Name</label>
                             @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label class="headinglabel required">Contact Person</label>
                             @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
                         </div>
-                    </div>
-                    <div class="row no-margin" style="padding-top: 10px">                       
+                              
                         <div class="col-md-2">
                             <label class="headinglabel required">Flat/Building</label>
                             @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
@@ -1750,7 +1756,7 @@
             <div class="col-md-12 details1">
                 <div class="bg_box1">
                     <div class="col-md-12">
-                        <h3 style="color:white">SHIPMENT DETAILS</h3><hr />
+                        <h3 style="color:white">Shipment Details</h3><hr />
                     </div>
 
                     <div class="clearfix"></div>
@@ -1812,9 +1818,7 @@
                                 @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
                             </div>
                         </div>
-                        <div class="row no-margin" style="padding-top:10px">
-
-                        </div>
+                      
                     </div>
 
 
@@ -1823,7 +1827,7 @@
 
             <div class="col-md-12 details1" id="divCostUpdate">
                 <div class="bg_box1">
-                    <h3 style="color:white">COST UPDATION</h3><hr />
+                    <h3 style="color:white">Cost Updation</h3><hr />
 
 
                     <div class="row no-margin" style="padding-top: 10px">
@@ -1900,7 +1904,7 @@
             <div class="col-md-12">
                 <div class="row no-margin" style="padding-top: 10px" id="divforwardingagent">
 
-                    <h3 style="color:white">FORWARDING AGENT DETAILS</h3><hr />
+                    <h3 style="color:white">Forwarding Agent Details</h3><hr />
 
                 </div>
 
@@ -1931,7 +1935,7 @@
         <div class="row no-margin" style="padding-top: 10px">
             <div class="col-md-12">
 
-                <h3 style="color:white">AUDIT DETAILS</h3><hr />
+                <h3 style="color:white">Audit Details</h3><hr />
 
                 <div class="row no-margin" style="padding-top: 10px">
 

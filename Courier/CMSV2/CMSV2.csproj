@@ -206,7 +206,9 @@
     <Compile Include="Controllers\BranchMasterController.cs" />
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
+    <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
+    <Compile Include="Controllers\DebitNoteController.cs" />
     <Compile Include="Controllers\ManifestReceiptController.cs" />
     <Compile Include="Controllers\CompanyMasterController.cs" />
     <Compile Include="Controllers\ConsignmentEntryDomesticController.cs" />
@@ -395,6 +397,10 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AcInvoiceOpeningVM.cs" />
+    <Compile Include="Models\AcJournalAWB.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AcJournalConsignmentVM.cs" />
     <Compile Include="Models\AcJournalDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -809,6 +815,7 @@
     <Compile Include="Models\DebitNoteDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DebitNoteVM.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -853,6 +860,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRRRecPay.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DRRRecPayDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRSAWB.cs" />
@@ -1339,6 +1349,7 @@
     <Compile Include="Models\MCInvoice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MCManagementModel.cs" />
     <Compile Include="Models\MCPayment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3072,6 +3083,11 @@
     <Content Include="Reports\AWBPrint.rpt" />
     <Content Include="Reports\AWBOutStanding.rpt" />
     <Content Include="Reports\AWBUnInvoiced.rpt" />
+    <Content Include="Reports\AcJournalVoucherPrint.rpt" />
+    <Content Include="Reports\AcJournalVoucherPrint_A5.rpt" />
+    <Content Include="Reports\BankReceiptPaymentVoucherPrint.rpt" />
+    <Content Include="Reports\CashReceiptPaymentVoucherPrint.rpt" />
+    <Content Include="Reports\CreditNoteVoucherPrint.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3094,6 +3110,8 @@
     <Content Include="Reports\SupplierAgingSummary.rpt" />
     <Content Include="Reports\SupplierLedger.rpt" />
     <Content Include="Reports\CustomerStatement.rpt" />
+    <Content Include="Reports\DebitNoteVoucherPrint.rpt" />
+    <Content Include="Reports\SupplierPaymentPrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3584,6 +3602,14 @@
     <Content Include="Views\CODReceipt\Table.cshtml" />
     <Content Include="Views\CODReceipt\Create.cshtml" />
     <Content Include="Views\CODReceipt\ReceiptList.cshtml" />
+    <Content Include="Views\DebitNote\Create.cshtml" />
+    <Content Include="Views\DebitNote\Index.cshtml" />
+    <Content Include="Views\MCManagement\MCAWBSearch.cshtml" />
+    <Content Include="Views\MCManagement\Create.cshtml" />
+    <Content Include="Views\MCManagement\Index.cshtml" />
+    <Content Include="Views\MCManagement\ReceiptList.cshtml" />
+    <Content Include="Views\MCManagement\Table.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

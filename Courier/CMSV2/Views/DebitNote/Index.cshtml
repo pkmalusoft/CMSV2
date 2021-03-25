@@ -1,0 +1,199 @@
+﻿@model IEnumerable<CMSV2.Models.DebitNoteVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    string path = "/DebitNote/Index";
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+    table.dataTable tfoot th {
+        padding-left: 10px !important;
+    }
+
+    table.dataTable thead th {
+        padding-left: 10px !important;
+    } </style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" style="width:100%" />');
+        });
+
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+       
+
+    });
+
+ </script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Debit Note</h1>
+
+</section>
+
+
+<div class="col-md-12">
+    <p class="indexbtnpadding pull-right">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+    </p>
+</div>
+<section class="content">
+   @if (ViewBag.SuccessMsg != null)
+   {
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.SuccessMsg ", "success");
+         });
+                                                </script>
+   }
+<div class="table-responsive" style="background-color:#fff;padding:15px">
+<table class="table table-striped table-bordered tblfont" id="dataTables-example">
+    <thead>
+        <tr>
+            <th>
+                Debite Note No.
+            </th>
+        <th>
+           DebitNote Date
+        </th>
+      
+        <th>
+           Supplier
+        </th>
+        <th>
+          Job Number
+        </th>
+            <th>
+          Amount
+        </th>
+       <th>Action</th>
+    </tr>
+    </thead>
+
+    <tfoot>
+         <tr>
+             <th>
+                 Debit Note
+             </th>
+        <th>
+           DebitNote Date
+        </th>
+      
+        <th>
+           Supplier
+        </th>
+        <th>
+          Invoice Number
+        </th>
+            <th>
+          Amount
+        </th>
+      @*  <th>Action</th>*@
+    </tr>
+    </tfoot>
+
+<tbody>
+    @foreach (var item in Model) {
+    <tr>
+        <td>@item.DebitNoteNo</td>
+        <td>@LTMSV2.Models.CommanFunctions.GetShortDateFormat(item.Date)</td>
+        <td>@item.SupplierName</td>
+        <td>@item.JobNo</td>
+        <td style="text-align:right">@item.Amount</td>
+        <td>
+            @if (ismodify)
+            {
+                <a href='@Url.Action("Create", "DebitNote", new { id = item.DebitNoteId })' data-toggle="tooltip" data-placement="left" title="Click here"><i class="fa fa-pencil"></i></a>
+            }
+            |
+            @if (isdelete)
+            {
+                <a href="#" onclick="Delete(id=@item.DebitNoteId)"><i class="fa fa-times"></i></a>
+            }
+            @if (isprint)
+            {
+                <a onclick="funExportToPDF(@item.DebitNoteId)" href="#"><i class="fa fa-print"></i></a>
+            }
+        </td>
+    </tr>
+}
+
+</tbody>
+</table>
+    </div>
+    </section>
+<script type="text/javascript">
+    function Delete(id) {
+        if (confirm("Are you sure, You want to Delete this Debit Note?")) {
+            window.location.href = "/DebitNote/DeleteDebitNote/?id=" + id;
+        }
+    }
+</script>
+
+<script type="text/javascript">
+      function funExportToPDF(id) {
+          //showLoading();
+        $.ajax({
+             url: '@Url.Action("DebitNoteVoucher", "DebitNote")',
+
+            type: "GET",
+            data: { id:id},
+                    dataType: "json",
+            success: function (response) {
+                if (response.result == "ok") {
+                    $('#frmPDF').attr('src', @Url.Content("~/ReportsPDF/") + response.path); //''
+
+                    setTimeout(function () {
+                        //hideLoading();
+                        window.open('@Url.Content("~/ReportsPDF/")' + response.path);
+                        //frame = document.getElementById("frmPDF");
+                        //framedoc = frame.contentWindow;
+                        //framedoc.focus();
+                        //framedoc.print();
+                    }, 500);
+                } else {
+                    alert(resuponse.message);
+                    //hideLoading();
+                }
+            },
+        });
+
+        return false;
+    }
+</script>

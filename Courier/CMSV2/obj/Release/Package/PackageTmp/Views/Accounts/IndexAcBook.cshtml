@@ -5,7 +5,7 @@
     var isadd = true;
     var ismodify = true;
     var isdelete = true;
-
+    var isprint = true;
     string path = "/Accounts/IndexAcBook";
 
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
@@ -14,7 +14,7 @@
         isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
         ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
         isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
-
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
     }
 }
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
@@ -174,11 +174,11 @@
             <p class="indexbtnpadding">
                 @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
                 {
-                    @Html.ActionLink("Create New", "CreateAcBook", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
                 }
                 else
                 {
-                    @Html.ActionLink("Create New", "CreateAcBook", null, new { @class = "btn btn-primary btnwidth" })
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
                 }
             </p>
         </div>
@@ -261,17 +261,21 @@
                         </td>
                         <td>
                             @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
-                                @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
-                                @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+        @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
+        @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
                             @if (ismodify)
                             {
-                                <a href="@Url.Action("EditAcBook", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                                <a href="@Url.Action("Create", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
                             }
                             @if (isdelete)
                             {
-                                <a  onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
+                                <a onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
                             }
-                            @* <a href="#" onclick="Delete(ID=@item.AcCategoryID)"><i class="fa fa-times"></i></a>*@
+                            @if (isprint)
+                            {
+                                <a onclick="funExportToPDF(@item.AcJournalID)" href="#"><i class="fa fa-print"></i></a>
+                            }
+
 
                         </td>
                         <td style="display:none;">
@@ -289,5 +293,36 @@
         if (confirm("Are you sure, You want to Delete this Voucher?")) {
             window.location.href = "/Accounts/DeleteAcBook/?id=" + ID;
         }
+    }
+</script>
+<script type="text/javascript">
+      function funExportToPDF(id) {
+          //showLoading();
+        $.ajax({
+             url: '@Url.Action("AcReceipPaymenttVoucher", "Accounts")',
+
+            type: "GET",
+            data: { id:id},
+                    dataType: "json",
+            success: function (response) {
+                if (response.result == "ok") {
+                    $('#frmPDF').attr('src', @Url.Content("~/ReportsPDF/") + response.path); //''
+
+                    setTimeout(function () {
+                        //hideLoading();
+                        window.open('@Url.Content("~/ReportsPDF/")' + response.path);
+                        //frame = document.getElementById("frmPDF");
+                        //framedoc = frame.contentWindow;
+                        //framedoc.focus();
+                        //framedoc.print();
+                    }, 500);
+                } else {
+                    alert(resuponse.message);
+                    //hideLoading();
+                }
+            },
+        });
+
+        return false;
     }
 </script>

@@ -170,6 +170,17 @@
     <Property Name="Remarks" Type="int" />
     <Property Name="CheckSum" Type="bit" />
   </EntityType>
+  <EntityType Name="AcJournalAWB">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="AcJournalDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="AcHeadID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+  </EntityType>
   <EntityType Name="AcJournalDetail">
     <Key>
       <PropertyRef Name="AcJournalDetailID" />
@@ -922,19 +933,20 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
       <PropertyRef Name="CreditNoteID" />
     </Key>
     <Property Name="CreditNoteID" Type="int" Nullable="false" />
-    <Property Name="CreditNoteNo" Type="int" />
+    <Property Name="CreditNoteNo" Type="varchar" MaxLength="20" />
     <Property Name="InvoiceID" Type="int" />
     <Property Name="CreditNoteDate" Type="datetime" />
     <Property Name="Amount" Type="money" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="InvoiceType" Type="nvarchar" MaxLength="5" />
+    <Property Name="InvoiceType" Type="varchar" MaxLength="5" />
     <Property Name="RecPayID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="statusclose" Type="bit" />
     <Property Name="IsShipping" Type="bit" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1225,13 +1237,19 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
       <PropertyRef Name="DebitNoteID" />
     </Key>
     <Property Name="DebitNoteID" Type="int" Nullable="false" />
-    <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="40" />
-    <Property Name="TransDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceID" Type="int" />
+    <Property Name="DebitNoteDate" Type="datetime" />
+    <Property Name="Amount" Type="money" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="customerID" Type="int" />
-    <Property Name="FyearID" Type="int" />
+    <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
+    <Property Name="InvoiceType" Type="nvarchar" MaxLength="5" />
+    <Property Name="RecPayID" Type="int" />
+    <Property Name="AcHeadID" Type="int" />
+    <Property Name="SupplierID" Type="int" />
+    <Property Name="IsShipping" Type="bit" />
+    <Property Name="Remarks" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="DebitNoteDetails">
     <Key>
@@ -1392,15 +1410,39 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
   </EntityType>
   <EntityType Name="DRRRecPay">
     <Key>
-      <PropertyRef Name="DRRRecPayID" />
+      <PropertyRef Name="RecPayID" />
     </Key>
-    <Property Name="DRRRecPayID" Type="int" Nullable="false" />
-    <Property Name="DRRID" Type="int" />
-    <Property Name="AcHeadID" Type="int" />
-    <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusRecPay" Type="char" MaxLength="3" />
+    <Property Name="RecPayID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecPayDate" Type="datetime" Nullable="false" />
+    <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="SupplierID" Type="int" />
+    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
     <Property Name="AcJournalID" Type="int" />
+    <Property Name="StatusRec" Type="bit" />
+    <Property Name="StatusEntry" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusOrigin" Type="nvarchar" MaxLength="50" />
+    <Property Name="FYearID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="EXRate" Type="money" />
+    <Property Name="FMoney" Type="money" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="CurrencyID" Type="int" />
+  </EntityType>
+  <EntityType Name="DRRRecPayDetails">
+    <Key>
+      <PropertyRef Name="RecPayDetailID" />
+    </Key>
+    <Property Name="RecPayDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecPayID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="Amount" Type="money" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="120" />
+    <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="DRS">
     <Key>
@@ -6756,6 +6798,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="AcHead" EntityType="Self.AcHead" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcHeadAssign" EntityType="Self.AcHeadAssign" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcHeadControl" EntityType="Self.AcHeadControl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AcJournalAWB" EntityType="Self.AcJournalAWB" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcJournalDetail" EntityType="Self.AcJournalDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcJournalMaster" EntityType="Self.AcJournalMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcMemoAnalysisHeadAllocation" EntityType="Self.AcMemoAnalysisHeadAllocation" Schema="dbo" store:Type="Tables" />
@@ -6829,6 +6872,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="DRRInvoice" EntityType="Self.DRRInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRPKPCAD" EntityType="Self.DRRPKPCAD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRRecPay" EntityType="Self.DRRRecPay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DRRRecPayDetails" EntityType="Self.DRRRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRS" EntityType="Self.DRS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSEmployeeID" EntityType="Self.DRSEmployeeID" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSExpense" EntityType="Self.DRSExpense" Schema="dbo" store:Type="Tables" />

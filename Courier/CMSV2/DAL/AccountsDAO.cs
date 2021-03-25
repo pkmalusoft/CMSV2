@@ -496,7 +496,7 @@ namespace CMSV2.DAL
         }
 
         //index jv voucher book
-        public static List<AcJournalMaster> AcJournalMasterSelect(int FYearId, int BranchID,DateTime FromDate,DateTime ToDate)
+        public static List<AcJournalMasterVM> AcJournalMasterSelect(int FYearId, int BranchID, DateTime FromDate, DateTime ToDate)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -518,33 +518,30 @@ namespace CMSV2.DAL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            List<AcJournalMaster> objList = new List<AcJournalMaster>();
-            AcJournalMaster obj;
-            
-
-
-
+            List<AcJournalMasterVM> objList = new List<AcJournalMasterVM>();
+            AcJournalMasterVM obj;
 
             if (ds != null && ds.Tables.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    obj = new AcJournalMaster();
+                    obj = new AcJournalMasterVM();
                     obj.AcJournalID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcJournalID"].ToString());
                     obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
                     obj.VoucherNo = ds.Tables[0].Rows[i]["VoucherNo"].ToString();
                     obj.TransDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransDate"].ToString());
                     obj.Remarks = ds.Tables[0].Rows[i]["Remarks"].ToString();
                     obj.TransactionNo = ds.Tables[0].Rows[i]["TransactionNo"].ToString();
-                    obj.Reference= ds.Tables[0].Rows[i]["Reference"].ToString();
-                    obj.VoucherType= ds.Tables[0].Rows[i]["VoucherType"].ToString();
+                    obj.Reference = ds.Tables[0].Rows[i]["Reference"].ToString();
+                    obj.VoucherType = ds.Tables[0].Rows[i]["VoucherType"].ToString();
+                    obj.Amount = Convert.ToDecimal(ds.Tables[0].Rows[i]["JournalAmount"].ToString());
                     objList.Add(obj);
                 }
             }
             return objList;
         }
 
-        
+
         //Indexacbook page
         public static List<AcJournalMasterVM> AcJournalMasterSelectAll(int FYearId, int BranchID, DateTime FromDate, DateTime ToDate,string VoucherType)
         {
@@ -756,6 +753,180 @@ namespace CMSV2.DAL
                 }
             }
             return objList;
+        }
+
+        //ac journal master
+        public static string GetMaxVoucherNo(string VoucherType, int yearid)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxVoucherNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@VoucherType", VoucherType);
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+        public static string GetMaxCreditNoteNo(int yearid)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxCreditNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string GetMaxDebiteNoteNo(int yearid)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxDebitNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string DeleteDebiteNote(int id)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "DeleteDebitNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string DeleteCreditNote(int id)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "DeleteCreditNote";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static int DeleteAcJournalAWBs(AcJournalDetail ObjectAcJournalDetail)
+        {
+            int iReturn = 0;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "UPDATE AcJournalAWB where  AcJournalID=@AcJournalID and AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandType = CommandType.Text;
+
+            cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
+            cmd.Parameters["@AcJournalDetailID"].Value = ObjectAcJournalDetail.AcJournalDetailID;
+
+            cmd.Parameters.Add("@AcJournalID", SqlDbType.Int);
+            cmd.Parameters["@AcJournalID"].Value = ObjectAcJournalDetail.AcJournalID;
+
+            try
+            {
+                cmd.Connection.Open();
+                iReturn = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return iReturn;
         }
     }
 }

@@ -16,11 +16,17 @@ namespace CMSV2.Models
     {
         public int DebitNoteID { get; set; }
         public string DebitNoteNo { get; set; }
-        public Nullable<System.DateTime> TransDate { get; set; }
-        public string Remarks { get; set; }
+        public Nullable<int> InvoiceID { get; set; }
+        public Nullable<System.DateTime> DebitNoteDate { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public Nullable<int> AcJournalID { get; set; }
-        public Nullable<int> customerID { get; set; }
-        public Nullable<int> FyearID { get; set; }
+        public Nullable<int> FYearID { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
+        public string InvoiceType { get; set; }
+        public Nullable<int> RecPayID { get; set; }
+        public Nullable<int> AcHeadID { get; set; }
+        public Nullable<int> SupplierID { get; set; }
+        public Nullable<bool> IsShipping { get; set; }
+        public string Remarks { get; set; }
     }
 }

@@ -1,0 +1,326 @@
+﻿@model CMSV2.Models.DebitNoteVM
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
+
+    string path = Request.Url.AbsolutePath.ToLower();
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+    .tblbackground {
+        background-color: #fff;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+        border-radius: 10px;
+    }
+
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 765px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+
+<script type="text/javascript">
+     function setTwoNumberDecimal(obj) {    
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
+
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $("#InvoiceAmount").attr("disabled", "disabled");
+        $("#AmountPaid").attr("disabled", "disabled");
+
+        setTwoNumberDecimal($("#InvoiceAmount"));
+        setTwoNumberDecimal($("#AmountPaid"));
+        setTwoNumberDecimal($("#Amount"));
+
+
+        $("#btnsave").click(function () {
+            var date = $("#Date").val();
+            var supp = $("#SupplierID option:selected").val();
+            var inv = $("#Invoice option:selected").val();
+            var amt = $("#Amount").val();
+
+
+
+            if (date == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (supp == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (inv == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (amt == "") {
+                $("#alert").show();
+                return false;
+            }
+
+
+            else {
+                $("#alert").hide();
+                return true;
+            }
+
+
+        });
+
+        var startdate = '@Session["FyearFrom"].ToString()';
+        var enddate = '@Session["FyearTo"].ToString()';
+        var sd = new Date(startdate);
+        var ed = new Date(enddate);
+
+        $('#Date').datetimepicker({
+            //maxDate: ed,
+            //minDate: sd,
+            format: 'DD-MM-YYYY'
+        });
+        $("#Amount").on('change', function () {
+            var value = $(this).val();
+            if (value == null || value == "") {
+                $(this).val("0.00");
+            } else {
+                $(this).val(parseFloat(value).toFixed(2));
+            }
+        });
+        $("#SupplierID").change(function () {
+            var ID = $('#SupplierID').val();
+            $.ajax({
+                type: "POST",
+                url: '/DebitNote/GetTradeInvoiceOfSupplier/' + ID,
+                data: { 'ID': ID, 'amountreceived': 0 },
+                success: function (data) {
+                    if (data.length == 0) {
+                        alert("There is no pending invoice!");
+                        $('#InvoiceNo').val('');
+                        $('#InvoiceNo').attr('readonly', 'readonly');
+                    }
+                    else {
+                        $('#InvoiceNo').removeAttr('readonly');
+                    }
+
+                }
+            });
+        });
+        $("#InvoiceNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DebitNote/GetInvoiceNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+
+                            return {
+                                label: val.InvoiceNo,
+                                value: val.SalesInvoiceID,
+                                InvDate: val.DateTime,
+                                InvoiceAmt: val.InvoiceAmount,
+                                Type: val.InvoiceType,
+                                Received: val.AmountReceived
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            focus: function (e, i) {
+                $("#InvoiceNo").val(i.item.label);
+                $("#InvoiceID").val(i.item.value);
+                $("#InvoiceDate").val(i.item.InvDate);
+                $('#InvoiceType').val(i.item.Type);
+                $('#InvoiceAmount').val(i.item.InvoiceAmt);
+                $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#AmountPaid"));
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#InvoiceNo").val(i.item.label);
+                $("#InvoiceID").val(i.item.value);
+                $("#InvoiceDate").val(i.item.InvDate);
+                $('#InvoiceType').val(i.item.Type);
+                $('#InvoiceAmount').val(i.item.InvoiceAmt);
+                $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#AmountPaid"));
+            }
+        });
+
+
+    });
+    function getamt() {
+
+        $.ajax({
+            type: "POST",
+            url: "/DebitNote/GetAmountByinvono",
+            datatype: "Json",
+            data: { invno: $("#InvoiceNo").val(), IsTrading: $('#TradingInvoice').val() },
+            success: function (data) {
+                $("#InvoiceAmount").val(parseFloat(data.InvAmt).toFixed(2));
+                $("#AmountPaid").val(parseFloat(data.AmtPaid).toFixed(2));
+
+            }
+        });
+
+    }
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">Debit Note</h1>
+
+</section>
+
+<section class="content">
+
+   
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="searchdiv sm-width">
+            <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+            <fieldset>
+                <div class="row no-margin">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Debit Note Number</label>
+                            @Html.HiddenFor(model => model.DebitNoteId)
+                            @Html.HiddenFor(model => model.AcJournalID)
+                            @Html.TextBoxFor(model => model.DebitNoteNo, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel required">D.N. Date</label>
+
+                            @Html.TextBoxFor(model => model.Date, new { @class = "form-control text-right", placeholder = "dd-mmm-yyyy" })
+                        </div>
+                    </div>
+                    <div class=" row">
+                        <div class="col-md-12">
+
+                            <label class="headinglabel">Chart of Account (Credit Account)</label>
+
+                            @Html.DropDownListFor(model => model.AcHeadID, new SelectList(@ViewBag.AcHead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+
+                        </div>
+
+                       
+                    </div>
+                    <div class=" row">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Supplier</label>
+                            @Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="required headinglabel">Invoice No.</label>
+                            @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @required = "true" })
+                            @Html.ValidationMessageFor(model => model.InvoiceNo)
+                            <input type="hidden" id="TradingInvoice" name="TradingInvoice" value="" class="form-control" />
+                            @Html.HiddenFor(model => model.InvoiceID)
+                            @Html.HiddenFor(model => model.InvoiceType)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 labelrow flex justify-between">
+                            <label class="headinglabel required">Invoice Date</label>
+                            <label class="headinglabel required">Invoice Amount</label>
+                            <label class="headinglabel required">Paid Amount</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+
+                                @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control text-right" })
+                            </div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(model => model.AmountPaid, new { @class = "form-control text-right" })
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <label class="headinglabel">Description</label>
+
+                            @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Remarks)
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="headinglabel required"> Debit Note Amount</label>
+
+                            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control text-right" })
+                        </div>
+
+                    </div>
+
+
+                    <div class="row no-margin" style="padding-top:10px">
+                        <div class="" style="text-align:right;padding:10px">
+                            @if (isadd)
+                            {
+                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" disabled />
+                            }
+                            &nbsp;
+                            <a href='@Url.Action("Index", "DebitNote", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                        </div>
+                    </div>
+
+
+</fieldset>
+        </div>
+
+    }
+
+</section>
+
+
+
+
+

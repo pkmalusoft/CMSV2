@@ -15,7 +15,7 @@ namespace CMSV2.Models
     public partial class CreditNote
     {
         public int CreditNoteID { get; set; }
-        public Nullable<int> CreditNoteNo { get; set; }
+        public string CreditNoteNo { get; set; }
         public Nullable<int> InvoiceID { get; set; }
         public Nullable<System.DateTime> CreditNoteDate { get; set; }
         public Nullable<decimal> Amount { get; set; }
@@ -28,5 +28,6 @@ namespace CMSV2.Models
         public Nullable<int> CustomerID { get; set; }
         public Nullable<bool> statusclose { get; set; }
         public Nullable<bool> IsShipping { get; set; }
+        public string Description { get; set; }
     }
 }

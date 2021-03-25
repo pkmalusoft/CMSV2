@@ -38,6 +38,15 @@ namespace CMSV2.Models
             System.Web.HttpContext.Current.Session["TableFilter1"] = datePicker;
         }
 
+        public static MCDatePicker GetMCTableVariable1()
+        {
+            return (MCDatePicker)System.Web.HttpContext.Current.Session["MCTableFilter1"];
+        }
+        public static void SetMCTableVariable1(MCDatePicker datePicker)
+        {
+            System.Web.HttpContext.Current.Session["MCTableFilter1"] = datePicker;
+        }
+
         public static DatePicker GetTableVariable()
         {
             return (DatePicker)System.Web.HttpContext.Current.Session["TableFilter"];

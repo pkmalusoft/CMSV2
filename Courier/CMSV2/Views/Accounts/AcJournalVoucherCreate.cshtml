@@ -31,6 +31,36 @@
     }
 </style>
 <script type="text/javascript">
+    function deleterow(i) {
+            
+        var item = $('#JAmount_' + i);            
+        $(item).parent().parent().addClass('hide');
+        var obj = $(item).parent().parent().find('.hdndeleted');
+        $(obj).val(true);
+        CalculateTotal();
+        
+    }
+    function CalculateTotal() {
+        debugger;
+        var maxrow = $('#tbl1 > tr').length;
+        Total = 0;
+        for (i = 0; i < maxrow; i++) {
+            var item = $('#JAmount_' + i);
+            var itemval = $('#JAmount_' + i).val();
+            var paytypevalue = $('#Paytype_' + i).val();
+            if (paytypevalue == 0)
+                itemval = parseFloat(itemval) * -1;
+
+            var deleteobj = $(item).parent().parent().find('.hdndeleted').val();
+            if (deleteobj != "true") {
+                Total += parseFloat(itemval);
+            }
+        }
+        if (parseFloat(Total) != 0)
+            $('#btnsave').attr('disabled', 'disabled');
+        else if (parseFloat(Total)==0 && maxrow>0)
+            $('#btnsave').removeAttr('disabled');
+    }
     $(document).ready(function () {
             var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
@@ -54,6 +84,32 @@
             //    maxDate: ed,
             //});
         });
+
+        $(@Model.AcJournalID> 0)
+        {
+            setTimeout(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/Accounts/GetAcJVDetails",
+                    datatype: "Json",
+                    data: { id: $("#AcJournalID").val() },
+                    success: function (data) {
+
+                        $.each(data, function (index, value) {
+
+                            var i = $('#tbl1 tr').length;
+
+                            $("#tbl1").append('<tr>' + '<td>' + value.AcHead + '<input type = "hidden" name = "acJournalDetailsList[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" value=' + value.acHeadID + ' name="acJournalDetailsList[' + i + '].value.acHeadID"><input type="hidden" value=' + value.acHeadID + ' name="acJournalDetailsList[' + i + '].acHeadID"><input type="hidden" value=' + value.AcJournalDetID + ' name="acJournalDetailsList[' + i + '].AcJournalDetID"></td>' + '<td class=textright><input type="textbox" class="text-right"  onchange="CalculateTotal()" id="JAmount_' + i + '" value=' + parseFloat(value.Amount).toFixed(3) + ' name="acJournalDetailsList[' + i + '].Amount"></td>' +
+                                '<td>' + value.drcr + '<input type="hidden" value=' + value.IsDebit + ' id="Paytype_' + i + '" name="acJournalDetailsList[' + i + '].IsDebit"></td>' + '<td>' + value.AcRemark + '<input type="hidden" value=' + value.AcRemark + ' name="acJournalDetailsList[' + i + '].AcRemark"></td>' +
+                                '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr> ');
+                        });
+                    }
+
+
+                });
+
+            }, 1000);
+        }
         $("#AcHead").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -102,94 +158,37 @@
                 return;
             }
             if (Amount == '') {
-                Amount = 0;
+                Amount = 0;                
             }
 
-            if (Amount == '0') {
+            if (Amount == '0') {                
                 alert("Please Enter Amount!");
                 $('#Amount').focus();
                 return;
             }
+            
 
+            var i = $('#tbl1 tr').length;
 
-            var i = $('#tbl1 tr').length - 1;
-
-            $("#tbl1").append('<tr>' + '<td>' + Achead + ' <input type = "hidden" name = "AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" value=' + Achead + ' name="acJournalDetailsList[' + i + '].AcHead"><input type="hidden" value=' + acheadid + ' name="acJournalDetailsList[' + i + '].acHeadID"></td>' + '<td class=textright>' + Amount + '<input type="hidden" value=' + Amount + ' name="acJournalDetailsList[' + i + '].Amount"></td>' +
-                '<td>' + PaymentTypetext + '<input type="hidden" value=' + PaymentType + ' name="acJournalDetailsList[' + i + '].IsDebit"></td>' + '<td>' + remark + '<input type="hidden" value=' + remark + ' name="acJournalDetailsList[' + i + '].AcRemark"></td>' +
-                '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr > ');
+            $("#tbl1").append('<tr>' + '<td>' + Achead + '<input type = "hidden" name = "acJournalDetailsList[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" value=' + Achead + ' name="acJournalDetailsList[' + i + '].AcHead"><input type="hidden" value=' + acheadid + ' name="acJournalDetailsList[' + i + '].acHeadID"></td>' + '<td class=textright><input class="textright" type="text" onchange="CalculateTotal()" value=' + parseFloat(Amount).toFixed(3) + ' name="acJournalDetailsList[' + i + '].Amount" id="JAmount_' + i + '" /></td>' +
+                '<td>' + PaymentTypetext + '<input type="hidden" id="Paytype_' + i + '" value=' + PaymentType + ' name="acJournalDetailsList[' + i + '].IsDebit"></td>' + '<td>' + remark + '<input type="hidden" value=' + remark + ' name="acJournalDetailsList[' + i + '].AcRemark"></td>' +
+                '<td><a href="javascript:void(0)" id="DeleteNewRow" onclick="deleterow(' + i + ')" ><i class="fa fa-times"></i></a></td></tr > ');
 
            // $("#acHeadId").val($("#acHeadId option:first").val());
             $("#Amount").val('');
             $("#AcRemark").val('');
             $('#AcHead').val('');
-            $('SelectedAcHead').val(0);
+            $('#SelectedAcHead').val(0);
+            CalculateTotal();
             $('#AcHead').focus();
         });
-        $('#TransDate').keydown(function (e) {
 
-            if (e.keyCode == 13 || e.keyCode == 9) {
-                if ($("#TransDate").val() != "") {
-                    $.ajax({
-                        url: "@Url.Action("CheckDateValidate", "Accounts")",
-                        data: { entrydate: $("#TransDate").val() },
-                        type: "GET",
-                        dataType: "json",
-                        success: function (response) {
-
-                            if (response.Status == "OK") {
-                                datevalid = true;
-                                dateerror = response.Message;
-                            }
-                            else {
-                                datevalid = false;
-                                dateerror = response.Message;
-                               // alert(dateerror);
-                                $('#TransDate').val(response.ValidDate);
-                            }
-
-                        },
-                        error: function () {
-                            alert("Failed! Please try again.");
-                        }
-                    });
-                }
-            }
-        });
-        $('#TransDate').change(function () {
-
-            if ($("#TransDate").val() != "") {
-                 $.ajax({
-                url: "@Url.Action("CheckDateValidate", "Accounts")",
-                     data: { entrydate: $("#TransDate").val()},
-                type: "GET",
-                dataType: "json",
-                success: function (response) {
-                    if (response.Status == "OK") {
-                        datevalid = true;
-                        dateerror = response.Message;
-                    }
-                    else {
-                        datevalid = false;
-                        dateerror = response.Message;
-                        alert(dateerror);
-                        $('#TransDate').val(response.ValidDate);
-                    }
-
-                },
-                error: function () {
-                    alert("Failed! Please try again.");
-                }
-            });
-            }
-        });
-        $('#TransDate').on('dp.change', function (e) {
-            $('#TransDate').trigger('change');
-        })
         $('#tbl1').on("click", "#DeleteNewRow", function () {
             //$(this).parent().parent().remove();
             $(this).parent().parent().addClass('hide');
             var obj = $(this).parent().parent().find('.hdndeleted');
             $(obj).val(true);
+            CalculateTotal();
         });
 
         $("#btnsave").click(function () {
@@ -209,7 +208,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">JOURNAL VOUCHER - CREATE </h1>
+    <h1 class="headingfont">@ViewBag.Title</h1>
 
 </section>
 <div class="content ">
@@ -224,7 +223,9 @@
 
                 <div class="col-md-4">
                     <label class="headinglabel" id="VoucherNumber">Journal Voucher Number</label>
-                    <input type="text" name="voucher_number" readonly class="form-control" />
+                    @*<input type="text" name="voucher_number" readonly class="form-control" />*@
+                    @Html.TextBoxFor(model => model.VoucherNo, new { @class = "form-control",@readonly="readonly" })
+                    @Html.HiddenFor(model => model.AcJournalID)
                 </div>
                 <div class="col-md-4">
                     <label class="required headinglabel" id="lblTransDate">J.V. Date</label>
@@ -285,19 +286,24 @@
             <div class="row no-margin form-layout">
                 <div class="col-xs-12" style="padding-top: 10px">
                     <div class="data" style="padding-top: 10px;">
-                        <table border="1" class="table table-responsive table-bordered " style="width: 100%" id="tbl1">
-                            <tr style="font-weight: bold;background-color: #35b8eb;color: #fff;font-size: 16px;">
+                        <table border="1" class="table table-responsive table-bordered " style="width: 100%" >
+                            <thead>
+                                <tr style="font-weight: bold;background-color: #35b8eb;color: #fff;font-size: 16px;">
 
-                                <th>Chart Of Accounts</th>
-                                <th>Amount</th>
-                                <th>Debit/Credit</th>
-                                <th>
-                                    Remark
-                                </th>
-                                <th>Action</th>
+                                    <th>Chart Of Accounts</th>
+                                    <th>Amount</th>
+                                    <th>Debit/Credit</th>
+                                    <th>
+                                        Remark
+                                    </th>
+                                    <th>Action</th>
 
 
-                            </tr>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl1">
+
+                            </tbody>
 
 
                         </table>

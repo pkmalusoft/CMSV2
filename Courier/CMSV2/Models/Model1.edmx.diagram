@@ -61,7 +61,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierSchedule" Width="1.5" PointX="26.75" PointY="22.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierService" Width="1.5" PointX="25.5" PointY="54.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierStatu" Width="1.5" PointX="3" PointY="16" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="27.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CurrencyMaster" Width="1.5" PointX="3" PointY="79.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerContract" Width="1.5" PointX="27.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerEnquiry" Width="1.5" PointX="26.75" PointY="77.375" IsExpanded="true" />
@@ -74,7 +73,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" Width="1.5" PointX="27" PointY="62.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateType" Width="1.5" PointX="22.5" PointY="65.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustSuppJV" Width="1.5" PointX="27.75" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="27.75" PointY="25.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNoteDetail" Width="1.5" PointX="27.75" PointY="29.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Department" Width="1.5" PointX="28.75" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Designation" Width="1.5" PointX="3" PointY="85" IsExpanded="true" />
@@ -401,9 +399,13 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="17.75" PointY="45.875" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" Width="1.5" PointX="44.375" PointY="5.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" Width="1.5" PointX="46.375" PointY="0.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" Width="1.5" PointX="46.375" PointY="19.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="28.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" Width="1.5" PointX="22.375" PointY="46.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPayDetail" Width="1.5" PointX="44.375" PointY="30.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="46.375" PointY="23.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcJournalAWB" Width="1.5" PointX="28.375" PointY="25.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

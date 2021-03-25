@@ -1926,5 +1926,295 @@ namespace CMSV2.DAL
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
+
+        #region "ReceiptVoucher"
+        //Account Cash/Bank book receipt/payment voucher print        
+        public static string GenerateReceiptPaymentVoucherPrint(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_ReceiptPaymentVoucher";
+            comd.Parameters.AddWithValue("@ID", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AcReceiptPaymentVoucherPrint");
+
+            string PaymentType = "";
+            string TransType = "";
+            string Title = "";
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                PaymentType = ds.Tables[0].Rows[0]["PaymentType"].ToString();
+                TransType = ds.Tables[0].Rows[0]["TransType"].ToString();
+            }
+            if (PaymentType == "1" && TransType == "1")
+                Title = "CASH RECEIPT VOUCHER";
+            else if (PaymentType == "2" && TransType == "1")
+                Title = "BANK RECEIPT VOUCHER";
+            else if (PaymentType == "1" && TransType == "2")
+                Title = "CASH PAYMENT VOUCHER";
+            else if (PaymentType == "2" && TransType == "2")
+                Title = "BANK PAYMENT VOUCHER";
+
+
+            //generate XSD to design report            
+            //if (PaymentType == "1") --Cash
+            //{
+            //    System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AcReceiptPaymentVoucherPrint.xsd"));
+            //    ds.WriteXmlSchema(writer);
+            //    writer.Close();
+            //}
+            //else  --Bank
+            //{
+            //    System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "BankReceiptPaymentVoucherPrint.xsd"));
+            //    ds.WriteXmlSchema(writer);
+            //    writer.Close();
+            //}
+
+
+            ReportDocument rd = new ReportDocument();
+
+            if (PaymentType == "1") //--cash
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CashReceiptPaymentVoucherPrint.rpt"));
+            else
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "BankReceiptPaymentVoucherPrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue(Title);
+            //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "AcReceiptPaymentVoucherPrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            reportpath = "~/ReportsPDF/" + reportname;
+            rd.Close();
+            rd.Dispose();
+            return reportname;
+
+        }
+
+        public static string GenerateJournalVoucherPrint(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_JournalVoucher";
+            comd.Parameters.AddWithValue("@ID", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AcJournalVoucherPrint");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AcJournalVoucherPrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AcJournalVoucherPrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("JOURNAL VOUCHER");
+            //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "AcJournalVoucherPrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportname;
+
+        }
+
+
+        public static string GenerateDebitNoteVoucherPrint(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_DebitNoteVoucher";
+            comd.Parameters.AddWithValue("@ID", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "DebitNoteVoucherPrint");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "DebitNoteVoucherPrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "DebitNoteVoucherPrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("DEBIT NOTE VOUCHER");
+            //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "AcJournalVoucherPrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportname;
+
+        }
+
+        public static string GenerateCreditNoteVoucherPrint(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_CreditNoteVoucher";
+            comd.Parameters.AddWithValue("@ID", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "CreditNoteVoucherPrint");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CreditNoteVoucherPrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CreditNoteVoucherPrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("CREDIT NOTE VOUCHER");
+            //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "CreditNoteVoucherPrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportname;
+
+        }
+
+        #endregion
     }
 }

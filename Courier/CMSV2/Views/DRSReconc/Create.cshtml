@@ -427,32 +427,38 @@
                 var myDate = new Date(awbdate1.match(/\d+/)[0] * 1);
                 var cmon = myDate.getMonth() + 1;
                 var ulhtml = '<ul>';
-                var awbdate = '<li>AWB Date : ' + myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + '</li>';
-                ulhtml = ulhtml + awbdate;
-                var shipper = '<li>Shipper :' + obj.Shipper + '</li>';
-                ulhtml = ulhtml + shipper;
-                var consignee = '<li>Consignee : ' + obj.Consignee + '</li>';
-                ulhtml = ulhtml + consignee;
-                var pcs = '<li>Pcs : ' + obj.Pieces + '</li>';
-                var weight = '<li>Weight : ' + obj.Weight + '</li>';
-                ulhtml = ulhtml + pcs;
-                ulhtml = ulhtml + weight;
+                var awbdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                $('#txtAWBDate').val(awbdate);
+                //ulhtml = ulhtml + awbdate;
+                $('#txtShipper').val(obj.Shipper);
+                $('#txtConsignee').val(obj.Consignee);
+                $('#txtPieces').val(obj.Pieces);
+                $('#txtWeight').val(parseFloat(obj.Weight).toFixed(3));
+                //var shipper = '<li>Shipper :' + obj.Shipper + '</li>';
+                //ulhtml = ulhtml + shipper;
+                //var consignee = '<li>Consignee : ' + obj.Consignee + '</li>';
+                //ulhtml = ulhtml + consignee;
+                //var pcs = '<li>Pcs : ' + obj.Pieces + '</li>';
+                //var weight = '<li>Weight : ' + obj.Weight + '</li>';
+                //ulhtml = ulhtml + pcs;
+                //ulhtml = ulhtml + weight;
 
-                var Instructions = '<li>Instructions <ul>';
+                var Instructions = '';// '<li>Instructions <ul>';
                 if (obj.IsNCND == true)
-                    Instructions = Instructions + '<li>NCND</li>';
+                    Instructions = Instructions + ',NCND';
                 if (obj.IsCashOnly == true)
-                    Instructions = Instructions + '<li>Cash Only</li>';
+                    Instructions = Instructions + ',Cash Only';
                 if (obj.IsCheque == true)
-                    Instructions = Instructions + '<li>Cheque</li>';
+                    Instructions = Instructions + ',Cheque';
                 if (obj.IsCollectMaterial == true)
-                    Instructions = Instructions + '<li>Collect Material</li>';
+                    Instructions = Instructions + ',Collect Material';
                 if (obj.IsDoCopyBack == true)
-                    Instructions = Instructions + '<li>Do Copy Back</li></ul>';
+                    Instructions = Instructions + ',Do Copy Back';
 
-                ulhtml = ulhtml + Instructions;
-                ulthml = ulhtml + '</ul';
-                $('#divawbdetail').html(ulhtml);
+                //ulhtml = ulhtml + Instructions;
+                //ulthml = ulhtml + '</ul';
+                //$('#divawbdetail').html(ulhtml);
+                $('#txtInstructions').val(Instructions);
                 $('#txtCODAmount').val(obj.TotalCharge);
                 $('#txtMCCost').val(obj.MaterialCost);
             }
@@ -460,20 +466,12 @@
                 AWBObj = {};
                 $("#txtAWB").val('');
                 $('#txtInScanID').val(0);
-                var ulhtml = '<ul>';
-                var awbdate = '';
-                ulhtml = ulhtml + awbdate;
-                var shipper = '<li>Shipper :</li>';
-                ulhtml = ulhtml + shipper;
-                var consignee = '<li>Consignee : </li>';
-                ulhtml = ulhtml + consignee;
-                var pcs = '<li>Pcs :  </li>';
-                var weight = '<li>Weight : </li>';
-                ulhtml = ulhtml + pcs;
-                ulhtml = ulhtml + weight;
-
-                var Instructions = '<li>Instructions <ul>';
-                $('#divawbdetail').html(ulhtml);
+                $('#txtAWBDate').val('');              
+                $('#txtShipper').val('');
+                $('#txtConsignee').val('');
+                $('#txtPieces').val('');
+                $('#txtWeight').val('');
+                $('#txtInstructions').val('');           
                 $('#txtCODAmount').val('');
                 $('#txtDiscount').val('');
                 $('#txtMCCost').val('');
@@ -1126,7 +1124,7 @@
         @*@Html.HiddenFor(model => model.StatusEntry)*@
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.ReconciledAmount)
-        <div class="row no-margin" style="padding: 10px;margin-bottom: 10px;border: 1px solid #07a7e3;margin-bottom: 10px !important">
+        <div class="row  drsReceipt" >
             <div class="col-xs-12 col-sm-2">
                 <label class="headinglabel required">DRS Receipt No.</label>
                 @Html.TextBoxFor(model => model.DRSReceiptNo, new { @class = "form-control" })
@@ -1159,44 +1157,49 @@
         </div>
     }
     <div class="row no-margin">
-        <div class="col-md-4">
-            <button class="accordion">AWB Transaction</button>
+        <div class="drsAwb col-lg-3">
+            <button class="accordion">Airway Bills</button>
             <div class="panel">
                 <div id="divAWB">
-                    <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-md-12">
-                            <label class="headinglabel">AWB No.</label>
-                            <input type="text" id="txtAWB" class="form-control" />
-                            <input type="hidden" id="txtInScanID" class="form-control" />
-                        </div>
-
-                    </div>
+                   
                     <div class="row no-margin" style="padding-top:10px">
                         <div class="col-md-12" id="divawbdetail">
                             <ul>
                                 <li>
-                                    AWB Date:03/10/2021
+                                    <label class="headinglabel">AWB No.</label>
+                                    <input type="text" id="txtAWB" class="form-control ui-autocomplete-input" autocomplete="off" style="border-radius: 5px;">
+                                    <input type="hidden" id="txtInScanID" class="form-control">
                                 </li>
                                 <li>
-                                    Shipper : Shippper name
+                                    <label class="headinglabel">AWB Date:</label>
+                                    <input type="text" id="txtAWBDate" class="form-control" value="03/10/2021" readonly="" style="border-radius: 5px;">
                                 </li>
                                 <li>
-                                    Consignee :Consignee name
+                                    <label class="headinglabel">Shipper :</label> <input type="text" id="txtShipper" class="form-control" value="" readonly="" style="border-radius: 5px;">
                                 </li>
                                 <li>
-                                    PC/Weight: 2, 50.000
+                                    <label class="headinglabel">Consignee :</label>  <input type="text" class="form-control" id="txtConsignee"  value="" readonly="" style="border-radius: 5px;"> 
+                                </li>
+                                <li class="row">
+                                    <div class="col-md-6">
+                                    <label class="headinglabel">Pc :</label>
+                                    <input type="text" name="" class="form-control" id="txtPieces" value="" readonly="" style="border-radius: 5px;"> 
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="headinglabel">Weight:</label>
+                                    <input type="text" class="form-control" name="" id="txtWeight" value="" readonly style="border-radius: 5px;"> 
+                                </div>
+
                                 </li>
                                 <li>
-                                    Instructions:
-                                    <ul>
-                                        <li>NCND</li>
-                                        <li>Cash Only</li>
-                                    </ul>
+                                    <label class="headinglabel">Shipping Instructions:</label>
+                                     <input type="text" class="form-control" id="txtInstructions" value="Shipping Instructions" readonly="" style="border-radius: 5px;"> 
                                 </li>
                             </ul>
 
                         </div>
                     </div>
+
 
                     <!--<div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-6">
@@ -1222,7 +1225,7 @@
                         </div>
                     </div>-->
 
-                    <div class="row no-margin" style="padding-top:10px">
+                    <div class="row no-margin" >
                         <div class="col-md-6">
                             <label class="headinglabel">COD Amount</label>
                             <input type="text" id="txtCODAmount" class="form-control text-right" readonly />
@@ -1271,7 +1274,7 @@
                         <input type="hidden" id="txtCustomerId" class="form-control" />
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-primary" type="button" id="btnsearchInvoice" style="margin-top:28px;width:20px!Important;min-width: 15px!important;font-size:10px"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+                        <button class="btn btn-primary small_btn" style="margin-top:20px" type="button" id="btnsearchInvoice" ><i class="fa fa-refresh" aria-hidden="true"></i> </button>
                     </div>
 
                 </div>
@@ -1343,7 +1346,7 @@
                 </div>
                 <div class="row no-margin" style="padding-top: 10px">
                     <div class="col-md-12 btn-right">
-                        <input type="submit" class="btn btn-primary  btnwidth" value="Add New AWB" id="btnAddNewAWB" name="Command" />
+                        <input type="submit" class="btn btn-primary  " value="Add New AWB" id="btnAddNewAWB" name="Command" />
                     </div>
                 </div>
             </div>
@@ -1399,8 +1402,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
-            <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
+        <div class="col-lg-9">
+            <table border="1"  class="table table-bordered table-responsive">
                 <thead>
                     <tr style="font-weight: bold">
                         <th>Reference</th>
@@ -1411,7 +1414,7 @@
                         <th>Pickup Cash</th>
                         <th>Expenses</th>
                         <th>Total</th>
-                        <th></th>
+                        
                     </tr>
                 </thead>
                 <tbody id="tblTrans">
@@ -1474,7 +1477,7 @@
                         <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
                         <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>
                         <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
-                        <td></td>
+                        
                     </tr>
                     <tr>
                         <td colspan="6" class="text-right">

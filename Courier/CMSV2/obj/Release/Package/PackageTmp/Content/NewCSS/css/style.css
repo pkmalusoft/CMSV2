@@ -6065,7 +6065,36 @@ p.indexbtnpadding {
     padding-left: 5px;
     padding-right: 5px;
 }
+.drsReceipt{
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+}
+.drsAwb{
+  
+    transition: all 0.2s;
+}
+.RightDrs {
+   transition: all 0.2s;
+}
 
+.drsAwb .accordion.active{
+    color:#fff!important;
+}
+#divawbdetail ul{
+    list-style: none;
+    padding:0;
+}
+.drsAwb .accordion {
+    background: #9bddf7;
+    font-weight: bold;
+    border:0;
+    margin-bottom: 10px;
+    padding:10px;
+}
+.drsAwb .panel{
+    padding-bottom: 30px;
+}
 .card-body .row {
     padding-left: 15px;
     padding-right: 15px;

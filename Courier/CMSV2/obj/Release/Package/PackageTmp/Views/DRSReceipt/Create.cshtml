@@ -497,14 +497,14 @@
             @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control", @readonly = "readonly" })
 
         </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Date</label>
+        <div class="col-xs-12 col-sm-3">
+            <label class="headinglabel">DRS Receipt Date</label>
             @Html.TextBoxFor(model => model.DRSRecPayDate, new { @class = "form-control text-right", @required = true })
 
         </div>
 
-        <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">DRS No.</label>
+        <div class="col-xs-12 col-sm-3">
+            <label class=" required headinglabel">DRS Number</label>
             @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control",@required=true })
             @Html.HiddenFor(mode => Model.DRSID)
         </div>
@@ -516,16 +516,18 @@
             <label class="headinglabel">DRS Amount</label>
             @Html.TextBoxFor(model => model.DRSAmount, string.Format("{0:n2}", Model.DRSAmount), new { @class = "form-control text-right", @readonly = "true" })
         </div>
-        <div class="col-xs-12 col-sm-2">
+      
+    </div>
+    <div class="row no-margin" style="padding-top:10px">
+
+          <div class="col-xs-12 col-sm-2">
             <label class="headinglabel">Payment Mode</label>
             <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
                 <option value="1">Bank</option>
                 <option value="2">Cash</option>
             </select>
         </div>
-    </div>
-    <div class="row no-margin" style="padding-top:10px">
-        <div class="col-xs-12 col-sm-4">
+        <div class="col-xs-12 col-sm-6">
             <div id="divCash">
                 <label class=" required headinglabel">Cash</label>
                 @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
@@ -533,7 +535,7 @@
             </div>
             <div id="divBank">
                 <div class="form-title">
-                    <label class=" required headinglabel">Bank</label>
+                    <label class=" required headinglabel">Cash/Bank Account</label>
                 </div>
                 <div class="form-field">
                     @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
@@ -542,7 +544,7 @@
 
         </div>
         <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">Cheque No.</label>
+            <label class=" required headinglabel">Cheque Number.</label>
             @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright", @required = true })
 
         </div>
@@ -552,20 +554,21 @@
             @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right", @required = true })
 
         </div>
-        <div class="col-xs-12 col-sm-4">
-            <label class="headinglabel required">Delivered By</label>
-            @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-        </div>
+       
     </div>
 
         <div class="row no-margin" style="padding-top:10px">
                
 
             <div class="col-xs-12 col-sm-2">
-                <label class=" required headinglabel">Received Amount</label>
+                <label class=" required headinglabel">DRS Receipt Amount</label>
                 @Html.TextBoxFor(model => model.ReceivedAmount, string.Format("{0:n2}", Model.ReceivedAmount), new { @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
             </div>
-            <div class="col-xs-6 col-sm-10">
+             <div class="col-xs-12 col-sm-4">
+            <label class="headinglabel required">Delivered By</label>
+            @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+        </div>
+            <div class="col-xs-6 col-sm-6">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
             </div>

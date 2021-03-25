@@ -1,15 +1,14 @@
 ﻿@model CMSV2.Models.CustomerRcieptVM
 
 @{
-    
+
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var staffmodel = ViewBag.StaffNoteModel as IEnumerable<CMSV2.Models.StaffNoteModel>;
     var spath = "/CustomerReceipt/CustomerTradeReceiptDetails/0";// System.Configuration.ConfigurationManager.AppSettings["spath"].ToString();
     var CustomerNotification = ViewBag.CustomerNotification as IEnumerable<CMSV2.Models.CustomerNotificationModel>;
-    var CustomerDetails = ViewBag.CustomerDetail; /*as  LTMSV2.Models.CustomerMaster()*/
+    var CustomerDetails = ViewBag.CustomerDetail;
     var _decimal = @Session["Decimal"].ToString();
 }
-
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -20,7 +19,7 @@
         height: 32px;
     }
 
-    /* #tbl1 tr:first-of-type {
+    /*#tbl1 tr:first-of-type {
             background: #35b8eb;
             color: #fff;
         }*/
@@ -39,12 +38,36 @@
         color: #1b1919 !important;
     }
 
+    .modal-dialog {
+        width: 800px;
+    }
+
     #staffmodelbody {
         max-height: calc(100vh - 200px);
         overflow-y: auto;
     }
+
+    .flex {
+        display: flex;
+    }
+
+    .justify-content-between {
+        justify-content: space-between;
+    }
+
+    #popup h5 {
+        border: 2px solid #35b8eb;
+        min-width: 150px;
+        height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        color: #35b8eb;
+        text-align: center;
+        font-weight: bold;
+    }
 </style>
 <script type="text/javascript">
+
     function isNumberKey1(evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
         //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -53,13 +76,15 @@
 
         return true;
     }
+
     $(document).ready(function () {
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
         $("textarea").css({ "border-radius": "5px" });
-          $(".chkAllocate").prop("checked", true);
+
         //$("#FMoney").attr("readonly", false);
+        $("#PaymentMode").focus();
 
         if ('@Model.RecPayID' == 0) {
             $("#divCash").css({ "display": "none" });
@@ -69,24 +94,27 @@
             $("#EXRate").val('1.00');
 
         } else {
-
+            $('#customerName').attr('readonly', 'readonly');
+            $('#vendortype').val($('#SupplierTypeId').val()).trigger('change');
+            $('#vendortype').attr('readonly', 'readonly');
+            $('#btnsearch').attr('disabled', 'disabled');
             if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
-                $("#ChequeNo").attr({ "disabled": true })
-                $("#ChequeDate").attr({ "disabled": true })
+                $("#ChequeNo").attr("readonly","readonly")
+                $("#ChequeDate").attr("readonly","readonly")
                 $("#PaymentMode").val(2);
-                $("#PaymentMode").trigger('change');
 
             } else {
                 $("#divCash").css({ "display": "none" });
                 $("#divBank").css({ "display": "block" });
 
             }
+            ValidateTotal();
         }
         var wt = $("#EXRate").val();
         if (wt == null || wt == "") {
-            $("#EXRate").val("0.000");
+            $("#EXRate").val("0.00");
         } else {
             $("#EXRate").val(parseFloat(wt).toFixed(@_decimal));
         }
@@ -99,29 +127,59 @@
         $("#FMoney").blur(function () {
             var wt = $(this).val();
             if (wt == null || wt == "") {
-                $("#FMoney").val("0.000");
+                $("#FMoney").val("0.00");
             } else {
-                $("#FMoney").val(parseFloat(wt).toFixed(3));
+                $("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
             }
         });
-
         $("#FMoney").change(function () {
+            debugger;
             var wt = $(this).val();
             if (wt == null || wt == "") {
                 $("#FMoney").val("0.000");
             }
-                    
+            else {
+                $("#FMoney").attr('value', parseFloat(wt));
+            }
+
+
+              if ($('#AllocatedAmount').val() == '') {
+                  $('#AllocatedAmount').val(0);
+            }
+            var allocatedamount = $('#AllocatedAmount').val();
+            var allocatedamount = allocatedamount.replace(',', '');
+            var TotalAmount = parseFloat($('#FMoney').val()) + parseFloat($('#hdnAdvance').val());
+            if (TotalAmount == "")
+                TotalAmount = 0;
+            if (parseFloat(TotalAmount) > 0) {
+                var balance1 = parseFloat(TotalAmount) - parseFloat(allocatedamount);
+                $('#BalanceAmount').val(parseFloat(balance1).toFixed(@_decimal));
+            }
+            else {
+                $('#BalanceAmount').val(parseFloat("0").toFixed(@_decimal));
+            }
+
+
+
         if (parseFloat($("#FMoney").val()) == 0) {
             $("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
+            $('#msg1').show();
+            $('#msg1').text('Paid Amount Required!');
             $('#btnsave').attr('disabled', 'disabled');
+        }
+        else if (allocatedamount > 0 && parseFloat(TotalAmount) < allocatedamount) {
+            $('#btnsave').attr('disabled', 'disabled');
+            $('#msg1').show();
+            $('#msg1').text('Allocation amount should not be more than Paid amount!');
         }
         else {
             $('#btnsave').removeAttr('disabled', 'disabled');
-                $("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
+            //$("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
+            $('#msg1').hide();
+            $('#msg1').text('');
             }
 
         });
-
         $(".chkAllocate").click(function () {
             if ($(".chkAllocate").is(':checked')) {
 
@@ -136,70 +194,58 @@
                 $(".textamt").show();
             }
         });
-         $('#btnsearch').click(function () {
-
-             if ($('#SupplierID').val() == 0) {
-                alert('Select Supplier!');
-                return;
-            }
-            //else if ($('#FMoney').val() == "" || $('#FMoney').val()=="0") {
-            //    alert('Enter Paid Amount!');
-            //    return;
-            //}
-            var ID = $('#SupplierID').val();
-            $.ajax({
-                type: "POST",
-                url: '/SupplierPayment/GetTradeInvoiceOfSupplier/' + ID,
-                data: { 'ID': ID, 'amountreceived': $('#FMoney').val() },
-                success: function (response) {
-                    debugger;
-                    var advance = response.advance;
-                    var data = response.salesinvoice;
-                    if (advance == null)
-                        advance = 0;
-                    $('#Balance').val(parseFloat(advance).toFixed(@_decimal));
-                    $('#tbl1').html('');
-                    //$scope.Orders = data;
-                    var amt = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        var date = new Date(data[i].date);
-                        amt = parseFloat(amt) + parseFloat(data[i].Amount);
-                        var tempdate = new Date(date).getDate() + '/' + (new Date(date).getMonth() + 1) + '/' + new Date(date).getFullYear();
-                        var invoiceno = "'" + data[i].InvoiceNo + "'";
-                        $('#tbl1').append('<tr>' +
-                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value="' + data[i].AcOPInvoiceDetailID + '" type="hidden"><input  name="CustomerRcieptChildVM[' + i + '].InvoiceID" value="' + data[i].SalesInvoiceID + '" type="hidden" /></td>' +
-                            '<td>' + data[i].DateTime + '<input name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
-                            '<td class="text-right">' + parseFloat(data[i].InvoiceAmount).toFixed(@_decimal) + '<input  name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value="' + data[i].InvoiceAmount + '" type="hidden" class="AmountToBeRecieved" /></td>' +
-                            '<td class="text-right">' + parseFloat(data[i].AmountReceived).toFixed(@_decimal) + '<input name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden" /></td>' +
-                            '<td class="text-right">' + parseFloat(data[i].Balance).toFixed(@_decimal) + '<input id="txtbalance_' +  data[i].JobCode +  '"  name="CustomerRcieptChildVM[' + i + '].Balance" value="' + data[i].Balance + '" type="hidden" /><input  name="CustomerRcieptChildVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden" /></td>' +
-                            //'<td>' + data[i].Amount + '<input id="" name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"></td>' +
-                            '<td> <input type="text" onBlur="CheckAmt(this)"  id="txtinvoice_' + data[i].JobCode  + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" />' +
-                            '<td> <input type="text"  onBlur="CheckAmt1(this)" id="txtadjust_' + data[i].JobCode + '" class="amt1 txtNum text-right AdjustmentAmount" name="CustomerRcieptChildVM[' + i + '].AdjustmentAmount" />' + '</tr>');
-                            //'<td> <a href="JavaScript:void(0)"   onclick="ShowAWBAllocation(' + data[i].SalesInvoiceID + ',' + data[i].Amount + ',' + invoiceno + ')" ><i class="fa fa-eye"></i></a>' +
-
-                        //hideLoading();
-                        if (i == (data.length - 1)) {
-                            ValidateTotal();
-                        }
-                    }
-                  
-                    //$('#AllocatedAmount').val(parseFloat(amt).toFixed(@_decimal));
-
-                    @*if (amt < parseFloat($('#FMoney').val())) {
-                        $('#msg1').show();
-                        $('#msg1').text('Received Amount not exceeds the pending Amount,Pending Balance is ' + (amt.toFixed(@_decimal)).toLocaleString());
-                        $('#FMoney').val(amt);
-                        //$('#FMoney').focus();
-                    }
-                    else {
-                        $('#msg1').hide();
-                        $('#msg1').text('');
-                    }*@
-                }
-            });
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/PickUpRequest/GetCustomerName",
+        //    datatype: "Json",
+        //    success: function (response) {
+        //        debugger;
+        //        customernames = response.data;
+        //        $("#CustomerName").autocomplete({
+        //            source: customernames
+        //        });
+        //    }
+        //});
+        $('#vendortype').change(function () {
+            if ($('#vendortype').val() == 1)
+                $('#TDNo').removeAttr('readonly');
+            else
+                $('#TDNo').attr('readonly', 'readonly')
 
         });
-         $("#customerName").autocomplete({
+
+        $("#TDNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/SupplierPayment/GetTDNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierID: $("#SupplierID").val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.TDNo,
+                                value: val.TDID
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#TDNo").val(i.item.label);
+                $('#TruckDetailId').val(i.item.value);
+
+
+            },
+
+        });
+
+        $("#customerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/SupplierPayment/GetSupplierName',
@@ -219,11 +265,12 @@
                 })
             },
             minLength: 1,
-            autoFocus:true,
+            autoFocus: true,
             select: function (e, i) {
                 e.preventDefault();
                 $("#customerName").val(i.item.label);
                 $('#SupplierID').val(i.item.ID);
+                $('#SupplierID').attr('label', i.item.label);
                 //$('#hdnCustomerType').val(i.item.type);
                 //if ($('#hdnCustomerType').val() == "CR") {
                 //    $("#Consignor1").css('color', 'blue');
@@ -238,8 +285,132 @@
             },
 
         });
+        $('#btnsearch').click(function () {
+            var autoallocate = $("#AutoAllocate").is(':checked');
+            var TotalAmount = 0;
+            var recpayid = $("#RecPayID").val();
+            if (autoallocate == true)
+                TotalAmount = parseFloat($('#FMoney').val()).toFixed(3);
+            if ($('#SupplierID').val() == 0) {
+                alert('Select Vendor!');
+                return;
+            }
+
+            if ($('#FMoney').val() == "") {// || $('#FMoney').val()=="0") {
+                //alert('Enter Receipt Amount!');
+                $('#FMoney').val(0);
+            }
+
+            var ID = $('#SupplierID').val();
+            $.ajax({
+                type: "POST",
+                url: '/SupplierPayment/GetTradeInvoiceOfSupplier/' + ID,
+                data: {
+                    'ID': ID, 'amountreceived': parseFloat(TotalAmount), 'RecPayId': recpayid },
+                success: function (response) {
+                    debugger;
+                    var data = response.salesinvoice;
+                    var advance = response.advance;
+                    $('#hdnAdvance').val(advance);
+                    $('#tbl1').html('');
+                    if (data.length == 0) {
+                        $('#BalanceAmount').val(parseFloat(advance).toFixed(@_decimal));
+                    }
+                    //$scope.Orders = data;
+                    var amt = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        var date = new Date(data[i].date);
+                        amt = parseFloat(amt) + parseFloat(data[i].Amount);
+                        var tempdate = new Date(date).getDate() + '/' + (new Date(date).getMonth() + 1) + '/' + new Date(date).getFullYear();
+                        var invoiceno = "'" + data[i].InvoiceNo + "'";
+                        html = '<tr>' +
+                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input id="" name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value=' + data[i].AcOPInvoiceDetailID + ' type="hidden"><input id="hdnInvoiceId_' + i + '"  name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceID + ' type="hidden"></td>' +
+                            '<td>' + data[i].DateTime + '<input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
+                            '<td class="text-right">' + parseFloat(data[i].InvoiceAmount).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value=' + data[i].InvoiceAmount + ' type="hidden" class="AmountToBeRecieved"></td>' +
+                            '<td class="text-right">' + parseFloat(data[i].AmountReceived).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden"></td>' +
+                            '<td class="text-right">' + parseFloat(data[i].Balance).toFixed(@_decimal) + '<input id="txtbalance_' + i + '" name="CustomerRcieptChildVM[' + i + '].Balance" value=' + data[i].Balance + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden"></td>';
+                            //'<td>' + data[i].Amount + '<input id="" name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"></td>' +
+                        if (data[i].Allocated == true) {
+                            html = html + '<td><input type="checkbox" onchange="allocate(this);" checked id="chkallocate_' + i + '" /><input type="text" onchange="CheckAmt(this)"  id="txtinvoice_' + i + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" /></td>';
+                        }
+                        else {
+                            html = html + '<td><input type="checkbox" onchange="allocate(this);" id="chkallocate_' + i + '" /><input type="text" onchange="CheckAmt(this)"  id="txtinvoice_' + i + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" /></td>';
+                        }
+
+                        html=html+ '<td> <input type="text"  onchange="CheckAmt1(this)" id="txtadjust_' + i + '" class="amt1 txtNum text-right AdjustmentAmount" name="CustomerRcieptChildVM[' + i + '].AdjustmentAmount" /></td>';
+                        //if (data[i].InvoiceType == 'OP') {
+                        //    html = html + '<td></td>';
+                        //}
+                        //else {
+                        //    html = html + '<td> <a href="JavaScript:void(0)"   onclick="ShowAWBAllocation(' + i + ',' + data[i].Amount + ',' + invoiceno + ')" ><i class="fa fa-eye"></i></a></td>';
+                        //}
+
+                        html = html + '</tr>';
+
+                          $('#tbl1').append(html);
+                        //hideLoading();
+                    }
+                    ValidateTotal();
+
+                }
+            });
+
+        });
+        $("#customerName").change(function () {
+            if ($('#customerName').val() != $('#SupplierID').attr('label')) {
+                $('#customerName').val('');
+                $('#SupplierID').val(0);
+                $('#customerName').focus();
+            }
+
+    });
+        $("#AllocationClose").on("click", function () {
+            $('#popup').modal('hide');
+            //$('#popupbackground').hide();
+        });
+        $('#AllocationSave').on("click", function () {
+            var invoiceid = $('#hdnEditCustomerInvoiceId').val();
+            var allocatedamount =parseFloat($('#hdnAllocatedAmount').val()).toFixed(@_decimal);
+            var amt = 0;
+            var obj = [];
+            var formdata = $('form#FormReceipt').serialize();
+          //  console.log(JSON.stringify(formdata));
+            var idtext = 'atxt_' + invoiceid;
+            var maxrow = parseFloat($('#hdnItemCount').val());
+
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var detailid = $(item).attr('detailid');
+                if ($(item).val() == "") {
+                    $(item).val(0);
+                }
+                amt = amt + parseFloat($(item).val());
+                var item1 = { CustomerInvoiceId: invoiceid, CustomerInvoiceDetailId: detailid, AllocatedAmount: $(item).val() }
+                obj.push(item1);
+                if (maxrow == obj.length) {
+                    if (parseFloat(amt).toFixed(@_decimal) != allocatedamount) {
+                        alert('Allocate Amount should be equal to allocation of AWB!')
+                        return;
+                    }
+                    else {
+                        var RecP = JSON.stringify({ 'RecP': obj });
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            type: 'POST',
+                            url: '/CustomerReceipt/SaveAWBAllocation/',
+                            data: RecP,
+                            success: function (data) {
+                                $('#popup').modal('hide');
+
+                            }
+                        });
+                    }
+                }
+            });
 
 
+
+        });
         $(".amt").blur(function () {
             var curror = $(this).parent("div").parent("td").parent("tr");
             var amt = parseFloat($(curror).find("td").eq(2).find("div").find('input[type=hidden]').val());
@@ -259,46 +430,9 @@
         });
 
 
-        $(".aamt").blur(function () {
-
-            var amt = parseFloat($(this).val());
-            var f = 0;
-            $("#tbl1 tr").not(":first").each(function () {
-
-                var a = $(this).find("td").eq(5).text();
-                if (a == "")
-                    a = 0;
-                if (a < amt && f == 0) {
-
-                    $(this).find("td").eq(6).find(".amt").val(parseFloat(a).toFixed(2));
-                    amt = amt - parseFloat(a);
-                }
-                else {
-                    f = 1;
-                }
-            });
-        });
 
 
-        $(".aeamt").blur(function () {
-            var amt = parseFloat($(this).val());
-            var f = 0;
-            $("#tbl1 tr").not(":first").each(function () {
 
-                var a = $(this).find("td").eq(2).find("div").find('input[type=hidden]').val();
-                if (a == "")
-                    a = 0;
-                if (a < amt && f == 0) {
-                    {
-                        $(this).find("td").eq(3).find("div").find(".amt").val(parseFloat(a).toFixed(2));
-                        amt = amt - parseFloat(a);
-                    }
-                }
-                else {
-                    f = 1;
-                }
-            });
-        });
 
 
         if ($("#RecPayID").val() > 0) {
@@ -312,7 +446,7 @@
                 $("#Bank").prop('checked', false);
                 $("#Cash").trigger("click");
             }
-
+            PaymentModeChange();
 
             var money = parseFloat($("#FMoney").val());
             $("#FMoney").val(money.toFixed(@_decimal));
@@ -321,33 +455,32 @@
             $("#ExRate").val(exrate.toFixed(@_decimal));
         }
 
-        Comma($(".aeamt").val());
+        //Comma($(".aeamt").val());
 
-        $('.txtNum').blur(function () {
+        @*$('.txtNum').blur(function () {
             if (isNaN(parseInt($(this).val()))) {
                 $(this).val('0.00');
             } else {
                 var amt = parseFloat($(this).val());
-                $(this).val(amt.toFixed(2));
+                $(this).val(amt.toFixed(@_decimal));
             }
-        });
+        });*@
 
 
         //$('#tbl1').on('blur', '.amt', function () {
         //    var result = ValidateTotal();
         //});
 
-        $('#btnsave').click(function (e) {
-            debugger;
-            //var result = ValidateTotal();
-        if ($('#FMoney').val() == "0" || $('#FMoney').val() == null || $('#FMoney').val() == "") {
-            e.preventDefault();
-                alert('Enter amount!');
-                return false;
+        $('form').submit(function (e) {
+            var result = ValidateTotal();
+            if (result == false) {
+                e.preventDefault();
             }
-            else {
-                return true;
-            }
+        }); $('#RecPayDate').datetimepicker({
+            format: 'DD-MM-YYYY'
+        });
+        $('#ChequeDate').datetimepicker({
+            format: 'DD-MM-YYYY'
         });
 
     });
@@ -369,59 +502,33 @@
 </script>
 
 <script type="text/javascript">
-    function ValidateTotal() {
-        debugger;
-            var TotalAmount = 0;
-            var idtext = 'txtinvoice_';
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    function chkAWBAmt(x) {
         var amt = 0;
-        if ($('#Balance').val() == "") {
-            $('#Balance').val(0);
-        }
-        var balance =parseFloat($('#Balance').val());
+        var obj = [];
+        var invoiceid = $('#hdnEditCustomerInvoiceId').val();
+        var idtext = 'atxt_' + invoiceid;
+        var maxrow = parseFloat($('#hdnItemCount').val());
 
-            $('[id^=' + idtext + ']').each(function (index, item) {
-              //  var id = $(item).attr('id').split('_')[1];
-                if ($(item).val() == "" || $(item).val()==null) {
-                    $(item).val(0);
-                }
-                var paidamount = parseFloat($(item).val());
-                amt = amt + paidamount;
-                
-                if (parseFloat(amt) == 0) {
-                    $('#btnsave').attr('disabled', 'disabled');
-                }
-                
-                @*if (parseFloat($('#FMoney').val()) == 0) {
-                    $('#FMoney').val(parseFloat(amt).toFixed(@_decimal))
-                }*@
-                $('#AllocatedAmount').val(parseFloat(amt).toFixed(@_decimal));
-                var payingamount = parseFloat($('#FMoney').val());
-                var allocatedamount = parseFloat($('#AllocatedAmount').val());
-                var advance = 0;
-                if (allocatedamount > (payingamount + advance)) {
-                    $('#btnsave').attr('disabled', 'disabled');
-                }
-                else if (parseFloat(amt) == 0) {
-                    $('#btnsave').attr('disabled', 'disabled');
-                }
-                else {
-                    $('#btnsave').removeAttr('disabled');
-                }
-                
-                //$('#Balance').val(parseFloat(advance).toFixed(@_decimal));
+        $('[id^=' + idtext + ']').each(function (index, item) {
 
-            });
+            if ($(item).val() == "") {
+                $(item).val(0);
+            }
+            amt = amt + parseFloat($(item).val());
+            $('#hTotal').html(parseFloat(amt).toFixed(@_decimal));
+            if (maxrow == index) {
+                if (parseFloat(amt).toFixed(@_decimal) != allocatedamount) {
+                    alert('Allocate Amount should be equal to allocation of Consignment!')
+                    return;
+                }
 
-            //var TotalInvoiceAmount = parseFloat($('.TotalInvoiceAmount').val());
-            //if (TotalAmount > TotalInvoiceAmount) {
-            //    $('#msg1').show();
-            //    $('#msg1').text('Sum of Amount cannot be greater than Total Invoice Amount');
-            //    return false;
-            //} else {
-            //    return true;
-            //}
-        }
-    function CheckAmt(x) {
+            }
+        });
+    }
+ function CheckAmt(x) {
         debugger;
         var thisval = $(x).val();
         $(x).attr('value', thisval);
@@ -441,7 +548,7 @@
         if (balance < (paidamount + adjustmentamount)) {
             $(x).val(0);
             $('#msg1').show();
-            $('#msg1').text('Paidamount should not exceed than the balance!');
+            $('#msg1').text('Paid Amount should not exceed than the balance!');
         }
 
         ValidateTotal();
@@ -469,7 +576,7 @@
         if (balance < (paidamount + adjustmentamount)) {
             $(x).val(0);
             $('#msg1').show();
-            $('#msg1').text('Paidamount should not exceed than the Balance!');
+            $('#msg1').text('Received Amount should not exceed than the Balance!');
         }
 
             ValidateTotal();
@@ -512,7 +619,6 @@
      function Printreceipt(id) {
         if (id > 0) {
             var url = '@spath' + "/Reports/ReceiptVocher.aspx?recpayid=" + id;
-            //var src = "http://localhost:1052/Reports/ReceiptVocher.aspx?recpayid=" + id;
             window.open(url, "_blank");
         } else {
             alert("Receipt not Created !!")
@@ -522,13 +628,14 @@
      function ShowCustomerNotification() {
          if ('@Model.RecPayID' > 0) {
              $("#CustomerNotificationmodel").modal('show');
+
         } else {
             alert("Receipt not Created !!")
         }
     }
       function SaveCustNotes() {
            var Jobid = '@Model.RecPayID';
-         var Custid = '@Model.SupplierID';
+         var Custid = '@Model.CustomerID';
          var isemail = false;
          var iswhatsapp = false;
          var issms = false;
@@ -573,23 +680,22 @@
         if (val == 1) {
             $("#divCash").css({ "display": "none" });
             $("#divBank").css({ "display": "block" });
-            $("#ChequeNo").attr({ "disabled": false })
-            $("#ChequeDate").attr({ "disabled": false })
+            $("#ChequeNo").attr('required', 'required');
+            $("#ChequeDate").attr('required', 'required');
+            $("#ChequeNo").removeAttr('readonly');
+            $("#ChequeDate").removeAttr('readonly')
+            $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
-            $('#ChequeNo').attr('required', 'required');
-            $('#ChequeDate').attr('required', 'required');
-
         } else {
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
-            $("#ChequeNo").attr({ "disabled": true })
-            $("#ChequeDate").attr({ "disabled": true })
-            $('#ChequeBank').val('').trigger('change');
-            $('#ChequeNo').val('');
-            $('#ChequeDate').val('');
-            $('#ChequeBank').removeAttr('required');
-            $('#ChequeNo').removeAttr('required');
-            $('#ChequeDate').removeAttr('required');
+            $("#ChequeNo").removeAttr('required');
+            $("#ChequeDate").removeAttr('required');
+            $("#ChequeNo").attr('readonly', 'readonly');
+            $("#ChequeDate").attr('readonly','readonly')
+            $('#CashBank').attr('required','required');
+
+            $('#ChequeBank').removeAttr('required')
         }
 
     }
@@ -600,24 +706,29 @@
         <div class="col-md-5 pull-left">
             <h1 class="headingfont">@ViewBag.Title</h1>
         </div>
-        <div class="col-md-7 pull-right setting hide">
-            <div class="navbar-custom-menu" id="divsetting">
-                <ul class="nav navbar-nav">
+        <div class="col-md-5 pull-right text-right">
+            <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
+            @*<h5>Delivered</h5>*@
+            <h4 class="text-right" id="h4statustype" style='color:#07a7e3!important'>@ViewBag.StatusType</h4><h5 class="pull-right" id="h4courierstatus" style='color:red'>@ViewBag.CourierStatus</h5>
+            <div class="pull-right setting">
+                <div class="navbar-custom-menu" id="divsetting">
+                    <ul class="nav navbar-nav">
 
-                    <!-- User Account Menu -->
-                    <li class="dropdown user user-menu">
-                        <!-- Menu Toggle Button -->
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
 
-                        <ul class="dropdown-menu extended logout" style="top:0%!important">
-                            <li><a style="color:#35b8eb;cursor:pointer" onclick="Printreceipt(1)">Print</a></li>
-                            <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowStaffNotes()">Staff Notes</a></li>
-                            <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowCustomerNotification()">Customer Notification</a></li>
-                        </ul>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
-                        </a>
-                    </li>
-                </ul>
+                            <ul class="dropdown-menu extended logout" style="top:0%!important">
+                                <li><a style="color:#35b8eb;cursor:pointer" onclick="Printreceipt(1)">Print</a></li>
+                                <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowStaffNotes()">Staff Notes</a></li>
+                                <li><a style="color:#35b8eb;cursor:pointer" onclick="ShowCustomerNotification()">Customer Notification</a></li>
+                            </ul>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i style="font-size: 30px;color:#35b8eb;padding-top: 11px;" class="fa fa-cog"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -629,28 +740,61 @@
 
 <!-- Main content -->
 <section class="content">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("SupplierPayment", "SupplierPayment", FormMethod.Post, new { @id = "FormReceipt" }))
     {
         @Html.ValidationSummary(true)
 
         @Html.HiddenFor(model => model.RecPayID)
+        @Html.HiddenFor(model => model.CustomerID)
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.SupplierTypeId)
         @Html.HiddenFor(model => model.StatusEntry)
-        @Html.HiddenFor(model => model.AcCompanyID)
-        @Html.HiddenFor(model => model.BusinessCentreID)
-        @Html.HiddenFor(model => model.FYearID)
+        @Html.HiddenFor(model => model.Balance, new { id = "hdnAdvance" })
 
+        <div class="row no-margin">
+            <div class="col-xs-5 col-sm-5">
+                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
+            </div>
+        </div>
         <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 col-md-2">
+            <div class="col-xs-12 col-sm-2">
                 <label class="headinglabel">Document No</label>
                 @Html.TextBoxFor(model => model.DocumentNo, new { @Value = ViewBag.DocumentNos, @class = "form-control", @readonly = "readonly" })
 
             </div>
-            <div class="col-xs-12 col-md-2">
-                <label class="headinglabel">Date</label>
-                @Html.TextBoxFor(model => model.RecPayDate, new { @class = "form-control text-right" })
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Transaction Date</label>
+                @Html.TextBoxFor(model => model.RecPayDate, new { @class = "form-control text-right", @required = true })
 
+            </div>
+
+
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Payment Mode</label>
+                <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
+                    <option value="1">Bank</option>
+                    <option value="2">Cash</option>
+                </select>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div id="divCash" style="padding-top:10px">
+                    <label class=" required headinglabel">Cash</label>
+                    @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
+                        new SelectListItem{Text="Cash Account",Value="Cash Account"},
+                        new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
+                        new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
+                        new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
+                        new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
+                        "Select", new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
+
+                </div>
+                <div id="divBank">
+                    <label class=" required headinglabel">Bank</label>
+                    @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
+                </div>
             </div>
             <div class="col-xs-12 col-md-2">
                 <label class=" required headinglabel">Vendor Type</label>
@@ -661,114 +805,117 @@
                     }
                 </select>
             </div>
-            <div class="col-xs-12 col-md-5">
-                <label class=" required headinglabel">Vendor</label>
-                @Html.TextBoxFor(model => model.customerName, new { @class = "form-control",@required="true" })
-                @Html.HiddenFor(model => model.SupplierID)
-            </div>
-            <div class="col-md-1">
-                <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
-            </div>
         </div>
+
+
         <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 col-md-2">
-                <label class="headinglabel">Payment Mode</label>
-                <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
-                    <option value="1">Bank</option>
-                    <option value="2">Cash</option>
-                </select>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <div id="divCash">
-                    <label class=" required headinglabel">Cash</label>
-                    @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
-
-                </div>
-                <div id="divBank">
-                    <div class="form-title">
-                        <label class=" required headinglabel">Bank</label>
-                    </div>
-                    <div class="form-field">
-                        @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @autocomplete = "off",@required="true" })
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-xs-12 col-md-2">
-                <label class=" required headinglabel">Cheque No.</label>
-                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright", @autocomplete = "off",@required="true" })
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque Reference</label>
+                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright", @required = true, @autocomplete = "off" })
 
             </div>
-            <div class="col-xs-12 col-md-2">
+            <div class="col-xs-12 col-sm-2">
                 <label class=" required headinglabel">Cheque Date</label>
-                @if (Model.ChequeDate != null)
-                {
-                    @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MM-yyyy"), id = "", @class = "form-control text-right", @autocomplete = "off", @required = "true" })
-                }
-                else
-                {
 
-                    @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right", @autocomplete = "off" , @required = "true" })
-                }
+                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right", @required = true, @autocomplete = "off" })
+
             </div>
 
 
-            <div class="col-xs-12 col-md-2">
-                <label class=" required headinglabel">Currency</label>
-                @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+            @if (Model.RecPayID <= 0)
+            {
 
-            </div>
-            <div class="col-xs-12 col-md-1">
-                <label class="headinglabel">Exchange Rate</label>
-                @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
+                <div class="col-xs-12 col-sm-2">
+                    <label class=" required headinglabel">Currency</label>
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", @class = "form-control", required = "required" })
 
-            </div>
-        </div>
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 col-md-2">
-                <label class=" required headinglabel">Amount</label>
-                @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control aamt textright TotalInvoiceAmount", required = "required" })
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <label class=" required headinglabel">Advance</label>
-                @Html.TextBoxFor(model => model.Balance, new {  @class = "form-control aamt textright", @readonly="true"})
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <label class=" required headinglabel">Allocated Amount</label>
-                @Html.TextBoxFor(model => model.AllocatedAmount, new { @class = "form-control aamt textright TotalInvoiceAmount", @readonly="true" })
-            </div>
-            <div class="col-xs-6 col-sm-6">
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Ex. Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
+
+                </div>
+
+
+            }
+            else
+            {
+
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Currency</label>
+
+                    @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <label class="headinglabel">Ex. Rate</label>
+                    @Html.TextBoxFor(model => model.EXRate, new { @readonly = "readonly", @class = "form-control" })
+
+                </div>
+
+            }
+
+            <div class="col-xs-4 col-sm-4">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
             </div>
 
-            @*<div class="col-xs-12 col-md-3">
-            <input type="checkbox" class="chkAllocate" />&nbsp;&nbsp;&nbsp;<label class="headinglabel">Auto Allocate</label>
-
-        </div>*@
-
-            <div class="col-xs-6 col-sm-6">
-                <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
-            </div>
         </div>
+
+
+
+        <div class="col-xs-12 col-sm-3" style="width: calc(36.33% - 79px);">
+            <label class=" required headinglabel">Vendor</label>
+            @Html.TextBoxFor(model => model.customerName, new { @class = "form-control", @required = "true" })
+            @Html.HiddenFor(model => model.SupplierID)
+        </div>
+
+        <div class="pull-left" style="padding-right:5px">
+            <button class="btn btn-primary small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+        </div>       
+        <div class="col-xs-12 col-sm-2">
+            <div class="flexTitle">
+                <label class="headinglabel required">Amount</label>
+                <div class="checkboxdesign no-padding text-right" style="float:right">
+                    @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
+                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Auto Allocated</label>
+                </div>
+            </div>
+            @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright" })
+        </div>
+
+
+
+        <div class="col-xs-3 col-sm-2">
+            <label class="headinglabel">Allocated Amount</label>
+            <input type="text" id="AllocatedAmount" class="form-control text-right" readonly />
+        </div>
+        <div class="col-xs-3 col-sm-2">
+            <label class="headinglabel">UnAllocated Amount</label>
+            <input type="text" id="BalanceAmount" class="form-control text-right" readonly />
+        </div>
+        @Html.HiddenFor(model => model.AcCompanyID)
+        @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.BusinessCentreID)
+        @Html.HiddenFor(model => model.FYearID)
+
+
 
         <div class="row no-margin" style="padding-top:10px">
             <div class="col-xs-12 no-padding for-device">
                 <div class="data-table payment-div">
                     <div class="data">
                         <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
-                            <thead>
-                                <tr>
+                            <thead style="background:transparent;">
+                                <tr style="font-weight: bold; background:#07a7e3;">
                                     <th>Invoice No</th>
                                     <th>Invoice Date</th>
-                                    <th>Amount To be Received</th>
-                                    <th>Amount already Received</th>
+                                    <th>Invoice Amount</th>
+                                    <th>Paid Amount</th>
                                     <th>Outstanding</th>
                                     <th>Amount Allocated</th>
                                     <th>Adjustment Amount</th>
+                                    <th></th>
                                 </tr>
-
                             </thead>
                             <tbody id="tbl1">
                                 @if (Model.RecPayID > 0)
@@ -779,7 +926,7 @@
                                         <tr>
                                             <td>
                                                 <div class="data1">
-
+                                                    @*@Model.CostUpdationDetails[i].JobCode*@
                                                     @Model.CustomerRcieptChildVM[i].SInvoiceNo
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceID)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceType)
@@ -788,8 +935,8 @@
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayDetailID)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].CurrencyId)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceNo)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Amount)
-                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount)
+                                                    @*@Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Amount)*@
+                                                    @*@Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount)*@
                                                 </div>
                                             </td>
 
@@ -798,8 +945,8 @@
                                                     @*@Model.CostUpdationDetails[i].JobCode*@
                                                     @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
                                                     {
-                                                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].InvoiceDate)
+                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceDate)
                                                     }
                                                     else
                                                     {
@@ -809,50 +956,65 @@
                                                 </div>
                                             </td>
 
-                                            <td style="text-align: right;">
-
-                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBeRecieved, new { @Class = "AmountToBeRecieved" })
-                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBeRecieved)
-
+                                            <td style="text-align:right;">
+                                                <div class="data1">
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBeRecieved, new { @Class = "AmountToBeRecieved" })
+                                                    @string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AmountToBeRecieved)
+                                                </div>
                                             </td>
 
-                                            <td>
+                                            <td style="text-align:right;">
+                                                <div class="data1">
+                                                    @*@Model.CostUpdationDetails[i].JobCode*@
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBePaid, new { @Class = "AmountToBePaid" })
+                                                    @string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AmountToBePaid)
 
 
-                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AmountToBePaid, new { @Class = "AmountToBePaid" })
-                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AmountToBePaid)
+                                                </div>
+                                            </td>
+                                            <td style="text-align:right;">
+                                                <div class="data1">
+                                                    @*@Model.CostUpdationDetails[i].JobCode*@
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Balance, new { @Class = "Balance", @id = "txtbalance_" + Model.CustomerRcieptChildVM[i].JobCode })
+                                                    @string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].Balance)
 
+
+                                                </div>
+                                            </td>
+                                            <td style="">
+                                                @if (Model.CustomerRcieptChildVM[i].Amount > 0)
+                                                {
+                                                    <input type="checkbox" id="chkallocate_@Model.CustomerRcieptChildVM[i].JobCode" onchange="allocate(this)" checked />
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" id="chkallocate_@Model.CustomerRcieptChildVM[i].JobCode" onchange="allocate(this)" />
+                                                }
+
+                                                @Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].Amount), new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })
 
 
                                             </td>
-                                            <td>
+                                            <td style="text-align:right;">
+                                                <div class="data1">
+                                                    @*@Model.CostUpdationDetails[i].JobCode*@
+                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })
 
 
-                                                @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].Balance, new { @Class = "Balance", @id = "txtbalance_" + @Model.CustomerRcieptChildVM[i].JobCode })
-                                                @string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Balance)
-
-
-
+                                                </div>
                                             </td>
-                                            <td>
+                                            @*<td>
+                                                    @if (Model.CustomerRcieptChildVM[i].InvoiceID > 0)
+                                                    {
+                                                        <a href="Javascript:void(0)" onclick="EditAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                </td>*@
 
-
-                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].Amount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].Amount), new { @Class = "amt txtNum text-right Amount", @onChange = "CheckAmt1(this)", @readonly = "readonly", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode })
-
-
-
-                                            </td>
-                                            <td>
-
-                                                @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n2}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @Class = "amt1 txtNum text-right AdjustmentAmount", @readonly = "readonly" })
-
-
-
-                                            </td>
                                         </tr>
 
                                     }
                                 }
+                            </tbody>
 
                         </table>
 
@@ -865,13 +1027,67 @@
             <div class="col-md-12 btn-right">
                 @if (Model.RecPayID > 0)
                 {
-                    <input type="submit" class="btn btn-primary  btnwidth" value="Update" id="btnsave" />
+                    <input type="submit" id="btnsave" class="btn btn-primary  btnwidth" value="Update" />
                 }
                 else
                 {
-                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnsave" />
+                    <input type="submit" id="btnsave" class="btn btn-primary  btnwidth" value="Save" name="Command" />
                 }
                 <a href='@Url.Action("SupplierPaymentDetails", "SupplierPayment", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+            </div>
+        </div>
+
+        <div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius:5px">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            Invoice AWB Allocation
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid" style="max-height:480px;overflow-y:scroll">
+                            <div class="row">
+                                <div class="flex justify-content-between">
+                                    <h4 id="hInvoice"></h4>
+                                    @Html.CheckBox("AutoAllocate1", new { @name = "AutoAllocate1", @onchange = "awbautoallocation1()" })
+                                    <label class="headinglabel">Auto Allocate</label>
+                                    <h5 id="hTotal"> Total</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <input type="hidden" value="" id="hdnEditCustomerInvoiceId" />
+                                <input type="hidden" value="" id="hdnAllocatedAmount" />
+                                <input type="hidden" value="" id="hdnItemCount" />
+                                <table id="ExpAllocationTable" class="table table-bordered table-responsive" style="max-height:400px;overflow-y:scroll">
+                                    <thead>
+                                        <tr>
+                                            <th>AWB No.</th>
+                                            <th>AWB Date</th>
+                                            <th>Total Amount</th>
+                                            <th>Received Amount</th>
+                                            <th>Balance</th>
+                                            <th>Allocated</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="AllocationTable">
+                                    </tbody>
+                                    <tfoot>
+
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding-top: 5px">
+                        <button type="button" id="AllocationSave" class="btn btn-primary">Save</button>
+                        <button type="button" id="AllocationClose" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
     }
@@ -965,15 +1181,15 @@
                                     <div class="row" style="padding-top: 5px">
                                         <div class="col-sm-12">
                                             <div class="row form-group">
-                                                <div class="col-xs-7 col-md-3">
+                                                <div class="col-xs-7 col-sm-4">
                                                     <label>TO  </label>
                                                 </div>
                                                 <div class="col-xs-7 col-sm-8">
-                                                    @*<label>@CustomerDetails.CustomerName </label>*@
+                                                    @*<label>@CustomerDetails.SupplierName </label>*@
                                                 </div>
                                             </div>
                                             <div class="row form-group">
-                                                <div class="col-xs-7 col-md-3">
+                                                <div class="col-xs-7 col-sm-4">
                                                     <label><input type="checkbox" id="Isemail" /> Email  </label>
                                                 </div>
                                                 <div class="col-xs-7 col-sm-8">
@@ -981,7 +1197,7 @@
                                                 </div>
                                             </div>
                                             <div class="row form-group">
-                                                <div class="col-xs-7 col-md-3">
+                                                <div class="col-xs-7 col-sm-4">
                                                     <label><input type="checkbox" id="Issms" /> SMS  </label>
                                                 </div>
                                                 <div class="col-xs-7 col-sm-8">
@@ -989,7 +1205,7 @@
                                                 </div>
                                             </div>
                                             <div class="row form-group">
-                                                <div class="col-xs-7 col-md-3">
+                                                <div class="col-xs-7 col-sm-4">
                                                     <label><input type="checkbox" id="Iswhatsapp" /> WhatsApp  </label>
                                                 </div>
                                                 <div class="col-xs-7 col-sm-8">
@@ -1058,29 +1274,328 @@
 </div>
 
 <script type="text/javascript">
+
+  function awbautoallocation1() {
+
+         var invoiceid = $('#hdnEditCustomerInvoiceId').val();
+            var allocatedamount =parseFloat($('#hdnAllocatedAmount').val()).toFixed(@_decimal);
+            var amt = 0;
+            var obj = [];
+            var formdata = $('form#FormReceipt').serialize();
+          //  console.log(JSON.stringify(formdata));
+            var idtext = 'atxt_' + invoiceid;
+            var maxrow = parseFloat($('#hdnItemCount').val());
+
+        //$('[id^=' + idtext + ']').each(function (index, item) {
+        if ($("#AutoAllocate1").is(':checked')) {
+            var TotalAmount = parseFloat($('#hdnAllocatedAmount').val()).toFixed(3);
+            if (TotalAmount > 0) {
+
+                var amt = 0;
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var id = $(item).attr('id');
+                    var balanceid = id.replace('atxt', 'atxtbal');
+                    var balance = $('#' + balanceid).val();
+                    var balanceval = balance.replace(',', '');
+
+                    if (parseFloat(TotalAmount) > parseFloat(balanceval)) {
+                        $(item).val(parseFloat(balanceval).toFixed(@_decimal));
+                        TotalAmount = parseFloat(TotalAmount).toFixed(@_decimal) - parseFloat(balanceval).toFixed(@_decimal);
+
+                    }
+                    else if (parseFloat(TotalAmount) > 0) {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
+                        TotalAmount = 0;
+                    }
+                    else {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
+                    }
+
+                });
+
+            }
+            else {
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+
+
+                });
+
+            }
+        }
+        else {
+
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+                    $('#chkallocate_' + idindex).prop('checked', false);
+                    //$('#chkallocate_' + idindex).removeAttr('checked');
+                    ValidateTotal();
+
+                });
+
+
+        }
+
+    }
+    function autoallocation() {
+
+        var idtext = 'txtinvoice_';
+        if ($("#AutoAllocate").is(':checked')) {
+            var TotalAmount = parseFloat($('#FMoney').val()).toFixed(3);
+            if (TotalAmount > 0) {
+                $('#btnsearch').trigger('click');
+                return;
+                var amt = 0;
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    var idindex = $(item).attr('id').split('_')[1];
+                    var balance = $('#txtbalance_' + idindex).val();
+                    var balanceval = balance.replace(',', '');
+
+                    if (parseFloat(TotalAmount) > parseFloat(balanceval)) {
+                        $(item).val(parseFloat(balanceval).toFixed(@_decimal));
+                        TotalAmount = parseFloat(TotalAmount).toFixed(@_decimal) - parseFloat(balanceval).toFixed(@_decimal);
+                        $('#chkallocate_' + idindex).prop('checked', true);
+                    }
+                    else if (parseFloat(TotalAmount) > 0) {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
+                        TotalAmount = 0;
+                        $('#chkallocate_' + idindex).prop('checked', true);
+                    }
+                    else {
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
+                        $('#chkallocate_' + idindex).prop('checked', false);
+                        $('#chkallocate_' + idindex).attr('value', 'false');
+                    }
+                    ValidateTotal();
+                });
+
+            }
+            else {
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+                    //$('#chkallocate_' + idindex).prop('checked', false);
+                    //$('#chkallocate_' + idindex).attr('value', 'false');
+                    ValidateTotal();
+
+                });
+
+            }
+        }
+        else {
+
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    if ($(item).val() == "" || $(item).val() == null) {
+                        $(item).val(0);
+                    }
+                    var itemval = $(item).val();
+                    itemval = itemval.replace(',', '');
+                    $(item).val("0.000");
+                    $('#chkallocate_' + index).prop('checked', false);
+                    $('#chkallocate_' + index).removeAttr('checked');
+                    ValidateTotal();
+
+                });
+
+
+        }
+
+    }
+     function ValidateTotal() {
+        debugger;
+         var TotalAmount = parseFloat($("#FMoney").val()) + parseFloat($('#hdnAdvance').val());
+            var idtext = 'txtinvoice_';
+        var amt = 0;
+        //if ($('#Balance').val() == "") {
+        //    $('#Balance').val(0);
+        //}
+        //var balance =parseFloat($('#Balance').val());
+
+            $('[id^=' + idtext + ']').each(function (index, item) {
+              //  var id = $(item).attr('id').split('_')[1];
+                if ($(item).val() == "" || $(item).val()==null) {
+                    $(item).val(0);
+                }
+                var itemval = $(item).val();
+                itemval = itemval.replace(',', '');
+
+                var paidamount = parseFloat(itemval);
+                amt = amt + paidamount;
+
+                if (parseFloat(amt) == 0) {
+                    $('#btnsave').attr('disabled', 'disabled');
+                }
+
+                @*if (parseFloat($('#FMoney').val()) == 0) {
+                    $('#FMoney').val(parseFloat(amt).toFixed(@_decimal))
+                }*@
+
+                var alloamt = numberWithCommas(parseFloat(amt).toFixed(@_decimal));
+                var balance1 = parseFloat(TotalAmount) - parseFloat(amt);
+                $('#BalanceAmount').val(parseFloat(balance1).toFixed(@_decimal));
+                $('#AllocatedAmount').val(alloamt);
+                var payingamount = parseFloat($('#FMoney').val());
+                var allocatedamount = parseFloat(amt).toFixed(@_decimal);
+                var advance = 0;
+         if (parseFloat($("#FMoney").val()) == 0) {
+            //$("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
+            $('#msg1').show();
+            $('#msg1').text('Paid Amount Required!');
+            $('#btnsave').attr('disabled', 'disabled');
+        }
+        else if (allocatedamount > 0 && parseFloat(TotalAmount) < allocatedamount) {
+            $('#btnsave').attr('disabled', 'disabled');
+            $('#msg1').show();
+             $('#msg1').text('Allocation amount should not be more than Paid amount!');
+        }
+        else {
+            $('#btnsave').removeAttr('disabled', 'disabled');
+            //$("#FMoney").val(parseFloat(wt).toFixed(@_decimal));
+            $('#msg1').hide();
+            $('#msg1').text('');
+            }
+
+            });
+
+
+    }
+
+     function allocate(obj) {
+
+         var balamt = $('#BalanceAmount').val();
+         if (balamt == "")
+             balamt = "0";
+
+         var idindex = $(obj).attr('id').split('_')[1];
+         var txinvoice = $('#txtinvoice_' + idindex);
+         if (parseFloat(balamt) > 0) {
+
+             var idtext = 'txtinvoice_' + idindex;
+
+             var balance = $('#txtbalance_' + idindex).val();
+             if (balance == "") {
+                 balance = 0;
+             }
+             var adjust = $('#txtadjust_' + idindex).val();
+             if (adjust == "")
+                 adjust = 0;
+             if (parseFloat(balance) > 0 && parseFloat(balamt) > parseFloat(balance)) {
+                 balance = parseFloat(balance) - parseFloat(adjust);
+             }
+             else {
+                 balance = parseFloat(balamt); //parseFloat(balance) - parseFloat(adjust);
+             }
+             if ($(obj).is(':checked')) {
+                 $(txinvoice).val(parseFloat(balance).toFixed(@_decimal));
+             }
+             else {
+                 $(txinvoice).val(parseFloat("0").toFixed(@_decimal));
+             }
+             ValidateTotal();
+         }
+         else {
+             $(txinvoice).val(parseFloat("0").toFixed(@_decimal));
+             ValidateTotal();
+         }
+    }
     // When the document is ready
+
     $(document).ready(function () {
         var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
         var ed = new Date(enddate);
-        $('#RecPayDate').datepicker({
+        var datevalid = false;
+        var dateerror = "";
 
-            dateFormat: 'dd-M-yy',
-            minDate: sd,
-            maxDate: ed,
-            changeYear: true, changeMonth: true,
+
+
+
+          $('#RecPayDate').keydown(function (e) {
+
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                if ($("#RecPayDate").val() != "") {
+                    $.ajax({
+                        url: "@Url.Action("CheckDateValidate", "Accounts")",
+                        data: { entrydate: $("#RecPayDate").val() },
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+
+                            if (response.Status == "OK") {
+                                datevalid = true;
+                                dateerror = response.Message;
+                            }
+                            else {
+                                datevalid = false;
+                                dateerror = response.Message;
+                                $('#RecPayDate').val(response.ValidDate);
+                            }
+
+                        },
+                        error: function () {
+                            alert("Failed! Please try again.");
+                        }
+                    });
+                }
+            }
+        });
+        $('#RecPayDate').change(function ()    {
+
+            if ($("#RecPayDate").val() != "") {
+                 $.ajax({
+                url: "@Url.Action("CheckDateValidate", "Accounts")",
+                     data: { entrydate: $("#RecPayDate").val()},
+                type: "GET",
+                dataType: "json",
+                     success: function (response) {
+                    if (response.Status == "OK") {
+                        datevalid = true;
+                        dateerror = response.Message;
+                    }
+                    else {
+                        datevalid = false;
+                        dateerror = response.Message;
+                        $('#RecPayDate').val(response.ValidDate);
+                        alert(dateerror);
+                    }
+
+                },
+                error: function () {
+                    alert("Failed! Please try again.");
+                }
+            });
+            }
         });
 
+        $('#RecPayDate').on('dp.change', function (e) {
+            $('#RecPayDate').trigger('change');
+        })
 
-        $('#ChequeDate').datepicker({
-            dateFormat: 'dd-M-yy',
-            minDate: sd,
-            maxDate: ed,
-            changeYear: true, changeMonth: true
-        });
         $('#RecPayDate').datepicker("setDate", new Date());
-        //$('#ChequeDate').datepicker("setDate", sd);
+
 
     });
 

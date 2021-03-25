@@ -1,0 +1,44 @@
+﻿@model CMSV2.Models.MCDatePicker
+@{
+    int i = 0;
+    var _decimal = @Session["Decimal"].ToString();
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+    });
+</script>
+
+@using (Html.BeginForm("Table", "MCManagement", FormMethod.Post, new { @id = "mctable" }))
+{@Html.AntiForgeryToken()
+<div class="row d-flex">
+
+    <div class="col-md-2">
+        <input type="hidden" id="InScanID" />
+        <label class="headinglabel">AWB No.</label>
+        <input id="AWBNo" class="form-control" name="AWBNo" type="text" value="@ViewBag.AWBNo" />
+    </div>
+    <div class=" col-md-1  search_field">
+        <label for="FromDate" class="col-3 control-label">From</label>
+        <input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
+    </div>
+    <div class=" col-md-1 search_field">
+        <label for="FromDate" class="col-3 control-label">To</label>
+        <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
+    </div>
+    <div class="col-md-2 m-top">
+        @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
+        <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+    </div>
+
+    <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
+
+
+    </div>
+</div>
+
+}

@@ -81,7 +81,7 @@
         Amount = parseFloat($('#txtinvoice_' + index).val());
         var InvoiceId = $('#hdnInvoiceId_' + index).val();
         $('#hdnEditCustomerInvoiceId').val(InvoiceId);
-        //InvoiceId = InvoiceId.toString().replace('TR', '');
+        //InvoiceId = InvoiceId.replace('TR', '');
         $('#hdnAllocatedAmount').val(Amount);
         $('#hInvoice').html('<b>Invoice No:</b>' + InvoiceNo + ' <b> Allocated Amount :</b>' + Amount.toFixed(@_decimal));
         $('#hTotal').html(parseFloat(Amount).toFixed(@_decimal));
@@ -140,7 +140,7 @@
                         '<td>' + data[i].AWBNo + '<input type="hidden" name="AWBAllocation[' + i + '].CustomerInvoiceDetailID" value="' + data[i].CustomerInvoiceDetailID + '" /> <input type = "hidden" name = "AWBAllocation[' + i + '].ID" value ="' + data[i].ID + '" />  </td>' +
                         '<td>' + date + '</td>' +
                         '<td class="text-right">' + parseFloat(data[i].TotalAmount).toFixed(@_decimal) + '</td>' +
-                        '<td class="text-right">' + parseFloat(recamt).toFixed(@_decimal) +  '</td>' + 
+                        '<td class="text-right">' + parseFloat(recamt).toFixed(@_decimal) +  '</td>' +
                         '<td class="text-right"><input type="hidden" id="atxtbal_' + data[i].CustomerInvoiceId + '_' +  data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '"/>' + parseFloat(data[i].PendingAmount).toFixed(@_decimal) + '</td>' +
                         '<td class="text-right"> <input type="text" onBlur="chkAWBAmt(this)" name="AWBAllocation[' + i + '].AllocatedAmount" class="amt txtNum text-right AmountReceived" id="atxt_' + data[i].CustomerInvoiceId + '_' + data[i].CustomerInvoiceDetailID + '" detailid="' + data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].AllocatedAmount).toFixed(@_decimal) + '" />' +
                         '<tr>');
@@ -218,7 +218,7 @@
             }
             var allocatedamount = $('#AllocatedAmount').val();
             var allocatedamount = allocatedamount.replace(',', '');
-            var TotalAmount = $('#FMoney').val();
+            var TotalAmount = parseFloat($('#FMoney').val()) + parseFloat($('#hdnAdvance').val());
             if (TotalAmount == "")
                 TotalAmount = 0;
             if (parseFloat(TotalAmount) > 0) {
@@ -237,7 +237,7 @@
             $('#msg1').text('Received Amount Required!');
             $('#btnsave').attr('disabled', 'disabled');
         }
-        else if (parseFloat(allocatedamount) > 0 && parseFloat($("#FMoney").val()) < allocatedamount) {
+        else if (allocatedamount > 0 && parseFloat(TotalAmount) < allocatedamount) {
             $('#btnsave').attr('disabled', 'disabled');
             $('#msg1').show();
             $('#msg1').text('Allocation amount should not be more than Received amount!');
@@ -314,7 +314,11 @@
 
         });
         $('#btnsearch').click(function () {
-
+            var autoallocate = $("#AutoAllocate").is(':checked');
+            var TotalAmount = 0;
+            var recpayid = $("#RecPayID").val();
+            if (autoallocate == true)
+                TotalAmount = parseFloat($('#FMoney').val()).toFixed(3);
             if ($('#CustomerID').val() == 0) {
                 alert('Select Customer!');
                 return;
@@ -329,9 +333,17 @@
             $.ajax({
                 type: "POST",
                 url: '/CustomerReceipt/GetTradeInvoiceOfCustomer/' + ID,
-                data: { 'ID': ID, 'amountreceived': $('#FMoney').val() },
-                success: function (data) {
+                data: {
+                    'ID': ID, 'amountreceived': parseFloat(TotalAmount), 'RecPayId': recpayid },
+                success: function (response) {
+                    debugger;
+                    var data = response.salesinvoice;
+                    var advance = response.advance;
+                    $('#hdnAdvance').val(advance);
                     $('#tbl1').html('');
+                    if (data.length == 0) {
+                        $('#BalanceAmount').val(parseFloat(advance).toFixed(@_decimal));
+                    }
                     //$scope.Orders = data;
                     var amt = 0;
                     for (var i = 0; i < data.length; i++) {
@@ -340,7 +352,7 @@
                         var tempdate = new Date(date).getDate() + '/' + (new Date(date).getMonth() + 1) + '/' + new Date(date).getFullYear();
                         var invoiceno = "'" + data[i].InvoiceNo + "'";
                         html = '<tr>' +
-                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input id="" name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value=' + data[i].AcOPInvoiceDetailID + ' type="hidden"><input id="hdnInvoiceId_' + i + '" name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceID + ' type="hidden"/></td>' +
+                            '<td>' + data[i].InvoiceNo + '<input type="hidden" name="CustomerRcieptChildVM[' + i + '].InvoiceType"  value="' + data[i].InvoiceType + '" />  <input id="" name="CustomerRcieptChildVM[' + i + '].AcOPInvoiceDetailID" value=' + data[i].AcOPInvoiceDetailID + ' type="hidden"><input id="hdnInvoiceId_' + i + '"  name="CustomerRcieptChildVM[' + i + '].InvoiceID" value=' + data[i].SalesInvoiceID + ' type="hidden"></td>' +
                             '<td>' + data[i].DateTime + '<input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].InvoiceAmount).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value=' + data[i].InvoiceAmount + ' type="hidden" class="AmountToBeRecieved"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].AmountReceived).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden"></td>' +
@@ -698,6 +710,8 @@
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
             $("#ChequeDate").attr('required', 'required');
+            $("#ChequeNo").removeAttr('readonly');
+            $("#ChequeDate").removeAttr('readonly');
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
         } else {
@@ -763,6 +777,8 @@
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.StatusEntry)
+        @Html.HiddenFor(model => model.Balance, new { id = "hdnAdvance" })
+
         <div class="row no-margin">
             <div class="col-xs-5 col-sm-5">
                 <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
@@ -893,7 +909,7 @@
             <input type="text" id="AllocatedAmount" class="form-control text-right" readonly />
         </div>
         <div class="col-xs-3 col-sm-2">
-            <label class="headinglabel">Balance Amount</label>
+            <label class="headinglabel">UnAllocated Amount</label>
             <input type="text" id="BalanceAmount" class="form-control text-right" readonly />
         </div>
         @Html.HiddenFor(model => model.AcCompanyID)
@@ -1053,8 +1069,6 @@
                     <div class="modal-body">
                         <div class="container-fluid" style="max-height:480px;overflow-y:scroll">
                             <div class="row">
-
-
                                 <div class="flex justify-content-between">
                                     <h4 id="hInvoice"></h4>
                                     @Html.CheckBox("AutoAllocate1", new { @name = "AutoAllocate1", @onchange = "awbautoallocation1()" })
@@ -1280,8 +1294,8 @@
 
 <script type="text/javascript">
 
-    function awbautoallocation1() {
-        
+  function awbautoallocation1() {
+
          var invoiceid = $('#hdnEditCustomerInvoiceId').val();
             var allocatedamount =parseFloat($('#hdnAllocatedAmount').val()).toFixed(@_decimal);
             var amt = 0;
@@ -1309,16 +1323,16 @@
                     if (parseFloat(TotalAmount) > parseFloat(balanceval)) {
                         $(item).val(parseFloat(balanceval).toFixed(@_decimal));
                         TotalAmount = parseFloat(TotalAmount).toFixed(@_decimal) - parseFloat(balanceval).toFixed(@_decimal);
-                       
+
                     }
                     else if (parseFloat(TotalAmount) > 0) {
                         $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
-                        TotalAmount = 0;                       
+                        TotalAmount = 0;
                     }
                     else {
-                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));                       
+                        $(item).val(parseFloat(TotalAmount).toFixed(@_decimal));
                     }
-                   
+
                 });
 
             }
@@ -1330,7 +1344,7 @@
                     var itemval = $(item).val();
                     itemval = itemval.replace(',', '');
                     $(item).val("0.000");
-                    
+
 
                 });
 
@@ -1345,7 +1359,7 @@
                     var itemval = $(item).val();
                     itemval = itemval.replace(',', '');
                     $(item).val("0.000");
-                    //$('#chkallocate_' + idindex).prop('checked', false);
+                    $('#chkallocate_' + idindex).prop('checked', false);
                     //$('#chkallocate_' + idindex).removeAttr('checked');
                     ValidateTotal();
 
@@ -1356,7 +1370,7 @@
 
     }
     function autoallocation() {
-        
+
         var idtext = 'txtinvoice_';
         if ($("#AutoAllocate").is(':checked')) {
             var TotalAmount = parseFloat($('#FMoney').val()).toFixed(3);
@@ -1418,8 +1432,8 @@
                     var itemval = $(item).val();
                     itemval = itemval.replace(',', '');
                     $(item).val("0.000");
-                    //$('#chkallocate_' + idindex).prop('checked', false);
-                    //$('#chkallocate_' + idindex).removeAttr('checked');
+                    $('#chkallocate_' + index).prop('checked', false);
+                    $('#chkallocate_' + index).removeAttr('checked');
                     ValidateTotal();
 
                 });
@@ -1430,7 +1444,7 @@
     }
      function ValidateTotal() {
         debugger;
-            var TotalAmount =parseFloat($("#FMoney").val());
+         var TotalAmount = parseFloat($("#FMoney").val()) + parseFloat($('#hdnAdvance').val());
             var idtext = 'txtinvoice_';
         var amt = 0;
         //if ($('#Balance').val() == "") {
@@ -1470,7 +1484,7 @@
             $('#msg1').text('Received Amount Required!');
             $('#btnsave').attr('disabled', 'disabled');
         }
-        else if (allocatedamount > 0 && parseFloat($("#FMoney").val()) < allocatedamount) {
+        else if (allocatedamount > 0 && parseFloat(TotalAmount) < allocatedamount) {
             $('#btnsave').attr('disabled', 'disabled');
             $('#msg1').show();
              $('#msg1').text('Allocation amount should not be more than Received amount!');

@@ -14,7 +14,7 @@ namespace CMSV2.Controllers
     {
         Entities1 db = new Entities1();
         // GET: SupplierInvoice
-        public ActionResult Index(string FromDate, string ToDate)
+        public ActionResult Index(int? id, string FromDate, string ToDate)
         {
                         
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -22,7 +22,12 @@ namespace CMSV2.Controllers
 
             DateTime pFromDate;
             DateTime pToDate;
-                     
+            int suppliertypeid = 0;
+            if (id == null | id == 0)
+                suppliertypeid = 4;
+            else
+                suppliertypeid = Convert.ToInt32(id);
+
             if (FromDate == null || ToDate == null)
             {
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
@@ -35,11 +40,14 @@ namespace CMSV2.Controllers
 
             }
 
-            var lst = (from c in db.SupplierInvoices                       
-                       join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.InvoiceDate descending
-                       where c.InvoiceNo.StartsWith("SI")
-                       select new SupplierInvoiceVM {SupplierInvoiceID=c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0,SupplierType=s.SupplierType.SupplierType1,Remarks=s.Remarks }).ToList();
+            var lst = (from c in db.SupplierInvoices
+                       join s in db.SupplierMasters on c.SupplierID equals s.SupplierID
+                       orderby c.InvoiceDate descending
+                       where s.SupplierTypeID == suppliertypeid
+                       where c.InvoiceDate >= pFromDate && c.InvoiceDate < pToDate
+                       select new SupplierInvoiceVM { SupplierInvoiceID = c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0, SupplierType = s.SupplierType.SupplierType1, Remarks = s.Remarks }).ToList();
             lst.ForEach(d => d.Amount = (from s in db.SupplierInvoiceDetails where s.SupplierInvoiceID == d.SupplierInvoiceID select s).ToList().Sum(a => a.Value));
+
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
 
