@@ -12,16 +12,13 @@ namespace CMSV2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AWBStatu
+    public partial class AWBDetail
     {
-        public int AWBStatusID { get; set; }
-        public Nullable<int> StatusDescriptionID { get; set; }
-        public string AWBNO { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> statusUpdationID { get; set; }
-        public string Remarks { get; set; }
-        public string FormID { get; set; }
-        public string Status { get; set; }
-        public Nullable<bool> statusUpdate { get; set; }
+        public int ID { get; set; }
+        public string AWBNo { get; set; }
+        public Nullable<int> AWBBookIssueID { get; set; }
+        public Nullable<int> PrepaidAWBID { get; set; }
+        public Nullable<int> InScanID { get; set; }
+        public bool UserStatus { get; set; }
     }
 }

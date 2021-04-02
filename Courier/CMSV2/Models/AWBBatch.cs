@@ -12,17 +12,13 @@ namespace CMSV2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AWBSetting
+    public partial class AWBBatch
     {
         public int ID { get; set; }
+        public string BatchNumber { get; set; }
+        public Nullable<System.DateTime> BatchDate { get; set; }
         public Nullable<int> UserID { get; set; }
-        public Nullable<bool> IsShowShipper { get; set; }
-        public Nullable<bool> IsShowConsignee { get; set; }
-        public Nullable<bool> IsShowWeight { get; set; }
-        public Nullable<bool> IsShowCargo { get; set; }
-        public Nullable<bool> IsShowCollectedBy { get; set; }
-        public Nullable<bool> IsShowCourierCharges { get; set; }
-        public Nullable<bool> IsShowForwardingAgent { get; set; }
-        public Nullable<bool> IsShowMaterialCost { get; set; }
+        public Nullable<int> BranchID { get; set; }
+        public Nullable<int> AcFinancialYearid { get; set; }
     }
 }

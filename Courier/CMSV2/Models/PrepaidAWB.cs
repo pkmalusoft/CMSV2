@@ -15,19 +15,29 @@ namespace CMSV2.Models
     public partial class PrepaidAWB
     {
         public int PrepaidAWBID { get; set; }
-        public Nullable<System.DateTime> TransDate { get; set; }
-        public Nullable<int> CustomerID { get; set; }
-        public Nullable<int> OriginID { get; set; }
-        public Nullable<int> DestinationID { get; set; }
-        public Nullable<int> NoOfAWBs { get; set; }
-        public Nullable<decimal> CourierCharge { get; set; }
-        public Nullable<decimal> Total { get; set; }
-        public string PaymentMode { get; set; }
-        public Nullable<int> AcHeadID { get; set; }
+        public System.DateTime TransDate { get; set; }
+        public int CustomerID { get; set; }
+        public int NoOfAWBs { get; set; }
+        public decimal CourierCharge { get; set; }
+        public decimal Total { get; set; }
+        public int AcHeadID { get; set; }
         public string Reference { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
         public string Documentno { get; set; }
-        public Nullable<int> AcCompanyID { get; set; }
+        public int AcCompanyID { get; set; }
         public Nullable<int> AcjournalID { get; set; }
+        public int BranchID { get; set; }
+        public string OriginLocation { get; set; }
+        public string DestinationLocation { get; set; }
+        public string BankName { get; set; }
+        public string ChequeNo { get; set; }
+        public Nullable<System.DateTime> ChequeDate { get; set; }
+        public string StatusEntry { get; set; }
+        public string AWBNOFrom { get; set; }
+        public string AWBNOTo { get; set; }
+        public Nullable<int> FYearId { get; set; }
+        public Nullable<int> CreatedUserID { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> ModifiedUserID { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
     }
 }

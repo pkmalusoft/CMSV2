@@ -11,6 +11,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMSV2.Models
 {
+    public class AWBSearch
+    {
+        public int StatusID { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string AWBNo { get; set; }
+        public string BatchNo { get; set; }
+        public DateTime BatchDate { get; set; }
+        public List <QuickAWBVM> Details{ get; set; }
+    }
     public class QuickAWBVM
     {
         public string EnquiryNo { get; set; }

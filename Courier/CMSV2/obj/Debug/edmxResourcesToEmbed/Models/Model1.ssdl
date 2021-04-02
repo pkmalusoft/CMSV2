@@ -535,24 +535,46 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Property Name="ExceptionType" Type="nvarchar" MaxLength="256" />
     <Property Name="Details" Type="ntext" />
   </EntityType>
-  <EntityType Name="AWBIssue">
+  <EntityType Name="AWBBatch">
     <Key>
-      <PropertyRef Name="AWBIssueID" />
+      <PropertyRef Name="ID" />
     </Key>
-    <Property Name="AWBIssueID" Type="int" Nullable="false" />
-    <Property Name="IssuedDate" Type="datetime" />
-    <Property Name="IssuedBy" Type="int" />
-    <Property Name="CustomerID" Type="int" />
-    <Property Name="EmployeeID" Type="int" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BatchNumber" Type="varchar" MaxLength="50" />
+    <Property Name="BatchDate" Type="datetime" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="AcFinancialYearid" Type="int" />
   </EntityType>
-  <EntityType Name="AWBIssueDetails">
+  <EntityType Name="AWBBOOKIssue">
     <Key>
-      <PropertyRef Name="AWBIssueDetailID" />
+      <PropertyRef Name="AWBBOOKIssueID" />
     </Key>
-    <Property Name="AWBIssueDetailID" Type="int" Nullable="false" />
-    <Property Name="AWBIssueID" Type="int" />
-    <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBBOOKIssueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransDate" Type="datetime" />
+    <Property Name="NoOfAWBs" Type="int" />
+    <Property Name="BookNo" Type="nchar" MaxLength="250" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="Documentno" Type="nvarchar" MaxLength="20" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="AWBNOFrom" Type="nvarchar" MaxLength="25" />
+    <Property Name="AWBNOTo" Type="nvarchar" MaxLength="25" />
+    <Property Name="BranchID" Type="int" Nullable="false" />
+    <Property Name="CreatedUserID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedUserID" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="AWBDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
+    <Property Name="AWBBookIssueID" Type="int" />
+    <Property Name="PrepaidAWBID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="UserStatus" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="AWBPending">
     <Key>
@@ -567,35 +589,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Property Name="Status" Type="char" MaxLength="1" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="InscanID" Type="int" />
-  </EntityType>
-  <EntityType Name="AWBSetting">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserID" Type="int" />
-    <Property Name="IsShowShipper" Type="bit" />
-    <Property Name="IsShowConsignee" Type="bit" />
-    <Property Name="IsShowWeight" Type="bit" />
-    <Property Name="IsShowCargo" Type="bit" />
-    <Property Name="IsShowCollectedBy" Type="bit" />
-    <Property Name="IsShowCourierCharges" Type="bit" />
-    <Property Name="IsShowForwardingAgent" Type="bit" />
-    <Property Name="IsShowMaterialCost" Type="bit" />
-  </EntityType>
-  <EntityType Name="AWBStatus">
-    <Key>
-      <PropertyRef Name="AWBStatusID" />
-    </Key>
-    <Property Name="AWBStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StatusDescriptionID" Type="int" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
-    <Property Name="Date" Type="datetime" />
-    <Property Name="statusUpdationID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="250" />
-    <Property Name="FormID" Type="char" MaxLength="5" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="statusUpdate" Type="bit" />
   </EntityType>
   <EntityType Name="AWBStock">
     <Key>
@@ -618,7 +611,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Key>
       <PropertyRef Name="AWBTrackStatusId" />
     </Key>
-    <Property Name="AWBTrackStatusId" Type="int" Nullable="false" />
+    <Property Name="AWBTrackStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="InScanId" Type="int" Nullable="false" />
     <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="EntryDate" Type="datetime" Nullable="false" />
@@ -1147,6 +1140,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="CityName" Type="varchar" MaxLength="100" />
     <Property Name="DepotID" Type="int" />
     <Property Name="UserID" Type="int" />
+    <Property Name="ApprovedBy" Type="int" />
+    <Property Name="ApprovedOn" Type="datetime" />
+    <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
+    <Property Name="CountryCode" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="CustomerMultiContract">
     <Key>
@@ -2218,7 +2215,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Key>
       <PropertyRef Name="InScanID" />
     </Key>
-    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EnquiryNo" Type="nvarchar" MaxLength="50" />
     <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
     <Property Name="PickupRequestDate" Type="datetime" />
@@ -2249,11 +2246,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="AssignedEmployeeID" Type="int" />
     <Property Name="CourierCharge" Type="money" />
     <Property Name="PickupRemarks" Type="nvarchar" MaxLength="400" />
-    <Property Name="ShipmentType" Type="nvarchar" MaxLength="40" />
-    <Property Name="Vehicle" Type="nvarchar" MaxLength="40" />
     <Property Name="PickupReadyTime" Type="datetime" />
     <Property Name="EnteredByID" Type="int" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
     <Property Name="IsEnquiry" Type="bit" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="PickupRequestStatusId" Type="int" />
@@ -2278,9 +2272,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="CustomerRateID" Type="int" />
     <Property Name="QuickInscanID" Type="int" />
     <Property Name="TransactionDate" Type="datetime" Nullable="false" />
-    <Property Name="StatusPaymentMode" Type="varchar" MaxLength="3" />
-    <Property Name="PackingCharge" Type="money" />
-    <Property Name="SeviceCharge" Type="money" />
     <Property Name="OtherCharge" Type="money" />
     <Property Name="NetTotal" Type="money" />
     <Property Name="ParcelTypeId" Type="int" />
@@ -2321,6 +2312,9 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="ConsignorMobileNo" Type="varchar" MaxLength="50" />
     <Property Name="ConsigneeMobileNo" Type="varchar" MaxLength="50" />
     <Property Name="AWBProcessed" Type="bit" Nullable="false" />
+    <Property Name="PrepaidAWBID" Type="int" />
+    <Property Name="AWBBookIssueID" Type="int" />
+    <Property Name="BATCHID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2821,32 +2815,31 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Key>
       <PropertyRef Name="PrepaidAWBID" />
     </Key>
-    <Property Name="PrepaidAWBID" Type="int" Nullable="false" />
-    <Property Name="TransDate" Type="date" />
-    <Property Name="CustomerID" Type="int" />
-    <Property Name="OriginID" Type="int" />
-    <Property Name="DestinationID" Type="int" />
-    <Property Name="NoOfAWBs" Type="int" />
-    <Property Name="CourierCharge" Type="money" />
-    <Property Name="Total" Type="money" />
-    <Property Name="PaymentMode" Type="char" MaxLength="2" />
-    <Property Name="AcHeadID" Type="int" />
-    <Property Name="Reference" Type="nchar" MaxLength="500" />
-    <Property Name="EmployeeID" Type="int" />
-    <Property Name="Documentno" Type="nvarchar" MaxLength="40" />
-    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="PrepaidAWBID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransDate" Type="datetime" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="NoOfAWBs" Type="int" Nullable="false" />
+    <Property Name="CourierCharge" Type="money" Nullable="false" />
+    <Property Name="Total" Type="money" Nullable="false" />
+    <Property Name="AcHeadID" Type="int" Nullable="false" />
+    <Property Name="Reference" Type="nvarchar" MaxLength="250" />
+    <Property Name="Documentno" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="AcCompanyID" Type="int" Nullable="false" />
     <Property Name="AcjournalID" Type="int" />
-  </EntityType>
-  <EntityType Name="PrepaidAwbDetails">
-    <Key>
-      <PropertyRef Name="PrepaidAwbDetailID" />
-    </Key>
-    <Property Name="PrepaidAwbDetailID" Type="int" Nullable="false" />
-    <Property Name="PrepaidAwbID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="CourierCharge" Type="money" />
-    <Property Name="InscanID" Type="int" />
-    <Property Name="statusUpdate" Type="bit" />
+    <Property Name="BranchID" Type="int" Nullable="false" />
+    <Property Name="OriginLocation" Type="nvarchar" MaxLength="1000" />
+    <Property Name="DestinationLocation" Type="nvarchar" MaxLength="1000" />
+    <Property Name="BankName" Type="nvarchar" MaxLength="200" />
+    <Property Name="ChequeNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="StatusEntry" Type="varchar" MaxLength="10" />
+    <Property Name="AWBNOFrom" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNOTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="FYearId" Type="int" />
+    <Property Name="CreatedUserID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedUserID" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
   </EntityType>
   <EntityType Name="PrepaidAWBInvoice">
     <Key>
@@ -4232,56 +4225,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
       </Principal>
       <Dependent Role="AcOPInvoiceMaster">
         <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
-    <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CustomerInvoice">
-        <PropertyRef Name="CustomerInvoiceID" />
-      </Principal>
-      <Dependent Role="CustomerInvoiceDetails">
-        <PropertyRef Name="CustomerInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CustomerInvoiceDetails_InScan">
-    <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
-    <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="CustomerInvoiceDetails">
-        <PropertyRef Name="InscanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InscanOtherCharge_InScan">
-    <End Role="InScanMaster" Type="Self.InScanMaster" Multiplicity="0..1" />
-    <End Role="InscanOtherCharge" Type="Self.InscanOtherCharge" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScanMaster">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="InscanOtherCharge">
-        <PropertyRef Name="InscanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_InscanOtherCharge_OtherCharge">
-    <End Role="OtherCharge" Type="Self.OtherCharge" Multiplicity="0..1" />
-    <End Role="InscanOtherCharge" Type="Self.InscanOtherCharge" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="OtherCharge">
-        <PropertyRef Name="OtherChargeID" />
-      </Principal>
-      <Dependent Role="InscanOtherCharge">
-        <PropertyRef Name="OtherChargeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -6818,11 +6761,10 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="aspnet_SchemaVersions" EntityType="Self.aspnet_SchemaVersions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_UsersInRoles" EntityType="Self.aspnet_UsersInRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_WebEvent_Events" EntityType="Self.aspnet_WebEvent_Events" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBIssue" EntityType="Self.AWBIssue" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBIssueDetails" EntityType="Self.AWBIssueDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AWBBatch" EntityType="Self.AWBBatch" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AWBBOOKIssue" EntityType="Self.AWBBOOKIssue" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AWBDetail" EntityType="Self.AWBDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBPending" EntityType="Self.AWBPending" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBSetting" EntityType="Self.AWBSetting" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBStatus" EntityType="Self.AWBStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBStock" EntityType="Self.AWBStock" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBStockDetails" EntityType="Self.AWBStockDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBTrackStatus" EntityType="Self.AWBTrackStatus" Schema="dbo" store:Type="Tables" />
@@ -6938,7 +6880,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="POD" EntityType="Self.POD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PODSignature" EntityType="Self.PODSignature" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWB" EntityType="Self.PrepaidAWB" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="PrepaidAwbDetails" EntityType="Self.PrepaidAwbDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWBInvoice" EntityType="Self.PrepaidAWBInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWBInvoiceDetails" EntityType="Self.PrepaidAWBInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductCategoryMaster" EntityType="Self.ProductCategoryMaster" Schema="dbo" store:Type="Tables" />
@@ -7345,22 +7286,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="Self.FK_AcOPInvoiceMaster_BranchMaster">
       <End Role="BranchMaster" EntitySet="BranchMaster" />
       <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
-      <End Role="CustomerInvoice" EntitySet="CustomerInvoice" />
-      <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerInvoiceDetails_InScan" Association="Self.FK_CustomerInvoiceDetails_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMaster" />
-      <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InscanOtherCharge_InScan" Association="Self.FK_InscanOtherCharge_InScan">
-      <End Role="InScanMaster" EntitySet="InScanMaster" />
-      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
-    </AssociationSet>
-    <AssociationSet Name="FK_InscanOtherCharge_OtherCharge" Association="Self.FK_InscanOtherCharge_OtherCharge">
-      <End Role="OtherCharge" EntitySet="OtherCharge" />
-      <End Role="InscanOtherCharge" EntitySet="InscanOtherCharge" />
     </AssociationSet>
     <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="Self.FK_SupplierInvoice_SupplierMaster">
       <End Role="SupplierMaster" EntitySet="SupplierMaster" />

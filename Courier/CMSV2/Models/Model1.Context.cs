@@ -57,14 +57,9 @@ namespace CMSV2.Models
         public virtual DbSet<aspnet_SchemaVersions> aspnet_SchemaVersions { get; set; }
         public virtual DbSet<aspnet_Users> aspnet_Users { get; set; }
         public virtual DbSet<aspnet_WebEvent_Events> aspnet_WebEvent_Events { get; set; }
-        public virtual DbSet<AWBIssue> AWBIssues { get; set; }
-        public virtual DbSet<AWBIssueDetail> AWBIssueDetails { get; set; }
         public virtual DbSet<AWBPending> AWBPendings { get; set; }
-        public virtual DbSet<AWBSetting> AWBSettings { get; set; }
-        public virtual DbSet<AWBStatu> AWBStatus { get; set; }
         public virtual DbSet<AWBStock> AWBStocks { get; set; }
         public virtual DbSet<AWBStockDetail> AWBStockDetails { get; set; }
-        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<BranchMaster> BranchMasters { get; set; }
         public virtual DbSet<BusinessType> BusinessTypes { get; set; }
         public virtual DbSet<CargoDescription> CargoDescriptions { get; set; }
@@ -157,8 +152,6 @@ namespace CMSV2.Models
         public virtual DbSet<PickUpRequestStatu> PickUpRequestStatus { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<PODSignature> PODSignatures { get; set; }
-        public virtual DbSet<PrepaidAWB> PrepaidAWBs { get; set; }
-        public virtual DbSet<PrepaidAwbDetail> PrepaidAwbDetails { get; set; }
         public virtual DbSet<PrepaidAWBInvoice> PrepaidAWBInvoices { get; set; }
         public virtual DbSet<PrepaidAWBInvoiceDetail> PrepaidAWBInvoiceDetails { get; set; }
         public virtual DbSet<ProductCategoryMaster> ProductCategoryMasters { get; set; }
@@ -272,7 +265,6 @@ namespace CMSV2.Models
         public virtual DbSet<DRRDetail> DRRDetails { get; set; }
         public virtual DbSet<DRR> DRRs { get; set; }
         public virtual DbSet<DR> DRS { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<DRSRecPay> DRSRecPays { get; set; }
         public virtual DbSet<UserRegistration> UserRegistrations { get; set; }
         public virtual DbSet<CreditNote> CreditNotes { get; set; }
@@ -280,6 +272,12 @@ namespace CMSV2.Models
         public virtual DbSet<DRRRecPayDetail> DRRRecPayDetails { get; set; }
         public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<AcJournalAWB> AcJournalAWBs { get; set; }
+        public virtual DbSet<AWBDetail> AWBDetails { get; set; }
+        public virtual DbSet<AWBBatch> AWBBatches { get; set; }
+        public virtual DbSet<AWBBOOKIssue> AWBBOOKIssues { get; set; }
+        public virtual DbSet<PrepaidAWB> PrepaidAWBs { get; set; }
+        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

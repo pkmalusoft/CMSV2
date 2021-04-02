@@ -14,7 +14,7 @@ namespace CMSV2.Models
     public string DRSNo { get; set; }        
         public string CashBank { get; set; }
         //public string BankName { get; set; }
-        public int DeliveredBy { get; set; }
+        //public int DeliveredBy { get; set; }
         public DateTime DRSDate { get; set; }
         public decimal DRSAmount { get; set; }
         public string ChequeBank { get; set; }

@@ -35,14 +35,9 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.aspnet_SchemaVersions" Width="1.5" PointX="9.75" PointY="24.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.aspnet_Users" Width="1.5" PointX="17.25" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.aspnet_WebEvent_Events" Width="1.5" PointX="11.75" PointY="24.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBIssue" Width="1.5" PointX="23.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBIssueDetail" Width="1.5" PointX="23.75" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBPending" Width="1.5" PointX="23.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBSetting" Width="1.5" PointX="23.75" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBStatu" Width="1.5" PointX="23.75" PointY="16.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBStock" Width="1.5" PointX="24.75" PointY="20.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBStockDetail" Width="1.5" PointX="19.75" PointY="26.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" Width="1.5" PointX="24.75" PointY="23.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.BranchMaster" Width="1.5" PointX="8.25" PointY="78.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.BusinessType" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CargoDescription" Width="1.5" PointX="7.75" PointY="19.125" IsExpanded="true" />
@@ -135,8 +130,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PickUpRequestStatu" Width="1.5" PointX="10.75" PointY="35.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.POD" Width="1.5" PointX="7.5" PointY="15" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PODSignature" Width="1.5" PointX="33.75" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" Width="1.5" PointX="33.75" PointY="21.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PrepaidAwbDetail" Width="1.5" PointX="33.75" PointY="26.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWBInvoice" Width="1.5" PointX="26.75" PointY="35.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWBInvoiceDetail" Width="1.5" PointX="33.75" PointY="29.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ProductCategoryMaster" Width="1.5" PointX="7.75" PointY="21.375" IsExpanded="true" />
@@ -396,9 +389,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRDetail" Width="1.5" PointX="45.375" PointY="14.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRR" Width="1.5" PointX="44.375" PointY="0.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DR" Width="1.5" PointX="5.375" PointY="44.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="17.75" PointY="45.875" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_InScan" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_InscanOtherCharge_InScan" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" Width="1.5" PointX="46.375" PointY="0.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" Width="1.5" PointX="46.375" PointY="19.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="28.375" PointY="0.75" />
@@ -406,6 +396,12 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRRRecPayDetail" Width="1.5" PointX="44.375" PointY="30.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="46.375" PointY="23.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcJournalAWB" Width="1.5" PointX="28.375" PointY="25.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBDetail" Width="1.5" PointX="46.375" PointY="32.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBBatch" Width="1.5" PointX="46.375" PointY="35.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBBOOKIssue" Width="1.5" PointX="35.375" PointY="46.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" Width="1.5" PointX="37.375" PointY="46.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" Width="1.5" PointX="15.375" PointY="46.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="46.375" PointY="43.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

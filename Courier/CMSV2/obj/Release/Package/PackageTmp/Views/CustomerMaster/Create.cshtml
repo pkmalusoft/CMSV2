@@ -1,7 +1,7 @@
 ﻿@model CMSV2.Models.CustmorVM
 
 @{
-    ViewBag.Title = "Create";
+
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
 
@@ -34,7 +34,8 @@
     function checkmobileno(inputtxt) {
         debugger;
         //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-        var phoneno = /^[0-9]{10}$/;
+        //var phoneno = /^[0-9]{10}$/;
+        var phoneno = /(?([0-9]{3})\)?[-. ]?^[0-9]{10}$/;
         if (inputtxt.match(phoneno)) {
             $("#validations").html('* Please fill mandatory fields!');
             return true;
@@ -71,56 +72,97 @@
         $(":password").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
+        if (@ViewBag.UserRoleId == 1) { //if admin
+            if ($('#CustomerType').val() == 'CS') {
+                $('#divApprove').removeClass('hide');
+                $('#ApprovedOn').val('');
+            }
+        }
         $("#Email").val('');
         $("#Password").val('');
 
-        $("#CustomerType").focus();
-
+        $("#CustomerName").focus();
+        $('#CustomerType1').val($('#CustomerType').val()).trigger('change');
         $("#CityID").empty();
         $("#LocationID").empty();
 
-        $('#CityID').append('<option value="0">Select</option>');
-        $('#LocationID').append('<option value="0">Select</option>');
+        //$("#CountryName").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: '/CountryMaster/GetCountry',
+        //            datatype: "json",
+        //            data: {
+        //                term: request.term
+        //            },
+        //            success: function (data) {
+        //                response($.map(data, function (val, item) {
+        //                    return {
+        //                        label: val.CountryName,
+        //                        value: val.CountryName,
+        //                        CountryID: val.CountryID
+        //                    }
+        //                }))
+        //            }
+        //        })
+        //    },
+        //    minLength: 0,
+        //    autoFocus: false,
+        //    focus: function (event, i) {
+        //        $("#CountryName").val(i.item.label);
+        //        $("#CountryID").val(i.item.CountryID);
+        //    },
+        //    select: function (e, i) {
+        //        e.preventDefault();
+        //        $("#CountryName").val(i.item.label);
+        //        $("#CountryID").val(i.item.CountryID);
+        //    },
 
-        //$("#CountryID").change(function () {
-        //    $("#CityID").empty();
-        //    $('#CityID').append('<option value="0">Select</option>');
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/CompanyMaster/GetCity",
-        //        datatype: "Json",
-        //        data: { id: $("#CountryID option:selected").val() },
-        //        success: function (data) {
-
-
-        //            $.each(data, function (index, value) {
-        //                $('#CityID').append('<option value="' + value.CityID + '">' + value.City + '</option>');
-        //            });
-
-        //        }
-        //    });
         //});
 
-        //$("#CityID").change(function () {
+        //$("#LocationName").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: '/LocationMaster/GetLocation',
+        //            datatype: "json",
+        //            data: {
+        //                term: request.term
+        //            },
+        //            success: function (data) {
+        //                response($.map(data, function (val, item) {
+        //                    return {
+        //                        label: val.Location,
+        //                        value: val.Location,
+        //                        LocationID: val.LocationID,
+        //                        CityID: val.CityID,
+        //                        CountryID: val.CountryID,
+        //                        CountryName: val.CountryName,
+        //                        CityName: val.CityName
+        //                    }
+        //                }))
+        //            }
+        //        })
+        //    },
+        //    minLength: 0,
+        //    autoFocus: false,
+        //    focus: function (event, i) {
+        //        $("#LocationName").val(i.item.label);
+        //        $("#LocationID").val(i.item.LocationID);
+        //        $("#CountryName").val(i.item.CountryName);
+        //        $("#CountryID").val(i.item.CountryID);
+        //        $("#CityName").val(i.item.CityName);
+        //        $("#CityID").val(i.item.CityID);
+        //    },
+        //    select: function (e, i) {
+        //        e.preventDefault();
+        //        $("#LocationName").val(i.item.label);
+        //        $("#LocationID").val(i.item.LocationID);
+        //        $("#CountryName").val(i.item.CountryName);
+        //        $("#CountryID").val(i.item.CountryID);
+        //        $("#CityName").val(i.item.CityName);
+        //        $("#CityID").val(i.item.CityID);
+        //    },
 
-        //    $("#LocationID").empty();
-        //    $('#LocationID').append('<option value="0">Select</option>');
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/CompanyMaster/GetLocation",
-        //        datatype: "Json",
-        //        data: { id: $("#CityID option:selected").val() },
-        //        success: function (data) {
-
-
-        //            $.each(data, function (index, value) {
-        //                $('#LocationID').append('<option value="' + value.LocationID + '">' + value.Location + '</option>');
-        //            });
-
-        //        }
-        //    });
         //});
-
         $("#CustomerName").change(function () {
 
             $.ajax({
@@ -130,38 +172,33 @@
                 data: { custname: $("#CustomerName").val() },
                 success: function (result) {
                     debugger;
-                    
+
                         $('#CustomerCode').val(result.data)
                     // BindCity(data.CityID, data.LocationID);
                 }
             });
 
         });
-
-        $("#btnsave").click(function () {
+        $("#btnApprove").click(function () {
             debugger;
-            var cust = $("#CustomerType option:selected").val();
+            $("#validations").html("Plesae Fill mandatory details to Approve Customer!")
+            var cust = $("#CustomerType1 option:selected").val();
             var name = $("#CustomerName").val();
             var code = $("#CustomerCode").val();
             var add1 = $("#Address1").val();
             var con = $("#ContactPerson").val();
-            //var cou = $("#CountryID option:selected").val();
-            //var city = $("#CityID option:selected").val();
-            //var loc = $("#LocationID option:selected").val();
-
             var cou = $("#CountryName").val();
             var city = $("#CityName").val();
-            var loc = $("#autocomplete").val();
+            var loc = $("#LocationName").val();
             var curr = $("#CurrenceyID option:selected").val();
             var mobile = $("#Mobile").val();
+            var trn = $("#VATTRN").val();
             var phone = $("#Phone").val();
             var cre = $("#CreditLimit").val();
             var emp = $("#EmployeeID").val();
             var email = $("#Email").val();
             var pass = $("#Password").val();
             var website = $("#Website").val();
-            $("#validations").html('* Please fill mandatory fields!');
-            
             if (cust == "") {
                 $("#validations").show();
                 $("#CustomerType").focus();
@@ -172,11 +209,139 @@
                 $("#CustomerName").focus();
                 return false;
             }
-             if (cust != "CR" &&  cust!="" && name!="") {
+            else if (cou == "") {
+                $("#validations").show();
+                $("#CountryName").focus();
+                return false;
+            }
+            else if (code == "") {
+                $("#validations").show();
+                $("#CustomerCode").focus();
+                return false;
+            }
+            else if (add1 == "") {
+                $("#validations").show();
+                $("#Address1").focus();
+                return false;
+            }
+            else if (con == "") {
+                $("#validations").show();
+                $("#ContactPerson").focus();
+                return false;
+            }
+            //else if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
+
+            else if (city == "") {
+                $("#validations").show();
+                $("#CityName").focus();
+                return false;
+            }
+            else if (loc == "") {
+                $("#validations").show();
+                $("#LocationName").focus();
+                return false;
+            }
+            else if (curr == "") {
+                $("#validations").show();
+                $("#CurrenceyID").focus();
+                return false;
+            }
+            else if (mobile == "") {
+                $("#validations").show();
+                $("#Mobile").focus();
+                return false;
+            }
+            //else if (trn == "") {
+            //    $("#VATTRN").focus();
+            //    $("#validations").show();
+            //    return false;
+            //}
+            else if (email == "") {
+                $("#validations").show();
+                $("#Email").focus();
+                return false;
+            }
+
+            if (cre != "") {
+                if (checkNumeric(cre) == false) {
+                    $("#CreditLimit").focus();
+                    $("#validations").show();
+                    return false;
+                }
+            }
+            if (cust == "CS" && $('#btnApprove').is(':checked')) {
+                $("#validations").html('');
+                $("#CustomerType").val("CR");
+                $("#CustomerType1").val("CR").trigger('change');
+                var d = new Date();
+                var curr_date = d.getDate();
+                var curr_month = d.getMonth() + 1;
+                var curr_year = d.getFullYear();
+
+                var newdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+                $("#txtApprovedBy").val($('#ApprovedUserName').val());
+                $('#txtApprovedOn').val(newdate);
+                $('#ApprovedOn').val(newdate);
+            }
+            else {
+                $("#CustomerType").val("CS");
+                $("#CustomerType1").val("CS").trigger('change');
+                $("#validations").html('')
+                $("#txtApprovedBy").val('');
+                $('#ApprovedOn').val('');
+            }
+
+        });
+
+        $("#btnsave").click(function () {
+            debugger;
+            var cust = $("#CustomerType1 option:selected").val();
+            var name = $("#CustomerName").val();
+            var code = $("#CustomerCode").val();
+            var add1 = $("#Address1").val();
+            var con = $("#ContactPerson").val();
+            //var cou = $("#CountryID option:selected").val();
+            //var city = $("#CityID option:selected").val();
+            //var loc = $("#LocationID option:selected").val();
+            var trn = $("#VATTRN").val();
+            var cou = $("#CountryName").val();
+            var city = $("#CityName").val();
+            var loc = $("#LocationName").val();
+            var curr = $("#CurrenceyID option:selected").val();
+            var mobile = $("#Mobile").val();
+            var phone = $("#Phone").val();
+            var cre = $("#CreditLimit").val();
+            var emp = $("#EmployeeID").val();
+            var email = $("#Email").val();
+            var pass = $("#Password").val();
+            var website = $("#Website").val();
+            $("#validations").html('* Please fill mandatory fields!');
+
+            if (cust == "") {
+                $("#validations").show();
+                $("#CustomerType").focus();
+                return false;
+            }
+            else if (name == "") {
+                $("#validations").show();
+                $("#CustomerName").focus();
+                return false;
+            }
+            else if (cou == "" && ($("#CountryID").val() == 0 || $("#CountryID").val() == "")) {
+                $("#CountryName").val('');
+                $("#validations").show();
+                $("#CountryName").focus();
+                return false;
+            }
+            if (cust != "CR" && cust != "" && name != "" && cou != "")  {
                  $("#validations").hide();
                 return true;
             }
-            //for credit 
+            //for credit
             if (code == "") {
                 $("#validations").show();
                 $("#CustomerCode").focus();
@@ -197,11 +362,7 @@
             //    $("#CustomerCode").focus();
             //    return false;
             //}
-            else if (cou == "") {
-                $("#validations").show();
-                $("#CountryName").focus();
-                return false;
-            }
+
             else if (city == "") {
                 $("#validations").show();
                 $("#CityName").focus();
@@ -209,7 +370,7 @@
             }
             else if (loc == "") {
                 $("#validations").show();
-                $("#autocomplete").focus();
+                $("#LocationName").focus();
                 return false;
             }
             else if (curr == "") {
@@ -217,11 +378,11 @@
                 $("#CurrenceyID").focus();
                 return false;
             }
-            else if (mobile == "") {
-                $("#validations").show();
-                $("#Mobile").focus();
-                return false;
-            }
+            //else if (mobile == "") {
+            //    $("#validations").show();
+            //    $("#Mobile").focus();
+            //    return false;
+            //}
             //else if (phone == "") {
             //    $("#validations").show();
             //    return false;
@@ -230,47 +391,59 @@
             //    $("#validations").show();
             //    return false;
             //}
-            else if (emp == "") {
-                $("#EmployeeID").focus();
-                $("#validations").show();
-                return false;
-            }
-            else if (email == "") {
-                $("#validations").show();
-                $("#Email").focus();
-                return false;
-            }
+            //else if (emp == "") {
+            //    $("#EmployeeID").focus();
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (email == "") {
+            //    $("#validations").show();
+            //    $("#Email").focus();
+            //    return false;
+            //}
+            //else if (trn == "") {
+            //    $("#VATTRN").focus();
+            //    $("#validations").show();
+            //    return false;
+            //}
             //else if (pass == "") {
             //    $("#validations").show();
             //    return false;
             //}
 
-            if (cre != "") {
-                if (checkNumeric(cre) == false) {
-                    $("#CreditLimit").focus();
+            //if (cre != "") {
+            //    if (checkNumeric(cre) == false) {
+            //        $("#CreditLimit").focus();
+            //        $("#validations").show();
+            //        return false;
+            //    }
+            //}
+
+            if (phone != "") {
+                debugger;
+                if (checkPhoneNumber(phone) == false) {
+                    $("#PhoneNo").focus();
                     $("#validations").show();
                     return false;
                 }
+
             }
-
-            //if (phone != "") {
-            //    debugger;
-            //    if (checkPhoneNumber(phone) == false) {
-            //        $("#PhoneNo").focus();
-            //        $("#validations").show();
-            //        return false;
-            //    }
-
-            //}
-
-            //if (mobile != "") {
-            //    debugger;
-            //    if (checkmobileno(mobile) == false) {
-            //        $("#Mobile").focus();
-            //        $("#validations").show();
-            //        return false;
-            //    }
-            //}
+            if (mobile != "") {                
+                debugger;
+                if (checkmobileno(mobile) == false) {
+                    $("#Mobile").focus();
+                    $("#validations").show();
+                    return false;
+                }
+                else if ($('#countrycode').val() == '971') {
+                    var mobileno = $('#Mobile').val();
+                    mobileno = mobileno.replace(mobileno, $('#countrycode').val());
+                    if (mobileno.substring(0, 1) != '5') {
+                        alert('Pls ensure that you are not entering landline in mobile');
+                        return false;
+                    }
+                }
+            }
 
 
             if (website.trim() != "") {
@@ -327,6 +500,10 @@
             //     return true;
 
         });
+       
+            //fillInAddress()
+        }
+        
     });
 </script>
 
@@ -360,7 +537,7 @@
         // Create the autocomplete object, restricting the search predictions to
         // geographical location types.
         autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'), { types: ['geocode'] });
+            document.getElementById('LocationName'), { types: [] });
 
         // Avoid paying for data that you don't need by restricting the set of
         // place fields that are returned to just the address components.
@@ -368,17 +545,30 @@
 
         // When the user selects an address from the drop-down, populate the
         // address fields in the form.
-           autocomplete.addListener('place_changed', fillInAddress);
+        autocomplete.addListener('place_changed', fillInAddress);
 
 
         autocompleteCity = new google.maps.places.Autocomplete(
-            document.getElementById('CityName'), { types: ['geocode'] });
+            document.getElementById('CityName'), { types: [] });
 
         autocompleteCountry = new google.maps.places.Autocomplete(
-            document.getElementById('CountryName'), { types: ['geocode'] });
+            document.getElementById('CountryName'), { types: [] });
 
     }
-
+    function getcountryphonecode(countrycode) {
+        $.getJSON("/countrycode.json", function (data) {
+            var items = [];
+            $.each(data, function (key, item) {   
+                debugger;
+                if (item.code == countrycode) {
+                    $('#Mobile').val(item.dial_code.replace('+',''));
+                    $('#CountryCode').val(item.dial_code.replace('+', ''));
+                    $('#lblcountrycode').html($('#CountryCode').val());
+                }
+               // items.push("<li id='" + key + "'>" + val + "</li>");
+            });            
+        });
+    }
     function fillInAddress() {
         debugger;
         // Get the place details from the autocomplete object.
@@ -413,6 +603,8 @@
                 }
                 else if (type == 'country') {
                     $('#CountryName').val(component.long_name);
+                    var shortname = component.short_name;
+                    getcountryphonecode(shortname);
                 }
 
                 //if(type == 'administrative_area_level_1') {
@@ -420,7 +612,17 @@
                 //    }
             });
         });
-
+        $.ajax({
+            type: "GET",
+            url: "/ZoneChart/GetEventVenuesList",
+            datatype: "Json",
+            data: { SearchText: $('#LocationName').val() },
+            success: function (response) {
+                debugger;
+                console.log(response);
+                $('#PlaceID').val(response[0].place_id);
+            }
+        });
     }
 
     // Bias the autocomplete object to the user's geographical location,
@@ -448,7 +650,7 @@
                 };
                 var circle = new google.maps.Circle(
                     { center: geolocation, radius: position.coords.accuracy });
-                autocompleteCity.setBounds(circle.getBounds());
+                autocomplete.setBounds(circle.getBounds());
             });
         }
     }
@@ -462,13 +664,13 @@
                 };
                 var circle = new google.maps.Circle(
                     { center: geolocation, radius: position.coords.accuracy });
-                autocompleteCountry.setBounds(circle.getBounds());
+                autocomplete.setBounds(circle.getBounds());
             });
         }
     }
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Customer</h1>
+    <h1 class="headingfont">@ViewBag.Title</h1>
 
 </section>
 
@@ -492,15 +694,21 @@
 
 
                 <div class="col-md-3">
+                    @Html.HiddenFor(model => model.CustomerID)
+                    @Html.HiddenFor(model => model.CityID)
+                    @Html.HiddenFor(model => model.CountryID)
+                    @Html.HiddenFor(model => model.LocationID)
+                    @Html.HiddenFor(model => model.LocationID)
+                    @Html.HiddenFor(model => model.CustomerType)
+                    @Html.HiddenFor(model => model.PlaceID)
+                    @Html.HiddenFor(model => model.CountryCode)
                     <label class="headinglabel required">Customer Type</label>
-                    @Html.DropDownList("CustomerType", new List<SelectListItem>
+                    @Html.DropDownList("CustomerType1", new List<SelectListItem>
                 {
                     new SelectListItem{ Text="Credit", Value = "CR" },
                     new SelectListItem{ Text="Cash", Value = "CS" },
-                    new SelectListItem{ Text="CoLoader", Value = "CL" },
-                    new SelectListItem{ Text="COD", Value = "CD" },
 
-                 }, "Select", new { @class = "form-control" })
+                 }, new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
 
 
                     @*@Html.DropDownListFor(model => model.CustomerTypeId, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
@@ -510,20 +718,20 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Customer Name</label>
-                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget" })
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget",@autocomplete="off" })
                     @Html.ValidationMessageFor(model => model.CustomerName)
                 </div>
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Customer Code</label>
                     @*@Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control" })*@
-                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control",  @style = "font-weight:700;font-size:18px; " })
+                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control", @style = "font-weight:700;font-size:18px; " })
                     @Html.ValidationMessageFor(model => model.CustomerCode)
                 </div>
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Flat/Building</label>
+                    <label class="headinglabel">Flat/Building</label>
                     @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
@@ -547,15 +755,14 @@
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Contact Person</label>
+                    <label class="headinglabel">Contact Person</label>
                     @Html.TextBoxFor(model => model.ContactPerson, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.ContactPerson)
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Location</label>
-                    <input class="form-control" id="autocomplete" name="LocationName" onFocus="geolocate()" type="text" />
-                    @*@Html.DropDownListFor(model => model.LocationID, new SelectList(@ViewBag.location, "LocationID", "Location"), "Select", new { @class = "form-control" })*@
-                    @Html.ValidationMessageFor(model => model.LocationID)
+                    <label class="headinglabel">Location</label>
+                    @Html.TextBoxFor(mode => Model.LocationName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.LocationName)
                 </div>
 
             </div>
@@ -565,30 +772,28 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">City</label>
-                    <input class="form-control" id="CityName" name="CityName" type="text" onFocus="geoCitylocate()" />
-                    @*@Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID", "City"), "Select", new { @class = "form-control" })*@
-                    @Html.ValidationMessageFor(model => model.CityID)
+                    <label class="headinglabel">City</label>
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CityName)
                 </div>
 
 
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Country</label>
-                    <input class="form-control" id="CountryName" name="CountryName" type="text" onFocus="geoCountrylocate()" />
-                    @*@Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-                    @Html.ValidationMessageFor(model => model.CountryID)
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CountryName)
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Currency</label>
+                    <label class="headinglabel">Currency</label>
                     @Html.DropDownListFor(model => model.CurrenceyID, new SelectList(@ViewBag.currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CurrenceyID)
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Mobile</label>
-                    @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control textright", @placeholder = "XXXXXXXXXX", @maxlength = 25 })
+                    <label class="headinglabel">Mobile</label><label class="headinglabel" id="lblcountrycode">@Model.CountryCode</label>
+                    @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control textright", @placeholder = "XXX-XXXXXXXXXX", @maxlength = 25 })
                     @Html.ValidationMessageFor(model => model.Mobile)
                 </div>
 
@@ -619,7 +824,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Sale Executive</label>
+                    <label class="headinglabel">Sale Executive</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmployeeID)
                 </div>
@@ -632,14 +837,17 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Role</label>
-                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @disabled = "disabled", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.EmployeeID)
+                    <label class="headinglabel">VAT TRN No.</label>
+                    @Html.TextBoxFor(model => model.VATTRN, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VATTRN)
+
+                    @Html.HiddenFor(model => model.RoleID)
+
                 </div>
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Email</label>
+                    <label class="headinglabel">Email</label>
                     @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
@@ -677,20 +885,25 @@
                     @Html.DropDownListFor(model => model.BusinessTypeId, new SelectList(@ViewBag.businessType, "Id", "BusinessType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BusinessTypeId)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 30px">
+                <div class="col-md-2 checkboxdesign" style="padding-top: 30px; display: none">
                     @Html.CheckBox("StatusCommission", new { @name = "StatusCommission" }) &nbsp
                     <label class="headinglabel">Allow Commission To Courier</label>
                     @Html.ValidationMessageFor(model => model.StatusCommission)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top:30px">
+                <div class="col-md-2 checkboxdesign" style="padding-top:30px; display: none">
                     @Html.CheckBox("StatusTaxable", new { @name = "StatusTaxable" }) &nbsp
                     <label class="headinglabel">Taxable</label>
                     @Html.ValidationMessageFor(model => model.StatusTaxable)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 30px">
+                <div class="col-md-3 checkboxdesign justify-center" style="padding-top: 30px">
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive", @checked = "checked" }) &nbsp
                     <label class="headinglabel">Active</label>
                     @Html.ValidationMessageFor(model => model.StatusActive)
+                </div>
+                <div class="col-md-3 checkboxdesign justify-center" style="padding-top: 30px">
+                    @Html.CheckBox("EmailNotify", new { @name = "EmailNotify" }) &nbsp
+                    <label class="headinglabel">Email Notification to Customer</label>
+                    @Html.ValidationMessageFor(model => model.EmailNotify)
                 </div>
             </div>
             <div class="row no-margin" style="padding-top: 10px">
@@ -700,14 +913,32 @@
                     @Html.ValidationMessageFor(model => model.DepotID)
 
                 </div>
-                <div class="col-md-3 checkboxdesign" style="padding-top: 30px">
-                    @Html.CheckBox("EmailNotify", new { @name = "EmailNotify" }) &nbsp
-                    <label class="headinglabel">Email Notification to Customer</label>
-                    @Html.ValidationMessageFor(model => model.EmailNotify)
+
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="row no-margin">
+                    <div class="col-md-12 checkboxdesign" style="padding-bottom: 10px">
+                        @Html.CheckBox("ChkApprovedBy", new { @name = "ChkApprovedBy", @id = "btnApprove" }) &nbsp
+                        <label class="headinglabel">Approve Customer</label>
+                    </div>
                 </div>
-                <div class="col-md-3" style="padding-top: 20px">
+                <div class="row no-margin hide" style="padding: 30px;border:1px solid #dedede;" id="divApprove">
 
+                    <div class="col-md-12">
+                        <label class="headinglabel">Approved By</label>
+                        <input type="text" class="form-control" id="txtApprovedBy" value="" readonly />
+                        @Html.HiddenFor(model => model.ApprovedBy)
+                        @Html.HiddenFor(model => model.ApprovedOn)
+                        @Html.HiddenFor(model => model.ApprovedUserName)
 
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="headinglabel">Approved On</label>
+                        <input type="text" class="form-control" id="txtApprovedOn" value="" readonly />
+                    </div>
 
                 </div>
             </div>
@@ -722,5 +953,5 @@
 
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
 

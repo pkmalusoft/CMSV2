@@ -1,88 +1,91 @@
-﻿@model IEnumerable<CMSV2.Models.QuickAWBVM>
+﻿@model  CMSV2.Models.AWBSearch
 
-    @{
-        ViewBag.Title = "Index";
-        Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
-        var isadd = true;
-        var ismodify = true;
-        var isdelete = true;
-        var isprint = true;
-        var isview = true;
-        string path = "/QuickAWB/Index";
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/QuickAWB/Index";
+    var PageID = 0;
 
-        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
-        {
-            CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
-            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
-            isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
 
-        }
+    }
+}
+
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style>
+    tfoot {
+        display: table-header-group;
     }
 
-    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+    .dataTables_info {
+        display: block !important;
+    }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-    <style>
-        tfoot {
-            display: table-header-group;
-        }
-        .dataTables_info{
-            display:block!important;
-        }
-        .tblfont
-        {
-            font-size:13px;
-        }
-        .tdphone
-        {
-            width:50px!important;
-        }
-        .colorred
-        {
-            color:#c6250f;
-        }
-        .colorblue {
-            color: #273ef3;
-        }
-        /* .dataTables_paginate 
+    .tblfont {
+        font-size: 13px;
+    }
+
+    .tdphone {
+        width: 50px !important;
+    }
+
+    .colorred {
+        color: #c6250f;
+    }
+
+    .colorblue {
+        color: #273ef3;
+    }
+    /* .dataTables_paginate
          {
              display:block!important;
          }*/
-    </style>
-    <script type="text/javascript">
+</style>
+<script type="text/javascript">
 
-        $(function () {
-            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-        });
-        //$("#FromDate").val(GetCurrentDate());
-        //function GetCurrentDate() {
-        //    var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");            
-        //    var sd = new Date();
-        //    var curr_date = '01';
-        //    var curr_month = sd.getMonth()+1;
-        //    var curr_year = sd.getFullYear();
-        //    return (curr_date + "-" + curr_month + "-" + curr_year);
-        //}
+    });
+    //$("#FromDate").val(GetCurrentDate());
+    //function GetCurrentDate() {
+    //    var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    //    var sd = new Date();
+    //    var curr_date = '01';
+    //    var curr_month = sd.getMonth()+1;
+    //    var curr_year = sd.getFullYear();
+    //    return (curr_date + "-" + curr_month + "-" + curr_year);
+    //}
 
-        $(function () {
-            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-            $('#ToDate').datepicker("setDate", new Date());
-        });
+        $('#ToDate').datepicker("setDate", new Date());
+    });
 
-        $(function () {
-            $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
-        });
-    </script>
-    <script type="text/javascript">
-        
+    $(function () {
+        $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+    });
+</script>
+<script type="text/javascript">
+        @PageID = getparam();
         function ShowStatusModal(InScanId) {
-            
+
             $('#InScanID').val(InScanId);
 
           $.ajax({
@@ -97,19 +100,20 @@
                 console.log(_detail);
                 $('#CourierStatusId').val(_detail.CourierStatusID);
                 $('#StatusTypeId').val(_detail.StatusTypeID);
-                $('#ChangeStatusTypeId').val(_detail.StatusTypeID).trigger('change');                                               
+                $('#ChangeStatusTypeId').val(_detail.StatusTypeID).trigger('change');
 
                  $('#StatusModal').modal('show');
 
             }
         });
-              
+
     }
         $(document).ready(function () {
             $('#dataTables-example tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width:100%" />');
             });
+
 
 
             var table = $('#dataTables-example').DataTable({
@@ -145,11 +149,11 @@
                 datatype: "Json",
                 data: { 'StatusTypeId' : $('#ChangeStatusTypeId').val() },
                 success: function (response) {
-                    debugger;                                   
+                    debugger;
                     //$('#CourierStatusId').select2("destroy");
                     $('#ChangeCourierStatusId').html('');
                     var opthtml = '<option value="0">Select</option>';
-                    $(response.data).each(function (index, item) {                        
+                    $(response.data).each(function (index, item) {
                         if (item.id == pcourierstatusid) {
                                opthtml += '<option selected value="' + item.id + '">' + item.text + '</option>';
                         }
@@ -164,7 +168,7 @@
                     //$('#CourierStatusId').val("2").trigger('change');
                     //$('#CourierStatusId').select2('data', response.data[2]);
                     //$('#CourierStatusId').val('2').text(response.data[2].text);
-                    
+
 
                     // $('#ChangeCourierStatusId').select2({
                     //        width: '100%',
@@ -172,15 +176,15 @@
                     //        multiple: false,
                     //        maximumSelectionSize: 1,
                     //        minimumResultsForSearch :-1,
-                    //        placeholder: "Select Status"                            
+                    //        placeholder: "Select Status"
                     //        });
 
                     }
               });
            });
 
-           $('#btnsavestatus').click(function () {                     
-                         
+           $('#btnsavestatus').click(function () {
+
              var statusobj = {
                 InScanID: $('#InScanID').val(),
                 StatusTypeID: $('#ChangeStatusTypeId').val(),
@@ -194,7 +198,7 @@
                 datatype: "Json",
                 data: statusobj,
                 success: function (response) {
-                    debugger;                    
+                    debugger;
                     if (response.status == "ok") {
                         $.notify("Status Updated Successfully!", "success");
                         window.location.reload();
@@ -202,23 +206,24 @@
                     else
                     { $.notify("Save Failed :" + response.message, "warning"); }
 
-                    
+
                      $('#StatusModal').modal('hide');
                 }
             });
-                                     
+
 
         });
 
         });
 
 
-    </script>
-    <section class="content-header">
-        <h1 class="headingfont">AirWay Bill</h1>
+</script>
+<section class="content-header">
+    <h1 class="headingfont">AirWay Bill</h1>
 
-    </section>
-
+</section>
+@using (@Html.BeginForm("Index", "QuickAWB", FormMethod.Post, new { @class = "form-horizontal" }))
+{
     <div class="row no-margin">
         <div class=" d-flex">
             <div class="col-md-2">
@@ -226,40 +231,49 @@
                 <input type="hidden" id="CourierStatusId" />
                 <input type="hidden" id="StatusTypeId" />
                 <label class="headinglabel">Status</label>
-                @Html.DropDownList("StatusId", new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+                @Html.DropDownListFor(mode=>Model.StatusID, new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
             </div>
             <div class="col-md-1">
                 <label class="headinglabel">From </label>
-                <input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />
-                @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+                @*<input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />*@
+                @Html.TextBoxFor(mode=>mode.FromDate,new { @class = "form-control text-right" })
             </div>
 
             <div class="col-md-1">
                 <label class="headinglabel">To </label>
-                <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
-                @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+                @*<input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />*@
+                @Html.TextBoxFor(model=>model.ToDate, new { @class = "form-control text-right" })
             </div>
 
             <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
-                <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
+                <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>
             </div>
             <div class="pull-left" style="padding-top:32px;">
                 <p class="indexbtnpadding">
-                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                    @if (@ViewBag.PageID == 0)
                     {
-                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                        if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                        {
+                            @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                        }
                     }
                     else
                     {
-                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                         <a class="btn btn-primary btnwidth" href="Javascript:void(0)"  onclick="location.href='@Url.Action("Create", "AWBBatch")'">Create New</a>
+                            
                     }
 
                 </p>
             </div>
         </div>
     </div>
-
+}
     <section class="content">
         @if (TempData["SuccessMsg"] != null)
         {
@@ -294,7 +308,7 @@
                         </th>
                         <th width="15%">
                             @Html.Label("Receiver/Consignee")
-                        </th>                        
+                        </th>
                         <th width="5%">
                             @Html.Label("Destination")
                         </th>
@@ -315,38 +329,38 @@
                 <tfoot>
                     <tr>
                         <th>
-                            
+
                         </th>
                         <th class="right_text">
-                            
+
                         </th>
                         <th>
-                            
-                        </th>
-                        <th >
-                            
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
+                        </th>
+                        <th>
+
                         </th>
 
                         <th style="display:none"></th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Details)
                     {
 
                         <tr>
@@ -367,7 +381,7 @@
                                 @Html.DisplayFor(modelItem => item.consigneename)
                                 <br />
                                 @Html.DisplayFor(modelItem => item.ConsigneePhone)
-                            </td>                            
+                            </td>
                             <td class="textright">
                                 @Html.DisplayFor(modelItem => item.destination)
                             </td>
@@ -382,10 +396,10 @@
                                 @Html.DisplayFor(modelItem => item.CourierStatus)
                             </td>
                             <td>
-                                <span class="colorblue" title="Created Detail" >@Html.DisplayFor(modelItem => item.CreatedByDate) - @Html.DisplayFor(modelItem => item.CreatedByName) </span>
+                                <span class="colorblue" title="Created Detail">@Html.DisplayFor(modelItem => item.CreatedByDate) - @Html.DisplayFor(modelItem => item.CreatedByName) </span>
                                 <br />
-                                <span class="colorred" title="Modified Detail" >@Html.DisplayFor(modelItem => item.LastModifiedDate) - @Html.DisplayFor(modelItem => item.LastModifiedByName)</span>
-</td>
+                                <span class="colorred" title="Modified Detail">@Html.DisplayFor(modelItem => item.LastModifiedDate) - @Html.DisplayFor(modelItem => item.LastModifiedByName)</span>
+                            </td>
                             <td>
                                 <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.InScanID')"><i class="fa fa-file"></i></a> |
                                 @if (ismodify)
@@ -394,7 +408,7 @@
                                 }
                                 @if (isview)
                                 {
-                                    <a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i>|</a>                                
+                                    <a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i>|</a>
                                 }
                                 @if (isdelete)
                                 {
@@ -402,7 +416,7 @@
                                 }
                                 @if (isprint)
                                 {
-                                    <a target="_blank" href="@Url.Action("AWBPrintReport", "QuickAWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>                                                                
+                                    <a target="_blank" href="@Url.Action("AWBPrintReport", "QuickAWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>
                                 }
                             </td>
                         </tr>
@@ -458,6 +472,12 @@
         </div>
     </section>
     <script type="text/javascript">
+        function getparam() {
+            const params = new URLSearchParams(window.location.search)
+            var id = params.get('id');
+            return id
+
+        }
         function Delete(ID) {
             if (confirm("Are you sure, You want to Delete Quick AirWay Bill?")) {
                 window.location.href = "/QuickAWB/DeleteConfirmed/?id=" + ID;

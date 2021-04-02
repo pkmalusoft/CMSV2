@@ -14,13 +14,6 @@ namespace CMSV2.Models
     
     public partial class InScanMaster
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public InScanMaster()
-        {
-            this.CustomerInvoiceDetails = new HashSet<CustomerInvoiceDetail>();
-            this.InscanOtherCharges = new HashSet<InscanOtherCharge>();
-        }
-    
         public int InScanID { get; set; }
         public string EnquiryNo { get; set; }
         public string AWBNo { get; set; }
@@ -52,11 +45,8 @@ namespace CMSV2.Models
         public Nullable<int> AssignedEmployeeID { get; set; }
         public Nullable<decimal> CourierCharge { get; set; }
         public string PickupRemarks { get; set; }
-        public string ShipmentType { get; set; }
-        public string Vehicle { get; set; }
         public Nullable<System.DateTime> PickupReadyTime { get; set; }
         public Nullable<int> EnteredByID { get; set; }
-        public string UserName { get; set; }
         public Nullable<bool> IsEnquiry { get; set; }
         public Nullable<int> CourierStatusID { get; set; }
         public Nullable<int> PickupRequestStatusId { get; set; }
@@ -81,9 +71,6 @@ namespace CMSV2.Models
         public Nullable<int> CustomerRateID { get; set; }
         public Nullable<int> QuickInscanID { get; set; }
         public System.DateTime TransactionDate { get; set; }
-        public string StatusPaymentMode { get; set; }
-        public Nullable<decimal> PackingCharge { get; set; }
-        public Nullable<decimal> SeviceCharge { get; set; }
         public Nullable<decimal> OtherCharge { get; set; }
         public Nullable<decimal> NetTotal { get; set; }
         public Nullable<int> ParcelTypeId { get; set; }
@@ -124,10 +111,8 @@ namespace CMSV2.Models
         public string ConsignorMobileNo { get; set; }
         public string ConsigneeMobileNo { get; set; }
         public bool AWBProcessed { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InscanOtherCharge> InscanOtherCharges { get; set; }
+        public Nullable<int> PrepaidAWBID { get; set; }
+        public Nullable<int> AWBBookIssueID { get; set; }
+        public Nullable<int> BATCHID { get; set; }
     }
 }

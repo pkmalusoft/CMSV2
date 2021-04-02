@@ -46,49 +46,49 @@ namespace CMSV2.Controllers
         {
 
        
-                AWBStatu obj = new AWBStatu();
+                //AWBStatu obj = new AWBStatu();
 
-                int max = (from c in db.AWBStatus orderby c.AWBStatusID descending select c.AWBStatusID).FirstOrDefault();
-
-
-                //List<PODStatusVM> lst = (from c in db.CourierStatus join t in db.AWBStatus on c.CourierStatusID equals t.StatusDescriptionID select new PODStatusVM { CourierStatusID = c.CourierStatusID }).ToList();
-
-                if (max == null)
-                {
-                    obj.AWBStatusID =  1;
-                    obj.StatusDescriptionID = v.CourierStatusID;
-                }
-                else
-                {
-                    obj.AWBStatusID = max+1;
-                    obj.StatusDescriptionID = v.CourierStatusID;
-                }
-
-                POD ob = new POD();
-                int data = (from c in db.PODs orderby c.PODID descending select c.PODID).FirstOrDefault();
-
-                if (data == null)
-                {
-                    ob.PODID =  1;
-                    ob.ReceiverName = v.RecevierName;
-                    ob.Remarks = v.Remarks;
-
-                }
-                else
-                {
-                    ob.PODID = data+1;
-                    ob.ReceiverName = v.RecevierName;
-                    ob.Remarks = v.Remarks;
-
-                }
+                //int max = (from c in db.AWBStatus orderby c.AWBStatusID descending select c.AWBStatusID).FirstOrDefault();
 
 
-                db.AWBStatus.Add(obj);
-                db.SaveChanges();
+                ////List<PODStatusVM> lst = (from c in db.CourierStatus join t in db.AWBStatus on c.CourierStatusID equals t.StatusDescriptionID select new PODStatusVM { CourierStatusID = c.CourierStatusID }).ToList();
+
+                //if (max == null)
+                //{
+                //    obj.AWBStatusID =  1;
+                //    obj.StatusDescriptionID = v.CourierStatusID;
+                //}
+                //else
+                //{
+                //    obj.AWBStatusID = max+1;
+                //    obj.StatusDescriptionID = v.CourierStatusID;
+                //}
+
+                //POD ob = new POD();
+                //int data = (from c in db.PODs orderby c.PODID descending select c.PODID).FirstOrDefault();
+
+                //if (data == null)
+                //{
+                //    ob.PODID =  1;
+                //    ob.ReceiverName = v.RecevierName;
+                //    ob.Remarks = v.Remarks;
+
+                //}
+                //else
+                //{
+                //    ob.PODID = data+1;
+                //    ob.ReceiverName = v.RecevierName;
+                //    ob.Remarks = v.Remarks;
+
+                //}
 
 
-                db.PODs.Add(ob);
-                db.SaveChanges();
+                //db.AWBStatus.Add(obj);
+                //db.SaveChanges();
+
+
+                //db.PODs.Add(ob);
+                //db.SaveChanges();
 
 
                 return RedirectToAction("Index");

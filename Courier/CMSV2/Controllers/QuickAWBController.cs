@@ -15,39 +15,46 @@ namespace CMSV2.Controllers
     {
         Entities1 db = new Entities1();
 
-
-        public ActionResult Index(int? StatusId, string FromDate, string ToDate)
+        [HttpGet]
+        public ActionResult Index(int id=0)
         {
-                SessionDataModel.ClearTableVariable();
+            AWBSearch obj= (AWBSearch)Session["AWBSearch"];
+            AWBSearch model = new AWBSearch();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-
-            DateTime pFromDate;
-            DateTime pToDate;
-            int pStatusId = 0;
-            if (StatusId == null)
+            if (obj == null)
             {
-                pStatusId = 0;
-            }
-            else
-            {
-                pStatusId = Convert.ToInt32(StatusId);
-            }
-            if (FromDate == null || ToDate == null)
-            {                
+                DateTime pFromDate;
+                DateTime pToDate;
+                //int pStatusId = 0;
                 pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date; // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+                //if (FromDate == null || ToDate == null)
+                //{
+                 
+                //}
+                //else
+                //{
+                //    pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
+                //    pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+
+                //}
+                obj = new AWBSearch();
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate;
+                obj.StatusID = 0;
+                Session["AWBSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;
+                model.StatusID = 0;
             }
             else
             {
-                pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
-                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
-
+                model = obj;
             }
-
-            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(pStatusId, pFromDate, pToDate, branchid, depotId, "");
-            
+            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(obj.StatusID, obj.FromDate, obj.ToDate, branchid, depotId, "");
+            model.Details = lst;
             //List<QuickAWBVM> lst = (from c in db.InScanMasters
             //                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
             //                        from subpet in gj.DefaultIfEmpty()
@@ -65,17 +72,24 @@ namespace CMSV2.Controllers
             //                        orderby c.TransactionDate descending, c.AWBNo descending
             //                        select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,CreatedByName="",LastModifiedByName="" }).ToList();  //, requestsource=subpet3.RequestTypeName 
 
-            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
+            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            //ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.CourierStatusList = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
-            ViewBag.StatusId = StatusId;    
-            return View(lst);
+            ViewBag.PageID = id;
+            //ViewBag.StatusId = StatusId;    
+            return View(model);
 
         }
 
+        [HttpPost]
+        public ActionResult Index(AWBSearch obj)
+        {
+            Session["AWBSearch"] = obj;
+            return RedirectToAction("Index");
+        }
         public ActionResult Create(int id=0)
         {           
             
@@ -286,18 +300,18 @@ namespace CMSV2.Controllers
                     {
                         inscan.OtherCharge = Convert.ToDecimal(v.OtherCharge);
                     }
-                    if (v.PackingCharge != null)
-                    {
-                        inscan.PackingCharge = Convert.ToDecimal(v.PackingCharge);
-                    }
+                    //if (v.PackingCharge != null)
+                    //{
+                    //    inscan.PackingCharge = Convert.ToDecimal(v.PackingCharge);
+                    //}
                     if (v.Weight!=null)
                     {
                         inscan.Weight = Convert.ToDecimal(v.Weight);
                     }
-                    if (v.paymentmode!=null)
-                    {
-                        inscan.StatusPaymentMode = v.paymentmode;
-                    }
+                    //if (v.paymentmode!=null)
+                    //{
+                    //    inscan.StatusPaymentMode = v.paymentmode;
+                    //}
 
                     inscan.PaymentModeId = v.PaymentModeId;
                     
@@ -639,7 +653,7 @@ namespace CMSV2.Controllers
                 statusname = db.CourierStatus.Where(cc => cc.CourierStatusID == v.CourierStatusID).FirstOrDefault().CourierStatus;
                 
                 _enquiry.CourierStatusID = v.CourierStatusID;
-                _enquiry.TransactionDate = DateTime.Now;
+                //_enquiry.TransactionDate = DateTime.Now;
 
                 db.Entry(_enquiry).State = EntityState.Modified;
                 db.SaveChanges();
@@ -782,14 +796,14 @@ namespace CMSV2.Controllers
             else
                 inscan.totalCharge = 0;
 
-            if (data.PackingCharge != null)
-            {
-                inscan.PackingCharge = data.PackingCharge.Value;
-            }
-            else
-            {
-                inscan.PackingCharge = 0;
-            }
+            //if (data.PackingCharge != null)
+            //{
+            //    inscan.PackingCharge = data.PackingCharge.Value;
+            //}
+            //else
+            //{
+            //    inscan.PackingCharge = 0;
+            //}
             if (data.MaterialCost != null)
             {
                 inscan.materialcost = data.MaterialCost;
@@ -848,7 +862,7 @@ namespace CMSV2.Controllers
                 inscan.CustomerRateTypeID = Convert.ToInt32(data.CustomerRateID);
                 }
             inscan.PaymentModeId = data.PaymentModeId;
-            inscan.paymentmode = data.StatusPaymentMode;
+           // inscan.paymentmode = data.StatusPaymentMode;
                 inscan.ConsignorCountryName = data.ConsignorCountryName;
                 inscan.ConsignorCityName = data.ConsignorCityName;
                 inscan.ConsigneeCountryName = data.ConsigneeCountryName;
@@ -1387,10 +1401,11 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetReceiverName(string term)
         {
+            //c1.ConsignorMobileNo == null ? "" : c1.ConsignorMobileNo,
             var shipperlist = (from c1 in db.InScanMasters
                                where c1.Consignee.ToLower().StartsWith(term.ToLower())
                                orderby c1.Consignee ascending
-                               select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
+                               select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
 
             return Json(shipperlist, JsonRequestBehavior.AllowGet);                       
 
@@ -1402,7 +1417,7 @@ namespace CMSV2.Controllers
             var shipperlist = (from c1 in db.InScanMasters
                                where c1.Consignor.ToLower().StartsWith(term.ToLower())
                                orderby c1.Consignor ascending
-                               select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
+                               select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
             return Json(shipperlist, JsonRequestBehavior.AllowGet);
         }
 
@@ -1683,7 +1698,7 @@ namespace CMSV2.Controllers
                     inscan.Weight = 0;
                 }
 
-                inscan.paymentmode = data.StatusPaymentMode;
+                //inscan.paymentmode = data.StatusPaymentMode;
                 inscan.ConsignorCountryName = data.ConsignorCountryName;
                 inscan.ConsignorCityName = data.ConsignorCityName;
                 inscan.ConsigneeCountryName = data.ConsigneeCountryName;
@@ -1761,10 +1776,10 @@ namespace CMSV2.Controllers
             {
                 inscan.StatedWeight = Convert.ToDouble(v.Weight);
             }
-            if (v.paymentmode != null)
-            {
-                inscan.StatusPaymentMode = v.paymentmode;
-            }
+            //if (v.paymentmode != null)
+            //{
+            //    inscan.StatusPaymentMode = v.paymentmode;
+            //}
 
             
             inscan.PaymentModeId = v.PaymentModeId;            

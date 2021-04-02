@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace CMSV2.Controllers
 {
-    public class PrepaidConsignmentEntryDomesticController : Controller
+    public class PrepaidAWBController : Controller
     {
         Entities1 db = new Entities1();
 

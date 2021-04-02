@@ -19,11 +19,11 @@ namespace CMSV2.Controllers
 
         public ActionResult Home()
         {
-            var Query = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID  equals t1.MenuID  where t1.RoleID==13 &&  t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+            var Query = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.MenuID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
 
             var Query1 = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.ParentID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
 
-            foreach(Menu q in Query)
+            foreach (Menu q in Query)
             {
                 Query1.Add(q);
             }
@@ -62,7 +62,7 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
             List<CustmorVM> lst = new List<CustmorVM>();
-            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).ToList();
+            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
 
             foreach (var item in data)
             {
@@ -96,13 +96,13 @@ namespace CMSV2.Controllers
 
 
 
-        public ActionResult Create()
+        public ActionResult Create(int id = 0)
         {
-            var transtypes = new SelectList(new[] 
+            var transtypes = new SelectList(new[]
                                         {
                                             new { ID = "Cr", trans = "Credit" },
                                             new { ID = "Dr", trans = "Debit" },
-                                           
+
                                         },
           "ID", "trans", 1);
 
@@ -121,12 +121,28 @@ namespace CMSV2.Controllers
             ViewBag.Depot = data;
 
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            
-            PickupRequestDAO doa = new PickupRequestDAO();
-            ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+            ViewBag.UserRoleId = Convert.ToInt32(Session["UserRoleID"].ToString());
             CustmorVM obj = new CustmorVM();
-            obj.RoleID = 13;
-            obj.Password = doa.RandomPassword(6);
+            if (id == 0)
+            {
+                ViewBag.Title = "Customer - Create";
+                PickupRequestDAO doa = new PickupRequestDAO();
+                ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+                obj.CustomerID = 0;
+                obj.RoleID = 13;
+                obj.CustomerType = "CS";
+
+                obj.Password = doa.RandomPassword(6);
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+            }
+            else
+            {
+                ViewBag.Title = "Customer - Modify";
+                obj = GetDetail(id);
+            }
+
             return View(obj);
         }
 
@@ -138,17 +154,28 @@ namespace CMSV2.Controllers
             string locationname = c.LocationName;
             string country = c.CountryName;
             string city = c.CityName;
+
+
             CustomerMaster obj = new CustomerMaster();
             PickupRequestDAO _dao = new PickupRequestDAO();
-            int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+            if (c.CustomerID == 0)
+            {
+
+                int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+                int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                obj.CustomerID = max + 1;
+                obj.AcCompanyID = accompanyid;
+
+                obj.CustomerCode = c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+            }
+            else
+            {
+                obj = db.CustomerMasters.Find(c.CustomerID);
 
 
-            int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            int branchid= Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            obj.CustomerID = max + 1;
-            obj.AcCompanyID = accompanyid;
 
-            obj.CustomerCode = c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+            }
             obj.CustomerName = c.CustomerName;
             obj.CustomerType = c.CustomerType;
 
@@ -162,12 +189,25 @@ namespace CMSV2.Controllers
             obj.Fax = c.Fax;
             obj.Email = c.Email;
             obj.WebSite = c.Website;
-            //obj.CountryID = 1; ;// c.CountryID;
-            //obj.CityID = 19; // c.CityID;
-            //obj.LocationID = 7; // c.LocationID;
+            if (c.CountryCode != null)
+                obj.CountryCode = c.CountryCode;
+            obj.CountryID = c.CountryID;
+            if (c.CityID == 0)
+                obj.CityID = null;
+            else
+                obj.CityID = c.CityID;
+            if (c.LocationID == 0)
+            {
+                obj.LocationID = null;
+            }
+            else
+            {
+                obj.LocationID = c.LocationID;
+            }
             obj.CountryName = c.CountryName;
             obj.CityName = c.CityName;
             obj.LocationName = c.LocationName;
+            obj.PlaceID = c.PlaceID;
             if (c.CurrenceyID == 0)
             {
                 c.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
@@ -181,7 +221,7 @@ namespace CMSV2.Controllers
             obj.StatusTaxable = c.StatusTaxable;
             obj.EmployeeID = c.EmployeeID;
             obj.statusCommission = c.StatusCommission;
-
+            obj.VATTRN = c.VATTRN;
 
             obj.CourierServiceID = c.CourierServiceID;
             obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -192,10 +232,16 @@ namespace CMSV2.Controllers
             obj.Referal = c.Referal;
             obj.OfficeOpenTime = c.OfficeTimeFrom;
             obj.OfficeCloseTime = c.OfficeTimeTo;
-            if (c.DepotID==null)
-            obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            if (c.DepotID == null)
+                obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             else
                 obj.DepotID = c.DepotID;
+
+            if (c.CustomerType == "CR" && c.ChkApprovedBy)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedOn = c.ApprovedOn;
+            }
 
             //UserRegistration u = new UserRegistration();
             //if (c.Email != null)
@@ -234,45 +280,54 @@ namespace CMSV2.Controllers
             //                    Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
             //                        ve.PropertyName, ve.ErrorMessage);
             //                }
-                            
+
             //            }
             //        }
             //    }
             //}
-          
-                try
-                {
-                  //  obj.UserID = u.UserID;
 
+            try
+            {
+                //  obj.UserID = u.UserID;
+                if (c.CustomerID > 0)
+                {
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
                     db.CustomerMasters.Add(obj);
                     db.SaveChanges();
-                    if (c.EmailNotify==true)
-                    {
-                        EmailDAO _emaildao = new EmailDAO();
-                        _emaildao.SendCustomerEmail(c.Email, c.CustomerName, obj.Password);
-
-                    }
-
                 }
-                catch (DbEntityValidationException e)
+
+
+                if (c.EmailNotify == true)
                 {
-                    foreach (var eve in e.EntityValidationErrors)
-                    {
-                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                        foreach (var ve in eve.ValidationErrors)
-                        {
-                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                ve.PropertyName, ve.ErrorMessage);
-                        }
-                    }
+                    EmailDAO _emaildao = new EmailDAO();
+                    _emaildao.SendCustomerEmail(c.Email, c.CustomerName, obj.Password);
 
                 }
 
-            
-                TempData["SuccessMsg"] = "You have successfully added Customer.";
-                return RedirectToAction("Index");
-           
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+
+            }
+
+
+            TempData["SuccessMsg"] = "You have successfully added Customer.";
+            return RedirectToAction("Index");
+
 
 
             return View();
@@ -290,19 +345,19 @@ namespace CMSV2.Controllers
                 string custform = "000000";
                 string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
                 string last6digit = "";
-                if (maxcustomercode==null)
+                if (maxcustomercode == null || maxcustomercode == "")
                 {
                     //maxcustomercode="AA000000";
                     last6digit = "0";
-                        
+
                 }
                 else
                 {
                     last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
                 }
-                if (last6digit !="")
+                if (last6digit != "")
                 {
-                    
+
                     string customerfirst = custname.Substring(0, 1);
                     string customersecond = "";
                     try
@@ -310,14 +365,14 @@ namespace CMSV2.Controllers
                         customersecond = custname.Split(' ')[1];
                         customersecond = customersecond.Substring(0, 1);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
-                    
-                    if (customerfirst !="" && customersecond!="") 
+
+                    if (customerfirst != "" && customersecond != "")
                     {
-                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1); 
+                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
                     }
                     else
                     {
@@ -325,7 +380,7 @@ namespace CMSV2.Controllers
                     }
 
                 }
-                                
+
                 return Json(new { data = customercode, result = status }, JsonRequestBehavior.AllowGet);
             }
 
@@ -382,10 +437,10 @@ namespace CMSV2.Controllers
                 obj.RoleID = 13;
                 obj.CustomerID = c.CustomerID;
 
-                if (c.AcCompanyID!=null)
+                if (c.AcCompanyID != null)
                     obj.AcCompanyID = c.AcCompanyID.Value;
                 else
-                    obj.AcCompanyID= Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                    obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
                 obj.CustomerCode = c.CustomerCode;
                 obj.CustomerName = c.CustomerName;
@@ -401,14 +456,18 @@ namespace CMSV2.Controllers
                 obj.Fax = c.Fax;
                 obj.Email = c.Email;
                 obj.Website = c.WebSite;
-                //obj.CountryID = c.CountryID; //.Value;
-                //obj.CityID = c.CityID; //.Value;
-                //obj.LocationID = c.LocationID; //.Value;
+
+                if (c.CountryID != null)
+                    obj.CountryID = c.CountryID.Value;
+                if (c.CityID != null)
+                    obj.CityID = c.CityID.Value;
+                if (c.LocationID != null)
+                    obj.LocationID = c.LocationID.Value;
                 obj.CountryName = c.CountryName;
                 obj.LocationName = c.LocationName;
                 obj.CityName = c.CityName;
 
-                if (c.CurrencyID!=null)
+                if (c.CurrencyID != null)
                     obj.CurrenceyID = c.CurrencyID.Value;
                 else
                     obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
@@ -418,10 +477,14 @@ namespace CMSV2.Controllers
                 { obj.CreditLimit = c.CreditLimit.Value; }
                 else
                 { obj.CreditLimit = 0; }
+                if (c.StatusTaxable != null)
+                { obj.StatusTaxable = c.StatusTaxable.Value; }
+                else
+                {
+                    obj.StatusTaxable = false;
+                }
 
-                obj.StatusTaxable = c.StatusTaxable.Value;
-
-                if (c.EmployeeID!=null)
+                if (c.EmployeeID != null)
                     obj.EmployeeID = c.EmployeeID.Value;
                 if (c.statusCommission != null)
                 { obj.StatusCommission = c.statusCommission.Value; }
@@ -434,15 +497,15 @@ namespace CMSV2.Controllers
 
                 obj.OfficeTimeFrom = c.OfficeOpenTime;
                 obj.OfficeTimeTo = c.OfficeCloseTime;
-                
-                if (c.CourierServiceID !=null)
+
+                if (c.CourierServiceID != null)
                     obj.CourierServiceID = c.CourierServiceID.Value;
 
                 if (c.BranchID != null)
                 {
                     obj.BranchID = c.BranchID.Value;
                 }
-                
+                obj.VATTRN = c.VATTRN;
                 int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
                 obj.DepotID = DepotID;
                 obj.CustomerUsername = c.CustomerUsername;
@@ -451,19 +514,141 @@ namespace CMSV2.Controllers
                 {
                     obj.UserID = c.UserID;
                 }
-                
+
+                if (c.ApprovedBy == null || c.ApprovedBy == 0)
+                {
+                    obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                    obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                }
+
             }
 
             return View(obj);
         }
+        public CustmorVM GetDetail(int id)
+        {
+            CustmorVM obj = new CustmorVM();
+            var c = (from d in db.CustomerMasters where d.CustomerID == id select d).FirstOrDefault();
+            UserRegistration u = new UserRegistration();
+            if (c.UserID != null)
+            {
+                //UserRegistration x = (from a in db.UserRegistrations where a.UserName == c.Email select a).FirstOrDefault();
+                UserRegistration x = (from a in db.UserRegistrations where a.UserID == c.UserID select a).FirstOrDefault();
 
+                if (x != null)
+                {
+                    if (x.RoleID != null)
+                        if (obj.RoleID == 0)
+                            obj.RoleID = 13;
+                        else
+                            obj.RoleID = Convert.ToInt32(x.RoleID);
+                }
+            }
+            obj.RoleID = 13;
+            obj.CustomerID = c.CustomerID;
+
+            if (c.AcCompanyID != null)
+                obj.AcCompanyID = c.AcCompanyID.Value;
+            else
+                obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+            obj.CustomerCode = c.CustomerCode;
+            obj.CustomerName = c.CustomerName;
+            obj.CustomerType = c.CustomerType;
+
+            obj.ReferenceCode = c.ReferenceCode;
+            obj.ContactPerson = c.ContactPerson;
+            obj.Address1 = c.Address1;
+            obj.Address2 = c.Address2;
+            obj.Address3 = c.Address3;
+            obj.Phone = c.Phone;
+            obj.Mobile = c.Mobile;
+            obj.Email = c.Email;
+            obj.Fax = c.Fax;
+            obj.Email = c.Email;
+            obj.Website = c.WebSite;
+            if (c.PlaceID != null)
+                obj.PlaceID = c.PlaceID;
+            if (c.CountryCode!=null)
+            {
+                obj.CountryCode = c.CountryCode;
+            }
+            if (c.CountryID != null)
+                obj.CountryID = c.CountryID.Value;
+            if (c.CityID != null)
+                obj.CityID = c.CityID.Value;
+            if (c.LocationID != null)
+                obj.LocationID = c.LocationID.Value;
+            obj.CountryName = c.CountryName;
+            obj.LocationName = c.LocationName;
+            obj.CityName = c.CityName;
+
+            if (c.CurrencyID != null)
+                obj.CurrenceyID = c.CurrencyID.Value;
+            else
+                obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+
+            obj.StatusActive = c.StatusActive.Value;
+            if (c.CreditLimit != null)
+            { obj.CreditLimit = c.CreditLimit.Value; }
+            else
+            { obj.CreditLimit = 0; }
+            if (c.StatusTaxable != null)
+            { obj.StatusTaxable = c.StatusTaxable.Value; }
+            else
+            {
+                obj.StatusTaxable = false;
+            }
+
+            if (c.EmployeeID != null)
+                obj.EmployeeID = c.EmployeeID.Value;
+            if (c.statusCommission != null)
+            { obj.StatusCommission = c.statusCommission.Value; }
+            if (c.BusinessTypeId != null)
+            {
+                obj.BusinessTypeId = Convert.ToInt32(c.BusinessTypeId);
+            }
+            if (c.Referal != null)
+            { obj.Referal = c.Referal; }
+
+            obj.OfficeTimeFrom = c.OfficeOpenTime;
+            obj.OfficeTimeTo = c.OfficeCloseTime;
+
+            if (c.CourierServiceID != null)
+                obj.CourierServiceID = c.CourierServiceID.Value;
+
+            if (c.BranchID != null)
+            {
+                obj.BranchID = c.BranchID.Value;
+            }
+            obj.VATTRN = c.VATTRN;
+            int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            obj.DepotID = DepotID;
+            obj.CustomerUsername = c.CustomerUsername;
+            obj.Password = c.Password;
+            if (c.UserID != null)
+            {
+                obj.UserID = c.UserID;
+            }
+
+            if (c.ApprovedBy == null || c.ApprovedBy == 0)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+            }
+
+            return obj;
+
+
+
+        }
         //
         // POST: /CustomerMaster/Edit/5
         [HttpPost]
         public ActionResult Edit(CustmorVM c)
         {
             CustomerMaster obj = db.CustomerMasters.Find(c.CustomerID);
-            
+
             //obj.CustomerID = c.CustomerID;
             obj.AcCompanyID = c.AcCompanyID;
             obj.CustomerCode = c.CustomerCode;
@@ -480,14 +665,14 @@ namespace CMSV2.Controllers
             obj.Fax = c.Fax;
             obj.Email = c.Email;
             obj.WebSite = c.Website;
-            //obj.CountryID = 1;//  c.CountryID;
-            //obj.CityID = 19; // c.CityID;
-            //obj.LocationID = 7; // c.LocationID;
+            obj.CountryID = c.CountryID;
+            obj.CityID = c.CityID;
+            obj.LocationID = c.LocationID;
             obj.CountryName = c.CountryName;
             obj.CityName = c.CityName;
             obj.LocationName = c.LocationName;
             if (c.CurrenceyID == 0)
-            {                
+            {
                 c.CurrenceyID = Convert.ToInt32(Session["CurrencyID"].ToString());
             }
             else
@@ -499,9 +684,9 @@ namespace CMSV2.Controllers
             obj.StatusTaxable = c.StatusTaxable;
             obj.EmployeeID = c.EmployeeID;
             obj.statusCommission = c.StatusCommission;
-            
+
             obj.CourierServiceID = c.CourierServiceID;
-            obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString()); 
+            obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             obj.CustomerUsername = c.CustomerUsername;
             obj.Password = c.Password;
 
@@ -510,17 +695,22 @@ namespace CMSV2.Controllers
             obj.Referal = c.Referal;
             obj.BusinessTypeId = c.BusinessTypeId;
             //obj.UserID = c.UserID;
-            
-            obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString()); 
+            obj.VATTRN = c.VATTRN;
+            obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
+            if (obj.CustomerType == "CS" && c.CustomerType == "CR" && c.ChkApprovedBy)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedOn = c.ApprovedOn;
+            }
 
             db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully Updated Customer.";
-                return RedirectToAction("Index");
-           
+            db.SaveChanges();
+            TempData["SuccessMsg"] = "You have successfully Updated Customer.";
+            return RedirectToAction("Index");
 
-           
+
+
         }
 
         //
@@ -587,7 +777,149 @@ namespace CMSV2.Controllers
             }
             return Json(objLoc, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CustomerList()
+        {
+            List<CustmorVM> lst = new List<CustmorVM>();
+            var data = db.CustomerMasters.Where(ite => (ite.StatusActive.HasValue ? ite.StatusActive == true : false) && ite.CustomerType != "CR").ToList();
 
+            foreach (var item in data)
+            {
+                CustmorVM c = new CustmorVM();
+
+                c.CustomerID = item.CustomerID;
+                c.CustomerType = item.CustomerType;
+                c.CustomerCode = item.CustomerCode;
+                c.CustomerName = item.CustomerName;
+                c.ContactPerson = item.ContactPerson;
+                c.Mobile = item.Mobile;
+                c.Phone = item.Phone;
+                lst.Add(c);
+            }
+
+            return View(lst);
+        }
+        public ActionResult ApproveCustomer(int id)
+        {
+            var c = (from d in db.CustomerMasters where d.CustomerID == id select d).FirstOrDefault();
+            CustmorVM obj = new CustmorVM();
+
+
+            if (c == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+
+                UserRegistration u = new UserRegistration();
+                if (c.UserID != null)
+                {
+                    //UserRegistration x = (from a in db.UserRegistrations where a.UserName == c.Email select a).FirstOrDefault();
+                    UserRegistration x = (from a in db.UserRegistrations where a.UserID == c.UserID select a).FirstOrDefault();
+
+                    if (x != null)
+                    {
+                        if (x.RoleID != null)
+                            if (obj.RoleID == 0)
+                                obj.RoleID = 13;
+                            else
+                                obj.RoleID = Convert.ToInt32(x.RoleID);
+                    }
+                }
+                obj.RoleID = 13;
+                obj.CustomerID = c.CustomerID;
+
+                if (c.AcCompanyID != null)
+                    obj.AcCompanyID = c.AcCompanyID.Value;
+                else
+                    obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+                obj.CustomerCode = c.CustomerCode;
+                obj.CustomerName = c.CustomerName;
+                obj.CustomerType = c.CustomerType;
+
+                obj.ReferenceCode = c.ReferenceCode;
+                obj.ContactPerson = c.ContactPerson;
+                obj.Address1 = c.Address1;
+                obj.Address2 = c.Address2;
+                obj.Address3 = c.Address3;
+                obj.Phone = c.Phone;
+                obj.Mobile = c.Mobile;
+                obj.Fax = c.Fax;
+                obj.Email = c.Email;
+                obj.Website = c.WebSite;
+                //obj.CountryID = c.CountryID; //.Value;
+                //obj.CityID = c.CityID; //.Value;
+                //obj.LocationID = c.LocationID; //.Value;
+                obj.CountryName = c.CountryName;
+                obj.LocationName = c.LocationName;
+                obj.CityName = c.CityName;
+
+                if (c.CurrencyID != null)
+                    obj.CurrenceyID = c.CurrencyID.Value;
+                else
+                    obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+
+                obj.StatusActive = c.StatusActive.Value;
+                if (c.CreditLimit != null)
+                { obj.CreditLimit = c.CreditLimit.Value; }
+                else
+                { obj.CreditLimit = 0; }
+
+                obj.StatusTaxable = c.StatusTaxable.Value;
+
+                if (c.EmployeeID != null)
+                    obj.EmployeeID = c.EmployeeID.Value;
+                if (c.statusCommission != null)
+                { obj.StatusCommission = c.statusCommission.Value; }
+                if (c.BusinessTypeId != null)
+                {
+                    obj.BusinessTypeId = Convert.ToInt32(c.BusinessTypeId);
+                }
+                if (c.Referal != null)
+                { obj.Referal = c.Referal; }
+
+                obj.OfficeTimeFrom = c.OfficeOpenTime;
+                obj.OfficeTimeTo = c.OfficeCloseTime;
+
+                if (c.CourierServiceID != null)
+                    obj.CourierServiceID = c.CourierServiceID.Value;
+
+                if (c.BranchID != null)
+                {
+                    obj.BranchID = c.BranchID.Value;
+                }
+
+                int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+                obj.DepotID = DepotID;
+                obj.CustomerUsername = c.CustomerUsername;
+                if (c.UserID != null)
+                {
+                    obj.UserID = c.UserID;
+                }
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                obj.ApprovedOn = DateTime.Now;
+            }
+
+            return View(obj);
+        }
+        [HttpPost]
+        public ActionResult ApproveCustomer(CustmorVM c)
+        {
+            CustomerMaster obj = db.CustomerMasters.Find(c.CustomerID);
+            obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+            obj.ApprovedOn = DateTime.Now;
+            obj.CustomerType = c.CustomerType;
+
+            db.Entry(obj).State = EntityState.Modified;
+            db.SaveChanges();
+            TempData["SuccessMsg"] = "You have successfully Approved Customer.";
+            return RedirectToAction("CustomerList");
+
+
+
+        }
         public class CityM
         {
             public int CityID { get; set; }

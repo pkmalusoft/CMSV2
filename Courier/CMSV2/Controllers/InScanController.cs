@@ -116,7 +116,7 @@ namespace CMSV2.Controllers
                 vm.QuickInscanDateTime = CommanFunctions.GetLastDayofMonth();
                 vm.DepotID = depotid;
                 ViewBag.EditMode ="false";
-                ViewBag.Title = "InScan Local - Create";
+                ViewBag.Title = "Depot InScan - Create";
                 return View(vm);                
             }
             else
@@ -132,7 +132,7 @@ namespace CMSV2.Controllers
                 vm.DepotID = Convert.ToInt32(qvm.DepotId);
                 vm.BranchId = Convert.ToInt32(qvm.BranchId);
                 ViewBag.EditMode = "true";
-                ViewBag.Title = "InScan Local - Modify";
+                ViewBag.Title = "Depot InScan - Modify";
                 return View(vm);
             }
             

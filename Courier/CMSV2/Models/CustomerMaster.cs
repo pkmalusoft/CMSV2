@@ -67,6 +67,10 @@ namespace CMSV2.Models
         public string CityName { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<int> DepotID { get; set; }
+        public Nullable<int> ApprovedBy { get; set; }
+        public Nullable<System.DateTime> ApprovedOn { get; set; }
+        public string PlaceID { get; set; }
+        public string CountryCode { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CityMaster CityMaster { get; set; }

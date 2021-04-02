@@ -1,0 +1,211 @@
+﻿@model CMSV2.Models.AWBBookIssueSearch
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/DRSReceipt/Index";
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+    $(document).ready(function () {
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" style=width:100% />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    });
+
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">AWB Book Issue</h1>
+
+</section>
+
+@using (Html.BeginForm("Index", "AWBBookIssue", FormMethod.Post, new { @id = "booksearch" }))
+{
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-1">
+                <label class="headinglabel">Document No.</label>
+                @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control" })
+            </div>
+            <div class="col-md-1">
+                <label class="headinglabel">From Date</label>
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">To Date</label>
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control" })
+            </div>
+
+            <div class="pull-left" style=" padding-right:15px;padding-left:15px;">
+                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
+                <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+            <div class="pull-left" style="padding-top:32px;">
+                <p class="indexbtnpadding">
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                    }
+
+                </p>
+            </div>
+        </div>
+    </div>
+}
+    <section class="content">
+        @if (TempData["SuccessMsg"] != null)
+        {
+
+            <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+            </script>
+        }
+
+        <div class="table-responsive tblbackground" style="padding:15px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.Label("DocumentNo")
+                        </th>
+                        <th>
+                            @Html.Label("Trans Date")
+                        </th>
+                        <th>
+                            @Html.Label("BookNo")
+                        </th>
+                        <th>
+                            @Html.Label("Employee Name")
+                        </th>
+                        <th>
+                            @Html.Label("AWB No From")
+                        </th>
+                        <th>
+                            @Html.Label("AWB No To")
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.Label("DocumentNo")
+                        </th>
+                        <th>
+                            @Html.Label("Trans Date")
+                        </th>
+                        <th>
+                            @Html.Label("BookNo")
+                        </th>
+                        <th>
+                            @Html.Label("Employee Name")
+                        </th>
+                        <th>
+                            @Html.Label("AWB No From")
+                        </th>
+                        <th>
+                            @Html.Label("AWB No To")
+                        </th>
+
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+
+                @foreach (var item in Model.Details)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Documentno)
+                        </td>
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TransDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BookNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AWBNOFrom)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AWBNOTo)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Create", new { id = item.AWBBOOKIssueID })"><i class="fa fa-pencil"></i></a> |
+
+                            <a href="#" onclick="Delete(ID=@item.AWBBOOKIssueID)"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        function Delete(ID) {
+            if (confirm("Are you sure, You want to Delete AWB Book Issue?")) {
+                window.location.href = "/AWBBookIssue/DeleteConfirmed/?id=" + ID;
+            }
+        }
+    </script>

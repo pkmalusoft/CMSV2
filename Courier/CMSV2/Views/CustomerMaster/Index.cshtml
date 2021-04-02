@@ -40,7 +40,7 @@
 
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Customer</h1>
+    <h1 class="headingfont">Maintain Customer</h1>
 
 </section>
 <div class="col-md-12">
@@ -161,7 +161,7 @@
         </td>
        
         <td>
-           <a href="@Url.Action("Edit", new { id = item.CustomerID })"><i class="fa fa-pencil"></i></a> |
+           <a href="@Url.Action("Create", new { id = item.CustomerID })"><i class="fa fa-pencil"></i></a> |
             @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
             <a href="#" onclick="Delete(ID=@item.CustomerID)"><i class="fa fa-times"></i></a>
         </td>

@@ -8,11 +8,9 @@ using System;
 
 namespace CMSV2.Models
 {
-  public class PrepaidConsignmentEntryDomesticVM
+  public class PrepaidAWBVM:PrepaidAWB
   {
     public string AWBNO { get; set; }
-
-    public string CustomerID { get; set; }
 
     public string Shipper { get; set; }
 
@@ -32,25 +30,10 @@ namespace CMSV2.Models
 
     public int movementID { get; set; }
 
-    public string PaymentMode { get; set; }
-
-    public Decimal CourierCharge { get; set; }
-
+   
     public Decimal OtherCharge { get; set; }
 
-    public Decimal Total { get; set; }
-
-    public string Consignee { get; set; }
-
-    public string ConsigneeAddress { get; set; }
-
-    public int ConsigneePhone { get; set; }
-
-    public string ConsigneeCity { get; set; }
-
-    public string ConsigneeDestination { get; set; }
-
-    public string ConsigneeDepartment { get; set; }
+     
 
     public string ProductType { get; set; }
 
@@ -78,10 +61,12 @@ namespace CMSV2.Models
 
     public Decimal RevisedCharge { get; set; }
 
-    public Decimal MaterialCost { get; set; }
-
-    public string Reference { get; set; }
+    public Decimal MaterialCost { get; set; }  
 
     public string Remarks { get; set; }
   }
+    public class PrepaidAWBDetailVM:PrepaidAwbDetail
+    {
+
+    }
 }

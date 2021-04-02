@@ -249,7 +249,7 @@ namespace CMSV2.Controllers
                 _enquiry.PickedUpEmpID = v.CollectedEmpID;
                 _enquiry.PickedupDate = v.CollectedTime;
 
-                _enquiry.ShipmentType = v.ShipmentType;
+                //_enquiry.ShipmentType = v.ShipmentType;
                 //if (v.vehreq == true)
                 //{
                 //    _enquiry.Vehicle = v.Vehicle;
@@ -585,7 +585,7 @@ namespace CMSV2.Controllers
                 v.Remarks = a.Remarks;
                 v.CollectedEmpID = a.PickedUpEmpID; ;
                 v.CollectedTime = a.PickedupDate; ;
-                v.ShipmentType = a.ShipmentType;
+              //  v.ShipmentType = a.ShipmentType;
                 if (a.VehicleTypeId != null)
                 {
                     v.VehicleTypeId = a.VehicleTypeId.Value;                    
@@ -665,7 +665,7 @@ namespace CMSV2.Controllers
                 v.Remarks = a.Remarks;
                 v.CollectedEmpID = a.PickedUpEmpID; ;
                 v.CollectedTime = a.PickedupDate; ;
-                v.ShipmentType = a.ShipmentType;
+              //  v.ShipmentType = a.ShipmentType;
 
             if (a.CourierCharge != null)
                 v.CourierCharge = a.CourierCharge.Value;

@@ -94,6 +94,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.13.2, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>packages\iTextSharp.5.5.13.2\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -108,6 +114,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -203,6 +210,10 @@
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\AgentDeliveryRateController.cs" />
     <Compile Include="Controllers\AgentShipmentController.cs" />
+    <Compile Include="Controllers\AWBBatchController.cs" />
+    <Compile Include="Controllers\AWBBookIssueController.cs" />
+    <Compile Include="Controllers\AWBImportController.cs" />
+    <Compile Include="Controllers\AWBPrepaidController.cs" />
     <Compile Include="Controllers\BranchMasterController.cs" />
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
@@ -211,9 +222,6 @@
     <Compile Include="Controllers\DebitNoteController.cs" />
     <Compile Include="Controllers\ManifestReceiptController.cs" />
     <Compile Include="Controllers\CompanyMasterController.cs" />
-    <Compile Include="Controllers\ConsignmentEntryDomesticController.cs" />
-    <Compile Include="Controllers\ConsignmentEntryFAgentAssignController.cs" />
-    <Compile Include="Controllers\ConsignmentEntryInternationController.cs" />
     <Compile Include="Controllers\CountryMasterController.cs" />
     <Compile Include="Controllers\CourierStatusController.cs" />
     <Compile Include="Controllers\CreditNoteController.cs" />
@@ -237,10 +245,6 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\ExportShipmentController.cs" />
-    <Compile Include="Controllers\ForwardingAgentAssignController.cs" />
-    <Compile Include="Controllers\ForwardingAgentInvoiceController.cs" />
-    <Compile Include="Controllers\ForwardingAgentMasterController.cs" />
-    <Compile Include="Controllers\ForwardingAgentRatesController.cs" />
     <Compile Include="Controllers\HoldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
@@ -263,8 +267,6 @@
     <Compile Include="Controllers\PickUpEnquiryController.cs" />
     <Compile Include="Controllers\PickUpRequestController.cs" />
     <Compile Include="Controllers\PickupRequestStatusController.cs" />
-    <Compile Include="Controllers\PODStatusUpdationController.cs" />
-    <Compile Include="Controllers\PrepaidConsignmentEntryDomesticController.cs" />
     <Compile Include="Controllers\PrintBillController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\QuickAWBController.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Controllers\ZoneNameController.cs" />
     <Compile Include="DAL\AccountsDAO.cs" />
     <Compile Include="DAL\AccountsReportsDAO.cs" />
+    <Compile Include="DAL\AWBDAO.cs" />
     <Compile Include="DAL\EmailDAO.cs" />
     <Compile Include="DAL\NumbertoWords.cs" />
     <Compile Include="DAL\PickupRequestDAO.cs" />
@@ -571,21 +574,20 @@
     <Compile Include="Models\aspnet_WebEvent_Events.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AWBBatch.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AWBBatchVM.cs" />
+    <Compile Include="Models\AWBBOOKIssue.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AWBPrepaidVM.cs" />
+    <Compile Include="Models\AWBDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AWBDetailsVM.cs" />
     <Compile Include="Models\AWBillVM.cs" />
-    <Compile Include="Models\AWBIssue.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AWBIssueDetail.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\AWBPending.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AWBSetting.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AWBStatu.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AWBStock.cs">
@@ -594,10 +596,10 @@
     <Compile Include="Models\AWBStockDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AWBBookIssueVM.cs" />
     <Compile Include="Models\AWBTrackStatu.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AWBVM.cs" />
     <Compile Include="Models\BankReconcilVM.cs" />
     <Compile Include="Models\BranchMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -931,7 +933,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExportVM.cs" />
-    <Compile Include="Models\FAgentAssignVM.cs" />
     <Compile Include="Models\FAgentRateDetailsVM.cs" />
     <Compile Include="Models\FAgentRateVM.cs" />
     <Compile Include="Models\FAgentVM.cs" />
@@ -1453,16 +1454,12 @@
     <Compile Include="Models\PrepaidAWB.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PrepaidAwbDetail.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\PrepaidAWBInvoice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PrepaidAWBInvoiceDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PrepaidConsignmentEntryDomesticVM.cs" />
     <Compile Include="Models\PrintAWBVM.cs" />
     <Compile Include="Models\proAWBDetailsDatewise_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -3064,6 +3061,7 @@
     <Content Include="ReportsXSD\AWBPrint.xsc">
       <DependentUpon>AWBPrint.xsd</DependentUpon>
     </Content>
+    <Content Include="countrycode.json" />
     <None Include="ReportsXSD\AWBPrint.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>AWBPrint.Designer.cs</LastGenOutput>
@@ -3415,7 +3413,7 @@
     <Content Include="Views\PODStatusUpdation\Create.cshtml" />
     <Content Include="Views\PODStatusUpdation\Edit.cshtml" />
     <Content Include="Views\PODStatusUpdation\Index.cshtml" />
-    <Content Include="Views\PrepaidConsignmentEntryDomestic\Create.cshtml" />
+    <Content Include="Views\PrepaidAWB\Create.cshtml" />
     <Content Include="Views\PrintBill\PrintAWB.cshtml" />
     <Content Include="Views\ProductType\Create.cshtml" />
     <Content Include="Views\ProductType\Edit.cshtml" />
@@ -3610,6 +3608,14 @@
     <Content Include="Views\MCManagement\ReceiptList.cshtml" />
     <Content Include="Views\MCManagement\Table.cshtml" />
     <Content Include="Views\Accounts\Create.cshtml" />
+    <Content Include="Views\AWBImport\Index.cshtml" />
+    <Content Include="Views\AWBBookIssue\Create.cshtml" />
+    <Content Include="Views\AWBBookIssue\Index.cshtml" />
+    <Content Include="Views\AWBPrepaid\Index.cshtml" />
+    <Content Include="Views\AWBPrepaid\Create.cshtml" />
+    <Content Include="Views\AWBBatch\Create.cshtml" />
+    <Content Include="Views\AWBBatch\Create %284%29.cshtml" />
+    <Content Include="Views\AWBBatch\Create - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

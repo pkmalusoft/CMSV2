@@ -22,6 +22,5 @@ namespace CMSV2.Models
         public bool Reimbursement { get; set; }
     
         public virtual OtherCharge OtherCharge { get; set; }
-        public virtual InScanMaster InScanMaster { get; set; }
     }
 }

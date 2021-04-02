@@ -603,7 +603,7 @@
 
              <div class="col-md-3" id="divvehicle">
                   <label class="headinglabel">Vehicle Type</label>
-               @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicle, "VehicleID", "VehicleDescription"),"Select", new { @class = "form-control" })
+               @Html.DropDownListFor(model => model.VehicleTypeId, new SelectList(@ViewBag.Vehicle, "VehicleID", "VehicleDescription"),"Select", new { @class = "form-control" })
                  @Html.HiddenFor(model => model.Vehicle)
             </div>
 
