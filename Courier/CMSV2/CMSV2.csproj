@@ -217,6 +217,7 @@
     <Compile Include="Controllers\BranchMasterController.cs" />
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
+    <Compile Include="Controllers\DevelopmentController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
     <Compile Include="Controllers\DebitNoteController.cs" />
@@ -1695,7 +1696,6 @@
     <Compile Include="Models\RevenueType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RoleController.cs" />
     <Compile Include="Models\RoleMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3616,6 +3616,7 @@
     <Content Include="Views\AWBBatch\Create.cshtml" />
     <Content Include="Views\AWBBatch\Create %284%29.cshtml" />
     <Content Include="Views\AWBBatch\Create - Copy.cshtml" />
+    <Content Include="Views\Development\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1445,7 +1445,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Key>
       <PropertyRef Name="DRSID" />
     </Key>
-    <Property Name="DRSID" Type="int" Nullable="false" />
+    <Property Name="DRSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
     <Property Name="DRSDate" Type="datetime" Nullable="false" />
     <Property Name="DeliveredBy" Type="int" />
@@ -2987,7 +2987,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Key>
       <PropertyRef Name="QuickInscanID" />
     </Key>
-    <Property Name="QuickInscanID" Type="int" Nullable="false" />
+    <Property Name="QuickInscanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="InscanSheetNumber" Type="nvarchar" MaxLength="100" />
     <Property Name="ReceivedByID" Type="int" />
     <Property Name="CollectedByID" Type="int" />

@@ -599,7 +599,7 @@
                             @item1.MenuID" href=@item1.Link><i class="@item1.imgclass"></i><span>@item1.Title</span></a>
                             if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)
                             {
-                                @:<ul style="padding-left:55px">
+                                @:<ul style="padding-left:55px;display:block!important">
                                 }
                                 @RenderMenuList(menuList, item1)
                                 if (menuList.Count(p => p.ParentID == item1.MenuID) > 0)

@@ -381,13 +381,14 @@
             var OutScanDelivery = $('#OutScanDelivery').prop('checked');
             var DeliveryAttempted = $('#DeliveryAttempted').prop('checked');
             var Delivered = $('#Delivered').prop('checked');
-            var OutScanDeliveredID = $('#OutScanDeliveredID').val()
-            var OutScanDate = $('#OutScanDate').val()
-            var DeliveryAttemptedBy = $('#DeliveryAttemptedBy').val()
-            var DelieveryAttemptDate = $('#DelieveryAttemptDate').val()
-            var DeliveredBy = $('#DeliveredBy').val()
-            var DeliveredDate = $('#DeliveredDate ').val()
-
+            var OutScanDeliveredID = $('#OutScanDeliveredID').val();
+            var OutScanDate = $('#OutScanDate').val();
+            var DeliveryAttemptedBy = $('#DeliveryAttemptedBy').val();
+            var DelieveryAttemptDate = $('#DelieveryAttemptDate').val();
+            var DeliveredBy = $('#DeliveredBy').val();
+            var DeliveredDate = $('#DeliveredDate ').val();
+            var InScanVehicleID = $('#InscanVehicleId ').val();
+            var OutScanVehicleID = $('#OutscanVehicleId ').val();
             var i = $('#tbl1 > tr').length;
             var row = i + 1;
             var datahtml =
@@ -451,7 +452,9 @@
                 '<input type="hidden" id="hdnDeliveryAttemptedBy_' + i + '" value="' + DeliveryAttemptedBy + '"/>' +
                 '<input type="hidden" id="hdnDelieveryAttemptDate_' + i + '" value="' + DelieveryAttemptDate + '"/>' +
                 '<input type="hidden" id="hdnDeliveredBy_' + i + '" value="' + DeliveredBy + '"/>' +
-                '<input type="hidden" id="hdnDeliveredDate_' + i + '" value="' + DeliveredDate + '"/>';
+                '<input type="hidden" id="hdnDeliveredDate_' + i + '" value="' + DeliveredDate + '"/>' +
+                '<input type="hidden" id="hdnInscanVehicleId_' + i + '" value="' + InScanVehicleID + '"/>' + 
+                '<input type="hidden" id="hdnOutscanVehicleId_' + i + '" value="' + OutScanVehicleID + '"/>';
 
                 $('#tbl1').append('<tr>' +
                     '<td>' + datahtml + '</td>' +
@@ -538,67 +541,72 @@
                     var AssignedForCollection = $('#hdnAssignedForCollection_' + i).val()
                     var ConsignorMobileNo = $('#hdnConsignorMobileNo_' + i).val();
                     var ConsigneeMobileNo = $('#hdnConsigneeMobileNo_' + i).val();
+                    var InscanVehicleID = $('#hdnInscanVehicleId_' + i).val();  
+                    var OutScanVehicleID = $('#hdnOutscanVehicleId_' + i).val();
                     var DocumentTypeId = 1;
                     var item = {
-                        AWBNo: AWBNo ,
-                        CustomerID:CustomerID,
-                        Consignor:Shipper,
+                        AWBNo: AWBNo,
+                        CustomerID: CustomerID,
+                        Consignor: Shipper,
                         ConsignorContact: ConsignorContact,
                         ConsignorAddress1_Building: ConsignorAddress1,
                         ConsignorAddress2_Street: ConsignorAddress2,
                         ConsignorAddress3_PinCode: ConsignorAddress3,
-                        ConsignorPhone: ConsignorPhone  ,
+                        ConsignorPhone: ConsignorPhone,
                         ConsignorCountryName: ConsignorCountryName,
-                        ConsignorCityName: ConsignorCityName ,
+                        ConsignorCityName: ConsignorCityName,
                         ConsignorLocationName: ConsignorLocationName,
                         Consignee: Receiver,
-                        ConsigneeContact: ConsigneeContact ,
+                        ConsigneeContact: ConsigneeContact,
                         ConsigneeAddress1_Building: ConsigneeAddress1,
                         ConsigneeAddress2_Street: ConsigneeAddress2,
                         ConsigneeAddress3_PinCode: ConsigneeAddress3,
-                        ConsigneePhone: ConsigneePhone ,
+                        ConsigneePhone: ConsigneePhone,
                         ConsigneeCountryName: ConsigneeCountryName,
-                        ConsigneeCityName: ConsigneeCityName ,
+                        ConsigneeCityName: ConsigneeCityName,
                         ConsigneeLocationName: ConsigneeLocationName,
-                        AssignedEmployeeID: AssignedEmployeeID ,
-                        CourierCharge: CourierCharge ,
-                        PickedUpEmpID: PickedUpEmpID ,
+                        AssignedEmployeeID: AssignedEmployeeID,
+                        CourierCharge: CourierCharge,
+                        PickedUpEmpID: PickedUpEmpID,
                         PickedupDate: PickedupDate,
                         Pieces: Pieces,
                         Weight: Weight,
-                        CargoDescription:ItemDescription,
+                        CargoDescription: ItemDescription,
                         MovementID: MovementID,
                         ProductTypeID: ProductTypeID,
                         TransactionDate: AWBDate,
-                        NetTotal :CourierCharge,
+                        NetTotal: CourierCharge,
                         ParcelTypeId: ParcelTypeId,
                         MaterialCost: MaterialCost,
-                        PaymentModeId: PaymentTypeId ,
-                        DepotReceivedBy: DepotReceivedBy ,
+                        PaymentModeId: PaymentTypeId,
+                        DepotReceivedBy: DepotReceivedBy,
                         DocumentTypeId: DocumentTypeId,
-                        OriginPlaceID: OriginPlaceID ,
-                        DestinationPlaceID: DestinationPlaceID ,
-                        PickupLocation: PickUpLocation ,
-                        DeliveryLocation: DeliveryLocation ,
-                        PickupSubLocality: PickupSubLocality ,
-                        DeliverySubLocality: DeliverySubLocality ,
+                        OriginPlaceID: OriginPlaceID,
+                        DestinationPlaceID: DestinationPlaceID,
+                        PickupLocation: PickUpLocation,
+                        DeliveryLocation: DeliveryLocation,
+                        PickupSubLocality: PickupSubLocality,
+                        DeliverySubLocality: DeliverySubLocality,
                         ConsignorMobileNo: ConsignorMobileNo,
                         ConsigneeMobileNo: ConsigneeMobileNo,
                         AssignedDate: AssignedDate,
-                        AssignedForCollection:AssignedForCollection,
-                        CollectedBy :CollectedBy,
-                        ReceivedBy :ReceivedBy,
-                        OutScanDelivery :OutScanDelivery,
-                        DeliveryAttempted :DeliveryAttempted,
-                        Delivered :Delivered,
-                        ReceivedDate :ReceivedDate,
-                        OutScanDeliveredID :OutScanDeliveredID,
-                        OutScanDate :OutScanDate,
-                        DeliveryAttemptedBy :DeliveryAttemptedBy,
+                        AssignedForCollection: AssignedForCollection,
+                        CollectedBy: CollectedBy,
+                        ReceivedBy: ReceivedBy,
+                        OutScanDelivery: OutScanDelivery,
+                        DeliveryAttempted: DeliveryAttempted,
+                        Delivered: Delivered,
+                        ReceivedDate: ReceivedDate,
+                        OutScanDeliveredID: OutScanDeliveredID,
+                        OutScanDate: OutScanDate,
+                        DeliveryAttemptedBy: DeliveryAttemptedBy,
                         DelieveryAttemptDate: DelieveryAttemptDate,
-                        DeliveredBy :DeliveredBy,
-                        DeliveredDate: DeliveredDate
+                        DeliveredBy: DeliveredBy,
+                        DeliveredDate: DeliveredDate,
+                        InscanVehicleId: InscanVehicleID,
+                        OutscanVehicleId: OutScanVehicleID
                     }
+                    
                     obj.push(item);
                 }
 
@@ -658,12 +666,12 @@
                 @Html.DropDownListFor(model => model.MovementID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
             </div>
             <div class="col-xs-12 col-sm-2">
-                <label class="headinglabel required">Parcel Type</label>
-                @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                <label class="headinglabel required">Parcel Type</label>                
+                @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control" })
             </div>
             <div class="col-xs-12 col-sm-2">
                 <label class="headinglabel required">Product Type</label>
-                @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control" })
             </div>
             <div class="col-sm-3 text-right" style="margin-top:32px;">
                 <input type="submit" class="btn btn-primary  btnwidth" value="Save " name="Command" id="btnSave" />
@@ -713,6 +721,8 @@
                 </div>
                 @Html.TextBoxFor(model => model.ReceivedDate, new { @class = "form-control text-right", @required = true })
                 @Html.DropDownListFor(model => model.DepotReceivedBy, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.InscanVehicleId, new SelectList(ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
+                
             </div>
             <div class="col-xs-12 col-sm-2">
                 <div class="flex">
@@ -725,6 +735,8 @@
                 </div>
                 @Html.TextBoxFor(model => model.OutScanDate, new { @class = "form-control text-right", @required = true })
                 @Html.DropDownListFor(model => model.OutScanDeliveredID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.OutscanVehicleId, new SelectList(ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
+
             </div>
             <div class="col-xs-12 col-sm-2">
                 <div class="flex">

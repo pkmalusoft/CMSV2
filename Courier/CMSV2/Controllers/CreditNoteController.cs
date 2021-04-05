@@ -47,7 +47,7 @@ namespace CMSV2.Controllers
                 v.Date = item.CreditNoteDate.Value;
                 v.CustomerName = customer;
                 v.Amount = item.Amount.Value;
-                lst.Add(v);                
+                lst.Add(v);
 
             }
 

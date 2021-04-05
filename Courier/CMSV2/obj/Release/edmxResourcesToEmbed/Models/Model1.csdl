@@ -2444,25 +2444,6 @@
     <NavigationProperty Name="Product" Relationship="Self.FK_PurchaseOrderDetails_Products" FromRole="PurchaseOrderDetails" ToRole="Products" />
     <NavigationProperty Name="PurchaseOrder" Relationship="Self.FK_PurchaseOrderDetails_PurchaseOrder" FromRole="PurchaseOrderDetails" ToRole="PurchaseOrder" />
   </EntityType>
-  <EntityType Name="QuickInscanMaster">
-    <Key>
-      <PropertyRef Name="QuickInscanID" />
-    </Key>
-    <Property Name="QuickInscanID" Type="Int32" Nullable="false" />
-    <Property Name="InscanSheetNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ReceivedByID" Type="Int32" />
-    <Property Name="CollectedByID" Type="Int32" />
-    <Property Name="QuickInscanDateTime" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="VehicleId" Type="Int32" />
-    <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="BranchId" Type="Int32" />
-    <Property Name="DepotId" Type="Int32" />
-    <Property Name="AcCompanyId" Type="Int32" />
-    <Property Name="UserId" Type="Int32" />
-    <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="AgentID" Type="Int32" />
-    <Property Name="AcFinancialYearID" Type="Int32" />
-  </EntityType>
   <EntityType Name="Quotation">
     <Key>
       <PropertyRef Name="QuotationID" />
@@ -5222,7 +5203,6 @@
     <EntitySet Name="PurchaseInvoiceDetails" EntityType="Self.PurchaseInvoiceDetail" />
     <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
     <EntitySet Name="PurchaseOrderDetails" EntityType="Self.PurchaseOrderDetail" />
-    <EntitySet Name="QuickInscanMasters" EntityType="Self.QuickInscanMaster" />
     <EntitySet Name="Quotations" EntityType="Self.Quotation" />
     <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetail" />
     <EntitySet Name="RequestTypes" EntityType="Self.RequestType" />
@@ -8418,7 +8398,6 @@
     <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
     <EntitySet Name="DRRDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRDetail" />
     <EntitySet Name="DRRs" EntityType="DB_9F57C4_couriertest_newModel.DRR" />
-    <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
     <EntitySet Name="DRSRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" />
     <EntitySet Name="UserRegistrations" EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" />
     <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
@@ -8432,6 +8411,8 @@
     <EntitySet Name="PrepaidAWBs" EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" />
     <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
     <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
+    <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
+    <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12652,25 +12633,6 @@
     <Property Name="UserID" Type="Int32" Nullable="false" />
     <Property Name="FYearID" Type="Int32" />
   </EntityType>
-  <EntityType Name="DR">
-    <Key>
-      <PropertyRef Name="DRSID" />
-    </Key>
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="CheckedBy" Type="Int32" Nullable="false" />
-    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="StatusInbound" Type="Boolean" />
-    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="DRSRecPayId" Type="Int32" />
-  </EntityType>
   <EntityType Name="DRSRecPay">
     <Key>
       <PropertyRef Name="DRSRecPayID" />
@@ -12987,5 +12949,43 @@
     <Property Name="PrepaidAWBID" Type="Int32" />
     <Property Name="AWBBookIssueID" Type="Int32" />
     <Property Name="BATCHID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DR">
+    <Key>
+      <PropertyRef Name="DRSID" />
+    </Key>
+    <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="CheckedBy" Type="Int32" Nullable="false" />
+    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="VehicleID" Type="Int32" />
+    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="StatusInbound" Type="Boolean" />
+    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="DRSRecPayId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="QuickInscanMaster">
+    <Key>
+      <PropertyRef Name="QuickInscanID" />
+    </Key>
+    <Property Name="QuickInscanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InscanSheetNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ReceivedByID" Type="Int32" />
+    <Property Name="CollectedByID" Type="Int32" />
+    <Property Name="QuickInscanDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="VehicleId" Type="Int32" />
+    <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="BranchId" Type="Int32" />
+    <Property Name="DepotId" Type="Int32" />
+    <Property Name="AcCompanyId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="AgentID" Type="Int32" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
   </EntityType>
 </Schema>

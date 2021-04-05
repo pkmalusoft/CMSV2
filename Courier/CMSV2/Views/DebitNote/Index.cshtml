@@ -132,7 +132,7 @@
     @foreach (var item in Model) {
     <tr>
         <td>@item.DebitNoteNo</td>
-        <td>@LTMSV2.Models.CommanFunctions.GetShortDateFormat(item.Date)</td>
+        <td>@CMSV2.Models.CommanFunctions.GetShortDateFormat(item.Date)</td>
         <td>@item.SupplierName</td>
         <td>@item.JobNo</td>
         <td style="text-align:right">@item.Amount</td>

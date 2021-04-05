@@ -33,7 +33,7 @@ namespace CMSV2.Controllers
                     var purchaseinvoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.InvoiceNo;
                 }
-                else if(item.InvoiceType=="OP")
+                else if (item.InvoiceType == "OP")
                 {
                     var purchaseinvoice = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.InvoiceNo;
@@ -97,7 +97,7 @@ namespace CMSV2.Controllers
                 List<CustomerTradeReceiptVM> lst = (List<CustomerTradeReceiptVM>)Session["SupplierInvoice"];
                 if (v.InvoiceType == "TR")
                 {
-                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType=="TR").FirstOrDefault();
+                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType == "TR").FirstOrDefault();
                     //var invoice = db.SupplierInvoices.Find(vm.InvoiceID);
                     if (invoice != null)
                     {
@@ -109,10 +109,10 @@ namespace CMSV2.Controllers
                 }
                 else if (v.InvoiceType == "OP")
                 {
-                    var invoice1 = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType=="OP").FirstOrDefault();
+                    var invoice1 = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType == "OP").FirstOrDefault();
                     //var invoice1 = db.AcOPInvoiceDetails.Where(cc => cc.AcOPInvoiceDetailID == vm.InvoiceID).FirstOrDefault();
                     if (invoice1 != null)
-                    {                    
+                    {
                         vm.InvoiceNo = invoice1.InvoiceNo;
                         vm.InvoiceDate = invoice1.DateTime;
                         vm.InvoiceAmount = Convert.ToDecimal(invoice1.InvoiceAmount);
@@ -121,11 +121,11 @@ namespace CMSV2.Controllers
                 }
                 //SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
                 vm.Date = Convert.ToDateTime(v.DebitNoteDate);
-               
+
                 return View(vm);
             }
         }
-        
+
         [HttpPost]
         public ActionResult Create(DebitNoteVM v)
         {
@@ -209,7 +209,7 @@ namespace CMSV2.Controllers
                 a.AcHeadID = customercon.AcHeadID; ;
             }
 
-            a.Amount =  v.Amount;
+            a.Amount = v.Amount;
             a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             a.Remarks = "debit note";
 
@@ -225,7 +225,7 @@ namespace CMSV2.Controllers
             }
 
             var invid = 0;
-            int? recpayid = 0;           
+            int? recpayid = 0;
             DebitNote d = new DebitNote();
             if (v.DebitNoteId == 0)
             {
@@ -242,7 +242,7 @@ namespace CMSV2.Controllers
                     maxid = data.DebitNoteID + 1;
                 }
 
-                d.DebitNoteID=maxid;
+                d.DebitNoteID = maxid;
                 d.DebitNoteNo = AccountsDAO.GetMaxDebiteNoteNo(fyearid);
             }
             else
@@ -262,7 +262,7 @@ namespace CMSV2.Controllers
             //d.statusclose = false;            
             d.Remarks = v.Remarks;
             d.IsShipping = true;
-            if (v.DebitNoteId== 0)
+            if (v.DebitNoteId == 0)
             {
                 db.DebitNotes.Add(d);
                 db.SaveChanges();
@@ -285,25 +285,25 @@ namespace CMSV2.Controllers
         [HttpPost]
         public JsonResult GetTradeInvoiceOfSupplier(int? ID, decimal? amountreceived, int? RecPayId)
         {
-                int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
 
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             decimal Advance = 0;
             Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(ID), Convert.ToInt32(RecPayId), fyearid);
             if (amountreceived > 0)
-                amountreceived = amountreceived + Advance;          
+                amountreceived = amountreceived + Advance;
             var salesinvoice = new List<CustomerTradeReceiptVM>();
 
             var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && d.Amount < 0 && m.StatusSDSC != "C" && m.PartyID == ID select d).OrderBy(cc => cc.InvoiceDate).ToList();
 
             foreach (var item in AllOPInvoices)
             {
-               
-                decimal? totamtpaid = 0;               
+
+                decimal? totamtpaid = 0;
                 var allrecpay = (from d in db.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
-                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.AcOPInvoiceDetailID, 0,0,"OP");
-               
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.AcOPInvoiceDetailID, 0, 0, "OP");
+
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
                 Invoice.SalesInvoiceID = 0;
@@ -346,15 +346,15 @@ namespace CMSV2.Controllers
             var AllInvoices = (from d in db.SupplierInvoices where (d.IsDeleted == null || d.IsDeleted == false) && d.SupplierID == ID select d).OrderBy(cc => cc.InvoiceDate).ToList();
             foreach (var item in AllInvoices)
             {
-               
-                var invoicedeails = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == item.SupplierInvoiceID select d).ToList();
-                              
-                decimal? totamtpaid = 0;
-                decimal? totadjust = 0;               
-                
 
-                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.SupplierInvoiceID,0,0, "TR");                
-                var Invoice = new CustomerTradeReceiptVM();                
+                var invoicedeails = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == item.SupplierInvoiceID select d).ToList();
+
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+
+
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.SupplierInvoiceID, 0, 0, "TR");
+                var Invoice = new CustomerTradeReceiptVM();
                 Invoice.JobCode = "TR" + item.SupplierInvoiceID.ToString();
                 Invoice.SalesInvoiceID = item.SupplierInvoiceID; // SalesInvoiceID;
                 Invoice.InvoiceNo = item.InvoiceNo;
@@ -404,10 +404,10 @@ namespace CMSV2.Controllers
             var receipts = (from d in db.RecPays where d.FYearID == fyearid && d.SupplierID == ID select d.FMoney).Sum();
             var receiptdetails = (from d in db.RecPays join c in db.RecPayDetails on d.RecPayID equals c.RecPayID where d.FYearID == fyearid && d.SupplierID == ID && c.InvoiceID > 0 && c.Amount < 0 select (-1 * c.Amount)).Sum();
 
-//            decimal Advance = 0;
-//            Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(id), fyearid);
+            //            decimal Advance = 0;
+            //            Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(id), fyearid);
 
-////            var advance = receipts - receiptdetails;
+            ////            var advance = receipts - receiptdetails;
             var salesinvoice = new List<CustomerTradeReceiptVM>();
 
             var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC != "C" && m.PartyID == ID select d).ToList();
@@ -417,7 +417,7 @@ namespace CMSV2.Controllers
                 decimal? totamt = 0;
                 decimal? totamtpaid = 0;
                 decimal? totadjust = 0;
-                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.AcOPInvoiceDetailID), 0,DebitNoteID, "OP");               
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.AcOPInvoiceDetailID), 0, DebitNoteID, "OP");
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
                 Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
@@ -456,23 +456,23 @@ namespace CMSV2.Controllers
             }
 
             //transaction
-            var AllInvoices = (from d in db.SupplierInvoices where d.SupplierID == ID && (d.IsDeleted==false || d.IsDeleted==null) select d).ToList();
+            var AllInvoices = (from d in db.SupplierInvoices where d.SupplierID == ID && (d.IsDeleted == false || d.IsDeleted == null) select d).ToList();
             foreach (var item in AllInvoices)
-            {                   
+            {
                 decimal? totamtpaid = 0;
                 decimal? totadjust = 0;
-                
-                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.SupplierInvoiceID), 0,DebitNoteID,"TR");
-                               
+
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.SupplierInvoiceID), 0, DebitNoteID, "TR");
+
                 var Invoice = new CustomerTradeReceiptVM();
-                
+
                 Invoice.JobCode = "TR" + item.SupplierInvoiceID.ToString();
                 Invoice.SalesInvoiceID = item.SupplierInvoiceID; // SalesInvoiceID;
                 Invoice.InvoiceNo = item.InvoiceNo;
-                Invoice.InvoiceType = "TR";                
+                Invoice.InvoiceType = "TR";
                 Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
                 Invoice.date = item.InvoiceDate;
-                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");                
+                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
                 Invoice.AmountReceived = totamtpaid;
                 Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
                 Invoice.AdjustmentAmount = totadjust;
@@ -508,9 +508,9 @@ namespace CMSV2.Controllers
             //int k = 0;
             if (id != 0)
             {
-                string result = AccountsDAO.DeleteDebiteNote(id);                
+                string result = AccountsDAO.DeleteDebiteNote(id);
                 TempData["SuccessMsg"] = result;
-                
+
             }
 
             return RedirectToAction("Index", "DebitNote");

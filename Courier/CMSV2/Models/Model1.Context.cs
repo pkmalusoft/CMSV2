@@ -162,7 +162,6 @@ namespace CMSV2.Models
         public virtual DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
-        public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<Quotation> Quotations { get; set; }
         public virtual DbSet<QuotationDetail> QuotationDetails { get; set; }
         public virtual DbSet<RequestType> RequestTypes { get; set; }
@@ -264,7 +263,6 @@ namespace CMSV2.Models
         public virtual DbSet<RecPay> RecPays { get; set; }
         public virtual DbSet<DRRDetail> DRRDetails { get; set; }
         public virtual DbSet<DRR> DRRs { get; set; }
-        public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<DRSRecPay> DRSRecPays { get; set; }
         public virtual DbSet<UserRegistration> UserRegistrations { get; set; }
         public virtual DbSet<CreditNote> CreditNotes { get; set; }
@@ -278,6 +276,8 @@ namespace CMSV2.Models
         public virtual DbSet<PrepaidAWB> PrepaidAWBs { get; set; }
         public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
+        public virtual DbSet<DR> DRS { get; set; }
+        public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

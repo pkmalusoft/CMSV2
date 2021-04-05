@@ -34,6 +34,7 @@ namespace CMSV2.Controllers
             ViewBag.parceltype = db.ParcelTypes.ToList();
             ViewBag.Employee = db.EmployeeMasters.ToList();
             ViewBag.PaymentMode = db.tblPaymentModes.ToList();
+            ViewBag.Vehicle = db.VehicleMasters.ToList();
             ViewBag.Title = "AWB Batch - Create";
             string DocNo = AWBDAO.GetMaxBathcNo(); //batch no
             vm.BatchNumber = DocNo;

@@ -77,6 +77,8 @@ namespace CMSV2.Models
         public string DeliverySubLocality { get; set; }
         public string OriginPlaceID { get; set; }
         public string DestinationPlaceID { get; set; }
+        public int InscanVehicleId { get; set; }
+        public int OutscanVehicleId { get; set; }
         public List<AWBBatchDetail> Details { get; set; }
     }
 
@@ -184,5 +186,7 @@ namespace CMSV2.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
         public DateTime DeliveredDate { get; set; }
+        public int InscanVehicleId { get; set; }
+		public int OutscanVehicleId { get; set; }
     }
 }

@@ -2362,26 +2362,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="QuickInscanMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
-        <MappingFragment StoreEntitySet="QuickInscanMaster">
-          <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
-          <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
-          <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
-          <ScalarProperty Name="CollectedByID" ColumnName="CollectedByID" />
-          <ScalarProperty Name="QuickInscanDateTime" ColumnName="QuickInscanDateTime" />
-          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
-          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-          <ScalarProperty Name="DepotId" ColumnName="DepotId" />
-          <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Source" ColumnName="Source" />
-          <ScalarProperty Name="AgentID" ColumnName="AgentID" />
-          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Quotations">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Quotation">
         <MappingFragment StoreEntitySet="Quotation">
@@ -8823,26 +8803,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRS">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
-        <MappingFragment StoreEntitySet="DRS">
-          <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
-          <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="DrsType" ColumnName="DrsType" />
-          <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
-          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-          <ScalarProperty Name="TotalAmountCollected" ColumnName="TotalAmountCollected" />
-          <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
-          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
-          <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
-          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DRSRecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
         <MappingFragment StoreEntitySet="DRSRecPay">
@@ -9170,6 +9130,46 @@
           <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
           <ScalarProperty Name="EnquiryNo" ColumnName="EnquiryNo" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRS">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
+        <MappingFragment StoreEntitySet="DRS">
+          <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
+          <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="DrsType" ColumnName="DrsType" />
+          <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
+          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+          <ScalarProperty Name="TotalAmountCollected" ColumnName="TotalAmountCollected" />
+          <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
+          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+          <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
+          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuickInscanMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
+        <MappingFragment StoreEntitySet="QuickInscanMaster">
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="AgentID" ColumnName="AgentID" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
+          <ScalarProperty Name="DepotId" ColumnName="DepotId" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+          <ScalarProperty Name="QuickInscanDateTime" ColumnName="QuickInscanDateTime" />
+          <ScalarProperty Name="CollectedByID" ColumnName="CollectedByID" />
+          <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
+          <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
+          <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

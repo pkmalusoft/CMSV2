@@ -1479,7 +1479,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
           <Key>
             <PropertyRef Name="DRSID" />
           </Key>
-          <Property Name="DRSID" Type="int" Nullable="false" />
+          <Property Name="DRSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
           <Property Name="DRSDate" Type="datetime" Nullable="false" />
           <Property Name="DeliveredBy" Type="int" />
@@ -3021,7 +3021,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
           <Key>
             <PropertyRef Name="QuickInscanID" />
           </Key>
-          <Property Name="QuickInscanID" Type="int" Nullable="false" />
+          <Property Name="QuickInscanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InscanSheetNumber" Type="nvarchar" MaxLength="100" />
           <Property Name="ReceivedByID" Type="int" />
           <Property Name="CollectedByID" Type="int" />
@@ -9778,25 +9778,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <NavigationProperty Name="Product" Relationship="Self.FK_PurchaseOrderDetails_Products" FromRole="PurchaseOrderDetails" ToRole="Products" />
           <NavigationProperty Name="PurchaseOrder" Relationship="Self.FK_PurchaseOrderDetails_PurchaseOrder" FromRole="PurchaseOrderDetails" ToRole="PurchaseOrder" />
         </EntityType>
-        <EntityType Name="QuickInscanMaster">
-          <Key>
-            <PropertyRef Name="QuickInscanID" />
-          </Key>
-          <Property Name="QuickInscanID" Type="Int32" Nullable="false" />
-          <Property Name="InscanSheetNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ReceivedByID" Type="Int32" />
-          <Property Name="CollectedByID" Type="Int32" />
-          <Property Name="QuickInscanDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="VehicleId" Type="Int32" />
-          <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="BranchId" Type="Int32" />
-          <Property Name="DepotId" Type="Int32" />
-          <Property Name="AcCompanyId" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="AgentID" Type="Int32" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-        </EntityType>
         <EntityType Name="Quotation">
           <Key>
             <PropertyRef Name="QuotationID" />
@@ -12556,7 +12537,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="PurchaseInvoiceDetails" EntityType="Self.PurchaseInvoiceDetail" />
           <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
           <EntitySet Name="PurchaseOrderDetails" EntityType="Self.PurchaseOrderDetail" />
-          <EntitySet Name="QuickInscanMasters" EntityType="Self.QuickInscanMaster" />
           <EntitySet Name="Quotations" EntityType="Self.Quotation" />
           <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetail" />
           <EntitySet Name="RequestTypes" EntityType="Self.RequestType" />
@@ -15752,7 +15732,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="RecPays" EntityType="DB_9F57C4_couriertest_newModel.RecPay" />
           <EntitySet Name="DRRDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRDetail" />
           <EntitySet Name="DRRs" EntityType="DB_9F57C4_couriertest_newModel.DRR" />
-          <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
           <EntitySet Name="DRSRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRSRecPay" />
           <EntitySet Name="UserRegistrations" EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" />
           <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
@@ -15766,6 +15745,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="PrepaidAWBs" EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" />
           <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
           <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
+          <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
+          <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19986,25 +19967,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="FYearID" Type="Int32" />
         </EntityType>
-        <EntityType Name="DR">
-          <Key>
-            <PropertyRef Name="DRSID" />
-          </Key>
-          <Property Name="DRSID" Type="Int32" Nullable="false" />
-          <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DeliveredBy" Type="Int32" />
-          <Property Name="CheckedBy" Type="Int32" Nullable="false" />
-          <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="VehicleID" Type="Int32" />
-          <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="StatusInbound" Type="Boolean" />
-          <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="DRSRecPayId" Type="Int32" />
-        </EntityType>
         <EntityType Name="DRSRecPay">
           <Key>
             <PropertyRef Name="DRSRecPayID" />
@@ -20321,6 +20283,44 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="PrepaidAWBID" Type="Int32" />
           <Property Name="AWBBookIssueID" Type="Int32" />
           <Property Name="BATCHID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DR">
+          <Key>
+            <PropertyRef Name="DRSID" />
+          </Key>
+          <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeliveredBy" Type="Int32" />
+          <Property Name="CheckedBy" Type="Int32" Nullable="false" />
+          <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="VehicleID" Type="Int32" />
+          <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="StatusInbound" Type="Boolean" />
+          <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DRSRecPayId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="QuickInscanMaster">
+          <Key>
+            <PropertyRef Name="QuickInscanID" />
+          </Key>
+          <Property Name="QuickInscanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InscanSheetNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedByID" Type="Int32" />
+          <Property Name="CollectedByID" Type="Int32" />
+          <Property Name="QuickInscanDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VehicleId" Type="Int32" />
+          <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="DepotId" Type="Int32" />
+          <Property Name="AcCompanyId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AgentID" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -22686,26 +22686,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="ItemUnitID" ColumnName="ItemUnitID" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="QuickInscanMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
-              <MappingFragment StoreEntitySet="QuickInscanMaster">
-                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
-                <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
-                <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
-                <ScalarProperty Name="CollectedByID" ColumnName="CollectedByID" />
-                <ScalarProperty Name="QuickInscanDateTime" ColumnName="QuickInscanDateTime" />
-                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
-                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="DepotId" ColumnName="DepotId" />
-                <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="AgentID" ColumnName="AgentID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29150,26 +29130,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DRS">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
-              <MappingFragment StoreEntitySet="DRS">
-                <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
-                <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="DrsType" ColumnName="DrsType" />
-                <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
-                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-                <ScalarProperty Name="TotalAmountCollected" ColumnName="TotalAmountCollected" />
-                <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
-                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
-                <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
-                <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
-                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DRSRecPays">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
               <MappingFragment StoreEntitySet="DRSRecPay">
@@ -29497,6 +29457,46 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
                 <ScalarProperty Name="EnquiryNo" ColumnName="EnquiryNo" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRS">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
+              <MappingFragment StoreEntitySet="DRS">
+                <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
+                <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="DrsType" ColumnName="DrsType" />
+                <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="TotalAmountCollected" ColumnName="TotalAmountCollected" />
+                <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
+                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+                <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
+                <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuickInscanMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
+              <MappingFragment StoreEntitySet="QuickInscanMaster">
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="AgentID" ColumnName="AgentID" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
+                <ScalarProperty Name="DepotId" ColumnName="DepotId" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+                <ScalarProperty Name="QuickInscanDateTime" ColumnName="QuickInscanDateTime" />
+                <ScalarProperty Name="CollectedByID" ColumnName="CollectedByID" />
+                <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
+                <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
+                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
