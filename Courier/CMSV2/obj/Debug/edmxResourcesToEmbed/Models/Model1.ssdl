@@ -739,14 +739,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Property Name="Value" Type="money" />
     <Property Name="CargoDescription" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="Category">
-    <Key>
-      <PropertyRef Name="CategoryID" />
-    </Key>
-    <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
-    <Property Name="AcHeadID" Type="int" />
-  </EntityType>
   <EntityType Name="CityMaster">
     <Key>
       <PropertyRef Name="CityID" />
@@ -2315,6 +2307,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="PrepaidAWBID" Type="int" />
     <Property Name="AWBBookIssueID" Type="int" />
     <Property Name="BATCHID" Type="int" />
+    <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
+    <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2791,12 +2785,13 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Key>
       <PropertyRef Name="PODID" />
     </Key>
-    <Property Name="PODID" Type="int" Nullable="false" />
+    <Property Name="PODID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
     <Property Name="ReceivedTime" Type="datetime" />
+    <Property Name="DeliveredBy" Type="int" />
+    <Property Name="DeliveredDate" Type="int" />
     <Property Name="CourierStatusID" Type="int" />
-    <Property Name="DRRConsignmentID" Type="int" />
     <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
     <Property Name="UpdationDate" Type="datetime" />
     <Property Name="IsSkyLarkUpdate" Type="bit" />
@@ -2840,6 +2835,11 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Property Name="CreatedDate" Type="datetime" />
     <Property Name="ModifiedUserID" Type="int" />
     <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="Prepaid" Type="bit" Nullable="false" />
+    <Property Name="PickupSubLocality" Type="varchar" MaxLength="1000" />
+    <Property Name="DeliverySubLocality" Type="varchar" MaxLength="1000" />
+    <Property Name="OriginPlaceID" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationPlaceID" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="PrepaidAWBInvoice">
     <Key>
@@ -6773,7 +6773,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="CargoDescription" EntityType="Self.CargoDescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CargoInScan" EntityType="Self.CargoInScan" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetails" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CODReceipt" EntityType="Self.CODReceipt" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CODReceiptDetail" EntityType="Self.CODReceiptDetail" Schema="dbo" store:Type="Tables" />

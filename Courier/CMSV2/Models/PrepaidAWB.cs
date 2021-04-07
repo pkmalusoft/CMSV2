@@ -39,5 +39,10 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedUserID { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public bool Prepaid { get; set; }
+        public string PickupSubLocality { get; set; }
+        public string DeliverySubLocality { get; set; }
+        public string OriginPlaceID { get; set; }
+        public string DestinationPlaceID { get; set; }
     }
 }

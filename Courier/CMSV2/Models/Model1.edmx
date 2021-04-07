@@ -773,14 +773,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
           <Property Name="Value" Type="money" />
           <Property Name="CargoDescription" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="Category">
-          <Key>
-            <PropertyRef Name="CategoryID" />
-          </Key>
-          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
-          <Property Name="AcHeadID" Type="int" />
-        </EntityType>
         <EntityType Name="CityMaster">
           <Key>
             <PropertyRef Name="CityID" />
@@ -2349,6 +2341,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
           <Property Name="PrepaidAWBID" Type="int" />
           <Property Name="AWBBookIssueID" Type="int" />
           <Property Name="BATCHID" Type="int" />
+          <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
+          <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2825,12 +2819,13 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
           <Key>
             <PropertyRef Name="PODID" />
           </Key>
-          <Property Name="PODID" Type="int" Nullable="false" />
+          <Property Name="PODID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InScanID" Type="int" Nullable="false" />
           <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedTime" Type="datetime" />
+          <Property Name="DeliveredBy" Type="int" />
+          <Property Name="DeliveredDate" Type="int" />
           <Property Name="CourierStatusID" Type="int" />
-          <Property Name="DRRConsignmentID" Type="int" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
           <Property Name="UpdationDate" Type="datetime" />
           <Property Name="IsSkyLarkUpdate" Type="bit" />
@@ -2874,6 +2869,11 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedUserID" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="Prepaid" Type="bit" Nullable="false" />
+          <Property Name="PickupSubLocality" Type="varchar" MaxLength="1000" />
+          <Property Name="DeliverySubLocality" Type="varchar" MaxLength="1000" />
+          <Property Name="OriginPlaceID" Type="varchar" MaxLength="1000" />
+          <Property Name="DestinationPlaceID" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="PrepaidAWBInvoice">
           <Key>
@@ -6807,7 +6807,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="CargoDescription" EntityType="Self.CargoDescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CargoInScan" EntityType="Self.CargoInScan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CODReceipt" EntityType="Self.CODReceipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CODReceiptDetail" EntityType="Self.CODReceiptDetail" Schema="dbo" store:Type="Tables" />
@@ -7482,7 +7481,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="TaxApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AcGroup" Relationship="Self.FK_AcHead_AcGroup" FromRole="AcHead" ToRole="AcGroup" />
-          <NavigationProperty Name="Categories" Relationship="Self.FK_Category_AcHead" FromRole="AcHead" ToRole="Category" />
           <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_AcHead" FromRole="AcHead" ToRole="Expense" />
           <NavigationProperty Name="ExpenseDetails" Relationship="Self.FK_ExpenseDetails_AcHead" FromRole="AcHead" ToRole="ExpenseDetails" />
           <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
@@ -8004,16 +8002,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="CargoDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Category">
-          <Key>
-            <PropertyRef Name="CategoryID" />
-          </Key>
-          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <NavigationProperty Name="AcHead" Relationship="Self.FK_Category_AcHead" FromRole="Category" ToRole="AcHead" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Category" FromRole="Category" ToRole="Products" />
-        </EntityType>
         <EntityType Name="CityMaster">
           <Key>
             <PropertyRef Name="CityID" />
@@ -8496,7 +8484,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="StatusSuspenseEntry" Type="Boolean" />
           <NavigationProperty Name="CourierStatu" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="DRRConsignment" ToRole="CourierStatus" />
           <NavigationProperty Name="MCPayments" Relationship="Self.FK_MCPayment_DRRConsignment" FromRole="DRRConsignment" ToRole="MCPayment" />
-          <NavigationProperty Name="PODs" Relationship="Self.FK_POD_DRRConsignment" FromRole="DRRConsignment" ToRole="POD" />
         </EntityType>
         <EntityType Name="DRRInvoice">
           <Key>
@@ -9586,21 +9573,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PickRequestStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="POD">
-          <Key>
-            <PropertyRef Name="PODID" />
-          </Key>
-          <Property Name="PODID" Type="Int32" Nullable="false" />
-          <Property Name="InScanID" Type="Int32" Nullable="false" />
-          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
-          <Property Name="CourierStatusID" Type="Int32" />
-          <Property Name="DRRConsignmentID" Type="Int32" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UpdationDate" Type="DateTime" Precision="3" />
-          <Property Name="IsSkyLarkUpdate" Type="Boolean" />
-          <NavigationProperty Name="DRRConsignment" Relationship="Self.FK_POD_DRRConsignment" FromRole="POD" ToRole="DRRConsignment" />
-        </EntityType>
         <EntityType Name="PODSignature">
           <Key>
             <PropertyRef Name="PODSignatureID" />
@@ -9668,7 +9640,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="EndUserPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ResellerPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="SpecialPrice" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_Products_Category" FromRole="Products" ToRole="Category" />
           <NavigationProperty Name="JobEnquiryDetails" Relationship="Self.FK_JobEnquiryDetails_Products" FromRole="Products" ToRole="JobEnquiryDetails" />
           <NavigationProperty Name="Type" Relationship="Self.FK_Products_Type" FromRole="Products" ToRole="Type" />
           <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetails_Products" FromRole="Products" ToRole="PurchaseOrderDetails" />
@@ -10987,18 +10958,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Category_AcHead">
-          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-          <End Role="Category" Type="Self.Category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcHead">
-              <PropertyRef Name="AcHeadID" />
-            </Principal>
-            <Dependent Role="Category">
-              <PropertyRef Name="AcHeadID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Expense_AcHead">
           <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -11324,18 +11283,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
             </Principal>
             <Dependent Role="SalesInvoice">
               <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Products_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-          <End Role="Products" Type="Self.Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Category">
-              <PropertyRef Name="CategoryID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="CategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11711,18 +11658,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
               <PropertyRef Name="DRRConsignmentID" />
             </Principal>
             <Dependent Role="MCPayment">
-              <PropertyRef Name="DRRConsignmentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_POD_DRRConsignment">
-          <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="0..1" />
-          <End Role="POD" Type="Self.POD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DRRConsignment">
-              <PropertyRef Name="DRRConsignmentID" />
-            </Principal>
-            <Dependent Role="POD">
               <PropertyRef Name="DRRConsignmentID" />
             </Dependent>
           </ReferentialConstraint>
@@ -12440,7 +12375,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="CargoDescriptions" EntityType="Self.CargoDescription" />
           <EntitySet Name="CargoInScans" EntityType="Self.CargoInScan" />
           <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetail" />
-          <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="CityMasters" EntityType="Self.CityMaster" />
           <EntitySet Name="ColoaderAllocations" EntityType="Self.ColoaderAllocation" />
           <EntitySet Name="ColoaderCostDetails" EntityType="Self.ColoaderCostDetail" />
@@ -12525,7 +12459,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="Periods" EntityType="Self.Period" />
           <EntitySet Name="PeriodTypes" EntityType="Self.PeriodType" />
           <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatu" />
-          <EntitySet Name="PODs" EntityType="Self.POD" />
           <EntitySet Name="PODSignatures" EntityType="Self.PODSignature" />
           <EntitySet Name="PrepaidAWBInvoices" EntityType="Self.PrepaidAWBInvoice" />
           <EntitySet Name="PrepaidAWBInvoiceDetails" EntityType="Self.PrepaidAWBInvoiceDetail" />
@@ -12657,10 +12590,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
             <End Role="AcGroup" EntitySet="AcGroups" />
             <End Role="AcHead" EntitySet="AcHeads" />
           </AssociationSet>
-          <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
-            <End Role="AcHead" EntitySet="AcHeads" />
-            <End Role="Category" EntitySet="Categories" />
-          </AssociationSet>
           <AssociationSet Name="FK_Expense_AcHead" Association="Self.FK_Expense_AcHead">
             <End Role="AcHead" EntitySet="AcHeads" />
             <End Role="Expense" EntitySet="Expenses" />
@@ -12768,10 +12697,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <AssociationSet Name="FK_SalesInvoice_BranchMaster" Association="Self.FK_SalesInvoice_BranchMaster">
             <End Role="BranchMaster" EntitySet="BranchMasters" />
             <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Products_Category" Association="Self.FK_Products_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <AssociationSet Name="FK_CustomerMaster_CityMaster" Association="Self.FK_CustomerMaster_CityMaster">
             <End Role="CityMaster" EntitySet="CityMasters" />
@@ -12896,10 +12821,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
             <End Role="DRRConsignment" EntitySet="DRRConsignments" />
             <End Role="MCPayment" EntitySet="MCPayments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_POD_DRRConsignment" Association="Self.FK_POD_DRRConsignment">
-            <End Role="DRRConsignment" EntitySet="DRRConsignments" />
-            <End Role="POD" EntitySet="PODs" />
           </AssociationSet>
           <AssociationSet Name="FK_DRSEmployee_DRSEmployeeID" Association="Self.FK_DRSEmployee_DRSEmployeeID">
             <End Role="DRSEmployeeID" EntitySet="DRSEmployeeIDs" />
@@ -15747,6 +15668,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
           <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
           <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
+          <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20163,6 +20085,11 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedUserID" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Prepaid" Type="Boolean" Nullable="false" />
+          <Property Name="PickupSubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="DeliverySubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AWBTrackStatu">
           <Key>
@@ -20283,6 +20210,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="PrepaidAWBID" Type="Int32" />
           <Property Name="AWBBookIssueID" Type="Int32" />
           <Property Name="BATCHID" Type="Int32" />
+          <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
+          <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
         </EntityType>
         <EntityType Name="DR">
           <Key>
@@ -20321,6 +20250,21 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AgentID" Type="Int32" />
           <Property Name="AcFinancialYearID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="POD">
+          <Key>
+            <PropertyRef Name="PODID" />
+          </Key>
+          <Property Name="PODID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveredBy" Type="Int32" />
+          <Property Name="DeliveredDate" Type="Int32" />
+          <Property Name="CourierStatusID" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdationDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSkyLarkUpdate" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20958,15 +20902,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="CargoDescription" ColumnName="CargoDescription" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Category">
-              <MappingFragment StoreEntitySet="Category">
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -22508,21 +22443,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
               <MappingFragment StoreEntitySet="PickUpRequestStatus">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PickRequestStatus" ColumnName="PickRequestStatus" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PODs">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
-              <MappingFragment StoreEntitySet="POD">
-                <ScalarProperty Name="PODID" ColumnName="PODID" />
-                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
-                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
-                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
-                <ScalarProperty Name="DRRConsignmentID" ColumnName="DRRConsignmentID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />
-                <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29310,6 +29230,11 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="PrepaidAWBs">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PrepaidAWB">
               <MappingFragment StoreEntitySet="PrepaidAWB">
+                <ScalarProperty Name="DestinationPlaceID" ColumnName="DestinationPlaceID" />
+                <ScalarProperty Name="OriginPlaceID" ColumnName="OriginPlaceID" />
+                <ScalarProperty Name="DeliverySubLocality" ColumnName="DeliverySubLocality" />
+                <ScalarProperty Name="PickupSubLocality" ColumnName="PickupSubLocality" />
+                <ScalarProperty Name="Prepaid" ColumnName="Prepaid" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -29357,6 +29282,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+                <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
                 <ScalarProperty Name="BATCHID" ColumnName="BATCHID" />
                 <ScalarProperty Name="AWBBookIssueID" ColumnName="AWBBookIssueID" />
                 <ScalarProperty Name="PrepaidAWBID" ColumnName="PrepaidAWBID" />
@@ -29497,6 +29424,22 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
                 <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
                 <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PODs">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
+              <MappingFragment StoreEntitySet="POD">
+                <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
+                <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
+                <ScalarProperty Name="DeliveredDate" ColumnName="DeliveredDate" />
+                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
+                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

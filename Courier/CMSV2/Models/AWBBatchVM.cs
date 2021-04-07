@@ -8,7 +8,9 @@ namespace CMSV2.Models
 {
     public class AWBBatchVM : AWBBatch
     {
-        public int CustomerID { get; set; }
+        public int CODCustomerID { get; set; }
+        public int CASHCustomerId { get; set; }
+            public int CustomerID { get; set; }
         public int MovementID { get; set; }
         public int ParcelTypeID { get; set; }
         public int ProductTypeID { get; set; }
@@ -26,22 +28,22 @@ namespace CMSV2.Models
 
         public bool OutScanDelivery { get; set; } //Out scan Deliver
         public int OutScanDeliveredID { get; set; } //Out scan Deliver
-        public DateTime OutScanDate { get; set; } //Out scan Deliver
+        public DateTime? OutScanDate { get; set; } //Out scan Deliver
 
         public bool DeliveryAttempted { get; set; } //Delivery Attempt Date
         public int DeliveryAttemptedBy { get; set; } //
-        public DateTime DelieveryAttemptDate { get; set; }
+        public DateTime? DelieveryAttemptDate { get; set; }
 
         public bool Delivered { get; set; } //Delivered Date
         public int DeliveredBy { get; set; } //
-        public DateTime DeliveredDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
 
         public int Pieces { get; set; }
         public decimal Weight { get; set; }
         public int VehiceId { get; set; }
         public string AWBNo { get; set; }
         public DateTime AWBDate { get; set; }
-
+        public string CustomerName { get; set; }
         public string Shipper { get; set; }
         public string ConsignorContact { get; set; }
         public string ConsignorPhone { get; set; }
@@ -68,6 +70,10 @@ namespace CMSV2.Models
 
         
         public decimal CourierCharge { get; set; }
+        public decimal TaxPercent { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal OtherCharge { get; set; }
+        public decimal NetTotal { get; set; }
         public decimal MaterialCost { get; set; }
         public int PaymentTypeId { get; set; }
         public string PickUpLocation {get;set;}
@@ -79,6 +85,7 @@ namespace CMSV2.Models
         public string DestinationPlaceID { get; set; }
         public int InscanVehicleId { get; set; }
         public int OutscanVehicleId { get; set; }
+        public string Specialnstructions { get; set; }
         public List<AWBBatchDetail> Details { get; set; }
     }
 
@@ -130,27 +137,33 @@ namespace CMSV2.Models
         public string ConsigneeLocationName { get; set; }
         public string AssignedEmployeeID { get; set; }
         public decimal CourierCharge { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? PickupReadyTime { get; set; }
+        public decimal TaxPercent{ get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal OtherCharge { get; set; }
+        public decimal NetTotal { get; set; }
+        //[DataType(DataType.Date)]
+        public string PickupReadyTime { get; set; }
         public int CourierStatusID { get; set; }
         public int PickedUpEmpID { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime PickedupDate { get; set; }
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public string PickedupDate { get; set; }
         public string Pieces { get; set; }
         public decimal Weight { get; set; }
         public string CargoDescription { get; set; }
         public int MovementID { get; set; }
         public int ProductTypeID { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
-        public DateTime TransactionDate { get; set; }
-        public decimal NetTotal { get; set; }
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        //public DateTime TransactionDate { get; set; }
+
+        public string TransactionDate { get; set; }      
         public int ParcelTypeId { get; set; }
         public decimal MaterialCost { get; set; }
         public int StatusTypeId { get; set; }
+        
            public int PaymentModeId { get; set; }
         public int DepotReceivedBy { get; set; }
         public int DocumentTypeId { get; set; }
@@ -163,30 +176,64 @@ namespace CMSV2.Models
         public string ConsignorMobileNo { get; set; }
         public string ConsigneeMobileNo { get; set; }
         public bool AssignedForCollection { get; set; } //Assigned for Collection
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime AssignedDate { get; set; }  //PickupRequestDate
+        //[DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public string AssignedDate { get; set; }  //PickupRequestDate
         public bool CollectedBy { get; set; } //collected By        
         public bool ReceivedBy { get; set; } //Depot Received by //Inscan Received at origin
         public bool OutScanDelivery { get; set; } //Out scan Deliver
         public bool DeliveryAttempted { get; set; } //Delivery Attempt Date
         public bool Delivered { get; set; } //Delivered Date
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime ReceivedDate { get; set; }
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public string ReceivedDate { get; set; }
         public int OutScanDeliveredID { get; set; } //Out scan Deliver
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime OutScanDate { get; set; } //Out scan Deliver       
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public string OutScanDate { get; set; } //Out scan Deliver       
         public int DeliveryAttemptedBy { get; set; } //
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime DelieveryAttemptDate { get; set; }        
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public string DelieveryAttemptDate { get; set; }        
         public int DeliveredBy { get; set; } //
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-        public DateTime DeliveredDate { get; set; }
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public string DeliveredDate { get; set; }
         public int InscanVehicleId { get; set; }
 		public int OutscanVehicleId { get; set; }
+        public string SpecialInstructions { get; set; }
+        
     }
+
+    public class AWBInfo
+    {
+        public AWBInfo()
+        {
+            CourierCharge = 0;
+        }
+        public string AWBNo { get; set; }
+        public string Status  { get; set; }
+        public string Mode { get; set; }
+        public int ReferenceID{ get; set; }
+        public int CustomerID{ get; set; }
+        public string OriginLocation{ get; set; }
+        public string DestinationLocation {get; set; }
+        public decimal CourierCharge {get; set;}
+        public string CustomerName { get; set; }
+        public string LocationName { get; set; }
+        public string CountryName{ get; set; }
+        public string CityName { get; set; }
+        public string Phone { get; set; }
+        public string Mobile { get; set; }
+        public string Address1 { get; set; }
+        public string Address2{ get; set; }
+        public string Address3 { get; set; }
+        public string  PickupSubLocality { get; set; }
+        public string DeliverySubLocality { get; set; }
+        public string OriginPlaceID { get; set; }
+        public string DestinationPlaceID { get; set; }
+
+
+
+}
 }

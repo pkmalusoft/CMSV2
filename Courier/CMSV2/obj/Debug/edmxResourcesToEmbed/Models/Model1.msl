@@ -634,15 +634,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Category">
-        <MappingFragment StoreEntitySet="Category">
-          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CityMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CityMaster">
         <MappingFragment StoreEntitySet="CityMaster">
@@ -2181,21 +2172,6 @@
         <MappingFragment StoreEntitySet="PickUpRequestStatus">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PickRequestStatus" ColumnName="PickRequestStatus" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PODs">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
-        <MappingFragment StoreEntitySet="POD">
-          <ScalarProperty Name="PODID" ColumnName="PODID" />
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
-          <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
-          <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
-          <ScalarProperty Name="DRRConsignmentID" ColumnName="DRRConsignmentID" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />
-          <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -8983,6 +8959,11 @@
     <EntitySetMapping Name="PrepaidAWBs">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PrepaidAWB">
         <MappingFragment StoreEntitySet="PrepaidAWB">
+          <ScalarProperty Name="DestinationPlaceID" ColumnName="DestinationPlaceID" />
+          <ScalarProperty Name="OriginPlaceID" ColumnName="OriginPlaceID" />
+          <ScalarProperty Name="DeliverySubLocality" ColumnName="DeliverySubLocality" />
+          <ScalarProperty Name="PickupSubLocality" ColumnName="PickupSubLocality" />
+          <ScalarProperty Name="Prepaid" ColumnName="Prepaid" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -9030,6 +9011,8 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+          <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
           <ScalarProperty Name="BATCHID" ColumnName="BATCHID" />
           <ScalarProperty Name="AWBBookIssueID" ColumnName="AWBBookIssueID" />
           <ScalarProperty Name="PrepaidAWBID" ColumnName="PrepaidAWBID" />
@@ -9170,6 +9153,22 @@
           <ScalarProperty Name="ReceivedByID" ColumnName="ReceivedByID" />
           <ScalarProperty Name="InscanSheetNumber" ColumnName="InscanSheetNumber" />
           <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PODs">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
+        <MappingFragment StoreEntitySet="POD">
+          <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
+          <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
+          <ScalarProperty Name="DeliveredDate" ColumnName="DeliveredDate" />
+          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+          <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
+          <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

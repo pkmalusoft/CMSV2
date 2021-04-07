@@ -18,12 +18,11 @@ namespace CMSV2.Models
         public int InScanID { get; set; }
         public string ReceiverName { get; set; }
         public Nullable<System.DateTime> ReceivedTime { get; set; }
+        public Nullable<int> DeliveredBy { get; set; }
+        public Nullable<int> DeliveredDate { get; set; }
         public Nullable<int> CourierStatusID { get; set; }
-        public Nullable<int> DRRConsignmentID { get; set; }
         public string Remarks { get; set; }
         public Nullable<System.DateTime> UpdationDate { get; set; }
         public Nullable<bool> IsSkyLarkUpdate { get; set; }
-    
-        public virtual DRRConsignment DRRConsignment { get; set; }
     }
 }

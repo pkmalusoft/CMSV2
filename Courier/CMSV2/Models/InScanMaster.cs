@@ -114,5 +114,7 @@ namespace CMSV2.Models
         public Nullable<int> PrepaidAWBID { get; set; }
         public Nullable<int> AWBBookIssueID { get; set; }
         public Nullable<int> BATCHID { get; set; }
+        public Nullable<decimal> TaxPercent { get; set; }
+        public Nullable<decimal> TaxAmount { get; set; }
     }
 }

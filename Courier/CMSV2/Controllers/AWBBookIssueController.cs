@@ -2,6 +2,7 @@
 using CMSV2.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -65,7 +66,7 @@ namespace CMSV2.Controllers
 
                 if (id > 0)
                 {
-                    ViewBag.Title = "AWB Book Issue - Modify";
+                    ViewBag.Title = "Air waybill Issue - Modify";
 
                     AWBBOOKIssue dpay = db.AWBBOOKIssues.Find(id);
                     vm.Documentno = dpay.Documentno;
@@ -85,7 +86,7 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-                    ViewBag.Title = "AWB Book Issue - Create";
+                    ViewBag.Title = "Air waybill Issue - Create";
                     string DocNo = AWBDAO.GetMaxAWBBookIssueDocumentNo();                    
 
                     DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
@@ -136,7 +137,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                v = db.AWBBOOKIssues.Find(v.AWBBOOKIssueID);
+                v = db.AWBBOOKIssues.Find(vm.AWBBOOKIssueID);
                 v.Documentno = vm.Documentno;
                 v.BookNo = vm.BookNo;
                 v.AWBNOFrom = vm.AWBNOFrom;
@@ -185,6 +186,32 @@ namespace CMSV2.Controllers
             }
             
             
+
+        }
+
+        public ActionResult DeleteConfirmed(int id)
+        {
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = AWBDAO.DeleteAWBCourier(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
+            return RedirectToAction("Index");
+
 
         }
     }

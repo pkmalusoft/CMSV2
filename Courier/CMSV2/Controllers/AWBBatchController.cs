@@ -40,63 +40,107 @@ namespace CMSV2.Controllers
             vm.BatchNumber = DocNo;
             DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
             vm.BatchDate = pFromDate;
-
-            vm.ProductTypeID = 1;
-            vm.ParcelTypeID = 1;
-            vm.MovementID = 1;
-            vm.AssignedDate= pFromDate;
-            vm.ReceivedDate = pFromDate;
-            vm.OutScanDate = pFromDate;
             vm.AWBDate = pFromDate;
+            vm.AssignedDate = pFromDate;
+            vm.TaxPercent = 5;
+            //vm.ProductTypeID = 1;
+            //vm.ParcelTypeID = 1;
+            //vm.MovementID = 1;
+            //vm.AssignedDate= pFromDate;
+            //vm.ReceivedDate = pFromDate;
+            //vm.OutScanDate = pFromDate;
 
-            vm.AssignedEmployeeID = 2;
-            vm.PickedUpEmpID= 2;
-            vm.PickedupDate = pFromDate;
-            vm.DelieveryAttemptDate = pFromDate;
-            vm.DeliveredDate = pFromDate;
-            vm.DeliveryAttemptedBy = 3;
-            vm.OutScanDeliveredID = 2;
-            vm.DeliveredBy = 2;
-            vm.DepotReceivedBy = 2;
+
+            //vm.AssignedEmployeeID = 2;
+            //vm.PickedUpEmpID= 2;
+            //vm.PickedupDate = pFromDate;
+            //vm.DelieveryAttemptDate = pFromDate;
+            //vm.DeliveredDate = pFromDate;
+            //vm.DeliveryAttemptedBy = 3;
+            //vm.OutScanDeliveredID = 2;
+            //vm.DeliveredBy = 2;
+            //vm.DepotReceivedBy = 2;
+
+            string customername = "";
+
+         
+                 customername = "WALK-IN-CUSTOMER";
+            var CashCustomer = (from c1 in db.CustomerMasters
+                                where c1.CustomerName == customername
+                                orderby c1.CustomerName ascending
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (CashCustomer != null)
+            {
+                vm.CASHCustomerId = CashCustomer.CustomerID;
+            }
+
+                customername = "COD-CUSTOMER";
+            var CODCustomer = (from c1 in db.CustomerMasters
+                                where c1.CustomerName == customername
+                                orderby c1.CustomerName ascending
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (CODCustomer!=null)
+            {
+                vm.CODCustomerID = CODCustomer.CustomerID;
+            }
+
+
             return View(vm);
         }
 
         [HttpPost]
         public string SaveBatch(string BatchNo, string BatchDate, string Details)
         {
-            Details.Replace("{}", "");
-            var IDetails = JsonConvert.DeserializeObject<List<AWBBatchDetail>>(Details);
-            DataTable ds = new DataTable();
-            DataSet dt = new DataSet();
-            dt = ToDataTable(IDetails);
-            int FyearId = Convert.ToInt32(Session["fyearid"]);
-            string xml = dt.GetXml();
-            xml=xml.Replace("T00:00:00+05:30", "");
-            if (Session["UserID"] != null)
+            try
             {
-                int userid = Convert.ToInt32(Session["UserID"].ToString());
-                int CompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-                int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-                int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
-                AWBBatch batch = new AWBBatch();
-                batch.BatchNumber = BatchNo;
-                batch.BatchDate =Convert.ToDateTime(BatchDate);
-                batch.UserID = userid;
-                batch.AcFinancialYearid = FyearId;
-                batch.BranchID = BranchId;
-                db.AWBBatches.Add(batch);
-                db.SaveChanges();
+                Details.Replace("{}", "");
+                var IDetails = JsonConvert.DeserializeObject<List<AWBBatchDetail>>(Details);
+                DataTable ds = new DataTable();
+                DataSet dt = new DataSet();
+                dt = ToDataTable(IDetails);
+                int FyearId = Convert.ToInt32(Session["fyearid"]);
+                string xml = dt.GetXml();
+                xml = xml.Replace("T00:00:00+05:30", "");
+                if (Session["UserID"] != null)
+                {
+                    int userid = Convert.ToInt32(Session["UserID"].ToString());
+                    int CompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+                    AWBBatch batch = new AWBBatch();
+                    batch.BatchNumber = BatchNo;
+                    batch.BatchDate = Convert.ToDateTime(BatchDate);
+                    batch.UserID = userid;
+                    batch.AcFinancialYearid = FyearId;
+                    batch.BranchID = BranchId;
+                    db.AWBBatches.Add(batch);
+                    db.SaveChanges();
 
-                AWBDAO.SaveAWBBatch(batch.ID, BranchId, CompanyID,DepotID, userid,FyearId, xml);
-                return "Ok";
+                    string result = AWBDAO.SaveAWBBatch(batch.ID, BranchId, CompanyID, DepotID, userid, FyearId, xml);
+                    return result;
+                }
+                else
+                {
+                    return "Failed!";
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return "Failed!";
+                return ex.Message;
             }
-
         }
 
+        [HttpGet]
+        public JsonResult GetConsignorCustomer(string customername)
+        {
+            var customerlist = (from c1 in db.CustomerMasters
+                                where c1.CustomerName == customername
+                                orderby c1.CustomerName ascending
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+
+            return Json(customerlist, JsonRequestBehavior.AllowGet);
+
+        }
         public static DataSet ToDataTable<T>(List<T> items)
         {
             DataSet ds = new DataSet();
@@ -150,6 +194,15 @@ namespace CMSV2.Controllers
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
 
             }
+
+        }
+
+        [HttpGet]
+        public JsonResult GetAWBInfo(string awbno)
+        {
+            AWBInfo info = AWBDAO.GetAWBInfo(awbno);
+
+            return Json(info, JsonRequestBehavior.AllowGet);
 
         }
     }

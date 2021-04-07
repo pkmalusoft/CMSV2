@@ -1839,16 +1839,16 @@
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel required">Courier Charge</label>
-                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
-                        </div>
+                            @Html.TextBoxFor(model => model.CourierCharge, string.Format("{0:n2}", Model.CourierCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
+                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel">Total Other Charge</label>
-                            @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                            @Html.TextBoxFor(model => model.OtherCharge, string.Format("{0:n2}", Model.OtherCharge), new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
                             @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel">Material Cost</label>
-                            @Html.TextBoxFor(model => model.materialcost, new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                            @Html.TextBoxFor(model => model.materialcost, string.Format("{0:n2}",Model.materialcost), new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
                         </div>
                         <div class="col-md-1">
                             @*<label class="headinglabel">Add Other Charge</label>*@
@@ -1856,7 +1856,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Total</label>
-                            @Html.TextBoxFor(model => model.totalCharge, new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
+                            @Html.TextBoxFor(model => model.totalCharge, string.Format("{0:n2}",Model.totalCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
                         </div>
                         <div class="col-md-12 inline_checkbox checkboxdesign " style="padding-top: 5px!important">
                             <div>
@@ -1955,57 +1955,89 @@
                     <div class="col-md-6">
                         <label class="headinglabel">Created By & Date  </label>
                         @Html.DisplayFor(model => model.CreatedByName, new { @class = "form-control" }) &nbsp;&nbsp;
-                        @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
-                    </div>
+    @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
+</div>
 
-                    <div class="col-md-6">
-                        <label class="headinglabel">Last Modified By & Date  </label>
+
+<div class="col-md-6">
+
+    <label class="headinglabel">Last Modified By & Date  </label>
                         @Html.DisplayFor(model => model.LastModifiedByName, new { @class = "form-control" }) &nbsp;&nbsp;
-                        @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12 btn-right">
-
-                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "QuickAWB", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+    @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
+</div>
 
 
-            </div>
-        </div>
+</div>
 
-        <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
+</div>
 
-        </div>
+</div>
 
-        <div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" style="border-radius:5px">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">
-                            Other Charges
-                        </h4>
-                    </div>
 
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="row">
+<div class="row no-margin" style="padding-top: 10px">
 
-                                <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
-                                <table id="ExpAllocationTable" class="table table-bordered table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th>Other Charge</th>
-                                            <th>Amount </th>
-                                            <th>Delete </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="OtherChargeTable">
-                                        @foreach (var item in Model.otherchargesVM)
+<div class="col-md-12 btn-right">
+
+
+<input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "QuickAWB", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+
+
+</div>
+
+</div>
+
+
+<div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
+
+
+</div>
+
+
+<div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal-dialog">
+
+<div class="modal-content" style="border-radius:5px">
+
+<div class="modal-header">
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+    <h4 class="modal-title" id="exampleModalLabel">
+        Other Charges
+    </h4>
+
+</div>
+
+
+<div class="modal-body">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+
+            <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
+
+            <table id="ExpAllocationTable" class="table table-bordered table-responsive">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Other Charge</th>
+
+                        <th>Amount </th>
+
+                        <th>Delete </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="OtherChargeTable">
+                    @foreach (var item in Model.otherchargesVM)
                                         {
                                             <tr>
                                                 <td>

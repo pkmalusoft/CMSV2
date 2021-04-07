@@ -148,7 +148,6 @@
     <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="TaxApplicable" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="AcGroup" Relationship="Self.FK_AcHead_AcGroup" FromRole="AcHead" ToRole="AcGroup" />
-    <NavigationProperty Name="Categories" Relationship="Self.FK_Category_AcHead" FromRole="AcHead" ToRole="Category" />
     <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_AcHead" FromRole="AcHead" ToRole="Expense" />
     <NavigationProperty Name="ExpenseDetails" Relationship="Self.FK_ExpenseDetails_AcHead" FromRole="AcHead" ToRole="ExpenseDetails" />
     <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
@@ -670,16 +669,6 @@
     <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="CargoDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
-  <EntityType Name="Category">
-    <Key>
-      <PropertyRef Name="CategoryID" />
-    </Key>
-    <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <NavigationProperty Name="AcHead" Relationship="Self.FK_Category_AcHead" FromRole="Category" ToRole="AcHead" />
-    <NavigationProperty Name="Products" Relationship="Self.FK_Products_Category" FromRole="Category" ToRole="Products" />
-  </EntityType>
   <EntityType Name="CityMaster">
     <Key>
       <PropertyRef Name="CityID" />
@@ -1162,7 +1151,6 @@
     <Property Name="StatusSuspenseEntry" Type="Boolean" />
     <NavigationProperty Name="CourierStatu" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="DRRConsignment" ToRole="CourierStatus" />
     <NavigationProperty Name="MCPayments" Relationship="Self.FK_MCPayment_DRRConsignment" FromRole="DRRConsignment" ToRole="MCPayment" />
-    <NavigationProperty Name="PODs" Relationship="Self.FK_POD_DRRConsignment" FromRole="DRRConsignment" ToRole="POD" />
   </EntityType>
   <EntityType Name="DRRInvoice">
     <Key>
@@ -2252,21 +2240,6 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PickRequestStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="POD">
-    <Key>
-      <PropertyRef Name="PODID" />
-    </Key>
-    <Property Name="PODID" Type="Int32" Nullable="false" />
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="DRRConsignmentID" Type="Int32" />
-    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="UpdationDate" Type="DateTime" Precision="3" />
-    <Property Name="IsSkyLarkUpdate" Type="Boolean" />
-    <NavigationProperty Name="DRRConsignment" Relationship="Self.FK_POD_DRRConsignment" FromRole="POD" ToRole="DRRConsignment" />
-  </EntityType>
   <EntityType Name="PODSignature">
     <Key>
       <PropertyRef Name="PODSignatureID" />
@@ -2334,7 +2307,6 @@
     <Property Name="EndUserPrice" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="ResellerPrice" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="SpecialPrice" Type="Decimal" Precision="18" Scale="2" />
-    <NavigationProperty Name="Category" Relationship="Self.FK_Products_Category" FromRole="Products" ToRole="Category" />
     <NavigationProperty Name="JobEnquiryDetails" Relationship="Self.FK_JobEnquiryDetails_Products" FromRole="Products" ToRole="JobEnquiryDetails" />
     <NavigationProperty Name="Type" Relationship="Self.FK_Products_Type" FromRole="Products" ToRole="Type" />
     <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetails_Products" FromRole="Products" ToRole="PurchaseOrderDetails" />
@@ -3653,18 +3625,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Category_AcHead">
-    <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-    <End Role="Category" Type="Self.Category" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AcHead">
-        <PropertyRef Name="AcHeadID" />
-      </Principal>
-      <Dependent Role="Category">
-        <PropertyRef Name="AcHeadID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Expense_AcHead">
     <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -3990,18 +3950,6 @@
       </Principal>
       <Dependent Role="SalesInvoice">
         <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Products_Category">
-    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Products" Type="Self.Product" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="CategoryID" />
-      </Principal>
-      <Dependent Role="Products">
-        <PropertyRef Name="CategoryID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -4377,18 +4325,6 @@
         <PropertyRef Name="DRRConsignmentID" />
       </Principal>
       <Dependent Role="MCPayment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_POD_DRRConsignment">
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="0..1" />
-    <End Role="POD" Type="Self.POD" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRRConsignment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Principal>
-      <Dependent Role="POD">
         <PropertyRef Name="DRRConsignmentID" />
       </Dependent>
     </ReferentialConstraint>
@@ -5106,7 +5042,6 @@
     <EntitySet Name="CargoDescriptions" EntityType="Self.CargoDescription" />
     <EntitySet Name="CargoInScans" EntityType="Self.CargoInScan" />
     <EntitySet Name="CargoInscanDetails" EntityType="Self.CargoInscanDetail" />
-    <EntitySet Name="Categories" EntityType="Self.Category" />
     <EntitySet Name="CityMasters" EntityType="Self.CityMaster" />
     <EntitySet Name="ColoaderAllocations" EntityType="Self.ColoaderAllocation" />
     <EntitySet Name="ColoaderCostDetails" EntityType="Self.ColoaderCostDetail" />
@@ -5191,7 +5126,6 @@
     <EntitySet Name="Periods" EntityType="Self.Period" />
     <EntitySet Name="PeriodTypes" EntityType="Self.PeriodType" />
     <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatu" />
-    <EntitySet Name="PODs" EntityType="Self.POD" />
     <EntitySet Name="PODSignatures" EntityType="Self.PODSignature" />
     <EntitySet Name="PrepaidAWBInvoices" EntityType="Self.PrepaidAWBInvoice" />
     <EntitySet Name="PrepaidAWBInvoiceDetails" EntityType="Self.PrepaidAWBInvoiceDetail" />
@@ -5323,10 +5257,6 @@
       <End Role="AcGroup" EntitySet="AcGroups" />
       <End Role="AcHead" EntitySet="AcHeads" />
     </AssociationSet>
-    <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
-      <End Role="AcHead" EntitySet="AcHeads" />
-      <End Role="Category" EntitySet="Categories" />
-    </AssociationSet>
     <AssociationSet Name="FK_Expense_AcHead" Association="Self.FK_Expense_AcHead">
       <End Role="AcHead" EntitySet="AcHeads" />
       <End Role="Expense" EntitySet="Expenses" />
@@ -5434,10 +5364,6 @@
     <AssociationSet Name="FK_SalesInvoice_BranchMaster" Association="Self.FK_SalesInvoice_BranchMaster">
       <End Role="BranchMaster" EntitySet="BranchMasters" />
       <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Products_Category" Association="Self.FK_Products_Category">
-      <End Role="Category" EntitySet="Categories" />
-      <End Role="Products" EntitySet="Products" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomerMaster_CityMaster" Association="Self.FK_CustomerMaster_CityMaster">
       <End Role="CityMaster" EntitySet="CityMasters" />
@@ -5562,10 +5488,6 @@
     <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
       <End Role="DRRConsignment" EntitySet="DRRConsignments" />
       <End Role="MCPayment" EntitySet="MCPayments" />
-    </AssociationSet>
-    <AssociationSet Name="FK_POD_DRRConsignment" Association="Self.FK_POD_DRRConsignment">
-      <End Role="DRRConsignment" EntitySet="DRRConsignments" />
-      <End Role="POD" EntitySet="PODs" />
     </AssociationSet>
     <AssociationSet Name="FK_DRSEmployee_DRSEmployeeID" Association="Self.FK_DRSEmployee_DRSEmployeeID">
       <End Role="DRSEmployeeID" EntitySet="DRSEmployeeIDs" />
@@ -8413,6 +8335,7 @@
     <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
     <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
     <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
+    <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12829,6 +12752,11 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <Property Name="ModifiedUserID" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="Prepaid" Type="Boolean" Nullable="false" />
+    <Property Name="PickupSubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DeliverySubLocality" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="AWBTrackStatu">
     <Key>
@@ -12949,6 +12877,8 @@
     <Property Name="PrepaidAWBID" Type="Int32" />
     <Property Name="AWBBookIssueID" Type="Int32" />
     <Property Name="BATCHID" Type="Int32" />
+    <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
+    <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
   </EntityType>
   <EntityType Name="DR">
     <Key>
@@ -12987,5 +12917,20 @@
     <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="AgentID" Type="Int32" />
     <Property Name="AcFinancialYearID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="POD">
+    <Key>
+      <PropertyRef Name="PODID" />
+    </Key>
+    <Property Name="PODID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InScanID" Type="Int32" Nullable="false" />
+    <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="DeliveredDate" Type="Int32" />
+    <Property Name="CourierStatusID" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UpdationDate" Type="DateTime" Precision="3" />
+    <Property Name="IsSkyLarkUpdate" Type="Boolean" />
   </EntityType>
 </Schema>

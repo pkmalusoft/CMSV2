@@ -65,7 +65,6 @@ namespace CMSV2.Models
         public virtual DbSet<CargoDescription> CargoDescriptions { get; set; }
         public virtual DbSet<CargoInScan> CargoInScans { get; set; }
         public virtual DbSet<CargoInscanDetail> CargoInscanDetails { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<CityMaster> CityMasters { get; set; }
         public virtual DbSet<ColoaderAllocation> ColoaderAllocations { get; set; }
         public virtual DbSet<ColoaderCostDetail> ColoaderCostDetails { get; set; }
@@ -150,7 +149,6 @@ namespace CMSV2.Models
         public virtual DbSet<Period> Periods { get; set; }
         public virtual DbSet<PeriodType> PeriodTypes { get; set; }
         public virtual DbSet<PickUpRequestStatu> PickUpRequestStatus { get; set; }
-        public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<PODSignature> PODSignatures { get; set; }
         public virtual DbSet<PrepaidAWBInvoice> PrepaidAWBInvoices { get; set; }
         public virtual DbSet<PrepaidAWBInvoiceDetail> PrepaidAWBInvoiceDetails { get; set; }
@@ -278,6 +276,7 @@ namespace CMSV2.Models
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
+        public virtual DbSet<POD> PODs { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

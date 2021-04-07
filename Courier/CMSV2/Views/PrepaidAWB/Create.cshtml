@@ -177,8 +177,14 @@
 
 
                 
-                 <div class="col-md-3">
-                    <label class="headinglabel required">Customer</label>
+                <div class="col-md-3">                    
+                    <div class="flexTitle">
+                        <label class="headinglabel required">Customer</label>
+                        <div class="checkboxdesign no-padding  text-right" style="float:right">
+                            @Html.CheckBox("Prepaid", new { @name = "Prepaid"}) &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Prepaid AWB</label>
+                        </div>
+                    </div>
                     @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CustomerID)
                 </div>

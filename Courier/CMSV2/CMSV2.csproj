@@ -263,6 +263,7 @@
     <Compile Include="Controllers\MovementTypeController.cs" />
     <Compile Include="Controllers\OtherChargeController.cs" />
     <Compile Include="Controllers\OutScanController.cs" />
+    <Compile Include="Controllers\PODController.cs" />
     <Compile Include="Controllers\VehicleTypeController.cs" />
     <Compile Include="Controllers\ParcelTypeController.cs" />
     <Compile Include="Controllers\PickUpEnquiryController.cs" />
@@ -632,9 +633,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cash_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CategorySelectAll_Result.cs">
@@ -3614,9 +3612,9 @@
     <Content Include="Views\AWBPrepaid\Index.cshtml" />
     <Content Include="Views\AWBPrepaid\Create.cshtml" />
     <Content Include="Views\AWBBatch\Create.cshtml" />
-    <Content Include="Views\AWBBatch\Create %284%29.cshtml" />
-    <Content Include="Views\AWBBatch\Create - Copy.cshtml" />
     <Content Include="Views\Development\Index.cshtml" />
+    <Content Include="Views\POD\Index.cshtml" />
+    <Content Include="Views\AWBBatch\Create - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

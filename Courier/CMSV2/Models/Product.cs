@@ -32,7 +32,6 @@ namespace CMSV2.Models
         public Nullable<decimal> ResellerPrice { get; set; }
         public Nullable<decimal> SpecialPrice { get; set; }
     
-        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JobEnquiryDetail> JobEnquiryDetails { get; set; }
         public virtual Type Type { get; set; }

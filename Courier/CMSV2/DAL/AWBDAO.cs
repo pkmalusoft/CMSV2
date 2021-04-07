@@ -12,6 +12,28 @@ namespace CMSV2.DAL
     {
 
         #region "AWBBookIssue"
+        public static DataTable DeleteAWBCourier(int AWBBookIssueID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteAWBBookIssue";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBBookIssueID", AWBBookIssueID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static List<AWBBookIssueList> GetAWBBookIssue(int branchId)
         {
             AWBBookIssueSearch paramobj = (AWBBookIssueSearch)(HttpContext.Current.Session["AWBBookIssueSearch"]);
@@ -108,6 +130,29 @@ namespace CMSV2.DAL
         #endregion
 
         #region "AWBPrepaid"
+
+        public static DataTable DeleteAWBPrepaid(int PrepaidAWBID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteAWBPrepaid";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@PrepaidAWBID", PrepaidAWBID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static string GetMaxPrepaidAWBDocumentNo()
         {
             SqlCommand cmd = new SqlCommand();
@@ -171,6 +216,65 @@ namespace CMSV2.DAL
             return objList;
         }
 
+        public static AWBInfo GetAWBInfo(string AWBNo)
+        {
+            AWBInfo obj = new AWBInfo();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GETAWBUsedStatus";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBNo", @AWBNo);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+                     
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    obj.ReferenceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["ReferenceID"].ToString());
+                    obj.AWBNo = ds.Tables[0].Rows[0]["AWBNo"].ToString();
+                    obj.Status = ds.Tables[0].Rows[0]["Status"].ToString();
+                    obj.Mode = ds.Tables[0].Rows[0]["Mode"].ToString();
+
+                    if (obj.Status != "Available")
+                        return obj;
+
+                    if (obj.Status == "Available" && (obj.Mode == "Prepaid"))
+                    {
+                        obj.CourierCharge = ds.Tables[0].Rows[0]["CourierCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[0]["CourierCharge"].ToString());
+                    }
+                    if (obj.Status == "Available" && (obj.Mode == "Prepaid" || obj.Mode == "NotPrepaid"))
+                    {
+                        obj.CustomerID = ds.Tables[0].Rows[0]["CustomerID"]== DBNull.Value ?0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"].ToString());
+                        obj.CustomerName = ds.Tables[0].Rows[0]["CustomerName"].ToString();
+                        obj.OriginLocation = ds.Tables[0].Rows[0]["OriginLocation"].ToString();
+                        obj.DestinationLocation = ds.Tables[0].Rows[0]["DestinationLocation"].ToString();
+                        obj.CountryName = ds.Tables[0].Rows[0]["CountryName"].ToString();
+                        obj.CityName = ds.Tables[0].Rows[0]["CityName"].ToString();
+                        obj.LocationName = ds.Tables[0].Rows[0]["LocationName"].ToString();
+                        obj.LocationName = ds.Tables[0].Rows[0]["LocationName"].ToString();
+                        obj.Phone = ds.Tables[0].Rows[0]["Phone"] == DBNull.Value ? "" : ds.Tables[0].Rows[0]["Phone"].ToString();
+                        obj.Mobile = ds.Tables[0].Rows[0]["Mobile"] == DBNull.Value ? "" : ds.Tables[0].Rows[0]["Mobile"].ToString();
+                        obj.Address1 = ds.Tables[0].Rows[0]["Address1"].ToString();
+                        obj.Address2 = ds.Tables[0].Rows[0]["Address2"].ToString();
+                        obj.Address3 = ds.Tables[0].Rows[0]["Address3"].ToString();
+                        obj.PickupSubLocality = ds.Tables[0].Rows[0]["PickupSubLocality"].ToString();
+                        obj.DeliverySubLocality = ds.Tables[0].Rows[0]["DeliverySubLocality"].ToString();
+                        obj.OriginPlaceID = ds.Tables[0].Rows[0]["OriginPlaceID"].ToString();
+                        obj.DestinationPlaceID = ds.Tables[0].Rows[0]["DestinationPlaceID"].ToString();
+                    }
+                    else
+                    {
+                        return obj;
+                    }
+                }
+            }
+
+            return obj;
+           
+        }
         public static string GenerateAWBPrepaid(int PrepaidAWBID)
         {
             try
@@ -266,33 +370,39 @@ namespace CMSV2.DAL
             }
 
         }
-        public static int SaveAWBBatch(int BATCHID  ,int BranchID,int AcCompanyID,int DepotID, int UserID , int FYearID, string Details)
+        public static string SaveAWBBatch(int BATCHID  ,int BranchID,int AcCompanyID,int DepotID, int UserID , int FYearID, string Details)
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "SP_SaveAWBBatch";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@BatchID", BATCHID);
-            cmd.Parameters.AddWithValue("@BranchID", BranchID);
-            cmd.Parameters.AddWithValue("@AcCompanyID", AcCompanyID);
-            cmd.Parameters.AddWithValue("@DepotID", DepotID);
-            cmd.Parameters.AddWithValue("@UserID", UserID);
-            cmd.Parameters.AddWithValue("@FYearId", FYearID);
-            cmd.Parameters.AddWithValue("@FormatForXMLitem", Details);           
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
-            if (ds.Tables[0].Rows.Count > 0)
+            try
             {
-                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
-            }
-            else
-            {
-                return 0;
-            }
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_SaveAWBBatch";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@BatchID", BATCHID);
+                cmd.Parameters.AddWithValue("@BranchID", BranchID);
+                cmd.Parameters.AddWithValue("@AcCompanyID", AcCompanyID);
+                cmd.Parameters.AddWithValue("@DepotID", DepotID);
+                cmd.Parameters.AddWithValue("@UserID", UserID);
+                cmd.Parameters.AddWithValue("@FYearId", FYearID);
+                cmd.Parameters.AddWithValue("@FormatForXMLitem", Details);
 
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    return "Ok";
+                }
+                else
+                {
+                    return "No AWB added";
+                }
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
 
         }
         #endregion

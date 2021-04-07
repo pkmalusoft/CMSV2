@@ -146,10 +146,11 @@
         $('#btnSave').click(function (e) {
             debugger;
             var result = false;
+            
             var rowcount = $('#tbl1 > tr').length;
 
             if (rowcount == 0) {
-                alert('Click Refresh Button to Generate AWBNo!');
+                alert('Enter Requied Values to Generate AWBNo!');
             }
             else {
                 result = true;
@@ -192,14 +193,14 @@
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label class="headinglabel">Book Date</label>
-                        @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control text-right", @required = true })
+                        @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control text-right", @required = "true" })
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-12 ">
                         <label class="headinglabel">Courier Name</label>
-                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control",@required="true" })
                     </div>
 
                 </div>
@@ -209,11 +210,11 @@
 
                     <div class="col-xs-12 col-md-6">
                         <label class=" required headinglabel">Book Number</label>
-                        @Html.TextBoxFor(model => model.BookNo, new { @class = "form-control", @required = true })
+                        @Html.TextBoxFor(model => model.BookNo, new { @class = "form-control", @required ="true" })
                     </div>
                     <div class="col-xs-2 col-sm-6">
-                        <label class="headinglabel">No. of AWBs</label>
-                        @Html.TextBoxFor(model => model.NoOfAWBs, new { @class = "form-control text-right", @required = true, @onchange = "checkawbstartend()" })
+                        <label class="headinglabel required">No. of AWBs</label>
+                        @Html.TextBoxFor(model => model.NoOfAWBs, new { @class = "form-control text-right", @required = "true", @onchange = "checkawbstartend()" })
                     </div>
 
                 </div>
@@ -222,12 +223,12 @@
 
                     <div class="col-xs-12 col-sm-6">
                         <label class=" required headinglabel">Start AWB</label>
-                        @Html.TextBoxFor(model => model.AWBNOFrom, new { @class = "form-control textright", required = "required", @onchange = "checkawbstartend()" })
+                        @Html.TextBoxFor(model => model.AWBNOFrom, new { @class = "form-control textright", required = "true", @onchange = "checkawbstartend()" })
                     </div>
 
                     <div class="col-xs-12 col-sm-6">
                         <label class=" required headinglabel">End AWB</label>
-                        @Html.TextBoxFor(model => model.AWBNOTo, new { @class = "form-control textright", required = "required", @readonly = "true" })
+                        @Html.TextBoxFor(model => model.AWBNOTo, new { @class = "form-control textright",  @readonly = "true" })
                     </div>
 
                 </div>

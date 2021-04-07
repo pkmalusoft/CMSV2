@@ -18,7 +18,6 @@ namespace CMSV2.Models
         public DRRConsignment()
         {
             this.MCPayments = new HashSet<MCPayment>();
-            this.PODs = new HashSet<POD>();
         }
     
         public int DRRConsignmentID { get; set; }
@@ -51,7 +50,5 @@ namespace CMSV2.Models
         public virtual CourierStatu CourierStatu { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MCPayment> MCPayments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<POD> PODs { get; set; }
     }
 }
