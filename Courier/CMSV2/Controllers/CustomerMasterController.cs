@@ -25,6 +25,7 @@ namespace CMSV2.Controllers
 
             foreach (Menu q in Query)
             {
+               
                 Query1.Add(q);
             }
 
@@ -51,7 +52,7 @@ namespace CMSV2.Controllers
             //}
             ViewBag.UserName = SourceMastersModel.GetUserFullName(Convert.ToInt32(Session["UserId"].ToString()), Session["UserType"].ToString());
 
-            Session["Menu"] = Query1;
+            Session["Menu"] = Query1.Distinct().ToList();
             return View();
 
 
@@ -62,7 +63,7 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
             List<CustmorVM> lst = new List<CustmorVM>();
-            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
+            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite=>ite.CustomerID >0).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
 
             foreach (var item in data)
             {

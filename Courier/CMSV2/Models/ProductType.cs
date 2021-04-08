@@ -23,5 +23,6 @@ namespace CMSV2.Models
         public Nullable<decimal> Width { get; set; }
         public Nullable<decimal> Height { get; set; }
         public Nullable<decimal> CBM { get; set; }
+        public bool DefaultType { get; set; }
     }
 }

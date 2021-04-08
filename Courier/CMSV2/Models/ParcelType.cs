@@ -17,5 +17,6 @@ namespace CMSV2.Models
         public int ID { get; set; }
         public Nullable<int> ParcelTypeID { get; set; }
         public string ParcelType1 { get; set; }
+        public bool DefaultType { get; set; }
     }
 }

@@ -779,5 +779,62 @@ namespace CMSV2.Controllers
 
         }
         #endregion
+
+        #region "CODRegister"
+        public ActionResult CODRegister()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Summary"
+                };
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            ViewBag.ReportName = "Customer Aging Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerAging"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CODRegister(CODReportParam picker)
+        {
+
+            Session["CODReportParam"] = picker;            
+            
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            AccountsReportsDAO.GenerateCustomerAgingReport();
+
+            return RedirectToAction("CODRegister", "Reports");
+
+
+        }
+        #endregion
     }
 }

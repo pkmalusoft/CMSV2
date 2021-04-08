@@ -1,0 +1,112 @@
+﻿@model CMSV2.Models.DatePicker
+@{
+    Layout = null;
+}
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
+<style>
+    #movementid + .btn-group button,#movementid + .btn-group{
+	display:block;
+	width:100%;
+	}
+</style>
+<script>
+    $(document).ready(function () {
+              $.ajax({
+                type: "Get",
+                url: "/CustomerInvoice/GetCourierType",
+                datatype: "Json",
+                  success: function (response) {
+                      
+                      var data = response.data;
+                    $('#movementid').empty();
+
+                    $.each(data, function (index, value) {
+
+                        var o_st = $("#MovementId").val().split(",");
+                        var flag = 0;
+                        for (var j = 0 ; j < o_st.length; j++) {
+
+                                if (o_st[j] == value.MovementID) {
+                                    flag = 1;
+                                    break;
+                                }
+
+                        }
+
+                        if (flag == 1) {
+                            $('#movementid').append('<option value="' + value.MovementID + '" selected=true>' + value.MovementType + '</option>');
+                        }
+                        else {
+                            $('#movementid').append('<option value="' + value.MovementID + '">' + value.MovementType + '</option>');
+                        }
+
+                    });
+
+
+
+                      $('#movementid').multiselect({
+                        nonSelectedText:'Select',
+                        enableClickableOptGroups: true,
+                        enableCollapsibleOptGroups: true,
+                        enableFiltering: false,
+                        includeSelectAllOption: true,
+                        selectAllValue: 'multiselect-all'
+                    });
+
+                }
+            });
+
+       
+    });
+
+
+    @*$('#MovementId').select2({
+        data:@ViewBag.Movement,
+        multiple: true
+    });*@
+
+</script>
+@using (Html.BeginForm("PrintSearch", "AWB", FormMethod.Post, new { @id = "invoicesearch" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="row no-margin d-flex">
+
+    <div class="col-md-1">
+        @Html.HiddenFor(model => model.MovementId)
+        <label class="headinglabel required ">From Date</label>
+        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
+    </div>
+    <div class="col-md-1">
+        <label class="headinglabel required">To Date</label>
+        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+    </div>
+    <div class="col-md-1">
+        <label class="headinglabel">Payment Mode</label>
+        @Html.DropDownListFor(model => model.paymentId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel">Courier Type</label> <br />
+        <select id="movementid" name="SelectedValues" multiple="multiple">
+            <option value=""></option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label class="headinglabel">Cash User</label>
+        @Html.DropDownListFor(model => model.AcHeadId, new SelectList(@ViewBag.AcHeads, "AcHeadId", "HeadName"), "Select", new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        <a class="btn btn-primary btnwidth" title="Click to Print" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="PrintDiv('divreport')"><i class="fa fa-print" aria-hidden="true"></i></a>
+        <a class="btn btn-primary btnwidth" title="Export to Excel" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;" href="Javascript:void(0)" onclick="ExportExcel()"><img style="width:30px;height:30px" src="~/Content/img/ExcelIcon.jpg" /></a>
+    </div>
+
+    <div class="col-md-1" style="padding-top:30px">
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+    </div>
+</div>    
+}
+
+

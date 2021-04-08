@@ -729,6 +729,7 @@
     <EntitySetMapping Name="CourierMovements">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CourierMovement">
         <MappingFragment StoreEntitySet="CourierMovement">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="MovementID" ColumnName="MovementID" />
           <ScalarProperty Name="MovementType" ColumnName="MovementType" />
         </MappingFragment>
@@ -2250,6 +2251,7 @@
     <EntitySetMapping Name="ProductTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ProductType">
         <MappingFragment StoreEntitySet="ProductType">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
           <ScalarProperty Name="ProductName" ColumnName="ProductName" />
           <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
@@ -3250,6 +3252,7 @@
     <EntitySetMapping Name="ParcelTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
         <MappingFragment StoreEntitySet="ParcelType">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
           <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />

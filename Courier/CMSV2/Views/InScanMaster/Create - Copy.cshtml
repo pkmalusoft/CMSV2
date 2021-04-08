@@ -77,7 +77,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCustomerData",
+                url: "/AWB/GetCustomerData",
                 datatype: "Json",
                 data: { id: $('#customerid').val() },
                 success: function (data) {
@@ -99,7 +99,7 @@
         function BindCity(x, y) {
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCity",
+                url: "/AWB/GetCity",
                 datatype: "Json",
                 data: { id: $("#origincountry option:selected").val() },
                 success: function (data) {
@@ -121,7 +121,7 @@
         function BindConsigneeCity(x) {
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCity",
+                url: "/AWB/GetCity",
                 datatype: "Json",
                 data: { id: $("#destinationCountry option:selected").val() },
                 success: function (data) {
@@ -147,7 +147,7 @@
             $('#destinationCity').append('<option value="0">Select</option>');
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCity",
+                url: "/AWB/GetCity",
                 datatype: "Json",
                 data: { id: $("#destinationCountry option:selected").val() },
                 success: function (data) {
@@ -167,7 +167,7 @@
             $('#destinationLocation').append('<option value="0">Select</option>');
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetLocation",
+                url: "/AWB/GetLocation",
                 datatype: "Json",
                 data: { id: $("#destinationCity option:selected").val() },
                 success: function (data) {
@@ -185,7 +185,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetAWB",
+                url: "/AWB/GetAWB",
                 datatype: "Json",
                 data: { id: $("#HAWBNo").val() },
                 success: function (data) {
@@ -332,7 +332,7 @@
         $("#HAWBNo").blur(function () {
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetPickUpData",
+                url: "/AWB/GetPickUpData",
                 datatype: "Json",
                 data: { id: $('#AWBNo').val() },
                 success: function (data) {
@@ -376,7 +376,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCustomerDataByNO",
+                url: "/AWB/GetCustomerDataByNO",
                 datatype: "Json",
                 data: { id: $('#EnquiryNo').val() },
                 success: function (data) {

@@ -212,6 +212,7 @@
     <Compile Include="Controllers\AgentShipmentController.cs" />
     <Compile Include="Controllers\AWBBatchController.cs" />
     <Compile Include="Controllers\AWBBookIssueController.cs" />
+    <Compile Include="Controllers\AWBCustomerBookController.cs" />
     <Compile Include="Controllers\AWBImportController.cs" />
     <Compile Include="Controllers\AWBPrepaidController.cs" />
     <Compile Include="Controllers\BranchMasterController.cs" />
@@ -271,7 +272,7 @@
     <Compile Include="Controllers\PickupRequestStatusController.cs" />
     <Compile Include="Controllers\PrintBillController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
-    <Compile Include="Controllers\QuickAWBController.cs" />
+    <Compile Include="Controllers\AWBController.cs" />
     <Compile Include="Controllers\ReExportShipmentController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ReturnShipmentController.cs" />
@@ -3416,15 +3417,15 @@
     <Content Include="Views\ProductType\Create.cshtml" />
     <Content Include="Views\ProductType\Edit.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
-    <Content Include="Views\QuickAWB\AWBPrint.cshtml" />
-    <Content Include="Views\QuickAWB\AWBTimeline - Copy.cshtml" />
-    <Content Include="Views\QuickAWB\AWBTimeline.cshtml" />
-    <Content Include="Views\QuickAWB\CreateL.cshtml" />
-    <Content Include="Views\QuickAWB\Edit - Copy.cshtml" />
-    <Content Include="Views\QuickAWB\Edit.cshtml" />
-    <Content Include="Views\QuickAWB\Index.cshtml" />
-    <Content Include="Views\QuickAWB\PrintAWBRegister.cshtml" />
-    <Content Include="Views\QuickAWB\PrintSearch.cshtml" />
+    <Content Include="Views\AWB\AWBPrint.cshtml" />
+    <Content Include="Views\AWB\AWBTimeline - Copy.cshtml" />
+    <Content Include="Views\AWB\AWBTimeline.cshtml" />
+    <Content Include="Views\AWB\CreateL.cshtml" />
+    <Content Include="Views\AWB\Edit - Copy.cshtml" />
+    <Content Include="Views\AWB\Edit.cshtml" />
+    <Content Include="Views\AWB\Index.cshtml" />
+    <Content Include="Views\AWB\PrintAWBRegister.cshtml" />
+    <Content Include="Views\AWB\PrintSearch.cshtml" />
     <Content Include="Views\ReExportShipment\Create.cshtml" />
     <Content Include="Views\ReExportShipment\CreateExport.cshtml" />
     <Content Include="Views\ReExportShipment\Details.cshtml" />
@@ -3525,16 +3526,16 @@
     <Content Include="Views\ManifestReceipt\Table.cshtml" />
     <Content Include="Views\ManifestReceipt\Index.cshtml" />
     <Content Include="Views\ManifestReceipt\Create.cshtml" />
-    <Content Include="Views\QuickAWB\Details.cshtml" />
-    <Content Include="Views\QuickAWB\Create - Copy.cshtml" />
+    <Content Include="Views\AWB\Details.cshtml" />
+    <Content Include="Views\AWB\Create - Copy.cshtml" />
     <Content Include="Views\ManifestReceipt\ReceiptDetail.cshtml" />
     <Content Include="Views\ManifestReceipt\Details.cshtml" />
-    <Content Include="Views\QuickAWB\OtherCharge.cshtml" />
+    <Content Include="Views\AWB\OtherCharge.cshtml" />
     <Content Include="Views\ExportShipment\Details - Copy.cshtml" />
     <Content Include="Views\ExportShipment\ExportShipmentReport - Copy.cshtml" />
     <Content Include="Views\Reports\EmposFeeReport.cshtml" />
     <Content Include="Views\Reports\PrintSearch.cshtml" />
-    <Content Include="Views\QuickAWB\Create.cshtml" />
+    <Content Include="Views\AWB\Create.cshtml" />
     <Content Include="Views\Reports\ReportFrame.cshtml" />
     <Content Include="Views\MenuRole\AccessRights.cshtml" />
     <Content Include="Views\Supplier\Create.cshtml" />
@@ -3560,7 +3561,7 @@
     <Content Include="Views\Accounts\ProfitLossReport.cshtml" />
     <Content Include="Views\CustomerInvoice\MultipleInvoice.cshtml" />
     <Content Include="Views\CustomerInvoice\InvoiceSearch - Copy %282%29.cshtml" />
-    <Content Include="Views\QuickAWB\AWBPrintReport.cshtml" />
+    <Content Include="Views\AWB\AWBPrintReport.cshtml" />
     <Content Include="Views\Accounts\DayBook.cshtml" />
     <Content Include="Views\Accounts\CustomerLedger.cshtml" />
     <Content Include="Views\Accounts\SupplierLedger.cshtml" />
@@ -3615,6 +3616,9 @@
     <Content Include="Views\Development\Index.cshtml" />
     <Content Include="Views\POD\Index.cshtml" />
     <Content Include="Views\AWBBatch\Create - Copy.cshtml" />
+    <Content Include="Views\AWBCustomerBook\Create.cshtml" />
+    <Content Include="Views\Reports\CODRegister.cshtml" />
+    <Content Include="Views\Reports\CODReportParam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

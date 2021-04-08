@@ -42,7 +42,7 @@
           $("#CustomerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/QuickAWB/GetCustomerName',
+                    url: '/AWB/GetCustomerName',
                     datatype: "json",
                     data: {
                         term: request.term

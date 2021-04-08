@@ -8,6 +8,11 @@ namespace CMSV2.Models
 {
     public class AWBBatchVM : AWBBatch
     {
+        public string CODCustomerName { get; set; }
+        public string CASHCustomerName { get; set; }
+        
+        public string FOCCustomerName { get; set; }
+        public int FOCCustomerID { get; set; }
         public int CODCustomerID { get; set; }
         public int CASHCustomerId { get; set; }
             public int CustomerID { get; set; }
@@ -158,7 +163,8 @@ namespace CMSV2.Models
         //[DataType(DataType.Date)]
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         //public DateTime TransactionDate { get; set; }
-
+        public bool IsEnquiry { get; set; }
+        public string RequestSource { get; set; }
         public string TransactionDate { get; set; }      
         public int ParcelTypeId { get; set; }
         public decimal MaterialCost { get; set; }
@@ -202,7 +208,9 @@ namespace CMSV2.Models
         public int InscanVehicleId { get; set; }
 		public int OutscanVehicleId { get; set; }
         public string SpecialInstructions { get; set; }
-        
+
+        public string PickupRequestDate { get; set; }
+
     }
 
     public class AWBInfo

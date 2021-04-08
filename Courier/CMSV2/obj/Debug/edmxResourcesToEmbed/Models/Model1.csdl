@@ -765,6 +765,7 @@
     </Key>
     <Property Name="MovementID" Type="Int32" Nullable="false" />
     <Property Name="MovementType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -2326,6 +2327,7 @@
     <Property Name="Width" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="Height" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="PurchaseInvoice">
     <Key>
@@ -3336,10 +3338,12 @@
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
+      <PropertyRef Name="DefaultType" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" />
     <Property Name="ParcelTypeID" Type="Int32" />
     <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="State">
     <Key>
@@ -12927,7 +12931,7 @@
     <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
     <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="DeliveredDate" Type="Int32" />
+    <Property Name="DeliveredDate" Type="DateTime" Precision="3" />
     <Property Name="CourierStatusID" Type="Int32" />
     <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="UpdationDate" Type="DateTime" Precision="3" />

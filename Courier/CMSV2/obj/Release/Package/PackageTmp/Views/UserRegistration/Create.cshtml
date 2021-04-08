@@ -143,6 +143,7 @@
 
         });
         $("#btnsave").click(function () {
+            debugger;
             var uname = $("#UserName").val();
             var pass = $("#Password").val();
             var role = $("#RoleID option:selected").val();
@@ -298,7 +299,7 @@
                 <div class="col-md-6">
 
                     <label class="required headinglabel" id="lblusername">User Name</label>
-                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control",@autocomplete="off",@type="search" })
                     @Html.ValidationMessageFor(model => model.UserName)
                 </div>
             </div>
@@ -306,7 +307,7 @@
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-6">
                     <label class="required headinglabel">Email</label>
-                    @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control", @autocomplete = "off", @type = "search" })
                     @Html.ValidationMessageFor(model => model.EmailId)
                 </div>
             </div>

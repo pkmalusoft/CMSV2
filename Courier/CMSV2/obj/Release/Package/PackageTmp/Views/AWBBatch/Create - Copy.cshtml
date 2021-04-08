@@ -153,7 +153,7 @@
 <script>
     function getCustomerId() {
         $.ajax({
-            url: '/AWBBatch/GetConsignorCustomer', //'/QuickAWB/GetConsigneeName',
+            url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
             datatype: "json",
             data: {
                 customername: $('#Shipper').val()
@@ -466,7 +466,7 @@
         $("#Shipper").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/QuickAWB/GetShipperName',
+                    url: '/AWB/GetShipperName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -541,7 +541,7 @@
         $('#Shipper').change(function () {
 
             $.ajax({
-                url: '/AWBBatch/GetConsignorCustomer', //'/QuickAWB/GetConsigneeName',
+                url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
                 datatype: "json",
                 data: {
                     customername: $('#Shipper').val()
@@ -560,7 +560,7 @@
         $("#Consignee").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/AWBBatch/GetReceiverName', //'/QuickAWB/GetConsigneeName',
+                    url: '/AWBBatch/GetReceiverName', //'/AWB/GetConsigneeName',
                     datatype: "json",
                     data: {
                         term: request.term,Shipper :$('#Shipper').val()
@@ -1086,7 +1086,7 @@
                                 $.notify("Batch Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 @*location.href = '@Url.Action("Index","DRSReconc")';*@
-                                window.location.href = "/QuickAWB/Index?id=1";
+                                window.location.href = "/AWB/Index?id=1";
                             }
                             else {
 

@@ -1926,7 +1926,131 @@ namespace CMSV2.DAL
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
+        public static string GenerateCODRegister()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
 
+            CODReportParam reportparam = (CODReportParam)HttpContext.Current.Session["CODReportParam"];
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_AWBRegisterReport";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@FYearId", yearid);
+           
+            if (reportparam.ParcelTypeId == null)
+            {
+                comd.Parameters.AddWithValue("@ParcelTypeId", 0);
+            }
+            else
+            {
+                comd.Parameters.AddWithValue("@ParcelTypeId", reportparam.ParcelTypeId);
+            }
+            comd.Parameters.AddWithValue("@MovementId", reportparam.MovementId);
+
+            comd.Parameters.AddWithValue("@SortBy", reportparam.SortBy);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AWBRegister");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AWBRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            if (reportparam.ReportType == "Date")
+            {
+
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister.rpt"));
+            }
+            else if (reportparam.ReportType == "Movement")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_MovementWise.rpt"));
+            }
+            else if (reportparam.ReportType == "PaymentMode")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Payment.rpt"));
+            }
+            else if (reportparam.ReportType == "ParcelType")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_ParcelType.rpt"));
+            }
+            else if (reportparam.ReportType == "Summary")
+            {
+                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Summary.rpt"));
+            }
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Airway Bill Register");
+            string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+
+            rd.ParameterFields["GroupBy"].CurrentValues.AddValue(reportparam.ReportType);
+            rd.ParameterFields["SortBy"].CurrentValues.AddValue(reportparam.SortBy);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+
+            string reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
         #region "ReceiptVoucher"
         //Account Cash/Bank book receipt/payment voucher print        
         public static string GenerateReceiptPaymentVoucherPrint(int id)

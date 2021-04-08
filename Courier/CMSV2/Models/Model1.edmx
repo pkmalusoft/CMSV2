@@ -906,6 +906,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
           </Key>
           <Property Name="MovementID" Type="int" Nullable="false" />
           <Property Name="MovementType" Type="varchar" MaxLength="50" />
+          <Property Name="DefaultType" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CourierSchedule">
           <Key>
@@ -2771,10 +2772,12 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
         <EntityType Name="ParcelType">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="DefaultType" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="ParcelTypeID" Type="int" />
           <Property Name="ParcelType" Type="nvarchar" MaxLength="50" />
+          <Property Name="DefaultType" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentsTerms">
           <Key>
@@ -2824,7 +2827,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
           <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedTime" Type="datetime" />
           <Property Name="DeliveredBy" Type="int" />
-          <Property Name="DeliveredDate" Type="int" />
+          <Property Name="DeliveredDate" Type="datetime" />
           <Property Name="CourierStatusID" Type="int" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
           <Property Name="UpdationDate" Type="datetime" />
@@ -2944,6 +2947,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
           <Property Name="Width" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Height" Type="decimal" Precision="18" Scale="0" />
           <Property Name="CBM" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="DefaultType" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseInvoice">
           <Key>
@@ -7150,7 +7154,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
             <DefiningQuery>SELECT 
     [ParcelType].[ID] AS [ID], 
     [ParcelType].[ParcelTypeID] AS [ParcelTypeID], 
-    [ParcelType].[ParcelType] AS [ParcelType]
+    [ParcelType].[ParcelType] AS [ParcelType], 
+    [ParcelType].[DefaultType] AS [DefaultType]
     FROM [dbo].[ParcelType] AS [ParcelType]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="State" EntityType="Self.State" store:Type="Tables" store:Schema="dbo">
@@ -8098,6 +8103,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           </Key>
           <Property Name="MovementID" Type="Int32" Nullable="false" />
           <Property Name="MovementType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefaultType" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="CourierSchedule">
           <Key>
@@ -9659,6 +9665,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Width" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="Height" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="DefaultType" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseInvoice">
           <Key>
@@ -10669,10 +10676,12 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
         <EntityType Name="ParcelType">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="DefaultType" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="ParcelTypeID" Type="Int32" />
           <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultType" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="State">
           <Key>
@@ -20260,7 +20269,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
           <Property Name="DeliveredBy" Type="Int32" />
-          <Property Name="DeliveredDate" Type="Int32" />
+          <Property Name="DeliveredDate" Type="DateTime" Precision="3" />
           <Property Name="CourierStatusID" Type="Int32" />
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdationDate" Type="DateTime" Precision="3" />
@@ -21000,6 +21009,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="CourierMovements">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CourierMovement">
               <MappingFragment StoreEntitySet="CourierMovement">
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
                 <ScalarProperty Name="MovementID" ColumnName="MovementID" />
                 <ScalarProperty Name="MovementType" ColumnName="MovementType" />
               </MappingFragment>
@@ -22521,6 +22531,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="ProductTypes">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ProductType">
               <MappingFragment StoreEntitySet="ProductType">
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
                 <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
@@ -23521,6 +23532,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="ParcelTypes">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
               <MappingFragment StoreEntitySet="ParcelType">
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
                 <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />

@@ -49,9 +49,19 @@
         min-width: 100px;
         width: auto;
     }
-
+    .multiselect-container{
+        margin-top:0!important;
+    }
     .searchMc .checkboxdesign {
         align-items: flex-start;
+    }
+    .multiselect.dropdown-toggle{
+        display: block;
+        width: 100%;
+        float: none;
+    }
+    .multiselect-native-select .btn-group{
+        display: block;
     }
 </style>
 <script type="text/javascript">
@@ -155,7 +165,7 @@
         debugger;
         var tax = $('#ChkTaxPercent').prop('checked');
         if (tax == true) {
-            $('#lblTaxPercent').removeClass('hide');
+            //$('#lblTaxPercent').removeClass('hide');
             var taxpercent =parseFloat($('#TaxPercent').val());
             if ($('#CourierCharge').val() == '' || $('#CourierCharge').val() == null)
             $('#CourierCharge').val(0);
@@ -170,14 +180,18 @@
             $('#NetTotal').val(parseFloat(net).toFixed(2));
         }
         else {
-            $('#lblTaxPercent').addClass('hide');
+            $('#TaxAmount').val(0);
+            var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
+            var net = parseFloat(charge);
+            $('#NetTotal').val(parseFloat(net).toFixed(2));          
+            
         }
 
 
     }
     function getCustomerId() {
         $.ajax({
-            url: '/AWBBatch/GetConsignorCustomer', //'/QuickAWB/GetConsigneeName',
+            url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
             datatype: "json",
             data: {
                 customername: $('#Shipper').val()
@@ -334,15 +348,32 @@
             var modeid = $('#PaymentTypeId').val();
             if (modeid == 3) { //Account
                 $('#CustomerName').removeAttr('readonly');
+                if ($('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#FOCCustomerID').val()) {
+                    $('#CustomerName').val('');
+                    $('#CustomerID').val(0);
+                }
+            
             }
             else {
+                if (modeid == 1) {
+                    $('#CustomerName').val($('#CASHCustomerName').val());
+                    $('#CustomerID').val($('#CASHCustomerId').val());
+                }
+                else if (modeid == 2) {
+                    $('#CustomerName').val($('#CODCustomerName').val());
+                    $('#CustomerID').val($('#CODCustomerID').val());
+                }
+                else if (modeid == 4) {
+                    $('#CustomerName').val($('#FOCCustomerName').val());
+                    $('#CustomerID').val($('#FOCCustomerID').val());
+                }
                 $('#CustomerName').attr('readonly','readonly');
             }
         });
         $("#CustomerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/QuickAWB/GetCustomerName',
+                    url: '/AWB/GetCustomerName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -533,7 +564,7 @@
         $("#Shipper").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/QuickAWB/GetShipperName',
+                    url: '/AWB/GetShipperName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -608,7 +639,7 @@
         $('#Shipper').change(function () {
 
             $.ajax({
-                url: '/AWBBatch/GetConsignorCustomer', //'/QuickAWB/GetConsigneeName',
+                url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
                 datatype: "json",
                 data: {
                     customername: $('#Shipper').val()
@@ -627,7 +658,7 @@
         $("#Consignee").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/AWBBatch/GetReceiverName', //'/QuickAWB/GetConsigneeName',
+                    url: '/AWBBatch/GetReceiverName', //'/AWB/GetConsigneeName',
                     datatype: "json",
                     data: {
                         term: request.term,Shipper :$('#Shipper').val()
@@ -751,6 +782,8 @@
                 CustomerID = $('#CODCustomerID').val();
             else if (PaymentTypeId == 3 || PaymentTypeId==5)
                 CustomerID = $('#CustomerID').val();
+            else if (PaymentTypeId == 4)
+                CustomerID = $('#FOCCustomerID').val();
 
             if (CustomerID == 0) {
                 $('#lierr').html('Could not find the corresponding Customer!');
@@ -1088,6 +1121,8 @@
                     var InscanVehicleID = $('#hdnInscanVehicleId_' + i).val();
                     var OutScanVehicleID = $('#hdnOutscanVehicleId_' + i).val();
                     var DocumentTypeId = 1;
+                    var IsEnquiry = true;
+                    var RequestSource = "";
                     var SpecialInstructions = $('#hdnSpecialInstructions_' + i).val();
                     var item = {
                         AWBNo: AWBNo,
@@ -1153,7 +1188,10 @@
                         DeliveredDate: DeliveredDate,
                         InscanVehicleId: InscanVehicleID,
                         OutscanVehicleId: OutScanVehicleID,
-                        SpecialInstructions:SpecialInstructions
+                        SpecialInstructions: SpecialInstructions,
+                        IsEnquiry: IsEnquiry,
+                        RequestSource: RequestSource,
+                        PickupRequestDate: checkDate($('#BatchDate'))
                     }
 
                     obj.push(item);
@@ -1171,7 +1209,7 @@
                                 $.notify("Batch Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 @*location.href = '@Url.Action("Index","DRSReconc")';*@
-                                window.location.href = "/QuickAWB/Index?id=1";
+                                window.location.href = "/AWB/Index?id=1";
                             }
                             else {
 
@@ -1409,7 +1447,7 @@
                         <div class="col-xs-12 col-sm-3">                            
                             <div class="flexTitle">
                                 @*<label class="headinglabel required">Tax</label>*@
-                                <label class="headinglabel" id="lblTaxPercent">Tax + @Model.TaxPercent %</label>
+                                <label class="headinglabel red" id="lblTaxPercent">Tax + @Model.TaxPercent %</label>
                                 <div class="checkboxdesign no-padding text-right" style="float:right">
                                     @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent" ,@onchange="CalculateTax()" }) &nbsp
                                     <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
@@ -1432,8 +1470,8 @@
                             @Html.TextBoxFor(model => model.MaterialCost, new { @class = "form-control text-right", @autocomplete = "off" })
                         </div>
                         <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Shpr.   Instrc.</label>
-                            <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple">
+                            <label class="headinglabel">Shpr. Notes</label>
+                            <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
                                 <option value="1" selected>IS NCND</option>
                                 <option value="2">Is Cash Only</option>
                                 <option value="3">IsChequeOnly</option>
@@ -1443,6 +1481,10 @@
                             @Html.HiddenFor(model => model.CustomerID)
                             @Html.HiddenFor(model => model.CASHCustomerId)
                             @Html.HiddenFor(model => model.CODCustomerID)
+                            @Html.HiddenFor(model => model.CODCustomerName)
+                            @Html.HiddenFor(model => model.CASHCustomerName)
+                            @Html.HiddenFor(model => model.FOCCustomerName)
+                            @Html.HiddenFor(model => model.FOCCustomerID)
                         </div>
                     </div>
                     <div class="row">
@@ -1453,7 +1495,9 @@
                             @Html.HiddenFor(model => model.CASHCustomerId)
                             @Html.HiddenFor(model => model.CODCustomerID)
                         </div>
-                       
+                       <div class="col-md-6 flex justify-between" style="margin-top:30px">
+                                <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
+                            </div>
 
                     </div>
                     <div class="row">
@@ -1461,13 +1505,11 @@
                             <ul class="list-unstyled show-error" id="ulerr">
                                 <li id="lierr"> </li>
                             </ul>                            
-                            <div class="col-md-3 flex justify-between" style="margin-top:30px">
-                                <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" class="scrolling_list">
                     <div class="row no-margin" style="padding-top:10px">
                         <div class="col-xs-12 no-padding for-device">
                             <div class="data-table payment-div">
@@ -1480,8 +1522,8 @@
                                                 </th>
                                                 <th> AWB No.</th>
                                                 <th>Type</th>
-                                                <th style="width:30%">Shipper</th>
-                                                <th style="width:30%">Receiver</th>
+                                                <th style="width:25%">Shipper</th>
+                                                <th style="width:25%">Receiver</th>
                                                 <th>Charge</th>
                                                 <th>MCost</th>
                                                 <th></th>

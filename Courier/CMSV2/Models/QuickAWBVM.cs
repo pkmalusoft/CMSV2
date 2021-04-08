@@ -11,6 +11,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMSV2.Models
 {
+    public class AWBTracking
+    {
+        public string AWBNo { get; set; }
+        public QuickAWBVM AWB { get; set; }
+        public List<AWBTrackStatusVM> Details { get; set; }
+    }
+    public class AWBTrackStatusVM :AWBTrackStatu
+    {
+        public string EmployeeName { get; set; }
+        public string UserName { get; set; }
+
+    }
     public class AWBSearch
     {
         public int StatusID { get; set; }
@@ -75,7 +87,8 @@ namespace CMSV2.Models
         public Decimal CustomCharge { get; set; }
 
         public Decimal? totalCharge { get; set; }
-
+        public Decimal? TaxPercent { get; set; }
+        public Decimal? TaxAmount { get; set; }
         public Decimal ForwardingCharge { get; set; }
 
         public string remarks { get; set; }

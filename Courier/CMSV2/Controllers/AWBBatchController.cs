@@ -72,6 +72,7 @@ namespace CMSV2.Controllers
             if (CashCustomer != null)
             {
                 vm.CASHCustomerId = CashCustomer.CustomerID;
+                vm.CASHCustomerName = customername;
             }
 
                 customername = "COD-CUSTOMER";
@@ -82,6 +83,18 @@ namespace CMSV2.Controllers
             if (CODCustomer!=null)
             {
                 vm.CODCustomerID = CODCustomer.CustomerID;
+                vm.CODCustomerName = "COD-CUSTOMER";
+            }
+
+            customername = "FOC CUSTOMER";
+            var FOCCustomer = (from c1 in db.CustomerMasters
+                               where c1.CustomerName == customername
+                               orderby c1.CustomerName ascending
+                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (FOCCustomer != null)
+            {
+                vm.FOCCustomerID = FOCCustomer.CustomerID;
+                vm.FOCCustomerName = "FOC CUSTOMER";
             }
 
 

@@ -19,7 +19,7 @@ namespace CMSV2.Models
         public string ReceiverName { get; set; }
         public Nullable<System.DateTime> ReceivedTime { get; set; }
         public Nullable<int> DeliveredBy { get; set; }
-        public Nullable<int> DeliveredDate { get; set; }
+        public Nullable<System.DateTime> DeliveredDate { get; set; }
         public Nullable<int> CourierStatusID { get; set; }
         public string Remarks { get; set; }
         public Nullable<System.DateTime> UpdationDate { get; set; }

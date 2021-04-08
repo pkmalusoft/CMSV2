@@ -16,5 +16,6 @@ namespace CMSV2.Models
     {
         public int MovementID { get; set; }
         public string MovementType { get; set; }
+        public bool DefaultType { get; set; }
     }
 }

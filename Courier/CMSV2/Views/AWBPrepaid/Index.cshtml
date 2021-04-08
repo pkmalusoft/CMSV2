@@ -69,7 +69,6 @@
     <h1 class="headingfont">Customer AWB</h1>
 
 </section>
-
 @using (Html.BeginForm("Index", "AWBPrepaid", FormMethod.Post, new { @id = "booksearch" }))
 {
     <div class="row no-margin">
@@ -108,109 +107,104 @@
         </div>
     </div>
 }
-    <section class="content">
-        @if (TempData["SuccessMsg"] != null)
-        {
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
 
         <script type="text/javascript">
-            $(document).ready(function () {
-                alert('hi');
+                 $(document).ready(function () {
                      $.notify("@TempData["SuccessMsg"]", "success");
-                      
                  });
         </script>
-        }
+    }
 
-        <div class="table-responsive tblbackground" style="padding:15px">
-            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.Label("DocumentNo")
-                        </th>
-                        <th>
-                            @Html.Label("Trans Date")
-                        </th>
-                        <th>
-                            @Html.Label("Reference")
-                        </th>
-                        <th>
-                            @Html.Label("Customer Name")
-                        </th>                    
-                        <th>
-                            @Html.Label("AWB No From")
-                        </th>
-                        <th>
-                            @Html.Label("AWB No To")
-                        </th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>
-                            @Html.Label("DocumentNo")
-                        </th>
-                        <th>
-                            @Html.Label("Trans Date")
-                        </th>
-                        <th>
-                            @Html.Label("Reference")
-                        </th>
-                        <th>
-                            @Html.Label("Customer Name")
-                        </th>                                       
-                        <th>
-                            @Html.Label("AWB No From")
-                        </th>
-                        <th>
-                            @Html.Label("AWB No To")
-                        </th>
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.Label("DocumentNo")
+                    </th>
+                    <th>
+                        @Html.Label("Trans Date")
+                    </th>
+                    <th>
+                        @Html.Label("Reference")
+                    </th>
+                    <th>
+                        @Html.Label("Customer Name")
+                    </th>
+                    <th>
+                        @Html.Label("AWB No From")
+                    </th>
+                    <th>
+                        @Html.Label("AWB No To")
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>
+                        @Html.Label("DocumentNo")
+                    </th>
+                    <th>
+                        @Html.Label("Trans Date")
+                    </th>
+                    <th>
+                        @Html.Label("Reference")
+                    </th>
+                    <th>
+                        @Html.Label("Customer Name")
+                    </th>
+                    <th>
+                        @Html.Label("AWB No From")
+                    </th>
+                    <th>
+                        @Html.Label("AWB No To")
+                    </th>
 
-                        <th style="display:none"></th>
-                    </tr>
-                </tfoot>
+                    <th style="display:none"></th>
+                </tr>
+            </tfoot>
 
-                @foreach (var item in Model.Details)
-                {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Documentno)
-                </td>
-                <td>
-                    @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TransDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Reference)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AWBNOFrom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AWBNOTo)
-                </td>
-                <td>
-                    <a href="@Url.Action("Create", new { id = item.PrepaidAWBID })"><i class="fa fa-pencil"></i></a> |
+            @foreach (var item in Model.Details)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Documentno)
+                    </td>
+                    <td>
+                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TransDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reference)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AWBNOFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AWBNOTo)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Create", new { id = item.PrepaidAWBID })"><i class="fa fa-pencil"></i></a> |
 
-                    <a href="#" onclick="Delete(ID=@item.PrepaidAWBID)"><i class="fa fa-times"></i></a>
-                </td>
-            </tr>
-                }
-
-            </table>
-        </div>
-    </section>
-
-    <script type="text/javascript">
-        function Delete(ID) {
-            if (confirm("Are you sure, You want to Delete AWB Prepaid?")) {
-                window.location.href = "/AWBPrepaid/DeleteConfirmed/?id=" + ID;
+                        <a href="#" onclick="Delete(ID=@item.PrepaidAWBID)"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
             }
+
+        </table>
+    </div>
+</section>
+
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete AWB Prepaid?")) {
+            window.location.href = "/AWBPrepaid/DeleteConfirmed/?id=" + ID;
         }
-    </script>
+    }
+</script>

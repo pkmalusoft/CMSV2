@@ -12927,7 +12927,7 @@
     <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
     <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="DeliveredDate" Type="Int32" />
+    <Property Name="DeliveredDate" Type="DateTime" Precision="3" />
     <Property Name="CourierStatusID" Type="Int32" />
     <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="UpdationDate" Type="DateTime" Precision="3" />

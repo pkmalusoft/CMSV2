@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());        
+}
+
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.ReportName</h1>
+</section>
+<div class="row no-margin" id="divreport1">
+    @{ Html.RenderAction("AWBReportParam", "Reports");}
+</div>
+<div class="row no-margin" style="padding-top:10px" id="divreportframe">
+    @{ Html.RenderAction("ReportFrame", "Reports");}    
+</div>

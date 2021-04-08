@@ -290,7 +290,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetAWB",
+                url: "/AWB/GetAWB",
                 datatype: "Json",
                 data: { id: $("#HAWBNo").val() },
                 success: function (data) {
@@ -437,7 +437,7 @@
         $("#HAWBNo").blur(function () {
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetPickUpData",
+                url: "/AWB/GetPickUpData",
                 datatype: "Json",
                 data: { id: $('#AWBNo').val() },
                 success: function (data) {
@@ -481,7 +481,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetCustomerDataByNO",
+                url: "/AWB/GetCustomerDataByNO",
                 datatype: "Json",
                 data: { id: $('#EnquiryNo').val() },
                 success: function (data) {
