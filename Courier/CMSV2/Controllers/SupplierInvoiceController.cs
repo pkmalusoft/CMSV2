@@ -24,7 +24,7 @@ namespace CMSV2.Controllers
             DateTime pToDate;
             int suppliertypeid = 0;
             if (id == null | id == 0)
-                suppliertypeid = 4;
+                suppliertypeid = 1;
             else
                 suppliertypeid = Convert.ToInt32(id);
 
@@ -50,11 +50,12 @@ namespace CMSV2.Controllers
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
-
+            ViewBag.SupplierType = db.SupplierTypes.ToList();
+            ViewBag.SupplierTypeId = suppliertypeid;
             return View(lst);
         }
 
-        public ActionResult Create(int id)
+        public ActionResult Create(int id=0)
         {
            var suppliers = db.SupplierMasters.ToList();
             ViewBag.Supplier = suppliers;
@@ -82,8 +83,20 @@ namespace CMSV2.Controllers
                 List<SupplierInvoiceDetailVM> _details = new List<SupplierInvoiceDetailVM>();
                 _details = (from c in db.SupplierInvoiceDetails join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                             where c.SupplierInvoiceID == id
-                            select new SupplierInvoiceDetailVM {SupplierInvoiceDetailID=c.SupplierInvoiceDetailID,SupplierInvoiceID=c.SupplierInvoiceID,AcHeadId=c.AcHeadID,AcHeadName=a.AcHead1,Particulars=c.Particulars,TaxPercentage=c.TaxPercentage,CurrencyID=c.CurrencyID,Amount=c.Amount,Rate=c.Rate, Quantity=c.Quantity, Value=c.Value}   ).ToList();
+                            select new SupplierInvoiceDetailVM {SupplierInvoiceDetailID=c.SupplierInvoiceDetailID,SupplierInvoiceID=c.SupplierInvoiceID,AcHeadId=c.AcHeadID,AcHeadName=a.AcHead1,Particulars=c.Particulars,TaxPercentage=c.TaxPercentage,CurrencyID=c.CurrencyID,Amount=c.Amount,Rate=c.Rate, Quantity=c.Quantity, Value=c.Value ,StockType=0 }   ).ToList();
 
+                foreach(SupplierInvoiceDetailVM detail in _details)
+                {
+                    var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+                    if (stock!=null)
+                    {
+                        detail.AWBCount =Convert.ToInt32(stock.AWBCount);
+                        detail.AWBStart =Convert.ToInt32(stock.AWBNOFrom);
+                        detail.AWBEnd = Convert.ToInt32(stock.AWBNOTo);
+                        detail.BookNo = stock.BookNo;
+                        detail.StockType =Convert.ToInt32(stock.StockType);
+                    }
+                }
 
                 _supinvoice.details = _details;
                 
@@ -141,11 +154,21 @@ namespace CMSV2.Controllers
                         join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                         join cu in db.CurrencyMasters on c.CurrencyID equals cu.CurrencyID
                         where c.SupplierInvoiceID == Id
-                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value ,Currency=cu.CurrencyCode }).ToList();
+                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value ,Currency=cu.CurrencyCode,StockType=0 }).ToList();
 
-            //var details = (from c in db.SupplierInvoiceDetails
-            //            where c.SupplierInvoiceID == Id
-            //            select c).ToList();
+            
+            foreach (SupplierInvoiceDetailVM detail in _details)
+            {
+                var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+                if (stock != null)
+                {
+                    detail.AWBCount = Convert.ToInt32(stock.AWBCount);
+                    detail.AWBStart = Convert.ToInt32(stock.AWBNOFrom);
+                    detail.AWBEnd = Convert.ToInt32(stock.AWBNOTo);
+                    detail.BookNo = stock.BookNo;
+                    detail.StockType = Convert.ToInt32(stock.StockType);
+                }
+            }
             foreach (var item in _details)
             {
                 int dice = rnd.Next(1, 7);
@@ -166,6 +189,11 @@ namespace CMSV2.Controllers
                 invoice.Amount = item.Amount;
                 invoice.Value = item.Value;
                 invoice.TaxPercentage = item.TaxPercentage;
+                invoice.StockType = item.StockType;
+                invoice.BookNo = item.BookNo;
+                invoice.AWBStart = item.AWBStart;
+                invoice.AWBEnd = item.AWBEnd;
+                invoice.AWBCount = item.AWBCount;
                 _details1.Add(invoice);
             }
 
@@ -193,6 +221,10 @@ namespace CMSV2.Controllers
 
                     var consignmentdetails = (from d in db.SupplierInvoiceAWBs where d.SupplierInvoiceId == Supplierinvoice.SupplierInvoiceID select d).ToList();
                     db.SupplierInvoiceAWBs.RemoveRange(consignmentdetails);
+                    db.SaveChanges();
+
+                    var stockdetails = (from d in db.SupplierInvoiceStocks where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
+                    db.SupplierInvoiceStocks.RemoveRange(stockdetails);
                     db.SaveChanges();
                 }
 
@@ -227,6 +259,24 @@ namespace CMSV2.Controllers
 
                     db.SupplierInvoiceDetails.Add(InvoiceDetail);
                     db.SaveChanges();
+
+                    if (item.StockType>0)
+                    {
+                        var stock = new SupplierInvoiceStock();
+                        stock.SupplierInvoiceID = Supplierinvoice.SupplierInvoiceID;
+                        stock.SupplierInvoiceDetailId = InvoiceDetail.SupplierInvoiceDetailID;
+                        stock.StockType = item.StockType;
+                        stock.BookNo= item.BookNo; 
+                        stock.AWBCount = item.AWBCount;
+                        stock.AWBNOFrom = item.AWBStart;
+                        stock.AWBNOTo = item.AWBEnd;
+                        stock.Rate = InvoiceDetail.Rate;
+                        stock.SupplierID = SupplierID;
+                        stock.Amount = item.Amount;
+                        stock.Qty = Convert.ToInt32(item.Quantity);
+                        db.SupplierInvoiceStocks.Add(stock);
+                        db.SaveChanges();
+                    }
 
                     //adding consignment referece to this entry
                     int acheadid = Convert.ToInt32(item.AcHeadId);
@@ -288,7 +338,19 @@ namespace CMSV2.Controllers
             return RedirectToAction("Index");
 
         }
-
+        public ActionResult GetAWB(string term)
+        {
+            int AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (term.Trim() != "")
+            {
+                var list = (from c in db.InScanMasters where c.IsDeleted == false && c.AWBNo== term.Trim() orderby c.AWBNo select new { InScanID = c.InScanID, TransactionDate = c.TransactionDate, ConsignmentNo = c.AWBNo }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult AccountHead(string term)
         {
             int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());

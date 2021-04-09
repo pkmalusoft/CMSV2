@@ -9175,5 +9175,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SupplierInvoiceStocks">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock">
+        <MappingFragment StoreEntitySet="SupplierInvoiceStock">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="AWBCount" ColumnName="AWBCount" />
+          <ScalarProperty Name="AWBNOTo" ColumnName="AWBNOTo" />
+          <ScalarProperty Name="AWBNOFrom" ColumnName="AWBNOFrom" />
+          <ScalarProperty Name="BookNo" ColumnName="BookNo" />
+          <ScalarProperty Name="StockType" ColumnName="StockType" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -729,6 +729,7 @@
     <EntitySetMapping Name="CourierMovements">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CourierMovement">
         <MappingFragment StoreEntitySet="CourierMovement">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="MovementID" ColumnName="MovementID" />
           <ScalarProperty Name="MovementType" ColumnName="MovementType" />
         </MappingFragment>
@@ -2250,6 +2251,7 @@
     <EntitySetMapping Name="ProductTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ProductType">
         <MappingFragment StoreEntitySet="ProductType">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
           <ScalarProperty Name="ProductName" ColumnName="ProductName" />
           <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
@@ -3250,6 +3252,7 @@
     <EntitySetMapping Name="ParcelTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
         <MappingFragment StoreEntitySet="ParcelType">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
           <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />
@@ -9169,6 +9172,24 @@
           <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
           <ScalarProperty Name="PODID" ColumnName="PODID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplierInvoiceStocks">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock">
+        <MappingFragment StoreEntitySet="SupplierInvoiceStock">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="AWBCount" ColumnName="AWBCount" />
+          <ScalarProperty Name="AWBNOTo" ColumnName="AWBNOTo" />
+          <ScalarProperty Name="AWBNOFrom" ColumnName="AWBNOFrom" />
+          <ScalarProperty Name="BookNo" ColumnName="BookNo" />
+          <ScalarProperty Name="StockType" ColumnName="StockType" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

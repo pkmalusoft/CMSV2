@@ -22,85 +22,95 @@ namespace CMSV2.Controllers
         }
         public ActionResult Create()
         {
-            int customerid = Convert.ToInt32(Session["CustomerId"].ToString());
-            int FyearId = Convert.ToInt32(Session["fyearid"]);
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"]);
-            int userid = Convert.ToInt32(Session["UserID"].ToString());
-            AWBBatchVM vm = new AWBBatchVM();
-            ViewBag.Movement = db.CourierMovements.ToList();
-            ViewBag.ProductType = db.ProductTypes.ToList();
-            ViewBag.parceltype = db.ParcelTypes.ToList();
-            ViewBag.Employee = db.EmployeeMasters.ToList();
-            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
-            ViewBag.Vehicle = db.VehicleMasters.ToList();
-            ViewBag.Title = "AWB Shipper Booking - Create";
-            string DocNo = AWBDAO.GetMaxBathcNo(); //batch no
-            vm.BatchNumber = DocNo;
-            DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
-            vm.BatchDate = pFromDate;
-            vm.AWBDate = pFromDate;
-            vm.AssignedDate = pFromDate;
-            vm.TaxPercent = 5;
-            var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
-            if (defaultproducttype != null)
-                vm.ProductTypeID = defaultproducttype.ProductTypeID;
+            int customerid = 0;
+            if (Session["CustomerId"] == null)
+            {
+                customerid = 0;
+            }
+            else
+            {
+                customerid = Convert.ToInt32(Session["CustomerId"].ToString());
+            }
 
-            var defaultmovementtype = db.CourierMovements.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
-            if (defaultmovementtype != null)
-                vm.MovementID = defaultmovementtype.MovementID;
+              int FyearId = Convert.ToInt32(Session["fyearid"]);
+                int branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+                int userid = Convert.ToInt32(Session["UserID"].ToString());
+                AWBBatchVM vm = new AWBBatchVM();
+                ViewBag.Movement = db.CourierMovements.ToList();
+                ViewBag.ProductType = db.ProductTypes.ToList();
+                ViewBag.parceltype = db.ParcelTypes.ToList();
+                ViewBag.Employee = db.EmployeeMasters.ToList();
+                ViewBag.PaymentMode = db.tblPaymentModes.ToList();
+                ViewBag.Vehicle = db.VehicleMasters.ToList();
+                ViewBag.Title = "AWB Shipper Booking - Create";
+                string DocNo = AWBDAO.GetMaxBathcNo(); //batch no
+                vm.BatchNumber = DocNo;
+                DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+                vm.BatchDate = pFromDate;
+                vm.AWBDate = pFromDate;
+                vm.AssignedDate = pFromDate;
+                vm.TaxPercent = 5;
+                var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+                if (defaultproducttype != null)
+                    vm.ProductTypeID = defaultproducttype.ProductTypeID;
 
-            var defaultparceltype = db.ParcelTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
-            if (defaultparceltype != null)
-                vm.ParcelTypeID = defaultparceltype.ID;
+                var defaultmovementtype = db.CourierMovements.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+                if (defaultmovementtype != null)
+                    vm.MovementID = defaultmovementtype.MovementID;
 
-            var Customer = (from c1 in db.CustomerMasters
-                                where c1.CustomerID== customerid
+                var defaultparceltype = db.ParcelTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+                if (defaultparceltype != null)
+                    vm.ParcelTypeID = defaultparceltype.ID;
+
+                var Customer = (from c1 in db.CustomerMasters
+                                where c1.CustomerID == customerid
                                 orderby c1.CustomerName ascending
-                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName ,LocationName=c1.LocationName,CountryName=c1.CountryName,CityName=c1.CityName }).FirstOrDefault();
-            if (Customer != null)
-            {
-                vm.CustomerID = Customer.CustomerID;
-                vm.CustomerName = Customer.CustomerName;
-                vm.Shipper = Customer.CustomerName;
-                vm.PickUpLocation = Customer.LocationName;
-            }
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, LocationName = c1.LocationName, CountryName = c1.CountryName, CityName = c1.CityName }).FirstOrDefault();
+                if (Customer != null)
+                {
+                    vm.CustomerID = Customer.CustomerID;
+                    vm.CustomerName = Customer.CustomerName;
+                    vm.Shipper = Customer.CustomerName;
+                    vm.PickUpLocation = Customer.LocationName;
+                }
 
-            string customername = "";
-            customername = "WALK-IN-CUSTOMER";
-            var CashCustomer = (from c1 in db.CustomerMasters
-                                where c1.CustomerName == customername
-                                orderby c1.CustomerName ascending
-                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (CashCustomer != null)
-            {
-                vm.CASHCustomerId = CashCustomer.CustomerID;
-                vm.CASHCustomerName = customername;
-            }
+                string customername = "";
+                customername = "WALK-IN-CUSTOMER";
+                var CashCustomer = (from c1 in db.CustomerMasters
+                                    where c1.CustomerName == customername
+                                    orderby c1.CustomerName ascending
+                                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+                if (CashCustomer != null)
+                {
+                    vm.CASHCustomerId = CashCustomer.CustomerID;
+                    vm.CASHCustomerName = customername;
+                }
 
-            customername = "COD-CUSTOMER";
-            var CODCustomer = (from c1 in db.CustomerMasters
-                               where c1.CustomerName == customername
-                               orderby c1.CustomerName ascending
-                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (CODCustomer != null)
-            {
-                vm.CODCustomerID = CODCustomer.CustomerID;
-                vm.CODCustomerName = "COD-CUSTOMER";
-            }
+                customername = "COD-CUSTOMER";
+                var CODCustomer = (from c1 in db.CustomerMasters
+                                   where c1.CustomerName == customername
+                                   orderby c1.CustomerName ascending
+                                   select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+                if (CODCustomer != null)
+                {
+                    vm.CODCustomerID = CODCustomer.CustomerID;
+                    vm.CODCustomerName = "COD-CUSTOMER";
+                }
 
-            customername = "FOC CUSTOMER";
-            var FOCCustomer = (from c1 in db.CustomerMasters
-                               where c1.CustomerName == customername
-                               orderby c1.CustomerName ascending
-                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (FOCCustomer != null)
-            {
-                vm.FOCCustomerID = FOCCustomer.CustomerID;
-                vm.FOCCustomerName = "FOC CUSTOMER";
-            }
+                customername = "FOC CUSTOMER";
+                var FOCCustomer = (from c1 in db.CustomerMasters
+                                   where c1.CustomerName == customername
+                                   orderby c1.CustomerName ascending
+                                   select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+                if (FOCCustomer != null)
+                {
+                    vm.FOCCustomerID = FOCCustomer.CustomerID;
+                    vm.FOCCustomerName = "FOC CUSTOMER";
+                }
 
 
-            return View(vm);
+                return View(vm);
+            
         }
 
         [HttpPost]
@@ -190,9 +200,9 @@ namespace CMSV2.Controllers
         {
             int customerid = Convert.ToInt32(Session["CustomerId"].ToString());
             AWBInfo info = AWBDAO.GetAWBInfo(awbno);
-            if (info.CustomerID !=customerid)
+            if (info.CustomerID !=customerid && info.Status=="Available")
             {
-                info.Status = "NotAvailable";
+                info.Status = "Not Available";
                 info.Mode = "Invalid AWB!";
             }
             return Json(info, JsonRequestBehavior.AllowGet);

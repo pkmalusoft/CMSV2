@@ -277,6 +277,7 @@ namespace CMSV2.Models
         public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
+        public virtual DbSet<SupplierInvoiceStock> SupplierInvoiceStocks { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

@@ -872,6 +872,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     </Key>
     <Property Name="MovementID" Type="int" Nullable="false" />
     <Property Name="MovementType" Type="varchar" MaxLength="50" />
+    <Property Name="DefaultType" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -2737,10 +2738,12 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
+      <PropertyRef Name="DefaultType" />
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ParcelTypeID" Type="int" />
     <Property Name="ParcelType" Type="nvarchar" MaxLength="50" />
+    <Property Name="DefaultType" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="PaymentsTerms">
     <Key>
@@ -2910,6 +2913,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a prim
     <Property Name="Width" Type="decimal" Precision="18" Scale="0" />
     <Property Name="Height" Type="decimal" Precision="18" Scale="0" />
     <Property Name="CBM" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="DefaultType" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="PurchaseInvoice">
     <Key>
@@ -3266,6 +3270,23 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
     <Property Name="RecPayStatus" Type="int" />
     <Property Name="RecPayDetailId" Type="int" />
     <Property Name="AcHeadID" Type="int" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceStock">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierInvoiceID" Type="int" />
+    <Property Name="SupplierInvoiceDetailId" Type="int" />
+    <Property Name="SupplierID" Type="int" />
+    <Property Name="StockType" Type="int" />
+    <Property Name="BookNo" Type="nvarchar" MaxLength="500" />
+    <Property Name="AWBNOFrom" Type="int" />
+    <Property Name="AWBNOTo" Type="int" />
+    <Property Name="AWBCount" Type="int" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="Rate" Type="money" />
+    <Property Name="Amount" Type="money" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>
@@ -6908,6 +6929,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoiceAWB" EntityType="Self.SupplierInvoiceAWB" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierInvoiceStock" EntityType="Self.SupplierInvoiceStock" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SystemControlSequence" EntityType="Self.SystemControlSequence" Schema="dbo" store:Type="Tables" />
@@ -7116,7 +7138,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
       <DefiningQuery>SELECT 
     [ParcelType].[ID] AS [ID], 
     [ParcelType].[ParcelTypeID] AS [ParcelTypeID], 
-    [ParcelType].[ParcelType] AS [ParcelType]
+    [ParcelType].[ParcelType] AS [ParcelType], 
+    [ParcelType].[DefaultType] AS [DefaultType]
     FROM [dbo].[ParcelType] AS [ParcelType]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="State" EntityType="Self.State" store:Type="Tables" store:Schema="dbo">

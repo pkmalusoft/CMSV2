@@ -3305,6 +3305,23 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
           <Property Name="RecPayDetailId" Type="int" />
           <Property Name="AcHeadID" Type="int" />
         </EntityType>
+        <EntityType Name="SupplierInvoiceStock">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierInvoiceID" Type="int" />
+          <Property Name="SupplierInvoiceDetailId" Type="int" />
+          <Property Name="SupplierID" Type="int" />
+          <Property Name="StockType" Type="int" />
+          <Property Name="BookNo" Type="nvarchar" MaxLength="500" />
+          <Property Name="AWBNOFrom" Type="int" />
+          <Property Name="AWBNOTo" Type="int" />
+          <Property Name="AWBCount" Type="int" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="Rate" Type="money" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
         <EntityType Name="SupplierMaster">
           <Key>
             <PropertyRef Name="SupplierID" />
@@ -6946,6 +6963,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierInvoiceAWB" EntityType="Self.SupplierInvoiceAWB" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierInvoiceStock" EntityType="Self.SupplierInvoiceStock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SystemControlSequence" EntityType="Self.SystemControlSequence" Schema="dbo" store:Type="Tables" />
@@ -15678,6 +15696,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
           <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
           <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
+          <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20274,6 +20293,23 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdationDate" Type="DateTime" Precision="3" />
           <Property Name="IsSkyLarkUpdate" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SupplierInvoiceStock">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierInvoiceID" Type="Int32" />
+          <Property Name="SupplierInvoiceDetailId" Type="Int32" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="StockType" Type="Int32" />
+          <Property Name="BookNo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AWBNOFrom" Type="Int32" />
+          <Property Name="AWBNOTo" Type="Int32" />
+          <Property Name="AWBCount" Type="Int32" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -29452,6 +29488,24 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
                 <ScalarProperty Name="PODID" ColumnName="PODID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierInvoiceStocks">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock">
+              <MappingFragment StoreEntitySet="SupplierInvoiceStock">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="AWBCount" ColumnName="AWBCount" />
+                <ScalarProperty Name="AWBNOTo" ColumnName="AWBNOTo" />
+                <ScalarProperty Name="AWBNOFrom" ColumnName="AWBNOFrom" />
+                <ScalarProperty Name="BookNo" ColumnName="BookNo" />
+                <ScalarProperty Name="StockType" ColumnName="StockType" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+                <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

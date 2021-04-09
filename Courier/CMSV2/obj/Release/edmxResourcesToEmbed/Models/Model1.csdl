@@ -765,6 +765,7 @@
     </Key>
     <Property Name="MovementID" Type="Int32" Nullable="false" />
     <Property Name="MovementType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -2326,6 +2327,7 @@
     <Property Name="Width" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="Height" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="PurchaseInvoice">
     <Key>
@@ -3336,10 +3338,12 @@
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
+      <PropertyRef Name="DefaultType" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" />
     <Property Name="ParcelTypeID" Type="Int32" />
     <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="State">
     <Key>
@@ -8336,6 +8340,7 @@
     <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
     <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
     <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
+    <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12932,5 +12937,22 @@
     <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="UpdationDate" Type="DateTime" Precision="3" />
     <Property Name="IsSkyLarkUpdate" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceStock">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierInvoiceID" Type="Int32" />
+    <Property Name="SupplierInvoiceDetailId" Type="Int32" />
+    <Property Name="SupplierID" Type="Int32" />
+    <Property Name="StockType" Type="Int32" />
+    <Property Name="BookNo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="AWBNOFrom" Type="Int32" />
+    <Property Name="AWBNOTo" Type="Int32" />
+    <Property Name="AWBCount" Type="Int32" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
 </Schema>

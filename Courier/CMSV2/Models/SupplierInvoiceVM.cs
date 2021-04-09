@@ -30,6 +30,12 @@ namespace CMSV2.Models
         public decimal Value { get; set; }
         public string InvNo { get; set; }
         public string Currency { get; set; }
+
+        public string BookNo { get; set; }
+        public int StockType { get; set; }
+        public int AWBStart { get; set; }
+        public int AWBEnd { get; set; }
+        public int AWBCount { get; set; }
     }
 
     public class SupplierInvoiceAWBVM : SupplierInvoiceAWB

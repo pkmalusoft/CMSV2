@@ -183,8 +183,13 @@
       var i = $('#detailsbody > tr').length;
 
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
+        var purchasehtml = '<input type="hidden" id="hdnStockType_' + i + '" value="' + $('#StockType').val() + '"/>' +
+            '<input type="hidden" id="hdnBookNo_' + i + '" value="' + $('#BookNo').val() + '"/>' +
+            '<input type="hidden" id="hdnAWBCount_' + i + '" value="' + $('#AWBCount').val() + '"/>' +
+            '<input type="hidden" id="hdnAWBStart_' + i + '" value="' + $('#AWBStart').val() + '"/>' +
+            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + $('#AWBEnd').val() + '"/>';
                         var acheadid = AcHeadId;
-                        var headhtml = '<td> <input type="text" acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
+                        var headhtml = '<td>' + purchasehtml + ' <input type="text" acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
                         var particulars = Particulars;
                         var particularshtml = '<td> <input type="text" id="txtparticulars_' + i + '" value="' + particulars + '" /> </td>';
 
@@ -195,10 +200,11 @@
                 var taxhtml = '<td> <input class="text-right" type="text" onchange="calculatevalue(' + i + ')"  id="txttax_' + i + '" value="' + Taxpercent + '" /> </td>';
                 var netvaluehtml = '<td> <input class="text-right" type="text" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(3)  + '" /> </td>';
                 var delHtml = '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ><td> ';
+                var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Edit AWB Reference" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ><td> ';
+                var StockHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Edit Purchase" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-file" ></i></a ><td> ';
                 var html = '<tr><td><input type="hidden" id="hdndetailid_' + i + '" value="0" />' + currencyname + '<input type="hidden" id="hdncurrency_' + i + '" value="' + currency + '"</></td><td><input type="hidden" id="hdnexrate_' + exchangereate + '" />'  + parseFloat(exchangereate).toFixed(@_decimal) + '</td>';
 
-                        html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + delHtml + '</tr>';
+        html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + StockHTML + delHtml + '</tr>';
 
 
                 $("#detailsbody").append(html);
@@ -249,10 +255,14 @@
                         //AWBItems.push(value);
                         //$("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.AcHeadName + '</td><td>' + value.Particulars + '</td><td class="text-right" >' + parseFloat(value.Rate).toFixed(3) + '</td><td class="text-right" >' + value.Quantity + '</td><td>' + value.Currency + '</td><td class="text-right" >' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td class="text-right" >' + parseFloat(value.Amount).toFixed(3) + '</td><td class="text-right" >' + value.TaxPercentage + '</td><td class="text-right">' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
                           var i = $('#detailsbody > tbody > tr').length;
-
+                        var purchasehtml = '<input type="hidden" id="hdnStockType_' + i + '" value="' + item.StockType + '"/>' +
+                            '<input type="hidden" id="hdnBookNo_' + i + '" value="' + item.BookNo + '"/>' +
+                            '<input type="hidden" id="hdnAWBCount_' + i + '" value="' + item.AWBCount + '"/>' +
+                            '<input type="hidden" id="hdnAWBStart_' + i + '" value="' + item.AWBStart + '"/>' +
+                            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + item.AWBEnd + '"/>';
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
                         var acheadid = AcHeadId;
-                        var headhtml = '<td> <input type="text"  acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
+                        var headhtml = '<td>' + purchasehtml + '<input type="text"  acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
                         var particulars = Particulars;
                         var particularshtml = '<td> <input type="text" id="txtparticulars_' + i + '" value="' + particulars + '" /> </td>';
 
@@ -435,9 +445,14 @@
                     var amount = $('#txtAmt_' + i).val();
                     var currency = $("#hdncurrency_" + i).val();
                     var Taxpercent = $("#txttax_" + i).val();
-                    var exchangereate = $("#hdnexrate_" + i).val();;
+                    var exchangereate = $("#hdnexrate_" + i).val();
                     var netvalue = $('#txtnetval_' + i).val();
-                    var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount,Value:netvalue };
+                    var StockType = $('#hdnStockType_' + i).val();
+                    var BookNo =$('#hdnBookNo_' + i).val();
+                    var AWBCount = $('#hdnAWBCount_' + i).val();
+                    var AWBStart = $('#hdnAWBStart_' + i).val();
+                    var AWBEnd = $('#hdnAWBEnd_' + i).val();
+                    var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount,Value:netvalue , StockType:StockType, BookNo:BookNo,AWBStart:AWBStart,AWBEnd:AWBEnd,AWBCount:AWBCount };
                     AWBItems.push(data);
                    //var data= {Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(), Remarks: $('#Remarks').val(), Details: JSON.stringify(AWBItems) },
 
@@ -566,6 +581,31 @@
 </script>
 
 <script type="text/javascript">
+     function checkawbstartend() {
+        if ($('#AWBCount').val() == '') {
+            $('#AWBCount').val(0);
+        }
+
+        var awbcount = $('#AWBCount').val();
+        if ($('#AWBStart').val() == '')
+            $('#AWBStart').val(0);
+        var startno = $('#AWBStart').val();
+        $('#AWBEnd').val(parseInt(startno) + parseInt(awbcount));
+
+    }
+
+    function checkawbstartend1() {
+        if ($('#txtAWBCount').val() == '') {
+            $('#txtAWBCount').val(0);
+        }
+
+        var awbcount = $('#txtAWBCount').val();
+        if ($('#txtAWBStart').val() == '')
+            $('#txtAWBStart').val(0);
+        var startno = $('#txtAWBStart').val();
+        $('#txtAWBEnd').val(parseInt(startno) + parseInt(awbcount));
+
+    }
     function checkduplicate(consignment) {
 
         var idtext = 'txtinscan_';
@@ -626,8 +666,38 @@
         $("#txtConsignmentNo").val('');
         $("#txtConsignmentNo").focus();
     }
+
+    function ShowStockPopup(index) {
+        $('#hdnCurrentIndex').val(index);
+        var amount = $("#txtAmt_" + index).val();
+        var acheadname = 'AcHead : ' + $('#txtachead_' + index).val();
+        var acheadid = $("#hdnEditAcHeadId").val();
+        $('#hAcHead1').html(acheadname);
+        $('#hTotal1').html(parseFloat(amount).toFixed(@_decimal));
+        $('#txtStockType').val($('#hdnStockType_' + index).val());
+        $('#txtBookNo').val($('#hdnBookNo_' + index).val());
+        $('#txtAWBCount').val($('#hdnAWBCount_' + index).val());
+        $('#txtAWBStart').val($('#hdnAWBStart_' + index).val());
+        $('#txtAWBEnd').val($('#hdnAWBEnd_' + index).val());
+        $('#stockpopup').modal('show');
+    }
+    function SaveStock() {
+        debugger;
+        var index = $('#hdnCurrentIndex').val();
+        $('#hdnStockType_' + index).val($('#txtStockType').val());
+        $('#hdnBookNo_' + index).val($('#txtBookNo').val());
+        $('#hdnAWBCount_' + index).val($('#txtAWBCount').val());
+        $('#hdnAWBStart_' + index).val($('#txtAWBStart').val());
+        $('#hdnAWBEnd_' + index).val($('#txtAWBEnd').val());
+        $('#stockpopup').modal('hide');
+    }
     function EditConsignmentPopup(index) {
         debugger;
+        var stocktype = $('#hdnStockType_' + index).val();
+        if (stocktype > 0) {
+            ShowStockPopup(index);
+            return;
+        }
         $("#hdnEditAcHeadId").val($('#txtachead_' + index).attr('acheadid'));
         $('#hdnEditRowIndex').val(index);
         var amount = $("#txtAmt_" + index).val();
@@ -694,11 +764,11 @@
     function ShowConsignmentPopup(index) {
         debugger;
 
-        $('#hdnEditAcHeadId').val($('#txtachead').attr('accountid'));
-        var acheadname = 'AcHead : ' + $('#txtachead').val();
+        $('#hdnEditAcHeadId').val($('#txtAcHeadId').val());
+        var acheadname = 'AcHead : ' + $('#txtAcHead').val();
         $('#hAcHead').html(acheadname);
         $('#hdnEditRowIndex').val(-1);
-        var amount = $("#txtAmount").val();
+        var amount = $("#Amount").val();
         $("#hdnEditAmount").val(amount);
         $('#hTotal').html(parseFloat(amount).toFixed(@_decimal));
         $("#consignmentdetailsbody").html('');
@@ -769,48 +839,15 @@
     }
 
     $(document).ready(function () {
-        $("#txtTruckDetail").autocomplete({
+
+
+        $("#txtConsignmentNo1").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/Accounts/GetTrips',
+                    url: '/Accounts/GetAWB',
                     datatype: "json",
                     data: {
                         term: request.term
-                    },
-                    //open: function () {
-                    //    autoComplete.zIndex(dlg.zIndex() + 1);
-                    //}
-                    success: function (data) {
-                        response($.map(data, function (val, item) {
-                            return {
-                                label: val.ReceiptNo,
-                                value: val.ReceiptNo,
-                                ID: val.TruckDetailID
-                            }
-                        }))
-                    }
-                })
-            }, minLength: 0,
-            focus: function (e, i) {
-                $("#txtTruckDetail").val(i.item.label);
-                $("#txtTruckDetailID").val(i.item.ID);
-                $("#txtTruckDetailID").attr('label', i.item.label);
-            },
-            select: function (e, i) {
-                e.preventDefault();
-                $("#txtTruckDetail").val(i.item.label);
-                $("#txtTruckDetailID").val(i.item.ID);
-                $("#txtTruckDetailID").attr('label', i.item.label);
-            }
-        });
-
-        $("#txtConsignmentNo").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: '/Accounts/GetConsignment',
-                    datatype: "json",
-                    data: {
-                        term: request.term, tripno: $('#txtTruckDetailID').val()
                     },
                     //open: function () {
                     //    autoComplete.zIndex(dlg.zIndex() + 1);
@@ -839,30 +876,49 @@
             }
         });
         $("#txtConsignmentNo").change(function () {
+            $.ajax({
+                url: '/Accounts/GetAWB',
+                datatype: "json",
+                data: {
+                    term: $("#txtConsignmentNo").val()
+                },
+                success: function (data) {
+                    debugger;
+                    if (data != null) {
+                        console.log(data);
+                        if (data.length > 0) {
+                            $("#txtConsignmentNo").val(data[0].ConsignmentNo);
+                            $("#txtInScanID").val(data[0].InScanID);
+                            $("#txtInScanID").attr('label', data[0].ConsignmentNo);
+                        }
+                        else {
+                            $("#txtConsignmentNo").val('');
+                            $("#txtInScanID").val(0);
+                            $("#txtInScanID").attr('label', '');
+                            $('#elemError').html('Invalid AWB No.');
+                            $("#txtConsignmentNo").focus();
+                        }
+                    }
+                    else {
+                        $("#txtConsignmentNo").val('');
+                        $("#txtInScanID").val(0);
+                        $("#txtInScanID").attr('label', '');
+                        $('#elemError').html('Invalid AWB No.');
+                        $("#txtConsignmentNo").focus();
+                    }
+                }
+            });
 
-            if ($('#txtConsignmentNo').val() != "" && $('#txtConsignmentNo').val() != $('#txtInScanID').attr('label')) {
-                $('#txtConsignmentNo').val('');
-                $("#txtInScanID").val(0);
-            }
         });
 
-        $("#txtTruckDetail").change(function () {
-            if ($("#txtTruckDetail").val() == "") {
-                $('#txtTruckDetail').val('');
-                $("#txtTruckDetailID").val(0);
-            }
-            if ($("#txtTruckDetail").val() != "" && $("#txtTruckDetail").val() != $('#txtTruckDetailID').attr('label')) {
-                $('#txtTruckDetail').val('');
-                $("#txtTruckDetailID").val(0);
-            }
-        });
+
 
         $('#btnaddConsignment').click(function () {
 
             var consignmento = $('#txtConsignmentNo').val();
             var InscanId = $("#txtInScanID").val();
             if (consignmento == '' || InscanId == 0) {
-                $('#elemError').html('Select Consignment No.');
+                $('#elemError').html('Select AWB No.');
                 return;
             }
             else {
@@ -998,7 +1054,7 @@
                     @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.SupplierName)
                 </div>
-                
+
             </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12">
@@ -1054,61 +1110,89 @@
                     </div>
                     <div class="col-md-1">
                         <label class="headinglabel required"> Net Value</label>
-                        <input type="text" class="form-control text-right" readonly id="NetValue"   />
+                        <input type="text" class="form-control text-right" readonly id="NetValue" />
                     </div>
                     <div class="col-md-1">
                         <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup(-1)">...</button>
                         <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnadd" title="Add New" class="addmore">+</button>
                     </div>
                     <!--<div class="col-md-1" style="padding-top:10px">-->
-                        @*<button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>*@
-                        
+                    @*<button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>*@
+
                     <!--</div>-->
                 </div>
             </div>
-
-
-
-            <div class="row no-margin" style="padding-top: 10px">
+            <div class="row no-margin">
                 <div class="col-md-12">
-                    <table class="table table-bordered table-responsive" id="details" style="background-color: white">
-
-                        <thead>
-                            <tr>
-                                <th>Currency</th>
-                                <th>Ex. Rate</th>
-                                <th>Account Head</th>
-                                <th>Particulars</th>
-                                <th>Qty</th>
-                                <th>Rate</th>
-                                <th>Value</th>
-                                <th>Tax(%)</th>
-                                <th>Net Value</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody class="input-table" id="detailsbody">
-                            @*@{Html.RenderPartial("InvoiceList", Model);}*@
-
-
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="" style="text-align:right;padding:10px">                    
-                    <button type="submit" class="btn btn-primary btnwidth" id="btnsave">Update</button>
-                    &nbsp;&nbsp;
-                    <a href='@Url.Action("Index", "SupplierInvoice", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                    <div class="col-md-1">
+                        <label class="headinglabel required ">Stock Type</label>
+                        <select class="form-control" id="StockType" name="StockType">
+                            <option value="">Select</option>
+                            <option value="0">None</option>
+                            <option value="1">AWB Purhcase</option>
+                            <option value="2">Cottons Purhcase</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel required ">Book No.</label>
+                        <input type="text" class="form-control" id="BookNo" name="BookNo" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel required ">No. of AWB.</label>
+                        <input type="text" class="form-control" id="AWBCount" name="AWBCount" onchange="checkawbstartend()" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel required">AWB Start</label>
+                        <input type="number" class="form-control" id="AWBStart" name="AWBStart" onchange="checkawbstartend()"/>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel required">AWB End</label>
+                        <input type="number" class="form-control" id="AWBEnd" name="AWBEnd" onchange="checkawbstartend()" />
+                    </div>
                 </div>
             </div>
 
 
-        }
-    </fieldset>
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-responsive" id="details" style="background-color: white">
+
+                            <thead>
+                                <tr>
+                                    <th>Currency</th>
+                                    <th>Ex. Rate</th>
+                                    <th>Account Head</th>
+                                    <th>Particulars</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>Value</th>
+                                    <th>Tax(%)</th>
+                                    <th>Net Value</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input-table" id="detailsbody">
+                                @*@{Html.RenderPartial("InvoiceList", Model);}*@
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row no-margin" style="padding-top:10px">
+                    <div class="" style="text-align:right;padding:10px">
+                        <button type="submit" class="btn btn-primary btnwidth" id="btnsave">Update</button>
+                        &nbsp;&nbsp;
+                        <a href='@Url.Action("Index", "SupplierInvoice", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                    </div>
+                </div>
+
+
+                }
+</fieldset>
 </section>
 
 <div class="modal fade" id="consignmentpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1117,7 +1201,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">
-                    Consignment Reference
+                    AWB Reference
                 </h4>
             </div>
 
@@ -1138,17 +1222,9 @@
                             <span id="elemError" class="errors"></span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <label class="headinglabel">Truck Detail No.</label>
-                            <input type="text" id="txtTruckDetail" class="form-control" />
-                            <input type="hidden" id="txtTruckDetailID" class="form-control" />
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-primary small_btn" type="button" id="btnaddall" title="Add all Consignments of TD" style="margin-top:30px;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="headinglabel"> Consignment Note </label>
+                    <div class="row">                       
+                        <div class="col-md-7">
+                            <label class="headinglabel"> AWB No. </label>
                             <input type="text" id="txtConsignmentNo" class="form-control" />
                             <input type="hidden" id="txtInScanID" class="form-control" />
                         </div>
@@ -1161,7 +1237,7 @@
                         <table class="table table-bordered table-responsive" id="Consignmentdetails">
                             <thead>
                                 <tr>
-                                    <th>Consignment Note</th>
+                                    <th>AWB No.</th>
                                     <th>Amount</th>
                                     <th>Delete</th>
                                 </tr>
@@ -1185,6 +1261,71 @@
             <div class="modal-footer" style="padding-top: 5px">
                 <button type="button" id="ConsignmentSave" class="btn btn-primary">Save</button>
                 <button type="button" id="ConsignmentClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stockpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Stock Reference
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-11 flex justify-content-between">
+                            <h4 id="hAcHead1"></h4>
+                            <h5 id="hTotal1">Total</h5>
+                        </div>                   
+
+                    </div>
+                    <div class="row">
+                        <div class="flex justify-content-between">
+                            <span id="elemError" class="errors"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="headinglabel required ">Stock Type</label>
+                            <select class="form-control" id="txtStockType" name="txtStockType">
+                                <option value="">Select</option>
+                                <option value="0">None</option>
+                                <option value="1">AWB Purhcase</option>
+                                <option value="2">Cottons Purhcase</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="hidden" id="hdnCurrentIndex" value="0" />
+                            <label class="headinglabel">Book No.</label>
+                            <input type="text" id="txtBookNo" class="form-control" />
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="headinglabel">AWB Count</label>
+                            <input type="text" id="txtAWBCount" class="form-control" onchange="checkawbstartend1()" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="headinglabel"> AWB Start No. </label>
+                            <input type="text" id="txtAWBStart" class="form-control" onchange="checkawbstartend1()"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="headinglabel"> AWB End No. </label>
+                            <input type="text" id="txtAWBEnd" class="form-control" readonly />
+                        </div>
+                    </div>
+                       
+                    </div>
+                </div>
+            <div class="modal-footer" style="padding-top: 5px">
+                <button type="button" id="StockSave" class="btn btn-primary" onclick="SaveStock()" >Save</button>
+                <button type="button" id="StockClose" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

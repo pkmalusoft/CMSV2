@@ -780,42 +780,38 @@ namespace CMSV2.Controllers
         }
         #endregion
 
-        #region "CODRegister"
+        #region "CODRegister & Pending"
         public ActionResult CODRegister()
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
 
-            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            CODReportParam model = (CODReportParam)Session["CODReportParam"];
             if (model == null)
             {
-                model = new CustomerLedgerReportParam
+                model = new CODReportParam 
                 {
 
-                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
-                    CustomerId = 0,
-                    CustomerName = "",
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,                    
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,                    
                     Output = "PDF",
-                    ReportType = "Summary"
+                    ReportType = "Detail",
+                    MovementId="1,2,3,4"
                 };
-            }
-            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
-            }
-
-            SessionDataModel.SetCustomerLedgerParam(model);
-
-            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            ViewBag.ReportName = "Customer Aging Report";
+                Session["CODReportParam"] = model;
+            }            
+            
+            ViewBag.ReportName = "COD Register Report";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("CustomerAging"))
+                if (!currentreport.Contains("CODRegister") && !currentreport.Contains("CODSummary"))
                 {
                     Session["ReportOutput"] = null;
                 }
             }
-
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
+            ViewBag.parceltype = db.ParcelTypes.ToList();
+            ViewBag.Movement = db.CourierMovements.ToList();
             return View(model);
 
         }
@@ -824,17 +820,104 @@ namespace CMSV2.Controllers
         public ActionResult CODRegister(CODReportParam picker)
         {
 
-            Session["CODReportParam"] = picker;            
-            
+          
+            picker.MovementId = "";
+            if (picker.SelectedValues != null)
+            {
+                foreach (var item in picker.SelectedValues)
+                {
+                    if (picker.MovementId == "")
+                    {
+                        picker.MovementId = item.ToString();
+                    }
+                    else
+                    {
+                        picker.MovementId = picker.MovementId + "," + item.ToString();
+                    }
+
+                }
+            }
+            Session["CODReportParam"] = picker;
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
-            AccountsReportsDAO.GenerateCustomerAgingReport();
+            if (picker.ReportType=="Detail")
+                AccountsReportsDAO.GenerateCODRegister();
+            else
+                AccountsReportsDAO.GenerateCODSummary();
 
             return RedirectToAction("CODRegister", "Reports");
+        }
 
+        
+        public ActionResult CODPending()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CODReportParam model = (CODReportParam)Session["CODReportParam"];
+            if (model == null)
+            {
+                model = new CODReportParam
+                {
+
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,                    
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,                    
+                    Output = "PDF",
+                    ReportType = "Detail",
+                    MovementId = "1,2,3,4"
+                };
+                Session["CODReportParam"] = model;
+            }
+
+            ViewBag.ReportName = "COD Pending Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CODPending"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
+            ViewBag.parceltype = db.ParcelTypes.ToList();
+            ViewBag.Movement = db.CourierMovements.ToList();
+            return View(model);
 
         }
+
+        [HttpPost]
+        public ActionResult CODPending(CODReportParam picker)
+        {
+
+
+            picker.MovementId = "";
+            if (picker.SelectedValues != null)
+            {
+                foreach (var item in picker.SelectedValues)
+                {
+                    if (picker.MovementId == "")
+                    {
+                        picker.MovementId = item.ToString();
+                    }
+                    else
+                    {
+                        picker.MovementId = picker.MovementId + "," + item.ToString();
+                    }
+
+                }
+            }
+            Session["CODReportParam"] = picker;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateCODPending();
+
+            return RedirectToAction("CODPending", "Reports");
+        }
+
+
+
         #endregion
     }
 }

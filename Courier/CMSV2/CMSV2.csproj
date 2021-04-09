@@ -1771,6 +1771,9 @@
     <Compile Include="Models\SupplierInvoiceDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplierInvoiceStock.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SupplierInvoiceVM.cs" />
     <Compile Include="Models\SupplierMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -3085,6 +3088,9 @@
     <Content Include="Reports\BankReceiptPaymentVoucherPrint.rpt" />
     <Content Include="Reports\CashReceiptPaymentVoucherPrint.rpt" />
     <Content Include="Reports\CreditNoteVoucherPrint.rpt" />
+    <Content Include="Reports\CODRegister.rpt" />
+    <Content Include="Reports\CODPending.rpt" />
+    <Content Include="Reports\CODSummary.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3619,6 +3625,8 @@
     <Content Include="Views\AWBCustomerBook\Create.cshtml" />
     <Content Include="Views\Reports\CODRegister.cshtml" />
     <Content Include="Views\Reports\CODReportParam.cshtml" />
+    <Content Include="Views\AWBCustomerBook\Create - Copy.cshtml" />
+    <Content Include="Views\Reports\CODPending.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
