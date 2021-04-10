@@ -279,9 +279,59 @@
     function checkfieldvalidate(obj) {
         if ($(obj).val() == null || $(obj).val().trim() == '')
         {
-            $('#ulerr').removeClass('show-green');
-            $('#ulerr').addClass('show-error');
-            $('#lierr').html('Please Enter Required Values!');
+            var id = $(obj).attr('id');
+            var message = '';
+            if (id == 'AWBNo') {
+                message = 'Missing Field..AWB No.!';
+            }
+            else if (id == 'AWBDate') {
+                message = 'Missing Field..AWB Date!';
+            }
+            else if (id == 'BatchDate') {
+                message = 'Missing Field..Batch Date!';
+            }
+            else if (id == 'Pieces') {
+                message = 'Missing Field..Pieces!';
+            }
+            else if (id == 'Weight') {
+                message = 'Missing Field..Weight!';
+            }
+            else if (id == 'Shipper') {
+                message = 'Missing Field..Shipper!';
+            }
+            else if (id == 'Consignee') {
+                message = 'Missing Field..Consignee!';
+            }
+            else if (id == 'AssignedDate') {
+                message = 'Missing Field..Collected By!';
+            }
+            else if (id == 'PickedupDate') {
+                message = 'Missing Field..Collected By!';
+            }
+            else if (id == 'ReceivedDate') {
+                message = 'Missing Field..Received at Store!';
+            }
+            else if (id == 'OutScanDeliveredID' || id == 'OutScanDate') {
+                message = 'Missing Field..Out for Delivery!';
+            }
+            else if (id == 'DeliveryAttemptedBy' || id == 'DelieveryAttemptDate') {
+                message = 'Missing Field..Delivery for Attempted!';
+            }
+            else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
+                message = 'Missing Field..Delivery Attempted!';
+            }
+            else if (id == 'PickUpLocation') {
+                message = 'Missing Field..Pickup Location!';
+            }
+            else if (id == 'DeliveryLocation') {
+                message = 'Missing Field..Delivery Location!';
+            }
+            
+            $.notify(message, "error");
+            //$('#ulerr').removeClass('show-green');
+            //$('#ulerr').addClass('show-error');
+            //$('#lierr').html('Please Enter Required Values!');
+            
             $(obj).focus();
             return false;
         }
@@ -292,9 +342,50 @@
     function checkdrpfieldvalidate(obj) {
 
         if ($(obj).val() == null || $(obj).val().trim() == '' || $(obj).val().trim() == '0') {
-            $('#ulerr').removeClass('show-green');
-            $('#ulerr').addClass('show-error');
-            $('#lierr').html('Please Enter Required Values!');
+            debugger;
+            //$('#ulerr').removeClass('show-green');
+            //$('#ulerr').addClass('show-error');
+            //$('#lierr').html('Please Enter Required Values!');
+            var message = '';
+            var id = $(obj).attr('id');
+            if (id == 'MovementID') {
+                message = 'Missing Field..Movement Type!';
+            }
+            else if (id == 'ParcelTypeID') {
+                message = 'Missing Field..Parcel Type!';
+            }
+            else if (id == 'ProductTypeID') {
+                message = 'Missing Field..Product Type!';
+            }
+            else if (id == 'PaymentTypeId') {
+                message = 'Missing Field..Payment Type!';
+            }
+            else if (id == 'AssignedEmployeeID') {
+                message = 'Missing Field..Assigned For Collection!';
+            }
+            else if (id == 'PickedUpEmpID') {
+                message = 'Missing Field..Collected By!';
+            }
+            else if (id == 'DepotReceivedBy') {
+                message = 'Missing Field..Received at Store!';
+            }
+            else if (id == 'InscanVehicleId') {
+                message = 'Missing Field..Received at Store!';
+            }
+            else if (id == 'OutScanDeliveredID') {
+                message = 'Missing Field..Out for Delivery!';
+            }
+            else if (id == 'OutscanVehicleId') {
+                message = 'Missing Field..Out for Delivery!';
+            }
+            else if (id == 'DeliveryAttemptedBy' || id=='DelieveryAttemptDate') {
+                message = 'Missing Field..Delivery for Attempted!';
+            }
+            else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
+                message = 'Missing Field..Delivery Attempted!';
+            }
+            
+            $.notify(message, "error");
             $(obj).focus();
             return false;
         }
@@ -335,7 +426,7 @@
         $('#OutScanDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#ReceivedDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#PickedupDate').datetimepicker({ format: 'DD-MM-YYYY' });
-
+        $('#MovementID').focus();
         $('#SpecialInstructions').multiselect({
             //nonSelectedText: 'Select',
             enableClickableOptGroups: true,
@@ -362,6 +453,12 @@
                 else if (modeid == 2) {
                     $('#CustomerName').val($('#CODCustomerName').val());
                     $('#CustomerID').val($('#CODCustomerID').val());
+                    if ($('#Shipper').attr('readonly') == 'readonly') {
+                        $('#Consignee').focus();
+                    }
+                    else {
+                        $('#Shipper').focus();
+                    }
                 }
                 else if (modeid == 4) {
                     $('#CustomerName').val($('#FOCCustomerName').val());
@@ -433,7 +530,8 @@
                         if (status == 'Available') {
                             $('#ulerr').addClass('show-green');
                             $('#ulerr').removeClass('show-error');
-                            $('#lierr').html(message);
+                            $('#lierr').html(response.Mode);
+                            
                         }
                         if (status == 'Available' && mode == 'Prepaid') {
                             var charge = response.CourierCharge;
@@ -486,14 +584,15 @@
                             $('#DeliverySubLocality').val(DeliverySubLocality);
                             $('#OriginPlaceID').val(OriginPlaceID);
                             $('#DestinationPlaceID').val(DestinationPlaceID);
-                            $("#PickUpLocation").attr('readonly', 'readonly');
-                            $("#DeliveryLocation").attr('readonly', 'readonly');
+                            $("#PickUpLocation").attr('readonly', 'readonly');                           
                             $("#ConsignorMobileNo").val(Mobile);
                             $('#btnAdd').removeAttr('disabled');
                             if (mode == 'Prepaid') {
+                                $("#DeliveryLocation").attr('readonly', 'readonly');
                                 $('#Consignee').focus();
                             }
                             else {
+                                $("#DeliveryLocation").removeAttr('readonly');
                                 $('#PaymentTypeId').focus();
                             }
 
@@ -552,9 +651,18 @@
                             $('#Pieces').val(0);
                             $('#Weight').val(0);
                             $('#btnAdd').attr('disabled', 'disabled');
-                            $('#ulerr').removeClass('show-green');
-                            $('#ulerr').addClass('show-error');
-                            $('#lierr').html(message);
+                            //$('#ulerr').removeClass('show-green');
+                            //$('#ulerr').addClass('show-error');
+                            //$('#lierr').html(message);
+                            if (response.Mode == 'Used')
+                            {
+                                $.notify('Air wayBill Used,Duplication not allowed!', "error");
+                            }
+                            else {
+                                $.notify('Air wayBill not Available!', "error");
+                            }
+                            $('#AWBNo').val('');
+                            $('#AWBNo').focus();
                         }
 
                     }
@@ -828,8 +936,9 @@
             var TaxAmount = $('#TaxAmount').val();
             var NetTotal = $('#NetTotal').val();
             debugger;
-            //if ($("#MaterialCost").val() == '');
-            //$("#MaterialCost").val(0)
+
+            if ($("#MaterialCost").val() == '');
+              $("#MaterialCost").val(0)
 
           var MaterialCost = $("#MaterialCost").val();
 
@@ -1266,7 +1375,7 @@
         <div class="row  searchMc">
 
 
-            <h4>Update Options</h4>
+            <h4>AWB Status</h4>
             <div class="col-xs-2 col-sm-2">
                 <div class="flex">
 
@@ -1442,24 +1551,25 @@
 
                         <div class="col-xs-12 col-sm-3">
                             <label class="headinglabel">C. Charge</label>
-                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off",@onchange= "CalculateTax()" })
+                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
                         </div>
-                        <div class="col-xs-12 col-sm-3">                            
-                            <div class="flexTitle">
-                                @*<label class="headinglabel required">Tax</label>*@
-                                <label class="headinglabel red" id="lblTaxPercent">Tax + @Model.TaxPercent %</label>
-                                <div class="checkboxdesign no-padding text-right" style="float:right">
-                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent" ,@onchange="CalculateTax()" }) &nbsp
-                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
-                                </div>
-                            </div>
-                            @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off",@readonly="true" })
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-xs-12 col-sm-3">
                             <label class="headinglabel">Other Charges</label>
                             @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="flexTitle">
+                                @*<label class="headinglabel required">Tax</label>*@
+                                <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
+                                <div class="checkboxdesign no-padding text-right" style="float:right">
+                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
+                                </div>
+                            </div>
+                            @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
                         </div>
                         <div class="col-xs-12 col-sm-3">
                             <label class="headinglabel">Total Charges</label>
@@ -1472,11 +1582,11 @@
                         <div class="col-xs-12 col-sm-3">
                             <label class="headinglabel">Shpr. Notes</label>
                             <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
-                                <option value="1" selected>IS NCND</option>
-                                <option value="2">Is Cash Only</option>
-                                <option value="3">IsChequeOnly</option>
-                                <option value="4">IsCollectMaterial</option>
-                                <option value="5">IsDOCopyBack</option>
+                                <option value="1" selected>NCND</option>
+                                <option value="2">Cash Only</option>
+                                <option value="3">Cheque Only</option>
+                                <option value="4">Collect Material</option>
+                                <option value="5">DO Copy Back</option>
                             </select>
                             @Html.HiddenFor(model => model.CustomerID)
                             @Html.HiddenFor(model => model.CASHCustomerId)
@@ -1496,8 +1606,8 @@
                             @Html.HiddenFor(model => model.CODCustomerID)
                         </div>
                        <div class="col-md-6 flex justify-between" style="margin-top:30px">
-                                <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
-                            </div>
+                            <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
+                       </div>
 
                     </div>
                     <div class="row">
@@ -1509,7 +1619,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6" class="scrolling_list">
+                <div class="col-md-6 scrolling_list">
                     <div class="row no-margin" style="padding-top:10px">
                         <div class="col-xs-12 no-padding for-device">
                             <div class="data-table payment-div">

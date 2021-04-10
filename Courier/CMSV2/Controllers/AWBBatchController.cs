@@ -43,23 +43,17 @@ namespace CMSV2.Controllers
             vm.AWBDate = pFromDate;
             vm.AssignedDate = pFromDate;
             vm.TaxPercent = 5;
-            //vm.ProductTypeID = 1;
-            //vm.ParcelTypeID = 1;
-            //vm.MovementID = 1;
-            //vm.AssignedDate= pFromDate;
-            //vm.ReceivedDate = pFromDate;
-            //vm.OutScanDate = pFromDate;
+            var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultproducttype != null)
+                vm.ProductTypeID = defaultproducttype.ProductTypeID;
 
+            var defaultmovementtype = db.CourierMovements.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultmovementtype != null)
+                vm.MovementID = defaultmovementtype.MovementID;
 
-            //vm.AssignedEmployeeID = 2;
-            //vm.PickedUpEmpID= 2;
-            //vm.PickedupDate = pFromDate;
-            //vm.DelieveryAttemptDate = pFromDate;
-            //vm.DeliveredDate = pFromDate;
-            //vm.DeliveryAttemptedBy = 3;
-            //vm.OutScanDeliveredID = 2;
-            //vm.DeliveredBy = 2;
-            //vm.DepotReceivedBy = 2;
+            var defaultparceltype = db.ParcelTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultparceltype != null)
+                vm.ParcelTypeID = defaultparceltype.ID;
 
             string customername = "";
 

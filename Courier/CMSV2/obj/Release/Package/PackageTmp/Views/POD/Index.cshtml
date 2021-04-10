@@ -1,17 +1,266 @@
-﻿
+﻿@model  CMSV2.Models.PODSearch
+
 @{
-    Layout = null;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/POD/Index";
+    var PageID = 0;
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 
-<!DOCTYPE html>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+    .dataTables_info {
+        display: block !important;
+    }
+
+    .tblfont {
+        font-size: 13px;
+    }
+
+    .tdphone {
+        width: 50px !important;
+    }
+
+    .colorred {
+        color: #c6250f;
+    }
+
+    .colorblue {
+        color: #273ef3;
+    }
+    /* .dataTables_paginate
+         {
+             display:block!important;
+         }*/
+</style>
+<script type="text/javascript">
+
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    }); 
+    
+
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#ToDate').datepicker("setDate", new Date());
+    }); 
+
+  
+</script>
+<script type="text/javascript">
+      
+        $(document).ready(function () {
+            $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style="width:100%" />');
+            });
+
+
+
+            var table = $('#dataTables-example').DataTable({
+                "aaSorting": []
+                //"dom": '<"top"i>rt<"top"flp><"clear">',
+                	//dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                 //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                 //"pagingType": "simple"
+            });
+            table.draw();
+           table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });       
+      
+
+        });
+
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">POD LIST </h1>
+
+</section>
+@using (@Html.BeginForm("Index", "POD", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-1">
+                <label class="headinglabel">From </label>
+                @*<input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />*@
+                @Html.TextBoxFor(mode => mode.FromDate, new { @class = "form-control text-right" })
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">To </label>
+                @*<input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />*@
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+            </div>
+
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">                
+                <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>                
+            </div>
+            <div class="pull-left" style="padding-top:32px;">
+                <p class="indexbtnpadding">
+                   
+                        @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                        {
+                            @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                        }
+                    
+
+                </p>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+}
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["ErrorMsg"]", "error");
+                 });
+        </script>
+    }
+
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%">
+
+            <thead>
+                <tr>
+                    <th width="8%">
+                        AWB No.
+                    </th>
+                    <th width="8%">
+                        @Html.Label("Delivered Date")
+                    </th>
+                    <th width="15%">
+                        @Html.Label("Shipper/Consignor")
+                    </th>
+                    <th width="15%">
+                        @Html.Label("Receiver/Consignee")
+                    </th>                 
+                    <th width="15%">
+                        @Html.Label("Status")
+                    </th>
+                  
+                    <th width="10%">Action</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th class="right_text">
+
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                   
+
+                    <th style="display:none"></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var item in Model.Details)
+                {
+
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AWBNo)
+                        </td>
+                        <td class="text-right">                          
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.DeliveredDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shipper)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Consignee)
+                        </td>                                    
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourierStatus)
+                        </td>                     
+                        <td>                            
+                            @if (ismodify)
+                            {
+                                <a href="@Url.Action("Create", new { id = item.PODID })"><i class="fa fa-pencil"></i>|</a>
+                            }                            
+                            @if (isdelete)
+                            {
+                                <a href="#" onclick="Delete(ID=@item.PODID)"><i class="fa fa-times"></i>|</a>
+                            }
+                           
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+
+    
+</section>
+<script type="text/javascript">
+  
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete POD?")) {
+            window.location.href = "/POD/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

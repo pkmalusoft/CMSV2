@@ -22,6 +22,8 @@
               <xs:element name="PaymentModeText" type="xs:string" minOccurs="0" />
               <xs:element name="CourierCharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="OtherCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxPercent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="Weight" type="xs:decimal" minOccurs="0" />
               <xs:element name="Pieces" type="xs:string" minOccurs="0" />
               <xs:element name="ConsignorPhone" type="xs:string" minOccurs="0" />

@@ -94,9 +94,7 @@
                         <th>
                             Account Category
                         </th>
-
-
-                        <th>Action</th>
+                       
                     </tr>
                 </thead>
                 <tfoot>
@@ -124,10 +122,8 @@
                                 @Html.DisplayFor(modelItem => item.AcCategory)
                             </td>
 
-                            <td>
-                                @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
-                                    @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+                            <td style="display:none">
+                              
                                 @if (ismodify)
                                 {
                                     <a href="@Url.Action("EditAcType", new { id = item.Id })"><i class="fa fa-pencil"></i></a>

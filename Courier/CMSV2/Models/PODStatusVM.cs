@@ -5,45 +5,49 @@
 // Assembly location: D:\Courier09022018\Decompiled\obj\Release\Package\PackageTmp\bin\CMSV2.dll
 
 using System;
+using System.Collections.Generic;
 
 namespace CMSV2.Models
 {
-  public class PODStatusVM
+  public class PODVM :POD
   {
-    public int InscanID { get; set; }
 
     public string AWBNo { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime AWBDate { get; set; }
 
-    public int? CollectedBy { get; set; }
+        public bool DeliveryAttempted { get; set; } //Delivery Attempt Date
+        public int DeliveryAttemptedBy { get; set; } //
+        public DateTime? DelieveryAttemptDate { get; set; }
 
-    public double? StatedWeight { get; set; }
+        public bool Delivered { get; set; } //Delivered Date
+        //public int DeliveredBy { get; set; } //
+        //public DateTime? DeliveredDate { get; set; }
+        public string Shipper { get; set; }
+        public string ShipperContact { get; set; }
+        public string Consignee { get; set; }
+        public string ConsigneeContact { get; set; }
+        public string CourierStatus { get; set; }
+        public int? CourierStatusId { get; set; }
+        public int? StatusTypeId { get; set; }
+        public List<PODAWBDetail> Details { get; set; }
+    }
+    public class PODAWBDetail : POD
+    {
+        public string AWBNo { get; set; }
+        public bool DeliveryAttempted { get; set; } //Delivery Attempt Date
+        public int DeliveryAttemptedBy { get; set; } //
+        public DateTime? DelieveryAttemptDate { get; set; }
+        public bool Delivered { get; set; } //Delivered Date
+        
+    }
 
-    public string Pieces { get; set; }
-
-    public Decimal CourierCharges { get; set; }
-
-    public string Consignor { get; set; }
-
-    public int ConsignorCountryID { get; set; }
-
-    public string Consignee { get; set; }
-
-    public int? CosigneeCountryID { get; set; }
-
-    public string StatusPaymentMOde { get; set; }
-
-    public int AWBStatusID { get; set; }
-
-    public int PODID { get; set; }
-
-    public int? CourierStatusID { get; set; }
-
-    public string CourierStatus { get; set; }
-
-    public string RecevierName { get; set; }
-
-    public string Remarks { get; set; }
-  }
+    public class PODSearch
+    {
+       
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }     
+     
+        public List<PODVM> Details { get; set; }
+    }
 }
