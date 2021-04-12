@@ -26,5 +26,6 @@ namespace CMSV2.Models
         public Nullable<int> Qty { get; set; }
         public Nullable<decimal> Rate { get; set; }
         public Nullable<decimal> Amount { get; set; }
+        public string ItemSize { get; set; }
     }
 }

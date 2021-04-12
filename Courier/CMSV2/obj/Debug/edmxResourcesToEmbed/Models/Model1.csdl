@@ -12954,5 +12954,6 @@
     <Property Name="Qty" Type="Int32" />
     <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ItemSize" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

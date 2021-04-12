@@ -125,7 +125,8 @@
                     }
                 }
                 else {
-                    alert(response.message);
+                    $.notify(response.message, "error");
+                    //alert(response.message);
                 }
             }
         });
@@ -146,11 +147,10 @@
         $('#btnSave').click(function (e) {
             debugger;
             var result = false;
-            
             var rowcount = $('#tbl1 > tr').length;
 
             if (rowcount == 0) {
-                alert('Enter Requied Values to Generate AWBNo!');
+                alert('Click Refresh Button to Generate AWBNo!');
             }
             else {
                 result = true;
@@ -193,14 +193,14 @@
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <label class="headinglabel">Book Date</label>
-                        @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control text-right", @required = "true" })
+                        @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control text-right", @required = true })
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-12 ">
                         <label class="headinglabel">Courier Name</label>
-                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control",@required="true" })
+                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                     </div>
 
                 </div>
@@ -210,11 +210,11 @@
 
                     <div class="col-xs-12 col-md-6">
                         <label class=" required headinglabel">Book Number</label>
-                        @Html.TextBoxFor(model => model.BookNo, new { @class = "form-control", @required ="true" })
+                        @Html.TextBoxFor(model => model.BookNo, new { @class = "form-control", @required = true })
                     </div>
                     <div class="col-xs-2 col-sm-6">
-                        <label class="headinglabel required">No. of AWBs</label>
-                        @Html.TextBoxFor(model => model.NoOfAWBs, new { @class = "form-control text-right", @required = "true", @onchange = "checkawbstartend()" })
+                        <label class="headinglabel">No. of AWBs</label>
+                        @Html.TextBoxFor(model => model.NoOfAWBs, new { @class = "form-control text-right", @required = true, @onchange = "checkawbstartend()" })
                     </div>
 
                 </div>
@@ -223,12 +223,12 @@
 
                     <div class="col-xs-12 col-sm-6">
                         <label class=" required headinglabel">Start AWB</label>
-                        @Html.TextBoxFor(model => model.AWBNOFrom, new { @class = "form-control textright", required = "true", @onchange = "checkawbstartend()" })
+                        @Html.TextBoxFor(model => model.AWBNOFrom, new { @class = "form-control textright", required = "required", @onchange = "checkawbstartend()" })
                     </div>
 
                     <div class="col-xs-12 col-sm-6">
                         <label class=" required headinglabel">End AWB</label>
-                        @Html.TextBoxFor(model => model.AWBNOTo, new { @class = "form-control textright",  @readonly = "true" })
+                        @Html.TextBoxFor(model => model.AWBNOTo, new { @class = "form-control textright", required = "required", @readonly = "true" })
                     </div>
 
                 </div>
@@ -252,11 +252,11 @@
             </div>
 
 
-            <div class="col-md-5" style="padding-left:30px!important">
+            <div class="col-md-5 " style="padding-left:30px!important">
 
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-xs-12 no-padding for-device">
-                        <div class="data-table payment-div">
+                        <div class="data-table payment-div scrolling_list">
                             <div class="data">
                                 <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
                                     <thead style="background:transparent;">
@@ -306,7 +306,7 @@
 
 
 
-            <div class="col-xs-12 col-sm-6" style="display: none">
+            <div class="col-xs-12 col-sm-6 " style="display: none">
                 <label class="headinglabel required">Employee ID</label>
                 @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
             </div>

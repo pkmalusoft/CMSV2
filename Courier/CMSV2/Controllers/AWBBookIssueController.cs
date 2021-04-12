@@ -162,29 +162,36 @@ namespace CMSV2.Controllers
         public JsonResult GetAWBBook(string StartAWB,string EndAWB,int AWBBookIssueId=0,int PrepaidAWBID=0)
         {
             int FyearId = Convert.ToInt32(Session["fyearid"]);
-
-            List<AWBDetailVM> listawb=AWBDAO.CheckAWBDuplicate(Convert.ToInt32(StartAWB),Convert.ToInt32(EndAWB),AWBBookIssueId,PrepaidAWBID);
-
-            if (listawb.Count == 0)
+            string result = AWBDAO.CheckAWBStock(Convert.ToInt32(StartAWB), Convert.ToInt32(EndAWB));
+            if (result == "ok")
             {
-                List<AWBDetailVM> awbs = new List<AWBDetailVM>();
 
-                for (int i = Convert.ToInt32(StartAWB); i < Convert.ToInt32(EndAWB); i++)
+                List<AWBDetailVM> listawb = AWBDAO.CheckAWBDuplicate(Convert.ToInt32(StartAWB), Convert.ToInt32(EndAWB), AWBBookIssueId, PrepaidAWBID);
+
+                if (listawb.Count == 0)
                 {
-                    AWBDetailVM obj = new AWBDetailVM();
-                    //obj.AWBBOOKIssueID = 0;
-                    //obj.AWBBOOKIssueDetailID = 0;
-                    obj.AWBNo = i.ToString();
-                    awbs.Add(obj);
+                    List<AWBDetailVM> awbs = new List<AWBDetailVM>();
+
+                    for (int i = Convert.ToInt32(StartAWB); i < Convert.ToInt32(EndAWB); i++)
+                    {
+                        AWBDetailVM obj = new AWBDetailVM();
+                        //obj.AWBBOOKIssueID = 0;
+                        //obj.AWBBOOKIssueDetailID = 0;
+                        obj.AWBNo = i.ToString();
+                        awbs.Add(obj);
+                    }
+                    Session["AWBBook"] = awbs;
+                    return Json(new { status = "ok", awbs = awbs }, JsonRequestBehavior.AllowGet);
                 }
-                Session["AWBBook"] = awbs;
-                return Json(new { status = "ok", awbs = awbs }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    return Json(new { status = "Failed", message = "Duplicate AWB , " + listawb.Count.ToString() + " AWBs are exist!" }, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
-                return Json(new { status = "Failed", message="Duplicate AWB , " + listawb.Count.ToString() + " AWBs are exist!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "Failed", message = result }, JsonRequestBehavior.AllowGet);
             }
-            
             
 
         }

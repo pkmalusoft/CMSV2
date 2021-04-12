@@ -503,7 +503,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             <div class="flex">
-                                <div class="checkboxdesign no-padding  text-right">
+                                <div class="no-padding  text-right">
                                     @Html.CheckBox("Delivered", new { @name = "Delivered", @onchange = "checkdeliverystatus(this)" }) &nbsp
                                     <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
                                 </div>
@@ -519,7 +519,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             <div class="flex">
-                                <div class="checkboxdesign no-padding  text-right">
+                                <div class=" no-padding  text-right">
                                     @Html.CheckBox("DeliveryAttempted", new { @name = "DeliveryAttempted", @onchange= "checkdeliverystatus(this)" }) &nbsp
                                     <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
                                 </div>
@@ -528,6 +528,12 @@
                             </div>
                             @*@Html.TextBoxFor(model => model.DelieveryAttemptDate, new { @class = "form-control text-right" })*@
                         </div>
+
+
+                         <div class="col-md-6 d-flex"  style="margin-top:20px">
+                            <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
+                        </div>
+
                         @*<div class="col-xs-12 col-sm-6">
                             <label class="headinglabel required">Delivery Attempted By</label>
                             @Html.DropDownListFor(model => model.DeliveryAttemptedBy, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
@@ -540,14 +546,12 @@
                                 <li id="lierr"> </li>
                             </ul>
                         </div>
-                        <div class="col-md-6 flex justify-between" style="margin-top:30px">
-                            <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
-                        </div>
+                       
                     </div>
                 </div>
 
                     <div class="col-md-7 scrolling_list">
-                        <div class="row no-margin" style="padding-top:25px">
+                        <div class="row no-margin" style="padding-top:15px">
                             <div class="col-xs-12 no-padding for-device">
                                 <div class="data-table payment-div">
                                     <div class="data">

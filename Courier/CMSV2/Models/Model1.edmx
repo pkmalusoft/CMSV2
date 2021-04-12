@@ -3321,6 +3321,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
           <Property Name="Qty" Type="int" />
           <Property Name="Rate" Type="money" />
           <Property Name="Amount" Type="money" />
+          <Property Name="ItemSize" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="SupplierMaster">
           <Key>
@@ -20310,6 +20311,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Qty" Type="Int32" />
           <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ItemSize" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -29494,6 +29496,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="SupplierInvoiceStocks">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock">
               <MappingFragment StoreEntitySet="SupplierInvoiceStock">
+                <ScalarProperty Name="ItemSize" ColumnName="ItemSize" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />

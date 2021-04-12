@@ -172,14 +172,18 @@ namespace CMSV2.Models
         public bool IsDOCopyBack { get; set; }
 
         public string PickupLocationPlaceId { get; set; }
-        public string PickupLocation  { get; set; }
+        public string PickupLocation { get; set; }
 
         public string DeliveryLocation { get; set; }
-        public string PickupSubLocality{ get; set; }
+        public string PickupSubLocality { get; set; }
         public string DeliverySubLocality { get; set; }
         public bool AWBProcessed { get; set; }
 
         public string DeliveryLocationPlaceId { get; set; }
+
+        public string SpecialNotes {get;set;}
+        public string  CODStatus { get; set; }
+        public string MaterialCostStatus { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

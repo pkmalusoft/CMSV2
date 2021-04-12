@@ -3076,8 +3076,8 @@
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />
     <Content Include="Reports\AWBRegister_MovementWise.rpt" />
-    <Content Include="Reports\AWBRegister_ParcelType.rpt" />
-    <Content Include="Reports\AWBRegister_Payment.rpt" />
+    <Content Include="Reports\AWBRegister_ParcelTypeold.rpt" />
+    <Content Include="Reports\AWBRegister_Paymentold.rpt" />
     <Content Include="Reports\AWBRegister_Summary.rpt" />
     <Content Include="Reports\AWBRegister.rpt" />
     <Content Include="Reports\AWBPrint.rpt" />
@@ -3091,6 +3091,8 @@
     <Content Include="Reports\CODRegister.rpt" />
     <Content Include="Reports\CODPending.rpt" />
     <Content Include="Reports\CODSummary.rpt" />
+    <Content Include="Reports\AWBRegister_ParcelType.rpt" />
+    <Content Include="Reports\AWBRegister_Payment.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3628,6 +3630,7 @@
     <Content Include="Views\AWBCustomerBook\Create - Copy.cshtml" />
     <Content Include="Views\Reports\CODPending.cshtml" />
     <Content Include="Views\POD\Create.cshtml" />
+    <Content Include="Views\AWBBatch\Create - Copy %282%29.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

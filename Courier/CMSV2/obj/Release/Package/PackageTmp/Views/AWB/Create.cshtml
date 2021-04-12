@@ -1126,10 +1126,6 @@
 
          });
 
-
-
-
-
         $('#ChangeStatusTypeId').change(function () {
             debugger;
             var pcourierstatusid = $('#CourierStatusId').val();
@@ -1204,7 +1200,7 @@
                     }
                     else
                     {
-                            $.notify("Save Failed :" + data, "warning");
+                       $.notify("Save Failed :" + data, "warning");
                     }
 
                     $('#StatusModal').modal('hide');
@@ -1281,7 +1277,6 @@
                     }
                     else if (weightval <= 30 && $('#ParcelTypeID').val() == 4) {
                         alert('Weight should be above than 30kg to this selcted parceltype!');
-
                         return false;
                     }
                     else {

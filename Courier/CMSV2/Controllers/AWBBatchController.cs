@@ -41,6 +41,7 @@ namespace CMSV2.Controllers
             DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
             vm.BatchDate = pFromDate;
             vm.AWBDate = pFromDate;
+            
             vm.AssignedDate = pFromDate;
             vm.TaxPercent = 5;
             var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();

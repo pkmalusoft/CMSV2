@@ -3287,6 +3287,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
     <Property Name="Qty" Type="int" />
     <Property Name="Rate" Type="money" />
     <Property Name="Amount" Type="money" />
+    <Property Name="ItemSize" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>

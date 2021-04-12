@@ -36,6 +36,8 @@ namespace CMSV2.Models
         public int AWBStart { get; set; }
         public int AWBEnd { get; set; }
         public int AWBCount { get; set; }
+
+        public string ItemSize { get; set; }
     }
 
     public class SupplierInvoiceAWBVM : SupplierInvoiceAWB

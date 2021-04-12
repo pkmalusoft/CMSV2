@@ -26,6 +26,9 @@
               <xs:element name="Pieces" type="xs:string" minOccurs="0" />
               <xs:element name="ConsignorPhone" type="xs:string" minOccurs="0" />
               <xs:element name="PaymentModeCode" type="xs:string" minOccurs="0" />
+              <xs:element name="TaxPercent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="MaterialCost" type="xs:decimal" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

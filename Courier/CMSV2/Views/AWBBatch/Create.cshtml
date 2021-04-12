@@ -41,7 +41,8 @@
     }
 
     .show-green {
-        color: green;
+        color: blue;
+        font-size:16px;
         font-weight: 700;
     }
 
@@ -214,21 +215,24 @@
         if (maxrow > 0) {
             var duplicate = false;
             $('[id^=' + idtext + ']').each(function (index, item) {
-                var con = $('#hdnAWBNo_' + index).val();
-                if (con.trim() == awbno.trim()) {
-                    duplicate = true;
-                    var message='Duplicate AWB No.!';
-                    $('#ulerr').removeClass('show-green');
-                    $('#ulerr').addClass('show-error');
-                    $('#lierr').html(message);
-                    $('#btnAdd').attr('disabled', 'disabled');
-                    //break;
-                }
+                var deleted = $('#hdndeleted_' + index).val();
+                if (deleted != "true") {
+                    var con = $('#hdnAWBNo_' + index).val();
+                    if (con.trim() == awbno.trim()) {
+                        duplicate = true;
+                        var message = 'Duplicate AWB No.!';
+                        $.notify('Duplicate AWB No.', 'error');
+                        $('#ulerr').removeClass('show-green');
+                        $('#ulerr').addClass('show-error');
+                        $('#lierr').html(message);
+                        $('#btnAdd').attr('disabled', 'disabled');
+                        //break;
+                    }
 
-                if (duplicate == false && index == (parseInt(maxrow - 1))) {
-                    return true;
+                    if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                        return true;
+                    }
                 }
-
             });
             if (duplicate == true) {
                 return false;
@@ -324,7 +328,7 @@
                 message = 'Missing Field..Pickup Location!';
             }
             else if (id == 'DeliveryLocation') {
-                message = 'Missing Field..Delivery Location!';
+                message = 'Missing Field..Destination Location!';
             }
             
             $.notify(message, "error");
@@ -588,11 +592,11 @@
                             $("#ConsignorMobileNo").val(Mobile);
                             $('#btnAdd').removeAttr('disabled');
                             if (mode == 'Prepaid') {
-                                $("#DeliveryLocation").attr('readonly', 'readonly');
+                                $("#DeliveryLocation").attr('disabled', 'disabled');
                                 $('#Consignee').focus();
                             }
                             else {
-                                $("#DeliveryLocation").removeAttr('readonly');
+                                $("#DeliveryLocation").removeAttr('disabled');
                                 $('#PaymentTypeId').focus();
                             }
 
@@ -804,7 +808,8 @@
                 $("#ConsigneeCountryName").val(i.item.CountryName);
                 $("#ConsigneeCityName").val(i.item.CityName);
                 $("#ConsigneeLocationName").val(i.item.LocationName);
-                $('#DeliveryLocation').val(i.item.LocationName);
+                if ($('#DeliveryLocation').attr('disabled')!='disabled')
+                    $('#DeliveryLocation').val(i.item.LocationName);
                 $("#ConsigneeLocation").val(i.item.LocationName);
 
                 if (i.item.ConsigneeMobileNo == null || i.item.ConsigneeMobileNo=='undefined')
@@ -825,7 +830,8 @@
                 $("#ConsigneeCountryName").val(i.item.CountryName);
                 $("#ConsigneeCityName").val(i.item.CityName);
                 $("#ConsigneeLocationName").val(i.item.LocationName);
-                $('#DeliveryLocation').val(i.item.LocationName);
+                if ($('#DeliveryLocation').attr('disabled') != 'disabled')
+                    $('#DeliveryLocation').val(i.item.LocationName);
                 $("#ConsigneeLocation").val(i.item.LocationName);
                 if (i.item.ConsigneeMobileNo == null || i.item.ConsigneeMobileNo == 'undefined')
                     $("#ConsigneeMobileNo").val('');
@@ -937,8 +943,8 @@
             var NetTotal = $('#NetTotal').val();
             debugger;
 
-            if ($("#MaterialCost").val() == '');
-              $("#MaterialCost").val(0)
+            if ($("#MaterialCost").val() == '')
+            $("#MaterialCost").val(0);
 
           var MaterialCost = $("#MaterialCost").val();
 
@@ -1129,6 +1135,7 @@
             $('#Shipper').val('');
             $('#Shipper').removeAttr('');
             $('#CustomerID').val(0);
+            $('#CustomerName').val('');
             $("#ConsignorContact").val('');
             $("#ConsignorAddress1_Building").val('');
             $("#ConsignorAddress2_Street").val('');
@@ -1148,6 +1155,10 @@
             $('#DeliverySubLocality').val('');
             $("#Consignee").val('');
             $("#MaterialCost").val('');
+            $("#CourierCharge").val('');
+            $("#OtherCharge").val('');
+            $("#TotalCharge").val('');
+            $('#ItemDescription').val('');
             $('#Pieces').val(0);
             $('#Weight').val(0);
             $('#AWBNo').focus();
@@ -1198,7 +1209,7 @@
                     var Weight = parseFloat($("#hdnWeight_" + i).val()).toFixed(3);
                     var ParcelTypeId = $('#hdnParcelTypeId_' + i).val();
                     var PaymentTypeId = $("#hdnPaymentModeId_" + i).val();
-                    var PickUpLocation = $('#hdnPickUpLocation_' + i).val();
+                    var PickUpLocation = $('#hdnPickupLocation_' + i).val();
                     var DeliveryLocation = $('#hdnDeliveryLocation_' + i).val();
                     var ItemDescription = $('#hdnCargoDescription_' + i).val();
                     var AssignedEmployeeID = $('#hdnAssignedEmployeeID_' + i).val(); // Assigned for collection
@@ -1363,9 +1374,9 @@
                 @Html.TextBoxFor(model => model.BatchDate, new { @class = "form-control text-right", @required = true })
             </div>
            
-            <div class="col-sm-3 text-right" style="margin-top:32px;">
+            <div class="col-sm-9 text-right" style="margin-top:32px;">
                 <input type="submit" class="btn btn-primary  btnwidth" value="Save " name="Command" id="btnSave" />
-                <a href='@Url.Action("Index", "QuickAWB", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+                <a href='@Url.Action("Index", "AWB", new { id = 1 })' class="btn btn-danger  btnwidth">Cancel</a>
 
             </div>
         </div>
@@ -1565,7 +1576,7 @@
                                 @*<label class="headinglabel required">Tax</label>*@
                                 <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
                                 <div class="checkboxdesign no-padding text-right" style="float:right">
-                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" }) &nbsp
+                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" ,@checked="checked" }) &nbsp
                                     <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
                                 </div>
                             </div>
@@ -1605,9 +1616,9 @@
                             @Html.HiddenFor(model => model.CASHCustomerId)
                             @Html.HiddenFor(model => model.CODCustomerID)
                         </div>
-                       <div class="col-md-6 flex justify-between" style="margin-top:30px">
-                            <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
-                       </div>
+                       <div class="col-md-6 d-flex" style="margin-top:30px">
+                                <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
+                            </div>
 
                     </div>
                     <div class="row">
@@ -1619,10 +1630,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 scrolling_list">
-                    <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-xs-12 no-padding for-device">
-                            <div class="data-table payment-div">
+                <div class="col-md-6 ">
+                    <div class="row no-margin" style="padding-top:20px">
+                        <div class="col-xs-12 no-padding for-device ">
+                            <div class="data-table payment-div scrolling_list">
                                 <div class="data">
                                     <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
                                         <thead style="background:transparent;">

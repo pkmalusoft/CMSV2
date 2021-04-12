@@ -135,85 +135,183 @@
             @using (@Html.BeginForm("AWBTimeline", "AWB", FormMethod.Post, new { @class = "form-horizontal" }))
             {
 
-                <div class="col-md-6 timelineDetails">
+            <div class="col-md-6 timelineDetails">
 
-                    <div class="row">
+                <div class="row">
 
-                        <div class="col-md-8  Aiwaybillcontrol">
-                            <div class="col-md-4">
-                                <label class="headinglabel">AIRWAY BILL: </label>
-                            </div>
-                            <div class="col-md-7">
-                                @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
-                            </div>
-                            <div class="col-md-1">
-                                <button type="submit" class="btn btn-primary" style="min-width:50px!Important;" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                            </div>
+                    <div class="col-md-8  Aiwaybillcontrol">
+                        <div class="col-md-4">
+                            <label class="headinglabel">AIRWAY BILL: </label>
                         </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Shipper</h4>
-
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.Consignor</h4>
-                            </div>
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Consignee</h4>
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.Consignee</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Origin</h4>
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.ConsignorCountryName</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Destination</h4>
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.ConsigneeCountryName </h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Pieces</h4>
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.Pieces </h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="col-md-5">
-                                <h4>Weight</h4>
-                            </div>
-                            <div class="col-md-7 timelinedata">
-                                <h4>@Model.AWB.Weight</h4>
-                            </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                         </div>
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Shipper</h4>
+
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.Consignor</h4>
+                            <h4>@Model.AWB.ConsignorAddress1_Building @Model.AWB.ConsignorAddress2_Street</h4>
+                            <h4>@Model.AWB.ConsignorAddress3_PinCode</h4>
+                            <h4>@Model.AWB.ConsignorPhone</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Consignee</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.Consignee</h4>
+                            <h4>@Model.AWB.ConsigneeAddress1_Building @Model.AWB.ConsigneeAddress2_Street</h4>
+                            <h4>@Model.AWB.ConsigneeAddress3_PinCode</h4>
+                            <h4>@Model.AWB.ConsigneePhone</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Origin</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.ConsignorCountryName</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Destination</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.ConsigneeCountryName </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Pieces</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.Pieces </h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Weight</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.Weight</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Courier Charge</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.CourierCharge </h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Other Charge</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.OtherCharge</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="col-md-5">
+                            <h4>Tax Amount</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.TaxAmount </h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-md-5">
+                            <h4>Total Charge</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.totalCharge </h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-5">
+                            <h4>Material Cost</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.materialcost </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Item Description</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.Description</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Special Notes</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.SpecialNotes</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5">
+                            <h4>Payment Mode</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.paymentmode</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-md-5">
+                            <h4>COD Status</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.CODStatus</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-5">
+                            <h4>Material Cost Status</h4>
+                        </div>
+                        <div class="col-md-7 timelinedata">
+                            <h4>@Model.AWB.MaterialCostStatus</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
                 <div class="col-md-5 timelineRow">

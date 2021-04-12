@@ -9178,6 +9178,7 @@
     <EntitySetMapping Name="SupplierInvoiceStocks">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock">
         <MappingFragment StoreEntitySet="SupplierInvoiceStock">
+          <ScalarProperty Name="ItemSize" ColumnName="ItemSize" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="Rate" ColumnName="Rate" />
           <ScalarProperty Name="Qty" ColumnName="Qty" />

@@ -317,6 +317,40 @@ namespace CMSV2.DAL
             return "ok";
 
         }
+        public static string CheckAWBStock(int AWBFrom, int AWBTo)
+        {
+            string result = "";
+            bool status1 = false;
+            bool status2 = false;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_CheckAWBStock";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBFrom", AWBFrom);
+            cmd.Parameters.AddWithValue("@AWBTo", AWBTo);          
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<AWBDetailVM> objList = new List<AWBDetailVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                status1 = Convert.ToBoolean(ds.Tables[0].Rows[0]["Status1"].ToString());
+                status2 =Convert.ToBoolean( ds.Tables[0].Rows[0]["Status2"].ToString());
+                result = ds.Tables[0].Rows[0]["Message"].ToString();
+
+                if (status1 == true && status2 == true)
+                    return "ok";
+                else
+                    return result;
+                
+            }
+
+            return "failed";
+            
+        }
         public static List<AWBDetailVM> CheckAWBDuplicate(int AWBFrom,int AWBTo, int AWBBookIssueID,int PrePaidAWBID )
         {
             

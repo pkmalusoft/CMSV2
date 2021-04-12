@@ -111,8 +111,10 @@ namespace CMSV2.Controllers
             else
             {
                 ViewBag.Title = "Supplier Invoice - Create";
+                _supinvoice.SupplierTypeId = 1;
                 var Maxnumber = db.SupplierInvoices.ToList().LastOrDefault();
                 _supinvoice.InvoiceNo = ReceiptDAO.SP_GetMaxSINo();
+                
             }
             return View(_supinvoice);
 
@@ -166,6 +168,7 @@ namespace CMSV2.Controllers
                     detail.AWBStart = Convert.ToInt32(stock.AWBNOFrom);
                     detail.AWBEnd = Convert.ToInt32(stock.AWBNOTo);
                     detail.BookNo = stock.BookNo;
+                    detail.ItemSize = stock.ItemSize;
                     detail.StockType = Convert.ToInt32(stock.StockType);
                 }
             }
@@ -194,6 +197,7 @@ namespace CMSV2.Controllers
                 invoice.AWBStart = item.AWBStart;
                 invoice.AWBEnd = item.AWBEnd;
                 invoice.AWBCount = item.AWBCount;
+                invoice.ItemSize = item.ItemSize;
                 _details1.Add(invoice);
             }
 
@@ -273,6 +277,7 @@ namespace CMSV2.Controllers
                         stock.Rate = InvoiceDetail.Rate;
                         stock.SupplierID = SupplierID;
                         stock.Amount = item.Amount;
+                        stock.ItemSize = item.ItemSize;
                         stock.Qty = Convert.ToInt32(item.Quantity);
                         db.SupplierInvoiceStocks.Add(stock);
                         db.SaveChanges();

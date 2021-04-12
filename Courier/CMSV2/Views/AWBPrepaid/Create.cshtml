@@ -230,7 +230,7 @@
                     }
                 }
                 else {
-                    alert(response.message);
+                    $.notify(response.message, "error");
                 }
             }
         });
@@ -643,11 +643,11 @@
 
 
 
-            <div class="col-md-5">
+            <div class="col-md-5 ">
 
                 <div class="row no-margin" style="padding-top:10px ; padding-left: 30px">
                     <div class="col-xs-12 no-padding for-device">
-                        <div class="data-table payment-div">
+                        <div class="data-table payment-div scrolling_list">
                             <div class="data">
                                 <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
                                     <thead style="background:transparent;">

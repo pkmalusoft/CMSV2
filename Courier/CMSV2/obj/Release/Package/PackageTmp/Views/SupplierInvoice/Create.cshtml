@@ -87,7 +87,7 @@
     var RemoveAWBItems = [];
 
     function addCommas(nStr) {
-        debugger;
+        
         nStr += '';
         x = nStr.split('.');
         x1 = x[0];
@@ -181,13 +181,22 @@
             var netvalue = parseFloat(amount) + (parseFloat(amount) * parseFloat(Taxpercent) / 100);
 
       var i = $('#detailsbody > tr').length;
+        if ($('#BookNo').val() == '')
+            $('#BookNo').val(0);
+        if ($('#AWBCount').val() == '')
+            $('#AWBCount').val(0)
+        if ($('#AWBEnd').val() == '')
+            $('#AWBEnd').val(0);
+        if ($('#AWBStart').val() == '')
+            $('#AWBStart').val(0);
 
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
         var purchasehtml = '<input type="hidden" id="hdnStockType_' + i + '" value="' + $('#StockType').val() + '"/>' +
             '<input type="hidden" id="hdnBookNo_' + i + '" value="' + $('#BookNo').val() + '"/>' +
             '<input type="hidden" id="hdnAWBCount_' + i + '" value="' + $('#AWBCount').val() + '"/>' +
             '<input type="hidden" id="hdnAWBStart_' + i + '" value="' + $('#AWBStart').val() + '"/>' +
-            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + $('#AWBEnd').val() + '"/>';
+            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + $('#AWBEnd').val() + '"/>'+
+            '<input type="hidden" id="hdnItemSize_' + i + '" value="' + $('#ItemSize').val() + '"/>';
                         var acheadid = AcHeadId;
                         var headhtml = '<td>' + purchasehtml + ' <input type="text" acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
                         var particulars = Particulars;
@@ -220,6 +229,22 @@
 
     }
     $(document).ready(function () {
+        $('#StockType').change(function () {
+            if ($('#StockType').val() == '0')
+            {                
+                $('#divawbpurchase').addClass('hide');
+                $('#divcartonpurchase').addClass('hide');
+            }
+            else if ($('#StockType').val() == '1') { //awb purhcase
+                $('#divawbpurchase').removeClass('hide');
+                $('#divcartonpurchase').addClass('hide');
+            }
+            else if ($('#StockType').val() == '2') { //carton stock
+                $('#divawbpurchase').addClass('hide');
+                $('#divcartonpurchase').removeClass('hide');
+            }
+
+        });
         $('#SupplierTypeId').on('change', function () {
 
             if ($('#SupplierTypeId').val() == 4) {
@@ -239,7 +264,7 @@
                 data: { Id: '@Model.SupplierInvoiceID' },
                 success: function (response) {
                     $.each(response.InvoiceDetails, function (index, item) {
-                        debugger;
+                        
                         var AcHead = item.AcHeadName;
                         var AcHeadId = item.AcHeadId;
                         var Particulars = item.Particulars;
@@ -259,7 +284,8 @@
                             '<input type="hidden" id="hdnBookNo_' + i + '" value="' + item.BookNo + '"/>' +
                             '<input type="hidden" id="hdnAWBCount_' + i + '" value="' + item.AWBCount + '"/>' +
                             '<input type="hidden" id="hdnAWBStart_' + i + '" value="' + item.AWBStart + '"/>' +
-                            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + item.AWBEnd + '"/>';
+                            '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + item.AWBEnd + '"/>' +
+                            '<input type="hidden" id="hdnItemSize_' + i + '" value="' + item.ItemSize + '"/>';
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
                         var acheadid = AcHeadId;
                         var headhtml = '<td>' + purchasehtml + '<input type="text"  acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
@@ -321,7 +347,7 @@
 
         });
         $("#btnadd").on('click', function () {
-            debugger;
+            
             var AcHead = $("#txtAcHead").val();
             var AcHeadId = $("#txtAcHeadId").val();
             var Particulars = $("#Particulars").val();
@@ -388,14 +414,14 @@
 
             var tempAWBItems = [];
             $.each(AWBItems, function (index, value) {
-                debugger;
+                
                 if (value.InvNo == remove_awbono) {
                     RemoveAWBItems.push(value);
                     return;
                 }
             });
             $.each(AWBItems, function (index, value) {
-                debugger;
+                
                 if (value.InvNo != remove_awbono) {
                     tempAWBItems.push(value);
                 }
@@ -412,7 +438,7 @@
         });
         $("#btnsave").click(function () {
             var itemcount = $('#detailsbody > tr').length;
-            alert(itemcount);
+            
             var supplier = $("#SupplierName").val();
             var SupplierID = $("#SupplierID").val();
             var InvoiceDate = $("#InvoiceDate").val();
@@ -452,7 +478,8 @@
                     var AWBCount = $('#hdnAWBCount_' + i).val();
                     var AWBStart = $('#hdnAWBStart_' + i).val();
                     var AWBEnd = $('#hdnAWBEnd_' + i).val();
-                    var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount,Value:netvalue , StockType:StockType, BookNo:BookNo,AWBStart:AWBStart,AWBEnd:AWBEnd,AWBCount:AWBCount };
+                    var ItemSize = $('#hdnItemSize_' + i).val();
+                    var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount,Value:netvalue , StockType:StockType, BookNo:BookNo,AWBStart:AWBStart,AWBEnd:AWBEnd,AWBCount:AWBCount,ItemSize:ItemSize };
                     AWBItems.push(data);
                    //var data= {Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(), Remarks: $('#Remarks').val(), Details: JSON.stringify(AWBItems) },
 
@@ -675,24 +702,41 @@
         $('#hAcHead1').html(acheadname);
         $('#hTotal1').html(parseFloat(amount).toFixed(@_decimal));
         $('#txtStockType').val($('#hdnStockType_' + index).val());
-        $('#txtBookNo').val($('#hdnBookNo_' + index).val());
-        $('#txtAWBCount').val($('#hdnAWBCount_' + index).val());
-        $('#txtAWBStart').val($('#hdnAWBStart_' + index).val());
-        $('#txtAWBEnd').val($('#hdnAWBEnd_' + index).val());
+        if ($('#hdnStockType_' + index).val() == 1) {
+            $('#divawb1').removeClass('hide');
+            $('#divawb2').removeClass('hide');
+            $('#divcarton').addClass('hide');
+            $('#txtBookNo').val($('#hdnBookNo_' + index).val());
+            $('#txtAWBCount').val($('#hdnAWBCount_' + index).val());
+            $('#txtAWBStart').val($('#hdnAWBStart_' + index).val());
+            $('#txtAWBEnd').val($('#hdnAWBEnd_' + index).val());
+        } 
+        else  if($('#hdnStockType_' + index).val() == 2)
+        {
+            $('#divawb1').addClass('hide');
+            $('#divawb2').addClass('hide');
+            $('#divcarton').removeClass('hide');
+            $('#txtItemSize').val($('#hdnItemSize_' + index).val());
+        }                       
         $('#stockpopup').modal('show');
     }
     function SaveStock() {
-        debugger;
+        
         var index = $('#hdnCurrentIndex').val();
         $('#hdnStockType_' + index).val($('#txtStockType').val());
-        $('#hdnBookNo_' + index).val($('#txtBookNo').val());
-        $('#hdnAWBCount_' + index).val($('#txtAWBCount').val());
-        $('#hdnAWBStart_' + index).val($('#txtAWBStart').val());
-        $('#hdnAWBEnd_' + index).val($('#txtAWBEnd').val());
+        if ($('#txtStockType').val() == 1) {
+            $('#hdnBookNo_' + index).val($('#txtBookNo').val());
+            $('#hdnAWBCount_' + index).val($('#txtAWBCount').val());
+            $('#hdnAWBStart_' + index).val($('#txtAWBStart').val());
+            $('#hdnAWBEnd_' + index).val($('#txtAWBEnd').val());
+        }
+        else {
+            $('#hdnItemSize_' + index).val($('#txtItemSize').val());
+        }
         $('#stockpopup').modal('hide');
     }
     function EditConsignmentPopup(index) {
-        debugger;
+        
         var stocktype = $('#hdnStockType_' + index).val();
         if (stocktype > 0) {
             ShowStockPopup(index);
@@ -762,7 +806,7 @@
 
     }
     function ShowConsignmentPopup(index) {
-        debugger;
+        
 
         $('#hdnEditAcHeadId').val($('#txtAcHeadId').val());
         var acheadname = 'AcHead : ' + $('#txtAcHead').val();
@@ -883,7 +927,7 @@
                     term: $("#txtConsignmentNo").val()
                 },
                 success: function (data) {
-                    debugger;
+                    
                     if (data != null) {
                         console.log(data);
                         if (data.length > 0) {
@@ -969,7 +1013,7 @@
             })
         });
             $('#ConsignmentSave').on("click", function () {
-                debugger;
+                
             var acheadid = $('#hdnEditAcHeadId').val();
             var allocatedamount = parseFloat($('#hdnEditAmount').val()).toFixed(@_decimal);
             var amt = 0;
@@ -1076,12 +1120,11 @@
                             <option value="">Select</option>
                             @foreach (var item in ViewBag.Currency)
                             {
-                                <option value="@item.CurrencyID">@item.CurrencyCode</option>
+                                <option value="@item.CurrencyID">@item.CurrencyName</option>
                             }
                         </select>
-
                     </div>
-                    `<div class="col-md-3">
+                    <div class="col-md-3">
                         <label class="headinglabel required ">AcHead</label>
                         <input type="text" class="form-control" id="txtAcHead" name="txtAcHead" />
                         <input type="hidden" class="form-control" id="txtAcHeadId" name="txtAcHeadId" />
@@ -1113,8 +1156,8 @@
                         <input type="text" class="form-control text-right" readonly id="NetValue" />
                     </div>
                     <div class="col-md-1">
-                        <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup(-1)">...</button>
-                        <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnadd" title="Add New" class="addmore">+</button>
+                        <button type="button" class="small_btn btn-2  btn btn-primary" title="Add Consignments" onclick="ShowConsignmentPopup(-1)"><i class=" fa fa-th"></i></button>
+                        <button type="button" class="small_btn  btn btn-primary" index="1" id="btnadd" title="Add New" class="addmore"><i class="fa fa-plus"></i></button>
                     </div>
                     <!--<div class="col-md-1" style="padding-top:10px">-->
                     @*<button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>*@
@@ -1126,31 +1169,38 @@
                 <div class="col-md-12">
                     <div class="col-md-1">
                         <label class="headinglabel required ">Stock Type</label>
-                        <select class="form-control" id="StockType" name="StockType">
-                            <option value="">Select</option>
+                        <select class="form-control" id="StockType" name="StockType">                            
                             <option value="0">None</option>
                             <option value="1">AWB Purhcase</option>
-                            <option value="2">Cottons Purhcase</option>
+                            <option value="2">Carton Purhcase</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required ">Book No.</label>
-                        <input type="text" class="form-control" id="BookNo" name="BookNo" />
+                    <div class="col-md-11 hide" id="divcartonpurchase">
+                        <div class="col-md-4">
+                            <label class="headinglabel required ">Size</label>
+                            <input type="text" class="form-control" id="ItemSize" name="ItemSize" />
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required ">No. of AWB.</label>
-                        <input type="text" class="form-control" id="AWBCount" name="AWBCount" onchange="checkawbstartend()" />
-                    </div>
-                    <div class="col-md-1">
-                        <label class="headinglabel required">AWB Start</label>
-                        <input type="number" class="form-control" id="AWBStart" name="AWBStart" onchange="checkawbstartend()"/>
-                    </div>
-                    <div class="col-md-1">
-                        <label class="headinglabel required">AWB End</label>
-                        <input type="number" class="form-control" id="AWBEnd" name="AWBEnd" onchange="checkawbstartend()" />
+                        <div class="col-md-11 hide" id="divawbpurchase">
+                            <div class="col-md-2">
+                                <label class="headinglabel required ">Book No.</label>
+                                <input type="text" class="form-control" id="BookNo" name="BookNo" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="headinglabel required ">No. of AWB.</label>
+                                <input type="text" class="form-control" id="AWBCount" name="AWBCount" onchange="checkawbstartend()" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="headinglabel required">AWB Start</label>
+                                <input type="number" class="form-control" id="AWBStart" name="AWBStart" onchange="checkawbstartend()" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="headinglabel required">AWB End</label>
+                                <input type="number" class="form-control" id="AWBEnd" name="AWBEnd" onchange="checkawbstartend()" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
                 <div class="row no-margin" style="padding-top: 10px">
@@ -1293,20 +1343,23 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="headinglabel required ">Stock Type</label>
-                            <select class="form-control" id="txtStockType" name="txtStockType">
-                                <option value="">Select</option>
+                            <input type="hidden" id="hdnCurrentIndex" value="0" />
+                            <select class="form-control" id="txtStockType" name="txtStockType">                                
                                 <option value="0">None</option>
                                 <option value="1">AWB Purhcase</option>
-                                <option value="2">Cottons Purhcase</option>
+                                <option value="2">Carton Purhcase</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <input type="hidden" id="hdnCurrentIndex" value="0" />
+                        <div class="col-md-6 none" id="divcarton">
+                            <label class="headinglabel">Item Size</label>
+                            <input type="text" id="txtItemSize" class="form-control" />
+                        </div>
+                        <div class="col-md-6" id="divawb1">
                             <label class="headinglabel">Book No.</label>
                             <input type="text" id="txtBookNo" class="form-control" />
-                        </div>                        
+                        </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="divawb2" >
                         <div class="col-md-4">
                             <label class="headinglabel">AWB Count</label>
                             <input type="text" id="txtAWBCount" class="form-control" onchange="checkawbstartend1()" />
