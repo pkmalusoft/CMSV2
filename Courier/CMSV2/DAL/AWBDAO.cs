@@ -275,6 +275,8 @@ namespace CMSV2.DAL
             return obj;
            
         }
+
+      
         public static string GenerateAWBPrepaid(int PrepaidAWBID)
         {
             try
@@ -384,6 +386,123 @@ namespace CMSV2.DAL
         #endregion
 
         #region "AWBBAtch"
+        public  static List<AWBBatchDetail> GetBatchAWBInfo(int BatchID)
+        {
+            List<AWBBatchDetail> list = new List<AWBBatchDetail>();
+            AWBBatchDetail obj = new AWBBatchDetail();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GETBatchAWB";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@BatchID", BatchID);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj.InScanID = CommanFunctions.ParseInt(dt.Rows[i]["InScanID"].ToString());
+                        obj.TransactionDate = dt.Rows[i]["TransactionDate"].ToString();
+                        obj.AWBNo = dt.Rows[i]["AWBNo"].ToString();
+                        obj.CurrentCourierStatus = dt.Rows[i]["CourierStatus"].ToString();
+                        obj.CurrentStatusType = dt.Rows[i]["StatusType"].ToString();
+                        obj.CustomerID = dt.Rows[i]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["CustomerID"].ToString());
+                        obj.CustomerName = dt.Rows[i]["CustomerName"].ToString();
+                        obj.Consignor = dt.Rows[i]["Consignor"].ToString();
+                        obj.ConsignorAddress1_Building = dt.Rows[i]["ConsignorAddress1_Building"].ToString();
+                        obj.ConsignorAddress2_Street = dt.Rows[i]["ConsignorAddress2_Street"].ToString();
+                        obj.ConsignorAddress3_PinCode = dt.Rows[i]["ConsignorAddress3_PinCode"].ToString();
+                        obj.ConsignorCountryName = dt.Rows[i]["ConsignorCountryName"].ToString();
+                        obj.ConsignorCityName = dt.Rows[i]["ConsignorCityName"].ToString();
+                        obj.ConsignorLocationName = dt.Rows[i]["ConsignorLocationName"].ToString();
+                        obj.ConsignorPhone = dt.Rows[i]["ConsignorPhone"].ToString();
+                        obj.ConsignorMobileNo = dt.Rows[i]["ConsignorMobileNo"].ToString();
+                        obj.Consignee = dt.Rows[i]["Consignee"].ToString();
+                        obj.ConsigneeAddress1_Building = dt.Rows[i]["ConsigneeAddress1_Building"].ToString();
+                        obj.ConsigneeAddress2_Street = dt.Rows[i]["ConsigneeAddress2_Street"].ToString();
+                        obj.ConsigneeAddress3_PinCode = dt.Rows[i]["ConsigneeAddress3_PinCode"].ToString();
+                        obj.ConsigneeCountryName = dt.Rows[i]["ConsigneeCountryName"].ToString();
+                        obj.ConsigneeCityName = dt.Rows[i]["ConsigneeCityName"].ToString();
+                        obj.ConsigneeLocationName = dt.Rows[i]["ConsigneeLocationName"].ToString();
+                        obj.ConsigneePhone = dt.Rows[i]["ConsigneePhone"].ToString();
+                        obj.ConsigneeMobileNo = dt.Rows[i]["ConsigneeMobileNo"].ToString();
+                        obj.PickupLocation = dt.Rows[i]["PickupLocation"].ToString();
+                        obj.DeliveryLocation = dt.Rows[i]["DeliveryLocation"].ToString();
+                        obj.PickupSubLocality = dt.Rows[i]["PickupSubLocality"].ToString();
+                        obj.DeliverySubLocality = dt.Rows[i]["DeliverySubLocality"].ToString();
+                        obj.OriginPlaceID = dt.Rows[i]["OriginPlaceID"].ToString();
+                        obj.DestinationPlaceID = dt.Rows[i]["DestinationPlaceID"].ToString();
+                        obj.CourierCharge = dt.Rows[i]["CourierCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["CourierCharge"].ToString());
+                        obj.MaterialCost = dt.Rows[i]["MaterialCost"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["MaterialCost"].ToString());
+                        obj.OtherCharge = dt.Rows[i]["OtherCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["OtherCharge"].ToString());
+                        obj.NetTotal= dt.Rows[i]["NetTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["NetTotal"].ToString());
+                        obj.PaymentModeId = dt.Rows[i]["PaymentModeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["PaymentModeId"].ToString());
+                        obj.MovementID = dt.Rows[i]["MovementID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["MovementID"].ToString());
+                        obj.ParcelTypeId = dt.Rows[i]["ParcelTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["ParcelTypeId"].ToString());
+                        obj.DocumentTypeId = dt.Rows[i]["DocumentTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["DocumentTypeId"].ToString());
+                        obj.ProductTypeID = dt.Rows[i]["ProductTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["ProductTypeID"].ToString());
+                        obj.PaymentModeText= dt.Rows[i]["PaymentModeText"].ToString();
+                        obj.CargoDescription =dt.Rows[i]["CargoDescription"].ToString();
+                        obj.Pieces = dt.Rows[i]["Pieces"] ==DBNull.Value ? "": dt.Rows[i]["Pieces"].ToString();
+                        obj.Weight = dt.Rows[i]["Weight"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["Weight"].ToString());
+                        obj.PickupRequestDate = dt.Rows[i]["PickupRequestDate"] == DBNull.Value ? "" : Convert.ToDateTime(dt.Rows[i]["PickupRequestDate"].ToString()).ToString("dd/MM/yyyy");
+                        obj.AssignedEmployeeID = dt.Rows[i]["AssignedEmployeeID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["AssignedEmployeeID"].ToString());
+                        obj.DepotReceivedBy = dt.Rows[i]["DepotReceivedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["DepotReceivedBy"].ToString());
+                        obj.PickedUpEmpID = dt.Rows[i]["PickedUpEmpID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["PickedUpEmpID"].ToString());
+                        obj.PickedupDate = dt.Rows[i]["PickedupDate"] == DBNull.Value ? "" : Convert.ToDateTime(dt.Rows[i]["PickedupDate"].ToString()).ToString("dd/MM/yyyy");
+                        list.Add(obj);
+                    }
+
+                }
+
+            }
+
+
+            return list;
+
+        }
+        public static List<AWBBatchList> GetAWBBatchList(int branchid)
+        {
+            AWBBatchSearch paramobj = (AWBBatchSearch)(HttpContext.Current.Session["AWBBatchSearch"]);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAWBBatchList";
+            cmd.CommandType = CommandType.StoredProcedure;
+           
+            if (paramobj.FromDate != null)
+                cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
+
+            if (paramobj.ToDate != null)
+                cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(paramobj.ToDate).ToString("MM/dd/yyyy"));
+
+            cmd.Parameters.AddWithValue("@BranchID", branchid);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<AWBBatchList> objList = new List<AWBBatchList>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    AWBBatchList obj = new AWBBatchList();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.BatchNumber = ds.Tables[0].Rows[i]["BatchNumber"].ToString();
+                    obj.BatchDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["BatchDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.AWBNumbers = ds.Tables[0].Rows[i]["AWBNumbers"].ToString();                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
         public static string GetMaxBathcNo()
         {
             SqlCommand cmd = new SqlCommand();
@@ -434,6 +553,42 @@ namespace CMSV2.DAL
                 }
             }
             catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+
+        public static string UpdateAWBBatch(int BATCHID, int BranchID, int AcCompanyID, int DepotID, int UserID, int FYearID, string Details)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_UpdateAWBBatch";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@BatchID", BATCHID);
+                cmd.Parameters.AddWithValue("@BranchID", BranchID);
+                cmd.Parameters.AddWithValue("@AcCompanyID", AcCompanyID);
+                cmd.Parameters.AddWithValue("@DepotID", DepotID);
+                cmd.Parameters.AddWithValue("@UserID", UserID);
+                cmd.Parameters.AddWithValue("@FYearId", FYearID);
+                cmd.Parameters.AddWithValue("@FormatForXMLitem", Details);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    return "Ok";
+                }
+                else
+                {
+                    return "No AWB added";
+                }
+            }
+            catch (Exception ex)
             {
                 return ex.Message;
             }

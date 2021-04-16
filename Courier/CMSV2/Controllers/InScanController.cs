@@ -295,32 +295,41 @@ namespace CMSV2.Controllers
             //}
             //return Json(obj, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetAWBDetail(string id,int? collectedby)
+        public JsonResult GetAWBDetail(string id,int? collectedby,int? batchid)
         {
             if (collectedby == null)
                 collectedby = 0;
             AWBList obj = new AWBList();
-            var lst = (from c in db.InScanMasters where c.AWBNo == id &&  (c.PickedUpEmpID==collectedby || collectedby==0) select c).FirstOrDefault();
+            if (batchid == null)
+                batchid = 0;
+
+            var lst = (from c in db.InScanMasters
+                       where   (c.BATCHID == batchid || c.AWBNo == id) && (c.CourierStatusID == 4 || c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10) && (c.PickedUpEmpID == collectedby || collectedby == 0)
+                       select new AWBList { InScanId = c.InScanID, AWB = c.AWBNo, Origin = c.ConsignorCountryName, Destination = c.ConsigneeCountryName }).ToList();
+            
+            
+            //var lst = (from c in db.InScanMasters where c.AWBNo == id &&  (c.PickedUpEmpID==collectedby || collectedby==0) select c).FirstOrDefault();
             if (lst==null)
             {
                 return Json(new { status="failed", data = obj, message = "AWB No. Not found"}, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                if (lst.QuickInscanID == null)
-                {
-                    obj.Origin = lst.ConsignorCountryName;
-                    obj.Destination = lst.ConsigneeCountryName;
-                    obj.AWB = lst.AWBNo;
-                    obj.InScanId = lst.InScanID;
+                return Json(new { status = "ok", data = lst, message = "AWB Found" }, JsonRequestBehavior.AllowGet);
+                //if (lst.QuickInscanID == null)
+                //{
+                //    obj.Origin = lst.ConsignorCountryName;
+                //    obj.Destination = lst.ConsigneeCountryName;
+                //    obj.AWB = lst.AWBNo;
+                //    obj.InScanId = lst.InScanID;
 
-                    return Json(new { status = "ok", data = obj, message = "AWB Not.found" }, JsonRequestBehavior.AllowGet);
+                
 
-                }
-                else
-                {
-                    return Json(new { status = "failed", data = obj, message = "InScan already Done!" }, JsonRequestBehavior.AllowGet);
-                }
+                //}
+                //else
+                //{
+                //    return Json(new { status = "failed", data = obj, message = "InScan already Done!" }, JsonRequestBehavior.AllowGet);
+                //}
             }            
             
         }

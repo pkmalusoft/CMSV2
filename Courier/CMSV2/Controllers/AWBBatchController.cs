@@ -20,8 +20,40 @@ namespace CMSV2.Controllers
         // GET: AWBBatch
         public ActionResult Index()
         {
-            return View();
+
+            int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            AWBBatchSearch obj = (AWBBatchSearch)Session["AWBBatchSearch"];
+            AWBBatchSearch model = new AWBBatchSearch();
+            AWBDAO _dao = new AWBDAO();
+            if (obj != null)
+            {
+                List<AWBBatchList> translist = new List<AWBBatchList>();
+                translist = AWBDAO.GetAWBBatchList(BranchID);
+                model.FromDate = obj.FromDate;
+                model.ToDate = obj.ToDate;
+                model.DocumentNo = obj.DocumentNo;
+                model.Details = translist;
+            }
+            else
+            {
+                Session["AWBBatchSearch"] = model;
+                List<AWBBatchList> translist = new List<AWBBatchList>();
+                model.FromDate = CommanFunctions.GetLastDayofMonth().Date;
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+                translist = AWBDAO.GetAWBBatchList(BranchID);
+                model.Details = translist;
+
+            }
+            return View(model);
         }
+
+        [HttpPost]
+        public ActionResult Index(AWBBatchSearch obj)
+        {
+            Session["AWBBatchSearch"] = obj;
+            return RedirectToAction("Index");
+        }
+
 
         public ActionResult Create()
         {
@@ -41,8 +73,78 @@ namespace CMSV2.Controllers
             DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
             vm.BatchDate = pFromDate;
             vm.AWBDate = pFromDate;
-            
+
             vm.AssignedDate = pFromDate;
+            vm.TaxPercent = 5;
+            var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultproducttype != null)
+                vm.ProductTypeID = defaultproducttype.ProductTypeID;
+
+            var defaultmovementtype = db.CourierMovements.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultmovementtype != null)
+                vm.MovementID = defaultmovementtype.MovementID;
+
+            var defaultparceltype = db.ParcelTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
+            if (defaultparceltype != null)
+                vm.ParcelTypeID = defaultparceltype.ID;
+
+            string customername = "";
+
+
+            customername = "WALK-IN-CUSTOMER";
+            var CashCustomer = (from c1 in db.CustomerMasters
+                                where c1.CustomerName == customername
+                                orderby c1.CustomerName ascending
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (CashCustomer != null)
+            {
+                vm.CASHCustomerId = CashCustomer.CustomerID;
+                vm.CASHCustomerName = customername;
+            }
+
+            customername = "COD-CUSTOMER";
+            var CODCustomer = (from c1 in db.CustomerMasters
+                               where c1.CustomerName == customername
+                               orderby c1.CustomerName ascending
+                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (CODCustomer != null)
+            {
+                vm.CODCustomerID = CODCustomer.CustomerID;
+                vm.CODCustomerName = "COD-CUSTOMER";
+            }
+
+            customername = "FOC CUSTOMER";
+            var FOCCustomer = (from c1 in db.CustomerMasters
+                               where c1.CustomerName == customername
+                               orderby c1.CustomerName ascending
+                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (FOCCustomer != null)
+            {
+                vm.FOCCustomerID = FOCCustomer.CustomerID;
+                vm.FOCCustomerName = "FOC CUSTOMER";
+            }
+
+
+            return View(vm);
+        }
+        public ActionResult Edit(int id)
+        {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+            int userid = Convert.ToInt32(Session["UserID"].ToString());
+            AWBBatch v = db.AWBBatches.Find(id);
+            AWBBatchVM vm = new AWBBatchVM();
+            ViewBag.Movement = db.CourierMovements.ToList();
+            ViewBag.ProductType = db.ProductTypes.ToList();
+            ViewBag.parceltype = db.ParcelTypes.ToList();
+            ViewBag.Employee = db.EmployeeMasters.ToList();
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
+            ViewBag.Vehicle = db.VehicleMasters.ToList();
+            ViewBag.Title = "AWB Batch - Create";
+            vm.ID = v.ID;
+            vm.BatchNumber = v.BatchNumber;
+            vm.BatchDate = v.BatchDate;           
+            
             vm.TaxPercent = 5;
             var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
             if (defaultproducttype != null)
@@ -91,8 +193,8 @@ namespace CMSV2.Controllers
                 vm.FOCCustomerID = FOCCustomer.CustomerID;
                 vm.FOCCustomerName = "FOC CUSTOMER";
             }
-
-
+            vm.ID = id;
+            vm.Details = AWBDAO.GetBatchAWBInfo(id);
             return View(vm);
         }
 
@@ -133,6 +235,40 @@ namespace CMSV2.Controllers
                 }
             }
             catch(Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        [HttpPost]
+        public string UpdateBatch(int BatchId, string Details)
+        {
+            try
+            {
+                Details.Replace("{}", "");
+                var IDetails = JsonConvert.DeserializeObject<List<AWBBatchDetail>>(Details);
+                DataTable ds = new DataTable();
+                DataSet dt = new DataSet();
+                dt = ToDataTable(IDetails);
+                int FyearId = Convert.ToInt32(Session["fyearid"]);
+                string xml = dt.GetXml();
+                xml = xml.Replace("T00:00:00+05:30", "");
+                if (Session["UserID"] != null)
+                {
+                    int userid = Convert.ToInt32(Session["UserID"].ToString());
+                    int CompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());                  
+
+                    string result = AWBDAO.UpdateAWBBatch(BatchId, BranchId, CompanyID, DepotID, userid, FyearId, xml);
+                    return result;
+                }
+                else
+                {
+                    return "Failed!";
+                }
+            }
+            catch (Exception ex)
             {
                 return ex.Message;
             }
@@ -212,6 +348,36 @@ namespace CMSV2.Controllers
 
             return Json(info, JsonRequestBehavior.AllowGet);
 
+        }
+
+        [HttpGet]
+        public JsonResult GetAWBBatch(string term)
+        {
+            if (term.Trim() != "")
+            {
+                var customerlist = (from c1 in db.AWBBatches
+                                    where c1.BatchNumber.Contains(term)
+                                    orderby c1.BatchNumber descending
+                                    select new { BatchId = c1.ID, BatchNo = c1.BatchNumber }).ToList();
+
+                return Json(customerlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var customerlist = (from c1 in db.AWBBatches
+                                    orderby c1.BatchNumber descending
+                                    select new { BatchId = c1.ID, BatchNo = c1.BatchNumber }).ToList();
+
+                return Json(customerlist, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpGet]
+        public JsonResult GetBatchAWB(int id)
+        {
+            List<AWBBatchDetail> Details = AWBDAO.GetBatchAWBInfo(id);
+            return Json(Details, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -1,0 +1,633 @@
+﻿@model CMSV2.Models.AWBBatchSearch
+@{
+
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var spath = "/POD/Create";// System.Configuration.ConfigurationManager.AppSettings["spath"].ToString();
+    var _decimal = @Session["Decimal"].ToString();
+}
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
+<style>
+    #movementid + .btn-group button, #movementid + .btn-group {
+        display: block;
+        width: 100%;
+    }
+</style>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style type="text/css">
+
+    .searchMc {
+        border: 2px solid #07a7e3;
+        position: relative;
+        padding: 30px 10px;
+        margin: 20px 0;
+    }
+
+        .searchMc h4 {
+            padding: 0 30px;
+            position: ABSOLUTE;
+            top: -21px;
+            display: inline-block;
+            left: 22px;
+            background: #f8fbff;
+            text-align: center;
+        }
+.multiselect-container{
+    margin:0!important;
+}
+.multiselect-native-select .btn-group{
+    display:block;
+}
+.multiselect.dropdown-toggle{
+    width: 100%;
+    display: block;
+    float: none;
+}
+    .show-error {
+        color: red;
+    }
+
+    .show-green {
+        color: green;
+        font-weight: 700;
+    }
+
+    .btnwidth {
+        min-width: 100px;
+        width: auto;
+    }
+
+    .searchMc .checkboxdesign {
+        align-items: flex-start;
+    }
+</style>
+
+<script>
+    
+    function checkduplicate(awbno) {
+        debugger;
+        var idtext = 'hdnAWBNo_';
+        var maxrow = $('#tbl1 > tr').length;
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var con = $('#hdnAWBNo_' + index).val();
+                if (con.trim() == awbno.trim()) {
+                    duplicate = true;
+                    var message='Duplicate AWB No.!';
+                    $('#ulerr').removeClass('show-green');
+                    $('#ulerr').addClass('show-error');
+                    $('#lierr').html(message);
+                    $('#btnAdd').attr('disabled', 'disabled');
+                    //break;
+                }
+
+                if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                    return true;
+                }
+
+            });
+            if (duplicate == true) {
+                return false;
+            }
+        }
+        else {
+
+            return true;
+        }
+    }
+    function checkDate(obj) {
+        var value = '';
+        if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' || $(obj).val() == null) {
+            return '';
+        }
+        else {
+            var date = $(obj).val().split('-');
+            value = date[1] + '/' + date[0] + '/' + date[2];
+        }
+
+        return value
+
+    }
+    function checkdata(obj)
+    {
+        var value = '';
+        if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' ||$(obj).val() == null) {
+            return '';
+        }
+        else {
+            value = $(obj).val();
+        }
+
+        return value
+
+    }
+    function getdate(date) {
+        var myDate = new Date(date);
+        var cmon = myDate.getMonth() + 1;
+        var entrydate = cmon + "/" + myDate.getDate() + '/' + myDate.getFullYear();
+        return entrydate
+    }
+    function deletetrans(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+    function checkfieldvalidate(obj) {
+        if ($(obj).val() == null || $(obj).val().trim() == '')
+        {
+            $('#ulerr').removeClass('show-green');
+            $('#ulerr').addClass('show-error');
+            $('#lierr').html('Please Enter Required Values!');
+            $(obj).focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function checkdrpfieldvalidate(obj) {
+
+        if ($(obj).val() == null || $(obj).val().trim() == '' || $(obj).val().trim() == '0') {
+            $('#ulerr').removeClass('show-green');
+            $('#ulerr').addClass('show-error');
+            $('#lierr').html('Please Enter Required Values!');
+            $(obj).focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function checkNumberfieldvalidate(obj) {
+        if ($(obj).val() == null || $(obj).val().trim() == '') {
+            $('#ulerr').removeClass('show-green');
+            $('#ulerr').addClass('show-error');
+            $('#lierr').html('Please Enter Required Values!');
+            $(obj).focus();
+            return false;
+        }
+        else if (parseFloat($(obj).val()) == 0 || parseInt($(obj).val()) == 0) {
+            $('#ulerr').removeClass('show-green');
+            $('#ulerr').addClass('show-error');
+            $('#lierr').html('Please Enter Required Values!');
+            $(obj).focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function checkdeliverystatus(obj) {
+        var id = $(obj).attr('id');
+        var status=$(obj).prop('checked');
+        if (id == 'DeliveryAttempted' && status==true) {
+            $('#Delivered').removeAttr('checked');
+        }
+        else if (id == 'DeliveryAttempted' && status == false) 
+        {
+           $('#Delivered').prop('checked', 'checked');
+        }
+        else if (id == 'Delivered' && status == true) 
+        {
+                $('#DeliveryAttempted').removeAttr('checked');
+         }
+        else if (id == 'Delivered' && status ==false) 
+                {
+                $('#DeliveryAttempted').prop('checked', 'checked');
+                }
+        
+    }
+    $(document).ready(function () {
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $("textarea").css({ "border-radius": "5px" });
+       
+        $('#AWBDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        
+        $('#DeliveredDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        //$('#DelieveryAttemptDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ReceivedTime').datetimepicker({ format: 'DD-MM-YYYY hh:mm' });
+        $("#txtBatchNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWBBatch/GetAWBBatch',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.BatchNo,
+                                value: val.BatchId
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#txtBatchNo').val(ui.item.label);
+                $('#txtBatchId').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#txtBatchNo').val(i.item.label);
+                $('#txtBatchId').val(i.item.value);
+            }
+        });
+        $('#AWBNo').change(function () {
+            if ($('#AWBNo').val().trim() == '') {
+                var message = 'Enter AWBNo!';
+                $('#ulerr').addClass('show-error');
+                $('#ulerr').removeClass('show-green');
+                $('#lierr').html(message);
+                return;
+            }
+            else if (checkduplicate($('#AWBNo').val()) == false)
+            {
+                return;
+            }
+            else
+            {
+                $.ajax({
+                    type: "Get",
+                    url: '/POD/GetAWBInfo',
+                    datatype: "json",
+                    data: {
+                        awbno: $('#AWBNo').val()
+                    },
+                    success: function (response) {
+                        debugger;                      
+                        var status = response.Status;
+                        var mode = response.Mode;
+                        var data = response.data;
+                        var message = 'Status :' + response.Status + ', Mode :' + response.Mode;
+                        if (status == 'NotAvailabel') {
+                            $('#AWBNo').val('');
+                            $.notify('Air waybill no. is not Valid!', 'error');
+                            $('#AWBNo').focus();
+                        }
+                        if (status == 'NotValid') {
+                            //$('#ulerr').addClass('show-green');
+                            //$('#ulerr').removeClass('show-error');
+                            //$('#lierr').html(message);
+                            var courierstatus = response.data.CourierStatus;
+                            $('#AWBNo').val('');
+                            $.notify('AWB Status :' + courierstatus + ',This Status not valid to add POD', 'error');
+                            $('#AWBNo').focus();
+                        }
+                        else if (status == 'Valid') {
+                            
+                            var Shipper = data.Shipper;                           
+                            var Consignee = data.Consignee;                           
+                            var ConsigneeContact = data.ConsigneeContact;                           
+                            var awbdate = data.AWBDate;
+                            var AWBDate = new Date(awbdate.match(/\d+/)[0] * 1);
+                            var cmon = AWBDate.getMonth() + 1;
+                            var _awbdate = AWBDate.getDate() + "-" + cmon + "-" + AWBDate.getFullYear();
+                            $('#AWBDate').val(_awbdate);   
+                            $('#InScanID').val(data.InScanID);
+                            $('#Shipper').val(Shipper);                                                        
+                            $('#Consignee').val(Consignee);
+                            $("#ConsigneeContact").val(ConsigneeContact);
+                            $("#ReceiverName").val(ConsigneeContact);
+                            $("#ReceiverName").focus();
+                        }
+                     
+
+                    }
+                });
+            }
+        });
+      
+        $('#btnAdd').click(function () {
+            debugger;
+          
+
+            if (!checkfieldvalidate($('#AWBNo')))
+                return;
+
+            if (!checkfieldvalidate($('#AWBDate')))
+                return;
+
+            if (!checkfieldvalidate($('#Shipper')))
+                return;
+
+            if (!checkfieldvalidate($('#Consignee')))
+                return;
+
+            if (!checkfieldvalidate($('#ReceiverName')))
+                return;
+            
+
+            $('#lierr').html('');
+            var InScanID = $('#InScanID').val();
+            var AWBNo = $('#AWBNo').val();
+            var AWBDate = checkDate($('#AWBDate'));
+            var Shipper = $('#Shipper').val();            
+            var Receiver = checkdata($('#Consignee'));
+            var ConsigneeContact = checkdata($("#ConsigneeContact"));
+            var ReceiverName = checkdata($("#ReceiverName"));         
+            var ReceivedTime = $('#ReceivedTime').val();
+            
+            var defaultdate = $('#AWBDate').val();
+            var DeliveryAttemptedBy = 0;
+            var DelieveryAttemptDate = defaultdate;
+            var DeliveryAttempted = $('#DeliveryAttempted').prop('checked');
+            //if (DeliveryAttempted) {
+            //    if (!checkfieldvalidate($('#DelieveryAttemptDate')))
+            //        return;
+            //    if (!checkdrpfieldvalidate($('#DeliveryAttemptedBy')))
+            //        return;
+            // DeliveryAttemptedBy = $('#DeliveryAttemptedBy').val();
+            //DelieveryAttemptDate = checkDate($('#DelieveryAttemptDate'));
+            //}
+        var DeliveredBy = 0;
+            var DeliveredDate = defaultdate;
+        var Delivered = $('#Delivered').prop('checked');
+            if(Delivered)
+            {
+                if (!checkfieldvalidate($('#DeliveredDate')))
+                    return;
+                if (!checkdrpfieldvalidate($('#DeliveredBy')))
+                    return;
+                DeliveredBy = $('#DeliveredBy').val();
+                DeliveredDate = checkDate($('#DeliveredDate'));
+            }           
+            
+            var i = $('#tbl1 > tr').length;
+            var row = i + 1;
+            var datahtml =
+                '<span id="srow_' + i + '">' + row + '</span>' +
+                '<input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" />' +
+                '<input type="hidden" id="hdnInScanID_' + i + '" value="' + InScanID + '" />' +
+                '<input type="hidden" id="hdnAWBNo_' + i + '" value="' + AWBNo + '" />' +
+                '<input type="hidden" id="hdnConsignor_' + i + '" value="' + Shipper + '" />' +
+                '<input type="hidden" id="hdnReceiverName_' + i + '" value="' + ReceiverName + '"/>' +
+                '<input type="hidden" id="hdnReceivedTime_' + i + '" value="' + ReceivedTime + '"/>' +
+                '<input type="hidden" id="hdnDeliveryAttempted_' + i + '" value="' + DeliveryAttempted + '"/>' +
+                '<input type="hidden" id="hdnDelivered_' + i + '" value="' + Delivered + '"/>' +
+                '<input type="hidden" id="hdnDeliveryAttemptedBy_' + i + '" value="' + DeliveryAttemptedBy + '"/>' +
+                '<input type="hidden" id="hdnDelieveryAttemptDate_' + i + '" value="' + DelieveryAttemptDate + '"/>' +
+                '<input type="hidden" id="hdnDeliveredBy_' + i + '" value="' + DeliveredBy + '"/>' +
+                '<input type="hidden" id="hdnDeliveredDate_' + i + '" value="' + DeliveredDate + '"/>';
+                
+
+                $('#tbl1').append('<tr>' +
+                    '<td>' + datahtml + '</td>' +
+                    '<td>' + AWBNo + '<br/>' + AWBDate + '</td>' +
+                    '<td>' + Shipper + '</td>' +                   
+                    '<td>' + Receiver + '</td>' +
+                     '<td>' + ReceiverName + '</td>' +                                        
+                    '<td>' + DeliveredDate + '</td>' +                    
+                    '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
+                    '</tr>');
+            $('#AWBNo').val('');
+            $('#AWBDate').val('');
+            $('#Shipper').val('');
+            $('#Consignee').val('')
+            $('#ReceiverName').val('')
+            $('#ReceivedTime').val('')            
+            $('#AWBNo').focus();
+
+        });
+
+        $('#btnSave').click(function () {
+            debugger;
+            // $('#btnSave').attr('disabled', 'disabled');
+            var obj = [];
+            var maxrow = $('#tbl1 > tr').length;
+            if (maxrow == 0) {
+                alert('AWB Not added,could not save Batch!');
+                return;
+            }
+            for (i = 0; i < maxrow; i++) {
+                var deleted = $('#hdndeleted_' + i).val();
+                if (deleted == 'false') {
+                    var InScanID = $('#hdnInScanID_' + i).val();
+                    var AWBNo = $('#hdnAWBNo_' + i).val();                    
+                    //var AWBDate = $('#hdnTransactionDate_' + i).val();
+                    //var Shipper = $('#hdnConsignor_' + i).val();                    
+                    var Receiver = $('#hdnReceiverName_' + i).val();
+                    var ReceiverTime = $('#hdnReceivedTime_' + i).val();
+                    var Delivered = $('#hdnDelivered_' + i).val();                                        
+                    var DeliveryAttempted = $('#DeliveryAttempted_' + i).val();
+                    var DeliveryAttemptedBy = $('#hdnDeliveryAttemptedBy_'+i).val()
+                    var DelieveryAttemptDate = $('#hdnDelieveryAttemptDate_'+i).val()
+                    var DeliveredBy = $('#hdnDeliveredBy_' + i).val()
+                    var DeliveredDate = $('#hdnDeliveredDate_' + i).val()                    
+                    
+                    var item = {
+                        InScanID:InScanID,
+                        AWBNo: AWBNo,        
+                        ReceiverName: Receiver,
+                        ReceivedTime: ReceiverTime,
+                        DeliveryAttempted: DeliveryAttempted,
+                        Delivered: Delivered,
+                        DeliveryAttemptedBy: DeliveryAttemptedBy,
+                        DelieveryAttemptDate: DelieveryAttemptDate,
+                        DeliveredBy: DeliveredBy,
+                        DeliveredDate: DeliveredDate                         
+                    }
+
+                    obj.push(item);
+                }
+
+                if (maxrow == (i + 1)) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/POD/SaveBatchPOD",
+                        datatype: "Json",
+                        data: { Details: JSON.stringify(obj) },
+                        success: function (response) {
+                            if (response == "Ok") {
+                                $.notify("POD Saved Succesfully!", "success");
+                                $('#btnSave').removeAttr('disabled');
+                                @*location.href = '@Url.Action("Index","DRSReconc")';*@
+                                window.location.href = "/POD/Index";
+                            }
+                            else {
+
+                                $.notify(response, "error");
+                                $('#btnSave').removeAttr('disabled');
+                                //$.notify(response.message, "warning");
+                                return false;
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            <h1 class="headingfont">@ViewBag.Title</h1>
+        </div>
+    </div>
+</section>
+
+
+<!-- Main content -->
+<section class="content">
+    @using (Html.BeginForm("Create", "AWBStatus", FormMethod.Post, new { @id = "FormReceipt" }))
+    {
+        @Html.ValidationSummary(true)
+
+        <div class="row">
+            <div class="col-md-12 text-right" style="margin-top:32px;">
+                <input type="submit" class="btn btn-primary  btnwidth" value="Save " name="Command" id="btnSave" />
+                <a href='@Url.Action("Index", "POD", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+            </div>
+        </div>       
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Batch Number</label>
+                            @Html.TextBoxFor(model => model.BatchNumber, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(mode => mode.ID)
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Batch Date</label>
+                            @Html.TextBoxFor(model => model.BatchDate, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">AWB Number</label>
+                            @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(mode => mode.InscanVehicleId)
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">AWB Date</label>
+                            @Html.TextBoxFor(model => model.AWBDate, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Shipper</label>
+                            @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @readonly = "readonly", @autocomplete = "off" })
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Consignee</label>
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off", @readonly = "readonly" })
+                            @Html.HiddenFor(model => model.ConsigneeContact)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel required">Receiver Name</label>
+                            @Html.TextBoxFor(model => model.ReceiverName, new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel required">Received Time</label>
+                            @Html.TextBoxFor(model => model.ReceivedTime, new { @class = "form-control text-right" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="flex">
+                                <div class="no-padding  text-right">
+                                    @Html.CheckBox("Delivered", new { @name = "Delivered", @onchange = "checkdeliverystatus(this)" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
+                                </div>
+                                <label class="headinglabel required">Delivered</label>
+                            </div>
+                            @Html.TextBoxFor(model => model.DeliveredDate, new { @class = "form-control text-right" })
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel required">Delivered By</label>
+                            @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="flex">
+                                <div class=" no-padding  text-right">
+                                    @Html.CheckBox("DeliveryAttempted", new { @name = "DeliveryAttempted", @onchange = "checkdeliverystatus(this)" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
+                                </div>
+                                <label class="headinglabel">Delivery Pending</label>
+
+                            </div>
+                            @*@Html.TextBoxFor(model => model.DelieveryAttemptDate, new { @class = "form-control text-right" })*@
+                        </div>
+
+
+                        <div class="col-md-6 d-flex" style="margin-top:20px">
+                            <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
+                        </div>
+
+                        @*<div class="col-xs-12 col-sm-6">
+                <label class="headinglabel required">Delivery Attempted By</label>
+                @Html.DropDownListFor(model => model.DeliveryAttemptedBy, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+
+            </div>*@
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 flex justify-between" style="">
+                            <ul class="list-unstyled show-error" id="ulerr">
+                                <li id="lierr"> </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                    <div class="col-md-7 scrolling_list">
+                        <div class="row no-margin" style="padding-top:15px">
+                            <div class="col-xs-12 no-padding for-device">
+                                <div class="data-table payment-div">
+                                    <div class="data">
+                                        <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
+                                            <thead style="background:transparent;">
+                                                <tr style="font-weight: bold; background:#07a7e3;">
+                                                    <th>
+                                                        S.No
+                                                    </th>
+                                                    <th>AWB No.</th>
+                                                    <th>Shipper</th>
+                                                    <th>Consignee</th>
+                                                    <th>Receiver</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl1">
+                                            </tbody>
+
+                                        </table>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+
+            }
+</section>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>

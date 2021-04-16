@@ -16,6 +16,7 @@ namespace CMSV2.Models
         public int CODCustomerID { get; set; }
         public int CASHCustomerId { get; set; }
             public int CustomerID { get; set; }
+        public int InScanID { get; set; }
         public int MovementID { get; set; }
         public int ParcelTypeID { get; set; }
         public int ProductTypeID { get; set; }
@@ -97,7 +98,7 @@ namespace CMSV2.Models
 
     public class AWBBatchDetail
     {
-        AWBBatchDetail()
+       public AWBBatchDetail()
         {
             ConsignorMobileNo = "";
             ConsigneeMobileNo = "";
@@ -119,7 +120,8 @@ namespace CMSV2.Models
             ConsigneeAddress2_Street = "";
             ConsigneeAddress3_PinCode = "";
         }
-
+        
+        public int InScanID { get; set; }
         public string AWBNo { get; set; }
            public int CustomerID  { get; set; }
            public string Consignor { get; set; }
@@ -140,7 +142,7 @@ namespace CMSV2.Models
         public string ConsigneeCountryName { get; set; }
         public string ConsigneeCityName { get; set; }
         public string ConsigneeLocationName { get; set; }
-        public string AssignedEmployeeID { get; set; }
+        public int AssignedEmployeeID { get; set; }
         public decimal CourierCharge { get; set; }
         public decimal TaxPercent{ get; set; }
         public decimal TaxAmount { get; set; }
@@ -211,6 +213,12 @@ namespace CMSV2.Models
 
         public string PickupRequestDate { get; set; }
 
+        public int CurrentStatusTypeID { get; set; }
+        public int CurrentCourierStatusID { get; set; }
+        public string CurrentStatusType { get; set; }
+        public string CurrentCourierStatus { get; set; }
+        public string PaymentModeText { get; set; }
+        public string CustomerName { get; set; }
     }
 
     public class AWBInfo
@@ -244,4 +252,18 @@ namespace CMSV2.Models
 
 
 }
+
+
+    public class AWBBatchSearch
+    {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public string DocumentNo { get; set; }
+        public List<AWBBatchList> Details { get; set; }
+    }
+
+    public class AWBBatchList : AWBBatch
+    {
+        public string AWBNumbers { get; set; }
+    }
 }

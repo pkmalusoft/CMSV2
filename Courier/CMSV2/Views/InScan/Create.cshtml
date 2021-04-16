@@ -29,9 +29,92 @@
         //    dateFormat: 'dd-M-yy',
         //    changeYear: true, changeMonth: true,
         //});
-
+        $("#txtBatchNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWBBatch/GetAWBBatch',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {                          
+                            return {
+                                label: val.BatchNo,
+                                value: val.BatchId                                
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#txtBatchNo').val(ui.item.label);
+                $('#txtBatchId').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#txtBatchNo').val(i.item.label);
+                $('#txtBatchId').val(i.item.value);
+            }
+        });
         $("#txtawb").change(function () {
             $('#btnadd').trigger('click');
+        });
+        $("#btnbatchadd").click(function () {
+            debugger;
+            var CollectedByID = $('#CollectedByID').val();
+            if (CollectedByID == null || CollectedByID == '')
+                CollectedByID = 0;
+            if ($('#txtBatchId').val().trim() == '') {
+                return;
+            }
+            else {
+                $('#btnbatchadd').attr('disabled', 'disabled');
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/InScan/GetAWBDetail",
+                datatype: "Json",
+                data: { id: $("#txtawb").val(), collectedby: CollectedByID, batchid: $('#txtBatchId').val() },
+                success: function (response) {
+                    if (response.status == "ok") {
+                        debugger;
+                        var data = response.data;
+                        AWBItems=data;
+                        // var i = $('#details tr').length - 1;
+                        //$("#details").append('<tr>' + '<td id= >' + data.AWB + '<input type="hidden" value=' + $("#txtawb").val() + ' name="lst[' + i + '].AWB"></td><td><a href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        //$("#details").append('<tr awbno="' + $("#txtawb").val() + '">' + '<td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' + $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        //$("#detailsbody").html('');
+                        $.each(AWBItems, function (index, item) {
+                            debugger;
+                            // $('#details tr').length - 1;
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        });
+                        $('#btnbatchadd').removeAttr('disabled');
+                        $("#txtBatchNo").val('');
+                        $("#txtBatchNo").focus();
+
+                    }
+                    else {
+                        $('#btnbatchadd').removeAttr('disabled');
+                        $("#txtBatchNo").focus();
+                        //alert(response.message);
+                        $.notify(response.message, "error");
+                    }
+
+                    //$.each(data, function (index, value) {
+
+                    //      var i = AWBItems.length; // $('#details tr').length - 1;
+                    //      $("#details").append('<tr awbno="' +  $("#txtawb").val() + '">' + '<td>' + index + '</td><td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' +  $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                    //});
+
+                }
+
+
+            });
         });
         $("#btnadd").click(function () {
             debugger;
@@ -336,14 +419,23 @@
 
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-3">
+                        <label class="headinglabel required">Batch No.</label>
+                        <input type="text" id="txtBatchNo" class="form-control" />
+                        <input type="hidden" id="txtBatchId" class="form-control" />
+                    </div>
+                    <div class="col-md-3" style="padding-top:10px">
+                        <button type="button" id="btnbatchadd" class="btn btn-primary small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                    </div>
+                    <div class="col-md-3">
                         <label class="headinglabel required">AWB No.</label>
                         <input type="text" id="txtawb" class="form-control" />
                     </div>
                     <div class="col-md-3" style="padding-top:10px">
-                      <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-						
+                        <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+
                     </div>
-                
+
                 </div>
 
                 <div class="row no-margin" style="padding-top:30px">
