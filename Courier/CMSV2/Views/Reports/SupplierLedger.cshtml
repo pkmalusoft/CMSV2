@@ -18,10 +18,7 @@
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
     });
-    $(function () {
-        $('#AsonDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-    });
     $(document).ready(function () {
         var url = '/Accounts/GetSupplierName';
 
@@ -56,72 +53,7 @@
                 $('#SupplierId').val(i.item.ID);
             },
         });
-        $('#ReportType').change(function () {
-            if ($('#ReportType').val() == "Ledger") {
-                $('#divledger').removeClass('hide');
-                $('#divstatement').addClass('hide');
-                $('#AsonDate').removeAttr('required');
-                $('#FromDate').attr('required', 'true');
-                $('#ToDate').attr('required', 'true');
-                $("#SupplierName").removeAttr('readonly');
-                $('#SupplierName').attr('required', 'true')
-                $('#lblsuppliername').addClass('required');
-            }
-            else if ($('#ReportType').val() == "Statement") {
-                $('#divledger').addClass('hide');
-                $('#divstatement').removeClass('hide');
-                $('#AsonDate').attr('required', 'true')
-                $('#FromDate').removeAttr('required');
-                $('#ToDate').removeAttr('required');
-                $("#SupplierName").removeAttr('readonly');
-                $("#SupplierName").removeAttr('required');
-                $('#lblsuppliername').removeClass('required');
-            }
-            else {
 
-            }
-        });
-        $("#CustomerName").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: '/CustomerReceipt/GetCustomerName',
-                    datatype: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (val, item) {
-                            return {
-                                label: val.CustomerName,
-                                value: val.CustomerName,
-                                ID: val.CustomerID,
-                                type: val.CustomerType
-                            }
-                        }))
-                    }
-                })
-            },
-            minLength: 1,
-            autoFocus: true,
-            select: function (e, i) {
-                e.preventDefault();
-                $("#CustomerName").val(i.item.label);
-                $('#CustomerId').val(i.item.ID);
-                //$('#hdnCustomerType').val(i.item.type);
-                //if ($('#hdnCustomerType').val() == "CR") {
-                //    $("#Consignor1").css('color', 'blue');
-                //}
-                //else if ($('#hdnCustomerType').val() == "CS") {
-                //    $("#Consignor1").css('color', 'red');
-                //}
-                //else {
-                //    $("#Consignor1").css('color', 'black');
-                //}
-
-            },
-
-        });
-        $('#ReportType').trigger('change');
     });
 </script>
 
@@ -133,68 +65,39 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex">
-        <div class="col-md-5 ">
-            <div class="form-group" id="divledger" >
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="headinglabel required ">From Date</label>
-                        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
-                    </div>
-                    <div class="col-md-6">
-                        <label class="headinglabel required">To Date</label>
-                        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
-                    </div>
-                </div>
-            </div>
-            <div class="form-group hide" id="divstatement">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="headinglabel required ">As on date</label>
-                        @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
-                    </div>
-                </div>
-            </div>
+    <div class="row ">
+
+        <div class="col-md-2">
+            <label class="headinglabel required ">From Date</label>
+            @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
         </div>
-
-        <div class="col-md-6 col-md-offset-1">
-            <div class="col-md-5">
-                <label class="headinglabel  required">Output</label>
-                @Html.DropDownList("Output", new List<SelectListItem>
-                {
-                    new SelectListItem{ Text="PDF", Value = "PDF" },
-                    new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
-                    new SelectListItem{ Text="WORD", Value = "WORD" },
-
-                 }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-            </div>
-            <div class="col-md-5">
-                <label class="headinglabel">Report Type</label>
-                @Html.DropDownList("ReportType", new List<SelectListItem>
-               {
-                   new SelectListItem{ Text="Ledger", Value = "Ledger" },
-                   new SelectListItem{ Text="Statement", Value = "Statement" }                   
-                }, "Select", new { @class = "form-control" })
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-            </div>
+        <div class="col-md-2">
+            <label class="headinglabel required">To Date</label>
+            @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
         </div>
-    </div>
-    <div class="row no-margin">
-        
-            <div class="col-md-2">
-                <label class="required headinglabel">Supplier Type</label>
-                @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.SupplierTypeId)
-            </div>
-            <div class="col-md-6">
-                <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
-                @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
-                @Html.HiddenFor(model => model.SupplierId)
-            </div>
-        
+        <div class="col-md-2">
+            <label class="required headinglabel">Supplier Type</label>
+            @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.SupplierTypeId)
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
+            @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
+            @Html.HiddenFor(model => model.SupplierId)
+        </div>
+        <div class="col-md-2">
+            <label class="headinglabel  required">Output</label>
+            @Html.DropDownList("Output", new List<SelectListItem>
+            {
+                new SelectListItem{ Text="PDF", Value = "PDF" },
+                new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
+                new SelectListItem{ Text="WORD", Value = "WORD" },
 
+             }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        </div>
     </div>
 
 }

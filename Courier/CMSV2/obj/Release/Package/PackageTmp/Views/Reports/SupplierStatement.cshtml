@@ -1,0 +1,166 @@
+﻿@model CMSV2.Models.SupplierLedgerReportParam
+
+@{
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+
+    $(function () {
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+    $(function () {
+        $('#AsonDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+    });
+    $(document).ready(function () {
+        var url = '/Accounts/GetSupplierName';
+
+        $("#AllSupplier").click(function () {
+            if ($("#AllSupplier").is(':checked')) {
+                $('#SupplierName').attr('readonly', 'readonly');
+                $('#SupplierName').val('');
+                $('#SupplierId').val(0);
+                $('#SupplierName').removeAttr('required');
+            }
+            else {
+                $('#SupplierName').removeAttr('readonly');
+                $('#SupplierName').attr('required', 'required');
+            }
+        });
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url,
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierTypeId: $('#SupplierTypeId').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                ID: val.SupplierID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierId').val(i.item.ID);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierId').val(i.item.ID);
+            },
+        });
+
+        if ($('#SupplierId').val() > 0) {
+
+            $("#AllSupplier").prop('checked', 'false');
+            $("#AllSupplier").attr('value', false);
+            $("#AllSupplier").trigger('click');
+        }
+        else {           
+            $("#AllSupplier").prop('checked', true);
+            $("#SupplierName").removeAttr('required');
+            $("#SupplierName").attr('readonly', 'readonly');
+            //$("#AllCustomer").trigger('click');
+        }
+        //$('#ReportType').change(function () {
+        //    if ($('#ReportType').val() == "Ledger") {
+        //        $('#divledger').removeClass('hide');
+        //        $('#divstatement').addClass('hide');
+        //        $('#AsonDate').removeAttr('required');
+        //        $('#FromDate').attr('required', 'true');
+        //        $('#ToDate').attr('required', 'true');
+        //        $("#SupplierName").removeAttr('readonly');
+        //        $('#SupplierName').attr('required', 'true')
+        //        $('#lblsuppliername').addClass('required');
+        //    }
+        //    else if ($('#ReportType').val() == "Statement") {
+        //        $('#divledger').addClass('hide');
+        //        $('#divstatement').removeClass('hide');
+        //        $('#AsonDate').attr('required', 'true')
+        //        $('#FromDate').removeAttr('required');
+        //        $('#ToDate').removeAttr('required');
+        //        $("#SupplierName").removeAttr('readonly');
+        //        $("#SupplierName").removeAttr('required');
+        //        $('#lblsuppliername').removeClass('required');
+        //    }
+        //    else {
+
+        //    }
+        //});
+        
+        
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.ReportName</h1>
+</section>
+@using (Html.BeginForm("SupplierStatement", "Reports", FormMethod.Post, new { @id = "supplierledger" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      
+            
+        <div class="row">
+            <div class="col-md-2">
+                <label class="headinglabel required ">As on date</label>
+                @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
+            </div>
+            <div class="col-md-2">
+                <label class="required headinglabel">Supplier Type</label>
+                @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SupplierTypeId)
+            </div>
+            <div class="col-md-4">                
+                <div class="flexTitle">
+                    <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
+                    <div class="checkboxdesign no-padding text-right" style="float:right">
+                        @Html.CheckBox("AllSupplier", new { @id = "AllSupplier", @checked = "checked" }) &nbsp
+                        <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Supplier</label>
+                    </div>
+                </div>
+                @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off"  })
+                @Html.HiddenFor(model => model.SupplierId)
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel  required">Output</label>
+                @Html.DropDownList("Output", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="PDF", Value = "PDF" },
+                    new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
+                    new SelectListItem{ Text="WORD", Value = "WORD" },
+
+                 }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
+            </div>
+
+            <div class="col-md-1">
+                <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+        </div>
+            
+
+}
+<div class="row no-margin" style="padding-top:10px">
+    @{ Html.RenderAction("ReportFrame", "Accounts");}
+
+</div>

@@ -1570,7 +1570,7 @@ namespace CMSV2.DAL
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
-            sqlAdapter.Fill(ds, "SupplierLedger");
+            sqlAdapter.Fill(ds, "SupplierLedgerDetail");
 
             //generate XSD to design report            
             //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierLedger.xsd"));
@@ -1588,9 +1588,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1654,6 +1652,7 @@ namespace CMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_SupplierStatement";
             comd.Parameters.AddWithValue("@SupplierId", reportparam.SupplierId);
+            comd.Parameters.AddWithValue("@SupplierTypeId", reportparam.SupplierTypeId);
             comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
             //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
@@ -1729,6 +1728,7 @@ namespace CMSV2.DAL
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
+
 
         public static string GenerateSupplierAgingReport()
         {

@@ -377,19 +377,29 @@ namespace CMSV2.Controllers
         //
         // POST: /InScan/Delete/5
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
+            //int k = 0;
+            if (id != 0)
             {
-                // TODO: Add delete logic here
+                DataTable dt = ReceiptDAO.DeleteDepotInscan(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
 
-                return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            return RedirectToAction("Index");
+           
         }
     }
 }

@@ -440,7 +440,28 @@ namespace CMSV2.DAL
                 return null;
             }
         }
+        
+        //Quick Inscan
+        public static DataTable DeleteDepotInscan(int InscanId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteDepotInscan";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@QuickInScanId", InscanId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
         public static DataTable DeleteSupplierPayments(int RecPayID)
         {
             SqlCommand cmd = new SqlCommand();

@@ -87,7 +87,7 @@
     var RemoveAWBItems = [];
 
     function addCommas(nStr) {
-        
+
         nStr += '';
         x = nStr.split('.');
         x1 = x[0];
@@ -105,7 +105,13 @@
 
     function setThreeNumberDecimal(obj) {
        $(obj).val(parseFloat($(obj).val()).toFixed(3));
-}
+    }
+    function deletetrans(obj, i) {
+        debugger;
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
     $(function () {
         $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
@@ -131,13 +137,15 @@
         if (maxrow > 0) {
             var duplicate = false;
             $('[id^=' + idtext + ']').each(function (index, item) {
-                var accheadid = $('#txtachead_' + index).attr('acheadid');
-                if (accheadid.trim() == oacheadid.trim()) {
-                    $('#validations').show();
-                    $('#validations').html('Duplicate AcHead!');
-                    duplicate = true;
+                var deleted = $('#hdndeleted_' + index).val();
+                if (deleted != "true") {
+                    var accheadid = $('#txtachead_' + index).attr('acheadid');
+                    if (accheadid.trim() == oacheadid.trim()) {
+                        $('#validations').show();
+                        $('#validations').html('Duplicate AcHead!');
+                        duplicate = true;
+                    }
                 }
-
                 if (duplicate == false && index == (parseInt(maxrow - 1))) {
                     additem();
                     $('#validations').hide();
@@ -198,22 +206,22 @@
             '<input type="hidden" id="hdnAWBEnd_' + i + '" value="' + $('#AWBEnd').val() + '"/>'+
             '<input type="hidden" id="hdnItemSize_' + i + '" value="' + $('#ItemSize').val() + '"/>';
                         var acheadid = AcHeadId;
-                        var headhtml = '<td>' + purchasehtml + ' <input type="text" acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
+                        var headhtml = '<td>' + purchasehtml + '<input type="hidden" class="hdndeleted"  id="hdndeleted_' + i + '" value="false" /> <input type="text" acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
                         var particulars = Particulars;
                         var particularshtml = '<td> <input type="text" id="txtparticulars_' + i + '" value="' + particulars + '" /> </td>';
 
-                var ratehtml = '<td> <input class="text-right" type="text" onchange="calculatevalue(' + i + ')" id="txtRate_' + i + '" value="' + parseFloat(Rate).toFixed(3) + '" /> </td>';
-                var qtyhtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtQty_' + i + '" value="' + parseFloat(Qty).toFixed(2) + '" /> </td>';
-                var amounthtml = '<td><input type="text" class="text-right" readonly id="txtAmt_' + i + '" value="' + parseFloat(amount).toFixed(3) + '" /></td>';
+                var ratehtml = '<td> <input class="text-right" type="text" onchange="calculatevalue(' + i + ')" id="txtRate_' + i + '" value="' + parseFloat(Rate).toFixed(@_decimal) + '" /> </td>';
+                var qtyhtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtQty_' + i + '" value="' + parseFloat(Qty).toFixed(@_decimal) + '" /> </td>';
+                var amounthtml = '<td><input type="text" class="text-right" readonly id="txtAmt_' + i + '" value="' + parseFloat(amount).toFixed(@_decimal) + '" /></td>';
 
                 var taxhtml = '<td> <input class="text-right" type="text" onchange="calculatevalue(' + i + ')"  id="txttax_' + i + '" value="' + Taxpercent + '" /> </td>';
-                var netvaluehtml = '<td> <input class="text-right" type="text" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(3)  + '" /> </td>';
-                var delHtml = '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Edit AWB Reference" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ><td> ';
+                var netvaluehtml = '<td> <input class="text-right" type="text" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(@_decimal)  + '" /> </td>';
+                var delHtml = '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i  + ')"><i class="fa fa-times"></i></a></td>';
+                var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Edit AWB Reference" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ></td>';
                 var StockHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Edit Purchase" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-file" ></i></a ><td> ';
                 var html = '<tr><td><input type="hidden" id="hdndetailid_' + i + '" value="0" />' + currencyname + '<input type="hidden" id="hdncurrency_' + i + '" value="' + currency + '"</></td><td><input type="hidden" id="hdnexrate_' + exchangereate + '" />'  + parseFloat(exchangereate).toFixed(@_decimal) + '</td>';
 
-        html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + StockHTML + delHtml + '</tr>';
+        html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + delHtml + '</tr>';
 
 
                 $("#detailsbody").append(html);
@@ -222,8 +230,14 @@
                 $("#Particulars").val('');
                 $("#Rate").val('');
                 $("#Qty").val('');
-                $("#Amount").val('');
+        $("#Amount").val('');
+        $('#BookNo').val('');
+        $('#AWBCount').val('');
+        $('#AWBEnd').val('');
+        $('#AWBStart').val('');
         $("#Taxpercent").val('0');
+        $("#NetValue").val('0');
+
         $("#txtAcHead").focus();
 
 
@@ -231,7 +245,7 @@
     $(document).ready(function () {
         $('#StockType').change(function () {
             if ($('#StockType').val() == '0')
-            {                
+            {
                 $('#divawbpurchase').addClass('hide');
                 $('#divcartonpurchase').addClass('hide');
             }
@@ -256,15 +270,16 @@
         });
         $('#currency').val(@ViewBag.CurrencyId);
 
-         if ('@Model.SupplierInvoiceID' > 0) {
-             $.ajax({
+        if ('@Model.SupplierInvoiceID' > 0) {
+            $('#btnsave').html('Update');
+            $.ajax({
                 type: "POST",
-                 url: "/SupplierInvoice/GetSupplierInvDetails",
+                url: "/SupplierInvoice/GetSupplierInvDetails",
                 datatype: "Json",
                 data: { Id: '@Model.SupplierInvoiceID' },
                 success: function (response) {
                     $.each(response.InvoiceDetails, function (index, item) {
-                        
+
                         var AcHead = item.AcHeadName;
                         var AcHeadId = item.AcHeadId;
                         var Particulars = item.Particulars;
@@ -279,7 +294,7 @@
                         var netvalue = item.Value;
                         //AWBItems.push(value);
                         //$("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.AcHeadName + '</td><td>' + value.Particulars + '</td><td class="text-right" >' + parseFloat(value.Rate).toFixed(3) + '</td><td class="text-right" >' + value.Quantity + '</td><td>' + value.Currency + '</td><td class="text-right" >' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td class="text-right" >' + parseFloat(value.Amount).toFixed(3) + '</td><td class="text-right" >' + value.TaxPercentage + '</td><td class="text-right">' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                          var i = $('#detailsbody > tbody > tr').length;
+                        var i = $('#detailsbody > tr').length;
                         var purchasehtml = '<input type="hidden" id="hdnStockType_' + i + '" value="' + item.StockType + '"/>' +
                             '<input type="hidden" id="hdnBookNo_' + i + '" value="' + item.BookNo + '"/>' +
                             '<input type="hidden" id="hdnAWBCount_' + i + '" value="' + item.AWBCount + '"/>' +
@@ -288,18 +303,18 @@
                             '<input type="hidden" id="hdnItemSize_' + i + '" value="' + item.ItemSize + '"/>';
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
                         var acheadid = AcHeadId;
-                        var headhtml = '<td>' + purchasehtml + '<input type="text"  acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
+                        var headhtml = '<td>' + purchasehtml + '<input type="hidden" id="hdndeleted_' + i + '" class="hdndeleted" value="false" /> <input type="text"  acheadid="' + acheadid + '" id="txtachead_' + i + '" value="' + AcHead + '" /> </td>';
                         var particulars = Particulars;
                         var particularshtml = '<td> <input type="text" id="txtparticulars_' + i + '" value="' + particulars + '" /> </td>';
 
-                        var ratehtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtRate_' + i + '" value="' + parseFloat(Rate).toFixed(3) + '" /> </td>';
-                        var qtyhtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtQty_' + i + '" value="' + parseFloat(Qty).toFixed(2) + '" /> </td>';
-                        var amounthtml = '<td><input type="text" class="text-right" readonly id="txtAmt_' + i + '" value="' + parseFloat(amount).toFixed(3) + '" /></td>';
+                        var ratehtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtRate_' + i + '" value="' + parseFloat(Rate).toFixed(@_decimal) + '" /> </td>';
+                        var qtyhtml = '<td> <input type="text" class="text-right" onchange="calculatevalue(' + i + ')"  id="txtQty_' + i + '" value="' + parseFloat(Qty).toFixed(@_decimal) + '" /> </td>';
+                        var amounthtml = '<td><input type="text" class="text-right" readonly id="txtAmt_' + i + '" value="' + parseFloat(amount).toFixed(@_decimal) + '" /></td>';
 
                         var taxhtml = '<td> <input type="text"  class="text-right"  onchange="calculatevalue(' + i + ')"  id="txttax_' + i + '" value="' + Taxpercent + '" /> </td>';
-                        var netvaluehtml = '<td> <input type="text" class="text-right" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(3)  + '" /> </td>';
-                    var delHtml = '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                    var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ></td> ';
+                        var netvaluehtml = '<td> <input type="text" class="text-right" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(@_decimal) + '" /> </td>';
+                        var delHtml = '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')" ><i class="fa fa-times"></i></a></td>';
+                        var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ></td> ';
                         var html = '<tr><td><input type="hidden" id="hdndetailid_' + i + '" value="' + detailid + '" /><input type="hidden" id="hdncurrency_' + i + '" value="' + CurrencyID + '" />' + currency + '</td><td><input type = "hidden" id = "hdnexrate_' + exchangereate + '" />' + parseFloat(exchangereate).toFixed(@_decimal) + '</td>';
                         html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + delHtml + '</tr>';
 
@@ -314,6 +329,9 @@
 
 
 
+        }
+        else {
+            $('#btnsave').html('Save');
         }
 
         $("#SupplierName").autocomplete({
@@ -347,7 +365,7 @@
 
         });
         $("#btnadd").on('click', function () {
-            
+
             var AcHead = $("#txtAcHead").val();
             var AcHeadId = $("#txtAcHeadId").val();
             var Particulars = $("#Particulars").val();
@@ -387,6 +405,34 @@
             else if (Qty == null || Qty == "") {
                 $("#validations").show();
             }
+            else if ($('#StockType').val() == 1)
+            {
+                if ($('#BookNo').val() == '') {
+                    $("#validations").show();
+                }
+                else if ($('#AWBCount').val() == '') {
+                    $("#validations").show();
+                }
+                else if ($('#AWBStart').val() == '') {
+                    $("#validations").show();
+                }
+                else if ($('#AWBEnd').val() == '') {
+                    $("#validations").show();
+                }
+                else {
+                    $("#validations").hide();
+                    checkduplicateachead(AcHeadId);
+                }
+            }
+            else if ($('#StockType').val() == 2) {
+                if ($('#ItemSize').val() == '') {
+                    $("#validations").show();
+                }
+                else {
+                    $("#validations").hide();
+                    checkduplicateachead(AcHeadId);
+                }
+            }
              else {
                 $("#validations").hide();
                 checkduplicateachead(AcHeadId);
@@ -414,14 +460,14 @@
 
             var tempAWBItems = [];
             $.each(AWBItems, function (index, value) {
-                
+
                 if (value.InvNo == remove_awbono) {
                     RemoveAWBItems.push(value);
                     return;
                 }
             });
             $.each(AWBItems, function (index, value) {
-                
+
                 if (value.InvNo != remove_awbono) {
                     tempAWBItems.push(value);
                 }
@@ -438,7 +484,7 @@
         });
         $("#btnsave").click(function () {
             var itemcount = $('#detailsbody > tr').length;
-            
+
             var supplier = $("#SupplierName").val();
             var SupplierID = $("#SupplierID").val();
             var InvoiceDate = $("#InvoiceDate").val();
@@ -462,25 +508,28 @@
                 $("#validations").hide();
                 AWBItems = [];
                 for (i = 0; i < itemcount; i++) {
-                    var DetailID = $('#hdndetailid_' + i).val();
-                    var AcHead = $("#txtachead_" + i ).val();
-                    var AcHeadId = $("#txtachead_" + i).attr('acheadid');
-                    var Particulars = $("#txtparticulars_" +i).val();
-                    var Rate = $("#txtRate_" + i).val();
-                    var Qty = $("#txtQty_" + i).val();
-                    var amount = $('#txtAmt_' + i).val();
-                    var currency = $("#hdncurrency_" + i).val();
-                    var Taxpercent = $("#txttax_" + i).val();
-                    var exchangereate = $("#hdnexrate_" + i).val();
-                    var netvalue = $('#txtnetval_' + i).val();
-                    var StockType = $('#hdnStockType_' + i).val();
-                    var BookNo =$('#hdnBookNo_' + i).val();
-                    var AWBCount = $('#hdnAWBCount_' + i).val();
-                    var AWBStart = $('#hdnAWBStart_' + i).val();
-                    var AWBEnd = $('#hdnAWBEnd_' + i).val();
-                    var ItemSize = $('#hdnItemSize_' + i).val();
-                    var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount,Value:netvalue , StockType:StockType, BookNo:BookNo,AWBStart:AWBStart,AWBEnd:AWBEnd,AWBCount:AWBCount,ItemSize:ItemSize };
-                    AWBItems.push(data);
+                    var deleted = $('#hdndeleted_' + i).val();
+                    if (deleted != "true") {
+                        var DetailID = $('#hdndetailid_' + i).val();
+                        var AcHead = $("#txtachead_" + i).val();
+                        var AcHeadId = $("#txtachead_" + i).attr('acheadid');
+                        var Particulars = $("#txtparticulars_" + i).val();
+                        var Rate = $("#txtRate_" + i).val();
+                        var Qty = $("#txtQty_" + i).val();
+                        var amount = $('#txtAmt_' + i).val();
+                        var currency = $("#hdncurrency_" + i).val();
+                        var Taxpercent = $("#txttax_" + i).val();
+                        var exchangereate = $("#hdnexrate_" + i).val();
+                        var netvalue = $('#txtnetval_' + i).val();
+                        var StockType = $('#hdnStockType_' + i).val();
+                        var BookNo = $('#hdnBookNo_' + i).val();
+                        var AWBCount = $('#hdnAWBCount_' + i).val();
+                        var AWBStart = $('#hdnAWBStart_' + i).val();
+                        var AWBEnd = $('#hdnAWBEnd_' + i).val();
+                        var ItemSize = $('#hdnItemSize_' + i).val();
+                        var data = { SupplierInvoiceDetailID: DetailID, AcHeadID: AcHeadId, Particulars: Particulars, Rate: Rate, Quantity: Qty, CurrencyID: currency, TaxPercentage: Taxpercent, Amount: amount, Value: netvalue, StockType: StockType, BookNo: BookNo, AWBStart: AWBStart, AWBEnd: AWBEnd, AWBCount: AWBCount, ItemSize: ItemSize };
+                        AWBItems.push(data);
+                    }
                    //var data= {Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(), Remarks: $('#Remarks').val(), Details: JSON.stringify(AWBItems) },
 
                     if (i == (itemcount-1)) {
@@ -884,6 +933,7 @@
 
     $(document).ready(function () {
 
+        $('#SupplierTypeId').focus();
 
         $("#txtConsignmentNo1").autocomplete({
             source: function (request, response) {
@@ -1196,7 +1246,7 @@
                             </div>
                             <div class="col-md-1">
                                 <label class="headinglabel required">AWB End</label>
-                                <input type="number" class="form-control" id="AWBEnd" name="AWBEnd" onchange="checkawbstartend()" />
+                                <input type="number" class="form-control" readonly id="AWBEnd" name="AWBEnd" onchange="checkawbstartend()" />
                             </div>
                         </div>
                     </div>
@@ -1218,6 +1268,7 @@
                                     <th>Value</th>
                                     <th>Tax(%)</th>
                                     <th>Net Value</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                 </tr>
