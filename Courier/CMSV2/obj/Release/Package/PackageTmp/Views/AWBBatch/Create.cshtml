@@ -551,6 +551,10 @@
                             $('#PaymentTypeId').removeAttr('disabled');
                         }
                         if (status == 'Available' && (mode == 'Prepaid' || mode == 'NotPrepaid')) {
+                            var InScanID = response.InScanID;
+                            var QuickInScanId = response.QuickInScanID;
+                            if (QuickInScanId > 0)
+                                $('#lierr').html(response.Mode + ',Status : Depot Inscan Completed!' );
                             var CustomerName = response.CustomerName;
                             var CustomerId = response.CustomerID;
                             var LocationName = response.LocationName;
@@ -568,6 +572,8 @@
                             var DeliverySubLocality = response.DeliverySubLocality;
                             var OriginPlaceID = response.OriginPlaceID;
                             var DestinationPlaceID = response.DestinationPlaceID;
+                            $('#InScanID').val(InScanID);
+                            $('#QuickInScanID').val(QuickInScanId);                            
                             $('#CustomerName').val(CustomerName);
                             $('#Shipper').val(CustomerName);
                             $('#Shipper').attr('readonly', 'readonly');
@@ -602,6 +608,12 @@
 
                         }
                         else if (status == 'Available') {
+                            var InScanID = response.InScanID;
+                            var QuickInScanId = response.QuickInScanID;
+                            if (QuickInScanId > 0)
+                                $('#lierr').html(response.Mode + ',Status : Depot InScan Completed!');
+                            $('#InScanID').val(InScanID);
+                            $('#QuickInScanID').val(QuickInScanId);    
                             $('#Shipper').val('');
                             $('#Shipper').removeAttr('readonly');
                             $('#CourierCharge').val(0);
@@ -630,6 +642,8 @@
                             $('#PaymentTypeId').focus();
                         }
                         else if (status == 'NotAvailable') {
+                            $('#InScanID').val('');
+                            $('#QuickInScanID').val('');
                             $('#Shipper').val('');
                             $('#Shipper').removeAttr('');
                             $('#CustomerID').val(0);
@@ -909,7 +923,8 @@
         var ParcelTypeId = $('#ParcelTypeID').val();
         var ProductTypeID = $('#ProductTypeID').val();
         var MovementID = $('#MovementID').val();
-
+            var InScanID = $('#InScanID').val();
+            var QuickInScanID = $('#QuickInScanID').val();
             var AWBNo = $('#AWBNo').val();
             var AWBDate = checkDate($('#AWBDate'));
             var Shipper = $('#Shipper').val();
@@ -958,45 +973,59 @@
             var DeliveryLocation = $('#DeliveryLocation').val();
         var ItemDescription = checkdata($('#ItemDescription'));
 
+            var InScanID = $('#InScanID').val();
+
+            if ($('#QuickInScanID').val() == '')
+                $('#QuickInScanID').val(0);
+
+            var QuickInScanId = $('#QuickInScanID').val();
+
             var AssignedEmployeeID = 0;
             var AssignedDate = defaultdate;
-        var AssignedForCollection = $('#AssignedForCollection').prop('checked');
-            if (AssignedForCollection) {
-                if (!checkfieldvalidate($('#AssignedDate')))
-                    return;
-                if (!checkdrpfieldvalidate($('#AssignedEmployeeID')))
-                    return;
-             AssignedDate = checkDate($('#AssignedDate'));
-             AssignedEmployeeID = $('#AssignedEmployeeID').val() // Assigned for collection
+            var AssignedForCollection = $('#AssignedForCollection').prop('checked');
 
-        }
             var PickedUpEmpID = 0;
             var PickedupDate = defaultdate;
-        var CollectedBy = $('#CollectedBy').prop('checked');
-            if (CollectedBy) {
-                if (!checkfieldvalidate($('#PickedupDate')))
-                    return;
-                if (!checkdrpfieldvalidate($('#PickedUpEmpID')))
-                    return;
-             PickedUpEmpID = $('#PickedUpEmpID').val(); //collected by
-             PickedupDate = checkDate($('#PickedupDate'));
-        }
+            var CollectedBy = $('#CollectedBy').prop('checked');
 
             var DepotReceivedBy = 0;
             var ReceivedDate = defaultdate;
             var InScanVehicleID = 0;
             var ReceivedBy = $('#ReceivedBy').prop('checked');
-            if (ReceivedBy) {
-                if (!checkfieldvalidate($('#ReceivedDate')))
-                    return;
-                if (!checkdrpfieldvalidate($('#DepotReceivedBy')))
-                    return;
-                if (!checkdrpfieldvalidate($('#InscanVehicleId')))
-                    return;
-                DepotReceivedBy = $('#DepotReceivedBy').val(); //employee name
-                ReceivedDate = checkDate($('#ReceivedDate'));
-                InScanVehicleID = $('#InscanVehicleId ').val();
-        }
+
+            if (QuickInScanId == 0) {
+                if (AssignedForCollection) {
+                    if (!checkfieldvalidate($('#AssignedDate')))
+                        return;
+                    if (!checkdrpfieldvalidate($('#AssignedEmployeeID')))
+                        return;
+                    AssignedDate = checkDate($('#AssignedDate'));
+                    AssignedEmployeeID = $('#AssignedEmployeeID').val() // Assigned for collection
+
+                }
+              
+                if (CollectedBy) {
+                    if (!checkfieldvalidate($('#PickedupDate')))
+                        return;
+                    if (!checkdrpfieldvalidate($('#PickedUpEmpID')))
+                        return;
+                    PickedUpEmpID = $('#PickedUpEmpID').val(); //collected by
+                    PickedupDate = checkDate($('#PickedupDate'));
+                }
+
+              
+                if (ReceivedBy) {
+                    if (!checkfieldvalidate($('#ReceivedDate')))
+                        return;
+                    if (!checkdrpfieldvalidate($('#DepotReceivedBy')))
+                        return;
+                    if (!checkdrpfieldvalidate($('#InscanVehicleId')))
+                        return;
+                    DepotReceivedBy = $('#DepotReceivedBy').val(); //employee name
+                    ReceivedDate = checkDate($('#ReceivedDate'));
+                    InScanVehicleID = $('#InscanVehicleId ').val();
+                }
+            }
         var OutScanDeliveredID = 0;
             var OutScanDate = defaultdate;
         var OutScanVehicleID = 0;
@@ -1047,6 +1076,8 @@
             var datahtml =
                 '<span id="srow_' + i + '">' + row + '</span>' +
                 '<input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" />' +
+                '<input type="hidden" id="hdnInScanID_' + i + '" value="' + InScanID + '" />' +
+                '<input type="hidden" id="hdnQuickInScanID_' + i + '" value="' + QuickInScanId + '" />' +
                 '<input type="hidden" id="hdnAWBNo_' + i + '" value="' + AWBNo + '" />' +
                 '<input type="hidden" id="hdnCustomerID_' + i + '" value="' + CustomerID + '" />' +
                 '<input type="hidden" id="hdnConsignor_' + i + '" value="' + Shipper + '" />' +
@@ -1177,7 +1208,8 @@
             for (i = 0; i < maxrow; i++) {
                 var deleted = $('#hdndeleted_' + i).val();
                 if (deleted == 'false') {
-
+                    var InScanID = $('#hdnInScanID_' + i).val();
+                    var QuickInScanID = $('#hdnQuickInScanID_' + i).val();
                     var AWBNo = $('#hdnAWBNo_' + i).val();
                     var CustomerID = $('#hdnCustomerID_' + i).val();
                     var AWBDate = $('#hdnTransactionDate_' + i).val();
@@ -1245,6 +1277,8 @@
                     var RequestSource = "";
                     var SpecialInstructions = $('#hdnSpecialInstructions_' + i).val();
                     var item = {
+                        InScanID:InScanID,
+                        QuickInScanID:QuickInScanID,
                         AWBNo: AWBNo,
                         CustomerID: CustomerID,
                         Consignor: Shipper,
@@ -1490,6 +1524,8 @@
                     <div class="col-xs-12 col-sm-2">
                         <label class="headinglabel">Air Waybill</label>
                         @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @autocomplete = "off" })
+                        @Html.HiddenFor(model => model.InScanID)
+                        @Html.HiddenFor(model => model.QuickInScanID)
                     </div>
                     <div class="col-xs-12 col-sm-2">
                         <label class="headinglabel">Type</label>

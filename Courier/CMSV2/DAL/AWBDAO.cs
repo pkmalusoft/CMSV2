@@ -233,6 +233,11 @@ namespace CMSV2.DAL
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["InScanID"].ToString());
+                    if (obj.InScanID > 0)
+                        obj.QuickInScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["QuickInScanId"].ToString());
+                    else
+                        obj.QuickInScanID = 0;
                     obj.ReferenceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["ReferenceID"].ToString());
                     obj.AWBNo = ds.Tables[0].Rows[0]["AWBNo"].ToString();
                     obj.Status = ds.Tables[0].Rows[0]["Status"].ToString();
@@ -389,7 +394,7 @@ namespace CMSV2.DAL
         public  static List<AWBBatchDetail> GetBatchAWBInfo(int BatchID)
         {
             List<AWBBatchDetail> list = new List<AWBBatchDetail>();
-            AWBBatchDetail obj = new AWBBatchDetail();
+           
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GETBatchAWB";
@@ -407,6 +412,7 @@ namespace CMSV2.DAL
                     DataTable dt = ds.Tables[0];
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
+                        AWBBatchDetail obj = new AWBBatchDetail();
                         obj.InScanID = CommanFunctions.ParseInt(dt.Rows[i]["InScanID"].ToString());
                         obj.TransactionDate = dt.Rows[i]["TransactionDate"].ToString();
                         obj.AWBNo = dt.Rows[i]["AWBNo"].ToString();

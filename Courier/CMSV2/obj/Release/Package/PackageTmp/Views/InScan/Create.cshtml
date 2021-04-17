@@ -15,6 +15,56 @@
 <script type="text/javascript">
     var AWBItems = [];
     var RemoveAWBItems = [];
+    function showmessage(msg) {
+        $('#validations').css('display', 'block');
+        if (msg == '')
+            $('#validations').val('Please fill required Details!');
+        else {
+            $('#validations').val(msg);
+        }
+    }
+    function hidemessage() {
+        $('#validations').css('display', 'none');
+        
+    }
+    function deletetrans(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+         var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+    function checkduplicate(awbno) {
+        debugger;
+        var idtext = 'hdnAWbNo_';
+        var maxrow = $('#detailsbody > tr').length;
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var deleted = $('#hdndeleted_' + index).val();
+                if (deleted != "true") {
+                    var con = $('#hdnAWbNo_' + index).val();
+                    if (con.trim() == awbno.trim()) {
+                        duplicate = true;
+                        var message = 'Duplicate AWB No.!';
+                        $.notify('Duplicate AWB No.', 'error');                       
+                        $('#txtawb').val('');
+                        $('#txtawb').focus();
+                        //break;
+                    }
+
+                    if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                        return true;
+                    }
+                }
+            });
+            if (duplicate == true) {
+                return false;
+            }
+        }
+        else {
+
+            return true;
+        }
+    }
     $(document).ready(function () {
         AWBItems = [];
 
@@ -124,6 +174,10 @@
             if ($("#txtawb").val().trim() == '') {
                 return;
             }
+            else if (checkduplicate($('#txtawb').val())==false)
+            {
+                return;
+            }
             else {
                 $('#btnadd').attr('disabled', 'disabled');
             }
@@ -136,15 +190,18 @@
                 success: function (response) {
                     if (response.status == "ok") {
                         var data = response.data;
+                        AWBItems = [];
                         AWBItems.push(data);
                        // var i = $('#details tr').length - 1;
                         //$("#details").append('<tr>' + '<td id= >' + data.AWB + '<input type="hidden" value=' + $("#txtawb").val() + ' name="lst[' + i + '].AWB"></td><td><a href="javascript:void(0);" class="rem">Remove</a></td></tr>');
                         //$("#details").append('<tr awbno="' + $("#txtawb").val() + '">' + '<td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' + $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                        $("#detailsbody").html('');
+                        //$("#detailsbody").html('');
+                        console.log(data);
                         $.each(AWBItems, function (index, item) {
                             debugger;
-                            // $('#details tr').length - 1;
-                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                            var i = $('#detailsbody > tr').length;
+                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /> ' 
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a></td></tr>');
                         });
                         $('#btnadd').removeAttr('disabled');
                         $("#txtawb").val('');
@@ -168,33 +225,33 @@
             });
         });
 
-        $("#details").on('click', '.rem', function () {
-            debugger;
-            var remove_awbono = $(this).attr('awbno');
+        //$("#details").on('click', '.rem', function () {
+        //    debugger;
+        //    var remove_awbono = $(this).attr('awbno');
 
-            var tempAWBItems = [];
-            $.each(AWBItems, function (index, value) {
-                debugger;
-                if (value.AWB == remove_awbono) {
-                    RemoveAWBItems.push(value);
-                    return;
-                }
-            });
-            $.each(AWBItems, function (index, value) {
-                debugger;
-                if (value.AWB != remove_awbono) {
-                    tempAWBItems.push(value);
-                }
+        //    var tempAWBItems = [];
+        //    $.each(AWBItems, function (index, value) {
+        //        debugger;
+        //        if (value.AWB == remove_awbono) {
+        //            RemoveAWBItems.push(value);
+        //            return;
+        //        }
+        //    });
+        //    $.each(AWBItems, function (index, value) {
+        //        debugger;
+        //        if (value.AWB != remove_awbono) {
+        //            tempAWBItems.push(value);
+        //        }
 
-            });
-            AWBItems = [];
-            AWBItems = tempAWBItems;
-            //$(this).parent().parent().remove();
-            $("#detailsbody").html('');
-            $.each(AWBItems, function (index, item) {
-                    $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-            });
-        });
+        //    });
+        //    AWBItems = [];
+        //    AWBItems = tempAWBItems;
+        //    //$(this).parent().parent().remove();
+        //    $("#detailsbody").html('');
+        //    $.each(AWBItems, function (index, item) {
+        //            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+        //    });
+        //});
 
         //$("#InScanSheetNo").change(function () {
         function DisplayAWBItems() {
@@ -224,6 +281,11 @@
                         AWBItems = response.data;
 
                         $.each(AWBItems, function (index, item) {
+                            if (item.Origin == null)
+                                item.Origin = "";
+                            if (item.Destination == null) {
+                                item.Destination = "";
+                            }
                             $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
                         });
 
@@ -251,83 +313,111 @@
         }
         $('#btnsave').click(function () {
             debugger;
-            var lst1 = [];
-            var SelectedInScanId = '';
-            var RemovedAWB = '';
-             $.each(AWBItems, function (index, item) {
-
-                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
-                 if (SelectedInScanId != '')
-                     SelectedInScanId += ',';
-
-                 SelectedInScanId = SelectedInScanId + item.InScanId;
-                //lst1.push(awbitem);
-             });
-
-            $.each(RemoveAWBItems, function (index, item) {
-
-                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
-                 if (RemovedAWB != '')
-                     RemovedAWB += ',';
-
-                 RemovedAWB = RemovedAWB +item.InScanId;
-                //lst1.push(awbitem);
-            });
-
-            var saveobj = {
-                QuickInscanID:$('#QuickInscanID').val(),
-                DepotID: $('#DepotID').val(),
-                DepotName: "",
-                InScanSheetNo: $('#InScanSheetNo').val(),
-                VehicleId: $('#VehicleId').val(),
-                DriverName: $('#DriverName').val(),
-                BranchId: 0,
-                UserId: 0,
-                CollectedByID: $('#CollectedByID').val(),
-                ReceivedByID: $('#ReceivedByID').val(),
-                QuickInscanDateTime: $('#QuickInscanDateTime').val(),
-                SelectedInScanId: SelectedInScanId,
-                RemovedInScanId :RemovedAWB
+            if ($('#QuickInscanDateTime').val() == '') {
+                showmessage();
+                $('#QuickInscanDateTime').focus();
+                return;
+            }
+            else if ($('#DepotID').val() == '') {
+                showmessage();
+                $('#DepotID').focus();
+                return;
+            }
+            else if ($('#CollectedByID').val() == '') {
+                showmessage();
+                $('#CollectedByID').focus();
+                return;
+            }
+            else if ($('#ReceivedByID').val() == '') {
+                showmessage();
+                $('#ReceivedByID').focus();
+                return;
+            }
+            else if ($('#VehicleId').val() == '') {
+                showmessage();
+                $('#VehicleId').focus();
+                return;
             }
 
-             $.ajax({
-                type: "POST",
-                url: "/InScan/SaveQuickInScan",
-                datatype: "Json",
-                data: saveobj,
-                success: function (response) {
-                    if (response.status == "ok") {
-                        $("#detailsbody").html('');
-                        $('#QuickInscanID').val(0);
-                        $('#DepotID').val(0);
-                        $('#VehicleId').val(0).trigger('change');
-                        $('#DriverName').val('');
-                        $('#CollectedByID').val(0).trigger('change');
-                        $('#ReceivedByID').val(0).trigger('change');
-                         var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
-                        var cmon = myDate.getMonth() + 1;
-                        var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
-                        $('#QuickInscanDateTime').val(inscandate);
+            hidemessage();
 
-                        $('#InScanSheetNo').val('');
-                        $("#txtawb").val('');
-                        $('#InScanSheetNo').focus();
-                        RemoveAWBItems = [];
-                        AWBItems = [];
-                        $.notify(response.message, "success");
-                        window.location = "/InScan/index";
+            var obj = [];
+            var maxrow = $('#detailsbody > tr').length;
+            if (maxrow == 0) {
+                $.notify('AWB Not added,could not save!');
+                return;
+            }
+            for (i = 0; i < maxrow; i++) {
+                var deleted = $('#hdndeleted_' + i).val();
+                if (deleted != 'true') {
+                    var item = {
+                        AWB: $('#hdnAWbNo_' + i).val(),
+                        InScanId: $('#hdnInScanId_' + i).val(),
+                        Origin: "",
+                        Destination: ""
                     }
-                    else {
-
-                        $.notify(response.message, "warning");
-
-                    }
+                    obj.push(item);
                 }
-            });
 
+                if (maxrow == (i + 1)) {
+                    var saveobj = {
+                        QuickInscanID: $('#QuickInscanID').val(),
+                        DepotID: $('#DepotID').val(),
+                        DepotName: "",
+                        InScanSheetNo: $('#InScanSheetNo').val(),
+                        VehicleId: $('#VehicleId').val(),
+                        DriverName: $('#DriverName').val(),
+                        BranchId: 0,
+                        UserId: 0,
+                        CollectedByID: $('#CollectedByID').val(),
+                        ReceivedByID: $('#ReceivedByID').val(),
+                        QuickInscanDateTime: $('#QuickInscanDateTime').val(),
+                        //SelectedInScanId: SelectedInScanId,
+                        //RemovedInScanId: RemovedAWB, 
+                        Details: JSON.stringify(obj)
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/InScan/SaveQuickInScan",
+                        datatype: "Json",
+                        data: saveobj,
+                        success: function (response) {
+                            if (response.status == "ok") {
+                                debugger;
+                                //$("#detailsbody").html('');
+                                //$('#QuickInscanID').val(0);
+                                //$('#DepotID').val(0);
+                                //$('#VehicleId').val(0).trigger('change');
+                                //$('#DriverName').val('');
+                                //$('#CollectedByID').val(0).trigger('change');
+                                //$('#ReceivedByID').val(0).trigger('change');
+                                //var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
+                                //var cmon = myDate.getMonth() + 1;
+                                //var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                                //$('#QuickInscanDateTime').val(inscandate);
+
+                                //$('#InScanSheetNo').val('');
+                                //$("#txtawb").val('');
+                                //$('#InScanSheetNo').focus();
+                                ////RemoveAWBItems = [];
+                                ////AWBItems = [];
+                                $.notify(response.message, "success");
+                                window.location = "/InScan/Index";
+                            }
+                            else {
+
+                                $.notify(response.message, "warning");
+
+                            }
+                        }
+                    });
+                }
+            }
 
         });
-     if ('@ViewBag.EditMode' == "true") {
+        if ('@ViewBag.EditMode' == "true") {
+            $('#divadd').addClass('hide');
             DisplayAWBItems();
         }
         else {
@@ -417,7 +507,7 @@
                     </div>
                 </div>
 
-                <div class="row no-margin" style="padding-top:10px">
+                <div class="row no-margin" style="padding-top:10px" id="divadd">
                     <div class="col-md-3">
                         <label class="headinglabel required">Batch No.</label>
                         <input type="text" id="txtBatchNo" class="form-control" />

@@ -34,7 +34,14 @@ namespace CMSV2.Models
         public string AgentName { get; set; }
         public string ReceivedBy { get; set; }
         public List<AWBDetailsVM> lst { get; set; }
-
+        public string Details { get; set; }
         public string Source { get; set; }
   }
+    public class AWBList
+    {
+        public int InScanId { get; set; }
+        public string AWB { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
+    }
 }

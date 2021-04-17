@@ -17,6 +17,7 @@ namespace CMSV2.Models
         public int CASHCustomerId { get; set; }
             public int CustomerID { get; set; }
         public int InScanID { get; set; }
+        public int QuickInScanID { get; set; }
         public int MovementID { get; set; }
         public int ParcelTypeID { get; set; }
         public int ProductTypeID { get; set; }
@@ -122,6 +123,7 @@ namespace CMSV2.Models
         }
         
         public int InScanID { get; set; }
+        public int QuickInScanID { get; set; }
         public string AWBNo { get; set; }
            public int CustomerID  { get; set; }
            public string Consignor { get; set; }
@@ -230,6 +232,8 @@ namespace CMSV2.Models
         public string AWBNo { get; set; }
         public string Status  { get; set; }
         public string Mode { get; set; }
+        public int InScanID { get; set; }
+        public int QuickInScanID { get; set; }
         public int ReferenceID{ get; set; }
         public int CustomerID{ get; set; }
         public string OriginLocation{ get; set; }
