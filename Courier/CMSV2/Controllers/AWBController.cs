@@ -1489,44 +1489,59 @@ namespace CMSV2.Controllers
             {
                 model.AWB = new QuickAWBVM();
                 model.Details = new List<AWBTrackStatusVM>();
+                model.AWBNo = "";
             }
             else
             {
+                model.AWBNo = obj.AWBNo;
                 if (obj.AWBNo!=null || obj.AWBNo!="" )
-                {
-
-                    model.AWBNo = obj.AWBNo;
-                    model.AWB = (from c in db.InScanMasters where c.IsDeleted == false && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName, Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId }).FirstOrDefault();
+                {      model.AWBNo = obj.AWBNo;
+                    model.AWB = (from c in db.InScanMasters where c.IsDeleted == false && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName,ConsignorAddress1_Building=c.ConsignorAddress1_Building,ConsignorAddress2_Street=c.ConsignorAddress2_Street,ConsignorAddress3_PinCode=c.ConsignorAddress3_PinCode,  ConsigneeAddress1_Building=c.ConsigneeAddress1_Building,ConsigneeAddress2_Street=c.ConsigneeAddress2_Street,ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,  Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId }).FirstOrDefault();
                     string specialinstruc = "";
-                    if (model.AWB.IsNCND)
-                        specialinstruc = "NCND,";
-                    if (model.AWB.IsCashOnly)                    {
-                        specialinstruc = specialinstruc + " Cash Only,";
+                    if (model.AWB != null)
+                    {
+                        if (model.AWB.IsNCND)
+                            specialinstruc = "NCND,";
+                        if (model.AWB.IsCashOnly)
+                        {
+                            specialinstruc = specialinstruc + " Cash Only,";
                         }
-                    if (model.AWB.IsChequeOnly)
-                    {
-                        specialinstruc = specialinstruc + " Cheque Only,";
-                    }
-                    if (model.AWB.IsCollectMaterial)
-                    {
-                        specialinstruc = specialinstruc + " Collect Material,";
-                    }
-                    if (model.AWB.IsDOCopyBack)
-                    {
-                        specialinstruc = specialinstruc + " Do Copy Back,";
-                    }
-                    model.AWB.SpecialNotes = specialinstruc;
-                    model.AWB.paymentmode = db.tblPaymentModes.Find(model.AWB.PaymentModeId).PaymentModeText;
-                    model.AWB.CODStatus = "Pending";
-                    model.AWB.MaterialCostStatus= "Pending";
+                        if (model.AWB.IsChequeOnly)
+                        {
+                            specialinstruc = specialinstruc + " Cheque Only,";
+                        }
+                        if (model.AWB.IsCollectMaterial)
+                        {
+                            specialinstruc = specialinstruc + " Collect Material,";
+                        }
+                        if (model.AWB.IsDOCopyBack)
+                        {
+                            specialinstruc = specialinstruc + " Do Copy Back,";
+                        }
+                        model.AWB.SpecialNotes = specialinstruc;
+                        model.AWB.paymentmode = db.tblPaymentModes.Find(model.AWB.PaymentModeId).PaymentModeText;
+                        model.AWB.CODStatus = "Pending";
+                        model.AWB.MaterialCostStatus = "Pending";
 
-                    model.Details = (from c in db.AWBTrackStatus
-                                     join c1 in db.UserRegistrations on c.UserId equals c1.UserID
-                                     where c.InScanId == model.AWB.InScanID
-                                     orderby c.EntryDate
-                                     select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.UserName , }).ToList();
+                        model.Details = (from c in db.AWBTrackStatus
+                                         join c1 in db.UserRegistrations on c.UserId equals c1.UserID
+                                         where c.InScanId == model.AWB.InScanID
+                                         orderby c.EntryDate
+                                         select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.UserName, }).ToList();
+                    }
+                    else
+                    {
+                        model.AWB = new QuickAWBVM();
+                        List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
+                        model.Details = details;
+                    }
                 }
-
+                else
+                {
+                    model.AWB = new QuickAWBVM();
+                    List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
+                    model.Details = details;
+                }
             }
             return View(model);
         }

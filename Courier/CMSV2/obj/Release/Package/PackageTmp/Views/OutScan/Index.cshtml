@@ -3,6 +3,22 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/OutScan/Index";
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 
 <style>
@@ -139,11 +155,15 @@
          </td>      
       
         
-        <td>
-        @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
+         <td>
+             @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
              <a href="@Url.Action("Create", new { id = item.DRSID })"><i class="fa fa-pencil"></i></a>|
-        <a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>
-        </td>
+             @*<a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>*@
+             @if (isprint)
+             {
+                 <a target="_blank" href="@Url.Action("DRSRunSheet", "OutScan", new { id = item.DRSID })"><i class="fa fa-print"></i></a>
+             }
+         </td>
     </tr>
 }
 

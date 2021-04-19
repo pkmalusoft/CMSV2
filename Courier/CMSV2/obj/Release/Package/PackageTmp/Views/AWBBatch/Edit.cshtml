@@ -42,7 +42,7 @@
 
     .show-green {
         color: blue;
-        font-size:16px;
+        font-size: 16px;
         font-weight: 700;
     }
 
@@ -50,18 +50,22 @@
         min-width: 100px;
         width: auto;
     }
-    .multiselect-container{
-        margin-top:0!important;
+
+    .multiselect-container {
+        margin-top: 0 !important;
     }
+
     .searchMc .checkboxdesign {
         align-items: flex-start;
     }
-    .multiselect.dropdown-toggle{
+
+    .multiselect.dropdown-toggle {
         display: block;
         width: 100%;
         float: none;
     }
-    .multiselect-native-select .btn-group{
+
+    .multiselect-native-select .btn-group {
         display: block;
     }
 </style>
@@ -162,6 +166,98 @@
 
 </script>
 <script>
+    function showshipperaddress() {
+
+        var Shipper = $('#Shipper').val();
+        var ConsignorContact = $("#ConsignorContact").val();
+        var ConsignorAddress1 = $("#ConsignorAddress1_Building").val();
+        var ConsignorAddress2 = $("#ConsignorAddress2_Street").val();
+        var ConsignorAddress3 = $("#ConsignorAddress3_PinCode").val();
+        var ConsignorPhone = $("#ConsignorPhone").val();
+        var ConsignorCountryName = $("#ConsignorCountryName").val();
+        var ConsignorCityName = $("#ConsignorCityName").val();
+        var ConsignorLocationName = $("#ConsignorLocationName").val();
+        var ConsignorMobileNo = $('#ConsignorMobileNo').val();
+        $('#Shipper1').val(Shipper);
+        $('#ConsignorContact1').val(ConsignorContact);
+        $('#ConsignorAddress1_1').val(ConsignorAddress1);
+        $('#ConsignorAddress2_1').val(ConsignorAddress2);
+        $('#ConsignorAddress3_1').val(ConsignorAddress3);
+        $('#ConsignorPhone1').val(ConsignorPhone);
+        $('#ConsignorCountryName1').val(ConsignorCountryName);
+        $('#ConsignorCityName1').val(ConsignorCityName);
+        $('#ConsignorLocationName1').val(ConsignorLocationName);
+        $('#ConsignorMobileNo1').val(ConsignorMobileNo);
+
+        $('#shipperpopup').modal('show');
+    }
+    function saveshipperaddress() {
+        var ConsignorContact = $("#ConsignorContact1").val();
+        var ConsignorAddress1 = $("#ConsignorAddress1_1").val();
+        var ConsignorAddress2 = $("#ConsignorAddress2_1").val();
+        var ConsignorAddress3 = $("#ConsignorAddress3_1").val();
+        var ConsignorPhone = $("#ConsignorPhone1").val();
+        var ConsignorCountryName = $("#ConsignorCountryName1").val();
+        var ConsignorCityName = $("#ConsignorCityName1").val();
+        var ConsignorLocationName = $("#ConsignorLocationName1").val();
+        var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
+        //$('#Shipper').val(Shipper);
+        $('#ConsignorContact').val(ConsignorContact);
+        $("#ConsignorAddress1_Building").val(ConsignorAddress1);
+        $("#ConsignorAddress2_Street").val(ConsignorAddress2);
+        $("#ConsignorAddress3_PinCode").val(ConsignorAddress3);
+        $('#ConsignorPhone').val(ConsignorPhone);
+        $('#ConsignorCountryName').val(ConsignorCountryName);
+        $('#ConsignorCityName').val(ConsignorCityName);
+        $('#ConsignorLocationName').val(ConsignorLocationName);
+        $('#ConsignorMobileNo').val(ConsignorMobileNo);
+        $('#shipperpopup').modal('hide');
+    }
+    function showreceiveraddress() {
+        var Receiver = $('#Consignee').val();
+        var ConsigneeContact = $("#ConsigneeContact").val();
+        var ConsigneeAddress1 = $("#ConsigneeAddress1_Building").val();
+        var ConsigneeAddress2 = $("#ConsigneeAddress2_Street").val()
+        var ConsigneeAddress3 = $("#ConsigneeAddress3_PinCode").val();
+        var ConsigneePhone = $("#ConsigneePhone").val();
+        var ConsigneeMobile = $("#ConsigneeMobileNo").val();
+        var ConsigneeCountryName = $("#ConsigneeCountryName").val();
+        var ConsigneeCityName = $("#ConsigneeCityName").val();
+        var ConsigneeLocationName = $("#ConsigneeLocationName").val();
+        $('#Consignee1').val(Receiver);
+        $('#ConsigneeContact1').val(ConsigneeContact);
+        $('#ConsigneeAddress1_1').val(ConsigneeAddress1);
+        $('#ConsigneeAddress2_1').val(ConsigneeAddress2);
+        $('#ConsigneeAddress3_1').val(ConsigneeAddress3);
+        $('#ConsigneePhone1').val(ConsigneePhone);
+        $('#ConsigneeCountryName1').val(ConsigneeCountryName);
+        $('#ConsigneeCityName1').val(ConsigneeCityName);
+        $('#ConsigneeLocationName1').val(ConsigneeLocationName);
+        $("#ConsigneeMobileNo1").val(ConsigneeMobile);
+        $('#receiverpopup').modal('show');
+    }
+    function savereceiveraddress() {
+        // var Receiver = $('#hdnConsignee1').val();
+        var ConsigneeContact = $('#ConsigneeContact1').val();
+        var ConsigneeAddress1 = $("#ConsigneeAddress1_1").val();
+        var ConsigneeAddress2 = $("#ConsigneeAddress2_1").val()
+        var ConsigneeAddress3 = $("#ConsigneeAddress3_1").val();
+        var ConsigneePhone = $("#ConsigneePhone1").val();
+        var ConsigneeCountryName = $("#ConsigneeCountryName1").val();
+        var ConsigneeCityName = $("#ConsigneeCityName1").val();
+        var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
+        var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
+        $("#ConsigneeContact").val(ConsigneeContact);
+        $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
+        $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
+        $("#ConsigneeAddress3_PinCode").val(ConsigneeAddress3);
+        $('#ConsigneePhone').val(ConsigneePhone);
+        $('#ConsigneeCountryName').val(ConsigneeCountryName);
+        $('#ConsigneeCityName').val(ConsigneeCityName);
+        $('#ConsigneeLocationName').val(ConsigneeLocationName);
+        $("#ConsigneeMobileNo").val(ConsigneeMobile);
+        $('#receiverpopup').modal('hide');
+    }
     function editawb(obj, i) {
         $('#hdnEditRow').val(i);
         var AWBNo = $('#hdnAWBNo_' + i).val();
@@ -235,7 +331,7 @@
         var ParcelTypeId = $('#ParcelTypeID').val();
         var ProductTypeID = $('#ProductTypeID').val();
         var MovementID = $('#MovementID').val();
-        
+
         $('#AWBNo').val(AWBNo);
         $('#AWBDate').val(AWBDate);
         $('#Shipper').val(Shipper);
@@ -249,7 +345,7 @@
         $("#ConsignorCountryName").val(ConsignorCountryName);
         $("#ConsignorCityName").val(ConsignorCityName);
         $("#ConsignorLocationName").val(ConsignorLocationName);
-        
+
         $("#ConsigneeContact").val(ConsigneeContact);
         $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
         $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
@@ -260,11 +356,11 @@
         $("#ConsigneeLocationName").val(ConsigneeLocationName)
         $('#ConsigneeMobileNo').val(ConsigneeMobileNo);
         $("#Pieces").val(Pieces);
-        $("#CourierCharge").val(CourierCharge);        
+        $("#CourierCharge").val(CourierCharge);
         $('#OtherCharge').val(OtherCharge);
         $('#TaxPercent').val(TaxPercent);
         $('#TaxAmount').val(TaxAmount);
-        $('#NetTotal').val(NetTotal);                
+        $('#NetTotal').val(NetTotal);
         $("#MaterialCost").val(MaterialCost);
 
         $("#Weight").val(Weight);
@@ -466,7 +562,7 @@
                     //if (Delivered) {
                     //    if (!checkfieldvalidate($('#DeliveredDate')))
                     //        return;
-                    //    if (!checkdrpfieldvalidate($('#DeliveredBy'))) 
+                    //    if (!checkdrpfieldvalidate($('#DeliveredBy')))
                     //        return;
                     //    DeliveredBy = $('#DeliveredBy').val();
                     //    DeliveredDate = checkDate($('#DeliveredDate'));
@@ -536,7 +632,7 @@
                         '<input type="hidden" id="hdnConsigneeMobileNo_' + i + '" value="' + ConsigneeMobileNo + '"/>' +
                         '<input type="hidden" id="hdnCourierStatus_' + i + '" value="' + CurrentCourierStatus + '"/>' +
                         '<input type="hidden" id="hdnStatusType_' + i + '" value="' + CurrentStatusType + '"/>';
-                    
+
                     //'<input type="hidden" id="hdnCollectedBy_' + i + '" value="' + CollectedBy + '"/>' +
                     //'<input type="hidden" id="hdnReceivedBy_' + i + '" value="' + ReceivedBy + '"/>' +
                     //'<input type="hidden" id="hdnOutScanDelivery_' + i + '" value="' + OutScanDelivery + '"/>' +
@@ -597,8 +693,8 @@
             $('#TaxAmount').val(0);
             var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
             var net = parseFloat(charge);
-            $('#NetTotal').val(parseFloat(net).toFixed(2));          
-            
+            $('#NetTotal').val(parseFloat(net).toFixed(2));
+
         }
 
 
@@ -743,12 +839,12 @@
             else if (id == 'DeliveryLocation') {
                 message = 'Missing Field..Destination Location!';
             }
-            
+
             $.notify(message, "error");
             //$('#ulerr').removeClass('show-green');
             //$('#ulerr').addClass('show-error');
             //$('#lierr').html('Please Enter Required Values!');
-            
+
             $(obj).focus();
             return false;
         }
@@ -801,7 +897,7 @@
             else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
                 message = 'Missing Field..Delivery Attempted!';
             }
-            
+
             $.notify(message, "error");
             $(obj).focus();
             return false;
@@ -860,7 +956,7 @@
                     $('#CustomerName').val('');
                     $('#CustomerID').val(0);
                 }
-            
+
             }
             else {
                 if (modeid == 1) {
@@ -940,7 +1036,7 @@
                         awbno: $('#AWBNo').val()
                     },
                     success: function (response) {
-                        debugger;                      
+                        debugger;
                         var status = response.Status;
                         var mode = response.Mode;
                         var message = 'Status :' + response.Status + ', Mode :' + response.Mode;
@@ -948,7 +1044,7 @@
                             $('#ulerr').addClass('show-green');
                             $('#ulerr').removeClass('show-error');
                             $('#lierr').html(response.Mode);
-                            
+
                         }
                         if (status == 'Available' && mode == 'Prepaid') {
                             var charge = response.CourierCharge;
@@ -1001,7 +1097,7 @@
                             $('#DeliverySubLocality').val(DeliverySubLocality);
                             $('#OriginPlaceID').val(OriginPlaceID);
                             $('#DestinationPlaceID').val(DestinationPlaceID);
-                            $("#PickUpLocation").attr('readonly', 'readonly');                           
+                            $("#PickUpLocation").attr('readonly', 'readonly');
                             $("#ConsignorMobileNo").val(Mobile);
                             $('#btnAdd').removeAttr('disabled');
                             if (mode == 'Prepaid') {
@@ -1291,7 +1387,7 @@
 
             if (!checkNumberfieldvalidate($('#CourierCharge')))
                 return;
-            
+
             if (!checkdrpfieldvalidate($('#PaymentTypeId')))
                 return;
 
@@ -1456,7 +1552,7 @@
             debugger;
             var SpecialInstructions = $('#SpecialInstructions').val();
             //var i = $('#tbl1 > tr').length;
-            
+
             var i = $('#hdnEditRow').val();
             var row = parseInt(i) + 1;
             var datahtml =
@@ -1542,7 +1638,7 @@
                 '<td>' + parseFloat(MaterialCost).toFixed(2) + '</td>' +
                 //'<td>' + DeliveryLocation + '</td>' +
                 //'<td>' + ItemDescription + '</td>' +
-                '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>');               
+                '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>');
             //$('#AWBNo').val('');
             //$('#Shipper').val('');
             //$('#Shipper').removeAttr('');
@@ -1783,13 +1879,13 @@
             <div class="col-xs-12 col-sm-1">
                 <label class="headinglabel">Batch No.</label>
                 @Html.TextBoxFor(model => model.BatchNumber, new { @class = "form-control", @readonly = "readonly" })
-                @Html.HiddenFor(mode=>Model.ID)
+                @Html.HiddenFor(mode => Model.ID)
             </div>
             <div class="col-xs-12 col-sm-2">
                 <label class="headinglabel">Batch Date</label>
                 @Html.TextBoxFor(model => model.BatchDate, new { @class = "form-control text-right", @required = true })
             </div>
-           
+
             <div class="col-sm-9 text-right" style="margin-top:32px;">
                 <input type="submit" class="btn btn-primary  btnwidth" value="Save " name="Command" id="btnSave" />
                 <a href='@Url.Action("Index", "AWBBatch", new { id = 1 })' class="btn btn-danger  btnwidth">Cancel</a>
@@ -1913,173 +2009,331 @@
                     <div class="col-xs-12 col-sm-6">
                         <label class="headinglabel">Customer</label>
                         @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off" })
-                        @Html.HiddenFor(model=>model.TaxPercent)
+                        @Html.HiddenFor(model => model.TaxPercent)
                     </div>
                 </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Shipper</label>
-                            @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @autocomplete = "off" })
-                            @Html.HiddenFor(model => model.ConsignorContact)
-                            @Html.HiddenFor(model => model.ConsignorAddress1_Building)
-                            @Html.HiddenFor(model => model.ConsignorAddress2_Street)
-                            @Html.HiddenFor(model => model.ConsignorAddress3_PinCode)
-                            @Html.HiddenFor(model => model.ConsignorLocationName)
-                            @Html.HiddenFor(model => model.ConsignorCountryName)
-                            @Html.HiddenFor(model => model.ConsignorCityName)
-                            @Html.HiddenFor(model => model.ConsignorPhone)
-                            @Html.HiddenFor(model => model.ConsignorMobileNo)
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="flex">
+                            <div class="checkboxdesign no-padding  ">
+                                <a id="btnaddress1" onclick="showshipperaddress()">show address</a>
+                                <label class="headinglabel">Shipper</label>
+                            </div>
+
+
                         </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Origin Location</label>
-                            @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
-                            @Html.HiddenFor(model => model.PickupSubLocality)
-                            @Html.HiddenFor(model => model.OriginPlaceID)
-                        </div>
-
-
-
-                       
-
+                        @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @autocomplete = "off" })
+                        @Html.HiddenFor(model => model.ConsignorContact)
+                        @Html.HiddenFor(model => model.ConsignorAddress1_Building)
+                        @Html.HiddenFor(model => model.ConsignorAddress2_Street)
+                        @Html.HiddenFor(model => model.ConsignorAddress3_PinCode)
+                        @Html.HiddenFor(model => model.ConsignorLocationName)
+                        @Html.HiddenFor(model => model.ConsignorCountryName)
+                        @Html.HiddenFor(model => model.ConsignorCityName)
+                        @Html.HiddenFor(model => model.ConsignorPhone)
+                        @Html.HiddenFor(model => model.ConsignorMobileNo)
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-6">
+                        <label class="headinglabel">Origin Location</label>
+                        @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.PickupSubLocality)
+                        @Html.HiddenFor(model => model.OriginPlaceID)
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="checkboxdesign no-padding  ">
+                            <a id="btnaddress1" onclick="showreceiveraddress()">show address</a>
                             <label class="headinglabel">Receiver</label>
-                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
-                            @Html.HiddenFor(model => model.ConsigneeContact)
-                            @Html.HiddenFor(model => model.ConsigneeAddress1_Building)
-                            @Html.HiddenFor(model => model.ConsigneeAddress2_Street)
-                            @Html.HiddenFor(model => model.ConsigneeAddress3_PinCode)
-                            @Html.HiddenFor(model => model.ConsigneeLocationName)
-                            @Html.HiddenFor(model => model.ConsigneeCountryName)
-                            @Html.HiddenFor(model => model.ConsigneeCityName)
-                            @Html.HiddenFor(model => model.ConsigneePhone)
-                            @Html.HiddenFor(model => model.ConsigneeMobileNo)
                         </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Destination Location</label>
-                            @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
-                            @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
-                            @Html.HiddenFor(model => model.DestinationPlaceID)
-                        </div>
-
+                        @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
+                        @Html.HiddenFor(model => model.ConsigneeContact)
+                        @Html.HiddenFor(model => model.ConsigneeAddress1_Building)
+                        @Html.HiddenFor(model => model.ConsigneeAddress2_Street)
+                        @Html.HiddenFor(model => model.ConsigneeAddress3_PinCode)
+                        @Html.HiddenFor(model => model.ConsigneeLocationName)
+                        @Html.HiddenFor(model => model.ConsigneeCountryName)
+                        @Html.HiddenFor(model => model.ConsigneeCityName)
+                        @Html.HiddenFor(model => model.ConsigneePhone)
+                        @Html.HiddenFor(model => model.ConsigneeMobileNo)
                     </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <label class="headinglabel">Pieces</label>
-                            @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right", @autocomplete = "off" })
-                        </div>
-
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Weight</label>
-                            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @autocomplete = "off" })
-                        </div>
-
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">C. Charge</label>
-                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
-                        </div>
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Other Charges</label>
-                            @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
-                        </div>
-                       
+                    <div class="col-xs-12 col-sm-6">
+                        <label class="headinglabel">Destination Location</label>
+                        @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.DestinationPlaceID)
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-3">
-                            <div class="flexTitle">
-                                @*<label class="headinglabel required">Tax</label>*@
-                                <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
-                                <div class="checkboxdesign no-padding text-right" style="float:right">
-                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" ,@checked="checked" }) &nbsp
-                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
-                                </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label class="headinglabel">Pieces</label>
+                        @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right", @autocomplete = "off" })
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">Weight</label>
+                        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @autocomplete = "off" })
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">C. Charge</label>
+                        @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">Other Charges</label>
+                        @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="flexTitle">
+                            @*<label class="headinglabel required">Tax</label>*@
+                            <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
+                            <div class="checkboxdesign no-padding text-right" style="float:right">
+                                @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()", @checked = "checked" }) &nbsp
+                                <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
                             </div>
-                            @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
                         </div>
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Total Charges</label>
-                            @Html.TextBoxFor(model => model.NetTotal, new { @class = "form-control text-right", @autocomplete = "off" })
-                        </div>
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Mat. Cost</label>
-                            @Html.TextBoxFor(model => model.MaterialCost, new { @class = "form-control text-right", @autocomplete = "off" })
-                        </div>
-                        <div class="col-xs-12 col-sm-3">
-                            <label class="headinglabel">Shpr. Notes</label>
-                            <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
-                                <option value="1" selected>NCND</option>
-                                <option value="2">Cash Only</option>
-                                <option value="3">Cheque Only</option>
-                                <option value="4">Collect Material</option>
-                                <option value="5">DO Copy Back</option>
-                            </select>
-                            @Html.HiddenFor(model=>model.InScanID)
-                            @Html.HiddenFor(model => model.CustomerID)
-                            @Html.HiddenFor(model => model.CASHCustomerId)
-                            @Html.HiddenFor(model => model.CODCustomerID)
-                            @Html.HiddenFor(model => model.CODCustomerName)
-                            @Html.HiddenFor(model => model.CASHCustomerName)
-                            @Html.HiddenFor(model => model.FOCCustomerName)
-                            @Html.HiddenFor(model => model.FOCCustomerID)
-                        </div>
+                        @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Item Desc.</label>
-                            @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })
-                            @Html.HiddenFor(model => model.CustomerID)
-                            @Html.HiddenFor(model => model.CASHCustomerId)
-                            @Html.HiddenFor(model => model.CODCustomerID)
-                        </div>
-                       <div class="col-md-6 d-flex" style="margin-top:30px">
-                                <input type="button" class="btn btn-primary  btnwidth" value="Update" name="Command" id="btnAdd" />
-                            </div>
-
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">Total Charges</label>
+                        @Html.TextBoxFor(model => model.NetTotal, new { @class = "form-control text-right", @autocomplete = "off" })
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 flex justify-between" style="">
-                            <ul class="list-unstyled show-error" id="ulerr">
-                                <li id="lierr"> </li>
-                            </ul>                            
-                            
-                        </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">Mat. Cost</label>
+                        @Html.TextBoxFor(model => model.MaterialCost, new { @class = "form-control text-right", @autocomplete = "off" })
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label class="headinglabel">Shpr. Notes</label>
+                        <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
+                            <option value="1" selected>NCND</option>
+                            <option value="2">Cash Only</option>
+                            <option value="3">Cheque Only</option>
+                            <option value="4">Collect Material</option>
+                            <option value="5">DO Copy Back</option>
+                        </select>
+                        @Html.HiddenFor(model => model.InScanID)
+                        @Html.HiddenFor(model => model.CustomerID)
+                        @Html.HiddenFor(model => model.CASHCustomerId)
+                        @Html.HiddenFor(model => model.CODCustomerID)
+                        @Html.HiddenFor(model => model.CODCustomerName)
+                        @Html.HiddenFor(model => model.CASHCustomerName)
+                        @Html.HiddenFor(model => model.FOCCustomerName)
+                        @Html.HiddenFor(model => model.FOCCustomerID)
                     </div>
                 </div>
-                <div class="col-md-6 ">
-                    <div class="row no-margin" style="padding-top:20px">
-                        <div class="col-xs-12 no-padding for-device ">
-                            <div class="data-table payment-div scrolling_list">
-                                <div class="data">
-                                    <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
-                                        <thead style="background:transparent;">
-                                            <tr style="font-weight: bold; background:#07a7e3;">
-                                                <th>
-                                                    S.No
-                                                </th>
-                                                <th> AWB No.</th>
-                                                <th>Type</th>
-                                                <th style="width:25%">Shipper</th>
-                                                <th style="width:25%">Receiver</th>
-                                                <th>Charge</th>
-                                                <th>MCost</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbl1">
-                                           
-                                        </tbody>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label class="headinglabel">Item Desc.</label>
+                        @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })
+                        @Html.HiddenFor(model => model.CustomerID)
+                        @Html.HiddenFor(model => model.CASHCustomerId)
+                        @Html.HiddenFor(model => model.CODCustomerID)
+                    </div>
+                    <div class="col-md-6 d-flex" style="margin-top:30px">
+                        <input type="button" class="btn btn-primary  btnwidth" value="Update" name="Command" id="btnAdd" />
+                    </div>
 
-                                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 flex justify-between" style="">
+                        <ul class="list-unstyled show-error" id="ulerr">
+                            <li id="lierr"> </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="row no-margin" style="padding-top:20px">
+                    <div class="col-xs-12 no-padding for-device ">
+                        <div class="data-table payment-div scrolling_list">
+                            <div class="data">
+                                <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
+                                    <thead style="background:transparent;">
+                                        <tr style="font-weight: bold; background:#07a7e3;">
+                                            <th>
+                                                S.No
+                                            </th>
+                                            <th> AWB No.</th>
+                                            <th>Type</th>
+                                            <th style="width:25%">Shipper</th>
+                                            <th style="width:25%">Receiver</th>
+                                            <th>Charge</th>
+                                            <th>MCost</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbl1">
+                                    </tbody>
+
+                                </table>
 
 
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            }
-    </section>
+        </div>
+    }
+</section>
+
+<div class="modal fade" id="shipperpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Shipper Address
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row no-margin" style="margin-top:10px!important">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Shipper Name</label>
+                            @Html.TextBoxFor(model => model.Shipper1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsignorContact1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+                            @Html.ValidationMessageFor(model => model.ConsignorContact1, "", new { @class = "text-danger", @placeholder = "Contact Person" })
+                        </div>
+
+                    </div>
+                    <div class="row no-margin" style="margin-top:10px!important">
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress1_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Street</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress2_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress3_1, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+                        </div>
+                    </div>
+
+                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Location</label>
+                            @Html.TextBoxFor(model => model.ConsignorLocationName1, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Origin City</label>
+                            @Html.TextBoxFor(model => model.ConsignorCityName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="headinglabel required">Origin Country</label>
+                            @Html.TextBoxFor(model => model.ConsignorCountryName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
+
+                        </div>
+                    </div>
+                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
+
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Telephone No.</label>
+                            @Html.TextBoxFor(model => model.ConsignorPhone1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Mobile No.</label>
+                            @Html.TextBoxFor(model => model.ConsignorMobileNo1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 5px">
+                <button type="button" id="StockSave" class="btn btn-primary" onclick="saveshipperaddress()">Save</button>
+                <button type="button" id="StockClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="receiverpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Receiver Address
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row no-margin" style="padding-top: 10px; ">
+                    <div class="col-md-6">
+                        <label class="headinglabel required">Name</label>
+                        @Html.TextBoxFor(model => model.Consignee1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="headinglabel required">Contact Person</label>
+                        @Html.TextBoxFor(model => model.ConsigneeContact1, new { @class = "form-control txttarget", @required = "true" })
+                    </div>
+
+
+                </div>
+                <div class="row no-margin" style="padding-top: 10px; ">
+                    <div class="col-md-4">
+                        <label class="headinglabel required">Flat/Building</label>
+                        @Html.TextBoxFor(model => model.ConsigneeAddress1_1, new { @class = "form-control txttarget", @required = "true" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="headinglabel">Street</label>
+                        @Html.TextBoxFor(model => model.ConsigneeAddress2_1, new { @class = "form-control txttarget" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="headinglabel">Pincode</label>
+                        @Html.TextBoxFor(model => model.ConsigneeAddress3_1, new { @class = "form-control txttarget" })
+                    </div>
+                </div>
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-4">
+                        <label class="headinglabel required">Consingee Location</label>
+                        @Html.TextBoxFor(model => model.ConsigneeLocationName1, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="headinglabel required">Consignee City</label>
+                        @Html.TextBoxFor(model => model.ConsigneeCityName1, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="headinglabel required">Consignee Country</label>
+                        @Html.TextBoxFor(model => model.ConsigneeCountryName1, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
+                    </div>
+                </div>
+                <div class="row no-margin" style="padding-top: 10px">
+
+                    <div class="col-md-6">
+                        <label class="headinglabel required">Telephone No</label>
+                        @Html.TextBoxFor(model => model.ConsigneePhone1, new { @class = "form-control textright", @required = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="headinglabel required">Mobile No.</label>
+                        @Html.TextBoxFor(model => model.ConsigneeMobileNo1, new { @class = "form-control textright", @required = "true" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 5px">
+                <button type="button" id="StockSave" class="btn btn-primary" onclick="savereceiveraddress()">Save</button>
+                <button type="button" id="StockClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>

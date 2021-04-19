@@ -97,6 +97,7 @@ namespace CMSV2.Controllers
             int courierstatusid1 = db.CourierStatus.Where(cc => cc.CourierStatus == "Released").FirstOrDefault().CourierStatusID;
 
             var l = (from c in db.InScanMasters where c.AWBNo == id && c.DRSID==null && (c.CourierStatusID== courierstatusid || c.CourierStatusID == courierstatusid1)  select c).FirstOrDefault();
+            
 
             if (l != null)
             {
@@ -502,6 +503,20 @@ namespace CMSV2.Controllers
             }
 
             return RedirectToAction("Index", "OutScan");
+
+        }
+
+
+        public ActionResult DRSRunSheet(int id = 0)
+        {
+            int uid = Convert.ToInt32(Session["UserID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+            AccountsReportsDAO.GenerateDRSRunSheet(id);
+            ViewBag.ReportName = "DRS Run Sheet";
+            return View();
 
         }
     }

@@ -2590,5 +2590,83 @@ namespace CMSV2.DAL
         }
 
         #endregion
+
+        #region "DRSRunSheet"
+        public static string GenerateDRSRunSheet(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_DRSRunSheet";
+            comd.Parameters.AddWithValue("@DRSID", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "DRSRunSheet");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "DRSRunSheet.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "DRSRunSheet.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+          //  rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("DRS Run Sheet");
+            string period = "AWB Print";
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+
+            //  rd.ParameterFields["GroupBy"].CurrentValues.AddValue(reportparam.ReportType);
+            // rd.ParameterFields["SortBy"].CurrentValues.AddValue(reportparam.SortBy);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+
+            string reportname = "AWBPrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+        #endregion
     }
 }

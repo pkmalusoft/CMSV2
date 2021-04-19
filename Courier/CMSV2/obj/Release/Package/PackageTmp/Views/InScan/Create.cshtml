@@ -268,6 +268,7 @@
                     if (response.status == "ok") {
                         var quickinscan = response.masterdata;
                         $('#QuickInscanID').val(quickinscan.QuickInscanID);
+                        $('#DepotID').attr('readonly', 'readonly');
                         $('#DepotID').val(quickinscan.DepotId).trigger('change');
                         $('#VehicleId').val(quickinscan.VehicleId).trigger('change');
                         $('#DriverName').val(quickinscan.DriverName);
@@ -277,6 +278,7 @@
                         var cmon = myDate.getMonth() + 1;
                         var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
                         $('#QuickInscanDateTime').val(inscandate);
+                        $('#QuickInscanDateTime').attr('readonly', 'readonly');
                         AWBItems = [];
                         AWBItems = response.data;
 
@@ -286,7 +288,8 @@
                             if (item.Destination == null) {
                                 item.Destination = "";
                             }
-                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
+                            //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
                         });
 
                     }
@@ -419,13 +422,14 @@
         if ('@ViewBag.EditMode' == "true") {
             $('#divadd').addClass('hide');
             DisplayAWBItems();
+            $("#InScanSheetNo").attr('readonly', 'readonly');
         }
         else {
             $('#DRSDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
             $("#DRSDate").focus();
         }
 
-        $("#InScanSheetNo").focus();
+       
     });
 
 </script>

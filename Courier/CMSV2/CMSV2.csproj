@@ -3117,6 +3117,7 @@
     <Content Include="Reports\CustomerStatement.rpt" />
     <Content Include="Reports\DebitNoteVoucherPrint.rpt" />
     <Content Include="Reports\SupplierPaymentPrint.rpt" />
+    <Content Include="Reports\DRSRunSheet.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3635,6 +3636,7 @@
     <Content Include="Views\AWBBatch\Index.cshtml" />
     <Content Include="Views\AWBBatch\Edit.cshtml" />
     <Content Include="Views\Reports\SupplierStatement.cshtml" />
+    <Content Include="Views\OutScan\DRSRunSheet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

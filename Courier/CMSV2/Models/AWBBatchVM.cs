@@ -93,6 +93,33 @@ namespace CMSV2.Models
         public int InscanVehicleId { get; set; }
         public int OutscanVehicleId { get; set; }
         public string Specialnstructions { get; set; }
+
+        //for popup proper
+        public string Shipper1 { get; set; }
+        public string ConsignorContact1 { get; set; }
+        public string ConsignorPhone1 { get; set; }
+        public string ConsignorMobileNo1 { get; set; }
+        public string ConsignorAddress1_1 { get; set; }
+        public string ConsignorAddress2_1 { get; set; }
+        public string ConsignorAddress3_1 { get; set; }
+        public string ConsignorCityName1 { get; set; }
+        public string ConsignorCountryName1 { get; set; }
+
+        public string ConsignorLocationName1 { get; set; }
+
+        public string Consignee1 { get; set; }
+        public string ConsigneeCityName1 { get; set; }
+
+        public string ConsigneeLocationName1 { get; set; }
+        public string ConsigneeContact1 { get; set; }
+        public string ConsigneePhone1 { get; set; }
+        public string ConsigneeMobileNo1 { get; set; }
+        public string ConsigneeAddress1_1 { get; set; }
+        public string ConsigneeAddress2_1 { get; set; }
+        public string ConsigneeAddress3_1 { get; set; }
+        public string ConsigneeCountryName1 { get; set; }
+
+
         public List<AWBBatchDetail> Details { get; set; }
     }
 

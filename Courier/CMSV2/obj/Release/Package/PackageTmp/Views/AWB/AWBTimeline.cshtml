@@ -20,6 +20,9 @@
         padding-right: 4px;
     }
 
+    .form-group{
+        margin-bottom: 5px;
+    }
     .timelineRight {
         padding-left: 4px;
     }
@@ -59,6 +62,9 @@
         text-align: right;
         position: absolute;
     }
+    .pl-2{
+        padding-left:10px;
+    }
 
     .timelineRow li:nth-of-type(1):after {
         background: #fb9643;
@@ -80,6 +86,10 @@
         width: 210px;
     }
 
+    textarea{
+        resize: none;
+        height:100px;
+    }
     .timelineRow li:nth-of-type(5):after {
         background: #ce504c;
         width: 230px;
@@ -116,6 +126,11 @@
         font-weight: bold;
     }
 
+    .address{
+        border:1px solid #ccc;
+        padding:10px;
+        margin-bottom: 10px;
+    }
     .Aiwaybillcontrol {
         float: none;
         margin: auto;
@@ -132,185 +147,186 @@
     <div class="container-fluid">
 
         <div class="row">
-            @using (@Html.BeginForm("AWBTimeline", "AWB", FormMethod.Post, new { @class = "form-horizontal" }))
+            @using (@Html.BeginForm("AWBTimeline", "AWB", FormMethod.Post))
             {
 
             <div class="col-md-6 timelineDetails">
-
-                <div class="row">
-
-                    <div class="col-md-8  Aiwaybillcontrol">
-                        <div class="col-md-4">
-                            <label class="headinglabel">AIRWAY BILL: </label>
-                        </div>
-                        <div class="col-md-7">
-                            @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
-                        </div>
-                        <div class="col-md-1">
+                    <div class=" Aiwaybillcontrol">
+                         <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group ">
+                                    <label class="headinglabel">AIRWAY BILL: </label>
+                                     @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
+                                </div>
+                            </div>
+                        <div class="col-md-1 mt-3" style="padding-top:30px">
                             <button type="submit" class="btn btn-primary" style="min-width:50px!Important;" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                         </div>
+
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Shipper</h4>
 
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.Consignor</h4>
-                            <h4>@Model.AWB.ConsignorAddress1_Building @Model.AWB.ConsignorAddress2_Street</h4>
-                            <h4>@Model.AWB.ConsignorAddress3_PinCode</h4>
-                            <h4>@Model.AWB.ConsignorPhone</h4>
-                        </div>
+
+                <div class="form-group">
+                    <div class="row">
+                    <div class="col-md-6">
+                            <label>Shipper</label>
+                            <input type="text" name="" class="form-control" value="@Model.AWB.Consignor" />
                     </div>
 
                     <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Consignee</h4>
+
+                        <label>Receiver</label>
+                        <input type="text" name="" class="form-control" value="@Model.AWB.Consignee" />
+
+                    </div>
+                    </div>
+                 </div>
+
+                    <div class="form-group">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="address">
+                                    <h4>@Model.AWB.ConsigneeAddress1_Building  &nbsp; &nbsp; @Model.AWB.ConsigneeAddress2_Street <br/> @Model.AWB.ConsigneeAddress3_PinCode </h4>
+                                    <h4>@Model.AWB.ConsigneeAddress3_PinCode</h4>
+                                </div> 
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="address">
+                                    <h4>@Model.AWB.ConsigneeAddress1_Building &nbsp;&nbsp; @Model.AWB.ConsigneeAddress2_Street <br/> @Model.AWB.ConsigneeAddress3_PinCode</h4>
+                                    <h4>@Model.AWB.ConsigneePhone</h4>
+
+                                </div>
+
+                            </div>
+
+
                         </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.Consignee</h4>
-                            <h4>@Model.AWB.ConsigneeAddress1_Building @Model.AWB.ConsigneeAddress2_Street</h4>
-                            <h4>@Model.AWB.ConsigneeAddress3_PinCode</h4>
-                            <h4>@Model.AWB.ConsigneePhone</h4>
-                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                    <div class="col-md-6">
+                            <label>origin</label>
+                            <input type="text" name="" class="form-control" value="@Model.AWB.ConsignorCountryName" />
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label>Destination</label>
+                        <input type="" name="" class="form-control" value="@Model.AWB.ConsigneeCountryName"/>
+
+                    </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Origin</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.ConsignorCountryName</h4>
-                        </div>
-                    </div>
+                   
 
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Destination</h4>
+                    <div class="form-group">
+                        <div class=" row">
+                        <div class="col-md-3 flex flex-wrap">
+
+                                <div>
+                                    <label>Pieces</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.Pieces"/>
+                                </div>
+
+                                <div class="pl-2">
+
+                                    <label>Weight</label>
+                                    <input type="" name="" class="form-control" value="@Model.AWB.Weight"/>
+
+                                 </div>
+
                         </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.ConsigneeCountryName </h4>
+
+                        
+
+                        <div class="col-md-2">
+                                <label>Courier Charge</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.CourierCharge"/>
                         </div>
+
+                        <div class="col-md-2">
+
+                            <label>Other Charge</label>
+                            <input type="" name="" class="form-control" value="@Model.AWB.OtherCharge" />
+
+                        </div>
+
+                         <div class="col-md-2">
+                                <label>Tax Amount</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.TaxAmount"/>
+                        </div>
+
+                        <div class="col-md-3 flex">
+
+                            <div>
+                            <label>T. Charge</label>
+                            <input type="" name="" class="form-control" value="@Model.AWB.totalCharge"/>
+
+                        </div>
+                            <div class="pl-2">
+
+                                <label>M. Cost</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.materialcost" />
+
+                            </div>
+
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Pieces</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.Pieces </h4>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Shipper Instruction</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.SpecialNotes" />
+                            </div>
+                             <div class="col-md-6">
+                                <label>Item Description</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.Description"/>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Payment Mode</label>
+                                <input type="" name="" class="form-control" value="@Model.AWB.paymentmode"/>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Weight</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.Weight</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Courier Charge</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.CourierCharge </h4>
-                        </div>
-                    </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>COD Status</label>
+                                </div> 
+                                <div class="col-md-8">
+                                    <input type="" name="" class="form-control" value="@Model.AWB.CODStatus"/>
+                                </div>       
 
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Other Charge</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.OtherCharge</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="col-md-5">
-                            <h4>Tax Amount</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.TaxAmount </h4>
-                        </div>
-                    </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-md-4">
+                                    <label>Material Cost Status</label>
+                                </div> 
+                                <div class="col-md-8">
+                                    <input type="" name="" class="form-control" value="@Model.AWB.MaterialCostStatus"/>
+                                </div>       
 
-                    <div class="col-md-3">
-                        <div class="col-md-5">
-                            <h4>Total Charge</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.totalCharge </h4>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-5">
-                            <h4>Material Cost</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.materialcost </h4>
-                        </div>
-                    </div>
-                </div>
+                            </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Item Description</h4>
                         </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.Description</h4>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Special Notes</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.SpecialNotes</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-5">
-                            <h4>Payment Mode</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.paymentmode</h4>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="col-md-5">
-                            <h4>COD Status</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.CODStatus</h4>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-5">
-                            <h4>Material Cost Status</h4>
-                        </div>
-                        <div class="col-md-7 timelinedata">
-                            <h4>@Model.AWB.MaterialCostStatus</h4>
-                        </div>
-                    </div>
-                </div>
+                    
             </div>
 
 
