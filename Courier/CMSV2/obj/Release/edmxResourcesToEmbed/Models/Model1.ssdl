@@ -2733,12 +2733,9 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have 
     <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ParcelType">
     <Key>
       <PropertyRef Name="ID" />
-      <PropertyRef Name="DefaultType" />
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ParcelTypeID" Type="int" />
@@ -6893,6 +6890,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="PageControlField" EntityType="Self.PageControlField" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PageControlMaster" EntityType="Self.PageControlMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pallet" EntityType="Self.Pallet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ParcelType" EntityType="Self.ParcelType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PaymentsTerms" EntityType="Self.PaymentsTerms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PaymentTerms" EntityType="Self.PaymentTerms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Period" EntityType="Self.Period" Schema="dbo" store:Type="Tables" />
@@ -7134,14 +7132,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     [MCPaymentReceipt].[FYearID] AS [FYearID], 
     [MCPaymentReceipt].[AcCompanyID] AS [AcCompanyID]
     FROM [dbo].[MCPaymentReceipt] AS [MCPaymentReceipt]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="ParcelType" EntityType="Self.ParcelType" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [ParcelType].[ID] AS [ID], 
-    [ParcelType].[ParcelTypeID] AS [ParcelTypeID], 
-    [ParcelType].[ParcelType] AS [ParcelType], 
-    [ParcelType].[DefaultType] AS [DefaultType]
-    FROM [dbo].[ParcelType] AS [ParcelType]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="State" EntityType="Self.State" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 

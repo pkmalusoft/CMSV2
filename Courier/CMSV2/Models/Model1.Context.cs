@@ -227,7 +227,6 @@ namespace CMSV2.Models
         public virtual DbSet<ImpExp> ImpExps { get; set; }
         public virtual DbSet<InScanNew> InScanNews { get; set; }
         public virtual DbSet<MCPaymentReceipt> MCPaymentReceipts { get; set; }
-        public virtual DbSet<ParcelType> ParcelTypes { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<tempCustomer> tempCustomers { get; set; }
         public virtual DbSet<TempCustomerInvoice> TempCustomerInvoices { get; set; }
@@ -278,6 +277,7 @@ namespace CMSV2.Models
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<SupplierInvoiceStock> SupplierInvoiceStocks { get; set; }
+        public virtual DbSet<ParcelType> ParcelTypes { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

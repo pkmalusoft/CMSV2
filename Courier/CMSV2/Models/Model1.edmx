@@ -2767,12 +2767,9 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have 
           <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
           <Property Name="AcCompanyID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.ParcelType' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ParcelType">
           <Key>
             <PropertyRef Name="ID" />
-            <PropertyRef Name="DefaultType" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="ParcelTypeID" Type="int" />
@@ -6927,6 +6924,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="PageControlField" EntityType="Self.PageControlField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PageControlMaster" EntityType="Self.PageControlMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pallet" EntityType="Self.Pallet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParcelType" EntityType="Self.ParcelType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentsTerms" EntityType="Self.PaymentsTerms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentTerms" EntityType="Self.PaymentTerms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Period" EntityType="Self.Period" Schema="dbo" store:Type="Tables" />
@@ -7168,14 +7166,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     [MCPaymentReceipt].[FYearID] AS [FYearID], 
     [MCPaymentReceipt].[AcCompanyID] AS [AcCompanyID]
     FROM [dbo].[MCPaymentReceipt] AS [MCPaymentReceipt]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ParcelType" EntityType="Self.ParcelType" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ParcelType].[ID] AS [ID], 
-    [ParcelType].[ParcelTypeID] AS [ParcelTypeID], 
-    [ParcelType].[ParcelType] AS [ParcelType], 
-    [ParcelType].[DefaultType] AS [DefaultType]
-    FROM [dbo].[ParcelType] AS [ParcelType]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="State" EntityType="Self.State" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -10692,16 +10682,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="FYearID" Type="Int32" />
           <Property Name="AcCompanyID" Type="Int32" />
         </EntityType>
-        <EntityType Name="ParcelType">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="DefaultType" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="ParcelTypeID" Type="Int32" />
-          <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DefaultType" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityType Name="State">
           <Key>
             <PropertyRef Name="StateID" />
@@ -12565,7 +12545,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="ImpExps" EntityType="Self.ImpExp" />
           <EntitySet Name="InScanNews" EntityType="Self.InScanNew" />
           <EntitySet Name="MCPaymentReceipts" EntityType="Self.MCPaymentReceipt" />
-          <EntitySet Name="ParcelTypes" EntityType="Self.ParcelType" />
           <EntitySet Name="States" EntityType="Self.State" />
           <EntitySet Name="tempCustomers" EntityType="Self.tempCustomer" />
           <EntitySet Name="TempCustomerInvoices" EntityType="Self.TempCustomerInvoice" />
@@ -15698,6 +15677,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
           <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
           <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
+          <EntitySet Name="ParcelTypes" EntityType="DB_9F57C4_couriertest_newModel.ParcelType" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20313,6 +20293,15 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ItemSize" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="ParcelType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ParcelTypeID" Type="Int32" />
+          <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultType" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23564,16 +23553,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="RecBankID" ColumnName="RecBankID" />
                 <ScalarProperty Name="FYearID" ColumnName="FYearID" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ParcelTypes">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
-              <MappingFragment StoreEntitySet="ParcelType">
-                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
-                <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29508,6 +29487,16 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
                 <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParcelTypes">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
+              <MappingFragment StoreEntitySet="ParcelType">
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
+                <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />
+                <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

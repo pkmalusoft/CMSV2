@@ -3335,16 +3335,6 @@
     <Property Name="FYearID" Type="Int32" />
     <Property Name="AcCompanyID" Type="Int32" />
   </EntityType>
-  <EntityType Name="ParcelType">
-    <Key>
-      <PropertyRef Name="ID" />
-      <PropertyRef Name="DefaultType" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
-    <Property Name="ParcelTypeID" Type="Int32" />
-    <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
-  </EntityType>
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -5208,7 +5198,6 @@
     <EntitySet Name="ImpExps" EntityType="Self.ImpExp" />
     <EntitySet Name="InScanNews" EntityType="Self.InScanNew" />
     <EntitySet Name="MCPaymentReceipts" EntityType="Self.MCPaymentReceipt" />
-    <EntitySet Name="ParcelTypes" EntityType="Self.ParcelType" />
     <EntitySet Name="States" EntityType="Self.State" />
     <EntitySet Name="tempCustomers" EntityType="Self.tempCustomer" />
     <EntitySet Name="TempCustomerInvoices" EntityType="Self.TempCustomerInvoice" />
@@ -8341,6 +8330,7 @@
     <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
     <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
     <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
+    <EntitySet Name="ParcelTypes" EntityType="DB_9F57C4_couriertest_newModel.ParcelType" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12955,5 +12945,14 @@
     <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="ItemSize" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ParcelType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ParcelTypeID" Type="Int32" />
+    <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DefaultType" Type="Boolean" Nullable="false" />
   </EntityType>
 </Schema>

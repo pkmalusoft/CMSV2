@@ -3249,16 +3249,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ParcelTypes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
-        <MappingFragment StoreEntitySet="ParcelType">
-          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
-          <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="States">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.State">
         <MappingFragment StoreEntitySet="State">
@@ -9190,6 +9180,16 @@
           <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
           <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
           <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ParcelTypes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ParcelType">
+        <MappingFragment StoreEntitySet="ParcelType">
+          <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
+          <ScalarProperty Name="ParcelType1" ColumnName="ParcelType" />
+          <ScalarProperty Name="ParcelTypeID" ColumnName="ParcelTypeID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
