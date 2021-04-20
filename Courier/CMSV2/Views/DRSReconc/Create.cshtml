@@ -109,6 +109,7 @@
         $(obj).parent().parent().addClass('hide');
         var obj1 = $(obj).parent().parent().find('.hdndeleted');
         $(obj1).val(true);
+        calculatetotal();
     }
     function deletenewawb(obj, i) {
         $(obj).parent().parent().addClass('hide');
@@ -322,52 +323,52 @@
                 });
             }
         })
-        $("#DRSNo").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: '/DRSReconc/GetDRS',
-                    datatype: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (val, item) {
-                            return {
-                                label: val.DRSNo,
-                                value: val.DRSID,
-                                Delivered: val.DeliveredBy,
-                                DRSDate: val.DRSDate,                               
-                            }
-                        }))
-                    }
-                })
-            },
-            minLength: 0,
-            autoFocus: false,
-            focus: function (e, i) {
-                $("#DRSNo").val(i.item.label);
-                $('#DRSID').val(i.item.value);
+        //$("#DRSNo").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: '/DRSReconc/GetDRS',
+        //            datatype: "json",
+        //            data: {
+        //                term: request.term
+        //            },
+        //            success: function (data) {
+        //                response($.map(data, function (val, item) {
+        //                    return {
+        //                        label: val.DRSNo,
+        //                        value: val.DRSID,
+        //                        Delivered: val.DeliveredBy,
+        //                        DRSDate: val.DRSDate,                               
+        //                    }
+        //                }))
+        //            }
+        //        })
+        //    },
+        //    minLength: 0,
+        //    autoFocus: false,
+        //    focus: function (e, i) {
+        //        $("#DRSNo").val(i.item.label);
+        //        $('#DRSID').val(i.item.value);
                  
-                var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
-                var cmon = myDate.getMonth() + 1;
-                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
-                $('#DRSDate').val(collectdate);
-                $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
-            },
-            select: function (e, i) {
-                e.preventDefault();
-                $("#DRSNo").val(i.item.label);
-                $('#DRSID').val(i.item.value);
+        //        var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
+        //        var cmon = myDate.getMonth() + 1;
+        //        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+        //        $('#DRSDate').val(collectdate);
+        //        $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
+        //    },
+        //    select: function (e, i) {
+        //        e.preventDefault();
+        //        $("#DRSNo").val(i.item.label);
+        //        $('#DRSID').val(i.item.value);
                  
-                var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
-                var vcmon = myDate.getMonth() + 1;
-                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
-                $('#DRSDate').val(collectdate);
-                $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
+        //        var myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
+        //        var vcmon = myDate.getMonth() + 1;
+        //        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+        //        $('#DRSDate').val(collectdate);
+        //        $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
                 
-            },
+        //    },
 
-        });
+        //});
 
         $("#txtAWB").autocomplete({
             source: function (request, response) {
@@ -669,7 +670,7 @@
                     html = html + '<td>' + parseFloat(awbamount).toFixed(2) + '</td>';//pickupcash
                     html = html + '<td>' + '' + '</td>';//expenses
                     html = html + '<td><input type="hidden" value="' + parseFloat(total).toFixed(2) + '" id="hdntotal_' + i + '" />' + parseFloat(total).toFixed(2) + '</td>';//total
-                    html = html + '<td><a href="javascript:void(0)" onclick=deletetrans(this,' + i + ')><i class="fa fa-times"></i></a></td></tr>'; //delete
+                    html = html + '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td></tr>'; //delete
 
                     $('#tblTrans').append(html);
                     var totalrow = $('#tblNewAWB > tr').length;
@@ -755,7 +756,7 @@
                         html = html + '<td>' + '' + '</td>';//pickupcash
                         html = html + '<td class="cred">' + parseFloat(expenses).toFixed(2) + '</td>';//expenses
                     html = html + '<td class="cred"><input type="hidden" value="' + parseFloat(total).toFixed(2) + '" id="hdntotal_' + i + '" />' + parseFloat(total).toFixed(2) + '</td>';//total
-                    html = html + '<td><a href="javascript:void(0)" onclick=deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td></tr>'; //delete
+                    html = html + '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td></tr>'; //delete
 
                         $('#tblTrans').append(html);
                     }
@@ -1002,6 +1003,7 @@
                     pkp = 0;
                 if (total == '')
                     total = 0;
+                
 
                 totalcod = parseFloat(totalcod) + parseFloat(COD);
                 totaldiscount = parseFloat(totaldiscount) + parseFloat(discount);
@@ -1021,14 +1023,15 @@
             $('#txtDRSReceipt').val(parseFloat($('#ReceivedAmount').val()).toFixed(2));
             var shortage = parseFloat($('#txtDRSReceipt').val()) - parseFloat($('#txtTotal').val()) ;// - parseFloat(totalall);
             if (shortage > 0) {
-                $('#lbshortage').html('SHORTAGE');
-                $('#txtShortage').val(parseFloat(shortage).toFixed(2));
-                $('#txtShortage').addClass('cred');
-            }
-            else {
                 $('#lbshortage').html('EXCESS');
                 $('#txtShortage').val(parseFloat(shortage).toFixed(2));
                 $('#txtShortage').removeClass('cred');
+            }
+            else {
+                $('#lbshortage').html('SHORTAGE');
+                $('#txtShortage').val(parseFloat(shortage).toFixed(2));
+                
+                $('#txtShortage').addClass('cred');
             }
 
             
@@ -1043,7 +1046,7 @@
                 var deleted = $('#hdndeleted_' + i).val(); 
                 if (deleted == 'false') {
                     debugger; 
-                    var DRRId = 0;
+                    var DRRID = $('#DRRID').val();
                     var DRSID =$('#DRSID').val();
                     var DRSRecPayId = $('#DRSRecPayID').val();
                     var DeliveredBy = $('#DeliveredBy').val();
@@ -1078,12 +1081,12 @@
                         type: "POST",
                         url: "/DRSReconc/SaveReconc",
                         datatype: "Json",
-                        data: { DRRID: 0, DRSID: DRSID, DRSRecPayId: DRSRecPayId, ReconcAmount:0, CourierId:DeliveredBy,Details: JSON.stringify(obj) },
+                        data: { DRRID: DRRID, DRSID: DRSID, DRSRecPayId: DRSRecPayId, ReconcAmount:0, CourierId:DeliveredBy,Details: JSON.stringify(obj) },
                         success: function (response) {
                             if (response == "Ok") {
-                                alert("Reconciliation Saved Succesfully");
-                                $('#btnSave').removeAttr('disabled');
-                               // $.notify(response.message, "success");
+                                //alert("Reconciliation Saved Succesfully");
+                                $.notify("Reconciliation Saved Succesfully", "success");
+                                $('#btnSave').removeAttr('disabled');                               
                                 location.href = '@Url.Action("Index","DRSReconc")';
                             }
                             else {
@@ -1140,7 +1143,7 @@
             </div>
             <div class="col-xs-12 col-sm-2">
                 <label class=" required headinglabel">DRS No.</label>
-                @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control",@readonly="readonly" })
                 @Html.HiddenFor(mode => Model.DRSID)
             </div>
             <div class="col-xs-12 col-sm-1">
@@ -1414,6 +1417,7 @@
                         <th>Pickup Cash</th>
                         <th>Expenses</th>
                         <th>Total</th>
+                        <th></th>
                         
                     </tr>
                 </thead>
@@ -1439,28 +1443,28 @@
                                     @item.Reference
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.COD, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.Discount, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Discount, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.MCReceived, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.Receipt, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Receipt, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.PKPCash, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.PKPCash, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.Expense, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Expense, "2")
                                 </td>
                                 <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat(item.Total, "2")
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
                                 </td>
                                 <td>
-                                    <a href="#" onclick="deletentrans(@i)"><i class="fa fa-times"></i></a>
+                                    <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
                             i++;

@@ -177,6 +177,26 @@ namespace CMSV2.Models
             }
             return "";
         }
+        public static string GetDecimalFormat1(object iInputValue, string Decimals="")
+        {
+            if (Decimals == "")
+                Decimals = HttpContext.Current.Session["Decimal"].ToString();
+
+            if (Convert.ToString(iInputValue) == "")
+                return "";
+            
+            if (Decimals == "2")
+            {
+                if (iInputValue != null)
+                    return String.Format("{0:0.00}", (object)Convert.ToDecimal(iInputValue));
+            }
+            else if (Decimals == "3")
+            {
+                if (iInputValue != null)
+                    return String.Format("{0:0.000}", (object)Convert.ToDecimal(iInputValue));
+            }
+            return "";
+        }
 
         public static string GetCurrencyId(int CurrencyId)
         {

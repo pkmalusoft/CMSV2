@@ -2636,8 +2636,16 @@ namespace CMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
           //  rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("DRS Run Sheet");
-            string period = "AWB Print";
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("DELIVERY RUN SHEET");
+            string period = "";
+            try
+            {
+                period=Convert.ToDateTime(ds.Tables[0].Rows[0]["DRSDate"]).ToString("dd MMM yyyy");
+            }            
+            catch(Exception ex1)
+            {
+
+            }
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
