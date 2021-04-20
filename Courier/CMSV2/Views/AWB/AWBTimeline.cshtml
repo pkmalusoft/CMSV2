@@ -240,7 +240,8 @@
                                 <div class="pl-2">
 
                                     <label>Weight</label>
-                                    <input type="" name="" class="form-control" value="@Model.AWB.Weight"/>
+                                    <input type="text" name="" class="form-control" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.Weight,"3")"/>
+                                                                                      
 
                                  </div>
 
@@ -250,32 +251,32 @@
 
                         <div class="col-md-2">
                                 <label>Courier Charge</label>
-                                <input type="" name="" class="form-control" value="@Model.AWB.CourierCharge"/>
+                                <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.CourierCharge)"/>
                         </div>
 
                         <div class="col-md-2">
 
                             <label>Other Charge</label>
-                            <input type="" name="" class="form-control" value="@Model.AWB.OtherCharge" />
+                            <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.OtherCharge)" />
 
                         </div>
 
                          <div class="col-md-2">
                                 <label>Tax Amount</label>
-                                <input type="" name="" class="form-control" value="@Model.AWB.TaxAmount"/>
+                                <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.TaxAmount)"/>
                         </div>
 
                         <div class="col-md-3 flex">
 
                             <div>
                             <label>T. Charge</label>
-                            <input type="" name="" class="form-control" value="@Model.AWB.totalCharge"/>
+                            <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.totalCharge)"/>
 
                         </div>
                             <div class="pl-2">
 
                                 <label>M. Cost</label>
-                                <input type="" name="" class="form-control" value="@Model.AWB.materialcost" />
+                                <input type="text" name="" class="form-control text-right"  value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.materialcost)"/>
 
                             </div>
 
@@ -293,12 +294,12 @@
                             </div>
                              <div class="col-md-6">
                                 <label>Item Description</label>
-                                <input type="" name="" class="form-control" value="@Model.AWB.Description"/>
+                                <input type="text" name="" class="form-control" value="@Model.AWB.Description" />
                             </div>
 
                             <div class="col-md-3">
                                 <label>Payment Mode</label>
-                                <input type="" name="" class="form-control" value="@Model.AWB.paymentmode"/>
+                                <input type="text" name="" class="form-control" value="@Model.AWB.paymentmode" />
                             </div>
 
                         </div>
@@ -310,7 +311,7 @@
                                     <label>COD Status</label>
                                 </div> 
                                 <div class="col-md-8">
-                                    <input type="" name="" class="form-control" value="@Model.AWB.CODStatus"/>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.CODStatus"/>
                                 </div>       
 
                             </div>

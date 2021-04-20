@@ -2310,6 +2310,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="BATCHID" Type="int" />
     <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
     <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
+    <Property Name="JobCode" Type="varchar" MaxLength="50" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->

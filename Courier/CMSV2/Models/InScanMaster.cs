@@ -116,5 +116,6 @@ namespace CMSV2.Models
         public Nullable<int> BATCHID { get; set; }
         public Nullable<decimal> TaxPercent { get; set; }
         public Nullable<decimal> TaxAmount { get; set; }
+        public string JobCode { get; set; }
     }
 }

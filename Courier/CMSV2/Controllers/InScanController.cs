@@ -278,9 +278,10 @@ namespace CMSV2.Controllers
                         db.SaveChanges();
                     }
                 }
-                
+                if (v.QuickInscanID==0)
+                    AWBDAO.GenerateAWBJobCode(v.QuickInscanDateTime);
                 //TempData["SuccessMsg"] = "You have successfully Saved InScan Items.";             
-           
+
                 return Json(new { status = "ok", message = "You have successfully Saved InScan Items.!" } , JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)

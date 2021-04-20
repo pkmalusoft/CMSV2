@@ -86,6 +86,7 @@ namespace CMSV2.Models
         public string PickUpLocation {get;set;}
         public string DeliveryLocation { get; set; }
         public string ItemDescription { get; set; }
+        public string Remarks { get; set; }
         public string PickupSubLocality { get; set; }
         public string DeliverySubLocality { get; set; }
         public string OriginPlaceID { get; set; }
@@ -188,6 +189,7 @@ namespace CMSV2.Models
         public string Pieces { get; set; }
         public decimal Weight { get; set; }
         public string CargoDescription { get; set; }
+        public string Remarks { get; set; }
         public int MovementID { get; set; }
         public int ProductTypeID { get; set; }
 

@@ -2344,6 +2344,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
           <Property Name="BATCHID" Type="int" />
           <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
           <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
+          <Property Name="JobCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -20221,6 +20222,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="BATCHID" Type="Int32" />
           <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
+          <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DR">
           <Key>
@@ -29311,6 +29313,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="JobCode" ColumnName="JobCode" />
                 <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
                 <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
                 <ScalarProperty Name="BATCHID" ColumnName="BATCHID" />

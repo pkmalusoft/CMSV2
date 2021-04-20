@@ -192,8 +192,11 @@ namespace CMSV2.Models
                 return "";
             }
         }
-        public static string GetFormatNumber(object iInputValue, string Decimals)
+        public static string GetFormatNumber(object iInputValue, string Decimals="")
         {
+            if (Decimals == "")
+                Decimals = HttpContext.Current.Session["Decimal"].ToString(); 
+
             if (Decimals == "2")
             {
                                 

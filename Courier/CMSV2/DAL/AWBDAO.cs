@@ -600,6 +600,36 @@ namespace CMSV2.DAL
             }
 
         }
+
+        public static string GenerateAWBJobCode(DateTime BatchDate)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_UpdateBatchCode";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.Parameters.AddWithValue("@BatchDate",BatchDate.ToString("MM/dd/yyyy"));
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+
+        }
         #endregion
     }
 }

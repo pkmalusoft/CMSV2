@@ -12874,6 +12874,7 @@
     <Property Name="BATCHID" Type="Int32" />
     <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
     <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
+    <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="DR">
     <Key>
