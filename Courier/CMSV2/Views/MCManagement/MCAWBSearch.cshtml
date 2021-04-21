@@ -13,7 +13,7 @@
 .searchMc{
     border: 1px solid #ccc;
     position: relative;
-    padding: 20px 10px;
+    padding: 5px 10px;
 }
 .searchMc h4{
     padding: 0 30px;
@@ -24,27 +24,32 @@
     background: #f8fbff;
     text-align: center;
 }
+.abselem{
+    position: absolute;
+    top:-25px;
+    padding-bottom: 5px;
+}
 </style>
 
 <script>
     function optionchange() {
         if ($('#chkDateWise').prop('checked') == true) {
-            $('#FromDate').removeAttr('readonly');
-            $('#ToDate').removeAttr('readonly');
+            $('#FromDate1').removeAttr('readonly');
+            $('#ToDate1').removeAttr('readonly');
             $('#AWBNo').attr('readonly', 'readonly');
-            $('#Shipper').attr('readonly', 'readonly');
+            $('#Shipper').removeAttr('readonly');
             $('#SearchOption').val('Date');
         }
         else if ($('#chkAWBWise').prop('checked') == true) {
-            $('#FromDate').attr('readonly', 'readonly');
-            $('#ToDate').attr('readonly', 'readonly');
+            $('#FromDate1').attr('readonly', 'readonly');
+            $('#ToDate1').attr('readonly', 'readonly');
             $('#AWBNo').removeAttr('readonly');
             $('#Shipper').attr('readonly', 'readonly');
             $('#SearchOption').val('AWBNo');
         }
         else {
-            $('#FromDate').attr('readonly', 'readonly');
-            $('#ToDate').attr('readonly', 'readonly');
+            $('#FromDate1').attr('readonly', 'readonly');
+            $('#ToDate1').attr('readonly', 'readonly');
             $('#AWBNo').attr('readonly', 'readonly');
             $('#Shipper').removeAttr('readonly');
             $('#SearchOption').val('Shipper');
@@ -63,7 +68,53 @@
             $('#chkShipperWise').prop('checked', true)
         }
 
+        $(document).ready(function () {
+            $("#Shipper").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/AWB/GetShipperName',
+                        datatype: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (val, item) {
+                                return {
+                                    label: val.ShipperName,
+                                    value: val.ShipperName,
+                                    AcHeadID: val.AcHeadID,
+                                    ContactPerson: val.ContactPerson,
+                                    Address1: val.Address1,
+                                    Address2: val.Address2,
+                                    Pincode: val.PinCode,
+                                    Phone: val.Phone,
+                                    CountryName: val.CountryName,
+                                    CityName: val.CityName,
+                                    LocationName: val.LocationName,
+                                    ConsignorMobileNo: val.ConsignorMobileNo
 
+                                }
+                            }))
+                        }
+                    })
+                },
+                minLength: 1,
+                autoFocus: false,
+                focus: function (event, i) {
+                    $('#Shipper').val(i.item.value);
+                    $('#ShipperName').val(i.item.value);
+                    $("#ShipperAddress").val(i.item.CountryName);
+
+                },
+                select: function (e, i) {
+                    e.preventDefault();
+                    $("#ShipperName").val(i.item.label);
+                    $('#ShipperName').val(i.item.value);
+                    $("#ShipperAddress").val(i.item.CountryName);
+                },
+
+            });
+        });
         $('#btnsearch').click(function () {           
           
         
@@ -81,50 +132,46 @@
 
     
 <div class="row no-margin searchMc ">
-     <h4>Search</h4>
-    <div class="col-md-11 datefilters" >
-       
-                          
-                <div class="col-md-2 field checkboxdesign">
-                    <label class="headinglabel"><input type="radio" id="chkDateWise" name="search1" onclick="optionchange()" />AWB Date</label>
+    <h4>Options</h4>
+    <div class="col-md-12 datefilters" style="padding-top:15px;">
 
-                </div>
+        <div class="col-md-7 field ">
+            <div class="col-md-3">
+                <label class="headinglabel"><input type="radio" id="chkDateWise" name="search1" onclick="optionchange()" checked />AWB From Date</label>
+                @Html.TextBoxFor(model => model.FromDate1, new { @class = "form-control text-right" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">To Date</label>
+                @Html.TextBoxFor(model => model.ToDate1, new { @class = "form-control text-right" })
+            </div>
+            <div class="col-md-6">
+                <label class="headinglabel">Shipper/Consignor</label>
+                @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.SearchOption, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.ShipperAddress, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-4 field">
 
-                    <div class="col-md-2">
-                        <label class="headinglabel required ">From Date</label>
-                        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required">To Date</label>
-                        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
-                    </div>
-                
-                <div class="col-md-3 field">
-                   
-                    <label class="headinglabel"><input type="radio" id="chkAWBWise" name="search1" onclick="optionchange()" />Airway Bill</label>
-               
-                  <div >
-                     @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control" ,@readonly="readonly"})
-                  </div>
-                </div>
-              
-                <div class="col-md-3 field ">
-                   
-                        <label class="headinglabel"><input type="radio" id="chkShipperWise" name="search1" onclick="optionchange()"/>Shipper/Consignor</label>
+            <label class="headinglabel"><input type="radio" id="chkAWBWise" name="search1" onclick="optionchange()" />Airway Bill</label>
 
-                        <div >
+            <div>
+                @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
 
-                         @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.HiddenFor(model => model.SearchOption, new { @class = "form-control" })
-                </div>
-                    
-                </div>
-              
-            </div>          
 
-    <div class="col-md-1 text-right">
-        <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+
+
+        <div class="col-md-1 text-right">
+            <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        </div>
+
+
+
     </div>
+ 
+    
 </div>
    
 }

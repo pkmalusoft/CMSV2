@@ -26,7 +26,7 @@ namespace CMSV2.Controllers
                     ToDate = CommanFunctions.GetLastDayofMonth().Date //DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59)                
                 };
             }
-                        
+            SessionDataModel.SetMCTableVariable1(datePicker);
             return View(datePicker);
 
         }
@@ -39,7 +39,7 @@ namespace CMSV2.Controllers
             {
                 AWBNo=picker.AWBNo,
                 FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                ToDate = Convert.ToDateTime(picker.ToDate).Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 
             };
 
@@ -52,6 +52,7 @@ namespace CMSV2.Controllers
         }
         public ActionResult Index()
         {
+            Session["MCAWBSearch"] = null;
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             MCDatePicker datePicker = SessionDataModel.GetMCTableVariable1();
@@ -59,7 +60,7 @@ namespace CMSV2.Controllers
             List<DRRRecPayVM> _Receipts = new List<DRRRecPayVM>();
             if (datePicker != null)            {
 
-                DateTime pToDate = datePicker.ToDate.AddDays(1);
+                DateTime pToDate = Convert.ToDateTime(datePicker.ToDate).AddDays(1);
                  _Receipts = (from c in db.DRRRecPays
                                                where (c.RecPayDate >= datePicker.FromDate && c.RecPayDate < pToDate)
                                                orderby c.DocumentNo descending
@@ -76,16 +77,18 @@ namespace CMSV2.Controllers
         }
         public ActionResult MCAWBSearch()
         {
-
-            MCDatePicker datePicker = SessionDataModel.GetMCTableVariable1();
-
-            if (datePicker == null)
+            MCDatePicker datePicker = new MCDatePicker();
+            if (Session["MCAWBSearch"] != null)
             {
-                datePicker = new MCDatePicker();
-                datePicker.FromDate = CommanFunctions.GetLastDayofMonth(); // DateTime.Now.Date;
-                datePicker.ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-                datePicker.SearchOption = "Date";
-            }                    
+                datePicker = (MCDatePicker)Session["MCAWBSearch"];
+            }
+            //if (datePicker == null)
+            //{
+            //    datePicker = new MCDatePicker();
+            //    datePicker.FromDate = CommanFunctions.GetLastDayofMonth(); // DateTime.Now.Date;
+            //    datePicker.ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+            //    datePicker.SearchOption = "Date";
+            //}                    
                         
             SessionDataModel.SetMCTableVariable1(datePicker);
             return View(datePicker);
@@ -94,12 +97,12 @@ namespace CMSV2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MCAWBSearch([Bind(Include = "FromDate,ToDate,SearchOption,AWBNo,Shipper")] MCDatePicker picker)
+        public ActionResult MCAWBSearch([Bind(Include = "FromDate1,ToDate1,SearchOption,AWBNo,Shipper")] MCDatePicker picker)
         {
             MCDatePicker model = new MCDatePicker
             {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate,
+                FromDate1 = picker.FromDate1,
+                ToDate1 = picker.ToDate1,
                 SearchOption =picker.SearchOption,
                 AWBNo=picker.AWBNo,
                 Shipper=picker.Shipper
@@ -110,7 +113,8 @@ namespace CMSV2.Controllers
                 model.AWBNo = "";
             }
             ViewBag.Token = model;
-            SessionDataModel.SetMCTableVariable1(model);
+            Session["MCAWBSearch"] = model;
+            //SessionDataModel.SetMCTableVariable1(model);
             return RedirectToAction("Create", "MCManagement");
             
 
@@ -124,7 +128,7 @@ namespace CMSV2.Controllers
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            MCDatePicker datePicker = SessionDataModel.GetMCTableVariable1();
+            MCDatePicker datePicker = (MCDatePicker)Session["MCAWBSearch"];
             ViewBag.Token = datePicker;
             ViewBag.Movement = db.CourierMovements.ToList();
             var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
@@ -151,8 +155,21 @@ namespace CMSV2.Controllers
                 if (datePicker != null)
                  {
 
-                    _details = ReceiptDAO.GetMCAWBPending(datePicker, 0,branchid ,yearid);                  
-                  
+                    _details = ReceiptDAO.GetMCAWBPending(datePicker, 0,branchid ,yearid);
+                    if (datePicker.SearchOption == "Date")
+                    {
+                        _receipt.ShipperName = datePicker.Shipper;
+                        _receipt.ShipperAddress = datePicker.ShipperAddress;
+                    }
+                    else
+                    {
+                        var inscan = db.InScanMasters.Where(cc => cc.AWBNo == datePicker.AWBNo).FirstOrDefault();
+                        if (inscan!=null)
+                        {
+                            _receipt.ShipperName = inscan.Consignor;
+                            _receipt.ShipperAddress = inscan.ConsignorCountryName;
+                        }
+                    }
                     _receipt.Details = _details;
                     //_receipt.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
                 }
@@ -166,11 +183,22 @@ namespace CMSV2.Controllers
                 _receipt.RecPayDate = receipt.RecPayDate;
                 _receipt.ChequeDate = receipt.ChequeDate;
                 _receipt.ChequeNo = receipt.ChequeNo;
-                //_receipt.AchHeadID = receipt.BankName;
-                //_receipt.CurrencyID = receipt.CurrencyID;
+                _receipt.StatusEntry = receipt.StatusEntry;
+                
+                if (receipt.ShipperName!=null)
+                {
+                    _receipt.ShipperName = receipt.ShipperName;
+                }
+                if (receipt.ShipperAddress!=null)
+                  _receipt.ShipperAddress = receipt.ShipperAddress;
+                var achead = db.AcHeads.Where(cc => cc.AcHead1 == receipt.BankName).FirstOrDefault(); ;
+                if (achead!=null)
+                  _receipt.AchHeadID = achead.AcHeadID;
+                
+                _receipt.CurrencyID = receipt.CurrencyID;
                 _receipt.EXRate = receipt.EXRate;
                 _receipt.FMoney = receipt.FMoney;
-                _receipt.Remarks = receipt.Remarks;
+                //_receipt.Remarks = receipt.Remarks;
                 _details = ReceiptDAO.GetMCAWBPending(datePicker,_receipt.RecPayID, branchid , yearid);
                 //_details = (from c in db.DRRRecPayDetails join  c2 in db.InScanMasters on c.InScanID equals c2.InScanID where c.RecPayID==_receipt.RecPayID
                 //            select new DRRRecPayDetailVM { RecPayDetailID = c.RecPayDetailID, RecPayID = c.RecPayID,
@@ -229,7 +257,8 @@ namespace CMSV2.Controllers
                 _receipt.EXRate = model.EXRate;
                 _receipt.ChequeNo = model.ChequeNo;
                 _receipt.ChequeDate = model.ChequeDate;
-                
+                _receipt.ShipperName = model.ShipperName;
+                _receipt.ShipperAddress = model.ShipperAddress;
                 //_receipt.AchHeadID = model.AchHeadID;
                 _receipt.Remarks = model.Remarks;
 
@@ -345,6 +374,19 @@ namespace CMSV2.Controllers
             }
 
             return RedirectToAction("Index", "CODReceipt");
+
+        }
+
+        public ActionResult PrintVoucher(int id = 0)
+        {
+            int uid = Convert.ToInt32(Session["UserID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+            AccountsReportsDAO.GenerateMCPaymentPrintVoucher(id);
+            ViewBag.ReportName = "MC Payment Voucher";
+            return View();
 
         }
     }

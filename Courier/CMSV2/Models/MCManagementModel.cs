@@ -24,6 +24,7 @@ namespace CMSV2.Models
         public decimal CustomCharge { get; set; }
         public decimal MaterialCost { get; set; }
         public decimal AmountReceived { get; set; }
+        public decimal AmountPaid { get; set; }
         public decimal AmountPending { get; set; }
         //public decimal TotalCharges { get; set; }
         public int MovementId { get; set; }

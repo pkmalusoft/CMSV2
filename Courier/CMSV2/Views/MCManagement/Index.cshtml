@@ -200,7 +200,10 @@
                             <a class="aedit" href="Create?id=@item.RecPayID"><i class="fa fa-pencil"></i></a>
 
                             <a class="adelete" href="#" onclick="Delete(@item.RecPayID)"><i class="fa fa-times"></i></a>
-
+                            @if (isprint)
+                            {
+                                <a target="_blank" href="@Url.Action("PrintVoucher", "MCManagement", new { id = item.RecPayID })"><i class="fa fa-print"></i></a>
+                            }
                         </td>
                         <td style="display:none">
                             @item.RecPayID

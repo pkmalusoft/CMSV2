@@ -948,12 +948,12 @@
             }
         });
         document.addEventListener('keydown', function (event) {
-            if (event.code == 'KeyS' && (event.ctrlKey)) {
+            if (event.code == 'KeyS' && (event.altKey)) {
                 showshipperaddress();
             }
         });
         document.addEventListener('keydown', function (event) {
-            if (event.code == 'KeyR' && (event.ctrlKey)) {
+            if (event.code == 'KeyR' && (event.altKey)) {
                 showreceiveraddress();
             }
         });
@@ -2038,7 +2038,7 @@
                     <div class="col-xs-12 col-sm-6">
                         <div class="flex">
                             <div class="checkboxdesign no-padding  ">
-                                <a id="btnaddress1" onclick="showshipperaddress()">Shipper</a>
+                                <a id="btnaddress1" class="headinglabel hyperlink" onclick="showshipperaddress()">Shipper <span class="red">( Alt + S ) </span></a>
                                 @*<label class="headinglabel">Shipper</label>*@
                             </div>
 
@@ -2070,7 +2070,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-6">
                         <div class="checkboxdesign no-padding  ">
-                            <a id="btnaddress1" onclick="showreceiveraddress()">Receiver</a>
+                            <a id="btnaddress1" class="headinglabel hyperlink" onclick="showreceiveraddress()">Receiver <span class="red">( Alt + R )</span>    </a>                            
                             @*<label class="headinglabel">Receiver</label>*@
                         </div>
                         @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
@@ -2174,7 +2174,8 @@
 
                     </div>
                     <div class="col-md-6 d-flex" style="margin-top:30px">
-                        <input type="button" class="btn btn-primary  btnwidth" value="Update" name="Command" id="btnAdd" />
+                        @*<input type="button" class="btn btn-primary  btnwidth" value="Update" name="Command" id="btnAdd" />*@
+                        <a id="btnAdd" class="btn btn-primary  btnwidth">Upd<strong style="text-decoration:underline">a</strong>te</a>
                     </div>
                 </div>
             </div>

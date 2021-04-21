@@ -2676,5 +2676,83 @@ namespace CMSV2.DAL
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
         #endregion
+
+        #region "MCPaymentPrintVoucher"
+        public static string GenerateMCPaymentPrintVoucher(int id)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_MCPaymentVoucherPrint";
+            comd.Parameters.AddWithValue("@RecPayId", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "MCPaymentVoucher");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "MCPaymentVoucher.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "MCPaymentVoucher.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            //  rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("MC PAYMENT VOUCHER");
+            string period = "";           
+            //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+
+            //  rd.ParameterFields["GroupBy"].CurrentValues.AddValue(reportparam.ReportType);
+            // rd.ParameterFields["SortBy"].CurrentValues.AddValue(reportparam.SortBy);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+
+            string reportname = "MCPaymentVoucher_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+        #endregion
     }
 }

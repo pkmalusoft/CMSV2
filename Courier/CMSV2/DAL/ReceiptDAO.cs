@@ -1076,21 +1076,24 @@ namespace CMSV2.DAL
                 cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
                 cmd.CommandText = "SP_GetMCRAWBPending";
                 cmd.CommandType = CommandType.StoredProcedure;
-                if (datePicker.SearchOption==null)
+                if (datePicker != null)
                 {
-                    datePicker.SearchOption = "Date";
+                    if (datePicker.SearchOption == null)
+                    {
+                        datePicker.SearchOption = "Date";
+                    }
+                    cmd.Parameters.AddWithValue("@SearchOption", datePicker.SearchOption);
+                    if (datePicker.AWBNo == null)
+                        datePicker.AWBNo = "";
+                    cmd.Parameters.AddWithValue("@AWBNo", datePicker.AWBNo);
+                    if (datePicker.Shipper == null)
+                    {
+                        datePicker.Shipper = "";
+                    }
+                    cmd.Parameters.AddWithValue("@Shipper", datePicker.Shipper);
+                    cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(datePicker.FromDate1).ToString("MM/dd/yyyy"));
+                    cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(datePicker.ToDate1).ToString("MM/dd/yyyy"));
                 }
-                cmd.Parameters.AddWithValue("@SearchOption", datePicker.SearchOption);
-                if (datePicker.AWBNo == null)
-                    datePicker.AWBNo = "";
-                cmd.Parameters.AddWithValue("@AWBNo", datePicker.AWBNo);
-                if (datePicker.Shipper==null)
-                {
-                    datePicker.Shipper = "";
-                }
-                cmd.Parameters.AddWithValue("@Shipper", datePicker.Shipper);
-                cmd.Parameters.AddWithValue("@FromDate", datePicker.FromDate.ToString("MM/dd/yyyy"));
-                cmd.Parameters.AddWithValue("@ToDate",datePicker.ToDate.ToString("MM/dd/yyyy"));
                 cmd.Parameters.AddWithValue("@MCPVID", MCPVVID);
                 cmd.Parameters.AddWithValue("@FYearID", FyearId);
                 cmd.Parameters.AddWithValue("@BranchID",BranchId);
@@ -1113,6 +1116,7 @@ namespace CMSV2.DAL
                         item.ConsignorName = drrow["Consignor"].ToString();
                         item.MaterialCost = Convert.ToDecimal(drrow["MaterialCost"].ToString());
                         item.AmountReceived = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                        item.AmountPaid = Convert.ToDecimal(drrow["PaidAmount"].ToString());
                         item.AmountPending = Convert.ToDecimal(drrow["PendingAmount"].ToString());
                         item.Amount= Convert.ToDecimal(drrow["PayingAmount"].ToString());
                         item.AdjustmentAmount = Convert.ToDecimal(drrow["AdjustmentAmount"].ToString());

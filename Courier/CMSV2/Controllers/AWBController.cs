@@ -1436,11 +1436,24 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetShipperName(string term)
         {
-            var shipperlist = (from c1 in db.InScanMasters
-                               where c1.Consignor.ToLower().StartsWith(term.ToLower())
-                               orderby c1.Consignor ascending
-                               select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
-            return Json(shipperlist, JsonRequestBehavior.AllowGet);
+
+            if (term.Trim() !="")
+            {
+                var shipperlist = (from c1 in db.InScanMasters
+                                   where c1.IsDeleted==false && c1.Consignor.ToLower().StartsWith(term.ToLower())
+                                   orderby c1.Consignor ascending
+                                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var shipperlist = (from c1 in db.InScanMasters
+                                   where c1.IsDeleted==false
+                                   orderby c1.Consignor ascending
+                                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         [HttpGet]

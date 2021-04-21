@@ -393,7 +393,7 @@
     <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Applications">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -404,7 +404,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Applications' does not ha
     <Property Name="Description" Type="nvarchar" MaxLength="256" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Membership">
     <Key>
       <PropertyRef Name="UserId" />
@@ -432,7 +432,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Membership' does not have
     <Property Name="Comment" Type="ntext" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Paths">
     <Key>
       <PropertyRef Name="PathId" />
@@ -451,7 +451,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Paths' does not have a pr
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_PersonalizationPerUser">
     <Key>
       <PropertyRef Name="Id" />
@@ -473,7 +473,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_PersonalizationPerUser' d
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Roles">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -494,7 +494,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Roles' does not have a pr
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Users">
     <Key>
       <PropertyRef Name="UserId" />
@@ -935,7 +935,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="CreditNoteDetails">
     <Key>
       <PropertyRef Name="CreditNoteID" />
@@ -1422,6 +1422,8 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="UserID" Type="int" />
     <Property Name="BranchID" Type="int" />
     <Property Name="CurrencyID" Type="int" />
+    <Property Name="ShipperName" Type="varchar" MaxLength="200" />
+    <Property Name="ShipperAddress" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="DRRRecPayDetails">
     <Key>
@@ -1454,7 +1456,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="DRSRecPayId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="DRSEmployee">
     <Key>
       <PropertyRef Name="DRSEmployeeID" />
@@ -1842,7 +1844,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -2313,7 +2315,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="JobCode" Type="varchar" MaxLength="50" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="InScanNew">
     <Key>
       <PropertyRef Name="InScanID" />
@@ -2545,7 +2547,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
     <Property Name="DRSNo" Type="char" MaxLength="10" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="MCPaymentReceipt">
     <Key>
       <PropertyRef Name="McPaymentReceiptID" />
@@ -3186,7 +3188,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have 
     <Property Name="PageTypeId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -3711,7 +3713,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.State' does not have a primary k
     <Property Name="InvoiceType" Type="char" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tempCustomer">
     <Key>
       <PropertyRef Name="ID" />
@@ -3728,7 +3730,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.tempCustomer' does not have a pr
     <Property Name="Location" Type="nvarchar" MaxLength="510" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempCustomerInvoice">
     <Key>
       <PropertyRef Name="ID" />
@@ -3758,7 +3760,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TempCustomerInvoice' does not ha
     <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempInScan">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -3808,7 +3810,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TempInScan' does not have a prim
     <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateDetail">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3821,7 +3823,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateDetail' does not have a 
     <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateMaster">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3868,7 +3870,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TempRateMaster' does not have a 
     <Property Name="CustomCharge" Type="money" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -3888,7 +3890,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.Transit' does not have a primary
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
@@ -4140,7 +4142,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__DomesticC__Recei__4AE30379">
+  <Association Name="FK__DomesticC__Recei__7B271378">
     <End Role="DomesticCODReceipt" Type="Self.DomesticCODReceipt" Multiplicity="1" />
     <End Role="DomesticCODReceiptDetail" Type="Self.DomesticCODReceiptDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4152,7 +4154,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__DomesticC__Recei__4BD727B2">
+  <Association Name="FK__DomesticC__Recei__7C1B37B1">
     <End Role="DomesticCODReceipt" Type="Self.DomesticCODReceipt" Multiplicity="1" />
     <End Role="DomesticCODReceiptDetail" Type="Self.DomesticCODReceiptDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -7265,11 +7267,11 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK__DomesticC__Recei__4AE30379" Association="Self.FK__DomesticC__Recei__4AE30379">
+    <AssociationSet Name="FK__DomesticC__Recei__7B271378" Association="Self.FK__DomesticC__Recei__7B271378">
       <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipt" />
       <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK__DomesticC__Recei__4BD727B2" Association="Self.FK__DomesticC__Recei__4BD727B2">
+    <AssociationSet Name="FK__DomesticC__Recei__7C1B37B1" Association="Self.FK__DomesticC__Recei__7C1B37B1">
       <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipt" />
       <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetail" />
     </AssociationSet>

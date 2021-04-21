@@ -8838,6 +8838,8 @@
     <EntitySetMapping Name="DRRRecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPay">
         <MappingFragment StoreEntitySet="DRRRecPay">
+          <ScalarProperty Name="ShipperAddress" ColumnName="ShipperAddress" />
+          <ScalarProperty Name="ShipperName" ColumnName="ShipperName" />
           <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />

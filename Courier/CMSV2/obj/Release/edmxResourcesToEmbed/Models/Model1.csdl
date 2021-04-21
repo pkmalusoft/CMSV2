@@ -12635,6 +12635,8 @@
     <Property Name="UserID" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
     <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="ShipperName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ShipperAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="DRRRecPayDetail">
     <Key>

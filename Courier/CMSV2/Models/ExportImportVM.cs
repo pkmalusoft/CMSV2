@@ -132,10 +132,12 @@ namespace CMSV2.Models
         public DateTime ToDate { get; set; }        
         public string AWBNo { get; set; }
         public int InScanID { get; set; }
+        public DateTime? FromDate1 { get; set; }
+        public DateTime? ToDate1 { get; set; }
+                public string Shipper { get; set; }
+        public string ShipperAddress { get; set; }
 
-        public string Shipper { get; set; }
-               
-        
+
 
     }
     public class InvoiceAllParam

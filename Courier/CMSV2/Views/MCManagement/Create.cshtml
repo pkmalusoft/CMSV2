@@ -5,7 +5,9 @@
     var _decimal = @Session["Decimal"].ToString();
 }
     <style>
-    
+        tfoot {
+            display: table-header-group;
+        }
         .w-6 {
             width: 6%;
         }
@@ -24,6 +26,9 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
+        }
+        .table-bordered > thead > tr > th{
+            text-align: center;
         }
 
         .align_self {
@@ -90,20 +95,57 @@
 
     }
     $(function () {
-        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#FromDate1').datetimepicker({ format: 'DD-MM-YYYY' });
 
-        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ToDate1').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $('#RecPayDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#ChequeDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        //var d = new Date();
-        //var curr_date = d.getDate();
-        //var curr_month = d.getMonth() + 1;
-        //var curr_year = d.getFullYear();
+        //$(document).ready(function () {
+        //    $("#ShipperName").autocomplete({
+        //        source: function (request, response) {
+        //            $.ajax({
+        //                url: '/AWB/GetShipperName',
+        //                datatype: "json",
+        //                data: {
+        //                    term: request.term
+        //                },
+        //                success: function (data) {
+        //                    response($.map(data, function (val, item) {
+        //                        return {
+        //                            label: val.ShipperName,
+        //                            value: val.ShipperName,
+        //                            AcHeadID: val.AcHeadID,
+        //                            ContactPerson: val.ContactPerson,
+        //                            Address1: val.Address1,
+        //                            Address2: val.Address2,
+        //                            Pincode: val.PinCode,
+        //                            Phone: val.Phone,
+        //                            CountryName: val.CountryName,
+        //                            CityName: val.CityName,
+        //                            LocationName: val.LocationName,
+        //                            ConsignorMobileNo: val.ConsignorMobileNo
 
-        //var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        //                        }
+        //                    }))
+        //                }
+        //            })
+        //        },
+        //        minLength: 1,
+        //        autoFocus: false,
+        //        focus: function (event, i) {
+        //            $('#ShipperName').val(i.item.value);
+        //            $("#ShipperAddress").val(i.item.CountryName);                    
 
-        //$('#ReceiptDate').val(reqdate);
+        //        },
+        //        select: function (e, i) {
+        //            e.preventDefault();
+        //            $("#ShipperName").val(i.item.label);
+        //            $("#ShipperAddress").val(i.item.CountryName);                                        
+        //        },
+
+        //    });
+        //});
     });
 
 
@@ -118,149 +160,165 @@
     @if (Model.RecPayID==0)
     {
     <div class="row no-margin">
-        @{ Html.RenderAction("MCAWBSearch", "MCManagement");}
+        
+            @{ Html.RenderAction("MCAWBSearch", "MCManagement");}        
+        
     </div>
     }
 	 
 	
-    <fieldset>
-        @using (Html.BeginForm("Create", "MCManagement", FormMethod.Post, new { @id = "codreceipt" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-        <div class="row no-margin" style="padding-top:10px">          
-                <div class="col-md-12 btn-right">
-                    <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+<fieldset>
+    @using (Html.BeginForm("Create", "MCManagement", FormMethod.Post, new { @id = "codreceipt" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-md-2">
+                @Html.HiddenFor(model => model.RecPayID)
+                <label class="headinglabel required "> Mc Payment Vhr No.</label>
+                @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.DocumentNo)
+                @Html.HiddenFor(model => model.FMoney)
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel required">Mc Payment Date</label>
+                @Html.TextBoxFor(model => model.RecPayDate, new { @class = "form-control text-right txttarget", @required = "true" })
+                @Html.ValidationMessageFor(model => model.RecPayDate)
+            </div>
+            <div class="col-xs-12 col-sm-2">
+
+                <label class="headinglabel">Payment Mode</label>
+                <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
+                    <option value="1">Bank</option>
+                    <option selected value="2">Cash</option>
+                </select>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <div id="divCash">
+                    <label class=" required headinglabel">Cash/ bank account No.</label>
+                    @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
+
                 </div>
+                <div id="divBank">
+                    <div class="form-title">
+                        <label class=" required headinglabel">Bank</label>
+                    </div>
+                    <div class="form-field">
+                        @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque No</label>
+                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
 
             </div>
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-md-2">
-                        @Html.HiddenFor(model => model.RecPayID)
-                        <label class="headinglabel required "> Mc Payment Vhr No.</label>
-                        @Html.TextBoxFor(model => model.DocumentNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
-                        @Html.ValidationMessageFor(model => model.DocumentNo)
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required">Mc Payment Date</label>
-                        @Html.TextBoxFor(model => model.RecPayDate, new { @class = "form-control text-right txttarget", @required = "true" })
-                        @Html.ValidationMessageFor(model => model.RecPayDate)
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                        
-                        <label class="headinglabel">Payment Mode</label>
-                        <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
-                            <option value="1">Bank</option>
-                            <option selected value="2">Cash</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-12 col-sm-3">
-                        <div id="divCash">
-                            <label class=" required headinglabel">Cash/ bank account No.</label>
-                            @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
-
-                        </div>
-                        <div id="divBank">
-                            <div class="form-title">
-                                <label class=" required headinglabel">Bank</label>
-                            </div>
-                            <div class="form-field">
-                                @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-1">
-                        <label class=" required headinglabel">Currency</label>
-                        @Html.DropDownListFor(model => model.CurrencyID, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
-
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class="headinglabel">Exchange Rate</label>
-                        @Html.TextBoxFor(model => model.EXRate, string.Format("{0:n2}", Model.EXRate), new { @class = "form-control textright" })
-
-                    </div>
-                </div>
-
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Cheque No</label>
-                        @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
-
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Cheque Date</label>
-                        @if (Model.ChequeDate != null)
-                        {
-                            @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
-                        }
-                        else
-                        {
-
-                            @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
-                        }
-                    </div>
-                    
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Amount Paid</label>
-
-                        @Html.TextBoxFor(model => model.FMoney, string.Format("{0:n2}", Model.FMoney), new { @class = "form-control amt textright TotalInvoiceAmount", @required = "true", @onchange = "setTwoNumberDecimal(this)" })
-
-                    </div>
-                    <div class="col-xs-12 col-sm-2 checkboxdesign" style="padding-top:30px!important">                        
-                        @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
-                        <label class="headinglabel">Auto Allocate</label>
-
-                    </div>
-                    <div class="col-md-4">
-                        <label class=" required headinglabel">Remarks</label>
-                        @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @required = "true"  })
-
-                    </div>
-
-                </div>
-             
-
-                <div class="row no-margin" style="padding-top: 10px">
-                    <div class="col-md-12">
-                        <table class="table table-bordered table-responsive" id="details" style="background-color: white; table-layout:fixed;" width="100%"; >
-
-                            <thead>
-                            <th width="3%" style="text-align:center">
-                                SNo.                                
-                            </th>
-                            <th width="7%">AWB No.</th>
-                            <th width="7%">AWB Date</th>
-                            <th >Consignor</th>
-                            <th >Consignee</th>
-                            <th>Material Cost</th>
-                            <th >Received Amount</th>
-                            <th >Pending Amount</th>
-                            <th >Paying Amount</th>
-                            <th >Adjustment Amt</th>
-                            <th > Close All  <input type="checkbox"  class="Selectall" id="Selectall" value="0" name="Selectall" /></th>
-                            </thead>
-                            <tbody class="input-table" id="listContainer">
-                                @{Html.RenderPartial("ReceiptList", Model);}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="7" class="text-right" style="font-weight:bold">Total</td>
-                                    <td><input type="text" class="text-right form-control"  id="txtTotalCharge" value="0" /> </td>
-                                    <td><input type="text" class="text-right form-control"  id="txtTotalReceived" value="0" /> </td>
-                                    <td><input type="text" class="text-right form-control"  id="txtTotalDiscount" value="0" /> </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-       
-
-
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque Date</label>
+                @if (Model.ChequeDate != null)
+                {
+                    @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
                 }
-        </fieldset>
+                else
+                {
+
+                    @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
+                }
+            </div>
+
+
+
+
+            <div class="col-xs-12 col-sm-1 hide">
+                <label class=" required headinglabel">Currency</label>
+                @Html.DropDownListFor(model => model.CurrencyID, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", @class = "form-control" })
+
+            </div>
+            <div class="col-xs-12 col-sm-2 hide">
+                <label class="headinglabel">Exchange Rate</label>
+                @Html.TextBoxFor(model => model.EXRate, string.Format("{0:n2}", Model.EXRate), new { @class = "form-control textright" })
+
+            </div>
+            <div class="col-md-4 hide">
+                <label class=" required headinglabel">Remarks</label>
+                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
+
+            </div>
+        </div>
+
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-md-3 field ">
+                <label class="headinglabel">Shipper</label>
+                @Html.TextBoxFor(model => model.ShipperName, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Shipper Location</label>
+                @Html.TextBoxFor(model => model.ShipperAddress, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Total Outstanding</label>
+                <input type="text" class="text-right form-control" readonly id="txtTotalCharge" />
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Current Payment</label>
+                <input type="text" class="text-right form-control" id="txtTotalReceived" readonly value="@Model.FMoney" readonly />
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Total Adjusted</label>
+                <input type="text" class="text-right form-control" id="txtTotalDiscount" value="0" readonly />
+
+            </div>
+            
+
+
+
+        </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-md-12 btn-right">
+                <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+            </div>
+        </div>
+
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-responsive" id="details" style="background-color: white; table-layout:fixed;" width="100%">
+
+                        <thead>
+                        <th width="3%" style="text-align:center">
+                            SNo.
+                        </th>
+                        <th width="7%">AWB No.</th>
+                        <th width="7%">AWB Date</th>
+                        <th>Shipper</th>
+                        <th>Receiver</th>
+                        <th>Material Cost</th>
+                        <th>Material Cost Received </th>
+                        <th>Material Cost Paid </th>
+                        <th>Mc Outstanding Payment</th>
+                        <th>Current Payment</th>
+                        <th>Material Cost Adjustment</th>
+                        <th> Close All  <input type="checkbox" class="Selectall" id="Selectall" value="0" name="Selectall" /></th>
+                        </thead>
+
+                        <tbody class="input-table" id="listContainer">
+
+                            @{Html.RenderPartial("ReceiptList", Model);}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+
+
+            }
+    </fieldset>
 </section>
 
 
@@ -326,6 +384,7 @@
                 totalcod = parseFloat(totalcod) + parseFloat(Received);
                 console.log(Received);
             //}
+            $('#FMoney').val(parseFloat(totalcod).toFixed(2));
             $('#txtTotalCharge').val(parseFloat(totalcharges).toFixed(2));
             $('#txtTotalDiscount').val(parseFloat(totaldiscount).toFixed(2));
             $('#txtTotalReceived').val(parseFloat(totalcod).toFixed(2));
@@ -339,7 +398,7 @@
           
           var idtext = 'txtAmountAllocated_';
         if ($("#AutoAllocate").is(':checked')) {
-            var TotalAmount = parseFloat($('#Amount').val()).toFixed(2);
+            var TotalAmount = parseFloat($('#FMoney').val()).toFixed(2);
             if (TotalAmount > 0) {
                 var amt = 0;
                 $('[id^=' + idtext + ']').each(function (index, item) {
