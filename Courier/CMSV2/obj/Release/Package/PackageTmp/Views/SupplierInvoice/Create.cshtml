@@ -1141,21 +1141,20 @@
                     <label class=" required headinglabel">Supplier Type</label>
                     @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="headinglabel required ">Supplier</label>
                     @Html.HiddenFor(model => model.SupplierID)
                     @*@Html.DropDownListFor(model => model.CustomerId, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })*@
                     @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.SupplierName)
                 </div>
-
-            </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-12">
+                <div class="col-md-3">
                     <label class="headinglabel">Remarks</label>
                     @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
                 </div>
+
             </div>
+            
             <div class="col-md-12 sub_title_block">
                 <h4 style="color:#0094ff;">Details</h4>
                 <hr />
@@ -1205,7 +1204,7 @@
                         <label class="headinglabel required"> Net Value</label>
                         <input type="text" class="form-control text-right" readonly id="NetValue" />
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1" style="padding-top:10px">
                         <button type="button" class="small_btn btn-2  btn btn-primary" title="Add Consignments" onclick="ShowConsignmentPopup(-1)"><i class=" fa fa-th"></i></button>
                         <button type="button" class="small_btn  btn btn-primary" index="1" id="btnadd" title="Add New" class="addmore"><i class="fa fa-plus"></i></button>
                     </div>

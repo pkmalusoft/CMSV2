@@ -9,6 +9,7 @@ using CMSV2.DAL;
 using System.Data.Entity;
 using System.Configuration;
 using Newtonsoft.Json;
+using System.Xml.Linq;
 
 namespace CMSV2.Controllers
 {
@@ -375,6 +376,38 @@ namespace CMSV2.Controllers
             public string reference { get; set; }
             public List<string> types { get; set; }
         }
+        public class Venue
+        {
+            #region Properties  
+            public int Id { get; set; }
+            
+            public string Name { get; set; }
+         
+            public string ZipCode { get; set; }
+          
+            public string Country { get; set; }
+            public string CountryName { get; set; }
+         
+            public string State { get; set; }
+         
+            public string City { get; set; }
+            public float Latitude { get; set; }
+            public float Longitude { get; set; }
+            public List<Country> Countries { get; set; }
+            public string CountryCode { get; set; }
+            #endregion
+        }
+
+        public class Country
+        {
+            #region Properties  
+            public int CountryId { get; set; }
+            public string CountryName { get; set; }
+            public string MapReference { get; set; }
+            public string CountryCode { get; set; }
+            public string CountryCodeLong { get; set; }
+            #endregion
+        }
         public class RootObject
         {
             public List<Prediction> predictions { get; set; }
@@ -415,7 +448,103 @@ namespace CMSV2.Controllers
             }
         }
 
+        [HttpGet, ActionName("GetVenueDetailsByPlace")]
+        public JsonResult GetVenueDetailsByPlace(string placeId)
+        {
+            string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
+            string placeDetailsApi = "https://maps.googleapis.com/maps/api/place/details/xml?placeid={0}&key={1}";
 
+          //  string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];
+            try
+            {
+                Venue ven = new Venue();
+                placeDetailsApi = placeDetailsApi.Replace("{0}", placeId);
+                placeDetailsApi = placeDetailsApi.Replace("{1}", GooglePlaceAPIKey);
+
+                var result = new System.Net.WebClient().DownloadString(placeDetailsApi);
+
+                var xmlElm = XElement.Parse(result);
+                ven = GetAllVenueDetails(xmlElm);
+
+                return Json(ven, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>  
+        /// This method is creted to get the place details from xml  
+        /// </summary>  
+        /// <param name="xmlElm"></param>  
+        /// <returns></returns>  
+        private Venue GetAllVenueDetails(XElement xmlElm)
+        {
+            Venue ven = new Venue();
+            List<string> c = new List<string>();
+            List<string> d = new List<string>();
+            //get the status of download xml file  
+            var status = (from elm in xmlElm.Descendants()
+                          where
+                              elm.Name == "status"
+                          select elm).FirstOrDefault();
+
+            //if download xml file status is ok  
+            if (status.Value.ToLower() == "ok")
+            {
+
+                //get the address_component element  
+                var addressResult = (from elm in xmlElm.Descendants()
+                                     where
+                                         elm.Name == "address_component"
+                                     select elm);
+                //get the location element  
+                var locationResult = (from elm in xmlElm.Descendants()
+                                      where
+                                          elm.Name == "location"
+                                      select elm);
+
+                foreach (XElement item in locationResult)
+                {
+                    ven.Latitude = float.Parse(item.Elements().Where(e => e.Name.LocalName == "lat").FirstOrDefault().Value);
+                    ven.Longitude = float.Parse(item.Elements().Where(e => e.Name.LocalName == "lng").FirstOrDefault().Value);
+                }
+                //loop through for each address_component  
+                foreach (XElement element in addressResult)
+                {
+                    string type = element.Elements().Where(e => e.Name.LocalName == "type").FirstOrDefault().Value;
+
+                    if (type.ToLower().Trim() == "locality") //if type is locality the get the locality  
+                    {
+                        ven.City = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                    }
+                    else
+                    {
+                        if (type.ToLower().Trim() == "administrative_area_level_2" && string.IsNullOrEmpty(ven.City))
+                        {
+                            ven.City = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                        }
+                    }
+                    if (type.ToLower().Trim() == "administrative_area_level_1") //if type is locality the get the locality  
+                    {
+                        ven.State = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                    }
+                    if (type.ToLower().Trim() == "country") //if type is locality the get the locality  
+                    {
+                        ven.Country = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                        ven.CountryCode = element.Elements().Where(e => e.Name.LocalName == "short_name").Single().Value;
+                        if (ven.Country == "United States") { ven.Country = "USA"; }
+                    }
+                    if (type.ToLower().Trim() == "postal_code") //if type is locality the get the locality  
+                    {
+                        ven.ZipCode = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                    }
+                }
+            }
+            xmlElm.RemoveAll();
+            return ven;
+        }
 
     }
 }

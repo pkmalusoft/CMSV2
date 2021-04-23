@@ -128,12 +128,10 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
         <div class="row no-margin" style="padding-top:10px">          
-                <div class="col-md-12 btn-right">
-                    <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
-                </div>
+                
 
             </div>
+
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-2">
                         @Html.HiddenFor(model => model.ReceiptID)
@@ -141,7 +139,7 @@
                         @Html.TextBoxFor(model => model.ReceiptNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
                         @Html.ValidationMessageFor(model => model.ReceiptNo)
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <label class="headinglabel required">Receipt Date</label>
                         @Html.TextBoxFor(model => model.ReceiptDate, new { @class = "form-control text-right txttarget", @required = "true" })
                         @Html.ValidationMessageFor(model => model.ReceiptDate)
@@ -153,7 +151,7 @@
                             <option selected value="2">Cash</option>
                         </select>
                     </div>
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-2">
                         <div id="divCash">
                             <label class=" required headinglabel">Cash</label>
                             @Html.DropDownListFor(model => model.AchHeadID, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = "true", @id = "AcCashHeadId" })
@@ -168,16 +166,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-xs-12 col-sm-2">
+                    <div class="col-xs-12 col-sm-1">
                         <label class=" required headinglabel">Cheque No</label>
                         @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright" })
 
                     </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Cheque Date</label>
+                    <div class="col-xs-12 col-sm-1">
+                        <label class=" required headinglabel">Cheq Date</label>
                         @if (Model.ChequeDate != null)
                         {
                             @Html.TextBoxFor(m => m.ChequeDate, new { Value = Model.ChequeDate.Value.ToString("dd-MMM-yyyy"), id = "", @class = "form-control text-right" })
@@ -188,34 +184,52 @@
                             @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right" })
                         }
                     </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Currency</label>
-                        @Html.DropDownListFor(model => model.CurrencyID, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+                     <div class="col-xs-12 col-sm-3 ">
 
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class="headinglabel">Exchange Rate</label>
-                        @Html.TextBoxFor(model => model.EXRate, string.Format("{0:n2}", Model.EXRate), new { @class = "form-control textright" })
+                     <div class=" checkboxdesign justify-between" >
 
+                         <label class=" required headinglabel" style="margin-bottom: 10px">Amt. Received</label>
+
+                        <div>
+                        @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
+                        <label class="headinglabel" style="margin-bottom: 10px">Auto Allocate</label>
                     </div>
-                    <div class="col-xs-12 col-sm-2">
-                        <label class=" required headinglabel">Amount Received</label>
+                       
+                    </div>
 
                         @Html.TextBoxFor(model => model.Amount, string.Format("{0:n2}", Model.Amount), new { @class = "form-control amt textright TotalInvoiceAmount", @required = "true", @onchange = "setTwoNumberDecimal(this)" })
 
                     </div>
-                    <div class="col-xs-12 col-sm-2 checkboxdesign" style="padding-top:30px!important">                        
-                        @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
-                        <label class="headinglabel">Auto Allocate</label>
-
-                    </div>
 
                 </div>
-                <div class="row no-margin" style="padding-top: 10px">
-                    <div class="col-md-12">
+
+                <div class="row no-margin" >
+                    
+                    <div class="col-xs-12 col-sm-2 hide">
+                        <label class=" required headinglabel">Currency</label>
+                        @Html.DropDownListFor(model => model.CurrencyID, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", ng_change = "getselectval()", @class = "form-control", required = "required" })
+
+                    </div>
+                    <div class="col-xs-12 col-sm-2 hide">
+                        <label class="headinglabel">Exchange Rate</label>
+                        @Html.TextBoxFor(model => model.EXRate, string.Format("{0:n2}", Model.EXRate), new { @class = "form-control textright" })
+
+                    </div>
+                   
+                  
+
+                </div>
+                <div class="row no-margin" >
+                    <div class="col-md-5">
                         <label class=" required headinglabel">Remarks</label>
                         @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @required = "true"  })
 
+                    </div>
+                    <div class="col-md-7">
+                        <div class=" btn-right">
+                            <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+                            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+                    </div>
                     </div>
                 </div>
 

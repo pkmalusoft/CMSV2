@@ -778,7 +778,7 @@
                 </select>
             </div>
 
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-2">
                 <div id="divCash" style="padding-top:10px">
                     <label class=" required headinglabel">Cash</label>
                     @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
@@ -796,6 +796,27 @@
                     @Html.DropDownListFor(model => model.ChequeBank, new SelectList(@ViewBag.acheadbank, "AcHeadID", "AcHead"), "Select", new { @class = "form-control", @required = true })
                 </div>
             </div>
+
+              <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque Reference</label>
+                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright", @required = true, @autocomplete = "off" })
+
+            </div>
+
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Cheque Date</label>
+
+                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right", @required = true, @autocomplete = "off" })
+
+            </div>
+
+
+               <div class="col-xs-4 col-sm-4">
+                <label class="headinglabel">Remarks</label>
+                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
+            </div>
+
+
             <div class="col-xs-12 col-md-2">
                 <label class=" required headinglabel">Vendor Type</label>
                 <select class="form-control" id="vendortype">
@@ -805,32 +826,46 @@
                     }
                 </select>
             </div>
+
+             <div class="col-xs-12 col-sm-3" style="width: calc(36.33% - 79px);">
+            <label class=" required headinglabel">Vendor</label>
+            @Html.TextBoxFor(model => model.customerName, new { @class = "form-control", @required = "true" })
+            @Html.HiddenFor(model => model.SupplierID)
+        </div>
+
+        <div class="pull-left" style="padding-right:5px; padding-top:10px">
+            <button class="btn btn-primary small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+        </div>  
+
+        <div class="col-xs-12 col-sm-2">
+        <div class="flexTitle">
+            <label class="headinglabel required">Amount</label>
+            <div class="checkboxdesign no-padding text-right" style="float:right">
+                @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
+                <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Auto Allocated</label>
+            </div>
+        </div>
+        @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright" })
+    </div>
+
+
+
         </div>
 
 
         <div class="row no-margin" style="padding-top:10px">
-            <div class="col-xs-12 col-sm-2">
-                <label class=" required headinglabel">Cheque Reference</label>
-                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control textright", @required = true, @autocomplete = "off" })
-
-            </div>
-            <div class="col-xs-12 col-sm-2">
-                <label class=" required headinglabel">Cheque Date</label>
-
-                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control text-right", @required = true, @autocomplete = "off" })
-
-            </div>
+          
 
 
             @if (Model.RecPayID <= 0)
             {
 
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 hide">
                     <label class=" required headinglabel">Currency</label>
                     @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { ng_model = "ExR", @class = "form-control", required = "required" })
 
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 hide">
                     <label class="headinglabel">Ex. Rate</label>
                     @Html.TextBoxFor(model => model.EXRate, new { ng_model = "exChangeRate", @class = "form-control textright" })
 
@@ -841,12 +876,12 @@
             else
             {
 
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 hide">
                     <label class="headinglabel">Currency</label>
 
                     @Html.DropDownListFor(model => model.CurrencyId, (SelectList)ViewBag.Currency, "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 hide">
                     <label class="headinglabel">Ex. Rate</label>
                     @Html.TextBoxFor(model => model.EXRate, new { @readonly = "readonly", @class = "form-control" })
 
@@ -854,38 +889,17 @@
 
             }
 
-            <div class="col-xs-4 col-sm-4">
-                <label class="headinglabel">Remarks</label>
-                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
-            </div>
+         
 
         </div>
 
 
 
-        <div class="col-xs-12 col-sm-3" style="width: calc(36.33% - 79px);">
-            <label class=" required headinglabel">Vendor</label>
-            @Html.TextBoxFor(model => model.customerName, new { @class = "form-control", @required = "true" })
-            @Html.HiddenFor(model => model.SupplierID)
-        </div>
-
-        <div class="pull-left" style="padding-right:5px">
-            <button class="btn btn-primary small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
-        </div>       
-        <div class="col-xs-12 col-sm-2">
-            <div class="flexTitle">
-                <label class="headinglabel required">Amount</label>
-                <div class="checkboxdesign no-padding text-right" style="float:right">
-                    @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
-                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Auto Allocated</label>
-                </div>
-            </div>
-            @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright" })
-        </div>
+            
+    
 
 
-
-        <div class="col-xs-3 col-sm-2">
+        <div class="col-xs-3 col-sm-2 col-sm-offset-8">
             <label class="headinglabel">Allocated Amount</label>
             <input type="text" id="AllocatedAmount" class="form-control text-right" readonly />
         </div>

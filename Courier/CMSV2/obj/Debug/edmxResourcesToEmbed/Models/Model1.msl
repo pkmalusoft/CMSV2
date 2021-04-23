@@ -9197,5 +9197,50 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="AccountSetups">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AccountSetup">
+        <MappingFragment StoreEntitySet="AccountSetup">
+          <ScalarProperty Name="SalesType" ColumnName="SalesType" />
+          <ScalarProperty Name="CreditAccountId" ColumnName="CreditAccountId" />
+          <ScalarProperty Name="DebitAccountId" ColumnName="DebitAccountId" />
+          <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="PageName" ColumnName="PageName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConsigneeMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsigneeMaster">
+        <MappingFragment StoreEntitySet="ConsigneeMaster">
+          <ScalarProperty Name="ConsigneeContactName" ColumnName="ConsigneeContactName" />
+          <ScalarProperty Name="ConsigneePhoneNo" ColumnName="ConsigneePhoneNo" />
+          <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
+          <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
+          <ScalarProperty Name="ConsigneeCountryname" ColumnName="ConsigneeCountryname" />
+          <ScalarProperty Name="ConsigneeAddress3" ColumnName="ConsigneeAddress3" />
+          <ScalarProperty Name="ConsigneeAddress2" ColumnName="ConsigneeAddress2" />
+          <ScalarProperty Name="ConsigneeAddress1" ColumnName="ConsigneeAddress1" />
+          <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
+          <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
+          <ScalarProperty Name="ConsigneeId" ColumnName="ConsigneeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConsignorMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsignorMaster">
+        <MappingFragment StoreEntitySet="ConsignorMaster">
+          <ScalarProperty Name="ConsignorContactName" ColumnName="ConsignorContactName" />
+          <ScalarProperty Name="ConsignorPhoneNo" ColumnName="ConsignorPhoneNo" />
+          <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
+          <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
+          <ScalarProperty Name="ConsignorCountryname" ColumnName="ConsignorCountryname" />
+          <ScalarProperty Name="ConsignorAddress3" ColumnName="ConsignorAddress3" />
+          <ScalarProperty Name="ConsignorAddress2" ColumnName="ConsignorAddress2" />
+          <ScalarProperty Name="ConsignorAddress1" ColumnName="ConsignorAddress1" />
+          <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
+          <ScalarProperty Name="ConsignorId" ColumnName="ConsignorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

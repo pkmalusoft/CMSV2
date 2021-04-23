@@ -12,6 +12,9 @@
         display: block;
         width: 100%;
     }
+    ul.ui-front {
+        z-index: 1100;
+    }
 </style>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -72,7 +75,7 @@ body .hyperlink{
     }
 </style>
 <script type="text/javascript">
-    var pickuplocation, deliverylocation;
+    var pickuplocation, deliverylocation,consignorlocation,consigneelocation;
 
     var componentForm = {
         street_number: 'short_name',
@@ -94,11 +97,14 @@ body .hyperlink{
 
         deliverylocation = new google.maps.places.Autocomplete(
             document.getElementById('DeliveryLocation'), { types: [] });
+      
+
 
         deliverylocation.addListener('place_changed', fillDeliveryLocation);
+      
 
     }
-
+  
     function fillPickupLocation() {
 
         // Get the place details from the autocomplete object.
@@ -111,7 +117,7 @@ body .hyperlink{
             datatype: "Json",
             data: { SearchText: $('#PickUpLocation').val() },
             success: function (response) {
-
+                debugger;
                 console.log(response);
                 $('#OriginPlaceID').val(response[0].place_id);
             }
@@ -168,354 +174,392 @@ body .hyperlink{
 
 </script>
 <script>
-    function showshipperaddress() {
-      
-        var Shipper = $('#Shipper').val();
-        var ConsignorContact = $("#ConsignorContact").val();
-        var ConsignorAddress1 = $("#ConsignorAddress1_Building").val();
-        var ConsignorAddress2 = $("#ConsignorAddress2_Street").val();
-        var ConsignorAddress3 = $("#ConsignorAddress3_PinCode").val();
-        var ConsignorPhone = $("#ConsignorPhone").val();
-        var ConsignorCountryName = $("#ConsignorCountryName").val();
-        var ConsignorCityName = $("#ConsignorCityName").val();
-        var ConsignorLocationName = $("#ConsignorLocationName").val();
-        var ConsignorMobileNo = $('#ConsignorMobileNo').val();
-        $('#Shipper1').val(Shipper);
-        $('#ConsignorContact1').val(ConsignorContact);
-        $('#ConsignorAddress1_1').val(ConsignorAddress1);
-        $('#ConsignorAddress2_1').val(ConsignorAddress2);
-        $('#ConsignorAddress3_1').val(ConsignorAddress3);
-        $('#ConsignorPhone1').val(ConsignorPhone);
-        $('#ConsignorCountryName1').val(ConsignorCountryName);
-        $('#ConsignorCityName1').val(ConsignorCityName);
-        $('#ConsignorLocationName1').val(ConsignorLocationName);
-        $('#ConsignorMobileNo1').val(ConsignorMobileNo);
+        function showshipperaddress() {
+            var fullform = $('form#FormReceipt').serialize();
 
-        $('#shipperpopup').modal('show');
-    }
-    function saveshipperaddress() {
-        var ConsignorContact = $("#ConsignorContact1").val();
-        var ConsignorAddress1 = $("#ConsignorAddress1_1").val();
-        var ConsignorAddress2 = $("#ConsignorAddress2_1").val();
-        var ConsignorAddress3 = $("#ConsignorAddress3_1").val();
-        var ConsignorPhone = $("#ConsignorPhone1").val();
-        var ConsignorCountryName = $("#ConsignorCountryName1").val();
-        var ConsignorCityName = $("#ConsignorCityName1").val();
-        var ConsignorLocationName = $("#ConsignorLocationName1").val();
-        var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
-        //$('#Shipper').val(Shipper);
-        $('#ConsignorContact').val(ConsignorContact);
-        $("#ConsignorAddress1_Building").val(ConsignorAddress1);
-        $("#ConsignorAddress2_Street").val(ConsignorAddress2);
-        $("#ConsignorAddress3_PinCode").val(ConsignorAddress3);
-        $('#ConsignorPhone').val(ConsignorPhone);
-        $('#ConsignorCountryName').val(ConsignorCountryName);
-        $('#ConsignorCityName').val(ConsignorCityName);
-        $('#ConsignorLocationName').val(ConsignorLocationName);
-        $('#ConsignorMobileNo').val(ConsignorMobileNo);
-        $('#shipperpopup').modal('hide');
-    }
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ShowConsignorAddres", "AWBBatch")',
+                            datatype: "html",
+                            data: {
+                                ship: fullform
+                            },
+                            success: function (data) {
+                                $("#listContainer").html(data);
+                                $('#shipperpopup').modal('show');
+                                var Shipper = $('#Shipper').val();
+                                var ConsignorContact = $("#ConsignorContact").val();
+                                var ConsignorAddress1 = $("#ConsignorAddress1_Building").val();
+                                var ConsignorAddress2 = $("#ConsignorAddress2_Street").val();
+                                var ConsignorAddress3 = $("#ConsignorAddress3_PinCode").val();
+                                var ConsignorPhone = $("#ConsignorPhone").val();
+                                var ConsignorCountryName = $("#ConsignorCountryName").val();
+                                var ConsignorCityName = $("#ConsignorCityName").val();
+                                var ConsignorLocationName = $("#ConsignorLocationName").val();
+                                var ConsignorMobileNo = $('#ConsignorMobileNo').val();
+                                $('#Shipper1').val(Shipper);
+                                $('#ConsignorContact1').val(ConsignorContact);
+                                $('#ConsignorAddress1_1').val(ConsignorAddress1);
+                                $('#ConsignorAddress2_1').val(ConsignorAddress2);
+                                $('#ConsignorAddress3_1').val(ConsignorAddress3);
+                                $('#ConsignorPhone1').val(ConsignorPhone);
+                                $('#ConsignorCountryName1').val(ConsignorCountryName);
+                                $('#ConsignorCityName1').val(ConsignorCityName);
+                                $('#ConsignorLocationName1').val(ConsignorLocationName);
+                                $('#ConsignorMobileNo1').val(ConsignorMobileNo);
+
+
+                            }
+                        });
+
+
+
+
+        }
+        function saveshipperaddress() {
+            var ConsignorContact = $("#ConsignorContact1").val();
+            var ConsignorAddress1 = $("#ConsignorAddress1_1").val();
+            var ConsignorAddress2 = $("#ConsignorAddress2_1").val();
+            var ConsignorAddress3 = $("#ConsignorAddress3_1").val();
+            var ConsignorPhone = $("#ConsignorPhone1").val();
+            var ConsignorCountryName = $("#ConsignorCountryName1").val();
+            var ConsignorCityName = $("#ConsignorCityName1").val();
+            var ConsignorLocationName = $("#ConsignorLocationName1").val();
+            var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
+            //$('#Shipper').val(Shipper);
+            $('#ConsignorContact').val(ConsignorContact);
+            $("#ConsignorAddress1_Building").val(ConsignorAddress1);
+            $("#ConsignorAddress2_Street").val(ConsignorAddress2);
+            $("#ConsignorAddress3_PinCode").val(ConsignorAddress3);
+            $('#ConsignorPhone').val(ConsignorPhone);
+            $('#ConsignorCountryName').val(ConsignorCountryName);
+            $('#ConsignorCityName').val(ConsignorCityName);
+            $('#ConsignorLocationName').val(ConsignorLocationName);
+            $('#ConsignorMobileNo').val(ConsignorMobileNo);
+            $('#shipperpopup').modal('hide');
+        }
     function showreceiveraddress() {
-        var Receiver = $('#Consignee').val();
-        var ConsigneeContact = $("#ConsigneeContact").val();
-        var ConsigneeAddress1 = $("#ConsigneeAddress1_Building").val();
-        var ConsigneeAddress2 = $("#ConsigneeAddress2_Street").val()
-        var ConsigneeAddress3 = $("#ConsigneeAddress3_PinCode").val();
-        var ConsigneePhone = $("#ConsigneePhone").val();
-        var ConsigneeMobile = $("#ConsigneeMobileNo").val();
-        var ConsigneeCountryName = $("#ConsigneeCountryName").val();
-        var ConsigneeCityName = $("#ConsigneeCityName").val();
-        var ConsigneeLocationName = $("#ConsigneeLocationName").val();
-        $('#Consignee1').val(Receiver);
-        $('#ConsigneeContact1').val(ConsigneeContact);
-        $('#ConsigneeAddress1_1').val(ConsigneeAddress1);
-        $('#ConsigneeAddress2_1').val(ConsigneeAddress2);
-        $('#ConsigneeAddress3_1').val(ConsigneeAddress3);
-        $('#ConsigneePhone1').val(ConsigneePhone);
-        $('#ConsigneeCountryName1').val(ConsigneeCountryName);
-        $('#ConsigneeCityName1').val(ConsigneeCityName);
-        $('#ConsigneeLocationName1').val(ConsigneeLocationName);
-        $("#ConsigneeMobileNo1").val(ConsigneeMobile);
-        $('#receiverpopup').modal('show');
-    }
-    function savereceiveraddress() {
-       // var Receiver = $('#hdnConsignee1').val();
-        var ConsigneeContact = $('#ConsigneeContact1').val();
-        var ConsigneeAddress1 = $("#ConsigneeAddress1_1").val();
-        var ConsigneeAddress2 = $("#ConsigneeAddress2_1").val()
-        var ConsigneeAddress3 = $("#ConsigneeAddress3_1").val();
-        var ConsigneePhone = $("#ConsigneePhone1").val();
-        var ConsigneeCountryName = $("#ConsigneeCountryName1").val();
-        var ConsigneeCityName = $("#ConsigneeCityName1").val();
-        var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
-        var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
-        $("#ConsigneeContact").val(ConsigneeContact);        
-        $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
-        $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
-        $("#ConsigneeAddress3_PinCode").val(ConsigneeAddress3);
-        $('#ConsigneePhone').val(ConsigneePhone);
-        $('#ConsigneeCountryName').val(ConsigneeCountryName);
-        $('#ConsigneeCityName').val(ConsigneeCityName);
-        $('#ConsigneeLocationName').val(ConsigneeLocationName);
-        $("#ConsigneeMobileNo").val(ConsigneeMobile);
-        $('#receiverpopup').modal('hide');
-    }
-    function CalculateTax() {
-        debugger;
-        var tax = $('#ChkTaxPercent').prop('checked');
-        if (tax == true) {
-            //$('#lblTaxPercent').removeClass('hide');
-            var taxpercent =parseFloat($('#TaxPercent').val());
-            if ($('#CourierCharge').val() == '' || $('#CourierCharge').val() == null)
-            $('#CourierCharge').val(0);
-            if ($('#OtherCharge').val() == '' || $('#OtherCharge').val() == null)
-                $('#OtherCharge').val(0);
+        var fullform = $('form#FormReceipt').serialize();
 
-            var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
-
-            var taxval = parseFloat(charge) * (parseFloat(taxpercent) / 100.00);
-            $('#TaxAmount').val(parseFloat(taxval).toFixed(2));
-            var net=parseFloat(charge) + parseFloat(taxval)
-            $('#NetTotal').val(parseFloat(net).toFixed(2));
-        }
-        else {
-            $('#TaxAmount').val(0);
-            var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
-            var net = parseFloat(charge);
-            $('#NetTotal').val(parseFloat(net).toFixed(2));          
-            
-        }
-
-
-    }
-    function getCustomerId() {
         $.ajax({
-            url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
-            datatype: "json",
+            type: 'POST',
+            url: '@Url.Action("ShowConsigneeAddres", "AWBBatch")',
+            datatype: "html",
             data: {
-                customername: $('#Shipper').val()
+                ship: fullform
             },
             success: function (data) {
-
-                if (data == null) {
-                    $('#CustomerID').val(0);
-                }
-                else {
-                    $('#CustomerID').val(data.CustomerID);
-                }
+                $("#listcontainer1").html(data);
+                $('#receiverpopup').modal('show');
+                var Receiver = $('#Consignee').val();
+                var ConsigneeContact = $("#ConsigneeContact").val();
+                var ConsigneeAddress1 = $("#ConsigneeAddress1_Building").val();
+                var ConsigneeAddress2 = $("#ConsigneeAddress2_Street").val()
+                var ConsigneeAddress3 = $("#ConsigneeAddress3_PinCode").val();
+                var ConsigneePhone = $("#ConsigneePhone").val();
+                var ConsigneeMobile = $("#ConsigneeMobileNo").val();
+                var ConsigneeCountryName = $("#ConsigneeCountryName").val();
+                var ConsigneeCityName = $("#ConsigneeCityName").val();
+                var ConsigneeLocationName = $("#ConsigneeLocationName").val();
+                $('#Consignee1').val(Receiver);
+                $('#ConsigneeContact1').val(ConsigneeContact);
+                $('#ConsigneeAddress1_1').val(ConsigneeAddress1);
+                $('#ConsigneeAddress2_1').val(ConsigneeAddress2);
+                $('#ConsigneeAddress3_1').val(ConsigneeAddress3);
+                $('#ConsigneePhone1').val(ConsigneePhone);
+                $('#ConsigneeCountryName1').val(ConsigneeCountryName);
+                $('#ConsigneeCityName1').val(ConsigneeCityName);
+                $('#ConsigneeLocationName1').val(ConsigneeLocationName);
+                $("#ConsigneeMobileNo1").val(ConsigneeMobile);
+             
             }
-        });
-    }
-    function checkduplicate(awbno) {
-        debugger;
-        var idtext = 'hdnAWBNo_';
-        var maxrow = $('#tbl1 > tr').length;
-        if (maxrow > 0) {
-            var duplicate = false;
-            $('[id^=' + idtext + ']').each(function (index, item) {
-                var deleted = $('#hdndeleted_' + index).val();
-                if (deleted != "true") {
-                    var con = $('#hdnAWBNo_' + index).val();
-                    if (con.trim() == awbno.trim()) {
-                        duplicate = true;
-                        var message = 'Duplicate AWB No.!';
-                        $.notify('Duplicate AWB No.', 'error');
-                        $('#ulerr').removeClass('show-green');
-                        $('#ulerr').addClass('show-error');
-                        $('#lierr').html(message);
-                        $('#btnAdd').attr('disabled', 'disabled');
-                        //break;
-                    }
 
-                    if (duplicate == false && index == (parseInt(maxrow - 1))) {
-                        return true;
+        });
+        }
+        function savereceiveraddress() {
+            // var Receiver = $('#hdnConsignee1').val();
+            var ConsigneeContact = $('#ConsigneeContact1').val();
+            var ConsigneeAddress1 = $("#ConsigneeAddress1_1").val();
+            var ConsigneeAddress2 = $("#ConsigneeAddress2_1").val()
+            var ConsigneeAddress3 = $("#ConsigneeAddress3_1").val();
+            var ConsigneePhone = $("#ConsigneePhone1").val();
+            var ConsigneeCountryName = $("#ConsigneeCountryName1").val();
+            var ConsigneeCityName = $("#ConsigneeCityName1").val();
+            var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
+            var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
+            $("#ConsigneeContact").val(ConsigneeContact);
+            $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
+            $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
+            $("#ConsigneeAddress3_PinCode").val(ConsigneeAddress3);
+            $('#ConsigneePhone').val(ConsigneePhone);
+            $('#ConsigneeCountryName').val(ConsigneeCountryName);
+            $('#ConsigneeCityName').val(ConsigneeCityName);
+            $('#ConsigneeLocationName').val(ConsigneeLocationName);
+            $("#ConsigneeMobileNo").val(ConsigneeMobile);
+            $('#receiverpopup').modal('hide');
+        }
+        function CalculateTax() {
+            debugger;
+            var tax = $('#ChkTaxPercent').prop('checked');
+            if (tax == true) {
+                //$('#lblTaxPercent').removeClass('hide');
+                var taxpercent = parseFloat($('#TaxPercent').val());
+                if ($('#CourierCharge').val() == '' || $('#CourierCharge').val() == null)
+                    $('#CourierCharge').val(0);
+                if ($('#OtherCharge').val() == '' || $('#OtherCharge').val() == null)
+                    $('#OtherCharge').val(0);
+
+                var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
+
+                var taxval = parseFloat(charge) * (parseFloat(taxpercent) / 100.00);
+                $('#TaxAmount').val(parseFloat(taxval).toFixed(2));
+                var net = parseFloat(charge) + parseFloat(taxval)
+                $('#NetTotal').val(parseFloat(net).toFixed(2));
+            }
+            else {
+                $('#TaxAmount').val(0);
+                var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
+                var net = parseFloat(charge);
+                $('#NetTotal').val(parseFloat(net).toFixed(2));
+
+            }
+
+
+        }
+        function getCustomerId() {
+            $.ajax({
+                url: '/AWBBatch/GetConsignorCustomer', //'/AWB/GetConsigneeName',
+                datatype: "json",
+                data: {
+                    customername: $('#Shipper').val()
+                },
+                success: function (data) {
+
+                    if (data == null) {
+                        $('#CustomerID').val(0);
+                    }
+                    else {
+                        $('#CustomerID').val(data.CustomerID);
                     }
                 }
             });
-            if (duplicate == true) {
+        }
+        function checkduplicate(awbno) {
+            debugger;
+            var idtext = 'hdnAWBNo_';
+            var maxrow = $('#tbl1 > tr').length;
+            if (maxrow > 0) {
+                var duplicate = false;
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    var deleted = $('#hdndeleted_' + index).val();
+                    if (deleted != "true") {
+                        var con = $('#hdnAWBNo_' + index).val();
+                        if (con.trim() == awbno.trim()) {
+                            duplicate = true;
+                            var message = 'Duplicate AWB No.!';
+                            $.notify('Duplicate AWB No.', 'error');
+                            $('#ulerr').removeClass('show-green');
+                            $('#ulerr').addClass('show-error');
+                            $('#lierr').html(message);
+                            $('#btnAdd').attr('disabled', 'disabled');
+                            //break;
+                        }
+
+                        if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                            return true;
+                        }
+                    }
+                });
+                if (duplicate == true) {
+                    return false;
+                }
+            }
+            else {
+
+                return true;
+            }
+        }
+        function checkDate(obj) {
+            var value = '';
+            if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' || $(obj).val() == null) {
+                return '';
+            }
+            else {
+                var date = $(obj).val().split('-');
+                value = date[1] + '/' + date[0] + '/' + date[2];
+            }
+
+            return value
+
+        }
+        function checkdata(obj) {
+            var value = '';
+            if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' || $(obj).val() == null) {
+                return '';
+            }
+            else {
+                value = $(obj).val();
+            }
+
+            return value
+
+        }
+        function getdate(date) {
+            var myDate = new Date(date);
+            var cmon = myDate.getMonth() + 1;
+            var entrydate = cmon + "/" + myDate.getDate() + '/' + myDate.getFullYear();
+            return entrydate
+        }
+        function deletetrans(obj, i) {
+            $(obj).parent().parent().addClass('hide');
+            var obj1 = $(obj).parent().parent().find('.hdndeleted');
+            $(obj1).val(true);
+        }
+        function checkfieldvalidate(obj) {
+            if ($(obj).val() == null || $(obj).val().trim() == '') {
+                var id = $(obj).attr('id');
+                var message = '';
+                if (id == 'AWBNo') {
+                    message = 'Missing Field..AWB No.!';
+                }
+                else if (id == 'AWBDate') {
+                    message = 'Missing Field..AWB Date!';
+                }
+                else if (id == 'BatchDate') {
+                    message = 'Missing Field..Batch Date!';
+                }
+                else if (id == 'Pieces') {
+                    message = 'Missing Field..Pieces!';
+                }
+                else if (id == 'Weight') {
+                    message = 'Missing Field..Weight!';
+                }
+                else if (id == 'Shipper') {
+                    message = 'Missing Field..Shipper!';
+                }
+                else if (id == 'Consignee') {
+                    message = 'Missing Field..Consignee!';
+                }
+                else if (id == 'AssignedDate') {
+                    message = 'Missing Field..Collected By!';
+                }
+                else if (id == 'PickedupDate') {
+                    message = 'Missing Field..Collected By!';
+                }
+                else if (id == 'ReceivedDate') {
+                    message = 'Missing Field..Received at Store!';
+                }
+                else if (id == 'OutScanDeliveredID' || id == 'OutScanDate') {
+                    message = 'Missing Field..Out for Delivery!';
+                }
+                else if (id == 'DeliveryAttemptedBy' || id == 'DelieveryAttemptDate') {
+                    message = 'Missing Field..Delivery for Attempted!';
+                }
+                else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
+                    message = 'Missing Field..Delivery Attempted!';
+                }
+                else if (id == 'PickUpLocation') {
+                    message = 'Missing Field..Pickup Location!';
+                }
+                else if (id == 'DeliveryLocation') {
+                    message = 'Missing Field..Destination Location!';
+                }
+
+                $.notify(message, "error");
+                //$('#ulerr').removeClass('show-green');
+                //$('#ulerr').addClass('show-error');
+                //$('#lierr').html('Please Enter Required Values!');
+
+                $(obj).focus();
                 return false;
             }
+            else {
+                return true;
+            }
         }
-        else {
+        function checkdrpfieldvalidate(obj) {
 
-            return true;
-        }
-    }
-    function checkDate(obj) {
-        var value = '';
-        if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' || $(obj).val() == null) {
-            return '';
-        }
-        else {
-            var date = $(obj).val().split('-');
-            value = date[1] + '/' + date[0] + '/' + date[2];
+            if ($(obj).val() == null || $(obj).val().trim() == '' || $(obj).val().trim() == '0') {
+                debugger;
+                //$('#ulerr').removeClass('show-green');
+                //$('#ulerr').addClass('show-error');
+                //$('#lierr').html('Please Enter Required Values!');
+                var message = '';
+                var id = $(obj).attr('id');
+                if (id == 'MovementID') {
+                    message = 'Missing Field..Movement Type!';
+                }
+                else if (id == 'ParcelTypeID') {
+                    message = 'Missing Field..Parcel Type!';
+                }
+                else if (id == 'ProductTypeID') {
+                    message = 'Missing Field..Product Type!';
+                }
+                else if (id == 'PaymentTypeId') {
+                    message = 'Missing Field..Payment Type!';
+                }
+                else if (id == 'AssignedEmployeeID') {
+                    message = 'Missing Field..Assigned For Collection!';
+                }
+                else if (id == 'PickedUpEmpID') {
+                    message = 'Missing Field..Collected By!';
+                }
+                else if (id == 'DepotReceivedBy') {
+                    message = 'Missing Field..Received at Store!';
+                }
+                else if (id == 'InscanVehicleId') {
+                    message = 'Missing Field..Received at Store!';
+                }
+                else if (id == 'OutScanDeliveredID') {
+                    message = 'Missing Field..Out for Delivery!';
+                }
+                else if (id == 'OutscanVehicleId') {
+                    message = 'Missing Field..Out for Delivery!';
+                }
+                else if (id == 'DeliveryAttemptedBy' || id == 'DelieveryAttemptDate') {
+                    message = 'Missing Field..Delivery for Attempted!';
+                }
+                else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
+                    message = 'Missing Field..Delivery Attempted!';
+                }
+
+                $.notify(message, "error");
+                $(obj).focus();
+                return false;
+            }
+            else {
+                return true;
+            }
         }
 
-        return value
+        function checkNumberfieldvalidate(obj) {
+            if ($(obj).val() == null || $(obj).val().trim() == '') {
+                $('#ulerr').removeClass('show-green');
+                $('#ulerr').addClass('show-error');
+                $('#lierr').html('Please Enter Required Values!');
+                $(obj).focus();
+                return false;
+            }
+            else if (parseFloat($(obj).val()) == 0 || parseInt($(obj).val()) == 0) {
+                $('#ulerr').removeClass('show-green');
+                $('#ulerr').addClass('show-error');
+                $('#lierr').html('Please Enter Required Values!');
+                $(obj).focus();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        $(document).ready(function () {
 
-    }
-    function checkdata(obj)
-    {
-        var value = '';
-        if ($(obj).val() == '' || $(obj).val() == undefined || $(obj).val() == 'undefined' ||$(obj).val() == null) {
-            return '';
-        }
-        else {
-            value = $(obj).val();
-        }
+            $("#shipperpopup").on("shown", function () {
+            //$("#shipperpopup").on("shown", function () {
+            //    initAutocomplete();
 
-        return value
 
-    }
-    function getdate(date) {
-        var myDate = new Date(date);
-        var cmon = myDate.getMonth() + 1;
-        var entrydate = cmon + "/" + myDate.getDate() + '/' + myDate.getFullYear();
-        return entrydate
-    }
-    function deletetrans(obj, i) {
-        $(obj).parent().parent().addClass('hide');
-        var obj1 = $(obj).parent().parent().find('.hdndeleted');
-        $(obj1).val(true);
-    }
-    function checkfieldvalidate(obj) {
-        if ($(obj).val() == null || $(obj).val().trim() == '')
-        {
-            var id = $(obj).attr('id');
-            var message = '';
-            if (id == 'AWBNo') {
-                message = 'Missing Field..AWB No.!';
-            }
-            else if (id == 'AWBDate') {
-                message = 'Missing Field..AWB Date!';
-            }
-            else if (id == 'BatchDate') {
-                message = 'Missing Field..Batch Date!';
-            }
-            else if (id == 'Pieces') {
-                message = 'Missing Field..Pieces!';
-            }
-            else if (id == 'Weight') {
-                message = 'Missing Field..Weight!';
-            }
-            else if (id == 'Shipper') {
-                message = 'Missing Field..Shipper!';
-            }
-            else if (id == 'Consignee') {
-                message = 'Missing Field..Consignee!';
-            }
-            else if (id == 'AssignedDate') {
-                message = 'Missing Field..Collected By!';
-            }
-            else if (id == 'PickedupDate') {
-                message = 'Missing Field..Collected By!';
-            }
-            else if (id == 'ReceivedDate') {
-                message = 'Missing Field..Received at Store!';
-            }
-            else if (id == 'OutScanDeliveredID' || id == 'OutScanDate') {
-                message = 'Missing Field..Out for Delivery!';
-            }
-            else if (id == 'DeliveryAttemptedBy' || id == 'DelieveryAttemptDate') {
-                message = 'Missing Field..Delivery for Attempted!';
-            }
-            else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
-                message = 'Missing Field..Delivery Attempted!';
-            }
-            else if (id == 'PickUpLocation') {
-                message = 'Missing Field..Pickup Location!';
-            }
-            else if (id == 'DeliveryLocation') {
-                message = 'Missing Field..Destination Location!';
-            }
-            
-            $.notify(message, "error");
-            //$('#ulerr').removeClass('show-green');
-            //$('#ulerr').addClass('show-error');
-            //$('#lierr').html('Please Enter Required Values!');
-            
-            $(obj).focus();
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    function checkdrpfieldvalidate(obj) {
+            });
 
-        if ($(obj).val() == null || $(obj).val().trim() == '' || $(obj).val().trim() == '0') {
-            debugger;
-            //$('#ulerr').removeClass('show-green');
-            //$('#ulerr').addClass('show-error');
-            //$('#lierr').html('Please Enter Required Values!');
-            var message = '';
-            var id = $(obj).attr('id');
-            if (id == 'MovementID') {
-                message = 'Missing Field..Movement Type!';
-            }
-            else if (id == 'ParcelTypeID') {
-                message = 'Missing Field..Parcel Type!';
-            }
-            else if (id == 'ProductTypeID') {
-                message = 'Missing Field..Product Type!';
-            }
-            else if (id == 'PaymentTypeId') {
-                message = 'Missing Field..Payment Type!';
-            }
-            else if (id == 'AssignedEmployeeID') {
-                message = 'Missing Field..Assigned For Collection!';
-            }
-            else if (id == 'PickedUpEmpID') {
-                message = 'Missing Field..Collected By!';
-            }
-            else if (id == 'DepotReceivedBy') {
-                message = 'Missing Field..Received at Store!';
-            }
-            else if (id == 'InscanVehicleId') {
-                message = 'Missing Field..Received at Store!';
-            }
-            else if (id == 'OutScanDeliveredID') {
-                message = 'Missing Field..Out for Delivery!';
-            }
-            else if (id == 'OutscanVehicleId') {
-                message = 'Missing Field..Out for Delivery!';
-            }
-            else if (id == 'DeliveryAttemptedBy' || id=='DelieveryAttemptDate') {
-                message = 'Missing Field..Delivery for Attempted!';
-            }
-            else if (id == 'DeliveredBy' || id == 'DeliveredDate') {
-                message = 'Missing Field..Delivery Attempted!';
-            }
-            
-            $.notify(message, "error");
-            $(obj).focus();
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    function checkNumberfieldvalidate(obj) {
-        if ($(obj).val() == null || $(obj).val().trim() == '') {
-            $('#ulerr').removeClass('show-green');
-            $('#ulerr').addClass('show-error');
-            $('#lierr').html('Please Enter Required Values!');
-            $(obj).focus();
-            return false;
-        }
-        else if (parseFloat($(obj).val()) == 0 || parseInt($(obj).val()) == 0) {
-            $('#ulerr').removeClass('show-green');
-            $('#ulerr').addClass('show-error');
-            $('#lierr').html('Please Enter Required Values!');
-            $(obj).focus();
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    $(document).ready(function () {
         document.addEventListener('keydown', function (event) {
             if (event.code == 'KeyA' && (event.altKey)) {
                 $('#btnAdd').trigger('click');
@@ -555,11 +599,11 @@ body .hyperlink{
             var modeid = $('#PaymentTypeId').val();
             if (modeid == 3) { //Account
                 $('#CustomerName').removeAttr('readonly');
-                if ($('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#FOCCustomerID').val()) {
+                if ($('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#CODCustomerID').val() || $('#CustomerID').val() == $('#FOCCustomerID').val()) {
                     $('#CustomerName').val('');
                     $('#CustomerID').val(0);
                 }
-            
+
             }
             else {
                 if (modeid == 1) {
@@ -639,7 +683,7 @@ body .hyperlink{
                         awbno: $('#AWBNo').val()
                     },
                     success: function (response) {
-                        debugger;                      
+                        debugger;
                         var status = response.Status;
                         var mode = response.Mode;
                         var message = 'Status :' + response.Status + ', Mode :' + response.Mode;
@@ -647,7 +691,7 @@ body .hyperlink{
                             $('#ulerr').addClass('show-green');
                             $('#ulerr').removeClass('show-error');
                             $('#lierr').html(response.Mode);
-                            
+
                         }
                         if (status == 'Available' && mode == 'Prepaid') {
                             var charge = response.CourierCharge;
@@ -685,7 +729,7 @@ body .hyperlink{
                             var OriginPlaceID = response.OriginPlaceID;
                             var DestinationPlaceID = response.DestinationPlaceID;
                             $('#InScanID').val(InScanID);
-                            $('#QuickInScanID').val(QuickInScanId);                            
+                            $('#QuickInScanID').val(QuickInScanId);
                             $('#CustomerName').val(CustomerName);
                             $('#Shipper').val(CustomerName);
                             $('#Shipper').attr('readonly', 'readonly');
@@ -706,7 +750,7 @@ body .hyperlink{
                             $('#DeliverySubLocality').val(DeliverySubLocality);
                             $('#OriginPlaceID').val(OriginPlaceID);
                             $('#DestinationPlaceID').val(DestinationPlaceID);
-                            $("#PickUpLocation").attr('readonly', 'readonly');                           
+                            $("#PickUpLocation").attr('readonly', 'readonly');
                             $("#ConsignorMobileNo").val(Mobile);
                             $('#btnAdd').removeAttr('disabled');
                             if (mode == 'Prepaid') {
@@ -725,7 +769,7 @@ body .hyperlink{
                             if (QuickInScanId > 0)
                                 $('#lierr').html(response.Mode + ',Status : Depot InScan Completed!');
                             $('#InScanID').val(InScanID);
-                            $('#QuickInScanID').val(QuickInScanId);    
+                            $('#QuickInScanID').val(QuickInScanId);
                             $('#Shipper').val('');
                             $('#Shipper').removeAttr('readonly');
                             $('#CourierCharge').val(0);
@@ -802,7 +846,7 @@ body .hyperlink{
         $("#Shipper").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/AWB/GetShipperName',
+                    url: '/AWBBatch/GetShipperName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -1004,7 +1048,7 @@ body .hyperlink{
 
             if (!checkNumberfieldvalidate($('#CourierCharge')))
                 return;
-            
+
             if (!checkdrpfieldvalidate($('#PaymentTypeId')))
                 return;
 
@@ -1115,7 +1159,7 @@ body .hyperlink{
                     AssignedEmployeeID = $('#AssignedEmployeeID').val() // Assigned for collection
 
                 }
-              
+
                 if (CollectedBy) {
                     if (!checkfieldvalidate($('#PickedupDate')))
                         return;
@@ -1125,7 +1169,7 @@ body .hyperlink{
                     PickedupDate = checkDate($('#PickedupDate'));
                 }
 
-              
+
                 if (ReceivedBy) {
                     if (!checkfieldvalidate($('#ReceivedDate')))
                         return;
@@ -1257,7 +1301,7 @@ body .hyperlink{
                 '<input type="hidden" id="hdnOutscanVehicleId_' + i + '" value="' + OutScanVehicleID + '"/>' +
                 '<input type="hidden" id="hdnSpecialInstructions_' + i + '" value="' + SpecialInstructions + '"/>'+
                 '<input type="hidden" id="hdnRemarks_' + i + '" value="' + Remarks+ '"/>';
-            
+
 
                 $('#tbl1').append('<tr>' +
                     '<td>' + datahtml + '</td>' +
@@ -1270,7 +1314,7 @@ body .hyperlink{
                     //'<td>' + Weight + '</td>' +
                     '<td>' + 'CC:' + parseFloat(CourierCharge).toFixed(2) + '<br/>' + //'</td>' +
                             'OC:' + parseFloat(OtherCharge).toFixed(2) + '<br/>' +
-                            'Tax:' + parseFloat(TaxAmount).toFixed(2) +  '<br/>' +                         
+                            'Tax:' + parseFloat(TaxAmount).toFixed(2) +  '<br/>' +
                             'Net' +  parseFloat(NetTotal).toFixed(2) + '</td>' +
                     '<td>' + parseFloat(MaterialCost).toFixed(2) + '</td>' +
                     //'<td>' + DeliveryLocation + '</td>' +
@@ -1674,7 +1718,7 @@ body .hyperlink{
                             @Html.HiddenFor(model => model.ConsignorMobileNo)
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Origin Location</label>
+                            <label class="headinglabel">Pickup Location</label>
                             @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.PickupSubLocality)
                             @Html.HiddenFor(model => model.OriginPlaceID)
@@ -1708,7 +1752,7 @@ body .hyperlink{
                             @Html.HiddenFor(model => model.ConsigneeMobileNo)
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Destination Location</label>
+                            <label class="headinglabel">Delivery Location</label>
                             @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.DestinationPlaceID)
@@ -1867,64 +1911,9 @@ body .hyperlink{
             </div>
 
             <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row no-margin" style="margin-top:10px!important">
-                        <div class="col-md-6">
-                            <label class="headinglabel required">Shipper Name</label>
-                            @Html.TextBoxFor(model => model.Shipper1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="headinglabel required">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsignorContact1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
-                            @Html.ValidationMessageFor(model => model.ConsignorContact1, "", new { @class = "text-danger", @placeholder = "Contact Person" })
-                        </div>
-                     
-                    </div>
-                    <div class="row no-margin" style="margin-top:10px!important">
-                        <div class="col-md-4">
-                            <label class="headinglabel">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress1_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="headinglabel">Street</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress2_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel">Pincode</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress3_1, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
-                        </div>
-                    </div>
-
-                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
-                        <div class="col-md-4">
-                            <label class="headinglabel">Location</label>
-                            @Html.TextBoxFor(model => model.ConsignorLocationName1, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel">Origin City</label>
-                            @Html.TextBoxFor(model => model.ConsignorCityName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
-                         </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel">Origin Country</label>
-                            @Html.TextBoxFor(model => model.ConsignorCountryName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
-                           
-                        </div>
-                    </div>
-                        <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
-                            
-                            <div class="col-md-6">
-                                <label class="headinglabel">Telephone No.</label>
-                                @Html.TextBoxFor(model => model.ConsignorPhone1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
-                            </div>
-                            <div class="col-md-6">
-                                <label class="headinglabel">Mobile No.</label>
-                                @Html.TextBoxFor(model => model.ConsignorMobileNo1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="container-fluid" id="listContainer">
+                   
+                </div>
                 </div>
             <div class="modal-footer" style="padding-top: 5px">
                 <button type="button"   class="btn btn-primary" onclick="saveshipperaddress()">Save</button>
@@ -1943,59 +1932,8 @@ body .hyperlink{
                 </h4>
             </div>
 
-            <div class="modal-body">
-                <div class="row no-margin" style="padding-top: 10px; ">
-                    <div class="col-md-6">
-                        <label class="headinglabel required">Name</label>
-                        @Html.TextBoxFor(model => model.Consignee1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true" })
-                    </div>
-                    <div class="col-md-6">
-                        <label class="headinglabel">Contact Person</label>
-                        @Html.TextBoxFor(model => model.ConsigneeContact1, new { @class = "form-control txttarget", @required = "true" })
-                    </div>
-
-
-                </div>
-                <div class="row no-margin" style="padding-top: 10px; ">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Flat/Building</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress1_1, new { @class = "form-control txttarget", @required = "true" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Street</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress2_1, new { @class = "form-control txttarget" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Pincode</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress3_1, new { @class = "form-control txttarget" })
-                    </div>
-                </div>
-                <div class="row no-margin" style="padding-top: 10px">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consingee Location</label>
-                        @Html.TextBoxFor(model => model.ConsigneeLocationName1, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consignee City</label>
-                        @Html.TextBoxFor(model => model.ConsigneeCityName1, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consignee Country</label>
-                        @Html.TextBoxFor(model => model.ConsigneeCountryName1, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
-                    </div>
-                </div>
-                    <div class="row no-margin" style="padding-top: 10px">
-                       
-                        <div class="col-md-6">
-                            <label class="headinglabel">Telephone No</label>
-                            @Html.TextBoxFor(model => model.ConsigneePhone1, new { @class = "form-control textright", @required = "true" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="headinglabel">Mobile No.</label>
-                            @Html.TextBoxFor(model => model.ConsigneeMobileNo1, new { @class = "form-control textright", @required = "true" })
-                        </div>
-                    </div>
+            <div class="modal-body" id="listcontainer1">
+              
                 </div>
                 <div class="modal-footer" style="padding-top: 5px">
                     <button type="button"   class="btn btn-primary" onclick="savereceiveraddress()">Save</button>

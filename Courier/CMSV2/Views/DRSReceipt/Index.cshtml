@@ -194,6 +194,10 @@
                         <a href="@Url.Action("Create", new { id = item.DRSRecPayID })"><i class="fa fa-pencil"></i></a> |
 
                         <a href="#" onclick="Delete(ID=@item.DRSRecPayID)"><i class="fa fa-times"></i></a>
+                        @if (isprint)
+                        {
+                            <a target="_blank" href="@Url.Action("PrintVoucher", "DRSReceipt", new { id = item.DRSRecPayID })"><i class="fa fa-print"></i></a>
+                        }
                     </td>
                 </tr>
             }

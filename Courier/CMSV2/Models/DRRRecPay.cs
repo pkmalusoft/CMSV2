@@ -23,9 +23,6 @@ namespace CMSV2.Models
         public string ChequeNo { get; set; }
         public Nullable<System.DateTime> ChequeDate { get; set; }
         public string Remarks { get; set; }
-        
-
-      
         public Nullable<int> AcJournalID { get; set; }
         public Nullable<bool> StatusRec { get; set; }
         public string StatusEntry { get; set; }

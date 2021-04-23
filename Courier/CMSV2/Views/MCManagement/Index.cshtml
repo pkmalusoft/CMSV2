@@ -172,7 +172,7 @@
                         Mc Payment Date
                     </th>
                     <th>Total Paid Amount</th>
-                    <th width="5%"></th>
+                    <th width="10%"></th>
                     <th style="display:none;"></th>
                 </tr>
             </thead>
@@ -187,9 +187,8 @@
                         <td>                           
                             @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.RecPayDate)
                         </td>
-                        <td>
+                        <td style="text-align:right">
                             @Html.DisplayFor(modelItem => item.FMoney)
-
                         </td>
                         <td style="font-size:13px">
                             @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@

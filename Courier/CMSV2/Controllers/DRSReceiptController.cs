@@ -305,5 +305,18 @@ namespace CMSV2.Controllers
             return RedirectToAction("Index", "DRSReceipt");
 
         }
+
+        public ActionResult PrintVoucher(int id = 0)
+        {
+            int uid = Convert.ToInt32(Session["UserID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+            AccountsReportsDAO.GenerateDRSReceiptVoucher(id);
+            ViewBag.ReportName = "DRS Receipt Voucher";
+            return View();
+
+        }
     }
 }

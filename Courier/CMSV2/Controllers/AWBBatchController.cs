@@ -89,7 +89,7 @@ namespace CMSV2.Controllers
                 vm.ParcelTypeID = defaultparceltype.ID;
 
             string customername = "";
-
+            
 
             customername = "WALK-IN-CUSTOMER";
             var CashCustomer = (from c1 in db.CustomerMasters
@@ -143,8 +143,8 @@ namespace CMSV2.Controllers
             ViewBag.Title = "AWB Batch - Create";
             vm.ID = v.ID;
             vm.BatchNumber = v.BatchNumber;
-            vm.BatchDate = v.BatchDate;           
-            
+            vm.BatchDate = v.BatchDate;
+
             vm.TaxPercent = 5;
             var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
             if (defaultproducttype != null)
@@ -160,8 +160,8 @@ namespace CMSV2.Controllers
 
             string customername = "";
 
-         
-                 customername = "WALK-IN-CUSTOMER";
+
+            customername = "WALK-IN-CUSTOMER";
             var CashCustomer = (from c1 in db.CustomerMasters
                                 where c1.CustomerName == customername
                                 orderby c1.CustomerName ascending
@@ -172,12 +172,12 @@ namespace CMSV2.Controllers
                 vm.CASHCustomerName = customername;
             }
 
-                customername = "COD-CUSTOMER";
+            customername = "COD-CUSTOMER";
             var CODCustomer = (from c1 in db.CustomerMasters
-                                where c1.CustomerName == customername
-                                orderby c1.CustomerName ascending
-                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (CODCustomer!=null)
+                               where c1.CustomerName == customername
+                               orderby c1.CustomerName ascending
+                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            if (CODCustomer != null)
             {
                 vm.CODCustomerID = CODCustomer.CustomerID;
                 vm.CODCustomerName = "COD-CUSTOMER";
@@ -234,7 +234,7 @@ namespace CMSV2.Controllers
                     return "Failed!";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return ex.Message;
             }
@@ -258,7 +258,7 @@ namespace CMSV2.Controllers
                     int userid = Convert.ToInt32(Session["UserID"].ToString());
                     int CompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                     int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-                    int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());                  
+                    int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
                     string result = AWBDAO.UpdateAWBBatch(BatchId, BranchId, CompanyID, DepotID, userid, FyearId, xml);
                     return result;
@@ -314,26 +314,65 @@ namespace CMSV2.Controllers
             return ds;
         }
 
+        [HttpGet]
+        public JsonResult GetShipperName(string term)
+        {
+
+            if (term.Trim() != "")
+            {
+                var shipperlist = (from c1 in db.ConsignorMasters
+                                   where c1.ConsignorName.ToLower().StartsWith(term.ToLower())
+                                   orderby c1.ConsignorName  ascending
+                                   select new { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct();
+
+                //var shipperlist = (from c1 in db.InScanMasters
+                //                   where c1.IsDeleted == false && c1.Consignor.ToLower().StartsWith(term.ToLower())
+                //                   orderby c1.Consignor ascending
+                //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+                var shipperlist = (from c1 in db.ConsignorMasters                                    
+                                    orderby c1.ConsignorName ascending
+                                    select new { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct();
+
+                //var shipperlist = (from c1 in db.InScanMasters
+                //                   where c1.IsDeleted == false
+                //                   orderby c1.Consignor ascending
+                //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+
+            }
+        }
 
         [HttpGet]
-        public JsonResult GetReceiverName(string term,string Shipper)
+        public JsonResult GetReceiverName(string term, string Shipper)
         {
             if (term.Trim() != "")
             {
-                var shipperlist = (from c1 in db.InScanMasters
-                                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
-                                   && c1.Consignor.ToLower().StartsWith(Shipper.ToLower())
-                                   orderby c1.Consignee ascending
-                                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo, ConsigneeMobileNo = c1.ConsigneeMobileNo }).Distinct();
+                var shipperlist = (from c1 in db.ConsigneeMasters
+                                   where c1.ConsigneeName.ToLower().StartsWith(term.ToLower())
+                                   && c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
+                                   orderby c1.ConsigneeName ascending
+                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = "" }).Distinct();
+
+                //var shipperlist = (from c1 in db.InScanMasters
+                //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
+                //                   && c1.Consignor.ToLower().StartsWith(Shipper.ToLower())
+                //                   orderby c1.Consignee ascending
+                //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo, ConsigneeMobileNo = c1.ConsigneeMobileNo }).Distinct();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var shipperlist = (from c1 in db.InScanMasters
-                                   where c1.Consignor.ToLower().StartsWith(Shipper.ToLower())
-                                   orderby c1.Consignee ascending
-                                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo, ConsigneeMobileNo = c1.ConsigneeMobileNo }).Distinct();
+                var shipperlist = (from c1 in db.ConsigneeMasters
+                                   where  
+                                   c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
+                                   orderby c1.ConsigneeName ascending
+                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = "" }).Distinct();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
 
@@ -379,5 +418,23 @@ namespace CMSV2.Controllers
             List<AWBBatchDetail> Details = AWBDAO.GetBatchAWBInfo(id);
             return Json(Details, JsonRequestBehavior.AllowGet);
         }
-    }
+
+        public ActionResult ConsignorAddress()
+        {
+            AWBBatchVM vm = new AWBBatchVM();
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult ShowConsignorAddres(AWBBatchVM model)
+        {
+            return PartialView("ConsignorAddress", model);
+        }
+
+        [HttpPost]
+        public ActionResult ShowConsigneeAddres(AWBBatchVM model)
+        {
+            return PartialView("ConsigneeAddress", model);
+        }
+        }
 }

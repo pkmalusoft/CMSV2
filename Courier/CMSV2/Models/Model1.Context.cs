@@ -278,6 +278,9 @@ namespace CMSV2.Models
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<SupplierInvoiceStock> SupplierInvoiceStocks { get; set; }
         public virtual DbSet<ParcelType> ParcelTypes { get; set; }
+        public virtual DbSet<AccountSetup> AccountSetups { get; set; }
+        public virtual DbSet<ConsigneeMaster> ConsigneeMasters { get; set; }
+        public virtual DbSet<ConsignorMaster> ConsignorMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

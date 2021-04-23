@@ -206,6 +206,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\AccountSetupController.cs" />
     <Compile Include="Controllers\AgentCollectionRateController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\AgentDeliveryRateController.cs" />
@@ -349,6 +350,10 @@
     <Compile Include="Models\AccountHeadControl.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountSetup.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountSetupMasterVM.cs" />
     <Compile Include="Models\AcExpenseAllocationVM.cs" />
     <Compile Include="Models\AcFinancialYear.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -679,9 +684,15 @@
     <Compile Include="Models\Commission.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConsigneeMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConsignEntryFAgentAssignVM.cs" />
     <Compile Include="Models\ConsignmentEntryDomVM.cs" />
     <Compile Include="Models\ConsignmentEntryInterVM.cs" />
+    <Compile Include="Models\ConsignorMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Content.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3119,6 +3130,7 @@
     <Content Include="Reports\SupplierPaymentPrint.rpt" />
     <Content Include="Reports\DRSRunSheet.rpt" />
     <Content Include="Reports\MCPaymentVoucher.rpt" />
+    <Content Include="Reports\DRSReceiptVoucher.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3639,6 +3651,12 @@
     <Content Include="Views\Reports\SupplierStatement.cshtml" />
     <Content Include="Views\OutScan\DRSRunSheet.cshtml" />
     <Content Include="Views\MCManagement\PrintVoucher.cshtml" />
+    <Content Include="Views\DRSReceipt\PrintVoucher.cshtml" />
+    <Content Include="Views\Accounts\AccountSetupMaster.cshtml" />
+    <Content Include="Views\AccountSetup\Index.cshtml" />
+    <Content Include="Views\AccountSetup\Create.cshtml" />
+    <Content Include="Views\AWBBatch\ConsignorAddress.cshtml" />
+    <Content Include="Views\AWBBatch\ConsigneeAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -928,6 +928,38 @@ namespace CMSV2.DAL
 
             return iReturn;
         }
+
+        public static List<AccountSetupMasterVM> GetAccountSetupList()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_AccountSetupList";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AccountSetupMasterVM> objList = new List<AccountSetupMasterVM>();
+            AccountSetupMasterVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AccountSetupMasterVM();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.DebitAccountId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DebitAccountId"].ToString());
+                    obj.CreditAccountId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CreditAccountId"].ToString());
+                    obj.PageName = ds.Tables[0].Rows[i]["PageName"].ToString();
+                    obj.TransType = ds.Tables[0].Rows[i]["TransType"].ToString();
+                    obj.SalesType = ds.Tables[0].Rows[i]["SalesType"].ToString();
+                    obj.DebitHead = ds.Tables[0].Rows[i]["DebitHead"].ToString();
+                    obj.CreditHead = ds.Tables[0].Rows[i]["CreditHead"].ToString();                    
+
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
     }
 }
     

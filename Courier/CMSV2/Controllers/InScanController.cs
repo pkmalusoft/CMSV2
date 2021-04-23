@@ -236,8 +236,8 @@ namespace CMSV2.Controllers
                         _inscan.DepotReceivedBy = v.ReceivedByID;
                         //_inscan.TransactionDate = v.QuickInscanDateTime;
                         _inscan.VehicleTypeId = v.VehicleId;
-                        _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
-                        _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                        _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Inscan").First().ID;
+                        _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received At Origin Facility").FirstOrDefault().CourierStatusID;
                         db.Entry(_inscan).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -355,7 +355,11 @@ namespace CMSV2.Controllers
             }
             else
             {
-                return Json(new { status = "ok", data = lst, message = "AWB Found" }, JsonRequestBehavior.AllowGet);
+                obj.AWB = id;
+                obj.Origin = lst[0].Origin;
+                obj.Destination =lst[0].Destination;
+                obj.InScanId = lst[0].InScanId;
+                return Json(new { status = "ok", data = obj, message = "AWB Found" }, JsonRequestBehavior.AllowGet);
                 //if (lst.QuickInscanID == null)
                 //{
                 //    obj.Origin = lst.ConsignorCountryName;

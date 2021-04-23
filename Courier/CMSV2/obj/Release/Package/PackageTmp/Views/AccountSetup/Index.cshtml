@@ -1,0 +1,170 @@
+﻿@model List<CMSV2.Models.AccountSetupMasterVM>
+
+@{
+    ViewBag.Title = "Account Setup";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var i = 0;
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+
+    string path = Request.Url.AbsolutePath.ToLower();
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+
+   
+</style>
+<script type="text/javascript">
+   
+  
+    $(document).ready(function () {
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" style="width:100%" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.draw();
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        
+     
+     
+    });
+   
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Account Setup</h1>
+
+</section>
+<p class="indexbtnpadding pull-right" style="padding-right:15px;">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+</p>
+<div class="clearfix"></div>
+<section class="content">
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.SuccessMsg ", "success");
+         });
+        </script>
+    }
+
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.ErrorMsg ", "danger");
+         });
+        </script>
+    }
+
+
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    
+                    <th>
+                        Page Name
+                    </th>
+                    <th>
+                        Trans Type
+                    </th>
+                    <th>Sales Type </th>
+                    <th>
+                        Debit Head
+                    </th>
+                    <th>
+                        Credit Head
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>
+                        @Html.Label("Page Name")
+                    </th>
+                    <th>
+                        Trans Type
+                    </th>
+                    <th>
+                        Debit Head
+                    </th>
+                    <th>
+                        Credit Head
+                    </th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody id="details">
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td>                             
+                            @Html.DisplayFor(modelItem => item.PageName)
+                        </td>
+                        <td>
+                            @item.TransType
+                        </td>
+                        <td>
+                            @item.SalesType
+                        </td>
+                        <td>
+                            @item.DebitHead
+                        </td>
+                        <td>
+                            @item.CreditHead
+                        </td>
+
+                        <td>
+
+                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+
+                        </td>
+
+
+
+                    </tr>
+                   
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Account Setup?")) {
+            window.location.href = "/AccountSetup/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

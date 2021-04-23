@@ -1,4 +1,4 @@
-5298@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
 
 html, body {
     min-height: 100%;
@@ -5295,7 +5295,7 @@ table.text-center, table.text-center td, table.text-center th {
     padding-right: 14px !important;
 }
 
-.content-header + .row {
+.content-header + .row ,.content-header + form .row{
     padding: 0 15px;
 }
 
@@ -5962,6 +5962,9 @@ input, select, textarea {
     display: flex;
 }
 
+.mt-3{
+    margin-top:32px;
+}
 .wrap {
     flex-wrap: wrap;
 }
@@ -6074,6 +6077,19 @@ p.indexbtnpadding {
   
     transition: all 0.2s;
 }
+.drsAwb label{
+    margin-bottom: 3px!important;
+    font-size: 13px!important;
+}
+.drsAwb input{
+    margin-bottom: 5px;
+    height:25px!important;
+    line-height: 25px!important;
+}
+.drsAwb .btn-right{
+    padding-top:0;
+}
+
 .RightDrs {
    transition: all 0.2s;
 }
@@ -6093,7 +6109,7 @@ p.indexbtnpadding {
     padding:10px;
 }
 .drsAwb .panel{
-    padding-bottom: 30px;
+    padding-bottom: 10px;
 }
 .card-body .row {
     padding-left: 15px;
@@ -6114,6 +6130,10 @@ p.indexbtnpadding {
     margin-top: 40px;
 }
 
+.scrolling_list{
+    height: calc(100vh - 210px);
+    overflow: auto;
+}
 .content-header + .row .d-flex .col-md-1, .content-header + form .d-flex .col-md-1 {
     width: 12%;
 }
@@ -6169,7 +6189,7 @@ p.indexbtnpadding {
 .small_btn {
     min-width: 25px !important;
     width: 30px !important;
-    margin-top: 32px;
+    margin-top: 22px;
     font-size: 15px;
     padding: 0 5px !important;
     border-radius: 5px !important;

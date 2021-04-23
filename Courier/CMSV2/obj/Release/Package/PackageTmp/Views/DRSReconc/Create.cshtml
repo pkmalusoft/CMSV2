@@ -102,6 +102,16 @@
         display: none;
         overflow: hidden;
     }
+    .drsAwb table{
+        table-layout: fixed;
+    }
+    .drsAwb input{
+        width: 100%;
+    }
+    .drsAwb input[type="submit"]{
+        background: #f4c106;
+        border-color:#f4c106;
+    }
 </style>
 <script type="text/javascript">
     var AWBObj = {};
@@ -1270,7 +1280,7 @@
             <button class="accordion">Invoice</button>
             <div class="panel">
                 <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-md-11">
+                    <div class="col-md-10">
                         <label class="headinglabel">Customer</label>
                         <input type="text" id="txtCustomer" class="form-control" />
                         <input type="hidden" id="txtCustomerId" class="form-control" />
@@ -1315,10 +1325,10 @@
                     <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
                         <thead>
                             <tr>
-                                <th width="56%">
+                                <th width="60%">
                                     AWB No.
                                 </th>
-                                <th>
+                                <th width="30%">
                                     Amount
                                 </th>
                                 <th>
@@ -1358,10 +1368,10 @@
                     <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive">
                         <thead>
                             <tr>
-                                <th width="56%">
+                                <th width="60%">
                                     Chart of Acccount
                                 </th>
-                                <th>
+                                <th width="30%">
                                     Amount
                                 </th>
                                 @*<th>

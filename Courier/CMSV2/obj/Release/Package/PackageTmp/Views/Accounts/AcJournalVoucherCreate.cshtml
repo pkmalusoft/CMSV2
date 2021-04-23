@@ -221,13 +221,13 @@
             @Html.ValidationSummary(true)
             <div class="row no-margin">
 
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label class="headinglabel" id="VoucherNumber">Journal Voucher Number</label>
                     @*<input type="text" name="voucher_number" readonly class="form-control" />*@
                     @Html.TextBoxFor(model => model.VoucherNo, new { @class = "form-control",@readonly="readonly" })
                     @Html.HiddenFor(model => model.AcJournalID)
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label class="required headinglabel" id="lblTransDate">J.V. Date</label>
                     @Html.TextBoxFor(model => model.TransDate, new { @class = "form-control datepicker ", placeholder = "dd-mmm-yyyy",@autocomplete="off" })
 
@@ -236,15 +236,15 @@
                     <label class="headinglabel" id="lblReference">J.V. Reference </label>
                     @Html.TextBoxFor(model => model.Refference, new { @class = "form-control" })
                 </div>
-
+                 <div class="col-md-4">
+                    <label class="headinglabel" id="lblremark">Remarks/Narration</label>
+                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+                </div>
             </div>
 
 
             <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-12">
-                    <label class="headinglabel" id="lblremark">Remarks/Narration</label>
-                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
-                </div>
+               
             </div>
             <div class="divider">
                 <hr />

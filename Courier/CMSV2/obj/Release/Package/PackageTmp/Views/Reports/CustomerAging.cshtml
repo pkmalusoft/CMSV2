@@ -120,8 +120,27 @@
 
         });
         $('#ReportType').trigger('change');
+        if ($('#CustomerId').val() != 0) {
+
+            $("#chkSelected").prop('checked', 'false');
+            $("#chkSelected").attr('value', false);
+            $("#chkSelected").trigger('click');
+        }
+        else {
+            $("#chkAll").prop('checked', 'checked');
+            //$("#AllCustomer").trigger('click');
+        }
     });
 </script>
+
+<style type="text/css">
+    
+    .innerCheckbox{
+        display: flex!important;
+        justify-content: space-evenly;
+        padding: 0!important;
+    }
+</style>
 
 <section class="content-header">
     <h1 class="headingfont">@ViewBag.ReportName</h1>
@@ -131,38 +150,43 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex">
-        <div class="col-md-5 ">            
-            <div class="form-group" id="divstatement">
-                <div class="row">
-                    <div class="col-md-6">
+    <div class="row no-margin">
+                 
+            <div class="" id="divstatement">
+            
+                    <div class="col-md-2">
                         <label class="headinglabel required ">As on date</label>
                         @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
                     </div>                
-                    <div class="col-md-4 text-right">
-                        <label class="headinglabel required ">Option</label>
-                        <div class="innerCheckbox">
+                    <div class="col-md-2    ">
+                        <label class="headinglabel required ">Customer Selection</label>
+                        <div class="innerCheckbox flex">
                             <div class="field checkboxdesign verticalcheckbox">
                                 <label class="headinglabel"><input type="radio" id="chkAll" checked name="roptions" />All</label>
                             </div>
-                            <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
-                                <label class="headinglabel"><input type="radio" id="chkSelected" name="roptions" />Selected</label>
+                            <div class="field checkboxdesign justify-center verticalcheckbox" >
+                                <label class="headinglabel"><input type="radio" id="chkSelected" name="roptions" />Single</label>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-12" id="divachead1">
+            
+            <div class="col-md-3" id="divachead1">
                 <div id="divachead">
                     <label class="headinglabel required" id="lblcustomername">Customer Name</label>
                     @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true",@readonly="readonly" })
                     @Html.HiddenFor(model => model.CustomerId)
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-6 col-md-offset-1">
-            <div class="col-md-5">
+             <div class="col-md-2">
+                <label class="headinglabel required">Report Type</label>
+                @Html.DropDownList("ReportType", new List<SelectListItem>
+               {
+                   new SelectListItem{ Text="Summary", Value = "Summary"},                   
+                   new SelectListItem{ Text="Detail", Value = "Detail" }                   
+                }, "Select", new { @class = "form-control",@required="true" })
+            </div>
+             <div class="col-md-2">
+            
                 <label class="headinglabel  required">Output</label>
                 @Html.DropDownList("Output", new List<SelectListItem>
                 {
@@ -171,19 +195,15 @@
                     new SelectListItem{ Text="WORD", Value = "WORD" },
 
                  }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-            </div>         
-            <div class="col-md-5">
-                <label class="headinglabel required">Report Type</label>
-                @Html.DropDownList("ReportType", new List<SelectListItem>
-               {
-                   new SelectListItem{ Text="Summary", Value = "Summary"},                   
-                   new SelectListItem{ Text="Detail", Value = "Detail" }                   
-                }, "Select", new { @class = "form-control",@required="true" })
+                    
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
         </div>
+        <div class="clearfix"></div>
+       
+        
     </div>
 
 

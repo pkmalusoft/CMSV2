@@ -60,6 +60,15 @@ namespace CMSV2.Controllers
             List<DRRRecPayVM> _Receipts = new List<DRRRecPayVM>();
             if (datePicker != null)            {
 
+                if (datePicker.FromDate.ToString() == "01-01-0001 00:00:00")
+                {
+                    datePicker.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                }
+
+                if (datePicker.ToDate.ToString() == "01-01-0001 00:00:00")
+                {
+                    datePicker.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+                }
                 DateTime pToDate = Convert.ToDateTime(datePicker.ToDate).AddDays(1);
                  _Receipts = (from c in db.DRRRecPays
                                                where (c.RecPayDate >= datePicker.FromDate && c.RecPayDate < pToDate)
@@ -71,6 +80,8 @@ namespace CMSV2.Controllers
                                                    RecPayDate = c.RecPayDate,
                                                    FMoney = c.FMoney
                                                }).ToList();
+
+                SessionDataModel.SetMCTableVariable1(datePicker);
             }
             return View(_Receipts);
 
@@ -152,6 +163,7 @@ namespace CMSV2.Controllers
                 _receipt.DocumentNo = _dao.GetMaxMCDocumentNo(companyid, branchid, yearid);
                 _receipt.CurrencyID = Convert.ToInt32(Session["CurrencyId"].ToString());
                 _receipt.EXRate = Convert.ToInt32(Session["EXRATE"].ToString());
+                
                 if (datePicker != null)
                  {
 
@@ -184,6 +196,18 @@ namespace CMSV2.Controllers
                 _receipt.ChequeDate = receipt.ChequeDate;
                 _receipt.ChequeNo = receipt.ChequeNo;
                 _receipt.StatusEntry = receipt.StatusEntry;
+                var achead = db.AcHeads.Where(cc => cc.AcHead1 == receipt.BankName).FirstOrDefault(); ;
+                if (achead != null)
+                    _receipt.AchHeadID = achead.AcHeadID;
+
+                if (receipt.StatusEntry=="CS")
+                {
+                    _receipt.CashBank = _receipt.AchHeadID.ToString();
+                }
+                else
+                {
+                    _receipt.ChequeBank = _receipt.AchHeadID.ToString();
+                }
                 
                 if (receipt.ShipperName!=null)
                 {
@@ -191,9 +215,7 @@ namespace CMSV2.Controllers
                 }
                 if (receipt.ShipperAddress!=null)
                   _receipt.ShipperAddress = receipt.ShipperAddress;
-                var achead = db.AcHeads.Where(cc => cc.AcHead1 == receipt.BankName).FirstOrDefault(); ;
-                if (achead!=null)
-                  _receipt.AchHeadID = achead.AcHeadID;
+                
                 
                 _receipt.CurrencyID = receipt.CurrencyID;
                 _receipt.EXRate = receipt.EXRate;
@@ -251,7 +273,8 @@ namespace CMSV2.Controllers
                 {
                     _receipt = db.DRRRecPays.Find(model.RecPayID);
                 }
-
+                _receipt.StatusEntry = model.StatusEntry;
+                _receipt.BankName = model.BankName;
                 _receipt.FMoney = model.FMoney;             
                 _receipt.CurrencyID = model.CurrencyID;
                 _receipt.EXRate = model.EXRate;

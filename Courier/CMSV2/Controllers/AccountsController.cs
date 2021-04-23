@@ -5169,6 +5169,18 @@ new AcGroupModel()
 
         }
         #endregion
+
+        #region "AccountSetupPage"
+        public ActionResult AccountSetupMaster()
+        {           
+            
+            List<AccountSetupMasterVM> model = new List<AccountSetupMasterVM>();
+            model = AccountsDAO.GetAccountSetupList();
+            return View(model);
+            
+        }
+
+        #endregion
     }
 
 
