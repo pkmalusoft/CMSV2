@@ -14,19 +14,6 @@ namespace CMSV2.Models
     
     public partial class EmployeeMaster
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public EmployeeMaster()
-        {
-            this.CustomerEnquiries = new HashSet<CustomerEnquiry>();
-            this.JobEnquiries = new HashSet<JobEnquiry>();
-            this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
-            this.PurchaseInvoices1 = new HashSet<PurchaseInvoice>();
-            this.PurchaseOrders = new HashSet<PurchaseOrder>();
-            this.Quotations = new HashSet<Quotation>();
-            this.SalesInvoices = new HashSet<SalesInvoice>();
-            this.SalesInvoices1 = new HashSet<SalesInvoice>();
-        }
-    
         public int EmployeeID { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
@@ -72,26 +59,6 @@ namespace CMSV2.Models
         public Nullable<int> DepotID { get; set; }
         public Nullable<int> UserID { get; set; }
         public string FCMTokenId { get; set; }
-        public byte[] ProfileImage { get; set; }
-    
-        public virtual CityMaster CityMaster { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerEnquiry> CustomerEnquiries { get; set; }
-        public virtual Designation Designation { get; set; }
-        public virtual LocationMaster LocationMaster { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobEnquiry> JobEnquiries { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseInvoice> PurchaseInvoices1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Quotation> Quotations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesInvoice> SalesInvoices { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesInvoice> SalesInvoices1 { get; set; }
+        public string ProfileImage { get; set; }
     }
 }

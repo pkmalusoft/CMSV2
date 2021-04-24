@@ -1417,29 +1417,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="Expense" Type="money" />
     <Property Name="Total" Type="money" />
   </EntityType>
-  <EntityType Name="DRRInvoice">
-    <Key>
-      <PropertyRef Name="DRRInvoiceID" />
-    </Key>
-    <Property Name="DRRInvoiceID" Type="int" Nullable="false" />
-    <Property Name="DRRID" Type="int" />
-    <Property Name="RecPayID" Type="int" />
-    <Property Name="CustomerID" Type="int" />
-    <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="DRRPKPCAD">
-    <Key>
-      <PropertyRef Name="DRRPKPCADID" />
-    </Key>
-    <Property Name="DRRPKPCADID" Type="int" Nullable="false" />
-    <Property Name="DRRID" Type="int" />
-    <Property Name="InScanID" Type="int" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
-    <Property Name="Amount" Type="money" />
-    <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
-    <Property Name="StatusDRRPKPCAD" Type="char" MaxLength="3" />
-  </EntityType>
   <EntityType Name="DRRRecPay">
     <Key>
       <PropertyRef Name="RecPayID" />
@@ -1486,8 +1463,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
     <Property Name="DRSDate" Type="datetime" Nullable="false" />
     <Property Name="DeliveredBy" Type="int" />
-    <Property Name="CheckedBy" Type="int" Nullable="false" />
-    <Property Name="TotalAmountCollected" Type="money" />
     <Property Name="VehicleID" Type="int" />
     <Property Name="StatusDRS" Type="char" MaxLength="1" />
     <Property Name="AcCompanyID" Type="int" />
@@ -1496,56 +1471,12 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.CreditNoteDetails' does not have
     <Property Name="BranchID" Type="int" />
     <Property Name="TotalMaterialCost" Type="money" />
     <Property Name="DRSRecPayId" Type="int" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="DRSEmployee">
-    <Key>
-      <PropertyRef Name="DRSEmployeeID" />
-      <PropertyRef Name="DRSID" />
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="Amount" />
-    </Key>
-    <Property Name="DRSEmployeeID" Type="int" Nullable="false" />
-    <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="EmployeeID" Type="int" Nullable="false" />
-    <Property Name="Amount" Type="money" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DRSEmployeeID">
-    <Key>
-      <PropertyRef Name="DRSEmployeeID" />
-    </Key>
-    <Property Name="DRSEmployeeID" Type="int" Nullable="false" />
-    <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="EmployeeID" Type="int" Nullable="false" />
-    <Property Name="Amount" Type="money" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DRSExpense">
-    <Key>
-      <PropertyRef Name="DRSExpenseID" />
-    </Key>
-    <Property Name="DRSExpenseID" Type="int" Nullable="false" />
-    <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="ExpenseID" Type="int" Nullable="false" />
-    <Property Name="Amount" Type="money" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DRSReceipt">
-    <Key>
-      <PropertyRef Name="DRSReceiptID" />
-    </Key>
-    <Property Name="DRSReceiptID" Type="int" Nullable="false" />
-    <Property Name="DRSReceiptDate" Type="datetime" />
-    <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
-    <Property Name="VehicleID" Type="int" />
-    <Property Name="EmployeeID" Type="int" />
-    <Property Name="DepartmentID" Type="int" />
-    <Property Name="AcJournalID" Type="int" />
-    <Property Name="StatusRunSheet" Type="char" MaxLength="1" />
-    <Property Name="User1" Type="int" />
-    <Property Name="FYearID" Type="int" />
-    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="FYearId" Type="int" />
+    <Property Name="TotalCourierCharge" Type="money" />
   </EntityType>
   <EntityType Name="DRSRecPay">
     <Key>
@@ -1638,7 +1569,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.DRSEmployee' does not have a pri
     <Property Name="DepotID" Type="int" />
     <Property Name="UserID" Type="int" />
     <Property Name="FCMTokenId" Type="text" />
-    <Property Name="ProfileImage" Type="image" />
+    <Property Name="ProfileImage" Type="text" />
   </EntityType>
   <EntityType Name="EmpZoneAllocation">
     <Key>
@@ -2356,36 +2287,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.ImpExp' does not have a primary 
     <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="varchar" MaxLength="50" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="InScanNew">
-    <Key>
-      <PropertyRef Name="InScanID" />
-      <PropertyRef Name="CourierCharge" />
-      <PropertyRef Name="ImportID" />
-    </Key>
-    <Property Name="InScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="CourierCharge" Type="money" Nullable="false" />
-    <Property Name="OtherCharge" Type="money" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="2000" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="2000" />
-    <Property Name="OriginLocation" Type="nvarchar" MaxLength="200" />
-    <Property Name="DestinationLocation" Type="nvarchar" MaxLength="200" />
-    <Property Name="CourierType" Type="nvarchar" MaxLength="200" />
-    <Property Name="CBM" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="Weight" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="Pieces" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="Discount" Type="money" />
-    <Property Name="NetTotal" Type="money" />
-    <Property Name="FAgent" Type="nvarchar" MaxLength="200" />
-    <Property Name="FAWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="NCND" Type="nvarchar" MaxLength="50" />
-    <Property Name="Branch" Type="nvarchar" MaxLength="200" />
-    <Property Name="ReceivedBy" Type="nvarchar" MaxLength="200" />
-    <Property Name="CollectedBy" Type="nvarchar" MaxLength="200" />
-    <Property Name="ImportID" Type="int" Nullable="false" />
-  </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
       <PropertyRef Name="InscanOtherChargeID" />
@@ -2396,52 +2297,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
     <Property Name="InscanID" Type="int" />
     <Property Name="TaxPercentage" Type="numeric" Precision="6" Scale="2" />
     <Property Name="Reimbursement" Type="bit" Nullable="false" />
-  </EntityType>
-  <EntityType Name="InScantransfer">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="InScanDate" Type="datetime" Nullable="false" />
-    <Property Name="DepartmentID" Type="int" />
-    <Property Name="ConsigneeID" Type="int" />
-    <Property Name="ConsignorID" Type="int" />
-    <Property Name="OriginID" Type="int" />
-    <Property Name="CityID" Type="int" />
-    <Property Name="DestinationID" Type="nvarchar" MaxLength="50" />
-    <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatedWeight" Type="float" />
-    <Property Name="CourierDescriptionID" Type="int" />
-    <Property Name="CourierServiceID" Type="int" />
-    <Property Name="CollectedBy" Type="int" />
-    <Property Name="ReceivedBy" Type="int" Nullable="false" />
-    <Property Name="CourierCharge" Type="money" Nullable="false" />
-    <Property Name="OtherCharge" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="CourierStatusID" Type="int" />
-    <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
-    <Property Name="StatusClose" Type="bit" />
-    <Property Name="StatusInScan" Type="char" MaxLength="2" />
-    <Property Name="StatusPickUp" Type="char" MaxLength="3" />
-    <Property Name="StatusReconciled" Type="bit" />
-    <Property Name="InscanSheetNo" Type="int" />
-    <Property Name="StatusTransit" Type="bit" Nullable="false" />
-    <Property Name="TransitID" Type="int" />
-    <Property Name="UserID" Type="int" Nullable="false" />
-    <Property Name="EnquiryID" Type="int" />
-    <Property Name="MovementID" Type="int" />
-    <Property Name="Statuspost" Type="bit" />
-    <Property Name="ConsignorCityID" Type="int" />
-    <Property Name="ConsigneeCityID" Type="int" />
-    <Property Name="ExportNo" Type="int" />
-    <Property Name="AcCompanyID" Type="int" />
-    <Property Name="StatusExport" Type="bit" />
-    <Property Name="ExportDate" Type="datetime" />
-    <Property Name="ImportNo" Type="int" />
-    <Property Name="ImportDate" Type="datetime" />
-    <Property Name="AcJournalID" Type="int" />
   </EntityType>
   <EntityType Name="Item">
     <Key>
@@ -2558,67 +2413,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.InScanNew' does not have a prima
     <Property Name="StatusClose" Type="bit" Nullable="false" />
     <Property Name="DRRID" Type="int" />
     <Property Name="MCReceivedAmt" Type="money" />
-  </EntityType>
-  <EntityType Name="MCInvoice">
-    <Key>
-      <PropertyRef Name="MCInvoiceID" />
-    </Key>
-    <Property Name="MCInvoiceID" Type="int" Nullable="false" />
-    <Property Name="McPaymentReceiptID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="100" />
-    <Property Name="TransDate" Type="datetime" />
-  </EntityType>
-  <EntityType Name="MCPayment">
-    <Key>
-      <PropertyRef Name="MCPaymentID" />
-    </Key>
-    <Property Name="MCPaymentID" Type="int" Nullable="false" />
-    <Property Name="MCPaymentDate" Type="datetime" Nullable="false" />
-    <Property Name="MCPaymentNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="DRRConsignmentID" Type="int" Nullable="false" />
-    <Property Name="CustomerID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="MaterialCost" Type="money" />
-    <Property Name="MCStatuspaymentType" Type="char" MaxLength="3" />
-    <Property Name="MCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeDate" Type="datetime" />
-    <Property Name="EmployeeID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
-    <Property Name="StatusReturn" Type="char" MaxLength="2" />
-    <Property Name="DRSNo" Type="char" MaxLength="10" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_cms.dbo.MCPaymentReceipt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="MCPaymentReceipt">
-    <Key>
-      <PropertyRef Name="McPaymentReceiptID" />
-    </Key>
-    <Property Name="McPaymentReceiptID" Type="int" Nullable="false" />
-    <Property Name="InscanID" Type="int" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="PayDate" Type="datetime" />
-    <Property Name="PayVoucherNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="PayAcHeadID" Type="int" />
-    <Property Name="PayAcjournalID" Type="int" />
-    <Property Name="PayAmt" Type="money" />
-    <Property Name="PayType" Type="nvarchar" MaxLength="50" />
-    <Property Name="PayBankID" Type="int" />
-    <Property Name="PayChequeNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="PayChequeDate" Type="datetime" />
-    <Property Name="PayRemarks" Type="nvarchar" MaxLength="50" />
-    <Property Name="RecType" Type="nvarchar" MaxLength="50" />
-    <Property Name="RecDate" Type="datetime" />
-    <Property Name="RecVoucherNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="RecAcHeadID" Type="int" />
-    <Property Name="RecAcjournalID" Type="int" />
-    <Property Name="RecAmt" Type="money" />
-    <Property Name="RecChequeNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="RecChequeDate" Type="datetime" />
-    <Property Name="RecRemarks" Type="nvarchar" MaxLength="50" />
-    <Property Name="RecBankID" Type="int" />
-    <Property Name="FYearID" Type="int" />
-    <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <EntityType Name="MemberUserIdLink">
     <Key>
@@ -6877,14 +6671,9 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="DRR" EntityType="Self.DRR" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRConsignment" EntityType="Self.DRRConsignment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRDetail" EntityType="Self.DRRDetail" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRRInvoice" EntityType="Self.DRRInvoice" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRRPKPCAD" EntityType="Self.DRRPKPCAD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRRecPay" EntityType="Self.DRRRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRRecPayDetails" EntityType="Self.DRRRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRS" EntityType="Self.DRS" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRSEmployeeID" EntityType="Self.DRSEmployeeID" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRSExpense" EntityType="Self.DRSExpense" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DRSReceipt" EntityType="Self.DRSReceipt" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
@@ -6913,7 +6702,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatils" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InScanMaster" EntityType="Self.InScanMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InscanOtherCharge" EntityType="Self.InscanOtherCharge" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="InScantransfer" EntityType="Self.InScantransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ItemUnit" EntityType="Self.ItemUnit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JobEnquiry" EntityType="Self.JobEnquiry" Schema="dbo" store:Type="Tables" />
@@ -6923,8 +6711,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manifest" EntityType="Self.Manifest" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MaterialCostMaster" EntityType="Self.MaterialCostMaster" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="MCInvoice" EntityType="Self.MCInvoice" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="MCPayment" EntityType="Self.MCPayment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MemberUserIdLink" EntityType="Self.MemberUserIdLink" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MenuAccessLevel" EntityType="Self.MenuAccessLevel" Schema="dbo" store:Type="Tables" />
@@ -7110,14 +6896,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     [CreditNoteDetails].[Remarks] AS [Remarks]
     FROM [dbo].[CreditNoteDetails] AS [CreditNoteDetails]</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="DRSEmployee" EntityType="Self.DRSEmployee" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [DRSEmployee].[DRSEmployeeID] AS [DRSEmployeeID], 
-    [DRSEmployee].[DRSID] AS [DRSID], 
-    [DRSEmployee].[EmployeeID] AS [EmployeeID], 
-    [DRSEmployee].[Amount] AS [Amount]
-    FROM [dbo].[DRSEmployee] AS [DRSEmployee]</DefiningQuery>
-    </EntitySet>
     <EntitySet Name="ImpExp" EntityType="Self.ImpExp" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [ImpExp].[ImpExpID] AS [ImpExpID], 
@@ -7126,60 +6904,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
     [ImpExp].[Employee] AS [Employee], 
     [ImpExp].[Status] AS [Status]
     FROM [dbo].[ImpExp] AS [ImpExp]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="InScanNew" EntityType="Self.InScanNew" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [InScanNew].[InScanID] AS [InScanID], 
-    [InScanNew].[AWBNo] AS [AWBNo], 
-    [InScanNew].[CourierCharge] AS [CourierCharge], 
-    [InScanNew].[OtherCharge] AS [OtherCharge], 
-    [InScanNew].[Consignee] AS [Consignee], 
-    [InScanNew].[Consignor] AS [Consignor], 
-    [InScanNew].[OriginLocation] AS [OriginLocation], 
-    [InScanNew].[DestinationLocation] AS [DestinationLocation], 
-    [InScanNew].[CourierType] AS [CourierType], 
-    [InScanNew].[CBM] AS [CBM], 
-    [InScanNew].[Weight] AS [Weight], 
-    [InScanNew].[Pieces] AS [Pieces], 
-    [InScanNew].[Discount] AS [Discount], 
-    [InScanNew].[NetTotal] AS [NetTotal], 
-    [InScanNew].[FAgent] AS [FAgent], 
-    [InScanNew].[FAWBNo] AS [FAWBNo], 
-    [InScanNew].[NCND] AS [NCND], 
-    [InScanNew].[Branch] AS [Branch], 
-    [InScanNew].[ReceivedBy] AS [ReceivedBy], 
-    [InScanNew].[CollectedBy] AS [CollectedBy], 
-    [InScanNew].[ImportID] AS [ImportID]
-    FROM [dbo].[InScanNew] AS [InScanNew]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="MCPaymentReceipt" EntityType="Self.MCPaymentReceipt" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [MCPaymentReceipt].[McPaymentReceiptID] AS [McPaymentReceiptID], 
-    [MCPaymentReceipt].[InscanID] AS [InscanID], 
-    [MCPaymentReceipt].[AWBNo] AS [AWBNo], 
-    [MCPaymentReceipt].[PayDate] AS [PayDate], 
-    [MCPaymentReceipt].[PayVoucherNo] AS [PayVoucherNo], 
-    [MCPaymentReceipt].[PayAcHeadID] AS [PayAcHeadID], 
-    [MCPaymentReceipt].[PayAcjournalID] AS [PayAcjournalID], 
-    [MCPaymentReceipt].[PayAmt] AS [PayAmt], 
-    [MCPaymentReceipt].[PayType] AS [PayType], 
-    [MCPaymentReceipt].[PayBankID] AS [PayBankID], 
-    [MCPaymentReceipt].[PayChequeNo] AS [PayChequeNo], 
-    [MCPaymentReceipt].[PayChequeDate] AS [PayChequeDate], 
-    [MCPaymentReceipt].[PayRemarks] AS [PayRemarks], 
-    [MCPaymentReceipt].[RecType] AS [RecType], 
-    [MCPaymentReceipt].[RecDate] AS [RecDate], 
-    [MCPaymentReceipt].[RecVoucherNo] AS [RecVoucherNo], 
-    [MCPaymentReceipt].[RecAcHeadID] AS [RecAcHeadID], 
-    [MCPaymentReceipt].[RecAcjournalID] AS [RecAcjournalID], 
-    [MCPaymentReceipt].[RecAmt] AS [RecAmt], 
-    [MCPaymentReceipt].[RecChequeNo] AS [RecChequeNo], 
-    [MCPaymentReceipt].[RecChequeDate] AS [RecChequeDate], 
-    [MCPaymentReceipt].[RecRemarks] AS [RecRemarks], 
-    [MCPaymentReceipt].[RecBankID] AS [RecBankID], 
-    [MCPaymentReceipt].[FYearID] AS [FYearID], 
-    [MCPaymentReceipt].[AcCompanyID] AS [AcCompanyID]
-    FROM [dbo].[MCPaymentReceipt] AS [MCPaymentReceipt]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="State" EntityType="Self.State" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 

@@ -71,6 +71,5 @@ namespace CMSV2.Models
         public string ConsignorCityName { get; set; }
     
         public virtual CustomerMaster CustomerMaster { get; set; }
-        public virtual EmployeeMaster EmployeeMaster { get; set; }
     }
 }

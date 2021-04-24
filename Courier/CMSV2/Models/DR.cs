@@ -18,8 +18,6 @@ namespace CMSV2.Models
         public string DRSNo { get; set; }
         public System.DateTime DRSDate { get; set; }
         public Nullable<int> DeliveredBy { get; set; }
-        public int CheckedBy { get; set; }
-        public Nullable<decimal> TotalAmountCollected { get; set; }
         public Nullable<int> VehicleID { get; set; }
         public string StatusDRS { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
@@ -28,5 +26,11 @@ namespace CMSV2.Models
         public Nullable<int> BranchID { get; set; }
         public Nullable<decimal> TotalMaterialCost { get; set; }
         public Nullable<int> DRSRecPayId { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> FYearId { get; set; }
+        public Nullable<decimal> TotalCourierCharge { get; set; }
     }
 }

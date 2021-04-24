@@ -107,7 +107,7 @@ namespace CMSV2.Controllers
                     cust.DRSNo = drsno.DRSNo;
                     cust.DRSDate = drsno.DRSDate;
                     cust.Remarks = dpay.Remarks;
-                    cust.DRSAmount =Convert.ToDecimal(drsno.TotalAmountCollected);
+                    cust.DRSAmount =Convert.ToDecimal(drsno.TotalCourierCharge);
                     cust.ReceivedAmount = dpay.ReceivedAmount;
                     cust.Details  = new List<DRSReceiptDetailVM>();                  
                   
@@ -210,7 +210,7 @@ namespace CMSV2.Controllers
                                where c1.DRSNo.ToLower().Contains(term.Trim().ToLower())
                                && c1.DRSRecPayId==null
                                orderby c1.DRSNo ascending
-                               select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate,CheckedBy=c1.CheckedBy,TotalAmount=c1.TotalAmountCollected + c1.TotalMaterialCost }).ToList();
+                               select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate,TotalAmount=c1.TotalCourierCharge + c1.TotalMaterialCost }).ToList();
 
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }
@@ -219,7 +219,7 @@ namespace CMSV2.Controllers
                 var drslist = (from c1 in Context1.DRS
                                where c1.DRSRecPayId == null
                                orderby c1.DRSNo ascending
-                               select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate, CheckedBy = c1.CheckedBy, TotalAmount = c1.TotalAmountCollected + c1.TotalMaterialCost}).ToList();
+                               select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate, TotalAmount = c1.TotalCourierCharge + c1.TotalMaterialCost}).ToList();
 
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }

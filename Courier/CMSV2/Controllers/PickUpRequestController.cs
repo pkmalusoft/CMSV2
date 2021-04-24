@@ -635,11 +635,18 @@ namespace CMSV2.Controllers
                 v.ConsigneeCountryName = a.ConsigneeCountryName;
                 v.ConsigneeCityName = a.ConsigneeCityName;                
                 v.ConsigneeLocationName = a.ConsigneeLocationName;
-                v.Weight = Convert.ToDouble(a.Weight);
+                
+            if (a.Weight!=null)
+                    v.Weight = Convert.ToDouble(a.Weight);
+
                 v.AcCompanyID = a.AcCompanyID;
-                v.CustomerID = a.CustomerID;
-                string customername = db.CustomerMasters.Find(v.CustomerID).CustomerName;
-                v.CustomerName = customername;
+                if (a.CustomerID != null)
+                {
+                    v.CustomerID = a.CustomerID;
+                    string customername = db.CustomerMasters.Find(v.CustomerID).CustomerName;
+
+                    v.CustomerName = customername;
+                }
                 v.Consignee = a.Consignee;
                 v.Consignor = a.Consignor;
                 v.ConsignorAddress = a.ConsignorAddress1_Building;
@@ -661,9 +668,14 @@ namespace CMSV2.Controllers
             //v.PickupRequestStatusId = a.PickupRequestStatusId;
             v.PickupRequestStatusId = a.CourierStatusID;
             v.SubReasonId = a.SubReasonId;
-            v.EmployeeID = a.AssignedEmployeeID;
+            if (a.AssignedEmployeeID!=null)
+                v.EmployeeID = a.AssignedEmployeeID;
+
                 v.Remarks = a.Remarks;
-                v.CollectedEmpID = a.PickedUpEmpID; ;
+            
+            if (a.PickedUpEmpID!=null)
+                v.CollectedEmpID = a.PickedUpEmpID; 
+
                 v.CollectedTime = a.PickedupDate; ;
               //  v.ShipmentType = a.ShipmentType;
 
@@ -696,8 +708,14 @@ namespace CMSV2.Controllers
                 v.CustomerCode = cm.CustomerCode;
                 v.OfficeTimeFrom = cm.OfficeOpenTime;
                 v.OfficeTimeTo = cm.OfficeCloseTime;
+
+            if (a.RequestSource!=null)
                 v.RequestSource = a.RequestSource;
-            v.DocumentTypeId = a.DocumentTypeId;
+
+            if (a.DocumentTypeId != null)
+            {
+                v.DocumentTypeId = a.DocumentTypeId;
+            }
             v.PickupLocation = a.PickupLocation;
             v.PickupLocationPlaceId = a.OriginPlaceID;
             v.DeliveryLocation = a.DeliveryLocation;

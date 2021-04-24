@@ -111,7 +111,7 @@ namespace CMSV2.Controllers
                 
                 PickupRequestDAO _dao = new PickupRequestDAO();
                 vm.InScanSheetNo = _dao.GetMaxInScanSheetNo(companyid, BranchId, "Inhouse");
-                vm.QuickInscanDateTime = CommanFunctions.GetLastDayofMonth();
+                vm.QuickInscanDateTime = CommanFunctions.GetCurrentDateTime(); // CommanFunctions.GetLastDayofMonth();
                 vm.DepotID = depotid;
                 ViewBag.EditMode ="false";
                 ViewBag.Title = "Depot InScan - Create";
@@ -260,6 +260,7 @@ namespace CMSV2.Controllers
                         _inscan.CreatedDate = v.QuickInscanDateTime;
                         _inscan.LastModifiedBy = UserId;
                         _inscan.LastModifiedDate = v.QuickInscanDateTime;
+                        _inscan.IsDeleted = false;
                         db.InScanMasters.Add(_inscan);
                         db.SaveChanges();
                         //updateing awbstaus table for tracking
@@ -274,6 +275,7 @@ namespace CMSV2.Controllers
                         _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                         _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                         _awbstatus.UserId = UserId;
+                       
                         db.AWBTrackStatus.Add(_awbstatus);
                         db.SaveChanges();
                     }

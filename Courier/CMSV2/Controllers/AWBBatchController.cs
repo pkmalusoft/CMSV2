@@ -70,7 +70,7 @@ namespace CMSV2.Controllers
             ViewBag.Title = "AWB Batch - Create";
             string DocNo = AWBDAO.GetMaxBathcNo(); //batch no
             vm.BatchNumber = DocNo;
-            DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+            DateTime pFromDate = CommanFunctions.GetCurrentDateTime(); //  AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
             vm.BatchDate = pFromDate;
             vm.AWBDate = pFromDate;
 

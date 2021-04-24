@@ -126,7 +126,7 @@ namespace CMSV2.Controllers
                     v.HAWBNo = ViewBag.AWBNo;
                     ViewBag.CourierStatusId = 0;
                     v.InScanID = 0;
-                v.TaxPercent = 5;
+                    v.TaxPercent = 5;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
                     int userId = Convert.ToInt32(Session["UserID"].ToString());
@@ -883,7 +883,9 @@ namespace CMSV2.Controllers
                 {
                 inscan.CustomerRateTypeID = Convert.ToInt32(data.CustomerRateID);
                 }
-            inscan.PaymentModeId = data.PaymentModeId;
+
+                if (data.PaymentModeId!=null)
+                    inscan.PaymentModeId = data.PaymentModeId;
            // inscan.paymentmode = data.StatusPaymentMode;
                 inscan.ConsignorCountryName = data.ConsignorCountryName;
                 inscan.ConsignorCityName = data.ConsignorCityName;
@@ -894,8 +896,11 @@ namespace CMSV2.Controllers
                 inscan.ConsignorAddress2_Street = data.ConsignorAddress2_Street;
                 inscan.ConsignorAddress3_PinCode = data.ConsignorAddress3_PinCode;
 
+            if (data.CustomerID != null)
+            {
                 inscan.CustomerID = data.CustomerID.Value;
                 inscan.customer = db.CustomerMasters.Find(inscan.CustomerID).CustomerName;
+            }
 
                 //inscan.TaxconfigurationID = data.TaxconfigurationID.Value;
                 inscan.Consignee = data.Consignee;
@@ -919,9 +924,15 @@ namespace CMSV2.Controllers
                 //inscan.materialcost = data.MaterialCost.Value;
                 inscan.Description = data.CargoDescription;
 
-                inscan.MovementTypeID = data.MovementID;
+               if (data.MovementID!=null)
+                    inscan.MovementTypeID = data.MovementID;
+
+            if (data.DepotReceivedBy!=null)
                 inscan.ReceivedBy = data.DepotReceivedBy; // "tesT"; // data.ReceivedBy.Value;
+            
+            if (data.PickedUpEmpID != null)
                 inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;           
+
             inscan.IsNCND = data.IsNCND;
             inscan.IsCashOnly = data.IsCashOnly;
             inscan.IsChequeOnly = data.IsChequeOnly;
@@ -933,7 +944,8 @@ namespace CMSV2.Controllers
             inscan.PickupSubLocality = data.PickupSubLocality;
             inscan.DeliverySubLocality = data.DeliverySubLocality;
             inscan.PickupLocationPlaceId = data.OriginPlaceID;
-            inscan.DeliveryLocationPlaceId = data.DestinationPlaceID;
+            if (data.DestinationPlaceID!=null)
+                inscan.DeliveryLocationPlaceId = data.DestinationPlaceID;
             if (data.CreatedBy != null)
             {
                 inscan.CreatedByDate = Convert.ToDateTime(data.CreatedDate).ToString("dd-MMM-yyyy HH:mm"); ;
@@ -1509,7 +1521,7 @@ namespace CMSV2.Controllers
                 model.AWBNo = obj.AWBNo;
                 if (obj.AWBNo!=null || obj.AWBNo!="" )
                 {      model.AWBNo = obj.AWBNo;
-                    model.AWB = (from c in db.InScanMasters where c.IsDeleted == false && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName,ConsignorAddress1_Building=c.ConsignorAddress1_Building,ConsignorAddress2_Street=c.ConsignorAddress2_Street,ConsignorAddress3_PinCode=c.ConsignorAddress3_PinCode,  ConsigneeAddress1_Building=c.ConsigneeAddress1_Building,ConsigneeAddress2_Street=c.ConsigneeAddress2_Street,ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,  Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId }).FirstOrDefault();
+                    model.AWB = (from c in db.InScanMasters where (c.IsDeleted == false || c.IsDeleted == null) && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName,ConsignorAddress1_Building=c.ConsignorAddress1_Building,ConsignorAddress2_Street=c.ConsignorAddress2_Street,ConsignorAddress3_PinCode=c.ConsignorAddress3_PinCode,  ConsigneeAddress1_Building=c.ConsigneeAddress1_Building,ConsigneeAddress2_Street=c.ConsigneeAddress2_Street,ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,  Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId }).FirstOrDefault();
                     string specialinstruc = "";
                     if (model.AWB != null)
                     {

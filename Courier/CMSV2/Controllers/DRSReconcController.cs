@@ -159,7 +159,7 @@ namespace CMSV2.Controllers
                                where c1.DocumentNo.ToLower().Contains(term.ToLower()) && c1.FYearID == FyearId
                                 && c1.DRRID == null
                                orderby c1.DocumentNo ascending
-                               select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DeliveredBy = c1.DeliveredBy, CheckedBy = c2.CheckedBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
+                               select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DeliveredBy = c1.DeliveredBy,   ReceivedAmount = c1.ReceivedAmount }).ToList();
 
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }
@@ -170,7 +170,7 @@ namespace CMSV2.Controllers
                                where c1.FYearID == FyearId
                                && c1.DRRID == null
                                orderby c1.DocumentNo ascending
-                               select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DeliveredBy = c1.DeliveredBy, CheckedBy = c2.CheckedBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
+                               select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DeliveredBy = c1.DeliveredBy,   ReceivedAmount = c1.ReceivedAmount }).ToList();
                 return Json(drslist, JsonRequestBehavior.AllowGet);
             }
 
@@ -183,7 +183,7 @@ namespace CMSV2.Controllers
 
             var drslist = (from c1 in db.DRS
                            where c1.DRSID == DRSID
-                           select new { DRSID = c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate, DeliveredBy = c1.DeliveredBy, CheckedBy = c1.CheckedBy }).FirstOrDefault();
+                           select new { DRSID = c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate, DeliveredBy = c1.DeliveredBy  }).FirstOrDefault();
 
              return Json(drslist, JsonRequestBehavior.AllowGet);
             

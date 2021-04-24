@@ -167,97 +167,132 @@
 </script>
 <script>
     function showshipperaddress() {
+            var fullform = $('form#FormReceipt').serialize();
 
-        var Shipper = $('#Shipper').val();
-        var ConsignorContact = $("#ConsignorContact").val();
-        var ConsignorAddress1 = $("#ConsignorAddress1_Building").val();
-        var ConsignorAddress2 = $("#ConsignorAddress2_Street").val();
-        var ConsignorAddress3 = $("#ConsignorAddress3_PinCode").val();
-        var ConsignorPhone = $("#ConsignorPhone").val();
-        var ConsignorCountryName = $("#ConsignorCountryName").val();
-        var ConsignorCityName = $("#ConsignorCityName").val();
-        var ConsignorLocationName = $("#ConsignorLocationName").val();
-        var ConsignorMobileNo = $('#ConsignorMobileNo').val();
-        $('#Shipper1').val(Shipper);
-        $('#ConsignorContact1').val(ConsignorContact);
-        $('#ConsignorAddress1_1').val(ConsignorAddress1);
-        $('#ConsignorAddress2_1').val(ConsignorAddress2);
-        $('#ConsignorAddress3_1').val(ConsignorAddress3);
-        $('#ConsignorPhone1').val(ConsignorPhone);
-        $('#ConsignorCountryName1').val(ConsignorCountryName);
-        $('#ConsignorCityName1').val(ConsignorCityName);
-        $('#ConsignorLocationName1').val(ConsignorLocationName);
-        $('#ConsignorMobileNo1').val(ConsignorMobileNo);
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ShowConsignorAddres", "AWBBatch")',
+                            datatype: "html",
+                            data: {
+                                ship: fullform
+                            },
+                            success: function (data) {
+                                $("#listContainer").html(data);
+                                $('#shipperpopup').modal('show');
+                                var Shipper = $('#Shipper').val();
+                                var ConsignorContact = $("#ConsignorContact").val();
+                                var ConsignorAddress1 = $("#ConsignorAddress1_Building").val();
+                                var ConsignorAddress2 = $("#ConsignorAddress2_Street").val();
+                                var ConsignorAddress3 = $("#ConsignorAddress3_PinCode").val();
+                                var ConsignorPhone = $("#ConsignorPhone").val();
+                                var ConsignorCountryName = $("#ConsignorCountryName").val();
+                                var ConsignorCityName = $("#ConsignorCityName").val();
+                                var ConsignorLocationName = $("#ConsignorLocationName").val();
+                                var ConsignorMobileNo = $('#ConsignorMobileNo').val();
+                                $('#Shipper1').val(Shipper);
+                                $('#ConsignorContact1').val(ConsignorContact);
+                                $('#ConsignorAddress1_1').val(ConsignorAddress1);
+                                $('#ConsignorAddress2_1').val(ConsignorAddress2);
+                                $('#ConsignorAddress3_1').val(ConsignorAddress3);
+                                $('#ConsignorPhone1').val(ConsignorPhone);
+                                $('#ConsignorCountryName1').val(ConsignorCountryName);
+                                $('#ConsignorCityName1').val(ConsignorCityName);
+                                $('#ConsignorLocationName1').val(ConsignorLocationName);
+                                $('#ConsignorMobileNo1').val(ConsignorMobileNo);
+                                $('#Shipper1').focus();
 
-        $('#shipperpopup').modal('show');
-    }
-    function saveshipperaddress() {
-        var ConsignorContact = $("#ConsignorContact1").val();
-        var ConsignorAddress1 = $("#ConsignorAddress1_1").val();
-        var ConsignorAddress2 = $("#ConsignorAddress2_1").val();
-        var ConsignorAddress3 = $("#ConsignorAddress3_1").val();
-        var ConsignorPhone = $("#ConsignorPhone1").val();
-        var ConsignorCountryName = $("#ConsignorCountryName1").val();
-        var ConsignorCityName = $("#ConsignorCityName1").val();
-        var ConsignorLocationName = $("#ConsignorLocationName1").val();
-        var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
-        //$('#Shipper').val(Shipper);
-        $('#ConsignorContact').val(ConsignorContact);
-        $("#ConsignorAddress1_Building").val(ConsignorAddress1);
-        $("#ConsignorAddress2_Street").val(ConsignorAddress2);
-        $("#ConsignorAddress3_PinCode").val(ConsignorAddress3);
-        $('#ConsignorPhone').val(ConsignorPhone);
-        $('#ConsignorCountryName').val(ConsignorCountryName);
-        $('#ConsignorCityName').val(ConsignorCityName);
-        $('#ConsignorLocationName').val(ConsignorLocationName);
-        $('#ConsignorMobileNo').val(ConsignorMobileNo);
-        $('#shipperpopup').modal('hide');
-    }
+                            }
+                        });
+
+
+
+
+        }
+        function saveshipperaddress() {
+            var ConsignorContact = $("#ConsignorContact1").val();
+            var ConsignorAddress1 = $("#ConsignorAddress1_1").val();
+            var ConsignorAddress2 = $("#ConsignorAddress2_1").val();
+            var ConsignorAddress3 = $("#ConsignorAddress3_1").val();
+            var ConsignorPhone = $("#ConsignorPhone1").val();
+            var ConsignorCountryName = $("#ConsignorCountryName1").val();
+            var ConsignorCityName = $("#ConsignorCityName1").val();
+            var ConsignorLocationName = $("#ConsignorLocationName1").val();
+            var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
+            var Shipper = $('#Shipper1').val();
+            $('#Shipper').val(Shipper);
+            $('#ConsignorContact').val(ConsignorContact);
+            $("#ConsignorAddress1_Building").val(ConsignorAddress1);
+            $("#ConsignorAddress2_Street").val(ConsignorAddress2);
+            $("#ConsignorAddress3_PinCode").val(ConsignorAddress3);
+            $('#ConsignorPhone').val(ConsignorPhone);
+            $('#ConsignorCountryName').val(ConsignorCountryName);
+            $('#ConsignorCityName').val(ConsignorCityName);
+            $('#ConsignorLocationName').val(ConsignorLocationName);
+            $('#ConsignorMobileNo').val(ConsignorMobileNo);
+            $('#shipperpopup').modal('hide');
+        }
     function showreceiveraddress() {
-        var Receiver = $('#Consignee').val();
-        var ConsigneeContact = $("#ConsigneeContact").val();
-        var ConsigneeAddress1 = $("#ConsigneeAddress1_Building").val();
-        var ConsigneeAddress2 = $("#ConsigneeAddress2_Street").val()
-        var ConsigneeAddress3 = $("#ConsigneeAddress3_PinCode").val();
-        var ConsigneePhone = $("#ConsigneePhone").val();
-        var ConsigneeMobile = $("#ConsigneeMobileNo").val();
-        var ConsigneeCountryName = $("#ConsigneeCountryName").val();
-        var ConsigneeCityName = $("#ConsigneeCityName").val();
-        var ConsigneeLocationName = $("#ConsigneeLocationName").val();
-        $('#Consignee1').val(Receiver);
-        $('#ConsigneeContact1').val(ConsigneeContact);
-        $('#ConsigneeAddress1_1').val(ConsigneeAddress1);
-        $('#ConsigneeAddress2_1').val(ConsigneeAddress2);
-        $('#ConsigneeAddress3_1').val(ConsigneeAddress3);
-        $('#ConsigneePhone1').val(ConsigneePhone);
-        $('#ConsigneeCountryName1').val(ConsigneeCountryName);
-        $('#ConsigneeCityName1').val(ConsigneeCityName);
-        $('#ConsigneeLocationName1').val(ConsigneeLocationName);
-        $("#ConsigneeMobileNo1").val(ConsigneeMobile);
-        $('#receiverpopup').modal('show');
-    }
-    function savereceiveraddress() {
-        // var Receiver = $('#hdnConsignee1').val();
-        var ConsigneeContact = $('#ConsigneeContact1').val();
-        var ConsigneeAddress1 = $("#ConsigneeAddress1_1").val();
-        var ConsigneeAddress2 = $("#ConsigneeAddress2_1").val()
-        var ConsigneeAddress3 = $("#ConsigneeAddress3_1").val();
-        var ConsigneePhone = $("#ConsigneePhone1").val();
-        var ConsigneeCountryName = $("#ConsigneeCountryName1").val();
-        var ConsigneeCityName = $("#ConsigneeCityName1").val();
-        var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
-        var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
-        $("#ConsigneeContact").val(ConsigneeContact);
-        $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
-        $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
-        $("#ConsigneeAddress3_PinCode").val(ConsigneeAddress3);
-        $('#ConsigneePhone').val(ConsigneePhone);
-        $('#ConsigneeCountryName').val(ConsigneeCountryName);
-        $('#ConsigneeCityName').val(ConsigneeCityName);
-        $('#ConsigneeLocationName').val(ConsigneeLocationName);
-        $("#ConsigneeMobileNo").val(ConsigneeMobile);
-        $('#receiverpopup').modal('hide');
-    }
+        var fullform = $('form#FormReceipt').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ShowConsigneeAddres", "AWBBatch")',
+            datatype: "html",
+            data: {
+                ship: fullform
+            },
+            success: function (data) {
+                $("#listcontainer1").html(data);
+                $('#receiverpopup').modal('show');
+                var Receiver = $('#Consignee').val();
+                var ConsigneeContact = $("#ConsigneeContact").val();
+                var ConsigneeAddress1 = $("#ConsigneeAddress1_Building").val();
+                var ConsigneeAddress2 = $("#ConsigneeAddress2_Street").val()
+                var ConsigneeAddress3 = $("#ConsigneeAddress3_PinCode").val();
+                var ConsigneePhone = $("#ConsigneePhone").val();
+                var ConsigneeMobile = $("#ConsigneeMobileNo").val();
+                var ConsigneeCountryName = $("#ConsigneeCountryName").val();
+                var ConsigneeCityName = $("#ConsigneeCityName").val();
+                var ConsigneeLocationName = $("#ConsigneeLocationName").val();
+                $('#Consignee1').val(Receiver);
+                $('#ConsigneeContact1').val(ConsigneeContact);
+                $('#ConsigneeAddress1_1').val(ConsigneeAddress1);
+                $('#ConsigneeAddress2_1').val(ConsigneeAddress2);
+                $('#ConsigneeAddress3_1').val(ConsigneeAddress3);
+                $('#ConsigneePhone1').val(ConsigneePhone);
+                $('#ConsigneeCountryName1').val(ConsigneeCountryName);
+                $('#ConsigneeCityName1').val(ConsigneeCityName);
+                $('#ConsigneeLocationName1').val(ConsigneeLocationName);
+                $("#ConsigneeMobileNo1").val(ConsigneeMobile);
+                $('#Consignee1').focus();
+            }
+
+        });
+        }
+        function savereceiveraddress() {
+            // var Receiver = $('#hdnConsignee1').val();
+            var ConsigneeContact = $('#ConsigneeContact1').val();
+            var ConsigneeAddress1 = $("#ConsigneeAddress1_1").val();
+            var ConsigneeAddress2 = $("#ConsigneeAddress2_1").val()
+            var ConsigneeAddress3 = $("#ConsigneeAddress3_1").val();
+            var ConsigneePhone = $("#ConsigneePhone1").val();
+            var ConsigneeCountryName = $("#ConsigneeCountryName1").val();
+            var ConsigneeCityName = $("#ConsigneeCityName1").val();
+            var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
+            var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
+            var Receiver = $('#Consignee1').val();
+            $('#Consignee').val(Receiver);
+            $("#ConsigneeContact").val(ConsigneeContact);
+            $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
+            $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
+            $("#ConsigneeAddress3_PinCode").val(ConsigneeAddress3);
+            $('#ConsigneePhone').val(ConsigneePhone);
+            $('#ConsigneeCountryName').val(ConsigneeCountryName);
+            $('#ConsigneeCityName').val(ConsigneeCityName);
+            $('#ConsigneeLocationName').val(ConsigneeLocationName);
+            $("#ConsigneeMobileNo").val(ConsigneeMobile);
+            $('#receiverpopup').modal('hide');
+        }
     function editawb(obj, i) {
         $('#hdnEditRow').val(i);
         var AWBNo = $('#hdnAWBNo_' + i).val();
@@ -2070,7 +2105,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-6">
                         <div class="checkboxdesign no-padding  ">
-                            <a id="btnaddress1" class="headinglabel hyperlink" onclick="showreceiveraddress()">Receiver <span class="red">( Alt + R )</span>    </a>                            
+                            <a id="btnaddress1" class="headinglabel hyperlink" onclick="showreceiveraddress()">Receiver <span class="red">( Alt + R )</span>    </a>
                             @*<label class="headinglabel">Receiver</label>*@
                         </div>
                         @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
@@ -2162,7 +2197,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-6">
                         <label class="headinglabel">Remarks</label>
-                        @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @autocomplete = "off" })                      
+                        @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @autocomplete = "off" })
                     </div>
 
                 </div>
@@ -2225,68 +2260,13 @@
             </div>
 
             <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row no-margin" style="margin-top:10px!important">
-                        <div class="col-md-6">
-                            <label class="headinglabel required">Shipper Name</label>
-                            @Html.TextBoxFor(model => model.Shipper1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="headinglabel">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsignorContact1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
-                            @Html.ValidationMessageFor(model => model.ConsignorContact1, "", new { @class = "text-danger", @placeholder = "Contact Person" })
-                        </div>
-
-                    </div>
-                    <div class="row no-margin" style="margin-top:10px!important">
-                        <div class="col-md-4">
-                            <label class="headinglabel">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress1_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="headinglabel">Street</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress2_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel required">Pincode</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress3_1, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
-                        </div>
-                    </div>
-
-                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
-                        <div class="col-md-4">
-                            <label class="headinglabel">Location</label>
-                            @Html.TextBoxFor(model => model.ConsignorLocationName1, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel required">Origin City</label>
-                            @Html.TextBoxFor(model => model.ConsignorCityName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="headinglabel">Origin Country</label>
-                            @Html.TextBoxFor(model => model.ConsignorCountryName1, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
-
-                        </div>
-                    </div>
-                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
-
-                        <div class="col-md-6">
-                            <label class="headinglabel">Telephone No.</label>
-                            @Html.TextBoxFor(model => model.ConsignorPhone1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="headinglabel">Mobile No.</label>
-                            @Html.TextBoxFor(model => model.ConsignorMobileNo1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
-                        </div>
-                    </div>
+                <div class="container-fluid" id="listContainer">
 
                 </div>
             </div>
             <div class="modal-footer" style="padding-top: 5px">
-                <button type="button"   class="btn btn-primary" onclick="saveshipperaddress()">Save</button>
-                <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveshipperaddress()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -2301,59 +2281,8 @@
                 </h4>
             </div>
 
-            <div class="modal-body">
-                <div class="row no-margin" style="padding-top: 10px; ">
-                    <div class="col-md-6">
-                        <label class="headinglabel required">Name</label>
-                        @Html.TextBoxFor(model => model.Consignee1, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true" })
-                    </div>
-                    <div class="col-md-6">
-                        <label class="headinglabel">Contact Person</label>
-                        @Html.TextBoxFor(model => model.ConsigneeContact1, new { @class = "form-control txttarget", @required = "true" })
-                    </div>
+            <div class="modal-body" id="listcontainer1">
 
-
-                </div>
-                <div class="row no-margin" style="padding-top: 10px; ">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Flat/Building</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress1_1, new { @class = "form-control txttarget", @required = "true" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Street</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress2_1, new { @class = "form-control txttarget" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Pincode</label>
-                        @Html.TextBoxFor(model => model.ConsigneeAddress3_1, new { @class = "form-control txttarget" })
-                    </div>
-                </div>
-                <div class="row no-margin" style="padding-top: 10px">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consingee Location</label>
-                        @Html.TextBoxFor(model => model.ConsigneeLocationName1, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
-                    </div>
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consignee City</label>
-                        @Html.TextBoxFor(model => model.ConsigneeCityName1, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="headinglabel">Consignee Country</label>
-                        @Html.TextBoxFor(model => model.ConsigneeCountryName1, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
-                    </div>
-                </div>
-                <div class="row no-margin" style="padding-top: 10px">
-
-                    <div class="col-md-6">
-                        <label class="headinglabel">Telephone No</label>
-                        @Html.TextBoxFor(model => model.ConsigneePhone1, new { @class = "form-control textright", @required = "true" })
-                    </div>
-                    <div class="col-md-6">
-                        <label class="headinglabel">Mobile No.</label>
-                        @Html.TextBoxFor(model => model.ConsigneeMobileNo1, new { @class = "form-control textright", @required = "true" })
-                    </div>
-                </div>
             </div>
             <div class="modal-footer" style="padding-top: 5px">
                 <button type="button" class="btn btn-primary" onclick="savereceiveraddress()">Save</button>
@@ -2362,5 +2291,4 @@
         </div>
     </div>
 </div>
-
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>

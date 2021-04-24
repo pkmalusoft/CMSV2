@@ -264,16 +264,9 @@
               <div class="col-md-2">
                   <label class="headinglabel required">OutScan Time</label>
                   @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control text-right" })
-              </div>
-
+              </div>            
               <div class="col-md-2">
-                  <label class="headinglabel required">Checked By</label>
-                  <input type="hidden" id="chkid" value="@Model.CheckedBy" />
-                  @*@Html.DropDownListFor(model => model.CheckedBy, new SelectList(ViewBag.Checkedby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })*@
-                  @Html.DropDownList("CheckedBy", new SelectList(@ViewBag.Checkedby, "EmployeeID", "EmployeeName", 51), "Select", new { @class = "form-control", @id = "CheckedBy", @name = "CheckedBy" })
-              </div>
-              <div class="col-md-2">
-                  <label class="headinglabel required">Deliverd By</label>
+                  <label class="headinglabel required">Delivered By</label>
 
                   @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
 

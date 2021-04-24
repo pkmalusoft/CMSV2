@@ -682,7 +682,6 @@
     <NavigationProperty Name="AcCompanies" Relationship="Self.FK_AcCompany_CityMaster" FromRole="CityMaster" ToRole="AcCompany" />
     <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_CityMaster" FromRole="CityMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_CityMaster" FromRole="CityMaster" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_CityMaster" FromRole="CityMaster" ToRole="EmployeeMaster" />
     <NavigationProperty Name="LocationMasters" Relationship="Self.FK_LocationMaster_CityMaster" FromRole="CityMaster" ToRole="LocationMaster" />
     <NavigationProperty Name="tblDepots" Relationship="Self.FK_tblDepot_CityMaster" FromRole="CityMaster" ToRole="tblDepot" />
   </EntityType>
@@ -906,7 +905,6 @@
     <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_CustomerEnquiry_CustomerMaster" FromRole="CustomerEnquiry" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_CustomerEnquiry_EmployeeMaster" FromRole="CustomerEnquiry" ToRole="EmployeeMaster" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetail">
     <Key>
@@ -1118,7 +1116,6 @@
     <Property Name="StatusDesignation" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="AcCompanies" Relationship="Self.FK_AcCompany_Designation" FromRole="Designation" ToRole="AcCompany" />
     <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_Designation" FromRole="Designation" ToRole="BranchMaster" />
-    <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_Designation" FromRole="Designation" ToRole="EmployeeMaster" />
   </EntityType>
   <EntityType Name="DRRConsignment">
     <Key>
@@ -1151,129 +1148,6 @@
     <Property Name="MCPaymentPriority" Type="Int16" />
     <Property Name="StatusSuspenseEntry" Type="Boolean" />
     <NavigationProperty Name="CourierStatu" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="DRRConsignment" ToRole="CourierStatus" />
-    <NavigationProperty Name="MCPayments" Relationship="Self.FK_MCPayment_DRRConsignment" FromRole="DRRConsignment" ToRole="MCPayment" />
-  </EntityType>
-  <EntityType Name="DRRInvoice">
-    <Key>
-      <PropertyRef Name="DRRInvoiceID" />
-    </Key>
-    <Property Name="DRRInvoiceID" Type="Int32" Nullable="false" />
-    <Property Name="DRRID" Type="Int32" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="DRRPKPCAD">
-    <Key>
-      <PropertyRef Name="DRRPKPCADID" />
-    </Key>
-    <Property Name="DRRPKPCADID" Type="Int32" Nullable="false" />
-    <Property Name="DRRID" Type="Int32" />
-    <Property Name="InScanID" Type="Int32" />
-    <Property Name="AWBNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="StatusDRRPKPCAD" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-  </EntityType>
-  <EntityType Name="DRSEmployeeID">
-    <Key>
-      <PropertyRef Name="DRSEmployeeID1" />
-    </Key>
-    <Property Name="DRSEmployeeID1" Type="Int32" Nullable="false" />
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <NavigationProperty Name="DRSEmployees" Relationship="Self.FK_DRSEmployee_DRSEmployeeID" FromRole="DRSEmployeeID" ToRole="DRSEmployee" />
-  </EntityType>
-  <EntityType Name="DRSExpense">
-    <Key>
-      <PropertyRef Name="DRSExpenseID" />
-    </Key>
-    <Property Name="DRSExpenseID" Type="Int32" Nullable="false" />
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="ExpenseID" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DRSReceipt">
-    <Key>
-      <PropertyRef Name="DRSReceiptID" />
-    </Key>
-    <Property Name="DRSReceiptID" Type="Int32" Nullable="false" />
-    <Property Name="DRSReceiptDate" Type="DateTime" Precision="3" />
-    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="EmployeeID" Type="Int32" />
-    <Property Name="DepartmentID" Type="Int32" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="StatusRunSheet" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="User1" Type="Int32" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="EmployeeMaster">
-    <Key>
-      <PropertyRef Name="EmployeeID" />
-    </Key>
-    <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="EmployeeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="StatusActive" Type="Boolean" />
-    <Property Name="CountryID" Type="Int32" />
-    <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PassportExpiryDate" Type="DateTime" Precision="3" />
-    <Property Name="VisaNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="VisaExpiryDate" Type="DateTime" Precision="3" />
-    <Property Name="JoinDate" Type="DateTime" Precision="3" />
-    <Property Name="BasicSalary" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="HRA" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Allowances" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="DesignationID" Type="Int32" />
-    <Property Name="StatusCommission" Type="Boolean" />
-    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="statusDefault" Type="Boolean" />
-    <Property Name="statusMobileLogin" Type="Boolean" />
-    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="MobileDeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MobileDevicePwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CityID" Type="Int32" />
-    <Property Name="LocationID" Type="Int32" />
-    <Property Name="CurrencyID" Type="Int32" />
-    <Property Name="CreditLimit" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="ZoneCategoryID" Type="Int32" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="TerminationDate" Type="DateTime" Precision="3" />
-    <Property Name="CountryName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="CityName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="LocationName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="DepotID" Type="Int32" />
-    <Property Name="UserID" Type="Int32" />
-    <NavigationProperty Name="CityMaster" Relationship="Self.FK_EmployeeMaster_CityMaster" FromRole="EmployeeMaster" ToRole="CityMaster" />
-    <NavigationProperty Name="CustomerEnquiries" Relationship="Self.FK_CustomerEnquiry_EmployeeMaster" FromRole="EmployeeMaster" ToRole="CustomerEnquiry" />
-    <NavigationProperty Name="Designation" Relationship="Self.FK_EmployeeMaster_Designation" FromRole="EmployeeMaster" ToRole="Designation" />
-    <NavigationProperty Name="LocationMaster" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="EmployeeMaster" ToRole="LocationMaster" />
-    <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_EmployeeMaster" FromRole="EmployeeMaster" ToRole="JobEnquiry" />
-    <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster" FromRole="EmployeeMaster" ToRole="PurchaseInvoice" />
-    <NavigationProperty Name="PurchaseInvoices1" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster1" FromRole="EmployeeMaster" ToRole="PurchaseInvoice" />
-    <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_EmployeeMaster" FromRole="EmployeeMaster" ToRole="PurchaseOrder" />
-    <NavigationProperty Name="Quotations" Relationship="Self.FK_Quotation_EmployeeMaster" FromRole="EmployeeMaster" ToRole="Quotation" />
-    <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_EmployeeMaster" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
-    <NavigationProperty Name="SalesInvoices1" Relationship="Self.FK_SalesInvoice_EmployeeMaster1" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
-    <Property Name="FCMTokenId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="ProfileImage" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="Expense">
     <Key>
@@ -1845,52 +1719,6 @@
     <Property Name="Reimbursement" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="OtherCharge" Relationship="Self.FK_InscanOtherCharge_OtherCharge" FromRole="InscanOtherCharge" ToRole="OtherCharge" />
   </EntityType>
-  <EntityType Name="InScantransfer">
-    <Key>
-      <PropertyRef Name="InScanID" />
-    </Key>
-    <Property Name="InScanID" Type="Int32" Nullable="false" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="InScanDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DepartmentID" Type="Int32" />
-    <Property Name="ConsigneeID" Type="Int32" />
-    <Property Name="ConsignorID" Type="Int32" />
-    <Property Name="OriginID" Type="Int32" />
-    <Property Name="CityID" Type="Int32" />
-    <Property Name="DestinationID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CustomerRateTypeID" Type="Int32" />
-    <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="StatedWeight" Type="Double" />
-    <Property Name="CourierDescriptionID" Type="Int32" />
-    <Property Name="CourierServiceID" Type="Int32" />
-    <Property Name="CollectedBy" Type="Int32" />
-    <Property Name="ReceivedBy" Type="Int32" Nullable="false" />
-    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="CourierStatusID" Type="Int32" />
-    <Property Name="StatusPaymentMode" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="StatusClose" Type="Boolean" />
-    <Property Name="StatusInScan" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-    <Property Name="StatusPickUp" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="StatusReconciled" Type="Boolean" />
-    <Property Name="InscanSheetNo" Type="Int32" />
-    <Property Name="StatusTransit" Type="Boolean" Nullable="false" />
-    <Property Name="TransitID" Type="Int32" />
-    <Property Name="UserID" Type="Int32" Nullable="false" />
-    <Property Name="EnquiryID" Type="Int32" />
-    <Property Name="MovementID" Type="Int32" />
-    <Property Name="Statuspost" Type="Boolean" />
-    <Property Name="ConsignorCityID" Type="Int32" />
-    <Property Name="ConsigneeCityID" Type="Int32" />
-    <Property Name="ExportNo" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="StatusExport" Type="Boolean" />
-    <Property Name="ExportDate" Type="DateTime" Precision="3" />
-    <Property Name="ImportNo" Type="Int32" />
-    <Property Name="ImportDate" Type="DateTime" Precision="3" />
-    <Property Name="AcJournalID" Type="Int32" />
-  </EntityType>
   <EntityType Name="Item">
     <Key>
       <PropertyRef Name="ItemID" />
@@ -1933,7 +1761,6 @@
     <Property Name="JobNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="JobDate" Type="DateTime" Precision="3" />
     <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_JobEnquiry_CustomerMaster" FromRole="JobEnquiry" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_JobEnquiry_EmployeeMaster" FromRole="JobEnquiry" ToRole="EmployeeMaster" />
     <NavigationProperty Name="LocationMaster" Relationship="Self.FK_JobEnquiry_LocationMaster" FromRole="JobEnquiry" ToRole="LocationMaster" />
     <NavigationProperty Name="JobEnquiryDetails" Relationship="Self.FK_JobEnquiryDetails_JobEnquiry" FromRole="JobEnquiry" ToRole="JobEnquiryDetails" />
   </EntityType>
@@ -1968,7 +1795,6 @@
     <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_LocationMaster" FromRole="LocationMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="CityMaster" Relationship="Self.FK_LocationMaster_CityMaster" FromRole="LocationMaster" ToRole="CityMaster" />
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_LocationMaster" FromRole="LocationMaster" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMasters" Relationship="Self.FK_EmployeeMaster_LocationMaster" FromRole="LocationMaster" ToRole="EmployeeMaster" />
     <NavigationProperty Name="JobEnquiries" Relationship="Self.FK_JobEnquiry_LocationMaster" FromRole="LocationMaster" ToRole="JobEnquiry" />
     <Property Name="LocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
     <Property Name="CityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
@@ -2011,36 +1837,6 @@
     <Property Name="ForwardingAWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="StatusUpdated" Type="Boolean" Nullable="false" />
     <Property Name="AcCompanyID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="MCInvoice">
-    <Key>
-      <PropertyRef Name="MCInvoiceID" />
-    </Key>
-    <Property Name="MCInvoiceID" Type="Int32" Nullable="false" />
-    <Property Name="McPaymentReceiptID" Type="Int32" />
-    <Property Name="DocumentNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="TransDate" Type="DateTime" Precision="3" />
-  </EntityType>
-  <EntityType Name="MCPayment">
-    <Key>
-      <PropertyRef Name="MCPaymentID" />
-    </Key>
-    <Property Name="MCPaymentID" Type="Int32" Nullable="false" />
-    <Property Name="MCPaymentDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="MCPaymentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRRConsignmentID" Type="Int32" Nullable="false" />
-    <Property Name="CustomerID" Type="Int32" Nullable="false" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="MCStatuspaymentType" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="MCBankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MCChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="MCChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="EmployeeID" Type="Int32" />
-    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="StatusReturn" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-    <Property Name="DRSNo" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="DRRConsignment" Relationship="Self.FK_MCPayment_DRRConsignment" FromRole="MCPayment" ToRole="DRRConsignment" />
   </EntityType>
   <EntityType Name="MemberUserIdLink">
     <Key>
@@ -2363,8 +2159,6 @@
     <NavigationProperty Name="AcJournalMaster" Relationship="Self.FK_PurchaseInvoice_AcJournalMaster" FromRole="PurchaseInvoice" ToRole="AcJournalMaster" />
     <NavigationProperty Name="BranchMaster" Relationship="Self.FK_PurchaseInvoice_BranchMaster" FromRole="PurchaseInvoice" ToRole="BranchMaster" />
     <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_PurchaseInvoice_CurrencyMaster" FromRole="PurchaseInvoice" ToRole="CurrencyMaster" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster" FromRole="PurchaseInvoice" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster1" Relationship="Self.FK_PurchaseInvoice_EmployeeMaster1" FromRole="PurchaseInvoice" ToRole="EmployeeMaster" />
     <NavigationProperty Name="PurchaseInvoiceDetails" Relationship="Self.FK_PurchaseInvoiceDetails_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="PurchaseInvoiceDetails" />
     <NavigationProperty Name="tblPurchaseInvoiceOtherCharges" Relationship="Self.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" FromRole="PurchaseInvoice" ToRole="tblPurchaseInvoiceOtherCharges" />
     <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_SupplierMaster" FromRole="PurchaseInvoice" ToRole="SupplierMaster" />
@@ -2399,7 +2193,6 @@
     <Property Name="StatusDiscountAmt" Type="Boolean" />
     <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="FYearID" Type="Int32" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_PurchaseOrder_EmployeeMaster" FromRole="PurchaseOrder" ToRole="EmployeeMaster" />
     <NavigationProperty Name="PurchaseOrderDetails" Relationship="Self.FK_PurchaseOrderDetails_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseOrderDetails" />
     <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_PurchaseOrder_SupplierMaster" FromRole="PurchaseOrder" ToRole="SupplierMaster" />
   </EntityType>
@@ -2433,7 +2226,6 @@
     <Property Name="BranchID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="BranchMaster" Relationship="Self.FK_Quotation_BranchMaster" FromRole="Quotation" ToRole="BranchMaster" />
     <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_Quotation_CustomerMaster" FromRole="Quotation" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_Quotation_EmployeeMaster" FromRole="Quotation" ToRole="EmployeeMaster" />
     <NavigationProperty Name="QuotationDetails" Relationship="Self.FK_QuotationDetails_Quotation" FromRole="Quotation" ToRole="QuotationDetails" />
   </EntityType>
   <EntityType Name="QuotationDetail">
@@ -2525,8 +2317,6 @@
     <NavigationProperty Name="BranchMaster" Relationship="Self.FK_SalesInvoice_BranchMaster" FromRole="SalesInvoice" ToRole="BranchMaster" />
     <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_SalesInvoice_CurrencyMaster" FromRole="SalesInvoice" ToRole="CurrencyMaster" />
     <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_SalesInvoice_CustomerMaster" FromRole="SalesInvoice" ToRole="CustomerMaster" />
-    <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_SalesInvoice_EmployeeMaster" FromRole="SalesInvoice" ToRole="EmployeeMaster" />
-    <NavigationProperty Name="EmployeeMaster1" Relationship="Self.FK_SalesInvoice_EmployeeMaster1" FromRole="SalesInvoice" ToRole="EmployeeMaster" />
     <NavigationProperty Name="SalesInvoiceDetails" Relationship="Self.FK_SalesInvoiceDetails_SalesInvoice" FromRole="SalesInvoice" ToRole="SalesInvoiceDetails" />
     <NavigationProperty Name="tblSalesInvoiceOtherCharges" Relationship="Self.FK_tblSalesInvoiceOtherCharges_SalesInvoice" FromRole="SalesInvoice" ToRole="tblSalesInvoiceOtherCharges" />
   </EntityType>
@@ -3250,19 +3040,6 @@
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
-  <EntityType Name="DRSEmployee">
-    <Key>
-      <PropertyRef Name="DRSEmployeeID" />
-      <PropertyRef Name="DRSID" />
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="Amount" />
-    </Key>
-    <Property Name="DRSEmployeeID" Type="Int32" Nullable="false" />
-    <Property Name="DRSID" Type="Int32" Nullable="false" />
-    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <NavigationProperty Name="DRSEmployeeID1" Relationship="Self.FK_DRSEmployee_DRSEmployeeID" FromRole="DRSEmployee" ToRole="DRSEmployeeID" />
-  </EntityType>
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -3276,64 +3053,6 @@
     <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Employee" Type="Int32" Nullable="false" />
     <Property Name="Status" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-  </EntityType>
-  <EntityType Name="InScanNew">
-    <Key>
-      <PropertyRef Name="InScanID" />
-      <PropertyRef Name="CourierCharge" />
-      <PropertyRef Name="ImportID" />
-    </Key>
-    <Property Name="InScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Consignee" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="Consignor" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="OriginLocation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="DestinationLocation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="CourierType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="CBM" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="Weight" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="Pieces" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="FAgent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="FAWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="NCND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Branch" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ReceivedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="CollectedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="ImportID" Type="Int32" Nullable="false" />
-  </EntityType>
-  <EntityType Name="MCPaymentReceipt">
-    <Key>
-      <PropertyRef Name="McPaymentReceiptID" />
-    </Key>
-    <Property Name="McPaymentReceiptID" Type="Int32" Nullable="false" />
-    <Property Name="InscanID" Type="Int32" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PayDate" Type="DateTime" Precision="3" />
-    <Property Name="PayVoucherNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PayAcHeadID" Type="Int32" />
-    <Property Name="PayAcjournalID" Type="Int32" />
-    <Property Name="PayAmt" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="PayType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PayBankID" Type="Int32" />
-    <Property Name="PayChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="PayChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="PayRemarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RecType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RecDate" Type="DateTime" Precision="3" />
-    <Property Name="RecVoucherNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RecAcHeadID" Type="Int32" />
-    <Property Name="RecAcjournalID" Type="Int32" />
-    <Property Name="RecAmt" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="RecChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RecChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="RecRemarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="RecBankID" Type="Int32" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
   </EntityType>
   <EntityType Name="State">
     <Key>
@@ -3959,18 +3678,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_EmployeeMaster_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="CityID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_LocationMaster_CityMaster">
     <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
     <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="*" />
@@ -4129,18 +3836,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CustomerEnquiry_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="CustomerEnquiry" Type="Self.CustomerEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="CustomerEnquiry">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_CustomerMaster_LocationMaster">
     <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
     <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
@@ -4296,138 +3991,6 @@
       </Principal>
       <Dependent Role="CustomerRateType">
         <PropertyRef Name="ZoneCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EmployeeMaster_Designation">
-    <End Role="Designation" Type="Self.Designation" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Designation">
-        <PropertyRef Name="DesignationID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="DesignationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MCPayment_DRRConsignment">
-    <End Role="DRRConsignment" Type="Self.DRRConsignment" Multiplicity="1" />
-    <End Role="MCPayment" Type="Self.MCPayment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRRConsignment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Principal>
-      <Dependent Role="MCPayment">
-        <PropertyRef Name="DRRConsignmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DRSEmployee_DRSEmployeeID">
-    <End Role="DRSEmployeeID" Type="Self.DRSEmployeeID" Multiplicity="1" />
-    <End Role="DRSEmployee" Type="Self.DRSEmployee" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DRSEmployeeID">
-        <PropertyRef Name="DRSEmployeeID1" />
-      </Principal>
-      <Dependent Role="DRSEmployee">
-        <PropertyRef Name="DRSEmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EmployeeMaster_LocationMaster">
-    <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationMaster">
-        <PropertyRef Name="LocationID" />
-      </Principal>
-      <Dependent Role="EmployeeMaster">
-        <PropertyRef Name="LocationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_JobEnquiry_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="JobEnquiry" Type="Self.JobEnquiry" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="JobEnquiry">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseInvoice_EmployeeMaster1">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseInvoice">
-        <PropertyRef Name="SalesManID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PurchaseOrder_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="PurchaseOrder">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Quotation_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="Quotation" Type="Self.Quotation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="Quotation">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_EmployeeMaster">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="EmployeeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SalesInvoice_EmployeeMaster1">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="SalesInvoice" Type="Self.SalesInvoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="SalesInvoice">
-        <PropertyRef Name="SalesManID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -5064,12 +4627,6 @@
     <EntitySet Name="Departments" EntityType="Self.Department" />
     <EntitySet Name="Designations" EntityType="Self.Designation" />
     <EntitySet Name="DRRConsignments" EntityType="Self.DRRConsignment" />
-    <EntitySet Name="DRRInvoices" EntityType="Self.DRRInvoice" />
-    <EntitySet Name="DRRPKPCADs" EntityType="Self.DRRPKPCAD" />
-    <EntitySet Name="DRSEmployeeIDs" EntityType="Self.DRSEmployeeID" />
-    <EntitySet Name="DRSExpenses" EntityType="Self.DRSExpense" />
-    <EntitySet Name="DRSReceipts" EntityType="Self.DRSReceipt" />
-    <EntitySet Name="EmployeeMasters" EntityType="Self.EmployeeMaster" />
     <EntitySet Name="Expenses" EntityType="Self.Expense" />
     <EntitySet Name="ExpenseDetails" EntityType="Self.ExpenseDetail" />
     <EntitySet Name="ExportShipmentDetails" EntityType="Self.ExportShipmentDetail" />
@@ -5091,7 +4648,6 @@
     <EntitySet Name="InScanInternationals" EntityType="Self.InScanInternational" />
     <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatil" />
     <EntitySet Name="InscanOtherCharges" EntityType="Self.InscanOtherCharge" />
-    <EntitySet Name="InScantransfers" EntityType="Self.InScantransfer" />
     <EntitySet Name="Items" EntityType="Self.Item" />
     <EntitySet Name="ItemUnits" EntityType="Self.ItemUnit" />
     <EntitySet Name="JobEnquiries" EntityType="Self.JobEnquiry" />
@@ -5100,8 +4656,6 @@
     <EntitySet Name="Locks" EntityType="Self.Lock" />
     <EntitySet Name="Logs" EntityType="Self.Log" />
     <EntitySet Name="Manifests" EntityType="Self.Manifest" />
-    <EntitySet Name="MCInvoices" EntityType="Self.MCInvoice" />
-    <EntitySet Name="MCPayments" EntityType="Self.MCPayment" />
     <EntitySet Name="MemberUserIdLinks" EntityType="Self.MemberUserIdLink" />
     <EntitySet Name="Menus" EntityType="Self.Menu" />
     <EntitySet Name="MenuAccessLevels" EntityType="Self.MenuAccessLevel" />
@@ -5194,10 +4748,7 @@
     <EntitySet Name="ZoneCharts" EntityType="Self.ZoneChart" />
     <EntitySet Name="ZoneMasters" EntityType="Self.ZoneMaster" />
     <EntitySet Name="CreditNoteDetails" EntityType="Self.CreditNoteDetail" />
-    <EntitySet Name="DRSEmployees" EntityType="Self.DRSEmployee" />
     <EntitySet Name="ImpExps" EntityType="Self.ImpExp" />
-    <EntitySet Name="InScanNews" EntityType="Self.InScanNew" />
-    <EntitySet Name="MCPaymentReceipts" EntityType="Self.MCPaymentReceipt" />
     <EntitySet Name="States" EntityType="Self.State" />
     <EntitySet Name="tempCustomers" EntityType="Self.tempCustomer" />
     <EntitySet Name="TempCustomerInvoices" EntityType="Self.TempCustomerInvoice" />
@@ -5362,10 +4913,6 @@
       <End Role="CityMaster" EntitySet="CityMasters" />
       <End Role="CustomerMaster" EntitySet="CustomerMasters" />
     </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_CityMaster" Association="Self.FK_EmployeeMaster_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMasters" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-    </AssociationSet>
     <AssociationSet Name="FK_LocationMaster_CityMaster" Association="Self.FK_LocationMaster_CityMaster">
       <End Role="CityMaster" EntitySet="CityMasters" />
       <End Role="LocationMaster" EntitySet="LocationMasters" />
@@ -5416,10 +4963,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_CustomerEnquiry_CustomerMaster" Association="Self.FK_CustomerEnquiry_CustomerMaster">
       <End Role="CustomerMaster" EntitySet="CustomerMasters" />
-      <End Role="CustomerEnquiry" EntitySet="CustomerEnquiries" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CustomerEnquiry_EmployeeMaster" Association="Self.FK_CustomerEnquiry_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
       <End Role="CustomerEnquiry" EntitySet="CustomerEnquiries" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomerMaster_LocationMaster" Association="Self.FK_CustomerMaster_LocationMaster">
@@ -5473,50 +5016,6 @@
     <AssociationSet Name="FK_CustomerRateType_ZoneCategory" Association="Self.FK_CustomerRateType_ZoneCategory">
       <End Role="ZoneCategory" EntitySet="ZoneCategories" />
       <End Role="CustomerRateType" EntitySet="CustomerRateTypes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_Designation" Association="Self.FK_EmployeeMaster_Designation">
-      <End Role="Designation" EntitySet="Designations" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MCPayment_DRRConsignment" Association="Self.FK_MCPayment_DRRConsignment">
-      <End Role="DRRConsignment" EntitySet="DRRConsignments" />
-      <End Role="MCPayment" EntitySet="MCPayments" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DRSEmployee_DRSEmployeeID" Association="Self.FK_DRSEmployee_DRSEmployeeID">
-      <End Role="DRSEmployeeID" EntitySet="DRSEmployeeIDs" />
-      <End Role="DRSEmployee" EntitySet="DRSEmployees" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EmployeeMaster_LocationMaster" Association="Self.FK_EmployeeMaster_LocationMaster">
-      <End Role="LocationMaster" EntitySet="LocationMasters" />
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-    </AssociationSet>
-    <AssociationSet Name="FK_JobEnquiry_EmployeeMaster" Association="Self.FK_JobEnquiry_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="JobEnquiry" EntitySet="JobEnquiries" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_EmployeeMaster" Association="Self.FK_PurchaseInvoice_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseInvoice_EmployeeMaster1" Association="Self.FK_PurchaseInvoice_EmployeeMaster1">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PurchaseOrder_EmployeeMaster" Association="Self.FK_PurchaseOrder_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Quotation_EmployeeMaster" Association="Self.FK_Quotation_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="Quotation" EntitySet="Quotations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_EmployeeMaster" Association="Self.FK_SalesInvoice_EmployeeMaster">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SalesInvoice_EmployeeMaster1" Association="Self.FK_SalesInvoice_EmployeeMaster1">
-      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
-      <End Role="SalesInvoice" EntitySet="SalesInvoices" />
     </AssociationSet>
     <AssociationSet Name="FK_ExpenseDetails_Expense" Association="Self.FK_ExpenseDetails_Expense">
       <End Role="Expense" EntitySet="Expenses" />
@@ -8317,7 +7816,6 @@
     <EntitySet Name="UserRegistrations" EntityType="DB_9F57C4_couriertest_newModel.UserRegistration" />
     <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
     <EntitySet Name="DRRRecPays" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPay" />
-    <EntitySet Name="DRRRecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPayDetail" />
     <EntitySet Name="DebitNotes" EntityType="DB_9F57C4_couriertest_newModel.DebitNote" />
     <EntitySet Name="AcJournalAWBs" EntityType="DB_9F57C4_couriertest_newModel.AcJournalAWB" />
     <EntitySet Name="AWBDetails" EntityType="DB_9F57C4_couriertest_newModel.AWBDetail" />
@@ -8326,7 +7824,6 @@
     <EntitySet Name="PrepaidAWBs" EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" />
     <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
     <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
-    <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
     <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
     <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
     <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
@@ -8334,6 +7831,9 @@
     <EntitySet Name="AccountSetups" EntityType="DB_9F57C4_couriertest_newModel.AccountSetup" />
     <EntitySet Name="ConsigneeMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsigneeMaster" />
     <EntitySet Name="ConsignorMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsignorMaster" />
+    <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
+    <EntitySet Name="DRRRecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPayDetail" />
+    <EntitySet Name="EmployeeMasters" EntityType="DB_9F57C4_couriertest_newModel.EmployeeMaster" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12641,17 +12141,6 @@
     <Property Name="ShipperName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="ShipperAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="DRRRecPayDetail">
-    <Key>
-      <PropertyRef Name="RecPayDetailID" />
-    </Key>
-    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="InScanID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
-  </EntityType>
   <EntityType Name="DebitNote">
     <Key>
       <PropertyRef Name="DebitNoteID" />
@@ -12881,25 +12370,6 @@
     <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="DR">
-    <Key>
-      <PropertyRef Name="DRSID" />
-    </Key>
-    <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DeliveredBy" Type="Int32" />
-    <Property Name="CheckedBy" Type="Int32" Nullable="false" />
-    <Property Name="TotalAmountCollected" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="VehicleID" Type="Int32" />
-    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="StatusInbound" Type="Boolean" />
-    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="DRSRecPayId" Type="Int32" />
-  </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>
       <PropertyRef Name="QuickInscanID" />
@@ -13002,5 +12472,90 @@
     <Property Name="ConsignorLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
     <Property Name="ConsignorPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ConsignorContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="DR">
+    <Key>
+      <PropertyRef Name="DRSID" />
+    </Key>
+    <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DeliveredBy" Type="Int32" />
+    <Property Name="VehicleID" Type="Int32" />
+    <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="StatusInbound" Type="Boolean" />
+    <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="DRSRecPayId" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="FYearId" Type="Int32" />
+    <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="DRRRecPayDetail">
+    <Key>
+      <PropertyRef Name="RecPayDetailID" />
+    </Key>
+    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="EmployeeMaster">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StatusActive" Type="Boolean" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PassportExpiryDate" Type="DateTime" Precision="3" />
+    <Property Name="VisaNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VisaExpiryDate" Type="DateTime" Precision="3" />
+    <Property Name="JoinDate" Type="DateTime" Precision="3" />
+    <Property Name="BasicSalary" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="HRA" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Allowances" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="DesignationID" Type="Int32" />
+    <Property Name="StatusCommission" Type="Boolean" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="statusDefault" Type="Boolean" />
+    <Property Name="statusMobileLogin" Type="Boolean" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="MobileDeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MobileDevicePwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="LocationID" Type="Int32" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="CreditLimit" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ZoneCategoryID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="TerminationDate" Type="DateTime" Precision="3" />
+    <Property Name="CountryName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="CityName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="LocationName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="DepotID" Type="Int32" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="FCMTokenId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

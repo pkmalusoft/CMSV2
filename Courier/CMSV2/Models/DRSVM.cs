@@ -21,7 +21,7 @@ namespace CMSV2.Models
 
     public int CheckedBy { get; set; }
 
-    public Decimal? TotalAmountCollected { get; set; }
+    public Decimal? TotalCourierCharge { get; set; }
         public Decimal? TotalMaterialCost{ get; set; }
 
         public int? VehicleID { get; set; }

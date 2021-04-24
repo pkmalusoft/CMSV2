@@ -19,7 +19,6 @@ namespace CMSV2.Models
         {
             this.AcCompanies = new HashSet<AcCompany>();
             this.BranchMasters = new HashSet<BranchMaster>();
-            this.EmployeeMasters = new HashSet<EmployeeMaster>();
         }
     
         public int DesignationID { get; set; }
@@ -30,7 +29,5 @@ namespace CMSV2.Models
         public virtual ICollection<AcCompany> AcCompanies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BranchMaster> BranchMasters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeMaster> EmployeeMasters { get; set; }
     }
 }

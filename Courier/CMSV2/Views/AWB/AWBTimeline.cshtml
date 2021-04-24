@@ -340,7 +340,7 @@
                                 if (item.CourierStatusId <= 4)
                                 {
                                     <li>
-                                        <p>@CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.EntryDate)</p>
+                                        <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
                                         <h4>@item.CourierStatus</h4>
                                     </li>
                                 }
@@ -377,7 +377,7 @@
                                 if (item.CourierStatusId > 4)
                                 {
                                     <li>
-                                        <p>@CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.EntryDate)</p>
+                                        <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
                                         <h4>@item.CourierStatus</h4>
                                     </li>
                                 }

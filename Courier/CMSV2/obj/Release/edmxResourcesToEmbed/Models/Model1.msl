@@ -1095,122 +1095,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRRInvoices">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRInvoice">
-        <MappingFragment StoreEntitySet="DRRInvoice">
-          <ScalarProperty Name="DRRInvoiceID" ColumnName="DRRInvoiceID" />
-          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
-          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DRRPKPCADs">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRPKPCAD">
-        <MappingFragment StoreEntitySet="DRRPKPCAD">
-          <ScalarProperty Name="DRRPKPCADID" ColumnName="DRRPKPCADID" />
-          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="AWBNO" ColumnName="AWBNO" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-          <ScalarProperty Name="StatusDRRPKPCAD" ColumnName="StatusDRRPKPCAD" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DRSEmployeeIDs">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSEmployeeID">
-        <MappingFragment StoreEntitySet="DRSEmployeeID">
-          <ScalarProperty Name="DRSEmployeeID1" ColumnName="DRSEmployeeID" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DRSExpenses">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSExpense">
-        <MappingFragment StoreEntitySet="DRSExpense">
-          <ScalarProperty Name="DRSExpenseID" ColumnName="DRSExpenseID" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-          <ScalarProperty Name="ExpenseID" ColumnName="ExpenseID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DRSReceipts">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSReceipt">
-        <MappingFragment StoreEntitySet="DRSReceipt">
-          <ScalarProperty Name="DRSReceiptID" ColumnName="DRSReceiptID" />
-          <ScalarProperty Name="DRSReceiptDate" ColumnName="DRSReceiptDate" />
-          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="StatusRunSheet" ColumnName="StatusRunSheet" />
-          <ScalarProperty Name="User1" ColumnName="User1" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="EmployeeMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmployeeMaster">
-        <MappingFragment StoreEntitySet="EmployeeMaster">
-          <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
-          <ScalarProperty Name="FCMTokenId" ColumnName="FCMTokenId" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
-          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address3" ColumnName="Address3" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Fax" ColumnName="Fax" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
-          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-          <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
-          <ScalarProperty Name="PassportExpiryDate" ColumnName="PassportExpiryDate" />
-          <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
-          <ScalarProperty Name="VisaExpiryDate" ColumnName="VisaExpiryDate" />
-          <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
-          <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
-          <ScalarProperty Name="HRA" ColumnName="HRA" />
-          <ScalarProperty Name="Allowances" ColumnName="Allowances" />
-          <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
-          <ScalarProperty Name="StatusCommission" ColumnName="StatusCommission" />
-          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="statusDefault" ColumnName="statusDefault" />
-          <ScalarProperty Name="statusMobileLogin" ColumnName="statusMobileLogin" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="MobileDeviceID" ColumnName="MobileDeviceID" />
-          <ScalarProperty Name="MobileDevicePwd" ColumnName="MobileDevicePwd" />
-          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
-          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
-          <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
-          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-          <ScalarProperty Name="CityName" ColumnName="CityName" />
-          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
-          <ScalarProperty Name="DepotID" ColumnName="DepotID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Expenses">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Expense">
         <MappingFragment StoreEntitySet="Expense">
@@ -1774,53 +1658,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="InScantransfers">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScantransfer">
-        <MappingFragment StoreEntitySet="InScantransfer">
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="InScanDate" ColumnName="InScanDate" />
-          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-          <ScalarProperty Name="ConsigneeID" ColumnName="ConsigneeID" />
-          <ScalarProperty Name="ConsignorID" ColumnName="ConsignorID" />
-          <ScalarProperty Name="OriginID" ColumnName="OriginID" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="DestinationID" ColumnName="DestinationID" />
-          <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
-          <ScalarProperty Name="Pieces" ColumnName="Pieces" />
-          <ScalarProperty Name="StatedWeight" ColumnName="StatedWeight" />
-          <ScalarProperty Name="CourierDescriptionID" ColumnName="CourierDescriptionID" />
-          <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
-          <ScalarProperty Name="CollectedBy" ColumnName="CollectedBy" />
-          <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
-          <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
-          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
-          <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-          <ScalarProperty Name="StatusInScan" ColumnName="StatusInScan" />
-          <ScalarProperty Name="StatusPickUp" ColumnName="StatusPickUp" />
-          <ScalarProperty Name="StatusReconciled" ColumnName="StatusReconciled" />
-          <ScalarProperty Name="InscanSheetNo" ColumnName="InscanSheetNo" />
-          <ScalarProperty Name="StatusTransit" ColumnName="StatusTransit" />
-          <ScalarProperty Name="TransitID" ColumnName="TransitID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="EnquiryID" ColumnName="EnquiryID" />
-          <ScalarProperty Name="MovementID" ColumnName="MovementID" />
-          <ScalarProperty Name="Statuspost" ColumnName="Statuspost" />
-          <ScalarProperty Name="ConsignorCityID" ColumnName="ConsignorCityID" />
-          <ScalarProperty Name="ConsigneeCityID" ColumnName="ConsigneeCityID" />
-          <ScalarProperty Name="ExportNo" ColumnName="ExportNo" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="StatusExport" ColumnName="StatusExport" />
-          <ScalarProperty Name="ExportDate" ColumnName="ExportDate" />
-          <ScalarProperty Name="ImportNo" ColumnName="ImportNo" />
-          <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Items">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Item">
         <MappingFragment StoreEntitySet="Item">
@@ -1927,37 +1764,6 @@
           <ScalarProperty Name="ForwardingAWBNo" ColumnName="ForwardingAWBNo" />
           <ScalarProperty Name="StatusUpdated" ColumnName="StatusUpdated" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MCInvoices">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.MCInvoice">
-        <MappingFragment StoreEntitySet="MCInvoice">
-          <ScalarProperty Name="MCInvoiceID" ColumnName="MCInvoiceID" />
-          <ScalarProperty Name="McPaymentReceiptID" ColumnName="McPaymentReceiptID" />
-          <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
-          <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MCPayments">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.MCPayment">
-        <MappingFragment StoreEntitySet="MCPayment">
-          <ScalarProperty Name="MCPaymentID" ColumnName="MCPaymentID" />
-          <ScalarProperty Name="MCPaymentDate" ColumnName="MCPaymentDate" />
-          <ScalarProperty Name="MCPaymentNo" ColumnName="MCPaymentNo" />
-          <ScalarProperty Name="DRRConsignmentID" ColumnName="DRRConsignmentID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
-          <ScalarProperty Name="MCStatuspaymentType" ColumnName="MCStatuspaymentType" />
-          <ScalarProperty Name="MCBankName" ColumnName="MCBankName" />
-          <ScalarProperty Name="MCChequeNo" ColumnName="MCChequeNo" />
-          <ScalarProperty Name="MCChequeDate" ColumnName="MCChequeDate" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="StatusReturn" ColumnName="StatusReturn" />
-          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3170,16 +2976,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRSEmployees">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSEmployee">
-        <MappingFragment StoreEntitySet="DRSEmployee">
-          <ScalarProperty Name="DRSEmployeeID" ColumnName="DRSEmployeeID" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ImpExps">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImpExp">
         <MappingFragment StoreEntitySet="ImpExp">
@@ -3188,64 +2984,6 @@
           <ScalarProperty Name="FName" ColumnName="FName" />
           <ScalarProperty Name="Employee" ColumnName="Employee" />
           <ScalarProperty Name="Status" ColumnName="Status" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="InScanNews">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanNew">
-        <MappingFragment StoreEntitySet="InScanNew">
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
-          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-          <ScalarProperty Name="Consignee" ColumnName="Consignee" />
-          <ScalarProperty Name="Consignor" ColumnName="Consignor" />
-          <ScalarProperty Name="OriginLocation" ColumnName="OriginLocation" />
-          <ScalarProperty Name="DestinationLocation" ColumnName="DestinationLocation" />
-          <ScalarProperty Name="CourierType" ColumnName="CourierType" />
-          <ScalarProperty Name="CBM" ColumnName="CBM" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="Pieces" ColumnName="Pieces" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
-          <ScalarProperty Name="FAgent" ColumnName="FAgent" />
-          <ScalarProperty Name="FAWBNo" ColumnName="FAWBNo" />
-          <ScalarProperty Name="NCND" ColumnName="NCND" />
-          <ScalarProperty Name="Branch" ColumnName="Branch" />
-          <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
-          <ScalarProperty Name="CollectedBy" ColumnName="CollectedBy" />
-          <ScalarProperty Name="ImportID" ColumnName="ImportID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MCPaymentReceipts">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.MCPaymentReceipt">
-        <MappingFragment StoreEntitySet="MCPaymentReceipt">
-          <ScalarProperty Name="McPaymentReceiptID" ColumnName="McPaymentReceiptID" />
-          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="PayDate" ColumnName="PayDate" />
-          <ScalarProperty Name="PayVoucherNo" ColumnName="PayVoucherNo" />
-          <ScalarProperty Name="PayAcHeadID" ColumnName="PayAcHeadID" />
-          <ScalarProperty Name="PayAcjournalID" ColumnName="PayAcjournalID" />
-          <ScalarProperty Name="PayAmt" ColumnName="PayAmt" />
-          <ScalarProperty Name="PayType" ColumnName="PayType" />
-          <ScalarProperty Name="PayBankID" ColumnName="PayBankID" />
-          <ScalarProperty Name="PayChequeNo" ColumnName="PayChequeNo" />
-          <ScalarProperty Name="PayChequeDate" ColumnName="PayChequeDate" />
-          <ScalarProperty Name="PayRemarks" ColumnName="PayRemarks" />
-          <ScalarProperty Name="RecType" ColumnName="RecType" />
-          <ScalarProperty Name="RecDate" ColumnName="RecDate" />
-          <ScalarProperty Name="RecVoucherNo" ColumnName="RecVoucherNo" />
-          <ScalarProperty Name="RecAcHeadID" ColumnName="RecAcHeadID" />
-          <ScalarProperty Name="RecAcjournalID" ColumnName="RecAcjournalID" />
-          <ScalarProperty Name="RecAmt" ColumnName="RecAmt" />
-          <ScalarProperty Name="RecChequeNo" ColumnName="RecChequeNo" />
-          <ScalarProperty Name="RecChequeDate" ColumnName="RecChequeDate" />
-          <ScalarProperty Name="RecRemarks" ColumnName="RecRemarks" />
-          <ScalarProperty Name="RecBankID" ColumnName="RecBankID" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -8863,18 +8601,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRRRecPayDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPayDetail">
-        <MappingFragment StoreEntitySet="DRRRecPayDetails">
-          <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DebitNotes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
         <MappingFragment StoreEntitySet="DebitNote">
@@ -9112,26 +8838,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DRS">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
-        <MappingFragment StoreEntitySet="DRS">
-          <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
-          <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="DrsType" ColumnName="DrsType" />
-          <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
-          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-          <ScalarProperty Name="TotalAmountCollected" ColumnName="TotalAmountCollected" />
-          <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
-          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
-          <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
-          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="QuickInscanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
         <MappingFragment StoreEntitySet="QuickInscanMaster">
@@ -9239,6 +8945,94 @@
           <ScalarProperty Name="ConsignorAddress1" ColumnName="ConsignorAddress1" />
           <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
           <ScalarProperty Name="ConsignorId" ColumnName="ConsignorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRS">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
+        <MappingFragment StoreEntitySet="DRS">
+          <ScalarProperty Name="TotalCourierCharge" ColumnName="TotalCourierCharge" />
+          <ScalarProperty Name="FYearId" ColumnName="FYearId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
+          <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="DrsType" ColumnName="DrsType" />
+          <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
+          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+          <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+          <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
+          <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRRRecPayDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPayDetail">
+        <MappingFragment StoreEntitySet="DRRRecPayDetails">
+          <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmployeeMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmployeeMaster">
+        <MappingFragment StoreEntitySet="EmployeeMaster">
+          <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+          <ScalarProperty Name="FCMTokenId" ColumnName="FCMTokenId" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="DepotID" ColumnName="DepotID" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
+          <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="MobileDevicePwd" ColumnName="MobileDevicePwd" />
+          <ScalarProperty Name="MobileDeviceID" ColumnName="MobileDeviceID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="statusMobileLogin" ColumnName="statusMobileLogin" />
+          <ScalarProperty Name="statusDefault" ColumnName="statusDefault" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="StatusCommission" ColumnName="StatusCommission" />
+          <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+          <ScalarProperty Name="Allowances" ColumnName="Allowances" />
+          <ScalarProperty Name="HRA" ColumnName="HRA" />
+          <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+          <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
+          <ScalarProperty Name="VisaExpiryDate" ColumnName="VisaExpiryDate" />
+          <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
+          <ScalarProperty Name="PassportExpiryDate" ColumnName="PassportExpiryDate" />
+          <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+          <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -93,12 +93,6 @@ namespace CMSV2.Models
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
         public virtual DbSet<DRRConsignment> DRRConsignments { get; set; }
-        public virtual DbSet<DRRInvoice> DRRInvoices { get; set; }
-        public virtual DbSet<DRRPKPCAD> DRRPKPCADs { get; set; }
-        public virtual DbSet<DRSEmployeeID> DRSEmployeeIDs { get; set; }
-        public virtual DbSet<DRSExpense> DRSExpenses { get; set; }
-        public virtual DbSet<DRSReceipt> DRSReceipts { get; set; }
-        public virtual DbSet<EmployeeMaster> EmployeeMasters { get; set; }
         public virtual DbSet<Expense> Expenses { get; set; }
         public virtual DbSet<ExpenseDetail> ExpenseDetails { get; set; }
         public virtual DbSet<ExportShipmentDetail> ExportShipmentDetails { get; set; }
@@ -120,7 +114,6 @@ namespace CMSV2.Models
         public virtual DbSet<InScanInternational> InScanInternationals { get; set; }
         public virtual DbSet<InScanInternationalDeatil> InScanInternationalDeatils { get; set; }
         public virtual DbSet<InscanOtherCharge> InscanOtherCharges { get; set; }
-        public virtual DbSet<InScantransfer> InScantransfers { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<ItemUnit> ItemUnits { get; set; }
         public virtual DbSet<JobEnquiry> JobEnquiries { get; set; }
@@ -129,8 +122,6 @@ namespace CMSV2.Models
         public virtual DbSet<Lock> Locks { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<Manifest> Manifests { get; set; }
-        public virtual DbSet<MCInvoice> MCInvoices { get; set; }
-        public virtual DbSet<MCPayment> MCPayments { get; set; }
         public virtual DbSet<MemberUserIdLink> MemberUserIdLinks { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<MenuAccessLevel> MenuAccessLevels { get; set; }
@@ -223,10 +214,7 @@ namespace CMSV2.Models
         public virtual DbSet<ZoneChart> ZoneCharts { get; set; }
         public virtual DbSet<ZoneMaster> ZoneMasters { get; set; }
         public virtual DbSet<CreditNoteDetail> CreditNoteDetails { get; set; }
-        public virtual DbSet<DRSEmployee> DRSEmployees { get; set; }
         public virtual DbSet<ImpExp> ImpExps { get; set; }
-        public virtual DbSet<InScanNew> InScanNews { get; set; }
-        public virtual DbSet<MCPaymentReceipt> MCPaymentReceipts { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<tempCustomer> tempCustomers { get; set; }
         public virtual DbSet<TempCustomerInvoice> TempCustomerInvoices { get; set; }
@@ -264,7 +252,6 @@ namespace CMSV2.Models
         public virtual DbSet<UserRegistration> UserRegistrations { get; set; }
         public virtual DbSet<CreditNote> CreditNotes { get; set; }
         public virtual DbSet<DRRRecPay> DRRRecPays { get; set; }
-        public virtual DbSet<DRRRecPayDetail> DRRRecPayDetails { get; set; }
         public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<AcJournalAWB> AcJournalAWBs { get; set; }
         public virtual DbSet<AWBDetail> AWBDetails { get; set; }
@@ -273,7 +260,6 @@ namespace CMSV2.Models
         public virtual DbSet<PrepaidAWB> PrepaidAWBs { get; set; }
         public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
-        public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<SupplierInvoiceStock> SupplierInvoiceStocks { get; set; }
@@ -281,6 +267,9 @@ namespace CMSV2.Models
         public virtual DbSet<AccountSetup> AccountSetups { get; set; }
         public virtual DbSet<ConsigneeMaster> ConsigneeMasters { get; set; }
         public virtual DbSet<ConsignorMaster> ConsignorMasters { get; set; }
+        public virtual DbSet<DR> DRS { get; set; }
+        public virtual DbSet<DRRRecPayDetail> DRRRecPayDetails { get; set; }
+        public virtual DbSet<EmployeeMaster> EmployeeMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

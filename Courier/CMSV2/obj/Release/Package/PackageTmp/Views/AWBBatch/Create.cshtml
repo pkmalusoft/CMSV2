@@ -207,7 +207,7 @@ body .hyperlink{
                                 $('#ConsignorCityName1').val(ConsignorCityName);
                                 $('#ConsignorLocationName1').val(ConsignorLocationName);
                                 $('#ConsignorMobileNo1').val(ConsignorMobileNo);
-
+                                $('#Shipper1').focus();
 
                             }
                         });
@@ -226,7 +226,8 @@ body .hyperlink{
             var ConsignorCityName = $("#ConsignorCityName1").val();
             var ConsignorLocationName = $("#ConsignorLocationName1").val();
             var ConsignorMobileNo = $('#ConsignorMobileNo1').val();
-            //$('#Shipper').val(Shipper);
+            var Shipper = $('#Shipper1').val();
+            $('#Shipper').val(Shipper);
             $('#ConsignorContact').val(ConsignorContact);
             $("#ConsignorAddress1_Building").val(ConsignorAddress1);
             $("#ConsignorAddress2_Street").val(ConsignorAddress2);
@@ -271,7 +272,7 @@ body .hyperlink{
                 $('#ConsigneeCityName1').val(ConsigneeCityName);
                 $('#ConsigneeLocationName1').val(ConsigneeLocationName);
                 $("#ConsigneeMobileNo1").val(ConsigneeMobile);
-             
+                $('#Consignee1').focus();
             }
 
         });
@@ -287,6 +288,8 @@ body .hyperlink{
             var ConsigneeCityName = $("#ConsigneeCityName1").val();
             var ConsigneeLocationName = $("#ConsigneeLocationName1").val();
             var ConsigneeMobile = $("#ConsigneeMobileNo1").val();
+            var Receiver = $('#Consignee1').val();
+            $('#Consignee').val(Receiver);
             $("#ConsigneeContact").val(ConsigneeContact);
             $("#ConsigneeAddress1_Building").val(ConsigneeAddress1);
             $("#ConsigneeAddress2_Street").val(ConsigneeAddress2);
@@ -578,14 +581,14 @@ body .hyperlink{
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
         $("textarea").css({ "border-radius": "5px" });
-        $('#BatchDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#AWBDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#AssignedDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#DeliveredDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#DelieveryAttemptDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#OutScanDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#ReceivedDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#PickedupDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#BatchDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#AWBDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#AssignedDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#DeliveredDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#DelieveryAttemptDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#OutScanDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#ReceivedDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#PickedupDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
         $('#MovementID').focus();
         $('#SpecialInstructions').multiselect({
             //nonSelectedText: 'Select',

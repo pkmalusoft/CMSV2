@@ -14,12 +14,6 @@ namespace CMSV2.Models
     
     public partial class DRRConsignment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DRRConsignment()
-        {
-            this.MCPayments = new HashSet<MCPayment>();
-        }
-    
         public int DRRConsignmentID { get; set; }
         public int DRRID { get; set; }
         public Nullable<int> InScanID { get; set; }
@@ -48,7 +42,5 @@ namespace CMSV2.Models
         public Nullable<bool> StatusSuspenseEntry { get; set; }
     
         public virtual CourierStatu CourierStatu { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MCPayment> MCPayments { get; set; }
     }
 }

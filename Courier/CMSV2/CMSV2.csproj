@@ -866,12 +866,6 @@
     <Compile Include="Models\DRRDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DRRInvoice.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DRRPKPCAD.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DRRRecPay.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -879,18 +873,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DRSAWB.cs" />
-    <Compile Include="Models\DRSEmployee.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DRSEmployeeID.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DRSExpense.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DRSReceipt.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DRSReceiptVM.cs" />
     <Compile Include="Models\DRSRecPay.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -1281,13 +1263,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InScanMasterVM.cs" />
-    <Compile Include="Models\InScanNew.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\InscanOtherCharge.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\InScantransfer.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InScanVM.cs" />
@@ -1358,16 +1334,7 @@
     <Compile Include="Models\MaterialCostMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MCInvoice.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MCManagementModel.cs" />
-    <Compile Include="Models\MCPayment.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MCPaymentReceipt.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MemberUserIdLink.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

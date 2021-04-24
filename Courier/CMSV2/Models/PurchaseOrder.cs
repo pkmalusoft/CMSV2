@@ -31,7 +31,6 @@ namespace CMSV2.Models
         public string Remarks { get; set; }
         public Nullable<int> FYearID { get; set; }
     
-        public virtual EmployeeMaster EmployeeMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public virtual SupplierMaster SupplierMaster { get; set; }

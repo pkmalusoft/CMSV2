@@ -25,7 +25,7 @@ namespace CMSV2.Controllers
             int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             List<DRSVM> lst = (from c in db.DRS join e in db.EmployeeMasters on c.DeliveredBy equals e.EmployeeID join v in db.VehicleMasters on c.VehicleID equals v.VehicleID
                                where c.BranchID==BranchId && c.AcCompanyID == CompanyId
-                               select new DRSVM {DRSID=c.DRSID,DRSNo=c.DRSNo,DRSDate=c.DRSDate,Deliver=e.EmployeeName,vehicle=v.VehicleNo ,TotalAmountCollected=c.TotalAmountCollected,TotalMaterialCost=c.TotalMaterialCost }).ToList();
+                               select new DRSVM {DRSID=c.DRSID,DRSNo=c.DRSNo,DRSDate=c.DRSDate,Deliver=e.EmployeeName,vehicle=v.VehicleNo ,TotalCourierCharge=c.TotalCourierCharge,TotalMaterialCost=c.TotalMaterialCost }).ToList();
 
             return View(lst);
         }
@@ -54,13 +54,14 @@ namespace CMSV2.Controllers
                 v.DRSNo = d.DRSNo;
                 v.DRSDate = d.DRSDate;
                 v.DeliveredBy = d.DeliveredBy;
-                v.CheckedBy = d.CheckedBy;
-                v.TotalAmountCollected = d.TotalAmountCollected;
+                //v.CheckedBy = d.CheckedBy;
+                v.TotalCourierCharge = d.TotalCourierCharge;
                 v.VehicleID = d.VehicleID;
                 v.StatusDRS = d.StatusDRS;
                 v.AcCompanyID = d.AcCompanyID;
                 v.StatusInbound = d.StatusInbound;
                 v.DrsType = d.DrsType;
+                
                 ViewBag.EditMode = "true";
                 ViewBag.Title = "OutScan - Modify";
             }
@@ -192,18 +193,22 @@ namespace CMSV2.Controllers
                 objdrs.StatusDRS = "0";
                 objdrs.StatusInbound = false;
                 objdrs.DrsType = "Courier";
+                objdrs.CreatedBy = UserId;
+                objdrs.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                
             }
             else
             {
                 objdrs = db.DRS.Find(v.DRSID);
 
             }
-            objdrs.TotalAmountCollected = couriercharge;
+            objdrs.TotalCourierCharge = couriercharge;
             objdrs.TotalMaterialCost = totalmaterialcost;
             objdrs.DRSDate = v.DRSDate;
-            objdrs.DeliveredBy = v.DeliveredBy;
-            objdrs.CheckedBy = v.CheckedBy;            
-            objdrs.VehicleID = v.VehicleID;                                            
+            objdrs.DeliveredBy = v.DeliveredBy;            
+            objdrs.VehicleID = v.VehicleID;
+            objdrs.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+            objdrs.ModifiedBy = UserId;
 
             if (v.DRSID==0)
             {
@@ -345,8 +350,8 @@ namespace CMSV2.Controllers
                 v.DRSNo = d.DRSNo;
                 v.DRSDate = d.DRSDate;
                 v.DeliveredBy = d.DeliveredBy;
-                v.CheckedBy = d.CheckedBy;
-                v.TotalAmountCollected = d.TotalAmountCollected;
+                //v.CheckedBy = d.CheckedBy;
+                v.TotalCourierCharge = d.TotalCourierCharge;
                 v.VehicleID = d.VehicleID;
                 v.StatusDRS = d.StatusDRS;
                 v.AcCompanyID = d.AcCompanyID;
@@ -394,8 +399,8 @@ namespace CMSV2.Controllers
                 //objdrs.DRSNo = objdrs.DRSID.ToString();
                 objdrs.DRSDate = v.DRSDate;
                 objdrs.DeliveredBy = v.DeliveredBy;
-                objdrs.CheckedBy = v.CheckedBy;
-                objdrs.TotalAmountCollected = 0;
+                //objdrs.CheckedBy = v.CheckedBy;
+                objdrs.TotalCourierCharge = 0;
                 objdrs.VehicleID = v.VehicleID;
                 objdrs.StatusDRS = "0";
                 objdrs.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());

@@ -53,8 +53,6 @@ namespace CMSV2.Models
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }
         public virtual CustomerMaster CustomerMaster { get; set; }
-        public virtual EmployeeMaster EmployeeMaster { get; set; }
-        public virtual EmployeeMaster EmployeeMaster1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesInvoiceDetail> SalesInvoiceDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

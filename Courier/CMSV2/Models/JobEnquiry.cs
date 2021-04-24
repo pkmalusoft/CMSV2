@@ -37,7 +37,6 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> JobDate { get; set; }
     
         public virtual CustomerMaster CustomerMaster { get; set; }
-        public virtual EmployeeMaster EmployeeMaster { get; set; }
         public virtual LocationMaster LocationMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JobEnquiryDetail> JobEnquiryDetails { get; set; }
