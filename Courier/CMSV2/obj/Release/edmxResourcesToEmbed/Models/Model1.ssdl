@@ -632,6 +632,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
     <Property Name="CourierStatus" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ShipmentDetailID" Type="int" />
+    <Property Name="EmpID" Type="int" />
   </EntityType>
   <EntityType Name="BranchMaster">
     <Key>

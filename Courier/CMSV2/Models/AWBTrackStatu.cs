@@ -24,5 +24,6 @@ namespace CMSV2.Models
         public string CourierStatus { get; set; }
         public int UserId { get; set; }
         public Nullable<int> ShipmentDetailID { get; set; }
+        public Nullable<int> EmpID { get; set; }
     }
 }

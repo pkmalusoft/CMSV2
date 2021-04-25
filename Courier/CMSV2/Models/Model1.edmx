@@ -666,6 +666,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.aspnet_Users' does not have a pr
           <Property Name="CourierStatus" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="ShipmentDetailID" Type="int" />
+          <Property Name="EmpID" Type="int" />
         </EntityType>
         <EntityType Name="BranchMaster">
           <Key>
@@ -14947,12 +14948,12 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
           <EntitySet Name="SupplierInvoiceStocks" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceStock" />
           <EntitySet Name="ParcelTypes" EntityType="DB_9F57C4_couriertest_newModel.ParcelType" />
-          <EntitySet Name="AccountSetups" EntityType="DB_9F57C4_couriertest_newModel.AccountSetup" />
-          <EntitySet Name="ConsigneeMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsigneeMaster" />
-          <EntitySet Name="ConsignorMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsignorMaster" />
-          <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
           <EntitySet Name="DRRRecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.DRRRecPayDetail" />
           <EntitySet Name="EmployeeMasters" EntityType="DB_9F57C4_couriertest_newModel.EmployeeMaster" />
+          <EntitySet Name="ConsigneeMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsigneeMaster" />
+          <EntitySet Name="ConsignorMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsignorMaster" />
+          <EntitySet Name="AccountSetups" EntityType="DB_9F57C4_couriertest_newModel.AccountSetup" />
+          <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19380,6 +19381,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="CourierStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="ShipmentDetailID" Type="Int32" />
+          <Property Name="EmpID" Type="Int32" />
         </EntityType>
         <EntityType Name="InScanMaster">
           <Key>
@@ -19550,71 +19552,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="ParcelType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DefaultType" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="AccountSetup">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PageName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DebitAccountId" Type="Int32" />
-          <Property Name="CreditAccountId" Type="Int32" />
-          <Property Name="SalesType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="ConsigneeMaster">
-          <Key>
-            <PropertyRef Name="ConsigneeId" />
-          </Key>
-          <Property Name="ConsigneeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ConsignorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress3" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeCountryname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeCityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneePhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ConsignorMaster">
-          <Key>
-            <PropertyRef Name="ConsignorId" />
-          </Key>
-          <Property Name="ConsignorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ConsignorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress3" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorCountryname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorCityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="DR">
-          <Key>
-            <PropertyRef Name="DRSID" />
-          </Key>
-          <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DeliveredBy" Type="Int32" />
-          <Property Name="VehicleID" Type="Int32" />
-          <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="StatusInbound" Type="Boolean" />
-          <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="DRSRecPayId" Type="Int32" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="FYearId" Type="Int32" />
-          <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
-        </EntityType>
         <EntityType Name="DRRRecPayDetail">
           <Key>
             <PropertyRef Name="RecPayDetailID" />
@@ -19676,6 +19613,71 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <Property Name="UserID" Type="Int32" />
           <Property Name="FCMTokenId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ConsigneeMaster">
+          <Key>
+            <PropertyRef Name="ConsigneeId" />
+          </Key>
+          <Property Name="ConsigneeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsignorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress3" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeCountryname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeCityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneePhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConsignorMaster">
+          <Key>
+            <PropertyRef Name="ConsignorId" />
+          </Key>
+          <Property Name="ConsignorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsignorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress3" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorCountryname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorCityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AccountSetup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PageName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DebitAccountId" Type="Int32" />
+          <Property Name="CreditAccountId" Type="Int32" />
+          <Property Name="SalesType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DR">
+          <Key>
+            <PropertyRef Name="DRSID" />
+          </Key>
+          <Property Name="DRSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DRSNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DRSDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeliveredBy" Type="Int32" />
+          <Property Name="VehicleID" Type="Int32" />
+          <Property Name="StatusDRS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="StatusInbound" Type="Boolean" />
+          <Property Name="DrsType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="TotalMaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DRSRecPayId" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="FYearId" Type="Int32" />
+          <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -28398,6 +28400,7 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
           <EntitySetMapping Name="AWBTrackStatus">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
               <MappingFragment StoreEntitySet="AWBTrackStatus">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
                 <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="CourierStatus" ColumnName="CourierStatus" />
@@ -28585,75 +28588,6 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AccountSetups">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AccountSetup">
-              <MappingFragment StoreEntitySet="AccountSetup">
-                <ScalarProperty Name="SalesType" ColumnName="SalesType" />
-                <ScalarProperty Name="CreditAccountId" ColumnName="CreditAccountId" />
-                <ScalarProperty Name="DebitAccountId" ColumnName="DebitAccountId" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="PageName" ColumnName="PageName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ConsigneeMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsigneeMaster">
-              <MappingFragment StoreEntitySet="ConsigneeMaster">
-                <ScalarProperty Name="ConsigneeContactName" ColumnName="ConsigneeContactName" />
-                <ScalarProperty Name="ConsigneePhoneNo" ColumnName="ConsigneePhoneNo" />
-                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
-                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
-                <ScalarProperty Name="ConsigneeCountryname" ColumnName="ConsigneeCountryname" />
-                <ScalarProperty Name="ConsigneeAddress3" ColumnName="ConsigneeAddress3" />
-                <ScalarProperty Name="ConsigneeAddress2" ColumnName="ConsigneeAddress2" />
-                <ScalarProperty Name="ConsigneeAddress1" ColumnName="ConsigneeAddress1" />
-                <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
-                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
-                <ScalarProperty Name="ConsigneeId" ColumnName="ConsigneeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ConsignorMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsignorMaster">
-              <MappingFragment StoreEntitySet="ConsignorMaster">
-                <ScalarProperty Name="ConsignorContactName" ColumnName="ConsignorContactName" />
-                <ScalarProperty Name="ConsignorPhoneNo" ColumnName="ConsignorPhoneNo" />
-                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
-                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
-                <ScalarProperty Name="ConsignorCountryname" ColumnName="ConsignorCountryname" />
-                <ScalarProperty Name="ConsignorAddress3" ColumnName="ConsignorAddress3" />
-                <ScalarProperty Name="ConsignorAddress2" ColumnName="ConsignorAddress2" />
-                <ScalarProperty Name="ConsignorAddress1" ColumnName="ConsignorAddress1" />
-                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
-                <ScalarProperty Name="ConsignorId" ColumnName="ConsignorId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DRS">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
-              <MappingFragment StoreEntitySet="DRS">
-                <ScalarProperty Name="TotalCourierCharge" ColumnName="TotalCourierCharge" />
-                <ScalarProperty Name="FYearId" ColumnName="FYearId" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
-                <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="DrsType" ColumnName="DrsType" />
-                <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
-                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
-                <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
-                <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
-                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DRRRecPayDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRRRecPayDetail">
               <MappingFragment StoreEntitySet="DRRRecPayDetails">
@@ -28715,6 +28649,75 @@ warning 6002: The table/view 'DB_A69D99_cms.dbo.TransportMode' does not have a p
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConsigneeMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsigneeMaster">
+              <MappingFragment StoreEntitySet="ConsigneeMaster">
+                <ScalarProperty Name="ConsigneeContactName" ColumnName="ConsigneeContactName" />
+                <ScalarProperty Name="ConsigneePhoneNo" ColumnName="ConsigneePhoneNo" />
+                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
+                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
+                <ScalarProperty Name="ConsigneeCountryname" ColumnName="ConsigneeCountryname" />
+                <ScalarProperty Name="ConsigneeAddress3" ColumnName="ConsigneeAddress3" />
+                <ScalarProperty Name="ConsigneeAddress2" ColumnName="ConsigneeAddress2" />
+                <ScalarProperty Name="ConsigneeAddress1" ColumnName="ConsigneeAddress1" />
+                <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
+                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
+                <ScalarProperty Name="ConsigneeId" ColumnName="ConsigneeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConsignorMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsignorMaster">
+              <MappingFragment StoreEntitySet="ConsignorMaster">
+                <ScalarProperty Name="ConsignorContactName" ColumnName="ConsignorContactName" />
+                <ScalarProperty Name="ConsignorPhoneNo" ColumnName="ConsignorPhoneNo" />
+                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
+                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
+                <ScalarProperty Name="ConsignorCountryname" ColumnName="ConsignorCountryname" />
+                <ScalarProperty Name="ConsignorAddress3" ColumnName="ConsignorAddress3" />
+                <ScalarProperty Name="ConsignorAddress2" ColumnName="ConsignorAddress2" />
+                <ScalarProperty Name="ConsignorAddress1" ColumnName="ConsignorAddress1" />
+                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
+                <ScalarProperty Name="ConsignorId" ColumnName="ConsignorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountSetups">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AccountSetup">
+              <MappingFragment StoreEntitySet="AccountSetup">
+                <ScalarProperty Name="SalesType" ColumnName="SalesType" />
+                <ScalarProperty Name="CreditAccountId" ColumnName="CreditAccountId" />
+                <ScalarProperty Name="DebitAccountId" ColumnName="DebitAccountId" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRS">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
+              <MappingFragment StoreEntitySet="DRS">
+                <ScalarProperty Name="TotalCourierCharge" ColumnName="TotalCourierCharge" />
+                <ScalarProperty Name="FYearId" ColumnName="FYearId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DRSRecPayId" ColumnName="DRSRecPayId" />
+                <ScalarProperty Name="TotalMaterialCost" ColumnName="TotalMaterialCost" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="DrsType" ColumnName="DrsType" />
+                <ScalarProperty Name="StatusInbound" ColumnName="StatusInbound" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="StatusDRS" ColumnName="StatusDRS" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="DeliveredBy" ColumnName="DeliveredBy" />
+                <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
+                <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

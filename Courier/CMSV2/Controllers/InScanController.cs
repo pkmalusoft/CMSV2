@@ -240,6 +240,20 @@ namespace CMSV2.Controllers
                         _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received At Origin Facility").FirstOrDefault().CourierStatusID;
                         db.Entry(_inscan).State = EntityState.Modified;
                         db.SaveChanges();
+                        AWBTrackStatu _awbstatus = new AWBTrackStatu();
+
+                        //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
+                        _awbstatus.AWBNo = _inscan.AWBNo;
+                        _awbstatus.EntryDate = v.QuickInscanDateTime;
+                        _awbstatus.InScanId = _inscan.InScanID;
+                        _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
+                        _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
+                        _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                        _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                        _awbstatus.UserId = UserId;
+                        _awbstatus.EmpID = v.CollectedByID;
+                        db.AWBTrackStatus.Add(_awbstatus);
+                        db.SaveChanges();
                     }
                     else
                     {
@@ -275,7 +289,7 @@ namespace CMSV2.Controllers
                         _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                         _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                         _awbstatus.UserId = UserId;
-                       
+                        _awbstatus.EmpID = v.CollectedByID;
                         db.AWBTrackStatus.Add(_awbstatus);
                         db.SaveChanges();
                     }

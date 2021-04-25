@@ -110,11 +110,16 @@ namespace CMSV2.Controllers
                     obj.InScanID = l.InScanID;
                         obj.consignor = l.Consignor;
                     obj.consignee = l.Consignee;
-                    obj.city = l.ConsigneeCityName.ToString();
-                    obj.phone = l.ConsigneePhone;
-                    obj.address = l.ConsigneeCountryName;
-                    obj.COD = Convert.ToDecimal(l.CourierCharge);
-
+                    if (l.ConsigneeCityName != null)
+                    {
+                        obj.city = l.ConsigneeCityName.ToString();
+                        obj.phone = l.ConsigneePhone;
+                        obj.address = l.ConsigneeCountryName;
+                    }
+                    if (l.CourierCharge != null)
+                        obj.COD = Convert.ToDecimal(l.CourierCharge);
+                    else
+                        obj.COD = 0;
                     if (l.MaterialCost != null)
                         obj.MaterialCost = Convert.ToDecimal(l.MaterialCost);
                     else
@@ -260,8 +265,8 @@ namespace CMSV2.Controllers
 
                 var _inscan = db.InScanMasters.Find(item.InScanID);
                 _inscan.DRSID = objdrs.DRSID;                                
-                _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "OUTSCAN").First().ID;
-                _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out for Delivery at Origin").FirstOrDefault().CourierStatusID;             
+                _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Outscan").First().ID;
+                _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out For Delivery").FirstOrDefault().CourierStatusID;             
                 db.Entry(_inscan).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -283,7 +288,7 @@ namespace CMSV2.Controllers
                 _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                 _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                 _awbstatus.UserId = UserId;
-
+                _awbstatus.EmpID = v.DeliveredBy;
                 db.AWBTrackStatus.Add(_awbstatus);
                 db.SaveChanges();
 
