@@ -35,5 +35,6 @@ namespace CMSV2.Models
     public int AcCompanyID { get; set; }
 
     public string VehicleNO { get; set; }
+        public int EmployeeId { get; set; }
   }
 }

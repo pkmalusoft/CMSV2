@@ -39,7 +39,23 @@
         //    }
             
         //});
+        $('#DeliveredBy').change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/InScan/GetVehicle",
+                datatype: "Json",
+                data: { EmployeeId: $('#DeliveredBy').val() },
+                success: function (response) {
+                    debugger;
+                    if (response.VehicleId != 0) {
+                        $('#VehicleID').val(response.VehicleId).trigger('change');
+                    } else {
+                        $('#VehicleID').val('').trigger('change');
+                    }
+                }
+            });
 
+        })
         $("#btnAdd").click(function () {
             if ($("#txtawb").val().trim() == '') {
                 return;
@@ -212,6 +228,7 @@
         }
         if (@ViewBag.EditMode ==true) {
             DisplayAWBItems();
+            $('#DRSDate').attr('readonly', 'readonly');
             $('#CheckedBy').val($('#chkid').val()).trigger('change');
         }
         else {
@@ -258,14 +275,14 @@
               <div class="col-md-2">
                   <label class="headinglabel required">Sheet No.</label>
                   @Html.HiddenFor(model => model.DRSID)
-                  @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" })
+                  @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control" ,@readonly="readonly"})
                   @Html.ValidationMessageFor(model => model.DRSNo)
               </div>
               <div class="col-md-2">
                   <label class="headinglabel required">OutScan Time</label>
                   @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control text-right" })
               </div>            
-              <div class="col-md-2">
+              <div class="col-md-3">
                   <label class="headinglabel required">Delivered By</label>
 
                   @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
@@ -273,8 +290,8 @@
               </div>
               <div class="col-md-3">
                   <label class="headinglabel required">Vehicle</label>
-
-                  @Html.DropDownListFor(model => model.VehicleID, new SelectList(ViewBag.vehicle, "VehicleID", "VehicleNo"), "Select", new { @class = "form-control" })
+                  @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicles, "VehicleID", "VehicleName"), "Select", new { @class = "form-control" })
+                  @*@Html.DropDownListFor(model => model.VehicleID, new SelectList(ViewBag.vehicle, "VehicleID", "VehicleNo"), "Select", new { @class = "form-control" })*@
               </div>
           </div>
 
@@ -284,7 +301,7 @@
 
           <div class="row no-margin" style="padding-top:25px">
               <div class="col-md-3">
-                  <label class="headinglabel required">AWB No</label>
+                  <label class="headinglabel required">AWB No.</label>
                   <input type="text" id="txtawb" class="form-control" />
 
               </div>

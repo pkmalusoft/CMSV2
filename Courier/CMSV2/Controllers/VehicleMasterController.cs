@@ -9,6 +9,7 @@ using CMSV2.Models;
 
 namespace CMSV2.Controllers
 {
+    [SessionExpire]
     public class VehicleMasterController : Controller
     {
          Entities1 db = new Entities1();
@@ -55,6 +56,7 @@ namespace CMSV2.Controllers
         public ActionResult Create()
         {
             ViewBag.VehicleType = db.tblVehicleTypes.ToList();
+            ViewBag.employee = db.EmployeeMasters.ToList();
             return View();
         }
 
@@ -83,6 +85,7 @@ namespace CMSV2.Controllers
                     v.RegExpirydate = vm.RegExpirydate;
                     v.AcCompanyID = 1;
                     v.VehicleNo = vm.VehicleNO;
+                    v.EmployeeId = vm.EmployeeId;
 
                 }
                 else
@@ -98,6 +101,7 @@ namespace CMSV2.Controllers
                     v.RegExpirydate = vm.RegExpirydate;
                     v.AcCompanyID = 1;
                     v.VehicleNo = vm.VehicleNO;
+                    v.EmployeeId = vm.EmployeeId;
                 }
 
 
@@ -116,6 +120,7 @@ namespace CMSV2.Controllers
         public ActionResult Edit(int id)
         {
             ViewBag.VehicleType = db.tblVehicleTypes.ToList();
+            ViewBag.employee = db.EmployeeMasters.ToList();
             VehiclesVM v = new VehiclesVM();
             var data = (from d in db.VehicleMasters where d.VehicleID == id select d).FirstOrDefault();
 
@@ -133,11 +138,16 @@ namespace CMSV2.Controllers
                 if (data.VehicleTypeId!=null)
                     v.VehicleTypeId =Convert.ToInt32(data.VehicleTypeId);
                 v.VehicleValue = data.VehicleValue.Value;
-                v.ValueDate = data.ValueDate.Value;
+                if (data.ValueDate!=null)
+                     v.ValueDate = data.ValueDate.Value;
+                if (data.PurchaseDate!=null)
                 v.PurchaseDate = data.PurchaseDate.Value;
-                v.RegExpirydate = data.RegExpirydate.Value;
+                if (data.RegExpirydate!=null)
+                   v.RegExpirydate = data.RegExpirydate.Value;
                 v.AcCompanyID = 1;
                 v.VehicleNO = data.VehicleNo;
+                if (data.EmployeeId != null)
+                    v.EmployeeId = data.EmployeeId.Value;
             }
             return View(v);
         }
@@ -160,6 +170,7 @@ namespace CMSV2.Controllers
                 v.RegExpirydate = data.RegExpirydate;
                 v.AcCompanyID = 1;
                 v.VehicleNo = data.VehicleNO;
+            v.EmployeeId = data.EmployeeId;
 
             if (ModelState.IsValid)
             {

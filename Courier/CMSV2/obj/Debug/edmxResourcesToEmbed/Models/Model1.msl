@@ -8352,6 +8352,7 @@
     <EntitySetMapping Name="VehicleMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.VehicleMaster">
         <MappingFragment StoreEntitySet="VehicleMaster">
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
           <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
           <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />

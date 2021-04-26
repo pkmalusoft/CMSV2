@@ -102,7 +102,7 @@ namespace CMSV2.Controllers
             ViewBag.depot = (from c in db.tblDepots where c.BranchID == BranchId select c).ToList();
             ViewBag.employee = db.EmployeeMasters.ToList();
             ViewBag.employeerec = db.EmployeeMasters.ToList();
-            ViewBag.Vehicles = db.VehicleMasters.ToList();
+            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleNo }).ToList();
             ViewBag.CourierService = db.CourierServices.ToList();
             if (id==0)
             {
@@ -454,6 +454,21 @@ namespace CMSV2.Controllers
 
             return RedirectToAction("Index");
            
+        }
+
+        [HttpGet]
+        public JsonResult GetVehicle(int EmployeeId)
+        {
+            
+                var list = db.VehicleMasters.Where(cc => cc.EmployeeId == EmployeeId).FirstOrDefault();
+
+            if (list!=null)
+                return Json(new { VehicleId = list.VehicleID }, JsonRequestBehavior.AllowGet);
+           else
+                return Json(new { VehicleId = 0 }, JsonRequestBehavior.AllowGet);
+
+        
+
         }
     }
 }

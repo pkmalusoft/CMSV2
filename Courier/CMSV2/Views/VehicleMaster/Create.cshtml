@@ -133,23 +133,23 @@
                 
              <div class="col-md-3">
                           <label class="headinglabel required">Value</label>
-       @Html.TextBoxFor(model => model.VehicleValue, new {@class="form-control text-right" })
+       @Html.TextBoxFor(model => model.VehicleValue, new {@class="form-control text-right", @autocomplete = "off" })
        
                  </div>
         <div class="col-md-3">
                           <label class="headinglabel">Value Date</label>  
-                       @Html.TextBoxFor(model => model.ValueDate,new { @class = "form-control text-right" })
+                       @Html.TextBoxFor(model => model.ValueDate,new { @class = "form-control text-right",@autocomplete="off" })
                   
                            
              </div>
              <div class="col-md-3">
                           <label class="headinglabel required">Purchase Date</label>
-        @Html.TextBoxFor(model => model.PurchaseDate, new {@class="form-control text-right" })
+        @Html.TextBoxFor(model => model.PurchaseDate, new {@class="form-control text-right", @autocomplete = "off" })
           
                  </div>
             <div class="col-md-3">
                           <label class="headinglabel required">Reg Expiry date</label>
-        @Html.TextBoxFor(model => model.RegExpirydate, new {@class="form-control text-right" })
+        @Html.TextBoxFor(model => model.RegExpirydate, new {@class="form-control text-right", @autocomplete = "off" })
           
                  </div>
         </div>
@@ -165,7 +165,11 @@
             @Html.ValidationMessageFor(model => model.VehicleDescription)
                      
                  </div>
-          
+                   <div class="col-md-3">
+                       <label class="headinglabel required">Driver</label>
+                       @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                    
+                </div>
           
             
         </div>

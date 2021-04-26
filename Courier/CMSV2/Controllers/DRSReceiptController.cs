@@ -202,13 +202,18 @@ namespace CMSV2.Controllers
 
         }
         [HttpGet]
-        public JsonResult GetDRSNo(string term)
+        public JsonResult GetDRSNo(string term,string DeliveredBy="")
         {
+            int DeliveredId=0;
+            if (DeliveredBy != "")
+                DeliveredId = Convert.ToInt32(DeliveredBy);
+                
+            
             if (term.Trim() != "")
             {
                 var drslist = (from c1 in Context1.DRS
                                where c1.DRSNo.ToLower().Contains(term.Trim().ToLower())
-                               && c1.DRSRecPayId==null
+                               && c1.DRSRecPayId==null && (c1.DeliveredBy== DeliveredId || DeliveredId==0 )
                                orderby c1.DRSNo ascending
                                select new {DRSID=c1.DRSID, DRSNo = c1.DRSNo, DRSDate = c1.DRSDate,TotalAmount=c1.TotalCourierCharge + c1.TotalMaterialCost }).ToList();
 
@@ -217,7 +222,7 @@ namespace CMSV2.Controllers
             else
             {
                 var drslist = (from c1 in Context1.DRS
-                               where c1.DRSRecPayId == null
+                               where c1.DRSRecPayId == null && (c1.DeliveredBy == DeliveredId || DeliveredId == 0)
                                orderby c1.DRSNo ascending
                                select new {DRSID=c1.DRSID, DRSNo=c1.DRSNo ,DRSDate=c1.DRSDate, TotalAmount = c1.TotalCourierCharge + c1.TotalMaterialCost}).ToList();
 

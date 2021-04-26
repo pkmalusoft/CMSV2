@@ -25,5 +25,6 @@ namespace CMSV2.Models
         public Nullable<int> AcCompanyID { get; set; }
         public string VehicleNo { get; set; }
         public Nullable<int> VehicleTypeId { get; set; }
+        public Nullable<int> EmployeeId { get; set; }
     }
 }

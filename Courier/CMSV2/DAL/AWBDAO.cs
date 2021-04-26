@@ -425,11 +425,13 @@ namespace CMSV2.DAL
                         obj.ConsignorAddress2_Street = dt.Rows[i]["ConsignorAddress2_Street"].ToString();
                         obj.ConsignorAddress3_PinCode = dt.Rows[i]["ConsignorAddress3_PinCode"].ToString();
                         obj.ConsignorCountryName = dt.Rows[i]["ConsignorCountryName"].ToString();
+                        obj.ConsignorContact = dt.Rows[i]["ConsignorContact"].ToString();
                         obj.ConsignorCityName = dt.Rows[i]["ConsignorCityName"].ToString();
                         obj.ConsignorLocationName = dt.Rows[i]["ConsignorLocationName"].ToString();
                         obj.ConsignorPhone = dt.Rows[i]["ConsignorPhone"].ToString();
                         obj.ConsignorMobileNo = dt.Rows[i]["ConsignorMobileNo"].ToString();
                         obj.Consignee = dt.Rows[i]["Consignee"].ToString();
+                        obj.ConsigneeContact = dt.Rows[i]["ConsigneeContact"].ToString();
                         obj.ConsigneeAddress1_Building = dt.Rows[i]["ConsigneeAddress1_Building"].ToString();
                         obj.ConsigneeAddress2_Street = dt.Rows[i]["ConsigneeAddress2_Street"].ToString();
                         obj.ConsigneeAddress3_PinCode = dt.Rows[i]["ConsigneeAddress3_PinCode"].ToString();
@@ -462,6 +464,9 @@ namespace CMSV2.DAL
                         obj.DepotReceivedBy = dt.Rows[i]["DepotReceivedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["DepotReceivedBy"].ToString());
                         obj.PickedUpEmpID = dt.Rows[i]["PickedUpEmpID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["PickedUpEmpID"].ToString());
                         obj.PickedupDate = dt.Rows[i]["PickedupDate"] == DBNull.Value ? "" : Convert.ToDateTime(dt.Rows[i]["PickedupDate"].ToString()).ToString("dd/MM/yyyy");
+                        obj.TaxPercent = dt.Rows[i]["TaxPercent"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["TaxPercent"].ToString());
+                        obj.TaxAmount = dt.Rows[i]["TaxAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["TaxAmount"].ToString());
+                        obj.SpecialInstructions = dt.Rows[i]["SpecialNotes"] == DBNull.Value ? "" : dt.Rows[i]["SpecialNotes"].ToString();
                         list.Add(obj);
                     }
 

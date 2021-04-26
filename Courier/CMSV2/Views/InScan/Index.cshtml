@@ -414,9 +414,9 @@
                         <th>
                             @Html.Label("Received By")
                         </th>
-                        <th>
+                        @*<th>
                             @Html.Label("Driver")
-                        </th>
+                        </th>*@
                        
 
                         <th>Action</th>
@@ -441,9 +441,9 @@
                             @Html.Label("Received By")
                         </th>
 
-                        <th>
+                        @*<th>
                             @Html.Label("Driver")
-                        </th>
+                        </th>*@
                         <th style="display:none"></th>
                     </tr>
                 </tfoot>
@@ -458,7 +458,7 @@
                                 @Html.DisplayFor(modelItem => item.InScanSheetNo)
                             </td>
                             <td class="text-right">
-                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.QuickInscanDateTime)
+                                @CMSV2.Models.CommanFunctions.GetLongDateFormat(item.QuickInscanDateTime)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CollectedBy)
@@ -467,9 +467,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.ReceivedBy)
                             </td>                                                        
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.DriverName)
-                            </td>
+                            </td>*@
                             <td>
                                 @if (ismodify)
                                 {
@@ -490,85 +490,7 @@
 
 
 
-        <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #f5f5f5;">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">
-                            Change Status
-                        </h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="row" style="padding-top: 5px">
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-xs-5 col-sm-3">
-                                            Current Status
-                                        </div>
-                                        <div class="col-xs-7 col-sm-9">
-                                            @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus"), "Select", new { @class = "form-control", @id = "ChangeStatusId", @name = "ChangeStatusId" })
-                                            @*  @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })*@
-                                        </div>
-                                    </div>
-                                    <div class="row hide" id="divassigned" style="margin-top:10px">
-                                        <div class="col-xs-5 col-sm-3">
-                                            Assigned Employee
-                                        </div>
-                                        <div class="col-xs-7 col-sm-9">
-                                            @Html.DropDownList("AssignedEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.AssignedEmployeeId), "Select", new { @class = "form-control", @id = "AssignedEmployeeId", @name = "AssignedEmployeeId" })
-
-                                        </div>
-                                    </div>
-                                    <div class="row hide" id="divnoshow" style="margin-top:10px">
-                                        <div class="col-xs-5 col-sm-3">
-                                            Reason
-                                        </div>
-                                        <div class="col-xs-7 col-sm-9">
-                                            @Html.DropDownList("NoshowReason", new List<SelectListItem>
-                                                    {
-                                            new SelectListItem{ Text="Telephone not Answering", Value = "1" },
-                                            new SelectListItem{ Text="Shop Closed", Value = "2" },
-                                                            new SelectListItem{ Text="Vehicle Damaged", Value = "3" }
-
-                                        }, "", new { @class = "form-control", @id = "SubStatusReason" })
-
-
-                                        </div>
-                                    </div>
-                                    <div id="divcollected" class="hide">
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-xs-5 col-sm-3">
-                                                Picked By
-                                            </div>
-                                            <div class="col-xs-7 col-sm-9">
-                                                @Html.DropDownList("PickedByEmployeeId", new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName", @ViewBag.PickedByEmployeeId), "Select", new { @class = "form-control", @id = "PickedEmployeeId", @name = "PickedEmployeeId" })
-                                            </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-xs-5 col-sm-3">
-                                                Picked Date Time
-                                            </div>
-                                            <div class="col-xs-7 col-sm-4">
-                                                <input type="text" id="txtpickuptime" value="" class="form-control" />
-                                                @*@Html.TextBoxFor(model => model.CollectedTime, new { @class = "form-control" })*@
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="padding-top: 5px">
-                        <lable style="color:red" id="lblstatuserror" class="pull-left"></lable>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" name="Command" value="Save Status" class="btn btn-primary" id="btnsavestatus" onclick="SaveStatus();">Save Status</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
     </section>
     <script type="text/javascript">
         function Delete(ID) {

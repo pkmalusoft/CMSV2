@@ -11889,6 +11889,7 @@
     <Property Name="AcCompanyID" Type="Int32" />
     <Property Name="VehicleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="VehicleTypeId" Type="Int32" />
+    <Property Name="EmployeeId" Type="Int32" />
   </EntityType>
   <EntityType Name="DomesticCODReceipt">
     <Key>

@@ -44,7 +44,8 @@ namespace CMSV2.Controllers
             int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ViewBag.Deliverdby = db.EmployeeMasters.ToList();
-            ViewBag.vehicle = db.VehicleMasters.ToList();
+           // ViewBag.vehicle = db.VehicleMasters.ToList();
+            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleNo }).ToList();
             ViewBag.Checkedby = db.EmployeeMasters.ToList();
             DRSVM v = new DRSVM();
             if (id>0)
@@ -154,9 +155,13 @@ namespace CMSV2.Controllers
                     obj.InScanID = l.InScanID;
                     obj.consignor = l.Consignor;
                     obj.consignee = l.Consignee;
+                    if (l.ConsigneeCityName!=null)
                     obj.city = l.ConsigneeCityName.ToString();
+                    if (l.ConsigneePhone!=null)
                     obj.phone = l.ConsigneePhone;
-                    obj.address = l.ConsigneeCountryName;
+                    if (l.ConsigneeCountryName!=null)
+                     obj.address = l.ConsigneeCountryName;
+                    if (l.CourierCharge!=null)
                     obj.COD = Convert.ToDecimal(l.CourierCharge);
                     if (l.MaterialCost != null)
                         obj.MaterialCost = Convert.ToDecimal(l.MaterialCost);
