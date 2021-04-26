@@ -1,0 +1,1045 @@
+﻿@model CMSV2.Models.DRRVM
+
+@{
+
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var spath = "/DRSReceipt/Index/0";// System.Configuration.ConfigurationManager.AppSettings["spath"].ToString();
+    var _decimal = @Session["Decimal"].ToString();
+}
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<style>
+    .table > tr {
+        height: 32px;
+    }
+    .cred
+    {
+        color:red;
+    }
+    #tblTrans > tr > td {
+        text-align: right !important;
+    }
+        #tblTrans > tr > td:first-child {
+            text-align: left !important;
+        }
+    .active, .accordion:hover {
+        background-color: #07a7e3 !important;
+        color: white;
+    }
+    /*#tbl1 tr:first-of-type {
+            background: #35b8eb;
+            color: #fff;
+        }*/
+
+    .form_field {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+        padding: 16px;
+        margin-top: 21px;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 15px;
+        color: #1b1919 !important;
+    }
+
+    .modal-dialog {
+        width: 800px;
+    }
+
+    #staffmodelbody {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .justify-content-between {
+        justify-content: space-between;
+    }
+
+    #popup h5 {
+        border: 2px solid #35b8eb;
+        min-width: 150px;
+        height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        color: #35b8eb;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+<style>
+    /* Style the buttons that are used to open and close the accordion panel */
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        transition: 0.4s;
+    }
+
+        /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+        padding: 0 18px;
+        background-color: white;
+        display: none;
+        overflow: hidden;
+    }
+    .drsAwb table{
+        table-layout: fixed;
+    }
+    .drsAwb input{
+        width: 100%;
+    }
+    .drsAwb input[type="submit"]{
+        background: #f4c106;
+        border-color:#f4c106;
+    }
+</style>
+<script type="text/javascript">
+    var AWBObj = {};
+    function deletetrans(obj, i) {
+        var checkstatus = $('#chkallocate_' + i).prop('checked');
+        if (checkstatus == true) {
+            var obj1 = $(obj).parent().parent().find('.hdndeleted');
+            $(obj1).val(false);
+        }
+        else {
+            //$(obj).parent().parent().addClass('hide');
+            var obj1 = $(obj).parent().parent().find('.hdndeleted');
+            $(obj1).val(true);
+        }
+        calculatetotal();
+    }
+    function deletenewawb(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+    function isNumberKey1(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function deleteexp(obj, j) {
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+
+     
+
+    $(document).ready(function () {
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                /* Toggle between adding and removing the "active" class,
+                to highlight the button that controls the panel */
+                this.classList.toggle("active");
+
+                /* Toggle between hiding and showing the active panel */
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+        $("textarea").css({ "border-radius": "5px" });
+
+        $('#tblTrans').on("click", "#DeleteNewRow", function () {
+            debugger;
+            //$(this).parent().parent().remove();
+            $(this).parent().parent().addClass('hide');
+            var obj = $(this).parent().parent().find('.hdndeleted');
+            $(obj).val(true);
+        });
+
+         $("#DRSNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DRSReceipt/GetDRSNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.DRSNo,
+                                value: val.DRSID,
+                                DRSDate:val.DRSDate
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#DRSNo").val(i.item.label);
+                $('#DRSID').val(i.item.value);
+                $('#DRSID').attr('label', i.item.label);
+             },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#DRSNo").val(i.item.label);
+                $('#DRSID').val(i.item.value);
+                $('#DRSID').attr('label', i.item.label);
+
+            },
+
+         });
+
+        $("#DRSReceiptNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DRSReconc/GetDRSReceiptNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term, DeliveredBy:$('#DeliveredBy').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.DocumentNo,
+                                value: val.DRSRecPayId,
+                                ReceiptDate: val.DRSRecPayDate,
+                                DRSID: val.DRSID,
+                                ReceivedAmount: val.ReceivedAmount,
+                                DeliveredBy: val.DeliveredBy
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#DRSReceiptNo").val(i.item.label);
+                $('#DRSRecPayID').val(i.item.value);
+                var myDate = new Date(i.item.ReceiptDate.match(/\d+/)[0] * 1);
+                var cmon = myDate.getMonth() + 1;
+                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                $('#ReceiptDate').val(collectdate);
+
+                $('#DRSID').val(i.item.DRSID);
+                //$('#DRSNo').val(i.item.DRSNo);
+                //myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
+                //cmon = myDate.getMonth() + 1;
+                //var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                //$('#DRSDate').val(collectdate);
+
+                $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
+                $('#ReceivedAmount').val(parseFloat(i.item.ReceivedAmount).toFixed(2));
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#DRSReceiptNo").val(i.item.label);
+                $('#DRSRecPayID').val(i.item.value);
+                var myDate = new Date(i.item.ReceiptDate.match(/\d+/)[0] * 1);
+                var cmon = myDate.getMonth() + 1;
+                var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                $('#ReceiptDate').val(collectdate);
+
+                $('#DRSID').val(i.item.DRSID);
+                //$('#DRSNo').val(i.item.DRSNo);
+                //myDate = new Date(i.item.DRSDate.match(/\d+/)[0] * 1);
+                //cmon = myDate.getMonth() + 1;
+                //var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                //$('#DRSDate').val(collectdate);
+                $('#DeliveredBy').val(i.item.DeliveredBy).trigger('change');
+                $('#ReceivedAmount').val(parseFloat(i.item.ReceivedAmount).toFixed(2));
+            },
+
+        });
+
+        $("#DRSReceiptNo").change(function () {
+
+            if ($('#DRSID').val() != '') {
+                $.ajax({
+                    url: '/DRSReconc/GetDRSDetail',
+                    datatype: "json",
+                    data: {
+                        DRSID: $('#DRSID').val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        $('#DRSNo').val(data.DRSNo);
+                        myDate = new Date(data.DRSDate.match(/\d+/)[0] * 1);
+                        cmon = myDate.getMonth() + 1;
+                        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                        $('#DRSDate').val(collectdate);
+                        //$('#DeliveredBy').val(data.DeliveredBy).trigger('change');
+
+                    }
+                });
+            }
+        })
+      
+        function displayawbdetail(obj) {
+            debugger;
+            if (obj != null) {
+                AWBObj = obj;
+                var awbdate1 = obj.AWBDate;
+                var myDate = new Date(awbdate1.match(/\d+/)[0] * 1);
+                var cmon = myDate.getMonth() + 1;
+                var ulhtml = '<ul>';
+                var awbdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();
+                $('#txtAWBDate').val(awbdate);
+                //ulhtml = ulhtml + awbdate;
+                $('#txtShipper').val(obj.Shipper);
+                $('#txtConsignee').val(obj.Consignee);
+                $('#txtPieces').val(obj.Pieces);
+                $('#txtWeight').val(parseFloat(obj.Weight).toFixed(3));
+                //var shipper = '<li>Shipper :' + obj.Shipper + '</li>';
+                //ulhtml = ulhtml + shipper;
+                //var consignee = '<li>Consignee : ' + obj.Consignee + '</li>';
+                //ulhtml = ulhtml + consignee;
+                //var pcs = '<li>Pcs : ' + obj.Pieces + '</li>';
+                //var weight = '<li>Weight : ' + obj.Weight + '</li>';
+                //ulhtml = ulhtml + pcs;
+                //ulhtml = ulhtml + weight;
+
+                var Instructions = '';// '<li>Instructions <ul>';
+                if (obj.IsNCND == true)
+                    Instructions = Instructions + ',NCND';
+                if (obj.IsCashOnly == true)
+                    Instructions = Instructions + ',Cash Only';
+                if (obj.IsCheque == true)
+                    Instructions = Instructions + ',Cheque';
+                if (obj.IsCollectMaterial == true)
+                    Instructions = Instructions + ',Collect Material';
+                if (obj.IsDoCopyBack == true)
+                    Instructions = Instructions + ',Do Copy Back';
+
+                //ulhtml = ulhtml + Instructions;
+                //ulthml = ulhtml + '</ul';
+                //$('#divawbdetail').html(ulhtml);
+                $('#txtInstructions').val(Instructions);
+                $('#txtCODAmount').val(obj.TotalCharge);
+                $('#txtMCCost').val(obj.MaterialCost);
+            }
+            else {
+                AWBObj = {};
+                $("#txtAWB").val('');
+                $('#txtInScanID').val(0);
+                $('#txtAWBDate').val('');
+                $('#txtShipper').val('');
+                $('#txtConsignee').val('');
+                $('#txtPieces').val('');
+                $('#txtWeight').val('');
+                $('#txtInstructions').val('');
+                $('#txtCODAmount').val('');
+                $('#txtDiscount').val('');
+                $('#txtMCCost').val('');
+                $('#txtCODReceived').val('');
+                $('#txtMCReceived').val('');
+            }
+        }
+        $('#btnAddAWB').click(function () {
+            var i = $('#tblTrans > tr').length;
+            var TransType = 'AWB';
+            var Reference = 'AWB:' + AWBObj.label;
+            var COD = $('#txtCODReceived').val();
+            var Discount = $('#txtDiscount').val();
+            var MCReceived = $('#txtMCReceived').val();
+            var inscanid = AWBObj.value;
+            var total = parseFloat(COD) + parseFloat(MCReceived);
+            var html = '<tr><td><input type="hidden" value="AWB" id="hdntype_' + i + '" /><input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" /> <input type="hidden" id="hdnrefId_' + i + '" value="' + inscanid + '" /><input type="hidden" id="hdnref_' + i + '" value="' + Reference + '" /> <input type="hidden" id="hdncod_' + i + '" value="' + COD + '" /><input type="hidden" id="hdndiscount_' + i + '" value="' + Discount + '" /> <input type="hidden" id="hdnmc_' + i + '" value="' + MCReceived + '" /><input type="hidden" id="hdnreceipt_' + i + '" value="0" /> <input type="hidden" id="hdnpkp_' + i + '" value="0" /> <input type="hidden" id="hdnexp_' + i + '" value="0" />'  + Reference + '</td>';
+            html = html + '<td>' + parseFloat(COD).toFixed(2) + '</td>';  //cod
+            html = html + '<td>' + parseFloat(Discount).toFixed(2) + '</td>';  //cod
+            html = html + '<td>' + parseFloat(MCReceived).toFixed(2) + '</td>';//mcreceived
+            html = html + '<td>' + '' + '</td>';//receipt
+            html = html + '<td>' + '' + '</td>';//pickupcash
+            html = html + '<td>' + '' + '</td>';//expenses
+            html = html + '<td><input type="hidden" value="' + parseFloat(total).toFixed(2) + '" id="hdntotal_' + i + '" />' + parseFloat(total).toFixed(2) + '</td>';//total
+            html = html + '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>'; //delete
+
+            $('#tblTrans').append(html);
+            displayawbdetail(null);
+            calculatetotal();
+
+        });
+
+               
+        $('#btnsearch').click(function () {
+            debugger;
+            if ($('#CustomerID').val() == 0) {
+                alert('Select Customer!');
+                return;
+            }
+
+            if ($('#FMoney').val() == "") {// || $('#FMoney').val()=="0") {
+                //alert('Enter Receipt Amount!');
+                $('#FMoney').val(0);
+            }
+
+            var ID = $('#DRSID').val();
+            var RecPayId = $('#DRSRecPayID').val();
+            $.ajax({
+                type: "GET",
+                url: '/DRSReconc/GetDRSAWB1/',
+                data: {   'DRSID': ID },
+                success: function (data) {
+                    console.log(data);
+                    $('#tblTrans').html('');
+
+                    var amt = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        debugger;
+                        var i = $('#tblTrans > tr').length;
+                        var TransType = 'AWB';
+                        var Reference = 'AWB:' + data[i].AWBNo;
+                        var COD = data[i].CourierCharge + data[i].OtherCharge;
+                        var Discount = 0;
+                        var MCReceived = data[i].MaterialCost;
+                        var inscanid = data[i].InscanId;
+                        var total = parseFloat(COD) + parseFloat(MCReceived);
+                        var html = '<tr><td><input type="checkbox" onchange="deletetrans(this, ' + i + ');" checked id="chkallocate_' + i + '" /></td>';
+                        html = html + '<td><input type="hidden" value="AWB" id="hdntype_' + i + '" /><input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" /> <input type="hidden" id="hdnrefId_' + i + '" value="' + inscanid + '" /><input type="hidden" id="hdnref_' + i + '" value="' + Reference + '" /> <input type="hidden" id="hdncod_' + i + '" value="' + COD + '" /><input type="hidden" id="hdndiscount_' + i + '" value="' + Discount + '" /> <input type="hidden" id="hdnmc_' + i + '" value="' + MCReceived + '" /><input type="hidden" id="hdnreceipt_' + i + '" value="0" /> <input type="hidden" id="hdnpkp_' + i + '" value="0" /> <input type="hidden" id="hdnexp_' + i + '" value="0" />'  + Reference + '</td>';
+                        html = html + '<td>' + parseFloat(COD).toFixed(2) + '</td>';  //cod
+                   //     html = html + '<td>' + parseFloat(Discount).toFixed(2) + '</td>';  //cod
+                        html = html + '<td>' + parseFloat(MCReceived).toFixed(2) + '</td>';//mcreceived
+                        
+                        html = html + '<td><input type="hidden" value="' + parseFloat(total).toFixed(2) + '" id="hdntotal_' + i + '" />' + parseFloat(total).toFixed(2) + '</td>';//total
+                        
+                        // if (data[i].Allocated == true) {
+                          
+                        //}
+                        //else {
+                        //    html = html + '<td><input type="checkbox" onchange="allocate(this);" id="chkallocate_' + i + '" /></td>';
+                        //}
+                        //html = html + '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>'; //delete
+                        $('#tblTrans').append(html);
+                    }
+
+                    //displayawbdetail(null);
+                    calculatetotal();
+
+                }
+            });
+
+        });
+        $("#DRSNo").change(function () {
+            if ($('#DRSNo').val() != $('#DRSID').attr('label')) {
+                $('#DRSNo').val('');
+                $('#DRSID').val('0');
+                $('#DRSNo').focus();
+            }
+
+    });
+
+
+        if (@Model.DRRID > 0) {
+            calculatetotal();
+        }
+
+        if (@Model.DRRID> 0) {
+            $('#DRSReceiptNo').attr('readonly', 'readonly');
+            $('#DRSNo').attr('readonly', 'readonly');
+            $('#DeliveredBy').attr('readonly', 'readonly');
+
+        }
+
+
+    });
+</script>
+
+<script>
+    function Comma(Num) { //function to add commas to textboxes
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        $(".aeamt").val(x1 + x2);
+    }
+</script>
+
+<script type="text/javascript">
+    function checkCODReceived() {
+        debugger;
+        if ($('#txtCODAmount').val() == "")
+            $('#txtCODAmount').val(0);
+        var codamount = $('#txtCODAmount').val();
+
+        if ($('#txtCODReceived').val() == "")
+            $('#txtCODReceived').val(0);
+
+        var codrecevied = $('#txtCODReceived').val();
+
+        if ($('#txtDiscount').val() == "")
+            $('#txtDiscount').val(0);
+
+        var discount = $('#txtDiscount').val();
+        
+        var totalamount = parseFloat(codrecevied) + parseFloat(discount);
+        if (parseFloat(codrecevied) > parseFloat(codamount)) {
+            $('#txtCODReceived').val(parseFloat(codamount).toFixed(2));
+        }
+        else if (parseFloat(totalamount) > parseFloat(codamount)) {
+            $('#txtCODReceived').val(parseFloat(codamount).toFixed(2));
+            $('#txtDiscount').val(0);
+        }
+        else if (parseFloat(codrecevied)>0 && (parseFloat(codrecevied) < parseFloat(codamount))) {
+            var discount = parseFloat(codamount) - parseFloat(codrecevied);
+            $('#txtDiscount').val(parseFloat(discount).toFixed(2));
+        }
+        
+    }
+
+    function checkCODDiscount() {
+
+        if ($('#txtCODAmount').val() == "")
+            $('#txtCODAmount').val(0);
+        var codamount = $('#txtCODAmount').val();
+
+        if ($('#txtCODReceived').val() == "")
+            $('#txtCODReceived').val(0);
+
+        var codrecevied = $('#txtCODReceived').val();
+
+        if ($('#txtDiscount').val() == "")
+            $('#txtDiscount').val(0);
+
+        var discount = $('#txtDiscount').val();
+
+        var totalamount = parseFloat(codrecevied) + parseFloat(discount);
+        if (parseFloat(codrecevied) > parseFloat(codamount)) {
+            $('#txtCODReceived').val(parseFloat(codamount).toFixed(2));
+        }
+        else if (parseFloat(totalamount) > parseFloat(codamount)) {
+            $('#txtCODReceived').val(parseFloat(codamount).toFixed(2));
+            $('#txtDiscount').val(0);
+        }
+        else if (parseFloat(codrecevied) > 0 && (parseFloat(codrecevied) < parseFloat(codamount))) {
+            var discount = parseFloat(codamount) - parseFloat(codrecevied);
+            $('#txtDiscount').val(parseFloat(discount).toFixed(2));
+        }
+
+    }
+
+    function checkMCReceived() {
+
+        if ($('#txtMCCost').val() == "")
+            $('#txtMCCost').val(0);
+
+        var mcamount = $('#txtMCCost').val();
+
+        if ($('#txtMCReceived').val() == "")
+            $('#txtMCReceived').val(0);
+
+        var mcreceived = $('#txtMCReceived').val();
+                     
+
+        
+        if (parseFloat(mcreceived ) > parseFloat(mcamount)) {
+            $('#txtMCReceived').val(parseFloat(mcamount).toFixed(2));
+        }
+        else {
+            $('#txtMCReceived').val(parseFloat(mcreceived).toFixed(2));
+        }
+
+    }
+    function CheckAmt(x) {
+        debugger;
+        var idindex = $(x).attr('id');
+        var thisval = $(x).val();
+        var maxval = $(x).attr('max');
+        if (parseFloat(thisval) > parseFloat(maxval)) {
+            $(x).val(parseFloat(maxval).toFixed(2));
+        }       
+        
+    }
+
+    function CheckAmt1(x) {
+        var thisval = $(x).val();
+        $(x).attr('value', thisval);
+        thisval = $(x).val();
+        if (thisval == null || thisval == "") {
+            $(x).val('0.000');
+        } else {
+            $(x).val(parseFloat(thisval).toFixed(@_decimal));
+        }
+
+    }
+        
+</script>
+<script>
+    function calculatetotal() {
+     
+        var maxrow = $('#tblTrans > tr').length;
+        var totalcod = 0;
+        var totaldiscount = 0;
+        var totalmc = 0;
+        var totalreceipt = 0;
+        var totalexp = 0;
+        var totalpkp = 0;
+        var totalall = 0;
+
+        for (i = 0; i < maxrow; i++) {
+            var deleted = $('#hdndeleted_' + i).val();
+            if (deleted == 'false') {
+                debugger;
+                var COD = $('#hdncod_' + i).val();
+                var MCReceived = $('#hdnmc_' + i).val();
+                var receipt = $('#hdnreceipt_' + i).val();
+                var exp = $('#hdnexp_' + i).val();
+                var pkp = $('#hdnpkp_' + i).val();
+                var discount = $('#hdndiscount_' + i).val();
+                var total = $('#hdntotal_' + i).val();
+                if (COD == '')
+                    COD = 0;
+                if (discount == '')
+                    discount = 0;
+                if (MCReceived == '')
+                    MCReceived = 0;
+                if (receipt == '')
+                    receipt = 0;
+                if (exp == '')
+                    exp = 0;
+                if (pkp == '')
+                    pkp = 0;
+                if (total == '')
+                    total = 0;
+
+                totalcod = parseFloat(totalcod) + parseFloat(COD);
+                totaldiscount = parseFloat(totaldiscount) + parseFloat(discount);
+                totalmc = parseFloat(totalmc) + parseFloat(MCReceived);
+                totalreceipt = parseFloat(totalreceipt) + parseFloat(receipt);
+                totalexp = parseFloat(totalexp) + parseFloat(exp);
+                totalpkp = parseFloat(totalpkp) + parseFloat(pkp);
+                totalall = parseFloat(totalall) + parseFloat(total);
+            }
+            $('#txtTotalCOD').val(parseFloat(totalcod).toFixed(2));
+            $('#txtTotalDiscount').val(parseFloat(totaldiscount).toFixed(2));
+            $('#txtTotalMC').val(parseFloat(totalmc).toFixed(2));
+            $('#txtTotalReceipt').val(parseFloat(totalreceipt).toFixed(2));
+            $('#txtTotalPKP').val(parseFloat(totalpkp).toFixed(2));
+            $('#txtTotalExp').val(parseFloat(totalexp).toFixed(2));
+            $('#txtTotal').val(parseFloat(totalall).toFixed(2));
+            $('#txtDRSReceipt').val(parseFloat($('#ReceivedAmount').val()).toFixed(2));
+            var shortage = parseFloat($('#txtDRSReceipt').val()) - parseFloat($('#txtTotal').val()) ;// - parseFloat(totalall);
+            if (shortage > 0) {
+                $('#lbshortage').html('EXCESS');
+                $('#txtShortage').val(parseFloat(shortage).toFixed(2));
+                $('#txtShortage').removeClass('cred');
+            }
+            else {
+                $('#lbshortage').html('SHORTAGE');
+                $('#txtShortage').val(parseFloat(shortage).toFixed(2));
+                
+                $('#txtShortage').addClass('cred');
+            }
+
+            
+        }
+    }
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            $('#btnSave').attr('disabled', 'disabled');
+            var obj = [];
+            var maxrow = $('#tblTrans > tr').length;
+            for (i = 0; i < maxrow; i++) {
+                var deleted = $('#hdndeleted_' + i).val(); 
+                if (deleted == 'false') {
+                    debugger; 
+                    var DRRID = $('#DRRID').val();
+                    var DRSID =$('#DRSID').val();
+                    var DRSRecPayId = $('#DRSRecPayID').val();
+                    var DeliveredBy = $('#DeliveredBy').val();
+                    var referenceid = $("#hdnrefId_" + i).val();
+                    var type = $("#hdntype_" + i).val();
+                    var Reference = $("#hdnref_" + i).val();
+                    var COD = $('#hdncod_' + i).val();
+                    var Discount = $('#hdndiscount_' + i).val();
+                    var MCReceived = $('#hdnmc_' + i).val();
+                    var receipt = $('#hdnreceipt_' + i).val();
+                    var exp = $('#hdnexp_' + i).val();
+                    var pkp = $('#hdnpkp_' + i).val();
+                    var total = $('#hdntotal_' + i).val();
+                    var item = {
+                        ReferenceId: referenceid,
+                        Type:type,
+                        Reference: Reference,
+                        COD: COD,
+                        Discount:Discount,
+                        MCReceived: MCReceived,
+                        Receipt: receipt,
+                        PKPCash: pkp,
+                        Expense: exp,
+                        Total: total
+                    }
+                    obj.push(item);
+                }
+
+                if (maxrow == (i + 1)) {
+                    debugger;
+                    $.ajax({
+                        type: "POST",
+                        url: "/DRSReconc/SaveReconc",
+                        datatype: "Json",
+                        data: { DRRID: DRRID, DRSID: DRSID, DRSRecPayId: DRSRecPayId, ReconcAmount:0, CourierId:DeliveredBy,Details: JSON.stringify(obj) },
+                        success: function (response) {
+                            if (response == "Ok") {
+                                //alert("Reconciliation Saved Succesfully");
+                                $.notify("Reconciliation Saved Succesfully", "success");
+                                $('#btnSave').removeAttr('disabled');                               
+                                location.href = '@Url.Action("Index","DRSReconc")';
+                            }
+                            else {
+                                alert(response);
+                                $('#btnSave').removeAttr('disabled');
+                                //$.notify(response.message, "warning");
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }
+
+
+        });
+    });
+</script>
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            <h1 class="headingfont">@ViewBag.Title</h1>
+        </div>    
+    </div>
+    
+</section>
+
+<!-- Main content -->
+<section class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.DRRID)
+        @Html.HiddenFor(model => model.DRSRecPayID)
+        @*@Html.HiddenFor(model => model.StatusEntry)*@
+        @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.ReconciledAmount)
+    <div class="row  drsReceipt">
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel required">Delivered By</label>
+            @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel required">DRS Receipt No.</label>
+            @Html.TextBoxFor(model => model.DRSReceiptNo, new { @class = "form-control" })
+
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel">Receipt Date</label>
+            @Html.TextBoxFor(model => model.ReceiptDate, new { @class = "form-control text-right", @required = true, @readonly = "readonly" })
+        </div>
+        <div class="col-xs-2 col-sm-1">
+            <label class="headinglabel">Rec. Amount</label>
+            @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control text-right", @readonly = "readonly" })
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class=" required headinglabel">DRS No.</label>
+            @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control", @readonly = "readonly" })
+            @Html.HiddenFor(mode => Model.DRSID)
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <label class="headinglabel required">DRS Date</label>
+            @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control", @readonly = "readonly" })
+            <input type="hidden" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:33px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+        </div>
+    </div>
+    }
+    <div class="row no-margin">   
+        <div class="col-lg-12">
+            <table border="1"  class="table table-bordered table-responsive">
+                <thead>
+                    <tr style="font-weight: bold">
+                        <th></th>
+                        <th>AWB No.</th>
+                        <th>COD</th>                        
+                        <th>Material Cost</th>                        
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tblTrans">
+                    @if (@Model.DRRID > 0)
+                    {
+                        var i = 0;
+                        foreach (var item in Model.Details)
+                        {
+                    <tr>
+                        <td>
+                            <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
+                        </td>
+                        <td>
+                            <input type="hidden" id="hdntype_@i" value="@item.Type" />
+                            <input type="hidden" value="false" class="hdndeleted" id="hdndeleted_@i" />
+                            <input type="hidden" id="hdnrefId_@i" value="@item.ReferenceId" />
+                            <input type="hidden" id="hdnref_@i" value="@item.Reference" />
+                            <input type="hidden" id="hdncod_@i" value="@item.COD" />
+                            <input type="hidden" id="hdndiscount_@i" value="@item.Discount" />
+                            <input type="hidden" id="hdnmc_@i" value="@item.MCReceived" />
+                            <input type="hidden" id="hdnreceipt_@i" value="@item.Receipt" />
+                            <input type="hidden" id="hdnpkp_@i" value="@item.PKPCash" />
+                            <input type="hidden" id="hdnexp_@i" value="@item.Expense" />
+                            <input type="hidden" id="hdntotal_@i" value="@item.Total" />
+                            @item.Reference
+                        </td>
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
+                        </td>                       
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
+                        </td>
+
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
+                        </td>
+
+                    </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr style="font-weight: bold">
+                        <td></td>
+                        <td>Total</td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalCOD" value="0" /></td>
+                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalMC" value="0" /></td>
+                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalReceipt" value="0" /></td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
+                        
+                    </tr>
+                    @*<tr>
+                        <td></td>
+                        <td></td>
+                        <td colspan="1" class="text-right">
+                            DRS Receipt
+                        </td>
+                        <td colspan="1">
+                            <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
+                        </td>
+                    </tr>*@
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td colspan="1" class="text-right">
+                            <label id="lbshortage">SHORTAGE</label>
+                        </td>
+                        <td colspan="1">
+                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
+                        </td>
+                    </tr>
+                    @*<tr>
+                            <td colspan="6" class="text-right">
+                                TOTAL
+                            </td>
+                            <td colspan="2">
+
+                            </td>
+                        </tr>*@
+                </tfoot>
+            </table>
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12 btn-right">
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnSave" name="Command" />
+                    <a href='@Url.Action("Index", "DRSReconc", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+
+            <div>
+            </div>
+
+            <script type="text/javascript">
+                 function ValidateTotal() {
+                    debugger;
+                    var TotalAmount = 0;
+                    var idtext = 'txtinvoice_';
+                    var amt = 0;
+                    if ($('#Balance').val() == "") {
+                        $('#Balance').val(0);
+                    }
+                    var balance =parseFloat($('#Balance').val());
+
+                        $('[id^=' + idtext + ']').each(function (index, item) {
+                        //  var id = $(item).attr('id').split('_')[1];
+                        if ($(item).val() == "" || $(item).val()==null) {
+                                $(item).val(0);
+                        }
+                        var paidamount = parseFloat($(item).val());
+                        amt = amt + paidamount;
+
+                        if (parseFloat(amt) == 0) {
+                                $('#btnsave').attr('disabled', 'disabled');
+                        }
+
+                            @*if (parseFloat($('#FMoney').val()) == 0) {
+                                $('#FMoney').val(parseFloat(amt).toFixed(@_decimal))
+                            }*@
+                            $('#AllocatedAmount').val(parseFloat(amt).toFixed(@_decimal));
+                            var payingamount = parseFloat($('#FMoney').val());
+                            var allocatedamount = parseFloat($('#AllocatedAmount').val());
+                            var advance = 0;
+                            if (allocatedamount > (payingamount + advance)) {
+                                $('#btnsave').attr('disabled', 'disabled');
+                            }
+                            else if (parseFloat(amt) == 0) {
+                                $('#btnsave').attr('disabled', 'disabled');
+                            }
+                            else {
+                                $('#btnsave').removeAttr('disabled');
+                            }
+
+                            //$('#Balance').val(parseFloat(advance).toFixed(@_decimal));
+
+                        });
+
+                        //var TotalInvoiceAmount = parseFloat($('.TotalInvoiceAmount').val());
+                        //if (TotalAmount > TotalInvoiceAmount) {
+                        //    $('#msg1').show();
+                        //    $('#msg1').text('Sum of Amount cannot be greater than Total Invoice Amount');
+                        //    return false;
+                        //} else {
+                        //    return true;
+                        //}
+                    }
+                // When the document is ready
+
+                $(document).ready(function () {
+                    var startdate = '@Session["FyearFrom"].ToString()';
+                    var enddate = '@Session["FyearTo"].ToString()';
+                    var sd = new Date(startdate);
+                    var ed = new Date(enddate);
+                    var datevalid = false;
+                    var dateerror = "";
+
+                    $('#txtDeliveredDate').datetimepicker({
+                        format: 'DD-MM-YYYY HH:mm'
+                    });
+                    $('#txtDeliveredDate').datetimepicker({
+                        date: new Date(1434544882775)
+                    });
+
+                    $('#DRSRecPayDate').datetimepicker({
+                        format: 'DD-MM-YYYY'
+                    });
+                    $('#ChequeDate').datetimepicker({
+                        format: 'DD-MM-YYYY'
+                    });
+
+                      $('#RecPayDate').keydown(function (e) {
+
+                        if (e.keyCode == 13 || e.keyCode == 9) {
+                            if ($("#RecPayDate").val() != "") {
+                                $.ajax({
+                                    url: "@Url.Action("CheckDateValidate", "Accounts")",
+                                    data: { entrydate: $("#RecPayDate").val() },
+                                    type: "GET",
+                                    dataType: "json",
+                                    success: function (response) {
+
+                                        if (response.Status == "OK") {
+                                            datevalid = true;
+                                            dateerror = response.Message;
+                                        }
+                                        else {
+                                            datevalid = false;
+                                            dateerror = response.Message;
+                                            $('#RecPayDate').val(response.ValidDate);
+                                        }
+
+                                    },
+                                    error: function () {
+                                        alert("Failed! Please try again.");
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    $('#RecPayDate').change(function ()    {
+
+                        if ($("#RecPayDate").val() != "") {
+                             $.ajax({
+                            url: "@Url.Action("CheckDateValidate", "Accounts")",
+                                 data: { entrydate: $("#RecPayDate").val()},
+                            type: "GET",
+                            dataType: "json",
+                                 success: function (response) {
+                                if (response.Status == "OK") {
+                                    datevalid = true;
+                                    dateerror = response.Message;
+                                }
+                                else {
+                                    datevalid = false;
+                                    dateerror = response.Message;
+                                    $('#RecPayDate').val(response.ValidDate);
+                                    alert(dateerror);
+                                }
+
+                            },
+                            error: function () {
+                                alert("Failed! Please try again.");
+                            }
+                        });
+                        }
+                    });
+
+                    $('#RecPayDate').on('dp.change', function (e) {
+                        $('#RecPayDate').trigger('change');
+                    })
+
+                    $('#RecPayDate').datepicker("setDate", new Date());
+
+
+                });
+
+            </script>

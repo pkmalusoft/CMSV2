@@ -233,11 +233,7 @@ namespace CMSV2.DAL
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["InScanID"].ToString());
-                    if (obj.InScanID > 0)
-                        obj.QuickInScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["QuickInScanId"].ToString());
-                    else
-                        obj.QuickInScanID = 0;
+                    
                     obj.ReferenceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["ReferenceID"].ToString());
                     obj.AWBNo = ds.Tables[0].Rows[0]["AWBNo"].ToString();
                     obj.Status = ds.Tables[0].Rows[0]["Status"].ToString();
@@ -246,6 +242,11 @@ namespace CMSV2.DAL
                     if (obj.Status != "Available")
                         return obj;
 
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["InScanID"].ToString());
+                    if (obj.InScanID > 0)
+                        obj.QuickInScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["QuickInScanId"].ToString());
+                    else
+                        obj.QuickInScanID = 0;
                     if (obj.Status == "Available" && (obj.Mode == "Prepaid"))
                     {
                         obj.CourierCharge = ds.Tables[0].Rows[0]["CourierCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[0]["CourierCharge"].ToString());

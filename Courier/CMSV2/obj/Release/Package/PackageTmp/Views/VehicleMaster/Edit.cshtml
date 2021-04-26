@@ -157,17 +157,21 @@
 
 
 
-              <div class="row no-margin" style="padding-top:25px">
-            
+        <div class="row no-margin" style="padding-top:25px">
 
-                   <div class="col-md-3">
-                          <label class="headinglabel required">Description</label>
-               @Html.TextBoxFor(model => model.VehicleDescription, new {@class="form-control" })
-            @Html.ValidationMessageFor(model => model.VehicleDescription)
-                     
-                 </div>
-       
-            
+
+            <div class="col-md-3">
+                <label class="headinglabel required">Description</label>
+                @Html.TextBoxFor(model => model.VehicleDescription, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.VehicleDescription)
+
+            </div>
+
+            <div class="col-md-3">
+                <label class="headinglabel">Driver</label>
+                @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+
+            </div>
         </div>
 
          <div class="row no-margin" style="padding-top:10px">

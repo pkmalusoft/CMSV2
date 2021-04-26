@@ -102,7 +102,7 @@ namespace CMSV2.Controllers
             ViewBag.depot = (from c in db.tblDepots where c.BranchID == BranchId select c).ToList();
             ViewBag.employee = db.EmployeeMasters.ToList();
             ViewBag.employeerec = db.EmployeeMasters.ToList();
-            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleNo }).ToList();
+            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleDescription }).ToList();
             ViewBag.CourierService = db.CourierServices.ToList();
             if (id==0)
             {
@@ -180,7 +180,7 @@ namespace CMSV2.Controllers
                 if (v.QuickInscanID > 0)
                 {
                     db.Entry(_qinscan).State= EntityState.Modified;
-                    var removeinscanitems = v.RemovedInScanId.Split(',');                                        
+                                               
                     //foreach (var _item in removeinscanitems)
                     //{
                     //    int _inscanid = Convert.ToInt32(_item);

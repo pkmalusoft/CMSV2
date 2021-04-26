@@ -184,7 +184,7 @@
                 var cmon = myDate.getMonth() + 1;
                 var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear(); 
                 $('#DRSDate').val(collectdate);
-                $('#DeliveredBy').val(i.item.CheckedBy);
+                //$('#DeliveredBy').val(i.item.CheckedBy);
                 $('#DRSAmount').val(i.item.TotalAmount);
              },
             select: function (e, i) {
@@ -197,7 +197,7 @@
                 var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear();// + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
                 $('#DRSDate').val(collectdate);
 
-                $('#DeliveredBy').val(i.item.CheckedBy);
+                //$('#DeliveredBy').val(i.item.CheckedBy);
                 $('#DRSAmount').val(i.item.TotalAmount);
 
             },

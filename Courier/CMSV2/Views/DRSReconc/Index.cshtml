@@ -88,21 +88,26 @@
         <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
             <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
         </div>
-        <div class="pull-left" style="padding-top:32px;">
-            <p class="indexbtnpadding">
-                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
-                {
-                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
-                }
-                else
-                {
-                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
-                }
+        <div class="col-md-4" style="padding-top:32px;">
+            <div class="col-md-6">                
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
 
-            </p>
+
+                    }                               
+            </div>
+            <div class="col-md-6">
+                @Html.ActionLink("Create Bulk", "CreateBulk", null, new { @class = "btn btn-primary btnwidth" })
+            </div>
+            </div>
+            
         </div>
     </div>
-</div>
 
 <section class="content">
     @if (TempData["SuccessMsg"] != null)

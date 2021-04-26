@@ -79,6 +79,24 @@
         //    dateFormat: 'dd-M-yy',
         //    changeYear: true, changeMonth: true,
         //});
+
+        $('#CollectedByID').change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/InScan/GetVehicle",
+                datatype: "Json",
+                data: { EmployeeId: $('#CollectedByID').val() },
+                success: function (response) {
+                    debugger;
+                    if (response.VehicleId != 0) {
+                        $('#VehicleId').val(response.VehicleId).trigger('change');
+                    } else{
+                        $('#VehicleId').val('').trigger('change');
+                    }
+                }
+            });
+
+        })
         $("#txtBatchNo").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -473,45 +491,56 @@
                 <div class="col-md-3">
                     @Html.HiddenFor(model => model.QuickInscanID, new { })
                     <label class="headinglabel required">Sheet No.</label>
-                    @Html.TextBoxFor(model => model.InScanSheetNo, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.InScanSheetNo, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.InScanSheetNo)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">InScan Date</label>
 
-                    @Html.TextBoxFor(model => model.QuickInscanDateTime, new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.QuickInscanDateTime, new { @class = "form-control text-right", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.QuickInscanDateTime)
-                </div>                
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Depot</label>
-                        @Html.DropDownListFor(model => model.DepotID, new SelectList(@ViewBag.depot, "ID", "Depot"), "Select", new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Collected By</label>
-                        @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Depot</label>
+                    @Html.DropDownListFor(model => model.DepotID, new SelectList(@ViewBag.depot, "ID", "Depot"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Received By</label>
+                    @Html.DropDownListFor(model => model.ReceivedByID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                </div>
+                
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Collected By</label>
+                    @*@Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Vehicle Detail</label>
+                    @Html.DropDownListFor(model => model.VehicleId, new SelectList(@ViewBag.Vehicles, "VehicleID", "VehicleName"), "Select", new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.VehicleId)
 
                 </div>
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Received By</label>
-                        @Html.DropDownListFor(model => model.ReceivedByID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-3">
-                        <label class="headinglabel">Vehicle Detail</label>
-                        @Html.DropDownListFor(model => model.VehicleId, new SelectList(@ViewBag.Vehicles, "VehicleID", "VehicleDescription"), "Select", new { @class = "form-control" })
-                        @Html.HiddenFor(model => model.VehicleId)
+                @*<div class="col-md-3">
+            <label class="headinglabel">Driver Name</label>
+            @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })
+            @Html.HiddenFor(model => model.DriverName)
 
-                    </div>
-                    <div class="col-md-3">
-                        <label class="headinglabel">Driver Name</label>
-                        @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })
-                        @Html.HiddenFor(model => model.DriverName)
+        </div>*@
+                <div class="col-md-3">
+                    <label class="headinglabel required">AWB No.</label>
+                    <input type="text" id="txtawb" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col-md-3"  >
+                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 
-                    </div>
                 </div>
 
-                <div class="row no-margin" style="padding-top:10px" id="divadd">
+            </div>
+
+                <div class="row no-margin hide" style="padding-top:10px" id="divadd">
                     @*<div class="col-md-3">
                         <label class="headinglabel required">Batch No.</label>
                         <input type="text" id="txtBatchNo" class="form-control" />
@@ -521,15 +550,7 @@
                         <button type="button" id="btnbatchadd" class="btn btn-primary small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
 
                     </div>*@
-                    <div class="col-md-3">
-                        <label class="headinglabel required">AWB No.</label>
-                        <input type="text" id="txtawb" class="form-control" />
-                    </div>
-                    <div class="col-md-3" style="padding-top:10px">
-                        <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-
-                    </div>
-
+                   
                 </div>
 
                 <div class="row no-margin" style="padding-top:30px">

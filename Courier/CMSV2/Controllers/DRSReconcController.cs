@@ -121,7 +121,7 @@ namespace CMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDRSReceiptNo(string term)
+        public JsonResult GetDRSReceiptNo(string term,int DeliveredBy=0)
         {
             int FyearId = Convert.ToInt32(Session["fyearid"]);
             if (term.Trim() != "")
@@ -130,6 +130,7 @@ namespace CMSV2.Controllers
                                //join c2 in db.DRS on c1.DRSID equals c2.DRSID
                                where c1.DocumentNo.ToLower().Contains(term.ToLower()) && c1.FYearID ==FyearId
                                 && c1.DRRID==null
+                                && (c1.DeliveredBy==DeliveredBy || c1.DeliveredBy==DeliveredBy)
                                orderby c1.DocumentNo ascending
                                select new { DRSRecPayId=c1.DRSRecPayID,DRSRecPayDate=c1.DRSRecPayDate,DocumentNo=c1.DocumentNo, DRSID = c1.DRSID, DeliveredBy = c1.DeliveredBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
 
@@ -141,6 +142,7 @@ namespace CMSV2.Controllers
                                //join c2 in db.DRS on c1.DRSID equals c2.DRSID
                                where c1.FYearID ==FyearId
                                && c1.DRRID == null
+                               && (c1.DeliveredBy == DeliveredBy || c1.DeliveredBy == DeliveredBy)
                                orderby c1.DocumentNo ascending
                                select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID,DeliveredBy=c1.DeliveredBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
                 return Json(drslist, JsonRequestBehavior.AllowGet);
@@ -222,6 +224,25 @@ namespace CMSV2.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetDRSAWB1(int DRSID)
+        {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
+           
+                var drslist = (from c3 in db.InScanMasters
+                               where c3.AcFinancialYearID == FyearId
+                               && c3.IsDeleted == false
+                               && (c3.DRSID == DRSID)
+                               && (c3.DRSID != null)
+                               && (c3.PaymentModeId == 2 && c3.CODReceiptId == null)
+                               orderby c3.AWBNo ascending
+                               select new { InscanId = c3.InScanID, AWBNo = c3.AWBNo, Shipper = c3.Consignor, Consignee = c3.Consignee, AWBDate = c3.TransactionDate, CourierCharge = c3.CourierCharge, OtherCharge = c3.OtherCharge, TotalCharge = c3.NetTotal, MaterialCost = c3.MaterialCost, IsNCND = c3.IsNCND, IsCashOnly = c3.IsCashOnly, IsCollectMaterial = c3.IsCollectMaterial, IsCheque = c3.IsDOCopyBack, d = c3.IsDOCopyBack, Pieces = c3.Pieces, Weight = c3.Weight }).ToList();
+
+                return Json(drslist, JsonRequestBehavior.AllowGet);
+            
+
+        }
+
         [HttpPost]
         public string SaveReconc(int DRRID, int DRSID, int DRSRecpayID, decimal ReconcAmount, int CourierId, string Details)
         {
@@ -273,6 +294,74 @@ namespace CMSV2.Controllers
             ds.Tables.Add(dataTable);
             //put a breakpoint here and check datatable
             return ds;
+        }
+        [HttpGet]
+        public ActionResult CreateBulk(int id = 0)
+        {
+            ViewBag.Deliverdby = db.EmployeeMasters.ToList();
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
+            DRRVM cust = new DRRVM();
+            cust.Details = new List<DRRDetailVM>();
+            if (Session["UserID"] != null)
+            {
+                var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+
+                if (id > 0)
+                {
+                    ViewBag.Title = "DRS Reconciliation - Modify";
+                    //cust = RP.GetRecPayByRecpayID(id);
+                    DRR dr = db.DRRs.Find(id);
+                    cust.DRRID = dr.DRRID;
+                    cust.DRRDate = dr.DRRDate;
+                    cust.CourierId = dr.CourierId;
+                    cust.DeliveredBy = Convert.ToInt32(dr.CourierId);
+                    cust.DRSID = dr.DRSID;
+                    var drs = db.DRS.Find(dr.DRSID);
+                    cust.DRSNo = drs.DRSNo;
+                    cust.DRSDate = drs.DRSDate;
+                    var drsrecpay = db.DRSRecPays.Find(dr.DRSRecPayID);
+                    cust.DRSRecPayID = dr.DRSRecPayID;
+                    cust.DRSReceiptNo = drsrecpay.DocumentNo;
+                    cust.DRSReceiptDate = drsrecpay.DRSRecPayDate.ToString("dd/MM/yyyy");
+                    cust.ReceiptDate = drsrecpay.DRSRecPayDate;
+                    cust.ReceivedAmount = Convert.ToDecimal(drsrecpay.ReceivedAmount);
+                    cust.ReconciledAmount = dr.ReconciledAmount;
+
+                    var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+
+                    cust.Details = new List<DRRDetailVM>();
+                    cust.Details = (from c in db.DRRDetails where c.DRRID == id select new DRRDetailVM { DRRID = c.DRRID, Reference = c.Reference, ReferenceId = c.ReferenceId, COD = c.CODAmount, PKPCash = c.PKPCash, MCReceived = c.MCReceived, Discount = c.Discount, Expense = c.Expense, Total = c.Total }).ToList();
+
+                    //BindMasters_ForEdit(cust);
+                }
+                else
+                {
+                    ViewBag.Title = "DRS Reconciliation - Create";
+
+
+                    var acheadforcash = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                    var acheadforbank = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+
+                    ViewBag.achead = acheadforcash;
+                    ViewBag.acheadbank = acheadforbank;
+
+                    DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+                    //cust.DRSReceiptDate = pFromDate;
+                    cust.DRSRecPayID = 0;
+
+                    //cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
+                }
+            }
+            else
+            {
+                return RedirectToAction("Home", "Home");
+            }
+
+            return View(cust);
+
         }
 
     }

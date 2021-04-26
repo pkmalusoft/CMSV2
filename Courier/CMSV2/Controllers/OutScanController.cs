@@ -45,7 +45,7 @@ namespace CMSV2.Controllers
             int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ViewBag.Deliverdby = db.EmployeeMasters.ToList();
            // ViewBag.vehicle = db.VehicleMasters.ToList();
-            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleNo }).ToList();
+            ViewBag.Vehicles = (from c in db.VehicleMasters select new { VehicleID = c.VehicleID, VehicleName = c.RegistrationNo + "-" + c.VehicleDescription }).ToList();
             ViewBag.Checkedby = db.EmployeeMasters.ToList();
             DRSVM v = new DRSVM();
             if (id>0)

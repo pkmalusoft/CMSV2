@@ -66,8 +66,7 @@ namespace CMSV2.Controllers
         [HttpPost]
         public ActionResult Create(VehiclesVM vm)
         {
-            if (ModelState.IsValid)
-            {
+            
                 VehicleMaster v = new VehicleMaster();
 
                 int max = (from d in db.VehicleMasters orderby d.VehicleID descending select d.VehicleID).FirstOrDefault();
@@ -85,7 +84,10 @@ namespace CMSV2.Controllers
                     v.RegExpirydate = vm.RegExpirydate;
                     v.AcCompanyID = 1;
                     v.VehicleNo = vm.VehicleNO;
-                    v.EmployeeId = vm.EmployeeId;
+                    if (vm.EmployeeId != 0)
+                        v.EmployeeId = vm.EmployeeId;
+                    else
+                        v.EmployeeId = null;
 
                 }
                 else
@@ -101,15 +103,18 @@ namespace CMSV2.Controllers
                     v.RegExpirydate = vm.RegExpirydate;
                     v.AcCompanyID = 1;
                     v.VehicleNo = vm.VehicleNO;
+                if (vm.EmployeeId != 0)
                     v.EmployeeId = vm.EmployeeId;
-                }
+                else
+                    v.EmployeeId = null;
+            }
 
 
                 db.VehicleMasters.Add(v);
                 db.SaveChanges();
                 TempData["SuccessMsg"] = "You have successfully added Vehicle.";
                 return RedirectToAction("Index");
-            }
+           
 
             return View();
         }
@@ -137,17 +142,32 @@ namespace CMSV2.Controllers
 
                 if (data.VehicleTypeId!=null)
                     v.VehicleTypeId =Convert.ToInt32(data.VehicleTypeId);
+                if (data.VehicleValue!=null)
                 v.VehicleValue = data.VehicleValue.Value;
-                if (data.ValueDate!=null)
-                     v.ValueDate = data.ValueDate.Value;
-                if (data.PurchaseDate!=null)
-                v.PurchaseDate = data.PurchaseDate.Value;
-                if (data.RegExpirydate!=null)
-                   v.RegExpirydate = data.RegExpirydate.Value;
+
+                if (data.ValueDate != null)
+                    v.ValueDate = data.ValueDate.Value;
+                else
+                    v.ValueDate = DateTime.Now;
+
+                if (data.PurchaseDate != null)
+                    v.PurchaseDate = data.PurchaseDate.Value;
+                else
+                    v.PurchaseDate = DateTime.Now;
+
+                if (data.RegExpirydate != null)
+                    v.RegExpirydate = data.RegExpirydate.Value;
+                else
+                    v.RegExpirydate = DateTime.Now;
+
                 v.AcCompanyID = 1;
                 v.VehicleNO = data.VehicleNo;
                 if (data.EmployeeId != null)
-                    v.EmployeeId = data.EmployeeId.Value;
+                {
+                    if (data.EmployeeId != 0)
+                        v.EmployeeId = data.EmployeeId.Value;
+                }
+                
             }
             return View(v);
         }
@@ -170,15 +190,18 @@ namespace CMSV2.Controllers
                 v.RegExpirydate = data.RegExpirydate;
                 v.AcCompanyID = 1;
                 v.VehicleNo = data.VehicleNO;
-            v.EmployeeId = data.EmployeeId;
 
-            if (ModelState.IsValid)
-            {
+            if (data.EmployeeId != 0)
+                v.EmployeeId = data.EmployeeId;
+            else
+                v.EmployeeId = null;
+
+           
                 db.Entry(v).State = EntityState.Modified;
                 db.SaveChanges();
                 TempData["SuccessMsg"] = "You have successfully Updated Vehicle.";
                 return RedirectToAction("Index");
-            }
+            
             return View();
         }
 

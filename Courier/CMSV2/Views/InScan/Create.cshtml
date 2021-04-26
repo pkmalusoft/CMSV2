@@ -491,30 +491,31 @@
                 <div class="col-md-3">
                     @Html.HiddenFor(model => model.QuickInscanID, new { })
                     <label class="headinglabel required">Sheet No.</label>
-                    @Html.TextBoxFor(model => model.InScanSheetNo, new { @class = "form-control",@readonly="readonly" })
+                    @Html.TextBoxFor(model => model.InScanSheetNo, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.InScanSheetNo)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">InScan Date</label>
 
-                    @Html.TextBoxFor(model => model.QuickInscanDateTime, new { @class = "form-control text-right",@readonly="readonly" })
+                    @Html.TextBoxFor(model => model.QuickInscanDateTime, new { @class = "form-control text-right", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.QuickInscanDateTime)
-                </div>                
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Depot</label>
-                        @Html.DropDownListFor(model => model.DepotID, new SelectList(@ViewBag.depot, "ID", "Depot"), "Select", new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Collected By</label>
-                        @*@Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })*@
-                        @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                    </div>
-
                 </div>
-            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Depot</label>
+                    @Html.DropDownListFor(model => model.DepotID, new SelectList(@ViewBag.depot, "ID", "Depot"), "Select", new { @class = "form-control" })
+                </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Received By</label>
                     @Html.DropDownListFor(model => model.ReceivedByID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                </div>
+                
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Collected By</label>
+                    @*@Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel">Vehicle Detail</label>
