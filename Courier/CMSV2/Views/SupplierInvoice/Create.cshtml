@@ -76,6 +76,7 @@
         color: red;
     }
 
+   
 </style>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -666,7 +667,7 @@
         if ($('#AWBStart').val() == '')
             $('#AWBStart').val(0);
         var startno = $('#AWBStart').val();
-        $('#AWBEnd').val(parseInt(startno) + parseInt(awbcount));
+        $('#AWBEnd').val(parseInt(startno) + parseInt(awbcount)-1);
 
     }
 
@@ -679,7 +680,7 @@
         if ($('#txtAWBStart').val() == '')
             $('#txtAWBStart').val(0);
         var startno = $('#txtAWBStart').val();
-        $('#txtAWBEnd').val(parseInt(startno) + parseInt(awbcount));
+        $('#txtAWBEnd').val(parseInt(startno) + parseInt(awbcount)-1);
 
     }
     function checkduplicate(consignment) {
@@ -1204,7 +1205,7 @@
                         <label class="headinglabel required"> Net Value</label>
                         <input type="text" class="form-control text-right" readonly id="NetValue" />
                     </div>
-                    <div class="col-md-1" style="padding-top:10px">
+                    <div class="col-md-1 btn-res" style="padding-top: 10px" >
                         <button type="button" class="small_btn btn-2  btn btn-primary" title="Add Consignments" onclick="ShowConsignmentPopup(-1)"><i class=" fa fa-th"></i></button>
                         <button type="button" class="small_btn  btn btn-primary" index="1" id="btnadd" title="Add New" class="addmore"><i class="fa fa-plus"></i></button>
                     </div>
@@ -1253,22 +1254,21 @@
 
 
                 <div class="row no-margin" style="padding-top: 10px">
-                    <div class="col-md-12">
-                        <table class="table table-bordered table-responsive" id="details" style="background-color: white">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-bordered " id="details" style="background-color: white">
 
                             <thead>
                                 <tr>
-                                    <th>Currency</th>
-                                    <th>Ex. Rate</th>
-                                    <th>Account Head</th>
+                                    <th class="hide">Currency</th>
+                                    <th class="hide">Ex. Rate</th>
+                                    <th width="20%">Chart Of Accounts</th>
                                     <th>Particulars</th>
                                     <th>Qty</th>
                                     <th>Rate</th>
                                     <th>Value</th>
                                     <th>Tax(%)</th>
                                     <th>Net Value</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>Action</th>
                                     <th></th>
                                 </tr>
                             </thead>

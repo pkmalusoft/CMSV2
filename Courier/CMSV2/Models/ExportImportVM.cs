@@ -13,7 +13,7 @@ namespace CMSV2.Models
             }
         public string ConsignorAddress {get;set;}
         public string ConsigneeAddress { get; set; }
-
+        public string Route { get; set; }
         public List<ImportShipmentDetail> Shipments { get; set; }
     }
     public class ImportShipmentDetailVM :ImportShipmentDetail

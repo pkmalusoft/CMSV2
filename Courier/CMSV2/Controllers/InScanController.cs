@@ -15,7 +15,7 @@ namespace CMSV2.Controllers
     {
         Entities1 db = new Entities1();
 
-        public ActionResult Index(int? StatusId, string FromDate, string ToDate)
+        public ActionResult Index(string FromDate, string ToDate)
         {
             ViewBag.Employee = db.EmployeeMasters.ToList();
             ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
@@ -25,15 +25,7 @@ namespace CMSV2.Controllers
 
             DateTime pFromDate;
             DateTime pToDate;
-            int pStatusId = 0;
-            if (StatusId == null)
-            {
-                pStatusId = 0;
-            }
-            else
-            {
-                pStatusId = Convert.ToInt32(StatusId);
-            }
+      
             if (FromDate == null || ToDate == null)
             {
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date;// DateTime.Now.Date;//.AddDays(-1); // FromDate = DateTime.Now;
@@ -42,7 +34,7 @@ namespace CMSV2.Controllers
             else
             {
                 pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
-                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+                pToDate = Convert.ToDateTime(ToDate).Date.AddDays(1);
 
             }
 
@@ -83,7 +75,7 @@ namespace CMSV2.Controllers
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             ViewBag.PickupRequestStatus = db.CourierStatus.Where(cc => cc.StatusTypeID == 1).ToList();
-            ViewBag.StatusId = StatusId;
+           
             return View(lst);
         }
              
@@ -180,6 +172,7 @@ namespace CMSV2.Controllers
                 if (v.QuickInscanID > 0)
                 {
                     db.Entry(_qinscan).State= EntityState.Modified;
+                    db.SaveChanges();
                                                
                     //foreach (var _item in removeinscanitems)
                     //{
@@ -224,74 +217,152 @@ namespace CMSV2.Controllers
                     db.QuickInscanMasters.Add(_qinscan);
                     db.SaveChanges();
                 }
-
-                foreach (var item in IDetails)
+                if (v.QuickInscanID == 0)
                 {
-                    int _inscanid =Convert.ToInt32(item.InScanId);
-                    if (_inscanid > 0)
+                    foreach (var item in IDetails)
                     {
-                        InScanMaster _inscan = db.InScanMasters.Find(_inscanid);
-                        _inscan.QuickInscanID = _qinscan.QuickInscanID;
-                        _inscan.PickedUpEmpID = v.CollectedByID;
-                        _inscan.DepotReceivedBy = v.ReceivedByID;
-                        //_inscan.TransactionDate = v.QuickInscanDateTime;
-                        _inscan.VehicleTypeId = v.VehicleId;
-                        _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Inscan").First().ID;
-                        _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received At Origin Facility").FirstOrDefault().CourierStatusID;
-                        db.Entry(_inscan).State = EntityState.Modified;
-                        db.SaveChanges();
-                        AWBTrackStatu _awbstatus = new AWBTrackStatu();
+                        int _inscanid = Convert.ToInt32(item.InScanId);
+                        if (_inscanid > 0)
+                        {
+                            InScanMaster _inscan = db.InScanMasters.Find(_inscanid);
+                            _inscan.QuickInscanID = _qinscan.QuickInscanID;
+                            _inscan.PickedUpEmpID = v.CollectedByID;
+                            _inscan.DepotReceivedBy = v.ReceivedByID;
+                            //_inscan.TransactionDate = v.QuickInscanDateTime;
+                            //_inscan.VehicleTypeId = v.VehicleId;
+                            _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Inscan").First().ID;
+                            _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received At Origin Facility").FirstOrDefault().CourierStatusID;
+                            db.Entry(_inscan).State = EntityState.Modified;
+                            db.SaveChanges();
+                            AWBTrackStatu _awbstatus = new AWBTrackStatu();
 
-                        //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = _inscan.AWBNo;
-                        _awbstatus.EntryDate = v.QuickInscanDateTime;
-                        _awbstatus.InScanId = _inscan.InScanID;
-                        _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
-                        _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
-                        _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                        _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                        _awbstatus.UserId = UserId;
-                        _awbstatus.EmpID = v.CollectedByID;
-                        db.AWBTrackStatus.Add(_awbstatus);
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        InScanMaster _inscan = new InScanMaster();
-                        _inscan.AWBNo = item.AWB;
-                        _inscan.QuickInscanID = _qinscan.QuickInscanID;
-                        _inscan.PickedUpEmpID = v.CollectedByID;
-                        _inscan.DepotReceivedBy = v.ReceivedByID;
-                        _inscan.TransactionDate = v.QuickInscanDateTime;
-                        _inscan.BranchID = BranchId;
-                        _inscan.DepotID = v.DepotID;
-                        _inscan.AcCompanyID = CompanyId;
-                        _inscan.AcFinancialYearID = yearid;
-                        _inscan.VehicleTypeId = v.VehicleId;
-                        _inscan.StatusTypeId = 2; // db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
-                        _inscan.CourierStatusID = 5;// db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
-                        _inscan.CreatedBy = UserId;
-                        _inscan.CreatedDate = v.QuickInscanDateTime;
-                        _inscan.LastModifiedBy = UserId;
-                        _inscan.LastModifiedDate = v.QuickInscanDateTime;
-                        _inscan.IsDeleted = false;
-                        db.InScanMasters.Add(_inscan);
-                        db.SaveChanges();
-                        //updateing awbstaus table for tracking
-                        AWBTrackStatu _awbstatus = new AWBTrackStatu();                      
+                            var StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Pickup Request").First().ID;
+                            var CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == StatusTypeId && cc.CourierStatus == "Assigned For Collection").FirstOrDefault().CourierStatusID;
+                            var awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == CourierStatusID).FirstOrDefault();
+                            if (awb == null)
+                            {
+                                _awbstatus.AWBNo = _inscan.AWBNo;
+                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.InScanId = _inscan.InScanID;
+                                _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
+                                _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
 
-                        //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = _inscan.AWBNo;
-                        _awbstatus.EntryDate = v.QuickInscanDateTime;
-                        _awbstatus.InScanId = _inscan.InScanID;
-                        _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
-                        _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
-                        _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                        _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                        _awbstatus.UserId = UserId;
-                        _awbstatus.EmpID = v.CollectedByID;
-                        db.AWBTrackStatus.Add(_awbstatus);
-                        db.SaveChanges();
+                                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(StatusTypeId).Name;
+                                _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
+                                _awbstatus.UserId = UserId;
+                                _awbstatus.EmpID = v.CollectedByID;
+                                db.AWBTrackStatus.Add(_awbstatus);
+                                db.SaveChanges();
+
+                            }
+
+                            _awbstatus = new AWBTrackStatu();
+                            StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Pickup Request").First().ID;
+                            CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == StatusTypeId && cc.CourierStatus == "Shipment Collected").FirstOrDefault().CourierStatusID;
+                            awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == CourierStatusID).FirstOrDefault();
+                            if (awb == null)
+                            {
+                                _awbstatus.AWBNo = _inscan.AWBNo;
+                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.InScanId = _inscan.InScanID;
+                                _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
+                                _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
+
+                                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                                _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                                _awbstatus.UserId = UserId;
+                                _awbstatus.EmpID = v.CollectedByID;
+                                db.AWBTrackStatus.Add(_awbstatus);
+                                db.SaveChanges();
+                            }
+                            //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
+                            _awbstatus.AWBNo = _inscan.AWBNo;
+                            _awbstatus.EntryDate = v.QuickInscanDateTime;
+                            _awbstatus.InScanId = _inscan.InScanID;
+                            _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
+                            _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
+                            _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                            _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                            _awbstatus.UserId = UserId;
+                            _awbstatus.EmpID = v.CollectedByID;
+                            db.AWBTrackStatus.Add(_awbstatus);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            InScanMaster _inscan = new InScanMaster();
+                            _inscan.AWBNo = item.AWB;
+                            _inscan.QuickInscanID = _qinscan.QuickInscanID;
+                            _inscan.PickedUpEmpID = v.CollectedByID;
+                            _inscan.DepotReceivedBy = v.ReceivedByID;
+                            _inscan.TransactionDate = v.QuickInscanDateTime;
+                            _inscan.BranchID = BranchId;
+                            _inscan.DepotID = v.DepotID;
+                            _inscan.AcCompanyID = CompanyId;
+                            _inscan.AcFinancialYearID = yearid;
+                            _inscan.VehicleTypeId = v.VehicleId;
+                            _inscan.StatusTypeId = 2; // db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
+                            _inscan.CourierStatusID = 5;// db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                            _inscan.CreatedBy = UserId;
+                            _inscan.CreatedDate = v.QuickInscanDateTime;
+                            _inscan.LastModifiedBy = UserId;
+                            _inscan.LastModifiedDate = v.QuickInscanDateTime;
+                            _inscan.IsDeleted = false;
+                            db.InScanMasters.Add(_inscan);
+                            db.SaveChanges();
+                            //updateing awbstaus table for tracking
+                            //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
+                            AWBTrackStatu _awbstatus = new AWBTrackStatu();
+                            var StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Pickup Request").First().ID;
+                            var CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == StatusTypeId && cc.CourierStatus == "Assigned For Collection").FirstOrDefault().CourierStatusID;
+                            var awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == CourierStatusID).FirstOrDefault();
+                            if (awb == null)
+                            {
+                                _awbstatus.AWBNo = _inscan.AWBNo;
+                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.InScanId = _inscan.InScanID;
+                                _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
+                                _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
+
+                                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(StatusTypeId).Name;
+                                _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
+                                _awbstatus.UserId = UserId;
+                                _awbstatus.EmpID = v.CollectedByID;
+                                db.AWBTrackStatus.Add(_awbstatus);
+                                db.SaveChanges();
+
+                            }
+                            CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == StatusTypeId && cc.CourierStatus == "Shipment Collected").FirstOrDefault().CourierStatusID;
+                            awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == CourierStatusID).FirstOrDefault();
+                            if (awb == null)
+                            {
+                                _awbstatus.AWBNo = _inscan.AWBNo;
+                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.InScanId = _inscan.InScanID;
+                                _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
+                                _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
+
+                                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(StatusTypeId).Name;
+                                _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
+                                _awbstatus.UserId = UserId;
+                                _awbstatus.EmpID = v.CollectedByID;
+                                db.AWBTrackStatus.Add(_awbstatus);
+                                db.SaveChanges();
+                            }
+
+                            _awbstatus = new AWBTrackStatu();
+                            _awbstatus.AWBNo = _inscan.AWBNo;
+                            _awbstatus.EntryDate = v.QuickInscanDateTime;
+                            _awbstatus.InScanId = _inscan.InScanID;
+                            _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
+                            _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
+                            _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                            _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                            _awbstatus.UserId = UserId;
+                            _awbstatus.EmpID = v.CollectedByID;
+                            db.AWBTrackStatus.Add(_awbstatus);
+                            db.SaveChanges();
+                        }
                     }
                 }
                 if (v.QuickInscanID==0)
@@ -363,11 +434,20 @@ namespace CMSV2.Controllers
             //var lst = (from c in db.InScanMasters where c.AWBNo == id &&  (c.PickedUpEmpID==collectedby || collectedby==0) select c).FirstOrDefault();
             if (lst==null || lst.Count==0)
             {
-                obj.AWB = id;
-                obj.Origin = "";
-                obj.Destination = "";
-                obj.InScanId = 0;
-                return Json(new { status="ok", data = obj, message = "AWB No. Not found"}, JsonRequestBehavior.AllowGet);
+                var lst1 = db.AWBDetails.Where(cc => cc.AWBNo == id && (cc.InScanID == null || cc.InScanID==0)).FirstOrDefault();
+                if (lst1 != null)
+                {
+                    
+                    obj.AWB = id;
+                    obj.Origin = "";
+                    obj.Destination = "";
+                    obj.InScanId = 0;
+                    return Json(new { status = "ok", data = obj, message = "AWB No. Not found" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "failed", data = obj, message = "AWB Not Found!" }, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {

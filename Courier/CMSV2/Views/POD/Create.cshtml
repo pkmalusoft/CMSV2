@@ -323,7 +323,7 @@
             //}
         var DeliveredBy = 0;
             var DeliveredDate = defaultdate;
-        var Delivered = $('#Delivered').prop('checked');
+            var Delivered = true; // $('#Delivered').prop('checked');
             if(Delivered)
             {
                 if (!checkfieldvalidate($('#DeliveredDate')))
@@ -501,14 +501,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="flex">
-                                <div class="no-padding  text-right">
-                                    @Html.CheckBox("Delivered", new { @name = "Delivered", @onchange = "checkdeliverystatus(this)" }) &nbsp
-                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
-                                </div>
-                                <label class="headinglabel required">Delivered</label>
-                            </div>
+                        <div class="col-xs-12 col-sm-6">                            
+                            <label class="headinglabel required">Delivered</label>
                             @Html.TextBoxFor(model => model.DeliveredDate, new { @class = "form-control text-right" })
                         </div>
                         <div class="col-xs-12 col-sm-6">
@@ -517,7 +511,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-6">
+                        @*<div class="col-xs-12 col-sm-6">
                             <div class="flex">
                                 <div class=" no-padding  text-right">
                                     @Html.CheckBox("DeliveryAttempted", new { @name = "DeliveryAttempted", @onchange= "checkdeliverystatus(this)" }) &nbsp
@@ -526,11 +520,11 @@
                                 <label class="headinglabel">Delivery Pending</label>
 
                             </div>
-                            @*@Html.TextBoxFor(model => model.DelieveryAttemptDate, new { @class = "form-control text-right" })*@
-                        </div>
+                            
+                        </div>*@
 
 
-                         <div class="col-md-6 d-flex"  style="margin-top:20px">
+                         <div class="col-md-12 d-flex"  style="margin-top:20px">
                             <input type="button" class="btn btn-primary  btnwidth" value="Add & Continue" name="Command" id="btnAdd" />
                         </div>
 

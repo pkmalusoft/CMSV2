@@ -558,7 +558,7 @@
                     var Weight = data.Weight;
                     var PaymentTypeId = data.PaymentModeId;
                     var PaymentTypetext = data.PaymentModeText;
-                    var PickUpLocation = data.PickUpLocation;
+                    var PickUpLocation = data.PickupLocation;// PickUpLocation;
                     var DeliveryLocation = data.DeliveryLocation;
                     var ItemDescription = data.CargoDescription;
 
@@ -1712,7 +1712,7 @@
                 '<td>' + parseFloat(MaterialCost).toFixed(2) + '</td>' +
                 //'<td>' + DeliveryLocation + '</td>' +
                 //'<td>' + ItemDescription + '</td>' +
-                '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>');
+                '<td><a href="javascript:void(0)" onclick="editawb(this,' + i + ')"><i class="fa fa-pencil"></i></a></td>');
             //$('#AWBNo').val('');
             //$('#Shipper').val('');
             //$('#Shipper').removeAttr('');

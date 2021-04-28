@@ -1993,6 +1993,9 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Property Name="Status" Type="int" />
           <Property Name="ShipmentTypeId" Type="int" />
           <Property Name="AcFinancialYearID" Type="int" />
+          <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="ParcelNo" Type="int" />
+          <Property Name="Route" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="ImportShipmentDetails">
           <Key>
@@ -8599,6 +8602,9 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="ShipmentTypeId" Type="Int32" />
           <Property Name="AcFinancialYearID" Type="Int32" />
           <NavigationProperty Name="ImportShipmentDetails" Relationship="Self.FK_S_Shipment_S_ImportShipment" FromRole="ImportShipment" ToRole="ImportShipmentDetails" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="ParcelNo" Type="Int32" />
+          <Property Name="Route" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ImportShipmentDetail">
           <Key>
@@ -21071,6 +21077,9 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="ImportShipments">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipment">
               <MappingFragment StoreEntitySet="ImportShipment">
+                <ScalarProperty Name="Route" ColumnName="Route" />
+                <ScalarProperty Name="ParcelNo" ColumnName="ParcelNo" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
                 <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />

@@ -32,11 +32,10 @@ namespace CMSV2.Controllers
                 model.Details = translist;
             }
             else
-            {
+            {   model.FromDate =CommanFunctions.GetLastDayofMonth().Date;
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
                 Session["AWBBookIssueSearch"] = model;
                 List<AWBBookIssueList> translist = new List<AWBBookIssueList>();
-                model.FromDate =CommanFunctions.GetLastDayofMonth().Date;
-                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
                 translist = AWBDAO.GetAWBBookIssue(BranchID);
                 model.Details = translist;
 
@@ -172,7 +171,7 @@ namespace CMSV2.Controllers
                 {
                     List<AWBDetailVM> awbs = new List<AWBDetailVM>();
 
-                    for (int i = Convert.ToInt32(StartAWB); i < Convert.ToInt32(EndAWB); i++)
+                    for (int i = Convert.ToInt32(StartAWB); i <= Convert.ToInt32(EndAWB); i++)
                     {
                         AWBDetailVM obj = new AWBDetailVM();
                         //obj.AWBBOOKIssueID = 0;

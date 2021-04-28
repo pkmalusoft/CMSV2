@@ -254,7 +254,7 @@
         if ($('#AWBNOFrom').val() == '')
             $('#AWBNOFrom').val(0);
         var startno = $('#AWBNOFrom').val();
-        $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount));
+        $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount)-1);
         
          var charge = parseFloat($('#CourierCharge').val()).toFixed(@_decimal)
                 var awbcount = $('#NoOfAWBs').val();
@@ -347,11 +347,11 @@
             },
 
         });
-     $('#AWBNOFrom').change(function () {
-            var awbcount = $('#NoOfAWBs').val();
-            var startno = $('#AWBNOFrom').val();
-            $('#AWBNOTo').val(parseInt(startno) +parseInt(awbcount));
-        })
+     //$('#AWBNOFrom').change(function () {
+     //       var awbcount = $('#NoOfAWBs').val();
+     //       var startno = $('#AWBNOFrom').val();
+     //       $('#AWBNOTo').val(parseInt(startno) +parseInt(awbcount));
+     //   })
 
 
 
@@ -375,7 +375,7 @@
             var rowcount = $('#tbl1 > tr').length;
 
             if (rowcount == 0) {
-                alert('Please Enter Required Values to Generate AWBNo!');
+                $.notify('Please Enter Required Values to Generate AWBNo!','error');
             }
             else {
                 result = true;

@@ -228,7 +228,7 @@
                     else {
                         $('#btnadd').removeAttr('disabled');
                         $("#txtawb").focus();
-                        alert(response.message);
+                        $.notify(response.message, "error");
                     }
 
                     //$.each(data, function (index, value) {
@@ -306,7 +306,11 @@
                             if (item.Destination == null) {
                                 item.Destination = "";
                             }
-                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
+                            var i = $('#detailsbody > tr').length;
+                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /> '
+                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
+                            //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
+                            //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
                             //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
                         });
 
@@ -529,29 +533,19 @@
             @Html.HiddenFor(model => model.DriverName)
 
         </div>*@
-                <div class="col-md-3">
+            <div class="col-md-6" id="divadd">
+                <div class="col-md-6">
                     <label class="headinglabel required">AWB No.</label>
                     <input type="text" id="txtawb" class="form-control" autocomplete="off" />
                 </div>
-                <div class="col-md-3"  >
+                <div class="col-md-6">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 
                 </div>
-
+            </div>
             </div>
 
-                <div class="row no-margin hide" style="padding-top:10px" id="divadd">
-                    @*<div class="col-md-3">
-                        <label class="headinglabel required">Batch No.</label>
-                        <input type="text" id="txtBatchNo" class="form-control" />
-                        <input type="hidden" id="txtBatchId" class="form-control" />
-                    </div>
-                    <div class="col-md-3" style="padding-top:10px">
-                        <button type="button" id="btnbatchadd" class="btn btn-primary small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-
-                    </div>*@
-                   
-                </div>
+                
 
                 <div class="row no-margin" style="padding-top:30px">
 

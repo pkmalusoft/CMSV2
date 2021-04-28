@@ -53,6 +53,9 @@ namespace CMSV2.Models
         public Nullable<int> Status { get; set; }
         public Nullable<int> ShipmentTypeId { get; set; }
         public Nullable<int> AcFinancialYearID { get; set; }
+        public Nullable<decimal> Weight { get; set; }
+        public Nullable<int> ParcelNo { get; set; }
+        public string Route { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails { get; set; }

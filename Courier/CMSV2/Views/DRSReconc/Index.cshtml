@@ -28,6 +28,9 @@
     tfoot {
         display: table-header-group;
     }
+    .side_btn a:nth-of-type(1){
+        margin-right: 20px
+    }
 </style>
 
 <script type="text/javascript">
@@ -89,7 +92,7 @@
             <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
         </div>
         <div class="col-md-4" style="padding-top:32px;">
-            <div class="col-md-6">                
+            <div class="d-flex side_btn">                
                     @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                     {
                         @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
@@ -100,9 +103,8 @@
 
 
                     }                               
-            </div>
-            <div class="col-md-6">
-                @Html.ActionLink("Create Bulk", "CreateBulk", null, new { @class = "btn btn-primary btnwidth" })
+           
+                @Html.ActionLink("Verify Batch", "CreateBulk", null, new { @class = "btn btn-primary btnwidth" })
             </div>
             </div>
             

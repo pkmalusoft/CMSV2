@@ -281,8 +281,68 @@ namespace CMSV2.DAL
             return obj;
            
         }
+        public static AWBBatchDetail GetAWBTrackStatus(string AWBNo)
+        {
+            AWBBatchDetail obj = new AWBBatchDetail();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GETAWBTrackStatus";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBNo", @AWBNo);
 
-      
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    
+                    if (ds.Tables[0].Rows[0]["Status"].ToString()== "StatusAvailable")
+                    {
+                        DataRow dr = ds.Tables[0].Rows[0];
+                        obj.AWBTrackStatus = "Available";
+                        obj.AssignedEmployeeID = dr["AssignedEmployeeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AssignedEmployeeID"].ToString());
+                        obj.AssignedForCollection = dr["AssignedForCollection"] == DBNull.Value ? false : Convert.ToBoolean(dr["AssignedForCollection"].ToString());
+                        obj.AssignedDate = dr["AssignedDate"] == DBNull.Value ? "" :dr["AssignedDate"].ToString();
+                        obj.QuickInscanId = dr["QuickInscanId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuickInscanId"].ToString());
+                        obj.InscanVehicleId = dr["InscanVehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InscanVehicleId"].ToString());
+                        obj.PickedUpEmpID = dr["PickedUpEmpID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PickedUpEmpID"].ToString()); //collected person id
+                        obj.PickedupDate = dr["PickedupDate"] == DBNull.Value ? "" : dr["PickedupDate"].ToString();                        
+                        obj.CollectedBy= dr["CollectedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["CollectedBy"].ToString());
+                        obj.ReceivedDate = dr["ReceivedDate"] == DBNull.Value ? "" : dr["ReceivedDate"].ToString();
+                        obj.DepotReceivedBy = dr["DepotReceivedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DepotReceivedBy"].ToString());
+                        obj.ReceivedBy= dr["ReceivedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReceivedBy"].ToString());
+                        obj.OutScanDelivery = dr["OutScanDelivery"] == DBNull.Value ? false : Convert.ToBoolean(dr["OutScanDelivery"].ToString());
+                        obj.OutscanVehicleId = dr["OutscanVehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutscanVehicleId"].ToString());
+                        obj.OutScanDate = dr["OutScanDate"] == DBNull.Value ? "" : dr["OutScanDate"].ToString();
+                        obj.DelieveryAttemptDate = dr["DelieveryAttemptDate"] == DBNull.Value ? "" : dr["DelieveryAttemptDate"].ToString();
+                        obj.DeliveryAttemptedBy = dr["DeliveryAttemptedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DeliveryAttemptedBy"].ToString());
+                        obj.Delivered=dr["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(dr["Delivered"].ToString());
+                        obj.DeliveredDate = dr["DeliveredDate"] == DBNull.Value ? "" : dr["DeliveredDate"].ToString();
+                        obj.DeliveredBy = dr["DeliveredBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DeliveredBy"].ToString());
+                        obj.CourierId = dr["CourierId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CourierId"].ToString());
+                        obj.VehicleId = dr["VehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VehicleId"].ToString());
+                        
+                        return obj;
+                    }
+                    else
+                    {
+                        DataRow dr = ds.Tables[0].Rows[0];
+                        obj.AWBTrackStatus = "Available";
+                        obj.CourierId = dr["CourierId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CourierId"].ToString());
+                        obj.VehicleId = dr["VehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VehicleId"].ToString());                        
+                        return obj;
+                    }
+                    
+                }
+            }
+
+            return obj;
+
+        }
+
         public static string GenerateAWBPrepaid(int PrepaidAWBID)
         {
             try

@@ -31,11 +31,11 @@ namespace CMSV2.Controllers
                 model.Details = translist;
             }
             else
-            {
-                Session["AWBPrepaidSearch"] = model;
-                List<AWBPrepaidList> translist = new List<AWBPrepaidList>();
+            {   
                 model.FromDate = CommanFunctions.GetLastDayofMonth().Date;
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+                Session["AWBPrepaidSearch"] = model;
+                List<AWBPrepaidList> translist = new List<AWBPrepaidList>();
                 translist = AWBDAO.GetAWBPrepaid(BranchID);
                 model.Details = translist;
 

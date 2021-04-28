@@ -553,7 +553,170 @@ body .hyperlink{
             else {
                 return true;
             }
-        }
+    }
+
+    function showawbtrackstatus() {
+        $.ajax({
+            type: "Get",
+            url: '/AWBBatch/GetAWBTrackStatus',
+            datatype: "json",
+            data: {
+                awbno: $('#AWBNo').val()
+            },
+            success: function (response) {
+                debugger;
+                var status = response.AWBTrackStatus;
+                var data = response;
+                var CourierId = data.CourierId;
+                var VehicleId = data.VehicleId;
+                if (status == "Available") {
+                    var AssignedForCollection = data.AssignedForCollection;
+                    var AssignedEmployeeID = data.AssignedEmployeeID;
+                    var AssignedDate = data.AssignedDate;
+                    var CollectedBy = data.CollectedBy;
+                    var PickedUpEmpID = data.PickedUpEmpID;
+                    var PickedupDate = data.PickedupDate;
+                    var ReceivedDate = data.ReceivedDate;
+                    var DepotReceivedBy = data.DepotReceivedBy;
+                    var InScanVehicleID = data.InscanVehicleId;
+                    var ReceivedBy = data.ReceivedBy;
+                    var Delivered = data.Delivered;
+                    var DeliveredDate = data.DeliveredDate;
+                    var DeliveredBy = data.DeliveredBy;
+                    
+                    if (AssignedForCollection) {
+                        $('#AssignedForCollection').prop('checked', 'checked');
+                        $('#AssignedForCollection').attr('disabled', 'disabled');
+                        $('#AssignedDate').attr('disabled', 'disabled');
+                        $('#AssignedEmployeeID').attr('disabled', 'disabled');
+                        $('#AssignedDate').val(AssignedDate);
+                        $('#AssignedEmployeeID').val(AssignedEmployeeID).trigger('change');
+                    }
+                    else {
+                        $('#AssignedForCollection').removeAttr('disabled');
+                        $('#AssignedDate').val('');
+                        if (CourierId > 0) {
+
+                            $('#AssignedEmployeeID').val(CourierId).trigger('change');
+                        }
+                        else {
+                            $('#AssignedEmployeeID').val('').trigger('change');
+                        }
+
+                        $('#AssignedDate').removeAttr('disabled', 'disabled');
+                        $('#AssignedEmployeeID').removeAttr('disabled', 'disabled');
+                    }
+
+                    if (CollectedBy) {
+                        $('#CollectedBy').prop('checked', 'checked');
+                        $('#CollectedBy').attr('disabled', 'disabled');
+                        $('#PickedupDate').val(PickedupDate);
+                        $('#PickedUpEmpID').val(PickedUpEmpID).trigger('change');
+                        $('#InscanVehicleId').val(InScanVehicleID).trigger('change');
+                        $('#PickedupDate').attr('disabled', 'disabled');
+                        $('#PickedUpEmpID').attr('disabled', 'disabled');
+                         
+                        $('#InscanVehicleId').attr('disabled', 'disabled');
+                    }
+                    else {
+                        $('#CollectedBy').prop('checked', 'checked');
+                        $('#CollectedBy').removeAttr('disabled');
+                        $('#PickedupDate').val('');
+                        if (CourierId>0)
+                            $('#PickedUpEmpID').val(CourierId).trigger('change');
+                        else
+                            $('#PickedUpEmpID').val('').trigger('change');
+
+                        
+                        $('#PickedupDate').removeAttr('disabled');
+                        $('#PickedUpEmpID').removeAttr('disabled');
+
+                        $('#InscanVehicleId').removeAttr('disabled');
+                        if (VehicleId > 0) {
+                            $('#InscanVehicleId').val(VehicleId).trigger('change');
+                        }
+                        else {
+                            $('#InscanVehicleId').val('').trigger('change');
+                        }
+                    }
+
+
+                    if (ReceivedBy) {
+                        $('#ReceivedBy').prop('checked', 'checked');
+                        $('#ReceivedBy').attr('disabled', 'disabled');
+                        $('#DepotReceivedBy').val(DepotReceivedBy).trigger('change');
+                        $('#ReceivedDate').val(ReceivedDate);
+                        $('#DepotReceivedBy').attr('disabled', 'disabled');
+                        $('#ReceivedDate').attr('disabled', 'disabled');
+
+                    }
+                    else {
+                        $('#ReceivedBy').removeAttr('disabled');
+                        $('#DepotReceivedBy').removeAttr('disabled');
+                        $('#ReceivedDate').removeAttr('disabled');
+                        //$('#DepotReceivedBy').val('').trigger('change');
+                        //$('#ReceivedDate').val('').trigger('change');
+                    }
+
+                    var OutScanDeliveredID = data.OutScanDeliveredID;
+                    var OutScanDate = data.OutScanDate;
+                    var OutScanVehicleID = data.OutScanVehicleID;
+                    var OutScanDelivery = data.OutScanDelivery;
+                    if (OutScanDelivery) {
+                        $('#OutScanDelivery').prop('checked', 'checked');
+                        $('#OutScanDelivery').attr('disabled', 'disabled');
+                        $('#OutScanDeliveredID').val(OutScanDeliveredID).trigger('change');
+                        $('#OutScanDate').val(OutScanDate);
+                        $('#OutscanVehicleId').val(OutScanVehicleID).trigger('change');
+                        $('#OutScanDeliveredID').attr('disabled', 'disabled');
+                        $('#OutScanDate').attr('disabled', 'disabled');
+                        $('#OutscanVehicleId').attr('disabled', 'disabled');
+
+                    }
+                    else {
+                        $('#OutScanDelivery').removeAttr('disabled');
+                        $('#OutScanDeliveredID').removeAttr('disabled');
+                        $('#OutScanDate').removeAttr('disabled');
+                        $('#OutscanVehicleId').removeAttr('disabled');
+                    }
+
+                    var DeliveryAttemptedBy = data.DeliveryAttemptedBy;
+                    var DelieveryAttemptDate = data.DelieveryAttemptDate;
+                    var DeliveryAttempted = data.DeliveryAttempted;
+                    if (DeliveryAttempted) {
+                        $('#DeliveryAttempted').prop('checked', 'checked');
+                        $('#DeliveryAttempted').attr('disabled', 'disabled');
+                        $('#DeliveryAttemptedBy').val(DeliveryAttemptedBy).trigger('change');
+                        $('#DelieveryAttemptDate').val(DelieveryAttemptDate);
+
+                        $('#DeliveryAttemptedBy').attr('disabled', 'disabled');
+                        $('#DelieveryAttemptDate').attr('disabled', 'disabled');
+                    }
+                    else {
+                        $('#DeliveryAttempted').removeAttr('disabled');
+                        $('#DeliveryAttemptedBy').removeAttr('disabled', 'disabled');
+                        $('#DelieveryAttemptDate').removeAttr('disabled', 'disabled');
+                    }
+
+                    if (Delivered) {
+                        $('#Delivered').prop('checked', 'checked');
+                        $('#Delivered').attr('disabled', 'disabled');
+                        $('#DeliveredDate').val(DeliveredDate)
+                        $('#DeliveredBy').val(DeliveredBy).trigger('change');
+                        $('#DeliveredDate').attr('disabled', 'disabled');
+                        $('#DeliveredBy').attr('disabled', 'disabled');
+
+                    }
+                    else {
+                        $('#Delivered').removeAttr('disabled', 'disabled');
+                        $('#DeliveredDate').removeAttr('disabled');
+                        $('#DeliveredBy').removeAttr('disabled');
+                    }
+                }
+                else { }
+            }
+        });
+    }
         $(document).ready(function () {
 
             $("#shipperpopup").on("shown", function () {
@@ -630,6 +793,38 @@ body .hyperlink{
                 $('#CustomerName').attr('readonly','readonly');
             }
         });
+
+        $("#ItemDescription").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/AWBBatch/GetTypeofGoods',
+                        datatype: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (val, item) {
+                                console.log(val);
+                                return {
+                                    label: val.TypeOfGood1,
+                                    value: val.TypeOfGood1
+                                    
+                                }
+                            }))
+                        }
+                    })
+                },
+                minLength: 1,
+                autoFocus: false,
+                focus: function (event, ui) {
+                    $('#ItemDescription').val(ui.item.value);
+                    
+                },
+                select: function (e, i) {
+                    e.preventDefault();
+                    $('#ItemDescription').val(i.item.value);                    
+                }
+            });
         $("#CustomerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -711,7 +906,9 @@ body .hyperlink{
                         }
                         if (status == 'Available' && (mode == 'Prepaid' || mode == 'NotPrepaid')) {
                             var InScanID = response.InScanID;
-                            var QuickInScanId = response.QuickInScanID;
+                            var QuickInScanId = response.QuickInScanID;                            
+
+                            showawbtrackstatus();
                             if (QuickInScanId > 0)
                                 $('#lierr').html(response.Mode + ',Status : Depot Inscan Completed!' );
                             var CustomerName = response.CustomerName;
@@ -769,6 +966,8 @@ body .hyperlink{
                         else if (status == 'Available') {
                             var InScanID = response.InScanID;
                             var QuickInScanId = response.QuickInScanID;
+                            
+                                showawbtrackstatus();
                             if (QuickInScanId > 0)
                                 $('#lierr').html(response.Mode + ',Status : Depot InScan Completed!');
                             $('#InScanID').val(InScanID);
@@ -789,7 +988,7 @@ body .hyperlink{
                             $("#PickUpLocation").val('');
                             $("#DeliveryLocation").val('');
                             $("#PickUpLocation").removeAttr('readonly');
-                            $("#DeliveryLocation").removeAattr('readonly');
+                            $("#DeliveryLocation").removeAttr('readonly');
                             $("#ConsignorMobileNo").val('');
                             $("#MaterialCost").val(0);
                             $('#Pieces').val(0);
@@ -1351,7 +1550,8 @@ body .hyperlink{
             $("#MaterialCost").val('');
             $("#CourierCharge").val('');
             $("#OtherCharge").val('');
-            $("#TotalCharge").val('');
+            $("#NetTotal").val('');
+            $('#TaxAmount').val(0);
             $('#ItemDescription').val('');
             $('#Pieces').val(0);
             $('#Weight').val(0);
@@ -1596,7 +1796,7 @@ body .hyperlink{
                     </div>
                     <label class="headinglabel required">Assigned for Collection</label>
                 </div>
-                @Html.TextBoxFor(model => model.AssignedDate, new { @class = "form-control text-right", @required = true })
+                @Html.TextBoxFor(model => model.AssignedDate, new { @class = "form-control text-right", @required = true,@autocomplete="off" })
                 @Html.DropDownListFor(model => model.AssignedEmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
             </div>
             <div class="col-xs-12 col-sm-2">
@@ -1608,8 +1808,9 @@ body .hyperlink{
                     <label class="headinglabel required">CollectedBy</label>
 
                 </div>
-                @Html.TextBoxFor(model => model.PickedupDate, new { @class = "form-control text-right" })
+                @Html.TextBoxFor(model => model.PickedupDate, new { @class = "form-control text-right", @autocomplete = "off" })
                 @Html.DropDownListFor(model => model.PickedUpEmpID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.InscanVehicleId, new SelectList(ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select Vehicle", new { @class = "form-control" })
             </div>
             <div class="col-xs-12 col-sm-2">
                 <div class="flex">
@@ -1620,9 +1821,9 @@ body .hyperlink{
                     <label class="headinglabel required">Received at Store</label>
 
                 </div>
-                @Html.TextBoxFor(model => model.ReceivedDate, new { @class = "form-control text-right" })
+                @Html.TextBoxFor(model => model.ReceivedDate, new { @class = "form-control text-right", @autocomplete = "off" })
                 @Html.DropDownListFor(model => model.DepotReceivedBy, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-                @Html.DropDownListFor(model => model.InscanVehicleId, new SelectList(ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select Vehicle", new { @class = "form-control" })
+                
 
             </div>
             <div class="col-xs-12 col-sm-2">
@@ -1634,7 +1835,7 @@ body .hyperlink{
                     <label class="headinglabel required">Out for Delivery</label>
 
                 </div>
-                @Html.TextBoxFor(model => model.OutScanDate, new { @class = "form-control text-right" })
+                @Html.TextBoxFor(model => model.OutScanDate, new { @class = "form-control text-right", @autocomplete = "off" })
                 @Html.DropDownListFor(model => model.OutScanDeliveredID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 @Html.DropDownListFor(model => model.OutscanVehicleId, new SelectList(ViewBag.Vehicle, "VehicleID", "VehicleDescription"), "Select Vehicle", new { @class = "form-control" })
 
@@ -1642,7 +1843,7 @@ body .hyperlink{
             <div class="col-xs-12 col-sm-2">
                 <div class="flex">
                     <div class="checkboxdesign no-padding  text-right">
-                        @Html.CheckBox("DeliveryAttempted", new { @name = "DeliveryAttempted" }) &nbsp
+                        @Html.CheckBox("DeliveryAttempted", new { @name = "DeliveryAttempted", @autocomplete = "off" }) &nbsp
                         <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important"></label>
                     </div>
                     <label class="headinglabel required">DeliveryAttempted</label>

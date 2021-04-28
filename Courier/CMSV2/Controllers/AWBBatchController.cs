@@ -28,18 +28,19 @@ namespace CMSV2.Controllers
             if (obj != null)
             {
                 List<AWBBatchList> translist = new List<AWBBatchList>();
-                translist = AWBDAO.GetAWBBatchList(BranchID);
+                
                 model.FromDate = obj.FromDate;
                 model.ToDate = obj.ToDate;
                 model.DocumentNo = obj.DocumentNo;
+                translist = AWBDAO.GetAWBBatchList(BranchID);
                 model.Details = translist;
             }
             else
             {
-                Session["AWBBatchSearch"] = model;
-                List<AWBBatchList> translist = new List<AWBBatchList>();
                 model.FromDate = CommanFunctions.GetLastDayofMonth().Date;
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+                Session["AWBBatchSearch"] = model;
+                List<AWBBatchList> translist = new List<AWBBatchList>();                
                 translist = AWBDAO.GetAWBBatchList(BranchID);
                 model.Details = translist;
 
@@ -390,6 +391,15 @@ namespace CMSV2.Controllers
         }
 
         [HttpGet]
+        public JsonResult GetAWBTrackStatus(string awbno)
+        {
+            AWBBatchDetail info = AWBDAO.GetAWBTrackStatus(awbno);
+
+            return Json(info, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpGet]
         public JsonResult GetAWBBatch(string term)
         {
             if (term.Trim() != "")
@@ -419,6 +429,21 @@ namespace CMSV2.Controllers
             return Json(Details, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetTypeofGoods(string term)
+        {
+            if (term.Trim() !="")
+            {
+                var list = db.TypeOfGoods.Where(cc => cc.TypeOfGood1.Contains(term.Trim())).OrderBy(cc => cc.TypeOfGood1).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = db.TypeOfGoods.ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+
+        }
         public ActionResult ConsignorAddress()
         {
             AWBBatchVM vm = new AWBBatchVM();
@@ -436,5 +461,6 @@ namespace CMSV2.Controllers
         {
             return PartialView("ConsigneeAddress", model);
         }
+
         }
 }

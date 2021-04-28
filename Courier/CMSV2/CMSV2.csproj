@@ -220,6 +220,7 @@
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
     <Compile Include="Controllers\DevelopmentController.cs" />
+    <Compile Include="Controllers\ImportManifestController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
     <Compile Include="Controllers\DebitNoteController.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="DAL\AccountsReportsDAO.cs" />
     <Compile Include="DAL\AWBDAO.cs" />
     <Compile Include="DAL\EmailDAO.cs" />
+    <Compile Include="DAL\ImportDAO.cs" />
     <Compile Include="DAL\NumbertoWords.cs" />
     <Compile Include="DAL\PickupRequestDAO.cs" />
     <Compile Include="DAL\ReceiptDAO.cs" />
@@ -1240,6 +1242,7 @@
     <Compile Include="Models\ImportAgentMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImportManifest.cs" />
     <Compile Include="Models\ImportShipment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3401,7 +3404,6 @@
     <Content Include="Views\PODStatusUpdation\Create.cshtml" />
     <Content Include="Views\PODStatusUpdation\Edit.cshtml" />
     <Content Include="Views\PODStatusUpdation\Index.cshtml" />
-    <Content Include="Views\PrepaidAWB\Create.cshtml" />
     <Content Include="Views\PrintBill\PrintAWB.cshtml" />
     <Content Include="Views\ProductType\Create.cshtml" />
     <Content Include="Views\ProductType\Edit.cshtml" />
@@ -3625,6 +3627,8 @@
     <Content Include="Views\AWBBatch\ConsignorAddress.cshtml" />
     <Content Include="Views\AWBBatch\ConsigneeAddress.cshtml" />
     <Content Include="Views\DRSReconc\CreateBulk.cshtml" />
+    <Content Include="Views\ImportManifest\Index.cshtml" />
+    <Content Include="Views\ImportManifest\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

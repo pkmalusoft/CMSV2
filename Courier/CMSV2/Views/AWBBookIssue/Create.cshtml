@@ -74,6 +74,7 @@
         return true;
     }
     function checkawbstartend() {
+        debugger;
         if ($('#NoOfAWBs').val() == '') {
             $('#NoOfAWBs').val(0);
         }
@@ -82,7 +83,7 @@
         if ($('#AWBNOFrom').val() == '')
             $('#AWBNOFrom').val(0);
         var startno = $('#AWBNOFrom').val();
-        $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount));
+        $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount) - parseInt(1));
         generateawb();
     }
     function generateawb() {
@@ -116,7 +117,7 @@
                     //$scope.Orders = data;
                     var amt = 0;
                     for (var i = 1; i <= data.length; i++) {
-                        debugger;
+                     
 
                         $('#tbl1').append('<tr>' +
                             '<td>' + i + '</td>' +
@@ -138,11 +139,11 @@
         $("select").css({ "border-radius": "5px" });
         $("textarea").css({ "border-radius": "5px" });
         $('#TransDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('#AWBNOFrom').change(function () {
-            var awbcount = $('#NoOfAWBs').val();
-            var startno = $('#AWBNOFrom').val();
-            $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount));
-        })
+        //$('#AWBNOFrom').change(function () {
+        //    var awbcount = $('#NoOfAWBs').val();
+        //    var startno = $('#AWBNOFrom').val();
+        //    $('#AWBNOTo').val(parseInt(startno) + parseInt(awbcount)-1);
+        //})
       
         $('#btnSave').click(function (e) {
             debugger;
@@ -150,7 +151,7 @@
             var rowcount = $('#tbl1 > tr').length;
 
             if (rowcount == 0) {
-                alert('Click Refresh Button to Generate AWBNo!');
+                $.notify('Enter Required Details, to generated AWB No.!','error');
             }
             else {
                 result = true;
@@ -200,7 +201,7 @@
                 <div class="row">
                     <div class="col-md-6 ">
                         <label class="headinglabel">Courier Name</label>
-                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @required = true })
                     </div>
                      <div class="col-xs-12 col-md-3">
                         <label class=" required headinglabel">Book Number</label>

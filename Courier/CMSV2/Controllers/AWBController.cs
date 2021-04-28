@@ -1544,15 +1544,22 @@ namespace CMSV2.Controllers
                             specialinstruc = specialinstruc + " Do Copy Back,";
                         }
                         model.AWB.SpecialNotes = specialinstruc;
-                        model.AWB.paymentmode = db.tblPaymentModes.Find(model.AWB.PaymentModeId).PaymentModeText;
+                        if (model.AWB.PaymentModeId != null)
+                        {
+                            model.AWB.paymentmode = db.tblPaymentModes.Find(model.AWB.PaymentModeId).PaymentModeText;
+                        }
+                        else
+                        {
+                            model.AWB.paymentmode = "";
+                        }
                         model.AWB.CODStatus = "Pending";
                         model.AWB.MaterialCostStatus = "Pending";
 
                         model.Details = (from c in db.AWBTrackStatus
-                                         join c1 in db.UserRegistrations on c.UserId equals c1.UserID
+                                         join c1 in db.EmployeeMasters on c.EmpID equals c1.EmployeeID
                                          where c.InScanId == model.AWB.InScanID
                                          orderby c.EntryDate
-                                         select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.UserName, }).ToList();
+                                         select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName }).ToList();
                     }
                     else
                     {

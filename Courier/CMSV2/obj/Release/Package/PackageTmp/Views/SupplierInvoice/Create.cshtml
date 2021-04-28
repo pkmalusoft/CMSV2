@@ -666,7 +666,7 @@
         if ($('#AWBStart').val() == '')
             $('#AWBStart').val(0);
         var startno = $('#AWBStart').val();
-        $('#AWBEnd').val(parseInt(startno) + parseInt(awbcount));
+        $('#AWBEnd').val(parseInt(startno) + parseInt(awbcount)-1);
 
     }
 
@@ -679,7 +679,7 @@
         if ($('#txtAWBStart').val() == '')
             $('#txtAWBStart').val(0);
         var startno = $('#txtAWBStart').val();
-        $('#txtAWBEnd').val(parseInt(startno) + parseInt(awbcount));
+        $('#txtAWBEnd').val(parseInt(startno) + parseInt(awbcount)-1);
 
     }
     function checkduplicate(consignment) {

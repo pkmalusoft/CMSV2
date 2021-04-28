@@ -250,6 +250,11 @@ namespace CMSV2.Models
         public string CurrentCourierStatus { get; set; }
         public string PaymentModeText { get; set; }
         public string CustomerName { get; set; }
+
+        public int QuickInscanId { get; set; }
+        public string AWBTrackStatus { get; set; }
+        public int CourierId { get; set; }
+        public int VehicleId { get; set; }
     }
 
     public class AWBInfo
