@@ -635,29 +635,12 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have
           <Property Name="AcCompanyID" Type="int" />
           <Property Name="InscanID" Type="int" />
         </EntityType>
-        <EntityType Name="AWBStock">
-          <Key>
-            <PropertyRef Name="AWBStockID" />
-          </Key>
-          <Property Name="AWBStockID" Type="int" Nullable="false" />
-          <Property Name="StockDate" Type="datetime" />
-          <Property Name="EnteredBy" Type="int" />
-        </EntityType>
-        <EntityType Name="AWBStockDetails">
-          <Key>
-            <PropertyRef Name="AWBStockDetailID" />
-          </Key>
-          <Property Name="AWBStockDetailID" Type="int" Nullable="false" />
-          <Property Name="AWBStockID" Type="int" Nullable="false" />
-          <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-          <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="AWBTrackStatus">
           <Key>
             <PropertyRef Name="AWBTrackStatusId" />
           </Key>
           <Property Name="AWBTrackStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InScanId" Type="int" Nullable="false" />
+          <Property Name="InScanId" Type="int" />
           <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="EntryDate" Type="datetime" Nullable="false" />
           <Property Name="StatusTypeId" Type="int" Nullable="false" />
@@ -1605,6 +1588,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
           <Property Name="UserID" Type="int" />
           <Property Name="FCMTokenId" Type="text" />
           <Property Name="ProfileImage" Type="text" />
+          <Property Name="RoleId" Type="int" />
         </EntityType>
         <EntityType Name="EmpZoneAllocation">
           <Key>
@@ -1956,11 +1940,18 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Property Name="CurrencyID" Type="int" />
           <Property Name="StatusActive" Type="bit" />
         </EntityType>
+        <EntityType Name="ImportFields">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FieldName" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="ImportShipment">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ManifestNumber" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ConsignorName" Type="nvarchar" MaxLength="1000" />
           <Property Name="ConsignorAddress1_Building" Type="nvarchar" MaxLength="400" />
@@ -2001,16 +1992,20 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Key>
             <PropertyRef Name="ShipmentDetailID" />
           </Key>
-          <Property Name="ShipmentDetailID" Type="int" Nullable="false" />
+          <Property Name="ShipmentDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ImportID" Type="int" Nullable="false" />
-          <Property Name="HAWB" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AWB" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AWBDate" Type="datetime" Nullable="false" />
           <Property Name="PCS" Type="int" Nullable="false" />
           <Property Name="Weight" Type="decimal" Precision="18" Scale="3" Nullable="false" />
           <Property Name="Contents" Type="varchar(max)" Nullable="false" />
           <Property Name="Shipper" Type="varchar" MaxLength="500" Nullable="false" />
-          <Property Name="Value" Type="money" Nullable="false" />
-          <Property Name="Reciver" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="CustomValue" Type="money" Nullable="false" />
+          <Property Name="COD" Type="money" Nullable="false" />
+          <Property Name="Receiver" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ReceiverContact" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ReceiverAddress" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ReceiverTelephone" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
           <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
           <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
@@ -2019,6 +2014,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Property Name="QuickInscanID" Type="int" />
           <Property Name="StatusTypeId" Type="int" />
           <Property Name="CourierStatusID" Type="int" />
+          <Property Name="DRSID" Type="int" />
+          <Property Name="CODReceiptId" Type="int" />
+          <Property Name="DestinationLocation" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ImportType" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="InScan">
           <Key>
@@ -6663,8 +6662,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="AWBBOOKIssue" EntityType="Self.AWBBOOKIssue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AWBDetail" EntityType="Self.AWBDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AWBPending" EntityType="Self.AWBPending" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AWBStock" EntityType="Self.AWBStock" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AWBStockDetails" EntityType="Self.AWBStockDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AWBTrackStatus" EntityType="Self.AWBTrackStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BranchMaster" EntityType="Self.BranchMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
@@ -6733,6 +6730,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="HoldRelease" EntityType="Self.HoldRelease" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Import" EntityType="Self.Import" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportAgentMaster" EntityType="Self.ImportAgentMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImportFields" EntityType="Self.ImportFields" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportShipment" EntityType="Self.ImportShipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportShipmentDetails" EntityType="Self.ImportShipmentDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InScan" EntityType="Self.InScan" Schema="dbo" store:Type="Tables" />
@@ -7646,23 +7644,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="AcCompanyID" Type="Int32" />
           <Property Name="InscanID" Type="Int32" />
         </EntityType>
-        <EntityType Name="AWBStock">
-          <Key>
-            <PropertyRef Name="AWBStockID" />
-          </Key>
-          <Property Name="AWBStockID" Type="Int32" Nullable="false" />
-          <Property Name="StockDate" Type="DateTime" Precision="3" />
-          <Property Name="EnteredBy" Type="Int32" />
-        </EntityType>
-        <EntityType Name="AWBStockDetail">
-          <Key>
-            <PropertyRef Name="AWBStockDetailID" />
-          </Key>
-          <Property Name="AWBStockDetailID" Type="Int32" Nullable="false" />
-          <Property Name="AWBStockID" Type="Int32" Nullable="false" />
-          <Property Name="AWBNoFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AWBNoTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="BranchMaster">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -8563,72 +8544,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="LocationID" Type="Int32" />
           <Property Name="CurrencyID" Type="Int32" />
           <Property Name="StatusActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="ImportShipment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="ManifestNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ConsignorName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="OriginAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="DestinationAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="FlightDate" Type="DateTime" Precision="3" />
-          <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Bags" Type="Int32" />
-          <Property Name="RunNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TotalAWB" Type="Int32" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="AgentID" Type="Int32" Nullable="false" />
-          <Property Name="AgentLoginID" Type="Int32" Nullable="false" />
-          <Property Name="LastEditedByLoginID" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ShipmentTypeId" Type="Int32" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <NavigationProperty Name="ImportShipmentDetails" Relationship="Self.FK_S_Shipment_S_ImportShipment" FromRole="ImportShipment" ToRole="ImportShipmentDetails" />
-          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="ParcelNo" Type="Int32" />
-          <Property Name="Route" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="ImportShipmentDetail">
-          <Key>
-            <PropertyRef Name="ShipmentDetailID" />
-          </Key>
-          <Property Name="ShipmentDetailID" Type="Int32" Nullable="false" />
-          <Property Name="ImportID" Type="Int32" Nullable="false" />
-          <Property Name="HAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PCS" Type="Int32" Nullable="false" />
-          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
-          <Property Name="Contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Shipper" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Reciver" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DestinationCountry" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="DestinationCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="BagNo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
-          <Property Name="ExportShipmentID" Type="Int32" />
-          <Property Name="QuickInscanID" Type="Int32" />
-          <Property Name="StatusTypeId" Type="Int32" />
-          <Property Name="CourierStatusID" Type="Int32" />
-          <NavigationProperty Name="ImportShipment" Relationship="Self.FK_S_Shipment_S_ImportShipment" FromRole="ImportShipmentDetails" ToRole="ImportShipment" />
         </EntityType>
         <EntityType Name="InScan">
           <Key>
@@ -11209,18 +11124,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_S_Shipment_S_ImportShipment">
-          <End Role="ImportShipment" Type="Self.ImportShipment" Multiplicity="1" />
-          <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImportShipment">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ImportShipmentDetails">
-              <PropertyRef Name="ImportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_InScanDomestic_InScan">
           <End Role="InScan" Type="Self.InScan" Multiplicity="1" />
           <End Role="InScanDomestic" Type="Self.InScanDomestic" Multiplicity="*" />
@@ -11719,8 +11622,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="aspnet_Users" EntityType="Self.aspnet_Users" />
           <EntitySet Name="aspnet_WebEvent_Events" EntityType="Self.aspnet_WebEvent_Events" />
           <EntitySet Name="AWBPendings" EntityType="Self.AWBPending" />
-          <EntitySet Name="AWBStocks" EntityType="Self.AWBStock" />
-          <EntitySet Name="AWBStockDetails" EntityType="Self.AWBStockDetail" />
           <EntitySet Name="BranchMasters" EntityType="Self.BranchMaster" />
           <EntitySet Name="BusinessTypes" EntityType="Self.BusinessType" />
           <EntitySet Name="CargoDescriptions" EntityType="Self.CargoDescription" />
@@ -11768,8 +11669,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="HoldReleases" EntityType="Self.HoldRelease" />
           <EntitySet Name="Imports" EntityType="Self.Import" />
           <EntitySet Name="ImportAgentMasters" EntityType="Self.ImportAgentMaster" />
-          <EntitySet Name="ImportShipments" EntityType="Self.ImportShipment" />
-          <EntitySet Name="ImportShipmentDetails" EntityType="Self.ImportShipmentDetail" />
           <EntitySet Name="InScans" EntityType="Self.InScan" />
           <EntitySet Name="InScanDomestics" EntityType="Self.InScanDomestic" />
           <EntitySet Name="InScanInternationals" EntityType="Self.InScanInternational" />
@@ -12171,10 +12070,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_ForwardingAgentRateDet_ForwardingAgentRate" Association="Self.FK_ForwardingAgentRateDet_ForwardingAgentRate">
             <End Role="ForwardingAgentRate" EntitySet="ForwardingAgentRates" />
             <End Role="ForwardingAgentRateDet" EntitySet="ForwardingAgentRateDets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_S_Shipment_S_ImportShipment" Association="Self.FK_S_Shipment_S_ImportShipment">
-            <End Role="ImportShipment" EntitySet="ImportShipments" />
-            <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_InScanDomestic_InScan" Association="Self.FK_InScanDomestic_InScan">
             <End Role="InScan" EntitySet="InScans" />
@@ -14949,7 +14844,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="AWBBatches" EntityType="DB_9F57C4_couriertest_newModel.AWBBatch" />
           <EntitySet Name="AWBBOOKIssues" EntityType="DB_9F57C4_couriertest_newModel.AWBBOOKIssue" />
           <EntitySet Name="PrepaidAWBs" EntityType="DB_9F57C4_couriertest_newModel.PrepaidAWB" />
-          <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
           <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
           <EntitySet Name="QuickInscanMasters" EntityType="DB_9F57C4_couriertest_newModel.QuickInscanMaster" />
           <EntitySet Name="PODs" EntityType="DB_9F57C4_couriertest_newModel.POD" />
@@ -14961,6 +14855,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="ConsignorMasters" EntityType="DB_9F57C4_couriertest_newModel.ConsignorMaster" />
           <EntitySet Name="AccountSetups" EntityType="DB_9F57C4_couriertest_newModel.AccountSetup" />
           <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
+          <EntitySet Name="ImportShipments" EntityType="DB_9F57C4_couriertest_newModel.ImportShipment" />
+          <EntitySet Name="ImportShipmentDetails" EntityType="DB_9F57C4_couriertest_newModel.ImportShipmentDetail" />
+          <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
+          <EntitySet Name="ImportFields" EntityType="DB_9F57C4_couriertest_newModel.ImportField" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19375,22 +19273,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="OriginPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="DestinationPlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="AWBTrackStatu">
-          <Key>
-            <PropertyRef Name="AWBTrackStatusId" />
-          </Key>
-          <Property Name="AWBTrackStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InScanId" Type="Int32" Nullable="false" />
-          <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StatusTypeId" Type="Int32" Nullable="false" />
-          <Property Name="ShipmentStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CourierStatusId" Type="Int32" Nullable="false" />
-          <Property Name="CourierStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="ShipmentDetailID" Type="Int32" />
-          <Property Name="EmpID" Type="Int32" />
-        </EntityType>
         <EntityType Name="InScanMaster">
           <Key>
             <PropertyRef Name="InScanID" />
@@ -19621,6 +19503,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="UserID" Type="Int32" />
           <Property Name="FCMTokenId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RoleId" Type="Int32" />
         </EntityType>
         <EntityType Name="ConsigneeMaster">
           <Key>
@@ -19686,6 +19569,101 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="FYearId" Type="Int32" />
           <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="ImportShipment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManifestNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ConsignorName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeCityName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeCountryName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeLocationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="OriginAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationAirportCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Bags" Type="Int32" />
+          <Property Name="RunNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TotalAWB" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AgentID" Type="Int32" Nullable="false" />
+          <Property Name="AgentLoginID" Type="Int32" Nullable="false" />
+          <Property Name="LastEditedByLoginID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ShipmentTypeId" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="ParcelNo" Type="Int32" />
+          <Property Name="Route" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ImportShipmentDetail">
+          <Key>
+            <PropertyRef Name="ShipmentDetailID" />
+          </Key>
+          <Property Name="ShipmentDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImportID" Type="Int32" Nullable="false" />
+          <Property Name="AWB" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AWBDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PCS" Type="Int32" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <Property Name="Contents" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Shipper" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CustomValue" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="COD" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Receiver" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverContact" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverAddress" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverTelephone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DestinationCountry" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="BagNo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <Property Name="ExportShipmentID" Type="Int32" />
+          <Property Name="QuickInscanID" Type="Int32" />
+          <Property Name="StatusTypeId" Type="Int32" />
+          <Property Name="CourierStatusID" Type="Int32" />
+          <Property Name="DRSID" Type="Int32" />
+          <Property Name="CODReceiptId" Type="Int32" />
+          <Property Name="DestinationLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ImportType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AWBTrackStatu">
+          <Key>
+            <PropertyRef Name="AWBTrackStatusId" />
+          </Key>
+          <Property Name="AWBTrackStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InScanId" Type="Int32" />
+          <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StatusTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ShipmentStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CourierStatusId" Type="Int32" Nullable="false" />
+          <Property Name="CourierStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ShipmentDetailID" Type="Int32" />
+          <Property Name="EmpID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ImportField">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FieldName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20182,25 +20160,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
                 <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AWBStocks">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBStock">
-              <MappingFragment StoreEntitySet="AWBStock">
-                <ScalarProperty Name="AWBStockID" ColumnName="AWBStockID" />
-                <ScalarProperty Name="StockDate" ColumnName="StockDate" />
-                <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AWBStockDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBStockDetail">
-              <MappingFragment StoreEntitySet="AWBStockDetails">
-                <ScalarProperty Name="AWBStockDetailID" ColumnName="AWBStockDetailID" />
-                <ScalarProperty Name="AWBStockID" ColumnName="AWBStockID" />
-                <ScalarProperty Name="AWBNoFrom" ColumnName="AWBNoFrom" />
-                <ScalarProperty Name="AWBNoTo" ColumnName="AWBNoTo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -21071,72 +21030,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ImportShipments">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipment">
-              <MappingFragment StoreEntitySet="ImportShipment">
-                <ScalarProperty Name="Route" ColumnName="Route" />
-                <ScalarProperty Name="ParcelNo" ColumnName="ParcelNo" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
-                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
-                <ScalarProperty Name="ConsignorAddress1_Building" ColumnName="ConsignorAddress1_Building" />
-                <ScalarProperty Name="ConsignorAddress2_Street" ColumnName="ConsignorAddress2_Street" />
-                <ScalarProperty Name="ConsignorAddress3_PinCode" ColumnName="ConsignorAddress3_PinCode" />
-                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
-                <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
-                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
-                <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
-                <ScalarProperty Name="ConsigneeAddress1_Building" ColumnName="ConsigneeAddress1_Building" />
-                <ScalarProperty Name="ConsigneeAddress2_Street" ColumnName="ConsigneeAddress2_Street" />
-                <ScalarProperty Name="ConsigneeAddress3_PinCode" ColumnName="ConsigneeAddress3_PinCode" />
-                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
-                <ScalarProperty Name="ConsigneeCountryName" ColumnName="ConsigneeCountryName" />
-                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
-                <ScalarProperty Name="OriginAirportCity" ColumnName="OriginAirportCity" />
-                <ScalarProperty Name="DestinationAirportCity" ColumnName="DestinationAirportCity" />
-                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
-                <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
-                <ScalarProperty Name="MAWB" ColumnName="MAWB" />
-                <ScalarProperty Name="CD" ColumnName="CD" />
-                <ScalarProperty Name="Bags" ColumnName="Bags" />
-                <ScalarProperty Name="RunNo" ColumnName="RunNo" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="TotalAWB" ColumnName="TotalAWB" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="AgentID" ColumnName="AgentID" />
-                <ScalarProperty Name="AgentLoginID" ColumnName="AgentLoginID" />
-                <ScalarProperty Name="LastEditedByLoginID" ColumnName="LastEditedByLoginID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ShipmentTypeId" ColumnName="ShipmentTypeId" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ImportShipmentDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
-              <MappingFragment StoreEntitySet="ImportShipmentDetails">
-                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
-                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
-                <ScalarProperty Name="HAWB" ColumnName="HAWB" />
-                <ScalarProperty Name="AWB" ColumnName="AWB" />
-                <ScalarProperty Name="PCS" ColumnName="PCS" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="Contents" ColumnName="Contents" />
-                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Reciver" ColumnName="Reciver" />
-                <ScalarProperty Name="DestinationCountry" ColumnName="DestinationCountry" />
-                <ScalarProperty Name="DestinationCity" ColumnName="DestinationCity" />
-                <ScalarProperty Name="BagNo" ColumnName="BagNo" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-                <ScalarProperty Name="ExportShipmentID" ColumnName="ExportShipmentID" />
-                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
-                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
-                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -28409,23 +28302,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AWBTrackStatus">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
-              <MappingFragment StoreEntitySet="AWBTrackStatus">
-                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
-                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CourierStatus" ColumnName="CourierStatus" />
-                <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
-                <ScalarProperty Name="ShipmentStatus" ColumnName="ShipmentStatus" />
-                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
-                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
-                <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-                <ScalarProperty Name="InScanId" ColumnName="InScanId" />
-                <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
@@ -28615,6 +28491,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="EmployeeMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmployeeMaster">
               <MappingFragment StoreEntitySet="EmployeeMaster">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
                 <ScalarProperty Name="FCMTokenId" ColumnName="FCMTokenId" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -28730,6 +28607,105 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
                 <ScalarProperty Name="DRSDate" ColumnName="DRSDate" />
                 <ScalarProperty Name="DRSNo" ColumnName="DRSNo" />
                 <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImportShipments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipment">
+              <MappingFragment StoreEntitySet="ImportShipment">
+                <ScalarProperty Name="Route" ColumnName="Route" />
+                <ScalarProperty Name="ParcelNo" ColumnName="ParcelNo" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="ShipmentTypeId" ColumnName="ShipmentTypeId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LastEditedByLoginID" ColumnName="LastEditedByLoginID" />
+                <ScalarProperty Name="AgentLoginID" ColumnName="AgentLoginID" />
+                <ScalarProperty Name="AgentID" ColumnName="AgentID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TotalAWB" ColumnName="TotalAWB" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="RunNo" ColumnName="RunNo" />
+                <ScalarProperty Name="Bags" ColumnName="Bags" />
+                <ScalarProperty Name="CD" ColumnName="CD" />
+                <ScalarProperty Name="MAWB" ColumnName="MAWB" />
+                <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="DestinationAirportCity" ColumnName="DestinationAirportCity" />
+                <ScalarProperty Name="OriginAirportCity" ColumnName="OriginAirportCity" />
+                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
+                <ScalarProperty Name="ConsigneeCountryName" ColumnName="ConsigneeCountryName" />
+                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
+                <ScalarProperty Name="ConsigneeAddress3_PinCode" ColumnName="ConsigneeAddress3_PinCode" />
+                <ScalarProperty Name="ConsigneeAddress2_Street" ColumnName="ConsigneeAddress2_Street" />
+                <ScalarProperty Name="ConsigneeAddress1_Building" ColumnName="ConsigneeAddress1_Building" />
+                <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
+                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
+                <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
+                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
+                <ScalarProperty Name="ConsignorAddress3_PinCode" ColumnName="ConsignorAddress3_PinCode" />
+                <ScalarProperty Name="ConsignorAddress2_Street" ColumnName="ConsignorAddress2_Street" />
+                <ScalarProperty Name="ConsignorAddress1_Building" ColumnName="ConsignorAddress1_Building" />
+                <ScalarProperty Name="ConsignorName" ColumnName="ConsignorName" />
+                <ScalarProperty Name="ManifestNumber" ColumnName="ManifestNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImportShipmentDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
+              <MappingFragment StoreEntitySet="ImportShipmentDetails">
+                <ScalarProperty Name="ImportType" ColumnName="ImportType" />
+                <ScalarProperty Name="DestinationLocation" ColumnName="DestinationLocation" />
+                <ScalarProperty Name="CODReceiptId" ColumnName="CODReceiptId" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
+                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
+                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
+                <ScalarProperty Name="ExportShipmentID" ColumnName="ExportShipmentID" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="BagNo" ColumnName="BagNo" />
+                <ScalarProperty Name="DestinationCity" ColumnName="DestinationCity" />
+                <ScalarProperty Name="DestinationCountry" ColumnName="DestinationCountry" />
+                <ScalarProperty Name="ReceiverTelephone" ColumnName="ReceiverTelephone" />
+                <ScalarProperty Name="ReceiverAddress" ColumnName="ReceiverAddress" />
+                <ScalarProperty Name="ReceiverContact" ColumnName="ReceiverContact" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="COD" ColumnName="COD" />
+                <ScalarProperty Name="CustomValue" ColumnName="CustomValue" />
+                <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PCS" ColumnName="PCS" />
+                <ScalarProperty Name="AWBDate" ColumnName="AWBDate" />
+                <ScalarProperty Name="AWB" ColumnName="AWB" />
+                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
+                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AWBTrackStatus">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
+              <MappingFragment StoreEntitySet="AWBTrackStatus">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CourierStatus" ColumnName="CourierStatus" />
+                <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
+                <ScalarProperty Name="ShipmentStatus" ColumnName="ShipmentStatus" />
+                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+                <ScalarProperty Name="InScanId" ColumnName="InScanId" />
+                <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImportFields">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportField">
+              <MappingFragment StoreEntitySet="ImportFields">
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

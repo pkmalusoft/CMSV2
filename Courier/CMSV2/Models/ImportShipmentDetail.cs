@@ -16,14 +16,18 @@ namespace CMSV2.Models
     {
         public int ShipmentDetailID { get; set; }
         public int ImportID { get; set; }
-        public string HAWB { get; set; }
         public string AWB { get; set; }
+        public System.DateTime AWBDate { get; set; }
         public int PCS { get; set; }
         public decimal Weight { get; set; }
         public string Contents { get; set; }
         public string Shipper { get; set; }
-        public decimal Value { get; set; }
-        public string Reciver { get; set; }
+        public decimal CustomValue { get; set; }
+        public decimal COD { get; set; }
+        public string Receiver { get; set; }
+        public string ReceiverContact { get; set; }
+        public string ReceiverAddress { get; set; }
+        public string ReceiverTelephone { get; set; }
         public string DestinationCountry { get; set; }
         public string DestinationCity { get; set; }
         public string BagNo { get; set; }
@@ -32,7 +36,9 @@ namespace CMSV2.Models
         public Nullable<int> QuickInscanID { get; set; }
         public Nullable<int> StatusTypeId { get; set; }
         public Nullable<int> CourierStatusID { get; set; }
-    
-        public virtual ImportShipment ImportShipment { get; set; }
+        public Nullable<int> DRSID { get; set; }
+        public Nullable<int> CODReceiptId { get; set; }
+        public string DestinationLocation { get; set; }
+        public string ImportType { get; set; }
     }
 }

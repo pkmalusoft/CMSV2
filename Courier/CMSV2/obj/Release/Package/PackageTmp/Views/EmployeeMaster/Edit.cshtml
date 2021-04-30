@@ -371,7 +371,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Email</label>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @required = "true" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @required = "true",@readonly="readonly" })
                     @Html.ValidationMessageFor(model => model.Email)
 
                 </div>
@@ -420,40 +420,44 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Role</label>
-                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control" , @required = "true" })
+                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.EmployeeID)
                 </div>
 
-                <div class="col-md-3">
-                    <label class="headinglabel">Password <a id="apassshow">Show</a></label>                    
-                    <input type="text" id="txtpass" value="@Model.Password" class="form-control hide" />
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control"  })
-                    @Html.ValidationMessageFor(model => model.Password)
+                @*<div class="col-md-3">
+            <label class="headinglabel">Password <a id="apassshow">Show</a></label>
+            <input type="text" id="txtpass" value="@Model.Password" class="form-control hide" />
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control"  })
+            @Html.ValidationMessageFor(model => model.Password)
 
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel">Mobile Device ID</label>
-                    @Html.TextBoxFor(model => model.MobileDeviceID, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.MobileDeviceID)
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel">Mobile Device ID</label>
+            @Html.TextBoxFor(model => model.MobileDeviceID, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MobileDeviceID)
 
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel">Device Password</label>
-                    @Html.PasswordFor(model => model.MobileDevicePWD, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.MobileDevicePWD)
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel">Device Password</label>
+            @Html.PasswordFor(model => model.MobileDevicePWD, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MobileDevicePWD)
 
-                </div>
-
-
-
-            </div>
-
-            <div class="row no-margin" style="padding-top:10px">
+        </div>*@
                 <div class="col-md-3">
                     <label class="headinglabel required">Account Head</label>
                     @Html.DropDownListFor(model => model.AcHeadID, new SelectList(ViewBag.AcHead, "AcHeadID", "AcHead1"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.AcHeadID)
                 </div>
+                <div class="col-md-3" style="padding-top:15px">
+                    @Html.CheckBox("StatusActive", new { @name = "StatusActive" }) &nbsp;&nbsp;
+                    <label class="headinglabel">Active</label>
+                    @Html.ValidationMessageFor(model => model.StatusActive)
+                </div>
+
+            </div>
+
+            @*<div class="row no-margin" style="padding-top:10px">*@
+               
                 @*<div class="col-md-3" style="padding:20px">
 
             @Html.CheckBox("StatusCommision", new { @name = "StatusCommision" }) &nbsp;&nbsp;
@@ -461,18 +465,14 @@
             @Html.ValidationMessageFor(model => model.StatusCommision)
         </div>*@
 
-                <div class="col-md-3" style="padding-top:15px">
-                    @Html.CheckBox("StatusActive", new { @name = "StatusActive" }) &nbsp;&nbsp;
-                    <label class="headinglabel">Active</label>
-                    @Html.ValidationMessageFor(model => model.StatusActive)
-                </div>
+              
 
                 @*<div class="col-md-3" style="padding-top:15px">
             @Html.CheckBox("StatusDefault", new { @name = "StatusDefault" }) &nbsp;&nbsp;
             <label class="headinglabel">Default</label>
             @Html.ValidationMessageFor(model => model.StatusDefault)
         </div>*@
-            </div>
+            @*</div>*@
             <div class="row no-margin" style="padding-top: 10px">
 
 

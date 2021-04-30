@@ -316,6 +316,7 @@ namespace CMSV2.DAL
                         obj.ReceivedBy= dr["ReceivedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReceivedBy"].ToString());
                         obj.OutScanDelivery = dr["OutScanDelivery"] == DBNull.Value ? false : Convert.ToBoolean(dr["OutScanDelivery"].ToString());
                         obj.OutscanVehicleId = dr["OutscanVehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutscanVehicleId"].ToString());
+                        obj.OutscanVehicleId = dr["OutScanDeliveredID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutScanDeliveredID"].ToString());                        
                         obj.OutScanDate = dr["OutScanDate"] == DBNull.Value ? "" : dr["OutScanDate"].ToString();
                         obj.DelieveryAttemptDate = dr["DelieveryAttemptDate"] == DBNull.Value ? "" : dr["DelieveryAttemptDate"].ToString();
                         obj.DeliveryAttemptedBy = dr["DeliveryAttemptedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DeliveryAttemptedBy"].ToString());

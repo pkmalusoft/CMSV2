@@ -6226,9 +6226,17 @@ p.indexbtnpadding {
     body .headinglabel {
         font-size: 13px;
     }
-
+    .timelineDetails label{
+        font-size: 13px!important;
+    }
     .small_btn {
         margin-top: 28px;
+    }
+   .btn-res{
+        padding-top:0!important;
+   } 
+   .mt-3{
+        margin-top:29px;
     }
 }
 
@@ -6245,6 +6253,9 @@ p.indexbtnpadding {
 
     header .navbar-nav > li {
         float: none;
+    }
+    .timelineDetails label {
+        font-size: 10px!important;
     }
 }
 

@@ -427,7 +427,7 @@ namespace CMSV2.Controllers
                 batchid = 0;
 
             var lst = (from c in db.InScanMasters
-                       where   (c.BATCHID == batchid || c.AWBNo == id) && (c.CourierStatusID == 4 || c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10) && (c.PickedUpEmpID == collectedby || collectedby == 0)
+                       where   (c.AWBNo == id) && (c.CourierStatusID == 4 || c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10) && (c.PickedUpEmpID == collectedby || collectedby == 0)
                        select new AWBList { InScanId = c.InScanID, AWB = c.AWBNo, Origin = c.ConsignorCountryName, Destination = c.ConsigneeCountryName }).ToList();
             
             

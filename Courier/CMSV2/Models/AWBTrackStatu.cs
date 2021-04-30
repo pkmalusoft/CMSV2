@@ -15,7 +15,7 @@ namespace CMSV2.Models
     public partial class AWBTrackStatu
     {
         public int AWBTrackStatusId { get; set; }
-        public int InScanId { get; set; }
+        public Nullable<int> InScanId { get; set; }
         public string AWBNo { get; set; }
         public System.DateTime EntryDate { get; set; }
         public int StatusTypeId { get; set; }

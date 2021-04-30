@@ -380,14 +380,14 @@ namespace CMSV2.Controllers
                     model.CurrencyID = item.CurrencyID;
                     model.DestinationCity = item.DestinationCity;
                     model.DestinationCountry = item.DestinationCountry;
-                    model.HAWB = item.HAWB;
+                    model.HAWB = item.AWB;
                     model.ImportDetailID = item.ShipmentDetailID;
                     model.Shipper = item.Shipper;
-                    model.Value = item.Value;
+                    model.Value = item.CustomValue;
                     model.Weight = item.Weight;
-                    model.Reciver = item.Reciver;
+                    model.Reciver = item.Receiver;
                     //model.ExportID = simportshipment.ID; // s_ImportShipment.ID;
-                    model.Reciver = item.Reciver;
+                    
                     model.PCS = item.PCS;
                     model.DestinationCountry = item.DestinationCountry;
                 model.DestinationCity = item.DestinationCity;
@@ -447,14 +447,13 @@ namespace CMSV2.Controllers
                 model.CurrencyID = item.CurrencyID;               
                 model.DestinationCity = item.DestinationCity;
                 model.DestinationCountry = item.DestinationCountry;
-                model.HAWB = item.HAWB;
+                model.HAWB = item.AWB;
                 model.ImportDetailID = item.ShipmentDetailID;
                 model.Shipper = item.Shipper;
-                model.Value = item.Value;
+                model.Value = item.CustomValue;
                 model.Weight = item.Weight;
-                model.Reciver = item.Reciver;
-                model.ExportID = s_Exportshipment.ID;
-                model.Reciver = item.Reciver;
+                model.Reciver = item.Receiver;
+                model.ExportID = s_Exportshipment.ID;                
                 model.PCS = item.PCS;
              
                 s_Exportshipment.Shipments.Add(model);

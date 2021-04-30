@@ -1,4 +1,4 @@
-﻿@model CMSV2.Models.AWBBatchSearch
+﻿@model CMSV2.Models.ImportManifestSearch
 
 @{
     ViewBag.Title = "Index";
@@ -8,7 +8,7 @@
     var isdelete = true;
     var isprint = true;
     var isview = true;
-    string path = "/ImportShipment/Index";
+    string path = "/ImportManfiest/Index";
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
     {
         CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
@@ -97,6 +97,7 @@
                     else
                     {
                         @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                        <input type="button" value="Download Template" class="btn btn-primary" onClick="window.location.href='/Template/ImportTemplate.csv'">
                     }
 
                 </p>
@@ -120,13 +121,13 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.Label("Batch No")
+                        @Html.Label("Manifest Number")
                     </th>
                     <th>
-                        @Html.Label("Batch Date")
+                        @Html.Label("Manifest Date")
                     </th>
                     <th>
-                        @Html.Label("AWB Numbers")
+                        @Html.Label("Consignor")
                     </th>
                     <th>Action</th>
                 </tr>
@@ -134,13 +135,13 @@
             <tfoot>
                 <tr>
                     <th>
-                        @Html.Label("Batch No")
+                        @Html.Label("Manifest Number")
                     </th>
                     <th>
-                        @Html.Label("Batch Date")
+                        @Html.Label("Manifest Date")
                     </th>
                     <th>
-                        @Html.Label("AWB Numbers")
+                        @Html.Label("Consignor")
                     </th>
 
 
@@ -152,16 +153,16 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.BatchNumber)
+                        @Html.DisplayFor(modelItem => item.ManifestNumber)
                     </td>
                     <td>
-                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.BatchDate)
+                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.CreatedDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AWBNumbers)
+                        @Html.DisplayFor(modelItem => item.ConsignorName)
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
+                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
 
                         @*<a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>*@
                     </td>
@@ -174,8 +175,8 @@
 
 <script type="text/javascript">
         function Delete(ID) {
-            if (confirm("Are you sure, You want to Delete AWB Book Issue?")) {
-                window.location.href = "/AWBBookIssue/DeleteConfirmed/?id=" + ID;
+            if (confirm("Are you sure, You want to Delete Import Manifest?")) {
+                window.location.href = "/ImportManifest/DeleteConfirmed/?id=" + ID;
             }
         }
 </script>

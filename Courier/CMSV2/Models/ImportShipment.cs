@@ -14,12 +14,6 @@ namespace CMSV2.Models
     
     public partial class ImportShipment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ImportShipment()
-        {
-            this.ImportShipmentDetails = new HashSet<ImportShipmentDetail>();
-        }
-    
         public int ID { get; set; }
         public string ManifestNumber { get; set; }
         public string ConsignorName { get; set; }
@@ -56,8 +50,5 @@ namespace CMSV2.Models
         public Nullable<decimal> Weight { get; set; }
         public Nullable<int> ParcelNo { get; set; }
         public string Route { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImportShipmentDetail> ImportShipmentDetails { get; set; }
     }
 }

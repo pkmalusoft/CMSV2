@@ -660,7 +660,7 @@ body .hyperlink{
 
                     var OutScanDeliveredID = data.OutScanDeliveredID;
                     var OutScanDate = data.OutScanDate;
-                    var OutScanVehicleID = data.OutScanVehicleID;
+                    var OutScanVehicleID = data.OutscanVehicleId;
                     var OutScanDelivery = data.OutScanDelivery;
                     if (OutScanDelivery) {
                         $('#OutScanDelivery').prop('checked', 'checked');
@@ -1729,7 +1729,7 @@ body .hyperlink{
                                 $.notify("Batch Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 @*location.href = '@Url.Action("Index","DRSReconc")';*@
-                                window.location.href = "/AWB/Index?id=1";
+                                window.location.href = "/AWBBatch/Index";
                             }
                             else {
 

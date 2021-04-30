@@ -275,7 +275,6 @@
     <Compile Include="Controllers\PrintBillController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\AWBController.cs" />
-    <Compile Include="Controllers\ReExportShipmentController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ReturnShipmentController.cs" />
     <Compile Include="Controllers\ReturnShippmentController.cs" />
@@ -598,12 +597,6 @@
     <Compile Include="Models\AWBDetailsVM.cs" />
     <Compile Include="Models\AWBillVM.cs" />
     <Compile Include="Models\AWBPending.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AWBStock.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AWBStockDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AWBBookIssueVM.cs" />
@@ -1240,6 +1233,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ImportAgentMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ImportField.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ImportManifest.cs" />
@@ -3629,6 +3625,8 @@
     <Content Include="Views\DRSReconc\CreateBulk.cshtml" />
     <Content Include="Views\ImportManifest\Index.cshtml" />
     <Content Include="Views\ImportManifest\Create.cshtml" />
+    <Content Include="Template\ImportTemplate.csv" />
+    <Content Include="Views\ImportManifest\ImportDataFixation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -551,57 +551,41 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Role</label>
-                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control" , @tabindex =13, @required = "true" })
+                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @tabindex = 13, @required = "true" })
                     @Html.ValidationMessageFor(model => model.EmployeeID)
                 </div>
-
-                <div class="col-md-3">
-                    <label class="headinglabel required">Password</label>
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @tabindex = 14,@value="",@autcomplete="off", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.Password)
-
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel">Mobile Device ID</label>
-                    @Html.TextBoxFor(model => model.MobileDeviceID, new { @class = "form-control", @tabindex = 15 })
-                    @Html.ValidationMessageFor(model => model.MobileDeviceID)
-
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel">Device Password</label>
-                    @Html.PasswordFor(model => model.MobileDevicePWD, new { @class = "form-control", @tabindex = 16 })
-                    @Html.ValidationMessageFor(model => model.MobileDevicePWD)
-
-                </div>
-
-            </div>
-
-            <div class="row no-margin" style="padding-top:10px">
-
                 <div class="col-md-3">
                     <label class="headinglabel required">Account Head</label>
                     @Html.DropDownListFor(model => model.AcHeadID, new SelectList(ViewBag.AcHead, "AcHeadID", "AcHead1"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.AcHeadID)
                 </div>
-                @*<div class="col-md-3 checkboxdesign" style="padding:20px">
-
-            @Html.CheckBox("StatusCommision", new { @name = "StatusCommision" }) &nbsp;&nbsp;
-            <label class="headinglabel">Allow Commission</label>
-            @Html.ValidationMessageFor(model => model.StatusCommision)
-        </div>*@
-
                 <div class="col-md-3 checkboxdesign" style="padding-top:15px">
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive", @tabindex = 17 }) &nbsp;&nbsp;
                     <label class="headinglabel">Active</label>
                     @Html.ValidationMessageFor(model => model.StatusActive)
                 </div>
+                @*<div class="col-md-3">
+            <label class="headinglabel required">Password</label>
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control", @tabindex = 14,@value="",@autcomplete="off", @required = "true" })
+            @Html.ValidationMessageFor(model => model.Password)
 
-                @*<div class="col-md-3 checkboxdesign" style="padding-top:15px">
-            @Html.CheckBox("StatusDefault", new { @name = "StatusDefault" }) &nbsp;&nbsp;
-            <label class="headinglabel">Default</label>
-            @Html.ValidationMessageFor(model => model.StatusDefault)
         </div>*@
+                @*<div class="col-md-3">
+            <label class="headinglabel">Mobile Device ID</label>
+            @Html.TextBoxFor(model => model.MobileDeviceID, new { @class = "form-control", @tabindex = 15 })
+            @Html.ValidationMessageFor(model => model.MobileDeviceID)
+
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel">Device Password</label>
+            @Html.PasswordFor(model => model.MobileDevicePWD, new { @class = "form-control", @tabindex = 16 })
+            @Html.ValidationMessageFor(model => model.MobileDevicePWD)
+
+        </div>*@
+
             </div>
+
+           
             <div class="row no-margin" style="padding-top: 10px">
                 <div class="col-md-12 btn-right">
                     <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;   <a href='@Url.Action("Index", "EmployeeMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>

@@ -219,7 +219,7 @@ namespace CMSV2.Controllers
                                 id = id + 1;
 
                             _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                            _awbstatus.AWBNo = _inscan.HAWB;
+                            _awbstatus.AWBNo = _inscan.AWB;
                             _awbstatus.EntryDate = DateTime.Now;
                             _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                             _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
@@ -260,7 +260,7 @@ namespace CMSV2.Controllers
                             id = id + 1;
 
                         _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = _inscan.HAWB;
+                        _awbstatus.AWBNo = _inscan.AWB;
                         _awbstatus.EntryDate = DateTime.Now;
                         _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                         _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
@@ -370,7 +370,7 @@ namespace CMSV2.Controllers
                             id = id + 1;
 
                         _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = _inscan.HAWB;
+                        _awbstatus.AWBNo = _inscan.AWB;
                         _awbstatus.EntryDate = DateTime.Now;
                         _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                         _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
@@ -409,7 +409,7 @@ namespace CMSV2.Controllers
                         id = id + 1;
 
                     _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                    _awbstatus.AWBNo = _inscan.HAWB;
+                    _awbstatus.AWBNo = _inscan.AWB;
                     _awbstatus.EntryDate = DateTime.Now;
                     _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                     _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
@@ -454,7 +454,7 @@ namespace CMSV2.Controllers
                             where _qmaster.QuickInscanID == id
                             orderby _shipdetail.AWB descending
                             select new InBoundAWBList { ShipmentDetailID = _shipdetail.ShipmentDetailID, AWB = _shipdetail.AWB, 
-                                OriginCity = _shipment.ConsignorCityName, OriginCountry =_shipment.ConsignorCountryName, DestinationCity  = _shipdetail.DestinationCity, DestinationCountry = _shipdetail.DestinationCountry,Shipper=_shipdetail.Shipper, Receiver=_shipdetail.Reciver   }).ToList();
+                                OriginCity = _shipment.ConsignorCityName, OriginCountry =_shipment.ConsignorCountryName, DestinationCity  = _shipdetail.DestinationCity, DestinationCountry = _shipdetail.DestinationCountry,Shipper=_shipdetail.Shipper, Receiver=_shipdetail.Receiver   }).ToList();
 
               return Json(new { status = "ok", masterdata=_qinscanvm, data = obj, message = "Data Found" }, JsonRequestBehavior.AllowGet);
         }
@@ -491,7 +491,7 @@ namespace CMSV2.Controllers
 
             var lst = (from c in db.ImportShipmentDetails join i in db.ImportShipments on c.ImportID equals i.ID
                        where c.AWB == id &&  c.CourierStatusID == CourierStatusId
-                       select new { i.ConsignorName, i.ConsignorCountryName, i.ConsignorCityName, c.DestinationCity, c.DestinationCountry, c.AWB, c.ShipmentDetailID, c.Shipper, c.Reciver }).FirstOrDefault();  //forwarded to agent status only
+                       select new { i.ConsignorName, i.ConsignorCountryName, i.ConsignorCityName, c.DestinationCity, c.DestinationCountry, c.AWB, c.ShipmentDetailID, c.Shipper, c.Receiver }).FirstOrDefault();  //forwarded to agent status only
             if (lst==null)
             {
                 return Json(new { status="failed", data = obj, message = "AWB No. Not found"}, JsonRequestBehavior.AllowGet);
@@ -504,7 +504,7 @@ namespace CMSV2.Controllers
                  obj.DestinationCity = lst.DestinationCity;
                  obj.DestinationCountry = lst.DestinationCountry;
                 obj.AWB = lst.AWB;
-                 obj.Receiver = lst.Reciver;
+                 obj.Receiver = lst.Receiver;
                  obj.Shipper = lst.Shipper;
                  obj.ShipmentDetailID = lst.ShipmentDetailID;
 

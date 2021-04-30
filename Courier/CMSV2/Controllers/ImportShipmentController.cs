@@ -310,7 +310,7 @@ namespace CMSV2.Controllers
                             id = id + 1;
 
                         _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = det.HAWB;
+                        _awbstatus.AWBNo = det.AWB;
                         _awbstatus.EntryDate = DateTime.Now;
                         _awbstatus.ShipmentDetailID = det.ShipmentDetailID;
                         _awbstatus.StatusTypeId =Convert.ToInt32(det.StatusTypeId);
@@ -453,14 +453,13 @@ namespace CMSV2.Controllers
     {
         var shipmentmodel = new ImportShipmentDetail();
         shipmentmodel.CurrencyID = Convert.ToInt32(data["tCurrencyID"]);
-        shipmentmodel.AWB = data["tAWB"];
-        shipmentmodel.HAWB = data["tHAWB"];
+        shipmentmodel.AWB = data["tAWB"];        
         shipmentmodel.BagNo = data["tBagNo"];
         shipmentmodel.PCS = Convert.ToInt32(data["tPCS"]);
         shipmentmodel.Weight = Convert.ToDecimal(data["tWeight"]);
-        shipmentmodel.Value = Convert.ToDecimal(data["tValue"]);
+        shipmentmodel.CustomValue = Convert.ToDecimal(data["tValue"]);
         shipmentmodel.Shipper = data["tShipper"];
-        shipmentmodel.Reciver = data["tReciver"];
+        shipmentmodel.Receiver = data["tReciver"];
         shipmentmodel.Contents = data["tContents"];
         shipmentmodel.DestinationCountry = data["tDestinationCountryID"];
         shipmentmodel.DestinationCity = data["tDestinationCityID"];

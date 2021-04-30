@@ -322,7 +322,7 @@ namespace CMSV2.Controllers
                     {
                         if  (det.ShipmentDetailID==0 )
                         {
-                            det.HAWB = "";
+                            det.AWB = "";
                             det.ShipmentDetailID = max;
                             det.ImportID = importShipment.ID;
                             var couriercstatus=db.CourierStatus.Where(c => c.CourierStatus == "Export Manifest Prepared").FirstOrDefault();
@@ -345,7 +345,7 @@ namespace CMSV2.Controllers
                             
                             if (det.CourierStatusID == null)
                             {
-                                det.HAWB = "";
+                                det.AWB = "";
                                 var couriercstatus = db.CourierStatus.Where(c => c.CourierStatus == "Export Manifest Prepared").FirstOrDefault();
                                 if (couriercstatus != null)
                                 {
@@ -355,14 +355,14 @@ namespace CMSV2.Controllers
                             }
                             if (det.StatusTypeId == null)
                             {
-                                det.HAWB = "";
+                                det.AWB = "";
                                 var statustype = db.tblStatusTypes.Where(c => c.Name == "READY TO EXPORT").FirstOrDefault();
                                 if (statustype != null)
                                 {
                                     det.StatusTypeId = statustype.ID;
                                 }
                             }
-                            det.HAWB = "";
+                            det.AWB = "";
                             det.ImportID = importShipment.ID;
                             db.Entry(det).State= EntityState.Modified; 
                             db.SaveChanges();
@@ -508,14 +508,13 @@ namespace CMSV2.Controllers
     {
         var shipmentmodel = new ImportShipmentDetail();
         shipmentmodel.CurrencyID = Convert.ToInt32(data["tCurrencyID"]);
-        shipmentmodel.AWB = data["tAWB"];
-        shipmentmodel.HAWB = data["tHAWB"];
+        shipmentmodel.AWB = data["tAWB"];        
         shipmentmodel.BagNo = data["tBagNo"];
         shipmentmodel.PCS = Convert.ToInt32(data["tPCS"]);
         shipmentmodel.Weight = Convert.ToDecimal(data["tWeight"]);
-        shipmentmodel.Value = Convert.ToDecimal(data["tValue"]);
+        shipmentmodel.CustomValue = Convert.ToDecimal(data["tValue"]);
         shipmentmodel.Shipper = data["tShipper"];
-        shipmentmodel.Reciver = data["tReciver"];
+        shipmentmodel.Receiver = data["tReciver"];
         shipmentmodel.Contents = data["tContents"];
         shipmentmodel.DestinationCountry = data["tDestinationCountryID"];
         shipmentmodel.DestinationCity = data["tDestinationCityID"];

@@ -123,12 +123,13 @@ namespace CMSV2.Controllers
                 a.JoinDate = Convert.ToDateTime(v.JoinDate);
                 a.BranchID = BranchID;
                 a.DepotID = v.Depot;
-                a.Password = v.Password;
-                a.MobileDeviceID = v.MobileDeviceID;
-                a.MobileDevicePwd = v.MobileDevicePWD;
+               // a.Password = v.Password;
+                //a.MobileDeviceID = v.MobileDeviceID;
+                //a.MobileDevicePwd = v.MobileDevicePWD;
                 a.StatusCommission = v.StatusCommision;
                 a.statusDefault = v.StatusDefault;
                 a.StatusActive = v.StatusActive;
+                a.RoleId = v.RoleID;
                 a.Type = "E";
             a.AcHeadID = v.AcHeadID;
 
@@ -139,10 +140,10 @@ namespace CMSV2.Controllers
             {
 
                 int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
-                u.UserID = max + 1;
+                u.UserID = max1 + 1;
                 u.UserName = v.Email;
                 u.EmailId = v.Email;
-                u.Password = v.Password;
+                u.Password = "12345";
                 u.Phone = v.Phone;
                 u.IsActive = true;
                 u.RoleID = v.RoleID;
@@ -260,13 +261,11 @@ namespace CMSV2.Controllers
                 v.CountryName = a.CountryName;
                 v.CityName = a.CityName;                
                 v.DesignationID = a.DesignationID.Value;
-                v.BranchID = a.BranchID.Value;
-                
+                v.BranchID = a.BranchID.Value;                
                 v.Depot = a.DepotID;
-
                 
-                v.MobileDeviceID = a.MobileDeviceID;
-                v.MobileDevicePWD = a.MobileDevicePwd;
+                //v.MobileDeviceID = a.MobileDeviceID;
+                //v.MobileDevicePWD = a.MobileDevicePwd;
                 v.StatusCommision = a.StatusCommission.Value;
                 v.StatusDefault = a.statusDefault.Value;
                 v.StatusActive = a.StatusActive.Value;
@@ -305,14 +304,14 @@ namespace CMSV2.Controllers
             v.CountryName = a.CountryName;
             v.AcCompanyID = companyid;
              v.DesignationID = a.DesignationID;
-
+            v.RoleId = a.RoleID;
             v.AcHeadID = a.AcHeadID;
             v.BranchID = BranchID;
             v.DepotID = a.Depot;
             //if (v.Password!=a.Password)
             //   v.Password = a.Password;
-             v.MobileDeviceID = a.MobileDeviceID;
-             v.MobileDevicePwd = a.MobileDevicePWD;
+             //v.MobileDeviceID = a.MobileDeviceID;
+             //v.MobileDevicePwd = a.MobileDevicePWD;
              v.JoinDate = a.JoinDate;
              v.StatusCommission = a.StatusCommision;
              v.statusDefault = a.StatusDefault;
@@ -323,100 +322,122 @@ namespace CMSV2.Controllers
             if (a.UserID != null && a.UserID > 0)
                 x = (from b in db.UserRegistrations where b.UserID == a.UserID select b).FirstOrDefault();
 
-            if (v.Email != a.Email)
+            if (x!=null)
             {
-                if (x == null)
-                {
-
-                    int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
-
-                    int roleid = a.RoleID; // db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
-                    u.UserID = max1 + 1;
-                    u.UserName = a.Email;
-                    u.EmailId = a.Email;
-                    if (a.Password == "")
-                        u.Password = _dao.RandomPassword(6);
-                    else
-                        u.Password = a.Password; //  _dao.RandomPassword(6);
-                    
-                    u.Phone = a.Phone;
-                    u.IsActive = true;
-                    u.RoleID = roleid;
-                    db.UserRegistrations.Add(u);
-                    db.SaveChanges();
-
-                    v.Email = a.Email;
-                    a.UserID = u.UserID;
-                }
-                else
-                {
-                    //checking duplicate
-                    UserRegistration x1 = (from b in db.UserRegistrations where b.UserName == a.Email && b.UserID != a.UserID select b).FirstOrDefault();
-                    if (x1 == null)
-                    {
-                        x.EmailId = a.Email;
-                        if (a.Password=="")
-                            x.Password =  _dao.RandomPassword(6);
-                        else
-                            x.Password = a.Password; //  _dao.RandomPassword(6);
-
-                        db.Entry(x).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-
-                    v.Email = a.Email;
-                    a.UserID = x.UserID;
-                }
-
-
+                x.RoleID = a.RoleID;
+                db.Entry(x).State = EntityState.Modified;
+                db.SaveChanges();
+                //        db.UserRegistrations.Add(u);
+                //        db.SaveChanges();
             }
             else
             {
-                if (a.UserID == null || a.UserID == 0)
-                {
-                    int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
-
-                    int roleid = db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
-                    u.UserID = max1 + 1;
-                    u.UserName = a.Email;
-                    u.EmailId = a.Email;
-                    
-                    if (a.Password == "")
-                        u.Password = _dao.RandomPassword(6);
-                    else
-                        u.Password = a.Password; //  _dao.RandomPassword(6);
-
-                    u.Phone = a.Phone;
-                    u.IsActive = true;
-                    u.RoleID = a.RoleID;
-                    db.UserRegistrations.Add(u);
-                    db.SaveChanges();
-
-                    v.UserID = u.UserID;
-                }
-                else
-                {
-                    u = (from b in db.UserRegistrations where b.UserID == a.UserID select b).FirstOrDefault();
-                    if (u.Password != a.Password)
-                        u.Password = a.Password;
-                    
-                    if (u.RoleID != a.RoleID)
-                        u.RoleID = a.RoleID;
-                    if (u.Password==null)
-                    {
-                        u.Password = "1234";
-                    }
-                    try
-                    {
-                        db.Entry(u).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                    catch(Exception ex1)
-                    {
-
-                    }
-                }
+                int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
+                u.UserID = max1 + 1;
+                u.UserName = a.Email;
+                u.EmailId = a.Email;
+                u.Password = "12345";
+                u.Phone = a.Phone;
+                u.IsActive = true;
+                u.RoleID = a.RoleID;
+                db.UserRegistrations.Add(u);
+                db.SaveChanges();
             }
+
+            //if (v.Email != a.Email)
+            //{
+            //    if (x == null)
+            //    {
+
+            //        int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
+
+            //        int roleid = a.RoleID; // db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
+            //        u.UserID = max1 + 1;
+            //        u.UserName = a.Email;
+            //        u.EmailId = a.Email;
+            //        if (a.Password == "")
+            //            u.Password = _dao.RandomPassword(6);
+            //        else
+            //            u.Password = a.Password; //  _dao.RandomPassword(6);
+
+            //        u.Phone = a.Phone;
+            //        u.IsActive = true;
+            //        u.RoleID = roleid;
+            //        db.UserRegistrations.Add(u);
+            //        db.SaveChanges();
+
+            //        v.Email = a.Email;
+            //        a.UserID = u.UserID;
+            //    }
+            //    else
+            //    {
+            //        //checking duplicate
+            //        UserRegistration x1 = (from b in db.UserRegistrations where b.UserName == a.Email && b.UserID != a.UserID select b).FirstOrDefault();
+            //        if (x1 == null)
+            //        {
+            //            x.EmailId = a.Email;
+            //            if (a.Password=="")
+            //                x.Password =  _dao.RandomPassword(6);
+            //            else
+            //                x.Password = a.Password; //  _dao.RandomPassword(6);
+
+            //            db.Entry(x).State = EntityState.Modified;
+            //            db.SaveChanges();
+            //        }
+
+            //        v.Email = a.Email;
+            //        a.UserID = x.UserID;
+            //    }
+
+
+            //}
+            //else
+            //{
+            //    if (a.UserID == null || a.UserID == 0)
+            //    {
+            //        int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
+
+            //        int roleid = db.RoleMasters.Where(t => t.RoleName == "Agent").FirstOrDefault().RoleID;
+            //        u.UserID = max1 + 1;
+            //        u.UserName = a.Email;
+            //        u.EmailId = a.Email;
+
+            //        if (a.Password == "")
+            //            u.Password = _dao.RandomPassword(6);
+            //        else
+            //            u.Password = a.Password; //  _dao.RandomPassword(6);
+
+            //        u.Phone = a.Phone;
+            //        u.IsActive = true;
+            //        u.RoleID = a.RoleID;
+            //        db.UserRegistrations.Add(u);
+            //        db.SaveChanges();
+
+            //        v.UserID = u.UserID;
+            //    }
+            //    else
+            //    {
+            //        u = (from b in db.UserRegistrations where b.UserID == a.UserID select b).FirstOrDefault();
+            //        if (u.Password != a.Password)
+            //            u.Password = a.Password;
+
+            //        if (u.RoleID != a.RoleID)
+            //            u.RoleID = a.RoleID;
+            //        if (u.Password==null)
+            //        {
+            //            u.Password = "1234";
+            //        }
+            //        try
+            //        {
+            //            db.Entry(u).State = EntityState.Modified;
+            //            db.SaveChanges();
+            //        }
+            //        catch(Exception ex1)
+            //        {
+
+            //        }
+            //    }
+            //}
 
 
 

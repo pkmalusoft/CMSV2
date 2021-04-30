@@ -35,7 +35,7 @@ namespace CMSV2.Models
         public int DesignationID { get; set; }
 
         public DateTime JoinDate { get; set; }
-
+        
         public int? Depot { get; set; }
 
         public string MobileDeviceID { get; set; }

@@ -60,5 +60,6 @@ namespace CMSV2.Models
         public Nullable<int> UserID { get; set; }
         public string FCMTokenId { get; set; }
         public string ProfileImage { get; set; }
+        public Nullable<int> RoleId { get; set; }
     }
 }

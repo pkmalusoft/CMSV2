@@ -1,405 +1,761 @@
-﻿@model CMSV2.Models.ImportShipmentFormModel
+﻿@model CMSV2.Models.ImportManifestVM
 @{
-    /**/
+    ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 
-    ViewBag.Title = "Edit";
-    var i = 1;
+    //var cities = (IEnumerable<CourierMVC.EntityFramework.S_CityMaster>)ViewBag.Cities;
 }
-
-<style>
-    tfoot {
-        display: table-header-group;
-    }
-    .dataTables-example_filter{
-        display:none!important;
-    }
-</style>
-
 <style>
 
-    .Selected {
-        background: lightsteelblue;
+  
+    .reve_rates > input {
+        font-size: 12px !important;
     }
 
-    .exported {
-        background: blanchedalmond;
+    .reve_rates1 > input {
+        font-size: 12px !important;
     }
+
+    .reve_rates2 > input {
+        font-size: 12px !important;
+    }
+
+    
+
+    .reve_rates3 > textarea {
+        min-height: 4rem !important;
+        font-size: 12px !important;
+    }
+
+    
 </style>
-<section class="content-header" style="margin-bottom:20px">
-    <div class="row">
-        <div class="col-md-5 pull-left">
-            <h1 class="headingfont">Import Shipment</h1>
-        </div>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
-        <hr />
-    </div>
-</section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript">   
+    var placeSearch, autocomplete, originairportCity, destinationairportCity;  
 
-@Html.HiddenFor(model => model.ID)
-@Html.HiddenFor(model => model.Status)
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-<div class="col-12">
-    <div class="row form-group">
-        <div class="col-lg-3 col-12">
-            <div class="form-group">
-                <label class="control-label">Manifest Number</label>
-                <div>
-                    <input type="text" class="form-control" title="@Model.ManifestNumber" value="@Model.ManifestNumber" disabled style="text-decoration:none" />
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-12">
-            <div class="form-group">
-                <label class="control-label">MAWB</label>
-                <div>
-                    <input type="text" class="form-control" title="@Model.MAWB" value="@Model.MAWB" disabled style="text-decoration:none" />
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-12">
-            <div class="form-group">
-                <label class="control-label">Flight No</label>
-                <div>
-                    <input type="text" class="form-control" title="@Model.FlightNo" value="@Model.FlightNo" disabled style="text-decoration:none" />
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-12">
-            <div class="form-group">
-                <label class="control-label">Agent Name</label>
-                <div>
-                    <input type="text" class="form-control" title="@ViewBag.AgentName" value="@ViewBag.AgentName" disabled style="text-decoration:none" />
-                </div>
-            </div>
-        </div>
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
 
-    </div>
-    <div class="row form-group hide">
-        <div class="col-lg-3">
-            <label for="DestinationCountryID">Select Country</label>
-            @*@Html.DropDownListFor(model => model.DestinationCountryID, null, "Select Country", htmlAttributes: new { @class = "form-control" })*@
-            @Html.EditorFor(model => model.ConsigneeCountryName, new { htmlAttributes = new { @class = "form-control", @required = "true" } })
+    function initAutocomplete() {
+        
+        originairportCity = new google.maps.places.Autocomplete(
+            document.getElementById('OriginAirportCity'), { types: ['geocode'] });
 
-        </div>
-    </div>
 
-</div>
-@*</div>*@
-@*<div class="col-12" style="margin-top:30px">*@
-@*<table class="table table-hover table_lg_head m_icons dataTable no-footer" role="grid" aria-describedby="datatable-1_info" id="dataTables-example" style="min-width: 100%">*@
-<div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
 
-    <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
-        @*<table style="min-width: 100%">*@
-        <thead class="input-table" id="listContainer">
-            <tr>
-                <th width="20px">
-                    S.No
-                    All  <input type="checkbox" style="width:20px;" class="Selectall" id="Selectall" value="0" name="Selectall" />
-                </th>              
-                <th>
-                    AWB
-                </th>
-                <th>
-                    PCS
-                </th>
-                <th>
-                    Weight
-                </th>
-                <th>
-                    Value
-                </th>
+        destinationairportCity = new google.maps.places.Autocomplete(
+            document.getElementById('DestinationAirportCity'), { types: ['geocode'] });
 
-                <th>
-                    Contents
-                </th>
-                <th style="width:20%">
-                    Shipper
-                </th>
-                <th style="width:20%">
-                    Receiver
-                </th>
-                <th>
-                    Bag No
-                </th>
-                <th>
-                    Currency
-                </th>
-                <th width="100px">
-                    Destination Country
-                </th>
-                <th width="100px">
-                    Destination City
-                </th>
-                
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th width="20px">                    
-                    
-                </th>                
-                <th>
-                    AWB
-                </th>
-                <th>
-                    
-                </th>
-                <th>
-                    
-                </th>
-                <th>
-                    
-                </th>
+        //destinationCity = new google.maps.places.Autocomplete(
+        //    document.getElementById('tDestinationCityID'), { types: ['geocode'] });
 
-                <th>
-                    
-                </th>
-                <th style="width:20%">
-                    Shipper
-                </th>
-                <th style="width:20%">
-                    Receiver
-                </th>
-                <th>
-                    
-                </th>
-                <th>
-                    
-                </th>
-                <th width="100px">
-                    Destination Country
-                </th>
-                <th width="100px">
-                    Destination City
-                </th>                
-            </tr>
-        </tfoot>
-        <tbody class="input-table" id="listContainer">
+        //destinationCountry = new google.maps.places.Autocomplete(
+        //    document.getElementById('tDestinationCountryID'), { types: ['geocode'] });
 
-            @foreach (var item in Model.Shipments)
-            {
-                //var isexported = "";
-                //if(item.Status>1)
-                //{
-                //    isexported = "exported";
-                //}
-                <tr id="@item.ShipmentDetailID" style="line-height:3">
-                    <td >
-                        <div class="col-md-1 checkboxdesign">
-                            @i
-                            <input type="checkbox" class="checkfilter" id="Chk_@item.ShipmentDetailID" value="@item.ShipmentDetailID" name="Chk_@item.ShipmentDetailID" />
-                            </div>
-                    </td>                    
-                    <td>@item.AWB</td>
-                    <td style="text-align:right">@item.PCS</td>
-                    <td style="text-align:right">
-                        @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Weight, "3")
-                    </td>
-                    <td style="text-align:right">
-                        @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Value, "2")
-                    </td>
-                    <td>@item.Contents</td>
-                    <td>@item.Shipper</td>
-                    <td>@item.Reciver</td>
-                    <td>@item.BagNo</td>
-                    <td>
-                        @CMSV2.Models.CommanFunctions.GetCurrencyId(@item.CurrencyID)
-                    </td>
-                    <td class="Destcountry">
-                        @item.DestinationCountry
-                    </td>
-                    <td>@item.DestinationCity</td>                    
-                </tr>
-                i = i + 1;
-            }
-        </tbody>
-    </table>
-</div>
-<hr />
-<br />
-<div class="row form-group btn-right">
-    <div class="col-md-12">
-        @Html.ActionLink("Cancel", "ViewImport", null, new { @class = "btn btn-secondary btn-sm waves-effect waves-light float-right" })
+    }
 
-        <input type="button" id="btnSubmit" value="Create Export" class="btn btn-primary waves-effect waves-light" />
-    </div>
-</div>
+    function fillInAddress() {
+        debugger;
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        console.log(place.address_components);
 
-<script>
-        function initialize() {
-            var input2 = document.getElementById('DestinationCountry');
-            new google.maps.places.Autocomplete(input2);
-        }
-
-       // google.maps.event.addDomListener(window, 'load', initialize);
-        $(document).ready(function () {
-            $("#Selectall").change(function () {
-                if ($(this).prop("checked") == true) {
-                    $("#dataTables-example tbody tr").addClass('Selected');
-                    $(".checkfilter").prop('checked', true);
-                } else {
-                    $("#dataTables-example tbody tr").removeClass('Selected');
-                    $(".checkfilter").prop('checked', false);
+       
+        var postcode = '';
+        $.each(place.address_components, function (index, component) {
+            var types = component.types;
+            $.each(types, function (index, type) {
+                if (type == 'postal_code') {
+                    postcode = component.long_name;
                 }
-            });
-
-            $('#dataTables-example tfoot th').each(function () {
-                debugger;
-                var title = $(this).html().trim();
-                console.log(title);
-                if (title!='')
-                    $(this).html('<input type="text" style="width:100%" />');
-            });
-
-
-        var table = $('#dataTables-example').DataTable();
-
-        table.columns().every(function () {
-            var that = this;
-
-            $('input', this.footer()).on('keyup change', function () {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#CityName').val(component.long_name);
                 }
+                else if (type == 'country') {
+                    $('#CountryName').val(component.long_name);
+                }
+
+                //if(type == 'administrative_area_level_1') {
+                //state = component.short_name;
+                //    }
             });
         });
 
-            $(".checkfilter").change(function () {
+    }
 
-                var id = this.id;
-                var countryid = id.split('_');
-                if ($(this).prop("checked") == true) {
-                    $("#dataTables-example tbody tr[id=" + countryid[1] + "]").addClass('Selected');
-
-                } else {
-                    $("#dataTables-example tbody tr[id=" + countryid[1] + "]").removeClass('Selected');
-                    $("#Selectall").prop('checked', false);
-                }
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
             });
-            $("#DestinationCountry").click(function () {
-                debugger;
-                $("#dataTables-example tbody tr").removeClass('Selected');
-                $(".checkfilter").prop('checked', false);
-                $("#Selectall").prop('checked', false);
+        }
+    }
 
-                var Countryid = $(this).val();
-                Countryid = Countryid.replace(/\s/g, "");
-                $('#dataTables-example .Destcountry').each(function () {
-                    var value = $(this).html();
-                    value = value.replace(/\s/g, "");
-
-                    if (Countryid == value) {
-                        var trid = $(this).closest('tr').attr('id'); // table row ID
-
-                        $("#Chk_" + trid).prop('checked', true);
-                        $("#dataTables-example tbody tr[id=" + trid + "]").not('.exported').addClass('Selected');
-
-                    }
-
-                });
+    function geoCitylocate(obj) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                $(obj).setBounds(circle.getBounds());
             });
-            $("#DestinationCountry").on("keydown",function () {
-                debugger;
-                $("#dataTables-example tbody tr").removeClass('Selected');
-                $(".checkfilter").prop('checked', false);
-                $("#Selectall").prop('checked', false);
+        }
+    }
 
-                var Countryid = $(this).val();
-                Countryid = Countryid.replace(/\s/g, "");
-                $('#dataTables-example .Destcountry').each(function () {
-                    var value = $(this).html();
-                    value = value.replace(/\s/g, "");
-
-                    if (Countryid == value) {
-                        var trid = $(this).closest('tr').attr('id'); // table row ID
-
-                        $("#Chk_" + trid).prop('checked', true);
-                        $("#dataTables-example tbody tr[id=" + trid + "]").not('.exported').addClass('Selected');
-
-                    }
-
-                });
+    function geoCountrylocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocompleteCountry.setBounds(circle.getBounds());
             });
-            $("#DestinationCountry").on("keyup",function () {
-                debugger;
-                $("#dataTables-example tbody tr").removeClass('Selected');
-                $(".checkfilter").prop('checked', false);
-                $("#Selectall").prop('checked', false);
+        }
+    }
+</script>
+<script type="text/javascript">
+    var objitems = [];
+    function savefixation() {
+        var Field = $('#FieldName').val();
+        var SourceValue = $('#SourceValue').val();
+        var DestinationValue = $('#DestinationValue').val();
+        var DestinationCountry = $('#DestinationCountry').val();
+        var DestinationCity = $('#DestinationCity').val();
+        var DestinationLocation = $('#DestinationLocation').val();
+        $("#listContainer").html('');
+        var newobjitems = [];
+        $.each(objitems, function (index, item) {
+            var i = $("#listContainer > tr").length;
+            var ReceiverContact = item.ReceiverContact;
+            var ReceiverAddress = item.ReceiverAddress;
+            if (Field == 'DestinationLocation') {
+                item.DestinationLocation = DestinationLocation;
+                item.DestinationCountry = DestinationCountry;
+            }
+            else if (Field == 'DestinationCountry') {
+                item.DestinationCountry = DestinationCountry;
+            }
+            else if (Field == 'DestinationCity') {
+                //item.DestinationCountry = DestinationCountry;
+            }
+            else {
 
-                var Countryid = $(this).val();
-                Countryid = Countryid.replace(/\s/g, "");
-                $('#dataTables-example .Destcountry').each(function () {
-                    var value = $(this).html();
-                    value = value.replace(/\s/g, "");
+            }
+            if (item.DestinationCountry.indexOf("DUBAI") >= 0)
+                item.ImportType = 'Import';
+            else
+                item.ImportType = 'Transit';
+            if (item.DestinationCity.indexOf("DUBAI") >= 0)
+                item.ImportType = 'Import';
+            else
+                item.ImportType = 'Transit';
 
-                    if (Countryid == value) {
-                        var trid = $(this).closest('tr').attr('id'); // table row ID
+            if (item.DestinationLocation.indexOf("DUBAI") >= 0)
+                item.ImportType = 'Import';
+            else
+                item.ImportType = 'Transit';
+            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
+            datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
+            datahtml = datahtml + '<input type="hidden" id="hdnImportType_' + i + '"  value="' + item.ImportType + '"/>';
+            var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
+                '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
+                '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
+                '<td>' + item.Bag + '</td>' +
+                '<td>' + item.Content + '</td>' +
+                '<td>' + item.Pcs + '</td>' +
+                '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
+                '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
+                '<td class="text-right">' + item.COD + '</td>'+
+                '<td class="text-right">' + item.ImportType + '</td></tr>';
 
-                        $("#Chk_" + trid).prop('checked', true);
-                        $("#dataTables-example tbody tr[id=" + trid + "]").not('.exported').addClass('Selected');
+            $("#listContainer").append(html);
+            newobjitems.push(item);
+            if (objitems.length == (i + 1)) {
+                objitems = [];
+                objitems = newobjitems;
+                $('#fixationpopup').modal('hide');
+            }
+        });
+    }
+    $(document).on("change", "#importFile", function () {
+        var files = $("#importFile").get(0).files;
 
-                    }
+        var formData = new FormData();
+        formData.append('importFile', files[0]);
 
-                });
-            });
-            $("#DestinationCountry").on("keypress",function () {
-                    debugger;
-                    $("#dataTables-example tbody tr").removeClass('Selected');
-                $(".checkfilter").prop('checked', false);
-                $("#Selectall").prop('checked', false);
-
-                    var Countryid = $(this).val();
-                    Countryid = Countryid.replace(/\s/g, "");
-                    $('#dataTables-example .Destcountry').each(function () {
-                        var value = $(this).html();
-                        value = value.replace(/\s/g, "");
-
-                        if (Countryid == value) {
-                            var trid = $(this).closest('tr').attr('id'); // table row ID
-
-                            $("#Chk_" + trid).prop('checked', true);
-                            $("#dataTables-example tbody tr[id=" + trid + "]").not('.exported').addClass('Selected');
-
+        $.ajax({
+            url: '/ImportManifest/ImportFile',
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Status === 1) {
+                    var data = response.data;
+                    
+                    $("#listContainer").html('');
+                    $.each(data, function (index, item) {
+                        objitems.push(item);
+                        debugger;
+                        var i = $('#listContainer > tr').length;
+                        var ReceiverContact = item.ReceiverContact;
+                        var ReceiverAddress = item.ReceiverAddress;
+                        if (ReceiverAddress.indexOf(":") >= 0) {
+                            var addr = ReceiverAddress.split(':');
+                            ReceiverContact = addr[0];
+                            ReceiverAddress = addr[1];
                         }
+                        
+                        if (item.DestinationCountry.indexOf("DUBAI") >= 0)
+                            item.ImportType = 'Import';
+                        else
+                            item.ImportType = 'Transit';
+                        if (item.DestinationCity.indexOf("DUBAI") >= 0)
+                            item.ImportType = 'Import';
+                        else
+                            item.ImportType = 'Transit';
 
+                        if (item.DestinationLocation.indexOf("DUBAI") >= 0)
+                            item.ImportType = 'Import';
+                        else
+                            item.ImportType = 'Transit';
+                        var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
+                        datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
+                        datahtml = datahtml + '<input type="hidden" id="hdnImportType_' + i + '"  value="' + item.ImportType + '"/>';
+                        var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
+                            '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
+                            '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
+                            '<td>' + item.Bag + '</td>' +
+                            '<td>' + item.Content + '</td>' +
+                            '<td>' + item.Pcs + '</td>' +
+                            '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
+                            '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
+                            '<td class="text-right">' + item.COD + '</td>'+
+                           '<td class="text-right">' + item.ImportType + '</td></tr>';
+
+                        $("#listContainer").append(html);
+                        $('#TotalAWB').val(index + 1);
+                            
+                        //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
+                        //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
+                        //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
                     });
 
 
-
-
-                //$("#dataTables-example tbody tr[id=" + Countryid+"]").each(function () {
-                //    alert(this.id);
-                //});
-
-            });
-
-            $("#btnSubmit").on('click', function () {
-                debugger;
-                var ImportShipId = '@Model.ID';
-                var DestinationCountry = $("#DestinationCountry").val();
-                var SelectedValues = $("#dataTables-example tr.Selected").length;
-                var selectedids = "";
-                $('#dataTables-example').find('input[type="checkbox"]:checked').each(function () {
-                    var det = $(this).val();
-                    if (selectedids == "") {
-                        selectedids = det;
-                    } else {
-                        selectedids = selectedids + "," + det;
-                    }
-                });
-                if (SelectedValues == 0) {
-                    alert("No shipments found to Export!!")
                 } else {
-                    location.href = '@Url.Action("Create","ExportShipment")?ImportShipId=' + ImportShipId + '&SelectedImportdetail=' + selectedids;
+                    //alert("Failed to Import");
+                    $.notify(response.message, 'error');
                 }
-
-            })
+            }
         });
+    });
 
+    $(document).on("click", "#btnUpload", function () {
+        $('#importFile').trigger('click');
+    });
+
+
+    $(document).ready(function () {
+        $('#btnFixation').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ShowImportDataFixation", "ImportManifest")',
+                datatype: "html",
+                data: {
+                    FieldName: 'DestinationLocation'
+                },
+                success: function (data) {
+                    $("#popupContainer").html(data);
+                    $('#fixationpopup').modal('show');
+                }
+            });
+        })
+        $('#btnSave').click(function () {
+            debugger;
+
+
+            if ($('#AgentID').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#AgentID').focus();
+                return;
+            }
+            else if ($('#Route').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#Route').focus();
+                return;
+            }
+            //else if ($('#Type').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#ShipmentTypeId').focus();
+            //    return;
+            //}
+            else if ($('#OriginAirportCity').val() == '') {
+                    $.notify('Please Fill Required Fields!');
+                $('#OriginAirportCity').focus();
+                    return;
+            }
+            else if ($('#DestinationAirportCity').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#DestinationAirportCity').focus();
+                    return;
+            }
+            else if ($('#FlightDate1').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#FlightDate1').focus();
+                return;
+            }
+            else if ($('#FlightNo').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#FlightNo').focus();
+                return;
+            }
+            else if ($('#MAWB').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#MAWB').focus();
+                return;
+            }
+            else if ($('#TotalAWB').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#TotalAWB').focus();
+                return;
+            }
+            else if ($('#ParcelNo').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#ParcelNo').focus();
+                return;
+            }
+            else if ($('#Weight').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#Weight').focus();
+                return;
+            }
+            else if ($('#Bags').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#Bags').focus();
+                return;
+            }
+            else if ($('#Bags').val() == '') {
+                $.notify('Please Fill Required Fields!');
+                $('#Bags').focus();
+                return;
+            }
+
+
+            var obj = [];
+            var maxrow = $('#listContainer > tr').length;
+            if (maxrow == 0) {
+                alert('Click upload to import Items from Excel!');
+                return;
+            }
+            for (i = 0; i < maxrow; i++) {
+                var deleted = $('#hdndeleted_' + i).val();
+                if (deleted == 'false') {
+                    var AWBNo = $('#hdnAWBNo_' + i).val();
+                    var AWBDate = $('#hdnAWBDate_' + i).val();
+                    var BagNo = $('#hdnBag_' + i).val();
+                    var Shipper = $('#hdnShipper_' + i).val();
+                    var Receiver = $('#hdnReceiver_' + i).val();
+                    var ReceiverContact = $('#hdnReceiverContact_' + i).val();
+                    var ReceiverAddress = $('#hdnReceiverAddress_' + i).val();
+                    var DestinationLocation = $('#hdnDestinationLocation_' + i).val();
+                    var DestinationCountry = $('#hdnDestinationCountry_' + i).val();
+                    var DestinationCity = $('#hdnDestinationCity_' + i).val();
+                    var ReceiverPhone = $('#hdnReceiverPhone_' + i).val();
+                    var Pcs = $('#hdnPcs_' + i).val();
+                    var Weight = $('#hdnWeight_' + i).val();
+                    var Content = $('#hdnContent_' + i).val();
+                    var COD = $('#hdnCOD_' + i).val();
+                    var Value = $('#hdnValue_' + i).val();
+                    var ImportType = $('#hdnImportType_' + i).val();
+                    var item = { AWBNo: AWBNo, AWBDate: AWBDate, Bag: BagNo, Shipper: Shipper, Receiver: Receiver, ReceiverContact: ReceiverContact, ReceiverAddress: ReceiverAddress, DestinationLocation: DestinationLocation, DestinationCountry: DestinationCountry, DestinationCity: DestinationCity, Pcs: Pcs, Weight: Weight, Content: Content, COD: COD, Value: Value, ReceiverPhone: ReceiverPhone, ImportType: ImportType }
+                    obj.push(item);
+                }
+                if (maxrow == (i + 1)) {
+                    //SaveImport
+                    debugger;
+                    var master = {
+                        ID: $('#ID').val(),
+                        ManifestNumber: $('#ManifestNumber').val(),
+                        AgentID: $('#AgentID').val(),
+                        ManifestDate: $('#ManifestDate').val(),
+                        //ShipmentTypeId: $('#ShipmentTypeId').val(),
+                        OriginAirportCity: $('#OriginAirportCity').val(),
+                        DestinationAirportCity: $('#DestinationAirportCity').val(),
+                        FlightDate1: $('#FlightDate1').val(),
+                        FlightNo: $('#FlightNo').val(),
+                        MAWB: $('#MAWB').val(),
+                        Type: $('#Type').val(),
+                        TotalAWB: $('#TotalAWB').val(),
+                        ParcelNo: $('#ParcelNo').val(),
+                        Weight: $('#Weight').val(),
+                        Bags: $('#Bags').val(),
+                        Route: $('#Route').val()
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "/ImportManifest/SaveImport",
+                        datatype: "Json",
+                        data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
+                        success: function (response) {
+                            $.notify("Import Shipment Saved Succesfully!", "success");
+                            $('#btnSave').removeAttr('disabled');
+                            window.location.href = "/ImportManifest/Index";
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            }
+        });
+        if ($('#ID').val() > 0) {
+            DisplayImprotItem();
+        }
+
+    });
+    function DisplayImprotItem() {
+        //GetImportItem
+        $("#listContainer").html('');
+        $.ajax({
+            type: "POST",
+            url: "/ImportManifest/GetImportItem",
+            datatype: "Json",
+            data: { id: $("#ID").val() },  //$("#CollectedByID option:selected").val()
+            success: function (response) {
+                debugger;
+                var data = response.data;
+                $.each(data, function (index, item) {
+                    var i = $("#listContainer > tr").length;
+                    var ReceiverContact = item.ReceiverContact;
+                    var ReceiverAddress = item.ReceiverAddress;
+                    if (item.DestinationCountry.indexOf("DUBAI") >= 0)
+                        item.ImportType = 'Import';
+                    else
+                        item.ImportType = 'Transit';
+                    var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
+                    datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
+                    datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
+                    var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
+                        '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
+                        '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
+                        '<td>' + item.Bag + '</td>' +
+                        '<td>' + item.Content + '</td>' +
+                        '<td>' + item.Pcs + '</td>' +
+                        '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
+                        '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
+                        '<td class="text-right">' + item.COD + '</td>'+
+                        '<td class="text-right">' + item.ImportType + '</td></tr>';
+
+                    $("#listContainer").append(html);
+                });
+            }
+        });
+    }
+    $(function () {
+        $('#CreatedDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#FlightDate1').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+    });
 </script>
 
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            <h1 class="headingfont">Create Shipments</h1>
+        </div>
+        @*<div class="col-md-5 pull-right text-right">
+                <h2 class="awb"><strong>@ViewBag.AWBNo</strong></h2>
+                <h5 id="h1status" style="color:red">@ViewBag.Status</h5>
 
+            </div>*@
+        <hr />
+    </div>
+    <section class="content">
+        @using (Html.BeginForm("Create", "ImportManifest", FormMethod.Post, new { @id = "importShipment" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+          
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.HiddenFor(mode=>Model.ID)
+                    @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
+
+                    @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
+
+                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true", @disabled = "true" })
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Agent</label>
+                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Route</label>
+                    @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @required = "true", @autocomplete = "off" })
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.OriginAirportCity, "Origin Airport City", htmlAttributes: new { @class = "headinglabel required"})
+
+                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @required = "true", @autocomplete = "off",@type="search" })
+                    @Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.DestinationAirportCity, "Destination Airport City", htmlAttributes: new { @class = "headinglabel required"})
+
+                    @Html.TextBoxFor(model => model.DestinationAirportCity, new { @class = "form-control", @required = "true", @autocomplete = "off", @type = "search" })
+
+                    @Html.ValidationMessageFor(model => model.DestinationAirportCity, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="col-md-3">
+                    
+                    <label class="headinglabel required">Flight No</label>
+                    @Html.TextBoxFor(model => model.FlightNo, new { @class = "form-control", @required = "true",@autocomplete="off" })
+
+                    @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Flight Date</label>
+                    @Html.TextBoxFor(model => model.FlightDate1, new { @class = "form-control", @required = "true", @autocomplete = "off" })
+
+                    @Html.ValidationMessageFor(model => model.FlightDate1, "", new { @class = "text-danger" })
+
+                </div>
+                @*<div class="col-md-2">
+                    <label class="headinglabel required">Type</label>
+                    @Html.DropDownListFor(model => model.Type, (IEnumerable<SelectListItem>)ViewBag.Type, Model.Type, htmlAttributes: new { @class = "form-control", @required = "true", @selected = @Model.Type })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+                </div>*@
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
+
+                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Parcel No.</label>
+                    @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.ParcelNo, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Bag</label>
+
+                    @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.Bags, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Weight</label>
+                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="col-md-1">
+                    <label class="headinglabel required">Total AWB</label>
+
+                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control text-right", @min = 1, @required = "true" })
+                    @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1" style="padding-top:30px">
+                    <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
+                    <input type="button" id="btnfile" style="display:none" />
+                    <input class="btn btn-primary" id="btnUpload" type="button" value="Upload" />
+
+                </div>
+                <div class="col-md-1" style="padding-top:30px">                                        
+                    <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
+
+                </div>
+            </div>                       
+            
+            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+                <table class="table table-responsive table-bordered tblfont" role="grid" aria-describedby="datatable-1_info" style="min-width: 100%" id="DetailsTable">
+
+                    @*<table class="table" style="min-width: 100%">*@
+                    <thead class="input-table">
+                        <tr>
+                            <th width="20px">
+                                S.No
+                            </th>
+                            <th>
+                                AWB
+                            </th>
+                            <th>
+                                AWB Date
+                            </th>
+                            <th>
+                                Shipper
+                            </th>
+                            <th>
+                                Receiver
+                            </th>
+                            <th width="100px">
+                                Destination Location
+                            </th>
+                            <th width="100px">
+                                Destination Country
+                            </th>
+                            <th>
+                                Bag.No
+                            </th>
+                            <th>
+                                Contents
+                            </th>
+                            <th>
+                                PCS
+                            </th>
+                            <th>
+                                Weight
+                            </th>
+                            <th>
+                                Customs Value
+                            </th>
+                            <th>
+                                COD
+                            </th>
+                            <th>
+                                Currency
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="input-table" id="listContainer">
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            @*<div class="form-group col-lg-3 col-md-6 col-sm-12 float-right" style="display:flex">
+                <div class="col-md-4">
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary btn-sm waves-effect waves-light float-right" })
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary waves-effect waves-light" />
+                </div>
+            </div>*@
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12 btn-right">
+                    <input type="button" value="Submit" id="btnSave" class="btn btn-primary waves-effect waves-light" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
+                </div>
+
+            </div>
+        }
+    </section>
+
+
+
+</section>
+
+
+
+<div class="modal fade" id="fixationpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Import Data Fixation
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid" id="popupContainer">
+
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 5px">
+                <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>

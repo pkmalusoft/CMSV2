@@ -601,29 +601,12 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="InscanID" Type="int" />
   </EntityType>
-  <EntityType Name="AWBStock">
-    <Key>
-      <PropertyRef Name="AWBStockID" />
-    </Key>
-    <Property Name="AWBStockID" Type="int" Nullable="false" />
-    <Property Name="StockDate" Type="datetime" />
-    <Property Name="EnteredBy" Type="int" />
-  </EntityType>
-  <EntityType Name="AWBStockDetails">
-    <Key>
-      <PropertyRef Name="AWBStockDetailID" />
-    </Key>
-    <Property Name="AWBStockDetailID" Type="int" Nullable="false" />
-    <Property Name="AWBStockID" Type="int" Nullable="false" />
-    <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
-  </EntityType>
   <EntityType Name="AWBTrackStatus">
     <Key>
       <PropertyRef Name="AWBTrackStatusId" />
     </Key>
     <Property Name="AWBTrackStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="InScanId" Type="int" Nullable="false" />
+    <Property Name="InScanId" Type="int" />
     <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="EntryDate" Type="datetime" Nullable="false" />
     <Property Name="StatusTypeId" Type="int" Nullable="false" />
@@ -1571,6 +1554,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
     <Property Name="UserID" Type="int" />
     <Property Name="FCMTokenId" Type="text" />
     <Property Name="ProfileImage" Type="text" />
+    <Property Name="RoleId" Type="int" />
   </EntityType>
   <EntityType Name="EmpZoneAllocation">
     <Key>
@@ -1922,11 +1906,18 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="CurrencyID" Type="int" />
     <Property Name="StatusActive" Type="bit" />
   </EntityType>
+  <EntityType Name="ImportFields">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FieldName" Type="varchar" MaxLength="100" />
+  </EntityType>
   <EntityType Name="ImportShipment">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ManifestNumber" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="ConsignorName" Type="nvarchar" MaxLength="1000" />
     <Property Name="ConsignorAddress1_Building" Type="nvarchar" MaxLength="400" />
@@ -1959,21 +1950,28 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="Status" Type="int" />
     <Property Name="ShipmentTypeId" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
+    <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="ParcelNo" Type="int" />
+    <Property Name="Route" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="ImportShipmentDetails">
     <Key>
       <PropertyRef Name="ShipmentDetailID" />
     </Key>
-    <Property Name="ShipmentDetailID" Type="int" Nullable="false" />
+    <Property Name="ShipmentDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ImportID" Type="int" Nullable="false" />
-    <Property Name="HAWB" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AWB" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AWBDate" Type="datetime" Nullable="false" />
     <Property Name="PCS" Type="int" Nullable="false" />
     <Property Name="Weight" Type="decimal" Precision="18" Scale="3" Nullable="false" />
     <Property Name="Contents" Type="varchar(max)" Nullable="false" />
     <Property Name="Shipper" Type="varchar" MaxLength="500" Nullable="false" />
-    <Property Name="Value" Type="money" Nullable="false" />
-    <Property Name="Reciver" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="CustomValue" Type="money" Nullable="false" />
+    <Property Name="COD" Type="money" Nullable="false" />
+    <Property Name="Receiver" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="ReceiverContact" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="ReceiverAddress" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="ReceiverTelephone" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
     <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
     <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
@@ -1982,6 +1980,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="QuickInscanID" Type="int" />
     <Property Name="StatusTypeId" Type="int" />
     <Property Name="CourierStatusID" Type="int" />
+    <Property Name="DRSID" Type="int" />
+    <Property Name="CODReceiptId" Type="int" />
+    <Property Name="DestinationLocation" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ImportType" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="InScan">
     <Key>
@@ -6626,8 +6628,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
     <EntitySet Name="AWBBOOKIssue" EntityType="Self.AWBBOOKIssue" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBDetail" EntityType="Self.AWBDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBPending" EntityType="Self.AWBPending" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBStock" EntityType="Self.AWBStock" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AWBStockDetails" EntityType="Self.AWBStockDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AWBTrackStatus" EntityType="Self.AWBTrackStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BranchMaster" EntityType="Self.BranchMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BusinessType" EntityType="Self.BusinessType" Schema="dbo" store:Type="Tables" />
@@ -6696,6 +6696,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
     <EntitySet Name="HoldRelease" EntityType="Self.HoldRelease" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Import" EntityType="Self.Import" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportAgentMaster" EntityType="Self.ImportAgentMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImportFields" EntityType="Self.ImportFields" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportShipment" EntityType="Self.ImportShipment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportShipmentDetails" EntityType="Self.ImportShipmentDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InScan" EntityType="Self.InScan" Schema="dbo" store:Type="Tables" />

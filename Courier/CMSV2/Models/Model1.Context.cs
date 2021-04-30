@@ -58,8 +58,6 @@ namespace CMSV2.Models
         public virtual DbSet<aspnet_Users> aspnet_Users { get; set; }
         public virtual DbSet<aspnet_WebEvent_Events> aspnet_WebEvent_Events { get; set; }
         public virtual DbSet<AWBPending> AWBPendings { get; set; }
-        public virtual DbSet<AWBStock> AWBStocks { get; set; }
-        public virtual DbSet<AWBStockDetail> AWBStockDetails { get; set; }
         public virtual DbSet<BranchMaster> BranchMasters { get; set; }
         public virtual DbSet<BusinessType> BusinessTypes { get; set; }
         public virtual DbSet<CargoDescription> CargoDescriptions { get; set; }
@@ -107,8 +105,6 @@ namespace CMSV2.Models
         public virtual DbSet<HoldRelease> HoldReleases { get; set; }
         public virtual DbSet<Import> Imports { get; set; }
         public virtual DbSet<ImportAgentMaster> ImportAgentMasters { get; set; }
-        public virtual DbSet<ImportShipment> ImportShipments { get; set; }
-        public virtual DbSet<ImportShipmentDetail> ImportShipmentDetails { get; set; }
         public virtual DbSet<InScan> InScans { get; set; }
         public virtual DbSet<InScanDomestic> InScanDomestics { get; set; }
         public virtual DbSet<InScanInternational> InScanInternationals { get; set; }
@@ -258,7 +254,6 @@ namespace CMSV2.Models
         public virtual DbSet<AWBBatch> AWBBatches { get; set; }
         public virtual DbSet<AWBBOOKIssue> AWBBOOKIssues { get; set; }
         public virtual DbSet<PrepaidAWB> PrepaidAWBs { get; set; }
-        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<QuickInscanMaster> QuickInscanMasters { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
@@ -270,6 +265,10 @@ namespace CMSV2.Models
         public virtual DbSet<ConsignorMaster> ConsignorMasters { get; set; }
         public virtual DbSet<AccountSetup> AccountSetups { get; set; }
         public virtual DbSet<DR> DRS { get; set; }
+        public virtual DbSet<ImportShipment> ImportShipments { get; set; }
+        public virtual DbSet<ImportShipmentDetail> ImportShipmentDetails { get; set; }
+        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
+        public virtual DbSet<ImportField> ImportFields { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
