@@ -184,6 +184,7 @@ namespace CMSV2.Models
         public string SpecialNotes {get;set;}
         public string  CODStatus { get; set; }
         public string MaterialCostStatus { get; set; }
+        public int InvoiceId { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

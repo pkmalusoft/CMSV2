@@ -198,6 +198,7 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
             cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            cmd.Parameters.AddWithValue("@EntryTime", CommanFunctions.GetCurrentDateTime());
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -397,6 +398,50 @@ namespace CMSV2.DAL
 
         }
 
+        public static DataTable DeleteAccountHead(int AcheadId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_SP_DeleteAcHead";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AcHeadId", AcheadId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static DataTable DeleteCustomer(int CustomerId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteCustomer";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static DataTable DeleteInvoice(int InvoiceId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -514,6 +559,29 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_DeleteDRS";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@DRSID", DRSID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public static DataTable DeleteSupplier(int SupplierId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);

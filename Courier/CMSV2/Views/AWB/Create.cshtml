@@ -1236,7 +1236,7 @@
         })
         $("#btnsave").click(function () {
             debugger;
-           
+
             var fullform = $('#quickAWB').valid();
             console.log(fullform);
             if ($("#HAWBNo").val() != "") {
@@ -1280,7 +1280,7 @@
                         return false;
                     }
                     else {
-                       
+
                         if ($('#txtAWBProcessed').val() == '') {
                             alert($('#AWBProcessed').val());
                             if (confirm("Please click Yes to confirm about AWBProcessed?") == true) {
@@ -1447,9 +1447,10 @@
         var divitems = $('#divcustomer1').find('.form-control');
 
         if (@ViewBag.EditMode== true) {
-            if ($('#AWBProcessed').val() == True) {
-                $('#txtAWBProcessed').val(1);
-            }
+             
+            //if ($('#AWBProcessed').val() == True) {
+            //    $('#txtAWBProcessed').val(1);
+            //}
              //$('#divcustomer1').find('.form-control').each(function(index,item) {
              //   console.log(item);
              //    $(item).attr('disabled', 'disabled');
@@ -1474,12 +1475,17 @@
                 $('#materialcost').attr('Disabled', 'disabled');
             }
 
-              setTwoNumberDecimal($("#CourierCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#PackingCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#OtherCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#CustomCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#totalCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#materialcost")); //.val('0.00');
+            
+            if ($('#InvoiceId').val() != '' && $('#InvoiceId').val() != '0') {
+                $("#CourierCharge").attr('readonly', 'readonly');
+                $("#OtherCharge").attr('readonly', 'readonly');
+            }
+            //  setTwoNumberDecimal($("#CourierCharge")); //.val('0.00');
+            //setTwoNumberDecimal($("#PackingCharge")); //.val('0.00');
+            //setTwoNumberDecimal($("#OtherCharge")); //.val('0.00');
+            //setTwoNumberDecimal($("#CustomCharge")); //.val('0.00');
+            //setTwoNumberDecimal($("#totalCharge")); //.val('0.00');
+            //setTwoNumberDecimal($("#materialcost")); //.val('0.00');
         }
         else {
               $('#TransactionDate').val(reqdate);
@@ -1574,20 +1580,21 @@
                 @Html.HiddenFor(model => model.InScanID)
                 @Html.HiddenFor(model => model.BranchID)
                 @Html.HiddenFor(model => model.DepotID)
+                @Html.HiddenFor(model => model.InvoiceId)
                 @Html.HiddenFor(model => model.AWBProcessed)
                 @Html.HiddenFor(model => model.AcCompanyID)
                 @Html.HiddenFor(model => model.UserID)
                 @Html.HiddenFor(model => model.CourierStatusId)
-                @Html.HiddenFor(model => model.StatusTypeId)                
+                @Html.HiddenFor(model => model.StatusTypeId)
                 <input type="hidden" id="txtAWBProcessed" value="" required />
                 <label class="headinglabel required">Airway Bill No.</label>
                 @if (@Model.InScanID == 0)
                 {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 11 }) }
 
-            else
-            {
+                else
+                {
                 @Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @Disabled = "disabled" })
-            }
+                }
 
             </div>
             <div class="col-md-2">
@@ -1619,7 +1626,7 @@
             </div>
             <div class="col-md-4 hide" id="divcash">
                 <label class="headinglabel">Cash Account</label>
-                @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off",@type="search" })
+                @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off", @type = "search" })
                 @Html.HiddenFor(model => model.AcheadID, new { })
             </div>
         </div>
@@ -1653,7 +1660,7 @@
                 <div class="row no-margin" style="margin-top:10px!important">
                     <div class="col-md-3">
                         <label class="headinglabel required">Name</label>
-                        @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget",@autocomplete="off",@type="search", @required = "true", @style = "", @placeholder = "Shipper Name" })
+                        @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
                     </div>
 
                     <div class="col-md-3">
@@ -1718,7 +1725,7 @@
                     <div class="row no-margin" style="padding-top: 10px; ">
                         <div class="col-md-3">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search",@required = "true" })
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Contact Person</label>
@@ -1802,7 +1809,7 @@
                         <div class="row no-margin" style="padding-top: 10px">
                             <div class="col-md-2">
                                 <label class="headinglabel required">Description</label>
-                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true",@autocomplete="off" })
+                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
                             </div>
 
                             <div class="col-md-1">
@@ -1878,7 +1885,7 @@
                                                                           </div>
                                                                       </div>
                                                                       @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
-                                                                      @Html.HiddenFor(mode=>Model.TaxPercent)
+                                                                      @Html.HiddenFor(mode => Model.TaxPercent)
                                                                   </div>
                                                                   <div class="col-md-2">
                                                                       <label class="headinglabel">Material Cost</label>
@@ -2069,7 +2076,7 @@
 
                 <tbody id="OtherChargeTable">
                     @foreach (var item in Model.otherchargesVM)
-                                        {
+                    {
                                             <tr>
                                                 <td>
                                                     @item.OtherChargeName
@@ -2080,7 +2087,9 @@
                                                     <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+                                                     
+                                                        <a href="javascript:void(0)" id="DeleteAllocationRow" ><i class="fa fa-times"></i></a>
+                                                    
                                                 </td>
                                             </tr>
                                             otherchargecount++;
@@ -2119,72 +2128,77 @@
                                 $(document).ready(function () {
 
                                     $('#AddExpAllocation').click(function () {
-                                        var Total = 0;
-                                        var MainTotal = 0;
-                                        var selectedval = $("#OtherChargeID").val();
-                                        var exists = false;
-                                        debugger;
-                                        if (selectedval == 0) {
-                                            alert('Please select Other Charge Name!');
-                                            return;
-                                        }
-                                        $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
+                                        if ($('#OtherCharge').attr('readonly') != 'readonly') {
+                                            var Total = 0;
+                                            var MainTotal = 0;
+                                            var selectedval = $("#OtherChargeID").val();
+                                            var exists = false;
                                             debugger;
-                                            if (isNaN(parseFloat($(this).val())) === false) {
-                                                Total += parseFloat($(this).val());
-                                            }
-                                        });
-
-                                        $('#OtherChargeTable').find('.OChargeID').each(function () {
-                                            debugger;
-                                            if ($(this).val() === selectedval) {
-                                                exists = true;
-                                                alert('Already this charge added!');
+                                            if (selectedval == 0) {
+                                                alert('Please select Other Charge Name!');
                                                 return;
                                             }
-                                        });
-                                        if (exists == true)
-                                            return;
+                                            $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
+                                                debugger;
+                                                if (isNaN(parseFloat($(this).val())) === false) {
+                                                    Total += parseFloat($(this).val());
+                                                }
+                                            });
 
-                                        if ($('#ExpAmount').val() == '' || $('#ExpAmount').val() == 0 || $('#ExpAmount').val() == undefined) {
-                                            alert('Enter Amount!')
-                                            return;
-                                        }
-                                        if (isNaN(parseFloat($('#ExpAmount').val())) === false) {
-                                            Total += parseFloat($('#ExpAmount').val());
-                                        }
-                                        $('#OtherCharge').val(Total);
-                                        var x = $("#CourierCharge").val();
-                                        //var y = $("#PackingCharge").val();
-                                        var z = $("#OtherCharge").val();
-                                        //var a = $("#CustomCharge").val();
-                                        var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a); parseFloat(y)
+                                            $('#OtherChargeTable').find('.OChargeID').each(function () {
+                                                debugger;
+                                                if ($(this).val() === selectedval) {
+                                                    exists = true;
+                                                    alert('Already this charge added!');
+                                                    return;
+                                                }
+                                            });
+                                            if (exists == true)
+                                                return;
 
-                                        $("#totalCharge").val(tot.toFixed(2));
-                                        //if (isNaN(parseFloat($('#amount').val())) === false) {
-                                        //    MainTotal += parseFloat($('#amount').val());
-                                        //}
-                                        //if (Total > MainTotal) {
-                                        //    alert('Amount cannot exceed total allocated amount');
-                                        //    return;
-                                        //}
+                                            if ($('#ExpAmount').val() == '' || $('#ExpAmount').val() == 0 || $('#ExpAmount').val() == undefined) {
+                                                alert('Enter Amount!')
+                                                return;
+                                            }
+                                            if (isNaN(parseFloat($('#ExpAmount').val())) === false) {
+                                                Total += parseFloat($('#ExpAmount').val());
+                                            }
+                                            $('#OtherCharge').val(Total);
+                                            var x = $("#CourierCharge").val();
+                                            //var y = $("#PackingCharge").val();
+                                            var z = $("#OtherCharge").val();
+                                            //var a = $("#CustomCharge").val();
+                                            var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a); parseFloat(y)
 
-                                        var othercharngename = $("#OtherChargeID option:selected").text();
+                                            $("#totalCharge").val(tot.toFixed(2));
+                                            //if (isNaN(parseFloat($('#amount').val())) === false) {
+                                            //    MainTotal += parseFloat($('#amount').val());
+                                            //}
+                                            //if (Total > MainTotal) {
+                                            //    alert('Amount cannot exceed total allocated amount');
+                                            //    return;
+                                            //}
+
+                                            var othercharngename = $("#OtherChargeID option:selected").text();
                                         @*if (@otherchargecount>0)
                                             $('#RowCount').val(@otherchargecount);*@
 
-                                        var RowCount = parseInt($('#RowCount').val());
-                                        var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
-                                        RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
-                                        RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
-                                        RowHtml = RowHtml + '</tr>';
-                                        $('#OtherChargeTable').append(RowHtml);
-                                        $('#RowCount').val(RowCount + 1);
-                                        ///otherchargecount++;
-                                        $("#OtherChargeName").val('');
-                                        $("#OtherChargeID").val(0);
-                                        $("#ExpAmount").val(0);
-                                        $('#OtherChargeName').focus()
+                                            var RowCount = parseInt($('#RowCount').val());
+                                            var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
+                                            RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
+                                            RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
+                                            RowHtml = RowHtml + '</tr>';
+                                            $('#OtherChargeTable').append(RowHtml);
+                                            $('#RowCount').val(RowCount + 1);
+                                            ///otherchargecount++;
+                                            $("#OtherChargeName").val('');
+                                            $("#OtherChargeID").val(0);
+                                            $("#ExpAmount").val(0);
+                                            $('#OtherChargeName').focus()
+                                        }
+                                        else {
+                                            $.notify('Charges could not be edited in the Invoiced AWB!');
+                                        }
                                     });
 
                                     $('.txtNum').blur(function () {
@@ -2197,14 +2211,15 @@
                                     });
 
                                     $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
-
-                                        $(this).parent().parent().remove();
+                                        if ($('#OtherCharge').attr('readonly') != 'readonly') {
+                                            $(this).parent().parent().remove();
+                                        }
                                     });
 
-                                    $('#details').on("click", "#DeleteAllocationRow", function () {
+                                    //$('#details').on("click", "#DeleteAllocationRow", function () {
 
-                                        $(this).parent().parent().remove();
-                                    });
+                                    //    $(this).parent().parent().remove();
+                                    //});
                                 });
                                 function ClearData() {
                                     $("#ReceivedFrom").val('');

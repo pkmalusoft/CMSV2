@@ -147,12 +147,12 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-                    int? maxid = (from c in db.QuickInscanMasters orderby c.QuickInscanID descending select c.QuickInscanID).FirstOrDefault();
+                    //int? maxid = (from c in db.QuickInscanMasters orderby c.QuickInscanID descending select c.QuickInscanID).FirstOrDefault();
 
-                    if (maxid == null)
-                        _qinscan.QuickInscanID = 1;
-                    else
-                        _qinscan.QuickInscanID = Convert.ToInt32(maxid) + 1;
+                    //if (maxid == null)
+                    //    _qinscan.QuickInscanID = 1;
+                    //else
+                    //    _qinscan.QuickInscanID = Convert.ToInt32(maxid) + 1;
                     
                     _qinscan.AcFinancialYearID = yearid;
 

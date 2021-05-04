@@ -1100,9 +1100,16 @@
                 e.preventDefault();
                 $("#AcHead").val(i.item.label);
                 $('#SelectedAcHead').val(i.item.AcHeadID);
+                $('#SelectedAcHead').attr('label',i.item.label);
             }
         });
+        $("#AcHead").change(function () {
+            if ($("#AcHead").val() != "" && $("#AcHead").val() != $('#SelectedAcHead').attr('label')) {
+                $("#AcHead").val('');
+                $('#SelectedAcHead').val(0);
+            }
 
+        })
         $("#AcHeadAllocation").autocomplete({
             source: function (request, response) {
                 $.ajax({

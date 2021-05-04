@@ -1093,6 +1093,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="BranchID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetails">
     <Key>
@@ -1321,6 +1325,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
     <Property Name="CurrencyID" Type="int" />
     <Property Name="Amount" Type="money" Nullable="false" />
     <Property Name="DRRID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="DomesticCODReceiptDetail">
     <Key>
@@ -2898,6 +2906,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
     <Property Name="DRRID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="RecPayAllocationDetails">
     <Key>

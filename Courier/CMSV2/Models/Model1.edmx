@@ -1127,6 +1127,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="BranchID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="CustomerInvoiceDetails">
           <Key>
@@ -1355,6 +1359,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
           <Property Name="CurrencyID" Type="int" />
           <Property Name="Amount" Type="money" Nullable="false" />
           <Property Name="DRRID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="DomesticCODReceiptDetail">
           <Key>
@@ -2932,6 +2940,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Property Name="UserID" Type="int" />
           <Property Name="IsTradingReceipt" Type="bit" />
           <Property Name="DRRID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="RecPayAllocationDetails">
           <Key>
@@ -18583,6 +18595,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="AcFinancialYearID" Type="Int32" />
           <Property Name="BranchID" Type="Int32" />
           <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
           <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoice" Role="CustomerInvoice" Multiplicity="0..1">
@@ -18942,6 +18958,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="DRRID" Type="Int32" />
           <NavigationProperty Name="DomesticCODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
           <NavigationProperty Name="DomesticCODReceiptDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="DomesticCODReceiptDetail">
           <Key>
@@ -19045,6 +19065,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="UserID" Type="Int32" />
           <Property Name="IsTradingReceipt" Type="Boolean" />
           <Property Name="DRRID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="DRRDetail">
           <Key>
@@ -27710,6 +27734,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="CustomerInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
               <MappingFragment StoreEntitySet="CustomerInvoice">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
@@ -27958,6 +27986,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="DomesticCODReceipts">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceipt">
               <MappingFragment StoreEntitySet="DomesticCODReceipt">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="DRRID" ColumnName="DRRID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
@@ -28039,6 +28071,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="RecPays">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPay">
               <MappingFragment StoreEntitySet="RecPay">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="DRRID" ColumnName="DRRID" />
                 <ScalarProperty Name="IsTradingReceipt" ColumnName="IsTradingReceipt" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />

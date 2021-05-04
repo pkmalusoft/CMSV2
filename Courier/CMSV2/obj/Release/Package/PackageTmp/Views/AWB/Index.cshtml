@@ -231,20 +231,23 @@
                 <input type="hidden" id="CourierStatusId" />
                 <input type="hidden" id="StatusTypeId" />
                 <label class="headinglabel">Status</label>
-                @Html.DropDownListFor(mode=>Model.StatusID, new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+                @Html.DropDownListFor(mode => Model.StatusID, new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
             </div>
             <div class="col-md-1">
                 <label class="headinglabel">From </label>
                 @*<input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />*@
-                @Html.TextBoxFor(mode=>mode.FromDate,new { @class = "form-control text-right" })
+                @Html.TextBoxFor(mode => mode.FromDate, new { @class = "form-control text-right" })
             </div>
 
             <div class="col-md-1">
                 <label class="headinglabel">To </label>
                 @*<input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />*@
-                @Html.TextBoxFor(model=>model.ToDate, new { @class = "form-control text-right" })
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
             </div>
-
+            <div class="col-md-2">
+                <label class="headinglabel">AWB No.</label>
+                @Html.TextBoxFor(mode => Model.AWBNo, new {@class="form-control"})
+            </div>
             <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
                 @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
                 <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
@@ -265,8 +268,8 @@
                     }
                     else
                     {
-                         <a class="btn btn-primary btnwidth" href="Javascript:void(0)"  onclick="location.href='@Url.Action("Create", "AWBBatch")'">Create New</a>
-                            
+                        <a class="btn btn-primary btnwidth" href="Javascript:void(0)" onclick="location.href='@Url.Action("Create", "AWBBatch")'">Create New</a>
+
                     }
 
                 </p>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CMSV2.Models;
+using CMSV2.DAL;
 
 namespace CMSV2.Controllers
 {
@@ -154,12 +155,30 @@ namespace CMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            SupplierMaster supplier = db.SupplierMasters.Find(id);
-            db.SupplierMasters.Remove(supplier);
-            db.SaveChanges();
-            ViewBag.SuccessMsg = "You have successfully deleted supplier.";
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteSupplier(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
             return RedirectToAction("Index");
+
+
         }
+
 
 
         public JsonResult GetID(string supid)

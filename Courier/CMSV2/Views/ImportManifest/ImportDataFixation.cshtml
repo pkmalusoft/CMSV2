@@ -19,8 +19,8 @@
                     type: "GET",
                     success: function (data) {
                         if (data.length == 0) {
-                            $('#EventVenueId').val("");
-                            $('#VenueLocationMesssage').show();
+                           /// $('#EventVenueId').val("");
+                           // $('#VenueLocationMesssage').show();
                             return false;
                         }
                         else {
@@ -37,8 +37,14 @@
                     }
                 });
             },
-            messages: {
-                noResults: "", results: ""
+            //messages: {
+            //    noResults: "", results: ""
+            //},
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#DestinationLocation').val(ui.item.label);
+                //$('#PlaceId').val(ui.item.value);
+                return false;
             },
             select: function (event, ui) {
                 $('#DestinationLocation').val(ui.item.label);
@@ -73,9 +79,10 @@
                     }
                 });
             },
-            messages: {
-                noResults: "", results: ""
-              },
+            //messages: {
+            //    noResults: "", results: ""
+            //  },
+            autoFocus: false,
             focus: function (event, ui) {
                   $('#DestinationCountry').val(ui.item.label);
                   //$('#PlaceId').val(ui.item.value);
@@ -115,14 +122,15 @@
                     }
                 });
             },
-            messages: {
-                noResults: "", results: ""
-              },
-            focus: function (event, ui) {
+            //messages: {
+            //    noResults: "", results: ""
+            //  },
+              autoFocus: false,
+              focus: function (event, ui) {
                   $('#DestinationCity').val(ui.item.label);
                   //$('#PlaceId').val(ui.item.value);
                   return false;
-              },
+              },            
             select: function (event, ui) {
                 $('#DestinationCity').val(ui.item.label);
                 //$('#PlaceId').val(ui.item.value);
@@ -152,19 +160,22 @@
 
         });
         $("#DestinationLocation").change(function () {
-
-            $.ajax({
-                type: "GET",
-                url: "/ZoneChart/GetVenueDetailsByPlace",
-                datatype: "Json",
-                data: { placeId: $('#PlaceId').val() },
-                success: function (response) {
-                    debugger;
-                    console.log(response);
-                    $('#DestinationCountry').val(response.Country);
-                    $('#DestinationCity').val(response.City);
-                }
-            });
+            if ($('#PlaceId').val() != "") {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#PlaceId').val() },
+                    success: function (response) {
+                        debugger;
+                        console.log(response);
+                        if (response != null) {
+                            $('#DestinationCountry').val(response.Country);
+                            $('#DestinationCity').val(response.City);
+                        }
+                    }
+                });
+            }
         })
         $('#FieldName').trigger('change');
     });

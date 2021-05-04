@@ -210,6 +210,7 @@ namespace CMSV2.Controllers
                                 where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
                                 && (c.InvoiceID == null || c.InvoiceID == 0)
                                 && c.PaymentModeId == 3 //account
+                                && c.CourierCharge>0
                                 && c.CustomerID == datePicker.CustomerId
                                 select new CustomerInvoiceDetailVM
                                 {
@@ -291,7 +292,10 @@ namespace CMSV2.Controllers
                 _custinvoice.AcFinancialYearID = yearid;                
                 _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
-
+                _custinvoice.CreatedBy = userid;
+                _custinvoice.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                _custinvoice.ModifiedBy = userid;
+                _custinvoice.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                 db.CustomerInvoices.Add(_custinvoice);
                 db.SaveChanges();
 
@@ -405,7 +409,9 @@ namespace CMSV2.Controllers
                 _custinvoice.FuelPer = model.FuelPer;
                 _custinvoice.FuelAmt = model.FuelAmt;
                 _custinvoice.OtherCharge = model.OtherCharge;
-                _custinvoice.InvoiceTotal = model.InvoiceTotal;
+                _custinvoice.InvoiceTotal = model.InvoiceTotal;                
+                _custinvoice.ModifiedBy = userid;
+                _custinvoice.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                 db.Entry(_custinvoice).State = EntityState.Modified;
                 db.SaveChanges();
 

@@ -258,6 +258,7 @@ namespace CMSV2.Controllers
                         detail.DestinationCountry = item.DestinationCountry;
                         detail.DestinationCity = item.DestinationCity;
                         detail.DestinationLocation = item.DestinationLocation;
+                        detail.ImportType = item.ImportType;
                     if (item.ImportType == "Import")
                     {
                         detail.StatusTypeId = 9;
@@ -299,7 +300,7 @@ namespace CMSV2.Controllers
         public JsonResult GetImportItem(int id)
         {
             List<ImportManifestItem> details = new List<ImportManifestItem>();
-            details = (from c in db.ImportShipmentDetails where c.ImportID == id select new ImportManifestItem { AWBNo = c.AWB, AWBDate = c.AWBDate.ToString(), Shipper = c.Shipper, Receiver = c.Receiver, ReceiverContact=c.ReceiverContact, ReceiverAddress = c.ReceiverAddress,  ReceiverPhone = c.ReceiverTelephone, Content=c.Contents,Bag= c.BagNo.ToString(),  Weight = c.Weight.ToString(), Pcs = c.PCS.ToString(), Value = c.CustomValue.ToString(), COD = c.COD.ToString(), DestinationCountry = c.DestinationCountry, DestinationLocation = c.DestinationCity }).ToList();
+            details = (from c in db.ImportShipmentDetails where c.ImportID == id select new ImportManifestItem { AWBNo = c.AWB, AWBDate = c.AWBDate.ToString(), Shipper = c.Shipper, Receiver = c.Receiver, ReceiverContact=c.ReceiverContact, ReceiverAddress = c.ReceiverAddress,  ReceiverPhone = c.ReceiverTelephone, Content=c.Contents,Bag= c.BagNo.ToString(),  Weight = c.Weight.ToString(), Pcs = c.PCS.ToString(), Value = c.CustomValue.ToString(), COD = c.COD.ToString(), DestinationCountry = c.DestinationCountry, DestinationLocation =c.DestinationLocation,DestinationCity=c.DestinationCity ,ImportType=c.ImportType }).ToList();
                 
             return Json(new { data = details});
 

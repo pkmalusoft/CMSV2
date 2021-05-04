@@ -8040,6 +8040,10 @@
     <EntitySetMapping Name="CustomerInvoices">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
         <MappingFragment StoreEntitySet="CustomerInvoice">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />
           <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
@@ -8288,6 +8292,10 @@
     <EntitySetMapping Name="DomesticCODReceipts">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceipt">
         <MappingFragment StoreEntitySet="DomesticCODReceipt">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="DRRID" ColumnName="DRRID" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
@@ -8369,6 +8377,10 @@
     <EntitySetMapping Name="RecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPay">
         <MappingFragment StoreEntitySet="RecPay">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="DRRID" ColumnName="DRRID" />
           <ScalarProperty Name="IsTradingReceipt" ColumnName="IsTradingReceipt" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />

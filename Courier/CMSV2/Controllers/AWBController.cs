@@ -53,7 +53,7 @@ namespace CMSV2.Controllers
             {
                 model = obj;
             }
-            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(obj.StatusID, obj.FromDate, obj.ToDate, branchid, depotId, "");
+            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(obj.StatusID, obj.FromDate, obj.ToDate, branchid, depotId, model.AWBNo);
             model.Details = lst;
             //List<QuickAWBVM> lst = (from c in db.InScanMasters
             //                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
@@ -232,11 +232,11 @@ namespace CMSV2.Controllers
                                     
                         inscan.ConsignorContact = v.ConsignorContact;
                         inscan.CreatedBy = userid;
-                        DateTime univDateTime = DateTime.Now;
-                        DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
-                        inscan.CreatedDate = localDateTime;
+                        //DateTime univDateTime = DateTime.Now;
+                        //DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
+                        inscan.CreatedDate = CommanFunctions.GetCurrentDateTime();
                         inscan.LastModifiedBy = userid;
-                        inscan.LastModifiedDate = localDateTime;
+                        inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
 
                         if (v.PaymentModeId != null)
                         {
@@ -279,9 +279,9 @@ namespace CMSV2.Controllers
                             }
                         }
                         inscan.TransactionDate = v.TransactionDate;
-                        DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);                        
+                        DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
                         inscan.LastModifiedBy = userid;
-                        inscan.LastModifiedDate = localDateTime1;
+                        inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
                     }
                     inscan.Weight = v.Weight;
 
@@ -735,6 +735,15 @@ namespace CMSV2.Controllers
                 inscan.Consignor = data.Consignor;
                 inscan.CustomerandShipperSame = data.CustomerShipperSame;
                 inscan.shippername = data.Consignor;
+
+                if (data.InvoiceID != null)
+                {
+                    inscan.InvoiceId =Convert.ToInt32(data.InvoiceID);
+                }
+                else
+                {
+                    inscan.InvoiceId = 0;
+                }
             
                 inscan.EnquiryNo = data.EnquiryNo;
                 //inscan.PickupRequestStatusId = data.PickupRequestStatusId;

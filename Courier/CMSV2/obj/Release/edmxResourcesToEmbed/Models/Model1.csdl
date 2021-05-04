@@ -11461,6 +11461,10 @@
     <Property Name="AcFinancialYearID" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
     <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
   </EntityType>
   <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
     <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoice" Role="CustomerInvoice" Multiplicity="0..1">
@@ -11820,6 +11824,10 @@
     <Property Name="DRRID" Type="Int32" />
     <NavigationProperty Name="DomesticCODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
     <NavigationProperty Name="DomesticCODReceiptDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
   </EntityType>
   <EntityType Name="DomesticCODReceiptDetail">
     <Key>
@@ -11923,6 +11931,10 @@
     <Property Name="UserID" Type="Int32" />
     <Property Name="IsTradingReceipt" Type="Boolean" />
     <Property Name="DRRID" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
   </EntityType>
   <EntityType Name="DRRDetail">
     <Key>

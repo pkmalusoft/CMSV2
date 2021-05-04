@@ -669,7 +669,9 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@BranchId", BranchId);
             cmd.Parameters.AddWithValue("@DepotId", DepotId);
-            cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+            if (AWBNo == null)
+                AWBNo = "";
+                cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();

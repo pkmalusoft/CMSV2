@@ -140,6 +140,7 @@
 <script type="text/javascript">
     var objitems = [];
     function savefixation() {
+        debugger;
         var Field = $('#FieldName').val();
         var SourceValue = $('#SourceValue').val();
         var DestinationValue = $('#DestinationValue').val();
@@ -149,18 +150,24 @@
         $("#listContainer").html('');
         var newobjitems = [];
         $.each(objitems, function (index, item) {
-            var i = $("#listContainer > tr").length;
-            var ReceiverContact = item.ReceiverContact;
-            var ReceiverAddress = item.ReceiverAddress;
+            var i = index;
+            
             if (Field == 'DestinationLocation') {
-                item.DestinationLocation = DestinationLocation;
-                item.DestinationCountry = DestinationCountry;
+                if (SourceValue == item.DestinationLocation) {
+                    item.DestinationLocation = DestinationLocation;
+                    item.DestinationCountry = DestinationCountry;
+                    item.DestinationCity = DestinationCity;
+                }
             }
             else if (Field == 'DestinationCountry') {
-                item.DestinationCountry = DestinationCountry;
+                if (SourceValue == item.DestinationCountry) {
+                    item.DestinationCountry = DestinationCountry;
+                }
             }
             else if (Field == 'DestinationCity') {
-                //item.DestinationCountry = DestinationCountry;
+                    if (SourceValue == item.DestinationCity) {
+                        item.DestinationCity = DestinationCity;
+                    }                
             }
             else {
 
@@ -178,6 +185,22 @@
                 item.ImportType = 'Import';
             else
                 item.ImportType = 'Transit';
+
+            newobjitems.push(item);
+            if (objitems.length == (i + 1)) {
+                debugger;
+                objitems = [];
+                objitems = newobjitems;
+                additem();
+                $('#fixationpopup').modal('hide');
+            }
+        });
+    }
+    function additem() {
+        $.each(objitems, function (index, item) {
+            var i = index;
+            var ReceiverContact = item.ReceiverContact;
+            var ReceiverAddress = item.ReceiverAddress;
             var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
             datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
             datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
@@ -203,16 +226,10 @@
                 '<td>' + item.Pcs + '</td>' +
                 '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
                 '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
-                '<td class="text-right">' + item.COD + '</td>'+
+                '<td class="text-right">' + item.COD + '</td>' +
                 '<td class="text-right">' + item.ImportType + '</td></tr>';
 
             $("#listContainer").append(html);
-            newobjitems.push(item);
-            if (objitems.length == (i + 1)) {
-                objitems = [];
-                objitems = newobjitems;
-                $('#fixationpopup').modal('hide');
-            }
         });
     }
     $(document).on("change", "#importFile", function () {
@@ -480,10 +497,7 @@
                     var i = $("#listContainer > tr").length;
                     var ReceiverContact = item.ReceiverContact;
                     var ReceiverAddress = item.ReceiverAddress;
-                    if (item.DestinationCountry.indexOf("DUBAI") >= 0)
-                        item.ImportType = 'Import';
-                    else
-                        item.ImportType = 'Transit';
+                   
                     var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
                     datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
                     datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
@@ -699,7 +713,7 @@
                                 COD
                             </th>
                             <th>
-                                Currency
+                                Type
                             </th>
 
                             <th></th>

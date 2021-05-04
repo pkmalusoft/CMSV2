@@ -721,36 +721,28 @@ namespace CMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            CustomerEnquiry cenquery = db.CustomerEnquiries.Where(t => t.CustomerID == id).FirstOrDefault();
-            if (cenquery == null)
+            //int k = 0;
+            if (id != 0)
             {
-                CustomerMaster customermaster = db.CustomerMasters.Find(id);
-                UserRegistration a = (from c in db.UserRegistrations where c.UserName == customermaster.Email select c).FirstOrDefault();
-
-                if (customermaster == null)
+                DataTable dt = ReceiptDAO.DeleteCustomer(id);
+                if (dt != null)
                 {
-                    return HttpNotFound();
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
 
                 }
                 else
                 {
-                    db.CustomerMasters.Remove(customermaster);
-                    db.SaveChanges();
-                    if (a != null)
-                    {
-                        db.UserRegistrations.Remove(a);
-                        db.SaveChanges();
-                    }
-                    TempData["SuccessMsg"] = "You have successfully Deleted Customer.";
-                    return RedirectToAction("Index");
-
+                    TempData["ErrorMsg"] = "Error at delete";
                 }
             }
-            else
-            {
-                TempData["SuccessMsg"] = "Customer Entry could not delete,because it has reference entries!";
-                return RedirectToAction("Index");
-            }
+
+            return RedirectToAction("Index");
+
+            
         }
 
         public JsonResult GetCity(int id)

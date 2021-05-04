@@ -498,12 +498,25 @@ new AcGroupModel()
 
         public ActionResult DeleteAcHead(int id)
         {
-            AcHead a = (from c in db.AcHeads where c.AcHeadID == id select c).FirstOrDefault();
-            db.AcHeads.Remove(a);
-            db.SaveChanges();
-            ViewBag.SuccessMsg = "You have successfully deleted Account Head.";
+            
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteAccountHead(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
             return RedirectToAction("IndexAcHead");
-            //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
         }
 
         public ActionResult CreateAcHead(int frmpage)
