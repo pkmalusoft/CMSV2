@@ -139,6 +139,20 @@
 </script>
 <script type="text/javascript">
     var objitems = [];
+    function UpdateImported() {
+        $.ajax({
+            type: "POST",
+            url: "/ImportManifest/UpdateImportedItem",
+            datatype: "Json",
+            data: { Details: JSON.stringify(objitems) },
+            success: function (response) {                
+                
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
     function savefixation() {
         debugger;
         var Field = $('#FieldName').val();
@@ -148,10 +162,11 @@
         var DestinationCity = $('#DestinationCity').val();
         var DestinationLocation = $('#DestinationLocation').val();
         $("#listContainer").html('');
+        $('#imgloader').removeClass('hide');
         var newobjitems = [];
         $.each(objitems, function (index, item) {
             var i = index;
-            
+            debugger;
             if (Field == 'DestinationLocation') {
                 if (SourceValue == item.DestinationLocation) {
                     item.DestinationLocation = DestinationLocation;
@@ -172,19 +187,20 @@
             else {
 
             }
-            if (item.DestinationCountry.indexOf("DUBAI") >= 0)
+            var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
+            if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
                 item.ImportType = 'Import';
             else
                 item.ImportType = 'Transit';
-            if (item.DestinationCity.indexOf("DUBAI") >= 0)
-                item.ImportType = 'Import';
-            else
-                item.ImportType = 'Transit';
+            //if (item.DestinationCity.indexOf("DUBAI") >= 0)
+            //    item.ImportType = 'Import';
+            //else
+            //    item.ImportType = 'Transit';
 
-            if (item.DestinationLocation.indexOf("DUBAI") >= 0)
-                item.ImportType = 'Import';
-            else
-                item.ImportType = 'Transit';
+            //if (item.DestinationLocation.indexOf("DUBAI") >= 0)
+            //    item.ImportType = 'Import';
+            //else
+            //    item.ImportType = 'Transit';
 
             newobjitems.push(item);
             if (objitems.length == (i + 1)) {
@@ -192,6 +208,8 @@
                 objitems = [];
                 objitems = newobjitems;
                 additem();
+                UpdateImported();
+                $('#imgloader').addClass('hide');
                 $('#fixationpopup').modal('hide');
             }
         });
@@ -247,10 +265,10 @@
             success: function (response) {
                 if (response.Status === 1) {
                     var data = response.data;
-                    
+                    $('#imgloader').removeClass('hide');
                     $("#listContainer").html('');
                     $.each(data, function (index, item) {
-                        objitems.push(item);
+                        
                         debugger;
                         var i = $('#listContainer > tr').length;
                         var ReceiverContact = item.ReceiverContact;
@@ -260,20 +278,12 @@
                             ReceiverContact = addr[0];
                             ReceiverAddress = addr[1];
                         }
-                        
-                        if (item.DestinationCountry.indexOf("DUBAI") >= 0)
+                        var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
+                        if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
                             item.ImportType = 'Import';
                         else
                             item.ImportType = 'Transit';
-                        if (item.DestinationCity.indexOf("DUBAI") >= 0)
-                            item.ImportType = 'Import';
-                        else
-                            item.ImportType = 'Transit';
-
-                        if (item.DestinationLocation.indexOf("DUBAI") >= 0)
-                            item.ImportType = 'Import';
-                        else
-                            item.ImportType = 'Transit';
+                        objitems.push(item);
                         var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
                         datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
                         datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
@@ -304,7 +314,11 @@
 
                         $("#listContainer").append(html);
                         $('#TotalAWB').val(index + 1);
-                            
+                        if ((index + 1) == data.length)
+                        {
+                            UpdateImported();
+                            $('#imgloader').addClass('hide');
+                        }
                         //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
                         //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
                         //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
@@ -559,6 +573,7 @@
             <div class="row">
                 <div class="col-md-3">
                     @Html.HiddenFor(mode=>Model.ID)
+                    @Html.HiddenFor(mode=>Model.CompanyCountryName)
                     @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
 
                     @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
@@ -659,10 +674,13 @@
                     <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
                     <input type="button" id="btnfile" style="display:none" />
                     <input class="btn btn-primary" id="btnUpload" type="button" value="Upload" />
-
                 </div>
-                <div class="col-md-1" style="padding-top:30px">                                        
+                <div class="col-md-1" style="padding-top:30px">
                     <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
+                </div>
+                <div class="col-md-1" style="padding-top:30px">
+
+                    <img src="~/Content/img/loading-gif-free-download-6.gif" id="imgloader" class="hide"  style="padding-left:15px;height:38px;width:38px" />
 
                 </div>
             </div>                       

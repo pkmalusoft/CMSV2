@@ -384,7 +384,7 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetAWBInfo(string awbno)
         {
-            AWBInfo info = AWBDAO.GetAWBInfo(awbno);
+            AWBInfo info = AWBDAO.GetAWBInfo(awbno.Trim());
 
             return Json(info, JsonRequestBehavior.AllowGet);
 

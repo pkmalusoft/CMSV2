@@ -138,7 +138,35 @@
             }
         });
         ///.autocomplete("widget").addClass("CitiesAutocomplete");
+        $("#SourceValue").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/ImportManifest/GetSourceValue',
+                    datatype: "json",
+                    data: {
+                        term: request.term,FieldName:$('#FieldName').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SourceValue,
+                                value: val.SourceValue                                
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#SourceValue").val(ui.item.label);                
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SourceValue").val(i.item.label);                               
 
+            },
+        });
         $('#FieldName').change(function () {
             $('#DestinationLocation').attr('disabled', 'disabled');
             $('#DestinationCountry').attr('disabled', 'disabled');

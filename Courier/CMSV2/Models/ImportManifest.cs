@@ -7,6 +7,7 @@ namespace CMSV2.Models
 {
     public class ImportManifestVM : ImportShipment
     {
+        public string CompanyCountryName { get; set; }
         public string ManifestDate { get; set; }
         public string FlightDate1 { get; set; }
 
