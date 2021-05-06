@@ -20,38 +20,62 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
 
-            DatePicker model = new DatePicker
+            CustomerInvoiceSearch obj = (CustomerInvoiceSearch)Session["CustomerInvoiceSearch"];
+            CustomerInvoiceSearch model = new CustomerInvoiceSearch();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            if (obj == null)
             {
-                FromDate = CommanFunctions.GetFirstDayofMonth().Date,
-                ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59)
-                //      Delete = (bool)Token.Permissions.Deletion,
-                //    Update = (bool)Token.Permissions.Updation,
-                //  Create = (bool)Token.Permissions.Creation
-            };
-            ViewBag.Token = model;
-            SessionDataModel.SetTableVariable(model);
+                DateTime pFromDate;
+                DateTime pToDate;
+                //int pStatusId = 0;
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;                                                                      
+                obj = new CustomerInvoiceSearch(); 
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate;
+                obj.InvoiceNo = "";
+                Session["CustomerInvoiceSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;
+                model.InvoiceNo = "";
+            }
+            else
+            {
+                model = obj;
+            }
+            List<CustomerInvoiceVM> lst = PickupRequestDAO.GetInvoiceList(obj.FromDate, obj.ToDate,model.InvoiceNo, yearid);
+            model.Details = lst;
+            
             return View(model);
 
 
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
+        public ActionResult Index(CustomerInvoiceSearch obj)
         {
-
-            DatePicker model = new DatePicker
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                Delete = true, // (bool)Token.Permissions.Deletion,
-                Update = true, //(bool)Token.Permissions.Updation,
-                Create = true //.ToStrin//(bool)Token.Permissions.Creation
-            };
-            ViewBag.Token = model;
-            SessionDataModel.SetTableVariable(model);
-            return View(model);
-
+            Session["CustomerInvoiceSearch"] = obj;
+            return RedirectToAction("Index");
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
+        //{
+
+        //    DatePicker model = new DatePicker
+        //    {
+        //        FromDate = picker.FromDate,
+        //        ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+        //        Delete = true, // (bool)Token.Permissions.Deletion,
+        //        Update = true, //(bool)Token.Permissions.Updation,
+        //        Create = true //.ToStrin//(bool)Token.Permissions.Creation
+        //    };
+        //    ViewBag.Token = model;
+        //    SessionDataModel.SetTableVariable(model);
+        //    return View(model);
+
+        //}
         public ActionResult InvoiceSearch()
         {
 
@@ -128,31 +152,32 @@ namespace CMSV2.Controllers
             //return PartialView("InvoiceSearch",model);
 
         }
-        public ActionResult Table()
+        public ActionResult Table(CustomerInvoiceSearch model)
         {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            return PartialView("Table", model);
+            //int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            //int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
-            ViewBag.Token = datePicker;
+            //DatePicker datePicker = SessionDataModel.GetTableVariable();
+            //ViewBag.Token = datePicker;
 
-            List<CustomerInvoiceVM> _Invoices = (from c in db.CustomerInvoices
-                                                 join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
-                                                 where (c.InvoiceDate >= datePicker.FromDate && c.InvoiceDate < datePicker.ToDate)
-                                                 && c.IsDeleted==false
-                                                 orderby c.InvoiceDate descending
-                                                 select new CustomerInvoiceVM
-                                                 {
-                                                     CustomerInvoiceID = c.CustomerInvoiceID,
-                                                     CustomerInvoiceNo = c.CustomerInvoiceNo,
-                                                     InvoiceDate = c.InvoiceDate,
-                                                     CustomerID = c.CustomerID,
-                                                     CustomerName = cust.CustomerName,
-                                                     InvoiceTotal=c.InvoiceTotal
+            //List<CustomerInvoiceVM> _Invoices = (from c in db.CustomerInvoices
+            //                                     join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
+            //                                     where (c.InvoiceDate >= datePicker.FromDate && c.InvoiceDate < datePicker.ToDate)
+            //                                     && c.IsDeleted==false
+            //                                     orderby c.InvoiceDate descending
+            //                                     select new CustomerInvoiceVM
+            //                                     {
+            //                                         CustomerInvoiceID = c.CustomerInvoiceID,
+            //                                         CustomerInvoiceNo = c.CustomerInvoiceNo,
+            //                                         InvoiceDate = c.InvoiceDate,
+            //                                         CustomerID = c.CustomerID,
+            //                                         CustomerName = cust.CustomerName,
+            //                                         InvoiceTotal=c.InvoiceTotal
 
-                                                 }).ToList();
+            //                                     }).ToList();
 
-            return View("Table", _Invoices);
+            //return View("Table", _Invoices);
 
         }
         public ActionResult Create()

@@ -92,6 +92,7 @@ namespace CMSV2.Controllers
                 //supplier.SupplierID = ObjectSourceModel.GetMaxNumberSupplier();
                 db.SupplierMasters.Add(supplier);
                 db.SaveChanges();
+                ReceiptDAO.ReSaveSupplierCode();
                 ViewBag.SuccessMsg = "You have successfully added Supplier.";
                 return RedirectToAction("Index");
             //}

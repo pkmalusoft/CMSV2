@@ -1202,5 +1202,32 @@ namespace CMSV2.DAL
             return list;
         }
         #endregion
+
+        #region CodeGeneration
+        public static void ReSaveSupplierCode()
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_ReSaveSupplierCode";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+
+            //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
+        }
+        public static void ReSaveEmployeeCode()
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_ReSaveEmployeeCode";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+
+            //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
+        }
+        #endregion
     }
 }

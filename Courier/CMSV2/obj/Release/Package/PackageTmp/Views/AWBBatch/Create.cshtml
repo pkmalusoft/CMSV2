@@ -41,7 +41,11 @@
             background: #f8fbff;
             text-align: center;
         }
-
+ .scrolling_list th{
+        position: sticky;
+        top: 0;
+        background: #07a7e3;
+    }
 body .hyperlink{
     color:#07a7e3!important;
 }
@@ -660,7 +664,7 @@ body .hyperlink{
 
                     var OutScanDeliveredID = data.OutScanDeliveredID;
                     var OutScanDate = data.OutScanDate;
-                    var OutScanVehicleID = data.OutscanVehicleId;
+                    var OutScanVehicleID = data.OutScanVehicleID;
                     var OutScanDelivery = data.OutScanDelivery;
                     if (OutScanDelivery) {
                         $('#OutScanDelivery').prop('checked', 'checked');
@@ -1729,7 +1733,7 @@ body .hyperlink{
                                 $.notify("Batch Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 @*location.href = '@Url.Action("Index","DRSReconc")';*@
-                                window.location.href = "/AWBBatch/Index";
+                                window.location.href = "/AWB/Index?id=1";
                             }
                             else {
 

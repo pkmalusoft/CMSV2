@@ -54,6 +54,9 @@
     .multiselect-container {
         margin-top: 0 !important;
     }
+    body .hyperlink {
+    color: #07a7e3!important;
+}
 
     .searchMc .checkboxdesign {
         align-items: flex-start;
@@ -64,7 +67,11 @@
         width: 100%;
         float: none;
     }
-
+    .scrolling_list th{
+        position: sticky;
+        top: 0;
+        background: #07a7e3;
+    }
     .multiselect-native-select .btn-group {
         display: block;
     }
@@ -2053,7 +2060,7 @@
 
         </div>
         <div class="row no-margin" style="padding-top:10px">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-xs-12 col-sm-4">
                         <label class=" required headinglabel">Movement Type</label>
@@ -2113,7 +2120,7 @@
                             @Html.HiddenFor(model => model.ConsignorMobileNo)
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Origin Location</label>
+                            <label class="headinglabel">Pickup Location</label>
                             @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.PickupSubLocality)
                             @Html.HiddenFor(model => model.OriginPlaceID)
@@ -2142,7 +2149,7 @@
                             @Html.HiddenFor(model => model.ConsigneeMobileNo)
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <label class="headinglabel">Destination Location</label>
+                            <label class="headinglabel">Delivery Location</label>
                             @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
                             @Html.HiddenFor(model => model.DestinationPlaceID)
@@ -2236,7 +2243,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 ">
+                <div class="col-md-7  ">
                     <div class="row no-margin" style="padding-top:20px">
                         <div class="col-xs-12 no-padding for-device ">
                             <div class="data-table payment-div scrolling_list">
@@ -2256,7 +2263,7 @@
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbl1">
+                                        <tbody id="tbl1" >
                                         </tbody>
 
                                     </table>

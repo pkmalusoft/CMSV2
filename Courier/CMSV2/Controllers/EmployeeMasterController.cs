@@ -105,7 +105,7 @@ namespace CMSV2.Controllers
 
                 a.EmployeeID = max + 1;
                 a.EmployeeName = v.EmployeeName;
-                a.EmployeeCode = v.EmployeeCode;
+                a.EmployeeCode = "";// v.EmployeeCode;
                 a.Address1 = v.Address1;
                 a.Address2 = v.Address2;
                 a.Address3 = v.Address3;
@@ -155,8 +155,8 @@ namespace CMSV2.Controllers
 
                 db.EmployeeMasters.Add(a);
                 db.SaveChanges();
-
-
+                //save employee code
+                ReceiptDAO.ReSaveEmployeeCode();
 
                 TempData["SuccessMsg"] = "You have successfully added Employee.";
                 return RedirectToAction("Index");
@@ -167,7 +167,7 @@ namespace CMSV2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             EmployeeMaster a = (from c in db.EmployeeMasters where c.EmployeeID == id select c).FirstOrDefault();
-            UserRegistration u = (from c in db.UserRegistrations where c.UserName == a.Email select c).FirstOrDefault();
+            UserRegistration u = (from c in db.UserRegistrations where c.UserID == a.UserID select c).FirstOrDefault();
             if (a == null)
             {
                 return HttpNotFound();
@@ -243,15 +243,11 @@ namespace CMSV2.Controllers
                 v.JoinDate = a.JoinDate.Value;
                 v.Fax = a.Fax;
                 v.MobileNo = a.Mobile;
-                if (a.UserID != null)
+                if (a.UserID!=null)
+                    v.UserID = a.UserID;
+                if (a.RoleId != null)
                 {
-                    var user = db.UserRegistrations.Where(cc => cc.UserID == a.UserID).FirstOrDefault();
-
-                    if (user != null)
-                    {
-                        v.RoleID = Convert.ToInt32(user.RoleID);
-                        v.Password = user.Password;
-                    }
+                    v.RoleID = Convert.ToInt32(a.RoleId);
                 }
                 if (a.AcHeadID!=null && a.AcHeadID!=0)
                 {
@@ -269,7 +265,7 @@ namespace CMSV2.Controllers
                 v.StatusCommision = a.StatusCommission.Value;
                 v.StatusDefault = a.statusDefault.Value;
                 v.StatusActive = a.StatusActive.Value;
-                v.UserID = a.UserID;
+                
                 int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
                 if (a.AcCompanyID == null)

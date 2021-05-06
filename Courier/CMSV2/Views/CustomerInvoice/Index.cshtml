@@ -1,4 +1,4 @@
-﻿@model CMSV2.Models.DatePicker
+﻿@model CMSV2.Models.CustomerInvoiceSearch
 @{
     //Layout = null;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
@@ -53,10 +53,10 @@
 
 
 
-         //$('#datatable-1 tfoot th').each(function () {
-         //       var title = $(this).text();
-         //       $(this).html('<input type="text" style="width:100%" />');
-         //   });
+         $('#datatable-1 tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style="width:100%" />');
+            });
 
 
             var table = $('#datatable-1').dataTable({
@@ -101,41 +101,77 @@
 {
     @Html.AntiForgeryToken()
     
-            <div class="row d-flex">
-                
-                    
-                        <div class=" col-md-1  search_field">
-                            <label for="FromDate" class="col-3 control-label">From</label>
-                            <input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
-                        </div>
-                        <div class=" col-md-1 search_field">
-                            <label for="FromDate" class="col-3 control-label">To</label>
-                            <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
-                        </div>
-                        <div class="col-md-2 m-top">
-                            @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
-                            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                        </div>
-                        @*<div>
-                            <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
-                        </div>*@
-                  
-            <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
-                @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
-                {
-                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btn-sm waves-effect waves-light" })
-                }
-                else
-                {
-                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
-                }
+<div class="row d-flex">
 
 
-            </div>
-            </div>
+    <div class=" col-md-1  search_field">
+        <label for="FromDate" class="col-3 control-label">From</label>
+        @*<input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />*@
+        @Html.TextBoxFor(mode => mode.FromDate, new { @class = "form-control text-right" })
+    </div>
+    <div class=" col-md-1 search_field">
+        <label for="FromDate" class="col-3 control-label">To</label>
+        @*<input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />*@
+        @Html.TextBoxFor(mode => mode.ToDate, new { @class = "form-control text-right" })
+    </div>
+    <div class=" col-md-1 search_field">
+        <label for="FromDate" class="col-3 control-label">Invoice No.</label>
+        @Html.TextBoxFor(mode => mode.InvoiceNo, new { @class = "form-control text-right" })
+    </div>
+    <div class="col-md-2 m-top">
+        @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
+        <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+    </div>
+    @*<div>
+            <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
+        </div>*@
+
+    <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+        @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+        {
+            @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btn-sm waves-effect waves-light" })
+        }
+        else
+        {
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
+        }
+
+
+    </div>
+</div>
             <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
                 <table class="table table-responsive table-bordered tblfont" id="datatable-1">
-                    @{ Html.RenderAction("Table", "CustomerInvoice");}
+                    <thead>
+                        <tr>
+                            <th>
+                                Invoice No.
+                            </th>
+                            <th>
+                                Invoice Date
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>Invoice Amount</th>
+                            <th width="15%"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>
+                                Invoice No.
+                            </th>
+                            <th>
+                                Invoice Date
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>Invoice Amount</th>
+                            <th width="15%"></th>
+                        </tr>
+                    </tfoot>
+                    @{Html.RenderPartial("Table", Model);}
                 </table>
             </div>
      

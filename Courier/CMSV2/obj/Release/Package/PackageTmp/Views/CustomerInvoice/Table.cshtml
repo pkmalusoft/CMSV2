@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CMSV2.Models.CustomerInvoiceVM>
+﻿@model CMSV2.Models.CustomerInvoiceSearch
 @{
     int i = 0;
     var _decimal = @Session["Decimal"].ToString();  
@@ -20,7 +20,7 @@
     </tr>
 </thead>
 <tbody>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Details)
     {
         <tr>
             <td>

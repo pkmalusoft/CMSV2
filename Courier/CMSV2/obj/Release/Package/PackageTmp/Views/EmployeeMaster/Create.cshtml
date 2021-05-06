@@ -552,7 +552,7 @@
                 <div class="col-md-3">
                     <label class="headinglabel required">Role</label>
                     @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @tabindex = 13, @required = "true" })
-                    @Html.ValidationMessageFor(model => model.EmployeeID)
+                    @Html.ValidationMessageFor(model => model.RoleID)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Account Head</label>
