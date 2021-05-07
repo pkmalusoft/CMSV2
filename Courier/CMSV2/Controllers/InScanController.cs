@@ -310,6 +310,15 @@ namespace CMSV2.Controllers
                             _inscan.IsDeleted = false;
                             db.InScanMasters.Add(_inscan);
                             db.SaveChanges();
+
+                            //UpdateModel  AWBDetail
+                            var awbdetail = db.AWBDetails.Where(cc => cc.AWBNo == item.AWB).FirstOrDefault();
+                            if (awbdetail!=null)
+                            {
+                                awbdetail.InScanID = _inscan.InScanID;
+                                db.Entry(awbdetail).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
                             //updateing awbstaus table for tracking
                             //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
                             AWBTrackStatu _awbstatus = new AWBTrackStatu();

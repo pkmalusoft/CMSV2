@@ -659,7 +659,7 @@ body .hyperlink{
                         $('#DepotReceivedBy').removeAttr('disabled');
                         $('#ReceivedDate').removeAttr('disabled');
                         //$('#DepotReceivedBy').val('').trigger('change');
-                        //$('#ReceivedDate').val('').trigger('change');
+                        $('#ReceivedDate').val('');
                     }
 
                     var OutScanDeliveredID = data.OutScanDeliveredID;
@@ -722,7 +722,40 @@ body .hyperlink{
         });
     }
         $(document).ready(function () {
+            $('#PickedUpEmpID').change(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/InScan/GetVehicle",
+                    datatype: "Json",
+                    data: { EmployeeId: $('#PickedUpEmpID').val() },
+                    success: function (response) {
+                        debugger;
+                        if (response.VehicleId != 0) {
+                            $('#InscanVehicleId').val(response.VehicleId).trigger('change');
+                        } else {
+                            $('#InscanVehicleId').val('').trigger('change');
+                        }
+                    }
+                });
 
+            });
+            $('#OutScanDeliveredID').change(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/InScan/GetVehicle",
+                    datatype: "Json",
+                    data: { EmployeeId: $('#OutScanDeliveredID').val() },
+                    success: function (response) {
+                        debugger;
+                        if (response.VehicleId != 0) {
+                            $('#OutscanVehicleId').val(response.VehicleId).trigger('change');
+                        } else {
+                            $('#OutscanVehicleId').val('').trigger('change');
+                        }
+                    }
+                });
+
+            })
             $("#shipperpopup").on("shown", function () {
             //$("#shipperpopup").on("shown", function () {
             //    initAutocomplete();
@@ -1566,13 +1599,14 @@ body .hyperlink{
 
         $('#btnSave').click(function () {
 
-            // $('#btnSave').attr('disabled', 'disabled');
+           
             var obj = [];
             var maxrow = $('#tbl1 > tr').length;
             if (maxrow == 0) {
                 alert('AWB Not added,could not save Batch!');
                 return;
             }
+            $('#btnSave').attr('disabled', 'disabled');
             for (i = 0; i < maxrow; i++) {
                 var deleted = $('#hdndeleted_' + i).val();
                 if (deleted == 'false') {
@@ -1733,12 +1767,12 @@ body .hyperlink{
                                 $.notify("Batch Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 @*location.href = '@Url.Action("Index","DRSReconc")';*@
-                                window.location.href = "/AWB/Index?id=1";
+                                window.location.href = "/AWBBatch/Index";
                             }
                             else {
-
-                                $.notify(response, "error");
                                 $('#btnSave').removeAttr('disabled');
+                                $.notify(response, "error");
+                                
                                 //$.notify(response.message, "warning");
                                 return false;
                             }

@@ -162,7 +162,8 @@
         var DestinationCity = $('#DestinationCity').val();
         var DestinationLocation = $('#DestinationLocation').val();
         $("#listContainer").html('');
-        $('#imgloader').removeClass('hide');
+        //$('#imgloader').removeClass('hide');
+        $('#loaderpopup').modal('show')
         var newobjitems = [];
         $.each(objitems, function (index, item) {
             var i = index;
@@ -210,6 +211,7 @@
                 additem();
                 UpdateImported();
                 $('#imgloader').addClass('hide');
+                $('#loaderpopup').modal('hide')
                 $('#fixationpopup').modal('hide');
             }
         });
@@ -256,84 +258,95 @@
         var formData = new FormData();
         formData.append('importFile', files[0]);
 
-        $.ajax({
-            url: '/ImportManifest/ImportFile',
-            data: formData,
-            type: 'POST',
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                if (response.Status === 1) {
-                    var data = response.data;
-                    $('#imgloader').removeClass('hide');
-                    $("#listContainer").html('');
-                    $.each(data, function (index, item) {
-                        
-                        debugger;
-                        var i = $('#listContainer > tr').length;
-                        var ReceiverContact = item.ReceiverContact;
-                        var ReceiverAddress = item.ReceiverAddress;
-                        if (ReceiverAddress.indexOf(":") >= 0) {
-                            var addr = ReceiverAddress.split(':');
-                            ReceiverContact = addr[0];
-                            ReceiverAddress = addr[1];
-                        }
-                        var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
-                        if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
-                            item.ImportType = 'Import';
-                        else
-                            item.ImportType = 'Transit';
-                        objitems.push(item);
-                        var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
-                        datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
-                        datahtml = datahtml + '<input type="hidden" id="hdnImportType_' + i + '"  value="' + item.ImportType + '"/>';
-                        var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
-                            '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
-                            '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
-                            '<td>' + item.Bag + '</td>' +
-                            '<td>' + item.Content + '</td>' +
-                            '<td>' + item.Pcs + '</td>' +
-                            '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
-                            '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
-                            '<td class="text-right">' + item.COD + '</td>'+
-                           '<td class="text-right">' + item.ImportType + '</td></tr>';
+        if (files.length > 0) {
+            $('#btnUpload').attr('disabled', 'disabled');
+            $.ajax({
+                url: '/ImportManifest/ImportFile',
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.Status === 1) {
+                        var data = response.data;
+                        //$('#imgloader').removeClass('hide');
+                        $('#loaderpopup').modal('show')
+                        $("#listContainer").html('');
+                        $.each(data, function (index, item) {
 
-                        $("#listContainer").append(html);
-                        $('#TotalAWB').val(index + 1);
-                        if ((index + 1) == data.length)
-                        {
-                            UpdateImported();
-                            $('#imgloader').addClass('hide');
-                        }
-                        //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
-                        //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
-                        //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
-                    });
+                            debugger;
+                            var i = $('#listContainer > tr').length;
+                            var ReceiverContact = item.ReceiverContact;
+                            var ReceiverAddress = item.ReceiverAddress;
+                            if (ReceiverAddress.indexOf(":") >= 0) {
+                                var addr = ReceiverAddress.split(':');
+                                ReceiverContact = addr[0];
+                                ReceiverAddress = addr[1];
+                            }
+                            var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
+                            if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
+                                item.ImportType = 'Import';
+                            else
+                                item.ImportType = 'Transit';
+                            objitems.push(item);
+                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
+                            datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
+                            datahtml = datahtml + '<input type="hidden" id="hdnImportType_' + i + '"  value="' + item.ImportType + '"/>';
+                            var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
+                                '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
+                                '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
+                                '<td>' + item.Bag + '</td>' +
+                                '<td>' + item.Content + '</td>' +
+                                '<td>' + item.Pcs + '</td>' +
+                                '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
+                                '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
+                                '<td class="text-right">' + item.COD + '</td>' +
+                                '<td class="text-right">' + item.ImportType + '</td></tr>';
+
+                            $("#listContainer").append(html);
+                            $('#TotalAWB').val(index + 1);
+                            if ((index + 1) == data.length) {
+                                UpdateImported();
+                                //$('#imgloader').addClass('hide');
+                                $('#loaderpopup').modal('hide');
+                                $('#btnUpload').removeAttr('disabled');
+                            }
+                            //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
+                            //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
+                            //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
+                        });
 
 
-                } else {
-                    //alert("Failed to Import");
-                    $.notify(response.message, 'error');
+                    } else {
+                        //alert("Failed to Import");
+                        $('#btnUpload').removeAttr('disabled');
+                        $.notify(response.message, 'error');
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            $('#btnUpload').removeAttr('disabled');
+        }
     });
 
     $(document).on("click", "#btnUpload", function () {
+        
+        
         $('#importFile').trigger('click');
     });
 
@@ -423,7 +436,7 @@
                 return;
             }
 
-
+            $('#btnSave').attr('disabled', 'disabled');
             var obj = [];
             var maxrow = $('#listContainer > tr').length;
             if (maxrow == 0) {
@@ -511,7 +524,7 @@
                     var i = $("#listContainer > tr").length;
                     var ReceiverContact = item.ReceiverContact;
                     var ReceiverAddress = item.ReceiverAddress;
-                   
+                    objitems.push(item);
                     var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
                     datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
                     datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
@@ -540,6 +553,9 @@
                         '<td class="text-right">' + item.ImportType + '</td></tr>';
 
                     $("#listContainer").append(html);
+                    if ((i + 1) == data.length) {
+                        UpdateImported();
+                    }
                 });
             }
         });
@@ -637,27 +653,27 @@
 
             </div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-1">
                     @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
 
                     @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label class="headinglabel required">Parcel No.</label>
                     @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right", @required = "true" })
                     @Html.ValidationMessageFor(model => model.ParcelNo, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label class="headinglabel required">Bag</label>
 
                     @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right", @required = "true" })
                     @Html.ValidationMessageFor(model => model.Bags, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label class="headinglabel required">Weight</label>
                     @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @required = "true" })
                     @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
@@ -673,16 +689,17 @@
                 <div class="col-md-1" style="padding-top:30px">
                     <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
                     <input type="button" id="btnfile" style="display:none" />
-                    <input class="btn btn-primary" id="btnUpload" type="button" value="Upload" />
+                    
+                    <a class="btn btn-primary" id="btnUpload" href="Javascript:void(0)">Upload</a>
                 </div>
                 <div class="col-md-1" style="padding-top:30px">
                     <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
                 </div>
-                <div class="col-md-1" style="padding-top:30px">
-
-                    <img src="~/Content/img/loading-gif-free-download-6.gif" id="imgloader" class="hide"  style="padding-left:15px;height:38px;width:38px" />
-
+                <div class="col-md-5 btn-right">
+                    <input type="button" value="Submit" id="btnSave" class="btn btn-primary waves-effect waves-light" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
                 </div>
+
             </div>                       
             
             <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
@@ -742,21 +759,8 @@
                 </table>
             </div>
             <hr />
-            @*<div class="form-group col-lg-3 col-md-6 col-sm-12 float-right" style="display:flex">
-                <div class="col-md-4">
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary btn-sm waves-effect waves-light float-right" })
-                </div>
-                <div class="col-md-4">
-                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary waves-effect waves-light" />
-                </div>
-            </div>*@
-            <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12 btn-right">
-                    <input type="button" value="Submit" id="btnSave" class="btn btn-primary waves-effect waves-light" />
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
-                </div>
-
-            </div>
+           
+            
         }
     </section>
 
@@ -785,6 +789,31 @@
                 <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loaderpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:5px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="LoaderModalLabel">
+                    Data Importing
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center" >
+                         <h2>Processing...</h2>
+                        <img src="~/Content/img/loading-gif-free-download-6.gif" id="imgloader" class="" style="padding-left:15px;height:60px;width:60px;" />
+                    </div>
+                </div>
+            </div>
+            @*<div class="modal-footer" style="padding-top: 5px">
+                <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>*@
         </div>
     </div>
 </div>

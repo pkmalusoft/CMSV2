@@ -294,6 +294,12 @@
                     @* @Html.DropDownList("LocationID", String.Empty)
             @Html.ValidationMessageFor(model => model.LocationID)*@
                 </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">City</label>
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
+                    @*@Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID", "City"), "Select", new { @class = "form-control" })*@
+                    @Html.ValidationMessageFor(model => model.CityID)
+                </div>
 
 
                 <div class="col-md-3">
@@ -304,12 +310,6 @@
 
                 </div>
 
-                <div class="col-md-3">
-                    <label class="headinglabel required">City</label>
-                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
-                    @*@Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID", "City"), "Select", new { @class = "form-control" })*@
-                    @Html.ValidationMessageFor(model => model.CityID)
-                </div>
 
 
                 <div class="col-md-3">
@@ -485,4 +485,4 @@
     }
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>

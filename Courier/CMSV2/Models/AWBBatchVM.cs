@@ -304,4 +304,19 @@ namespace CMSV2.Models
     {
         public string AWBNumbers { get; set; }
     }
+
+    public class Consignor
+    {
+        public string ShipperName { get; set; }
+            public string ContactPerson { get; set; }
+            public string ConsignorName { get; set; }
+        public string Phone { get; set; }
+            public string LocationName { get; set; }
+            public string CityName { get; set; } 
+        public string CountryName { get; set; }
+            public string Address1 { get; set; }
+            public string Address2 { get; set; }        
+            public string PinCode { get; set; }         
+        public string ConsignorMobileNo { get; set; }
+    }
 }

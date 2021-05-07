@@ -60,6 +60,7 @@ namespace CMSV2.Controllers
         {
             var userid = Convert.ToInt32(Session["UserID"]);
             var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+            var BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
 
             var agent = db.AgentMasters.ToList(); // .Where(cc => cc.UserID == userid).FirstOrDefault();
             var company = db.AcCompanies.FirstOrDefault(); // .Select(x => new { Address = x.Address1 
@@ -76,7 +77,7 @@ namespace CMSV2.Controllers
             ViewBag.CurrencyID = db.CurrencyMasters.ToList();  // db.CurrencyMasters.ToList();
             ViewBag.Currencies = db.CurrencyMasters.ToList();
             ViewBag.Agent = agent;
-            string CompanyCountryName = db.AcCompanies.Find(CompanyID).CountryName;
+            string CompanyCountryName = db.BranchMasters.Find(BranchID).CountryName;
             //ViewBag.AgentName = agent.Name;
             //ViewBag.AgentCity = agent.CityName;
             ViewBag.CompanyName = company.AcCompany1;
@@ -338,25 +339,25 @@ namespace CMSV2.Controllers
                     if (FieldName == "DestinationCountry")
                     {
                         var list = (from c in IDetails
-                                    where c.DestinationCountry.Contains(term)
+                                    where c.DestinationCountry.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.DestinationCountry
-                                    select new { SourceValue = c.DestinationCountry }).ToList();
+                                    select new { SourceValue = c.DestinationCountry }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationCity")
                     {
                         var list = (from c in IDetails
-                                    where c.DestinationCity.Contains(term)
+                                    where c.DestinationCity.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.DestinationCity
-                                    select new { SourceValue = c.DestinationCity }).ToList();
+                                    select new { SourceValue = c.DestinationCity }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationLocation")
                     {
                         var list = (from c in IDetails
-                                    where c.DestinationLocation.Contains(term)
+                                    where c.DestinationLocation.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.DestinationLocation
-                                    select new { SourceValue = c.DestinationLocation }).ToList();
+                                    select new { SourceValue = c.DestinationLocation }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else
@@ -371,21 +372,21 @@ namespace CMSV2.Controllers
                     {
                         var list = (from c in IDetails                                    
                                     orderby c.DestinationCountry
-                                    select new { SourceValue = c.DestinationCountry }).ToList();
+                                    select new { SourceValue = c.DestinationCountry }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationCity")
                     {
                         var list = (from c in IDetails                                    
                                     orderby c.DestinationCity
-                                    select new { SourceValue = c.DestinationCity }).ToList();
+                                    select new { SourceValue = c.DestinationCity }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationLocation")
                     {
                         var list = (from c in IDetails                                    
                                     orderby c.DestinationLocation
-                                    select new { SourceValue = c.DestinationLocation }).ToList();
+                                    select new { SourceValue = c.DestinationLocation }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else

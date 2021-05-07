@@ -299,12 +299,7 @@
             @Html.ValidationMessageFor(model => model.LocationID)*@
          </div>
 
-         <div class="col-md-3">
-             <label class="headinglabel required">Country</label>
-             @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @onFocus = "geoCountrylocate()" })
-             @Html.ValidationMessageFor(model => model.CountryName)
 
-         </div>
 
          <div class="col-md-3">
              <label class="headinglabel required">City</label>
@@ -312,7 +307,12 @@
              @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
              @Html.ValidationMessageFor(model => model.CityName)
          </div>
+         <div class="col-md-3">
+             <label class="headinglabel required">Country</label>
+             @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @onFocus = "geoCountrylocate()" })
+             @Html.ValidationMessageFor(model => model.CountryName)
 
+         </div>
 
 
          <div class="col-md-3">
@@ -451,4 +451,4 @@
     </fieldset>
 }
     </section>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>

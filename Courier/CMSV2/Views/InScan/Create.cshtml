@@ -338,6 +338,7 @@
         }
         $('#btnsave').click(function () {
             debugger;
+            
             if ($('#QuickInscanDateTime').val() == '') {
                 showmessage();
                 $('#QuickInscanDateTime').focus();
@@ -365,13 +366,14 @@
             }
 
             hidemessage();
-
+          
             var obj = [];
             var maxrow = $('#detailsbody > tr').length;
             if (maxrow == 0) {
                 $.notify('AWB Not added,could not save!');
                 return;
             }
+            $('#btnsave').attr('disabled', 'disabled');
             for (i = 0; i < maxrow; i++) {
                 var deleted = $('#hdndeleted_' + i).val();
                 if (deleted != 'true') {
@@ -428,10 +430,11 @@
                                 ////RemoveAWBItems = [];
                                 ////AWBItems = [];
                                 $.notify(response.message, "success");
+                                $('#btnsave').removeAttr('disabled', 'disabled');
                                 window.location = "/InScan/Index";
                             }
                             else {
-
+                                $('#btnsave').removeAttr('disabled', 'disabled');
                                 $.notify(response.message, "warning");
 
                             }

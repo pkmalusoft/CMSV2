@@ -318,13 +318,19 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetShipperName(string term)
         {
-
-            if (term.Trim() != "")
+            List<Consignor> shipperlist = (List<Consignor>)Session["ConsignorMaster"];
+            if (shipperlist == null)
             {
-                var shipperlist = (from c1 in db.ConsignorMasters
-                                   where c1.ConsignorName.ToLower().StartsWith(term.ToLower())
-                                   orderby c1.ConsignorName  ascending
-                                   select new { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct();
+                shipperlist = (from c1 in db.ConsignorMasters                               
+                               orderby c1.ConsignorName ascending
+                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct().ToList();
+                Session["ConsignorMaster"] = shipperlist;
+            }
+            if (term.Trim() != "")
+            {            
+                
+                
+                    shipperlist = shipperlist.Where(cc => cc.ShipperName.ToLower().Contains(term.Trim().ToLower())).Take(100).ToList();
 
                 //var shipperlist = (from c1 in db.InScanMasters
                 //                   where c1.IsDeleted == false && c1.Consignor.ToLower().StartsWith(term.ToLower())
@@ -334,15 +340,22 @@ namespace CMSV2.Controllers
             }
             else
             {
-
-                var shipperlist = (from c1 in db.ConsignorMasters                                    
-                                    orderby c1.ConsignorName ascending
-                                    select new { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct();
+                //if (shipperlist == null)
+                //{
+                //    shipperlist = (from c1 in db.ConsignorMasters
+                //                   where c1.ConsignorName.ToLower().StartsWith(term.ToLower())
+                //                   orderby c1.ConsignorName ascending
+                //                   select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct().ToList();
+                //}
+                //var shipperlist = (from c1 in db.ConsignorMasters                                    
+                //                    orderby c1.ConsignorName ascending
+                //                    select new { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct();
 
                 //var shipperlist = (from c1 in db.InScanMasters
                 //                   where c1.IsDeleted == false
                 //                   orderby c1.Consignor ascending
                 //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                shipperlist = shipperlist.Take(100).ToList();
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
 
             }
