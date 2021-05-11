@@ -18,8 +18,46 @@ namespace CMSV2.Controllers
 
         Entities1 db = new Entities1();
 
-
         public ActionResult Index()
+        {
+
+            OutScanSearch obj = (OutScanSearch)Session["OutScanSearch"];
+            OutScanSearch model = new OutScanSearch();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            if (obj == null)
+            {
+                DateTime pFromDate;
+                DateTime pToDate;
+                //int pStatusId = 0;
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                obj = new OutScanSearch();
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate;
+                Session["InScanSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;
+            }
+            else
+            {
+                model = obj;
+            }
+            List<DRSVM> lst = PickupRequestDAO.GetOutScanList(obj.FromDate, obj.ToDate, yearid, branchid, depotId);
+            model.Details = lst;
+
+            return View(model);
+
+
+        }
+        [HttpPost]
+        public ActionResult Index(OutScanSearch obj)
+        {
+            Session["OutScanSearch"] = obj;
+            return RedirectToAction("Index");
+        }
+        public ActionResult Index1()
         {
             int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());

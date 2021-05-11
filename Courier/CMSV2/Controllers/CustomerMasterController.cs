@@ -117,6 +117,7 @@ namespace CMSV2.Controllers
             ViewBag.currency = db.CurrencyMasters.ToList();
             ViewBag.employee = db.EmployeeMasters.ToList();
             ViewBag.roles = db.RoleMasters.ToList();
+            ViewBag.customerrate = db.CustomerRateTypes.ToList();
             int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             var data = db.tblDepots.Where(c => c.BranchID == BranchID).ToList();
             ViewBag.Depot = data;
@@ -243,7 +244,10 @@ namespace CMSV2.Controllers
                 obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
                 obj.ApprovedOn = c.ApprovedOn;
             }
-
+            if (c.CustomerRateTypeID!=null)
+            {
+                obj.CustomerRateTypeID = c.CustomerRateTypeID;
+            }
             //UserRegistration u = new UserRegistration();
             //if (c.Email != null)
             //{
@@ -638,6 +642,10 @@ namespace CMSV2.Controllers
                 obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
             }
 
+            if (c.CustomerRateTypeID!=null)
+            {
+                obj.CustomerRateTypeID =Convert.ToInt32(c.CustomerRateTypeID);
+            }
             return obj;
 
 

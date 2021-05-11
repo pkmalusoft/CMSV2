@@ -914,11 +914,14 @@ namespace CMSV2.Controllers
                             if (e_details.InscanId > 0)
                             {
                                 var _inscan = db.InScanMasters.Find(e_details.InscanId);
-                                _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "READY TO EXPORT").FirstOrDefault().ID;
-                                _inscan.ManifestID = _exportShipment.ID;
-                                _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Export Manifest Prepared").FirstOrDefault().CourierStatusID;
-                                db.Entry(_inscan).State = EntityState.Modified;
-                                db.SaveChanges();
+                                if (_inscan != null)
+                                {
+                                    _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "READY TO EXPORT").FirstOrDefault().ID;
+                                    _inscan.ManifestID = _exportShipment.ID;
+                                    _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Export Manifest Prepared").FirstOrDefault().CourierStatusID;
+                                    db.Entry(_inscan).State = EntityState.Modified;
+                                    db.SaveChanges();
+                                }
 
                             }
                             e_details.HAWB = "";
@@ -970,11 +973,14 @@ namespace CMSV2.Controllers
                             {
                                 //re update inscan status 
                                 var _inscan = db.InScanMasters.Find(e_details.InscanId);
-                                _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "INSCAN").FirstOrDefault().ID;
+                            if (_inscan != null)
+                            {
+                                _inscan.StatusTypeId = db.tblStatusTypes.Where(tt => tt.Name == "Depot Inscan").FirstOrDefault().ID;
                                 _inscan.ManifestID = null;
                                 _inscan.CourierStatusID = db.CourierStatus.Where(tt => tt.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
                                 db.Entry(_inscan).State = EntityState.Modified;
                                 db.SaveChanges();
+                            }
 
                                 db.Entry(e_details).State = EntityState.Deleted;
                                 db.SaveChanges();

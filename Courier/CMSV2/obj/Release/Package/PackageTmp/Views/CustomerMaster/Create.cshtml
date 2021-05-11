@@ -82,87 +82,12 @@
         $("#Password").val('');
 
         $("#CustomerName").focus();
+        
         $('#CustomerType1').val($('#CustomerType').val()).trigger('change');
         $("#CityID").empty();
         $("#LocationID").empty();
 
-        //$("#CountryName").autocomplete({
-        //    source: function (request, response) {
-        //        $.ajax({
-        //            url: '/CountryMaster/GetCountry',
-        //            datatype: "json",
-        //            data: {
-        //                term: request.term
-        //            },
-        //            success: function (data) {
-        //                response($.map(data, function (val, item) {
-        //                    return {
-        //                        label: val.CountryName,
-        //                        value: val.CountryName,
-        //                        CountryID: val.CountryID
-        //                    }
-        //                }))
-        //            }
-        //        })
-        //    },
-        //    minLength: 0,
-        //    autoFocus: false,
-        //    focus: function (event, i) {
-        //        $("#CountryName").val(i.item.label);
-        //        $("#CountryID").val(i.item.CountryID);
-        //    },
-        //    select: function (e, i) {
-        //        e.preventDefault();
-        //        $("#CountryName").val(i.item.label);
-        //        $("#CountryID").val(i.item.CountryID);
-        //    },
-
-        //});
-
-        //$("#LocationName").autocomplete({
-        //    source: function (request, response) {
-        //        $.ajax({
-        //            url: '/LocationMaster/GetLocation',
-        //            datatype: "json",
-        //            data: {
-        //                term: request.term
-        //            },
-        //            success: function (data) {
-        //                response($.map(data, function (val, item) {
-        //                    return {
-        //                        label: val.Location,
-        //                        value: val.Location,
-        //                        LocationID: val.LocationID,
-        //                        CityID: val.CityID,
-        //                        CountryID: val.CountryID,
-        //                        CountryName: val.CountryName,
-        //                        CityName: val.CityName
-        //                    }
-        //                }))
-        //            }
-        //        })
-        //    },
-        //    minLength: 0,
-        //    autoFocus: false,
-        //    focus: function (event, i) {
-        //        $("#LocationName").val(i.item.label);
-        //        $("#LocationID").val(i.item.LocationID);
-        //        $("#CountryName").val(i.item.CountryName);
-        //        $("#CountryID").val(i.item.CountryID);
-        //        $("#CityName").val(i.item.CityName);
-        //        $("#CityID").val(i.item.CityID);
-        //    },
-        //    select: function (e, i) {
-        //        e.preventDefault();
-        //        $("#LocationName").val(i.item.label);
-        //        $("#LocationID").val(i.item.LocationID);
-        //        $("#CountryName").val(i.item.CountryName);
-        //        $("#CountryID").val(i.item.CountryID);
-        //        $("#CityName").val(i.item.CityName);
-        //        $("#CityID").val(i.item.CityID);
-        //    },
-
-        //});
+       
         $("#CustomerName").change(function () {
 
             $.ajax({
@@ -502,7 +427,7 @@
         });
        
             //fillInAddress()
-        }
+        
         
     });
 </script>
@@ -885,6 +810,10 @@
                     @Html.DropDownListFor(model => model.BusinessTypeId, new SelectList(@ViewBag.businessType, "Id", "BusinessType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BusinessTypeId)
                 </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Customer Rate Type</label>
+                    @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control" })
+                </div>
                 <div class="col-md-2 checkboxdesign" style="padding-top: 30px; display: none">
                     @Html.CheckBox("StatusCommission", new { @name = "StatusCommission" }) &nbsp
                     <label class="headinglabel">Allow Commission To Courier</label>
@@ -895,7 +824,7 @@
                     <label class="headinglabel">Taxable</label>
                     @Html.ValidationMessageFor(model => model.StatusTaxable)
                 </div>
-                <div class="col-md-3 checkboxdesign justify-center" style="padding-top: 30px">
+                <div class="col-md-1 checkboxdesign justify-center" style="padding-top: 30px">
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive", @checked = "checked" }) &nbsp
                     <label class="headinglabel">Active</label>
                     @Html.ValidationMessageFor(model => model.StatusActive)
@@ -905,6 +834,7 @@
                     <label class="headinglabel">Email Notification to Customer</label>
                     @Html.ValidationMessageFor(model => model.EmailNotify)
                 </div>
+
             </div>
             <div class="row no-margin" style="padding-top: 10px">
                 <div class="col-md-3 hide">

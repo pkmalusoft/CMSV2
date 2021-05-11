@@ -16,10 +16,11 @@ namespace CMSV2.Models
     public int ContractRateID { get; set; }
 
     public int ContractRateTypeID { get; set; }
+        public int CustomerRateTypeID { get; set; }
 
-    public int ZoneChartID { get; set; }
-
-    public int ProductTypeID { get; set; }
+        public int ZoneChartID { get; set; }
+        public string ZoneChartName { get; set; }
+        public int ProductTypeID { get; set; }
 
     public int FAgentID { get; set; }
 

@@ -44,4 +44,13 @@ namespace CMSV2.Models
         public string Origin { get; set; }
         public string Destination { get; set; }
     }
+
+    public class InScanSearch 
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+               
+        public List<InScanVM> Details { get; set; }
+
+    }
 }

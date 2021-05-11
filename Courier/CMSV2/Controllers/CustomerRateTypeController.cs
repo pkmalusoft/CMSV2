@@ -9,6 +9,7 @@ using CMSV2.Models;
 
 namespace CMSV2.Controllers
 {
+    [SessionExpire]
     public class CustomerRateTypeController : Controller
     {
          Entities1 db = new Entities1();

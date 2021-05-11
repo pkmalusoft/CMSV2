@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CMSV2.Models.DRSVM>
+﻿@model CMSV2.Models.OutScanSearch
 
 @{
     ViewBag.Title = "Index";
@@ -130,7 +130,7 @@
         <th style="display:none"></th>
     </tr>
     </tfoot>
-@foreach (var item in Model) {
+@foreach (var item in Model.Details) {
     <tr>
         <td style="text-align:right">
             @Html.DisplayFor(modelItem => item.DRSNo)

@@ -9,6 +9,7 @@ using CMSV2.Models;
 
 namespace CMSV2.Controllers
 {
+    [SessionExpire]
     public class CustomerRatesMasterController : Controller
     {
         private Entities1 db = new Entities1();
@@ -20,13 +21,55 @@ namespace CMSV2.Controllers
             return View(data);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
             ViewBag.CustRate = db.CustomerRateTypes.ToList();
             ViewBag.ProductType = db.ProductTypes.ToList();
             ViewBag.ForwardingAgent = db.ForwardingAgentMasters.ToList();
             ViewBag.Zones = db.ZoneCharts.ToList();
-            return View();
+            CustRateVM vm = new CustRateVM();
+            CustomerRate r = new CustomerRate();
+            if (id > 0)
+            {
+                r = db.CustomerRates.Find(id);
+                vm.BaseRate = r.BaseRate;
+                vm.BaseWt = r.BaseWeight;
+                vm.CustomerRateID = r.CustomerRateID;
+                vm.CustomerRateTypeID = r.CustomerRateTypeID;
+                vm.ContractRateTypeID = r.CustomerRateTypeID;
+                vm.ProductTypeID = r.CourierServiceID;
+                vm.ZoneChartID = r.ZoneChartID;
+                var loc = db.GetZoneChartByCustomer(r.CustomerRateTypeID);
+                Zones lst = new Zones(); 
+                lst = (from c in loc where c.ZoneChartID==r.ZoneChartID select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).FirstOrDefault();
+                vm.ZoneChartName = lst.ZoneName;
+                //vm.CountryID = r.CountryID.Value;
+                vm.FAgentID = r.FAgentID.Value;
+                vm.CustomerRateID = r.CustomerRateID;
+                if (r.AdditionalCharges != null)
+                {
+                    vm.AdditionalCharges = r.AdditionalCharges.Value;
+                }
+                if (r.WithTax != null)
+                {
+                    vm.withtax = r.WithTax.Value;
+                }
+                if (r.WithoutTax != null)
+                {
+                    vm.withouttax = r.WithoutTax.Value;
+                }
+                ViewBag.Title = "Rate Chart - Modify";
+                ViewBag.EditMode = "true";
+            }
+            else
+            {
+                ViewBag.Title = "Rate Chart";
+                ViewBag.EditMode = "false";
+                vm.CustomerRateID = 0;
+            }
+
+            return View(vm);
+
         }
 
         [HttpPost]
@@ -35,6 +78,9 @@ namespace CMSV2.Controllers
             try
             {
                 CustomerRate r = new CustomerRate();
+                if (v.CustomerRateID > 0)
+                    r = db.CustomerRates.Find(v.CustomerRateID);
+
                 r.CustomerRateTypeID = v.ContractRateTypeID;
                 r.CourierServiceID = v.ProductTypeID;
                 r.ZoneChartID = v.ZoneChartID;
@@ -46,24 +92,40 @@ namespace CMSV2.Controllers
 
                 r.BaseRate = v.BaseRate;
 
-                db.CustomerRates.Add(r);
-                db.SaveChanges();
-
+                if (v.CustomerRateID > 0)
+                {
+                    db.Entry(r).State = EntityState.Modified;
+                    db.SaveChanges();
+                    var data = (from c in db.CustomerRateDets where c.CustomerRateID == v.CustomerRateID select c).ToList();
+                    foreach (var item in data)
+                    {
+                        db.CustomerRateDets.Remove(item);
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    db.CustomerRates.Add(r);
+                    db.SaveChanges();
+                }
 
                 if (v.CustRateDetails != null)
                 {
                     foreach (var item in v.CustRateDetails)
                     {
-                        CustomerRateDet a = new CustomerRateDet();
+                        if (item.Deleted == false)
+                        {
+                            CustomerRateDet a = new CustomerRateDet();
 
-                        a.CustomerRateID = r.CustomerRateID;
-                        a.AdditionalWeightFrom = item.AddWtFrom;
-                        a.AdditionalWeightTo = item.AddWtTo;
-                        a.IncrementalWeight = item.IncrWt;
-                        a.AdditionalRate = item.AddRate;
+                            a.CustomerRateID = r.CustomerRateID;
+                            a.AdditionalWeightFrom = item.AddWtFrom;
+                            a.AdditionalWeightTo = item.AddWtTo;
+                            a.IncrementalWeight = item.IncrWt;
+                            a.AdditionalRate = item.AddRate;
 
-                        db.CustomerRateDets.Add(a);
-                        db.SaveChanges();
+                            db.CustomerRateDets.Add(a);
+                            db.SaveChanges();
+                        }
                     }
                 }
 
@@ -101,7 +163,7 @@ namespace CMSV2.Controllers
                 vm.ContractRateTypeID = r.CustomerRateTypeID;
                 vm.ProductTypeID = r.CourierServiceID;
                 vm.ZoneChartID = r.ZoneChartID;
-                vm.CountryID = r.CountryID.Value;
+                //vm.CountryID = r.CountryID.Value;
                 vm.FAgentID = r.FAgentID.Value;
                 vm.CustomerRateID = r.CustomerRateID;
                 vm.AdditionalCharges = r.AdditionalCharges.Value;
@@ -234,7 +296,28 @@ namespace CMSV2.Controllers
             }
         }
 
-        public JsonResult GetZoneByCustomer(int contractid)
+        public JsonResult GetZoneByCustomer(string term,int contractid)
+        {
+
+            List<Zones> lst = new List<Zones>();
+            var loc = db.GetZoneChartByCustomer(contractid);
+
+            if (term.Trim()!="")
+            {
+                lst = (from c in loc where c.ZoneName.Contains(term) orderby c.ZoneName select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).ToList();
+            }
+            else
+            {
+                lst = (from c in loc orderby c.ZoneName select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).ToList();
+            }
+            //foreach (var item in loc)
+            //{
+            //    lst.Add(new Zones { ZoneID = item.ZoneChartID, ZoneName = item.ZoneName });
+
+            //}
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetZoneByCustomerold(int contractid)
         {
             List<Zones> lst = new List<Zones>();
             var loc = db.GetZoneChartByCustomer(contractid);
@@ -246,7 +329,6 @@ namespace CMSV2.Controllers
             }
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
         public class Zones
         {
             public int ZoneID { get; set; }

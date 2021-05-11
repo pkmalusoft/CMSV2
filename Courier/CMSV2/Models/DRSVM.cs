@@ -46,4 +46,13 @@ namespace CMSV2.Models
 
     public Decimal MaterialCost { get; set; }
   }
+
+    public class OutScanSearch
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public List<DRSVM> Details { get; set; }
+
+    }
 }

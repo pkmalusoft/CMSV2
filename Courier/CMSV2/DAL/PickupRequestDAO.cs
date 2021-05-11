@@ -767,6 +767,72 @@ namespace CMSV2.DAL
             }
             return objList;
         }
+
+        public static List<InScanVM> GetInScanList(DateTime FromDate, DateTime ToDate, int FyearId,int BranchId,int DepotId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetInScanList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            cmd.Parameters.AddWithValue("@BranchID", BranchId);
+            cmd.Parameters.AddWithValue("@DepotId", DepotId);            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<InScanVM> objList = new List<InScanVM>();
+            InScanVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new InScanVM();                      
+                    obj.QuickInscanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["QuickInscanID"].ToString());
+                    obj.InScanSheetNo= ds.Tables[0].Rows[i]["InscanSheetNumber"].ToString();
+                    obj.QuickInscanDateTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["QuickInscanDateTime"].ToString());
+                    obj.CollectedBy = ds.Tables[0].Rows[i]["CollectedBy"].ToString();
+                    obj.ReceivedBy = ds.Tables[0].Rows[i]["ReceivedBy"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        public static List<DRSVM> GetOutScanList(DateTime FromDate, DateTime ToDate, int FyearId, int BranchId, int DepotId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetOutScanList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            cmd.Parameters.AddWithValue("@BranchID", BranchId);
+            cmd.Parameters.AddWithValue("@DepotId", DepotId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<DRSVM> objList = new List<DRSVM>();
+            DRSVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new DRSVM();
+                    obj.DRSID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DRSID"].ToString());
+                    obj.DRSNo = ds.Tables[0].Rows[i]["DRSNo"].ToString();
+                    obj.DRSDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["DRSDate"].ToString());
+                    obj.Deliver = ds.Tables[0].Rows[i]["DeliveredBy"].ToString();
+                    obj.vehicle = ds.Tables[0].Rows[i]["vehicle"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
     }
 
 }

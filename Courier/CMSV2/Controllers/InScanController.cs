@@ -14,8 +14,46 @@ namespace CMSV2.Controllers
     public class InScanController : Controller
     {
         Entities1 db = new Entities1();
+        public ActionResult Index()
+        {
 
-        public ActionResult Index(string FromDate, string ToDate)
+            InScanSearch obj = (InScanSearch)Session["InScanSearch"];
+            InScanSearch model = new InScanSearch();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            if (obj == null)
+            {
+                DateTime pFromDate;
+                DateTime pToDate;
+                //int pStatusId = 0;
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                obj = new InScanSearch();
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate;                
+                Session["InScanSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;                
+            }
+            else
+            {
+                model = obj;
+            }
+            List<InScanVM> lst = PickupRequestDAO.GetInScanList(obj.FromDate, obj.ToDate,yearid,branchid,depotId);
+            model.Details = lst;
+
+            return View(model);
+
+
+        }
+        [HttpPost]
+        public ActionResult Index(InScanSearch obj)
+        {
+            Session["InScanSearch"] = obj;
+            return RedirectToAction("Index");
+        }
+        public ActionResult Index1(string FromDate, string ToDate)
         {
             ViewBag.Employee = db.EmployeeMasters.ToList();
             ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
