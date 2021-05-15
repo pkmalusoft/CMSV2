@@ -1016,6 +1016,8 @@
     <NavigationProperty Name="ZoneChart" Relationship="Self.FK_CustomerRate_ZoneChart" FromRole="CustomerRate" ToRole="ZoneChart" />
     <NavigationProperty Name="ZoneChart1" Relationship="Self.FK_CustomerRate_ZoneChart1" FromRole="CustomerRate" ToRole="ZoneChart" />
     <NavigationProperty Name="CustomerRateDets" Relationship="Self.FK_CustomerRateDet_CustomerRate" FromRole="CustomerRate" ToRole="CustomerRateDet" />
+    <Property Name="MovementID" Type="Int32" />
+    <Property Name="PaymentModeID" Type="Int32" />
   </EntityType>
   <EntityType Name="CustomerRateAssign">
     <Key>
@@ -7696,16 +7698,6 @@
     <EntitySet Name="EmpZoneAllocations" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocation" />
     <EntitySet Name="tblVehicleTypes" EntityType="DB_9F57C4_couriertest_newModel.tblVehicleType" />
     <EntitySet Name="VehicleMasters" EntityType="DB_9F57C4_couriertest_newModel.VehicleMaster" />
-    <EntitySet Name="DomesticCODReceipts" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" />
-    <EntitySet Name="DomesticCODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" />
-    <AssociationSet Name="FK__DomesticC__Recei__4AE30379" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379">
-      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
-      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__DomesticC__Recei__4BD727B2" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2">
-      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
-      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
-    </AssociationSet>
     <EntitySet Name="EmpZoneAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail" />
     <EntitySet Name="ZoneChartDetails" EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" />
     <EntitySet Name="MaterialCostMasters" EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" />
@@ -7737,6 +7729,16 @@
     <EntitySet Name="ImportShipmentDetails" EntityType="DB_9F57C4_couriertest_newModel.ImportShipmentDetail" />
     <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
     <EntitySet Name="ImportFields" EntityType="DB_9F57C4_couriertest_newModel.ImportField" />
+    <EntitySet Name="DomesticCODReceipts" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" />
+    <EntitySet Name="DomesticCODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" />
+    <AssociationSet Name="FK__DomesticC__Recei__7B271378" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7B271378">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DomesticC__Recei__7C1B37B1" Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7C1B37B1">
+      <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
+      <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -11798,77 +11800,6 @@
     <Property Name="VehicleTypeId" Type="Int32" />
     <Property Name="EmployeeId" Type="Int32" />
   </EntityType>
-  <EntityType Name="DomesticCODReceipt">
-    <Key>
-      <PropertyRef Name="ReceiptID" />
-    </Key>
-    <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ReceiptNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="ReceiptDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="AchHeadID" Type="Int32" Nullable="false" />
-    <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="Status" Type="Boolean" />
-    <Property Name="Deleted" Type="Boolean" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="BranchID" Type="Int32" />
-    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="UserID" Type="Int32" />
-    <Property Name="CurrencyID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="DRRID" Type="Int32" />
-    <NavigationProperty Name="DomesticCODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
-    <NavigationProperty Name="DomesticCODReceiptDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-    <Property Name="CreatedBy" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-    <Property Name="ModifiedBy" Type="Int32" />
-  </EntityType>
-  <EntityType Name="DomesticCODReceiptDetail">
-    <Key>
-      <PropertyRef Name="ReceiptDetailID" />
-    </Key>
-    <Property Name="ReceiptDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ReceiptID" Type="Int32" Nullable="false" />
-    <Property Name="InScanId" Type="Int32" Nullable="false" />
-    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="TotalCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="AmountAllocate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
-    <NavigationProperty Name="DomesticCODReceipt" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
-    <NavigationProperty Name="DomesticCODReceipt1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
-  </EntityType>
-  <Association Name="FK__DomesticC__Recei__4AE30379">
-    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
-    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DomesticCODReceipt">
-        <PropertyRef Name="ReceiptID" />
-      </Principal>
-      <Dependent Role="DomesticCODReceiptDetail">
-        <PropertyRef Name="ReceiptID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__DomesticC__Recei__4BD727B2">
-    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
-    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DomesticCODReceipt">
-        <PropertyRef Name="ReceiptID" />
-      </Principal>
-      <Dependent Role="DomesticCODReceiptDetail">
-        <PropertyRef Name="ReceiptID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="EmpZoneAllocationDetail">
     <Key>
       <PropertyRef Name="EmpZoneAllocationDetailID" />
@@ -12555,4 +12486,75 @@
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="FieldName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="DomesticCODReceipt">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ReceiptDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="AchHeadID" Type="Int32" Nullable="false" />
+    <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+    <Property Name="Remarks" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Deleted" Type="Boolean" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="EXRate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="DRRID" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <NavigationProperty Name="DomesticCODReceiptDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7B271378" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+    <NavigationProperty Name="DomesticCODReceiptDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7C1B37B1" FromRole="DomesticCODReceipt" ToRole="DomesticCODReceiptDetail" />
+  </EntityType>
+  <EntityType Name="DomesticCODReceiptDetail">
+    <Key>
+      <PropertyRef Name="ReceiptDetailID" />
+    </Key>
+    <Property Name="ReceiptDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" />
+    <Property Name="InScanId" Type="Int32" Nullable="false" />
+    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CourierCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalCharge" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="AmountAllocate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="DomesticCODReceipt" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7B271378" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
+    <NavigationProperty Name="DomesticCODReceipt1" Relationship="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7C1B37B1" FromRole="DomesticCODReceiptDetail" ToRole="DomesticCODReceipt" />
+  </EntityType>
+  <Association Name="FK__DomesticC__Recei__7B271378">
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DomesticC__Recei__7C1B37B1">
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Role="DomesticCODReceipt" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Role="DomesticCODReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DomesticCODReceipt">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="DomesticCODReceiptDetail">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

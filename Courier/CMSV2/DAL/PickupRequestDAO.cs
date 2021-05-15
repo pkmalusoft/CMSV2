@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using CMSV2.Models;
+using System.Web.Hosting;
 
 namespace CMSV2.DAL
 {
@@ -833,6 +834,42 @@ namespace CMSV2.DAL
             }
             return objList;
         }
+
+        public static List<CustomerContractVM> GetCustomerContracts(int CustomerId,string CourierType)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerContracts";
+            cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            //cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@CourierType", "");
+            //cmd.Parameters.AddWithValue("@BranchID", BranchId);
+            //cmd.Parameters.AddWithValue("@DepotId", DepotId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<CustomerContractVM> objList = new List<CustomerContractVM>();
+            CustomerContractVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new CustomerContractVM();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.CustomerID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerID"].ToString());
+                    obj.CustomerRateTypeID= Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerRateTypeID"].ToString());
+                    obj.CustomerRateType = ds.Tables[0].Rows[i]["CustomerRateType"].ToString();
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+     
     }
 
 }

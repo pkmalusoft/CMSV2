@@ -949,6 +949,8 @@
     <EntitySetMapping Name="CustomerRates">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerRate">
         <MappingFragment StoreEntitySet="CustomerRate">
+          <ScalarProperty Name="PaymentModeID" ColumnName="PaymentModeID" />
+          <ScalarProperty Name="MovementID" ColumnName="MovementID" />
           <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
           <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
           <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
@@ -8289,51 +8291,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DomesticCODReceipts">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceipt">
-        <MappingFragment StoreEntitySet="DomesticCODReceipt">
-          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="FMoney" ColumnName="FMoney" />
-          <ScalarProperty Name="EXRate" ColumnName="EXRate" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="Deleted" ColumnName="Deleted" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-          <ScalarProperty Name="BankName" ColumnName="BankName" />
-          <ScalarProperty Name="AchHeadID" ColumnName="AchHeadID" />
-          <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
-          <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
-          <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DomesticCODReceiptDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail">
-        <MappingFragment StoreEntitySet="DomesticCODReceiptDetail">
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="AmountAllocate" ColumnName="AmountAllocate" />
-          <ScalarProperty Name="TotalCharge" ColumnName="TotalCharge" />
-          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-          <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="InScanId" ColumnName="InScanId" />
-          <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
-          <ScalarProperty Name="ReceiptDetailID" ColumnName="ReceiptDetailID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="EmpZoneAllocationDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail">
         <MappingFragment StoreEntitySet="EmpZoneAllocationDetails">
@@ -9048,6 +9005,51 @@
         <MappingFragment StoreEntitySet="ImportFields">
           <ScalarProperty Name="FieldName" ColumnName="FieldName" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DomesticCODReceipts">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceipt">
+        <MappingFragment StoreEntitySet="DomesticCODReceipt">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FMoney" ColumnName="FMoney" />
+          <ScalarProperty Name="EXRate" ColumnName="EXRate" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="AchHeadID" ColumnName="AchHeadID" />
+          <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+          <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+          <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DomesticCODReceiptDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail">
+        <MappingFragment StoreEntitySet="DomesticCODReceiptDetail">
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="AmountAllocate" ColumnName="AmountAllocate" />
+          <ScalarProperty Name="TotalCharge" ColumnName="TotalCharge" />
+          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+          <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
+          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+          <ScalarProperty Name="InScanId" ColumnName="InScanId" />
+          <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+          <ScalarProperty Name="ReceiptDetailID" ColumnName="ReceiptDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

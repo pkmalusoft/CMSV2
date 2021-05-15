@@ -37,15 +37,15 @@ namespace CMSV2.Controllers
 
         public ActionResult Create()
         {
-            var zonetype = new SelectList(new[] 
-                                        {
-                                            new { ID = "D", type = "Domestic" },
-                                            new { ID = "I", type = "International" },
+            //var zonetype = new SelectList(new[] 
+            //                            {
+            //                                new { ID = "D", type = "Domestic" },
+            //                                new { ID = "I", type = "International" },
                                            
-                                        },
-            "ID", "type", 1);
-
-            ViewBag.zonetype = zonetype;
+            //                            },
+            //"ID", "type", 1);
+            var zonetype = db.CourierMovements.ToList();
+            ViewBag.Movement = zonetype;
 
             return View();
         }
@@ -72,16 +72,17 @@ namespace CMSV2.Controllers
 
         public ActionResult Edit(int id)
         {
-            var zonetype = new SelectList(new[] 
-                                        {
-                                            new { ID = "D", type = "Domestic" },
-                                            new { ID = "I", type = "International" },
+           // var zonetype = new SelectList(new[] 
+           //                             {
+           //                                 new { ID = "D", type = "Domestic" },
+           //                                 new { ID = "I", type = "International" },
                                            
-                                        },
-           "ID", "type", 1);
+           //                             },
+           //"ID", "type", 1);
 
-            ViewBag.zonetype = zonetype;
-
+           // ViewBag.zonetype = zonetype;
+            var zonetype = db.CourierMovements.ToList();
+            ViewBag.Movement = zonetype;
             ZoneMaster a = (from c in db.ZoneMasters where c.ZoneID == id select c).FirstOrDefault();
             ZoneNameVM v = new ZoneNameVM();
             v.ZoneID = a.ZoneID;

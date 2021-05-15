@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CMSV2.DAL;
 using CMSV2.Models;
 
 namespace CMSV2.Controllers
@@ -23,6 +24,8 @@ namespace CMSV2.Controllers
 
         public ActionResult Create(int id=0)
         {
+            ViewBag.Movement = db.CourierMovements.ToList();
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.CustRate = db.CustomerRateTypes.ToList();
             ViewBag.ProductType = db.ProductTypes.ToList();
             ViewBag.ForwardingAgent = db.ForwardingAgentMasters.ToList();
@@ -35,6 +38,8 @@ namespace CMSV2.Controllers
                 vm.BaseRate = r.BaseRate;
                 vm.BaseWt = r.BaseWeight;
                 vm.CustomerRateID = r.CustomerRateID;
+                vm.MovementID = Convert.ToInt32(r.MovementID);
+                vm.PaymentModeID = Convert.ToInt32(r.PaymentModeID);
                 vm.CustomerRateTypeID = r.CustomerRateTypeID;
                 vm.ContractRateTypeID = r.CustomerRateTypeID;
                 vm.ProductTypeID = r.CourierServiceID;
@@ -84,6 +89,8 @@ namespace CMSV2.Controllers
                 r.CustomerRateTypeID = v.ContractRateTypeID;
                 r.CourierServiceID = v.ProductTypeID;
                 r.ZoneChartID = v.ZoneChartID;
+                r.MovementID = v.MovementID;
+                r.PaymentModeID = v.PaymentModeID;
                 r.FAgentID = v.FAgentID;
                 r.BaseWeight = v.BaseWt;
                 r.WithTax = v.withtax;
@@ -299,16 +306,16 @@ namespace CMSV2.Controllers
         public JsonResult GetZoneByCustomer(string term,int contractid)
         {
 
-            List<Zones> lst = new List<Zones>();
-            var loc = db.GetZoneChartByCustomer(contractid);
+            List<ZoneNameVM> lst = new List<ZoneNameVM>();
+            var loc = AWBDAO.GetZoneChartMaster(contractid);
 
             if (term.Trim()!="")
             {
-                lst = (from c in loc where c.ZoneName.Contains(term) orderby c.ZoneName select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).ToList();
+                lst = (from c in loc   where c.ZoneName.Contains(term) orderby c.ZoneName select c).ToList();
             }
             else
             {
-                lst = (from c in loc orderby c.ZoneName select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).ToList();
+                lst = (from c in loc orderby c.ZoneName select c).ToList();
             }
             //foreach (var item in loc)
             //{
@@ -332,8 +339,14 @@ namespace CMSV2.Controllers
         public class Zones
         {
             public int ZoneID { get; set; }
-            public string ZoneName { get; set; }
+            public string ZoneName { get; set; }           
         }
+        public ActionResult RateChartPrint(int id)
+        {
+            ViewBag.ReportName = "Rate Chart Printing";
+            AccountsReportsDAO.RateChartPrintReport(id);            
+            return View();
 
+        }
     }
 }

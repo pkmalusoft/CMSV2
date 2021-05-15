@@ -21,8 +21,9 @@ namespace CMSV2.Models
         public int ZoneChartID { get; set; }
         public string ZoneChartName { get; set; }
         public int ProductTypeID { get; set; }
-
-    public int FAgentID { get; set; }
+        public int MovementID { get; set; }
+        public int PaymentModeID { get; set; }
+        public int FAgentID { get; set; }
 
     public int CountryID { get; set; }
 

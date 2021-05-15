@@ -73,11 +73,12 @@
                      
                  </div>
 
-            <div class="col-md-3">
-                   <label class="headinglabel required">Zone Type</label>
-                @Html.DropDownList("StatusZone",ViewBag.zonetype as SelectList,"Select",new{@class="form-control"})
-                @Html.HiddenFor(model => model.ZoneType)
-                </div>
+         <div class="col-md-3">
+             <label class="headinglabel required">Zone Type</label>
+             @*@Html.DropDownList("StatusZone", ViewBag.zonetype as SelectList, "Select", new { @class = "form-control" })*@
+             @Html.DropDownListFor(model => model.ZoneType, new SelectList(@ViewBag.Movement, "MovementType", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
+             @Html.HiddenFor(model => model.ZoneType)
+         </div>
 
      
                 </div>

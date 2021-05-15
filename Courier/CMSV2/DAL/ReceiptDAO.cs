@@ -374,7 +374,30 @@ namespace CMSV2.DAL
         //    return query;
         //}
 
+        
+        //Delete Manifest Receipt
+        public static DataTable DeleteManifestReceipt(int RecPayID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteManifestReceipts";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static DataTable DeleteCustomerReceipt(int RecPayID)
         {
             SqlCommand cmd = new SqlCommand();

@@ -1207,6 +1207,8 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
     <Property Name="WithTax" Type="bit" />
     <Property Name="WithoutTax" Type="bit" />
     <Property Name="AdditionalCharges" Type="bit" />
+    <Property Name="MovementID" Type="int" />
+    <Property Name="PaymentModeID" Type="int" />
   </EntityType>
   <EntityType Name="CustomerRateAssign">
     <Key>

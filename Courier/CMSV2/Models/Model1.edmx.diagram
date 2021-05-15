@@ -341,10 +341,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocation" Width="1.5" PointX="44.375" PointY="27.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.tblVehicleType" Width="1.5" PointX="29.375" PointY="34.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.VehicleMaster" Width="1.5" PointX="44.375" PointY="33.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Width="1.5" PointX="44.375" PointY="38.125" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Width="1.5" PointX="46.625" PointY="39.125" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4AE30379" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__4BD727B2" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.EmpZoneAllocationDetail" Width="1.5" PointX="44.375" PointY="24.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ZoneChartDetail" Width="1.5" PointX="44.375" PointY="44.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.MaterialCostMaster" Width="1.5" PointX="15.375" PointY="0.75" />
@@ -376,6 +372,10 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImportShipmentDetail" Width="1.5" PointX="0.75" PointY="46.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" Width="1.5" PointX="15.375" PointY="46.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImportField" Width="1.5" PointX="16.375" PointY="4.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" Width="1.5" PointX="48.375" PointY="17.125" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Width="1.5" PointX="50.625" PointY="18.625" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7B271378" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7C1B37B1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

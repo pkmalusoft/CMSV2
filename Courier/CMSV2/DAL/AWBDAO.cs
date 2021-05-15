@@ -697,6 +697,130 @@ namespace CMSV2.DAL
 
 
         }
+
+        public static List<CustomerRateType> GetRateList(int CustomerId, int MovementId,int ProductTypeId,int PaymentModeId)
+        {
+            List<CustomerRateType> list = new List<CustomerRateType>();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerRateList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@MovementId", MovementId);
+            cmd.Parameters.AddWithValue("@ProductTypeId", ProductTypeId);
+            cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomerRateType obj = new CustomerRateType();
+                        obj.CustomerRateTypeID = CommanFunctions.ParseInt(dt.Rows[i]["CustomerRateTypeID"].ToString());
+                        obj.CustomerRateType1 = dt.Rows[i]["CustomerRateType"].ToString();
+
+                        list.Add(obj);
+                    }
+
+                }
+
+            }
+
+
+            return list;
+
+        }
+
+        public static CustomerRateTypeVM GetCourierCharge(int RateTypeId, int CustomerId, int MovementId, int ProductTypeId, int PaymentModeId,decimal Weight,string CountryName,string CityName)
+        {
+            decimal CourierCharge = 0;
+            CustomerRateTypeVM vm = new CustomerRateTypeVM();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCourierCharge";
+            cmd.CommandType = CommandType.StoredProcedure;
+            
+            cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@MovementId", MovementId);
+            cmd.Parameters.AddWithValue("@ProductTypeId", ProductTypeId);
+            cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
+            cmd.Parameters.AddWithValue("@Weight", Weight);
+            cmd.Parameters.AddWithValue("@CountryName", CountryName);
+            cmd.Parameters.AddWithValue("@CityName", CityName);            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        vm.CustomerRateType = dt.Rows[i]["CustomerRateType"].ToString();
+                        vm.CustomerRateTypeID = Convert.ToInt32(dt.Rows[i]["CustomerRateTypeId"].ToString());
+                        vm.CourierCharge = Convert.ToDecimal(dt.Rows[i]["CourierCharge"].ToString());                        
+
+                        
+                    }
+
+                }
+
+            }
+
+
+            return vm;
+
+        }
+
+        public static List<ZoneNameVM> GetZoneChartMaster(int RateTypeId)
+        {
+
+            List<ZoneNameVM> vm = new List<ZoneNameVM>();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetZoneChartByCustomer";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        ZoneNameVM obj = new ZoneNameVM();   
+                        obj.ZoneID = Convert.ToInt32(dt.Rows[i]["ZoneChartID"].ToString());
+                        obj.MovementID = Convert.ToInt32(dt.Rows[i]["MovementId"].ToString());
+                        obj.ZoneName = dt.Rows[i]["ZoneName"].ToString();
+                        vm.Add(obj);
+
+                    }
+
+                }
+
+            }
+
+
+            return vm;
+
+        }
         #endregion
     }
 }

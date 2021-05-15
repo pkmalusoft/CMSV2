@@ -170,6 +170,13 @@ body .hyperlink{
                 else if (type == 'sublocality' || type == 'sublocality_level_1') {
                     $('#DeliverySubLocality').val(component.long_name);
                 }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#DeliveryCity').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#DeliveryCountry').val(component.long_name);
+                }
             });
         });
 
@@ -558,7 +565,59 @@ body .hyperlink{
                 return true;
             }
     }
-
+    function getParcelType() {
+        var ProductTypeID = $('#ProductTypeID').val();  
+        
+        $.ajax({
+            type: "Post",
+            url: '/AWBBatch/GetParcelType',
+            datatype: "json",
+            data: {
+                ProductTypeId: ProductTypeID 
+            },
+            success: function (response) {
+                debugger;
+                if (response != null) {
+                    if (response != 0) {
+                        $('#ParcelTypeID').val(response);
+                    }
+                }
+            }
+        });
+    }
+    function getCourierCharge() {
+        var CustomerRateTypeID= $('#CustomerRateTypeID').val();
+        var CustomerId= $('#CustomerID').val();
+        var MovementId = $('#MovementID').val();
+        var ProductTypeID = $('#ProductTypeID').val();
+        var PaymentModeId = $('#PaymentTypeId').val();
+        var Weight = $('#Weight').val();        
+        var CountryName = $('#DeliveryCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
+        var CityName = $('#DeliveryCity').val(); //$("#ConsigneeCityName").val();
+        $.ajax({
+            type: "Post",
+            url: '/AWBBatch/GetCourierCharge',
+            datatype: "json",
+            data: {
+                CustomerRateTypeID: CustomerRateTypeID, CustomerId: CustomerId, MovementId: MovementId, ProductTypeID: ProductTypeID, PaymentModeId: PaymentModeId, Weight: Weight, CountryName: CountryName,CityName:CityName
+            },
+            success: function (response) {
+                debugger;
+                if (response != null) {
+                    if ($('#CustomerRateTypeID').val() != response.CustomerRateTypeID) {
+                        $('#CustomerRateTypeID').val(response.CustomerRateTypeID);
+                        $('#CustomerRateType').val(response.CustomerRateType);
+                    }
+                    $('#CourierCharge').val(response.CourierCharge);
+                }
+                else {
+                    $('#CustomerRateTypeID').val(0);
+                    $('#CustomerRateType').val(0);
+                    $('#CourierCharge').val(0);
+                }
+            }
+        });
+    }
     function showawbtrackstatus() {
         $.ajax({
             type: "Get",
@@ -831,6 +890,42 @@ body .hyperlink{
             }
         });
 
+            $("#CustomerRateType").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/AWBBatch/GetCustomerRateType',
+                        datatype: "json",
+                        data: {
+                            term: request.term, CustomerId: $('#CustomerID').val(), MovementId: $('#MovementID').val(), ProductTypeID: $('#ProductTypeID').val(),PaymentModeId:$('#PaymentTypeId').val()
+                        },
+                        success: function (data) {
+                            response($.map(data, function (val, item) {
+                                console.log(val);
+                                return {
+                                    label: val.CustomerRateType1,
+                                    value: val.CustomerRateTypeID
+
+                                }
+                            }))
+                        }
+                    })
+                },
+                minLength: 1,
+                autoFocus: false,
+                focus: function (event, ui) {
+                    $('#CustomerRateTypeID').val(ui.item.value);
+                    $('#CustomerRateType').val(ui.item.label);
+
+                },
+                select: function (e, i) {
+                    e.preventDefault();
+                    $('#CustomerRateTypeID').val(i.item.value);
+                    $('#CustomerRateType').val(i.item.label);
+                }
+            });
+
+            
+
         $("#ItemDescription").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -896,6 +991,21 @@ body .hyperlink{
             }
         });
 
+            $('#CustomerName').change(function () {
+                getCourierCharge();
+            });
+            $('#ProductTypeID').change(function () {
+                getCourierCharge();
+            });
+            $('#PaymentTypeId').change(function () {
+                getCourierCharge();
+            });
+            $('#Weight').change(function () {
+                getCourierCharge();
+            });
+            $('#DeliveryLocation').change(function () {
+                getCourierCharge();
+            })
         $('#AWBNo').change(function () {
             if ($('#AWBNo').val().trim() == '') {
                 var message = 'Enter AWBNo!';
@@ -1466,8 +1576,10 @@ body .hyperlink{
             var PickupSubLocality = checkdata($('#PickupSubLocality'));
             var DeliverySubLocality = checkdata($('#DeliverySubLocality'));
             debugger;
-            var SpecialInstructions = $('#SpecialInstructions').val();
-            var Remarks = $('#Remarks').val();;
+            var SpecialInstructions = $('#SpecialInstructions').val();            
+            var Remarks = $('#Remarks').val();
+            var CustomerRateTypeId = $('#CustomerRateTypeID').val();
+
             var i = $('#tbl1 > tr').length;
             var row = i + 1;
             var datahtml =
@@ -1540,7 +1652,8 @@ body .hyperlink{
                 '<input type="hidden" id="hdnInscanVehicleId_' + i + '" value="' + InScanVehicleID + '"/>' +
                 '<input type="hidden" id="hdnOutscanVehicleId_' + i + '" value="' + OutScanVehicleID + '"/>' +
                 '<input type="hidden" id="hdnSpecialInstructions_' + i + '" value="' + SpecialInstructions + '"/>'+
-                '<input type="hidden" id="hdnRemarks_' + i + '" value="' + Remarks+ '"/>';
+                '<input type="hidden" id="hdnRemarks_' + i + '" value="' + Remarks + '"/>'+
+                '<input type="hidden" id="hdnCustomerRateTypeID_' + i + '" value="' + CustomerRateTypeId  + '"/>';
 
 
                 $('#tbl1').append('<tr>' +
@@ -1592,6 +1705,8 @@ body .hyperlink{
             $('#ItemDescription').val('');
             $('#Pieces').val(0);
             $('#Weight').val(0);
+            $('#CustomerRateTypeID').val(0);
+            $('#CustomerRateType').val('');
             $('#PaymentTypeId').val('').trigger('change');
             $('#AWBNo').focus();
 
@@ -1679,6 +1794,7 @@ body .hyperlink{
                     var RequestSource = "";
                     var SpecialInstructions = $('#hdnSpecialInstructions_' + i).val();
                     var Remarks = $('#hdnRemarks_' + i).val();
+                    var CustomerRateTypeId = $('#hdnCustomerRateTypeID_' + i).val();
                     var item = {
                         InScanID:InScanID,
                         QuickInScanID:QuickInScanID,
@@ -1749,7 +1865,8 @@ body .hyperlink{
                         IsEnquiry: IsEnquiry,
                         RequestSource: RequestSource,
                         PickupRequestDate: checkDate($('#BatchDate')),
-                        Remarks:Remarks
+                        Remarks: Remarks,
+                        CustomerRateTypeId: CustomerRateTypeId
                     }
 
                     obj.push(item);
@@ -1936,161 +2053,168 @@ body .hyperlink{
                         <div class="col-xs-12 col-sm-4">
                             <label class="headinglabel">Type</label>
                             @Html.DropDownListFor(model => model.PaymentTypeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeCode"), "Select", new { @class = "form-control", @required = "true" })
-                        </div>                        
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12">
+                        <div class="col-xs-12 col-sm-6">
                             <label class="headinglabel">Customer</label>
                             @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off" })
                             @Html.HiddenFor(model => model.TaxPercent)
                         </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Rate Type</label>
+                            @Html.TextBoxFor(model => model.CustomerRateType, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(model => model.CustomerRateTypeID)
+                        </div>
+                    </div>                   
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="flex">
+                                <div class="checkboxdesign no-padding  ">
+                                    <a id="btnaddress1" class="headinglabel hyperlink" onclick="showshipperaddress()">Shipper <span class="red">( Alt + S ) </span></a>
+                                </div>
+                            </div>
+                            @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(model => model.ConsignorContact)
+                            @Html.HiddenFor(model => model.ConsignorAddress1_Building)
+                            @Html.HiddenFor(model => model.ConsignorAddress2_Street)
+                            @Html.HiddenFor(model => model.ConsignorAddress3_PinCode)
+                            @Html.HiddenFor(model => model.ConsignorLocationName)
+                            @Html.HiddenFor(model => model.ConsignorCountryName)
+                            @Html.HiddenFor(model => model.ConsignorCityName)
+                            @Html.HiddenFor(model => model.ConsignorPhone)
+                            @Html.HiddenFor(model => model.ConsignorMobileNo)
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Pickup Location</label>
+                            @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
+                            @Html.HiddenFor(model => model.PickupSubLocality)
+                            @Html.HiddenFor(model => model.OriginPlaceID)
+                        </div>
+
+
+
+
+
                     </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="flex">
-                                    <div class="checkboxdesign no-padding  ">
-                                        <a id="btnaddress1" class="headinglabel hyperlink" onclick="showshipperaddress()">Shipper <span class="red">( Alt + S ) </span></a>
-                                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+
+                            <div class="flex">
+                                <div class="checkboxdesign no-padding  ">
+                                    <a id="btnaddress1" class="headinglabel hyperlink" onclick="showreceiveraddress()">Receiver <span class="red">( Alt + R )</span>    </a>
+                                    @*<label class="headinglabel">Receiver</label>*@
                                 </div>
-                                @Html.TextBoxFor(model => model.Shipper, new { @class = "form-control", @autocomplete = "off" })
-                                @Html.HiddenFor(model => model.ConsignorContact)
-                                @Html.HiddenFor(model => model.ConsignorAddress1_Building)
-                                @Html.HiddenFor(model => model.ConsignorAddress2_Street)
-                                @Html.HiddenFor(model => model.ConsignorAddress3_PinCode)
-                                @Html.HiddenFor(model => model.ConsignorLocationName)
-                                @Html.HiddenFor(model => model.ConsignorCountryName)
-                                @Html.HiddenFor(model => model.ConsignorCityName)
-                                @Html.HiddenFor(model => model.ConsignorPhone)
-                                @Html.HiddenFor(model => model.ConsignorMobileNo)
+
+
                             </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <label class="headinglabel">Pickup Location</label>
-                                @Html.TextBoxFor(model => model.PickUpLocation, new { @class = "form-control" })
-                                @Html.HiddenFor(model => model.PickupSubLocality)
-                                @Html.HiddenFor(model => model.OriginPlaceID)
-                            </div>
-
-
-
-
-
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(model => model.ConsigneeContact)
+                            @Html.HiddenFor(model => model.ConsigneeAddress1_Building)
+                            @Html.HiddenFor(model => model.ConsigneeAddress2_Street)
+                            @Html.HiddenFor(model => model.ConsigneeAddress3_PinCode)
+                            @Html.HiddenFor(model => model.ConsigneeLocationName)
+                            @Html.HiddenFor(model => model.ConsigneeCountryName)
+                            @Html.HiddenFor(model => model.ConsigneeCityName)
+                            @Html.HiddenFor(model => model.ConsigneePhone)
+                            @Html.HiddenFor(model => model.ConsigneeMobileNo)
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Delivery Location</label>
+                            @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
+                            @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
+                            @Html.HiddenFor(model => model.DestinationPlaceID)
+                            @Html.HiddenFor(model => model.DeliveryCity)
+                            @Html.HiddenFor(model => model.DeliveryCountry)
+                        </div>
 
-                                <div class="flex">
-                                    <div class="checkboxdesign no-padding  ">
-                                        <a id="btnaddress1" class="headinglabel hyperlink" onclick="showreceiveraddress()">Receiver <span class="red">( Alt + R )</span>    </a>
-                                        @*<label class="headinglabel">Receiver</label>*@
-                                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="headinglabel">Pieces</label>
+                            @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right", @autocomplete = "off" })
+                        </div>
 
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">Weight</label>
+                            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @autocomplete = "off" })
+                        </div>
 
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">C. Charge</label>
+                            @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">Other Charges</label>
+                            @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="flexTitle">
+                                @*<label class="headinglabel required">Tax</label>*@
+                                <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
+                                <div class="checkboxdesign no-padding text-right" style="float:right">
+                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()", @checked = "checked" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
                                 </div>
-                                @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @autocomplete = "off" })
-                                @Html.HiddenFor(model => model.ConsigneeContact)
-                                @Html.HiddenFor(model => model.ConsigneeAddress1_Building)
-                                @Html.HiddenFor(model => model.ConsigneeAddress2_Street)
-                                @Html.HiddenFor(model => model.ConsigneeAddress3_PinCode)
-                                @Html.HiddenFor(model => model.ConsigneeLocationName)
-                                @Html.HiddenFor(model => model.ConsigneeCountryName)
-                                @Html.HiddenFor(model => model.ConsigneeCityName)
-                                @Html.HiddenFor(model => model.ConsigneePhone)
-                                @Html.HiddenFor(model => model.ConsigneeMobileNo)
                             </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <label class="headinglabel">Delivery Location</label>
-                                @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control" })
-                                @Html.HiddenFor(model => model.DeliverySubLocality, new { @class = "form-control" })
-                                @Html.HiddenFor(model => model.DestinationPlaceID)
-                            </div>
+                            @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">Total Charges</label>
+                            @Html.TextBoxFor(model => model.NetTotal, new { @class = "form-control text-right", @autocomplete = "off" })
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">Mat. Cost</label>
+                            @Html.TextBoxFor(model => model.MaterialCost, new { @class = "form-control text-right", @autocomplete = "off" })
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <label class="headinglabel">Shpr. Notes</label>
+                            <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
+                                <option value="1" selected>NCND</option>
+                                <option value="2">Cash Only</option>
+                                <option value="3">Cheque Only</option>
+                                <option value="4">Collect Material</option>
+                                <option value="5">DO Copy Back</option>
+                            </select>
+                            @Html.HiddenFor(model => model.CustomerID)
+                            @Html.HiddenFor(model => model.CASHCustomerId)
+                            @Html.HiddenFor(model => model.CODCustomerID)
+                            @Html.HiddenFor(model => model.CODCustomerName)
+                            @Html.HiddenFor(model => model.CASHCustomerName)
+                            @Html.HiddenFor(model => model.FOCCustomerName)
+                            @Html.HiddenFor(model => model.FOCCustomerID)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Item Desc.</label>
+                            @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(model => model.CustomerID)
+                            @Html.HiddenFor(model => model.CASHCustomerId)
+                            @Html.HiddenFor(model => model.CODCustomerID)
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label class="headinglabel">Remarks</label>
+                            @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @autocomplete = "off" })
 
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <label class="headinglabel">Pieces</label>
-                                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control text-right", @autocomplete = "off" })
-                            </div>
 
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">Weight</label>
-                                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @autocomplete = "off" })
-                            </div>
 
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">C. Charge</label>
-                                @Html.TextBoxFor(model => model.CourierCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">Other Charges</label>
-                                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right", @autocomplete = "off", @onchange = "CalculateTax()" })
-                            </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 flex justify-between" style="">
+                            <ul class="list-unstyled show-error" id="ulerr">
+                                <li id="lierr"> </li>
+                            </ul>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-3">
-                                <div class="flexTitle">
-                                    @*<label class="headinglabel required">Tax</label>*@
-                                    <label class="headinglabel red" id="lblTaxPercent">Tax @Model.TaxPercent %</label>
-                                    <div class="checkboxdesign no-padding text-right" style="float:right">
-                                        @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()", @checked = "checked" }) &nbsp
-                                        <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
-                                    </div>
-                                </div>
-                                @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">Total Charges</label>
-                                @Html.TextBoxFor(model => model.NetTotal, new { @class = "form-control text-right", @autocomplete = "off" })
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">Mat. Cost</label>
-                                @Html.TextBoxFor(model => model.MaterialCost, new { @class = "form-control text-right", @autocomplete = "off" })
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="headinglabel">Shpr. Notes</label>
-                                <select id="SpecialInstructions" name="Specialnstructions" multiple="multiple" class="form-control">
-                                    <option value="1" selected>NCND</option>
-                                    <option value="2">Cash Only</option>
-                                    <option value="3">Cheque Only</option>
-                                    <option value="4">Collect Material</option>
-                                    <option value="5">DO Copy Back</option>
-                                </select>
-                                @Html.HiddenFor(model => model.CustomerID)
-                                @Html.HiddenFor(model => model.CASHCustomerId)
-                                @Html.HiddenFor(model => model.CODCustomerID)
-                                @Html.HiddenFor(model => model.CODCustomerName)
-                                @Html.HiddenFor(model => model.CASHCustomerName)
-                                @Html.HiddenFor(model => model.FOCCustomerName)
-                                @Html.HiddenFor(model => model.FOCCustomerID)
-                            </div>
+                        <div class="col-md-6 d-flex" style="margin-top:15px">
+                            @*<input type="button" class="btn btn-primary  btnwidth" value="<underline>Add & Continue" name="Command" id="btnAdd" />*@
+                            <a id="btnAdd" class="btn btn-primary  btnwidth"><strong style="text-decoration:underline">A</strong>dd & Continue</a>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <label class="headinglabel">Item Desc.</label>
-                                @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })
-                                @Html.HiddenFor(model => model.CustomerID)
-                                @Html.HiddenFor(model => model.CASHCustomerId)
-                                @Html.HiddenFor(model => model.CODCustomerID)
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <label class="headinglabel">Remarks</label>
-                                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @autocomplete = "off" })
-
-                            </div>
-
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 flex justify-between" style="">
-                                <ul class="list-unstyled show-error" id="ulerr">
-                                    <li id="lierr"> </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6 d-flex" style="margin-top:15px">
-                                @*<input type="button" class="btn btn-primary  btnwidth" value="<underline>Add & Continue" name="Command" id="btnAdd" />*@
-                                <a id="btnAdd" class="btn btn-primary  btnwidth"><strong style="text-decoration:underline">A</strong>dd & Continue</a>
-                            </div>
-                        </div>
+                    </div>
                 </form>
                 </div>
 
@@ -2188,4 +2312,4 @@ body .hyperlink{
             </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>

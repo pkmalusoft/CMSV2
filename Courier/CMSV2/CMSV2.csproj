@@ -219,7 +219,9 @@
     <Compile Include="Controllers\BranchMasterController.cs" />
     <Compile Include="Controllers\BusinessTypeController.cs" />
     <Compile Include="Controllers\CityMasterController.cs" />
+    <Compile Include="Controllers\CustomerContractController.cs" />
     <Compile Include="Controllers\DevelopmentController.cs" />
+    <Compile Include="Controllers\ForwardingAgentMasterController.cs" />
     <Compile Include="Controllers\ImportManifestController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
@@ -750,6 +752,7 @@
     <Compile Include="Models\CustomerContract.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerContractVM.cs" />
     <Compile Include="Models\CustomerEnquiry.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3098,6 +3101,7 @@
     <Content Include="Reports\DRSRunSheet.rpt" />
     <Content Include="Reports\MCPaymentVoucher.rpt" />
     <Content Include="Reports\DRSReceiptVoucher.rpt" />
+    <Content Include="Reports\RateChartPrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3628,6 +3632,9 @@
     <Content Include="Views\ImportManifest\Create.cshtml" />
     <Content Include="Template\ImportTemplate.csv" />
     <Content Include="Views\ImportManifest\ImportDataFixation.cshtml" />
+    <Content Include="Views\CustomerContract\Index.cshtml" />
+    <Content Include="Views\CustomerContract\Create.cshtml" />
+    <Content Include="Views\CustomerRatesMaster\RateChartPrint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

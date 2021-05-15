@@ -14,7 +14,7 @@ namespace CMSV2.Models
 
     public string ProductName { get; set; }
 
-    public int ParcelType { get; set; }
+    public int ParcelTypeID { get; set; }
 
     public int TransportModeID { get; set; }
 
@@ -27,5 +27,8 @@ namespace CMSV2.Models
     public Decimal Height { get; set; }
 
     public Decimal? CBM { get; set; }
+
+        public string ParcelType { get; set; }
+        public string MovementType { get; set; }
   }
 }

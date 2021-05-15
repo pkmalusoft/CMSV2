@@ -423,7 +423,7 @@ namespace CMSV2.Controllers
         public JsonResult GetEventVenuesList(string SearchText)
         {
             
-          string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
+          string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
             //string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
             string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&language=en&key={1}";
             //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />
@@ -451,7 +451,7 @@ namespace CMSV2.Controllers
         [HttpGet, ActionName("GetVenueDetailsByPlace")]
         public JsonResult GetVenueDetailsByPlace(string placeId)
         {
-            string GooglePlaceAPIKey = "AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU";
+            string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
             string placeDetailsApi = "https://maps.googleapis.com/maps/api/place/details/xml?placeid={0}&key={1}";
 
           //  string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];

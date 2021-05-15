@@ -35,7 +35,7 @@
     });
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Customer Rates</h1>
+    <h1 class="headingfont">Rate Chart</h1>
 
 </section>
 <div class="col-md-12">
@@ -110,8 +110,9 @@
 
                         <td>
                             <a href="@Url.Action("Create", new { id = item.CustomerRateID })"><i class="fa fa-pencil"></i></a>|
-            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+                            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
                             <a href="#" onclick="Delete(ID=@item.CustomerRateID)"><i class="fa fa-times"></i></a>
+                            <a class="aprint" target="_blank" href="RateChartPrint?id=@item.CustomerRateID" title="Invoice Printing"><i class="fa fa-print"></i></a>
                         </td>
                     </tr>
                 }

@@ -50,6 +50,8 @@ namespace CMSV2.Models
         public int VehiceId { get; set; }
         public string AWBNo { get; set; }
         public DateTime AWBDate { get; set; }
+        public string CustomerRateType { get; set; }
+        public int CustomerRateTypeID { get; set; }
         public string CustomerName { get; set; }
         public string Shipper { get; set; }
         public string ConsignorContact { get; set; }
@@ -120,7 +122,8 @@ namespace CMSV2.Models
         public string ConsigneeAddress3_1 { get; set; }
         public string ConsigneeCountryName1 { get; set; }
 
-
+        public string DeliveryCity { get; set; }
+        public string DeliveryCountry { get; set; }
         public List<AWBBatchDetail> Details { get; set; }
     }
 
@@ -200,6 +203,8 @@ namespace CMSV2.Models
         public string RequestSource { get; set; }
         public string TransactionDate { get; set; }      
         public int ParcelTypeId { get; set; }
+
+        public int CustomerRateTypeId { get; set; }
         public decimal MaterialCost { get; set; }
         public int StatusTypeId { get; set; }
         
@@ -210,7 +215,8 @@ namespace CMSV2.Models
     public string DestinationPlaceID { get; set; }
         public string PickupLocation { get; set; }
     public string DeliveryLocation { get; set; }
-           public string PickupSubLocality { get; set; }
+      
+        public string PickupSubLocality { get; set; }
         public string DeliverySubLocality { get; set; }
         public string ConsignorMobileNo { get; set; }
         public string ConsigneeMobileNo { get; set; }

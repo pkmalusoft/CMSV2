@@ -475,5 +475,89 @@ namespace CMSV2.Controllers
             return PartialView("ConsigneeAddress", model);
         }
 
+        public JsonResult GetCustomerRateType(string term, string CustomerId,string MovementId,string ProductTypeID,string PaymentModeId)
+        {
+            int pCustomerId = 0;
+            int pMovementId = 0;
+            int pProductTypeID = 0;
+            int pPaymentModeId = 0;
+            if (CustomerId != "")
+                pCustomerId = Convert.ToInt32(CustomerId);
+
+            if (MovementId != "")
+                pMovementId = Convert.ToInt32(MovementId);
+
+            if (ProductTypeID != "")
+                pProductTypeID = Convert.ToInt32(ProductTypeID);
+
+            if (PaymentModeId != "")
+                pPaymentModeId = Convert.ToInt32(PaymentModeId);
+
+            List<CustomerRateType> lst = new List<CustomerRateType>();
+            var loc = AWBDAO.GetRateList(pCustomerId, pMovementId, pProductTypeID, pPaymentModeId);
+
+            if (term.Trim() != "")
+            {
+                lst = (from c in loc where c.CustomerRateType1.Contains(term) orderby c.CustomerRateType1 select c).ToList();
+            }
+            else
+            {
+                lst = (from c in loc  orderby c.CustomerRateType1 select c).ToList();
+            }
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
+        
+        [HttpPost]
+        public JsonResult GetCourierCharge(string CustomerRateTypeID, string CustomerId, string MovementId, string ProductTypeID, string PaymentModeId,string Weight,string CountryName,string CityName)
+        {
+            int pRateTypeID = 0;
+            int pCustomerId = 0;
+            int pMovementId = 0;
+            int pProductTypeID = 0;
+            int pPaymentModeId = 0;
+            decimal pWeight = 0;
+            if (CustomerRateTypeID!="")
+            {
+                pRateTypeID = Convert.ToInt32(CustomerRateTypeID);
+            }
+            if (CustomerId != "")
+                pCustomerId = Convert.ToInt32(CustomerId);
+
+            if (MovementId != "")
+                pMovementId = Convert.ToInt32(MovementId);
+
+            if (ProductTypeID != "")
+                pProductTypeID = Convert.ToInt32(ProductTypeID);
+
+            if (PaymentModeId != "")
+                pPaymentModeId = Convert.ToInt32(PaymentModeId);
+
+            if (Weight != "")
+                pWeight = Convert.ToDecimal(Weight);
+
+            CustomerRateTypeVM vm = AWBDAO.GetCourierCharge(pRateTypeID,pCustomerId, pMovementId, pProductTypeID, pPaymentModeId,pWeight,CountryName,CityName);
+                        
+            return Json(vm, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetParcelType(string ProductTypeId)
+        {
+            int pProductTypeID = 0;
+
+            if (ProductTypeId != "")
+                pProductTypeID = Convert.ToInt32(ProductTypeId);
+
+            int ParcelTypeId = 0;
+            var prod = db.ProductTypes.Find(ProductTypeId);
+            if (prod!=null)
+            {
+                ParcelTypeId=prod.ParcelTypeID;
+            }
+
+            return Json(ParcelTypeId, JsonRequestBehavior.AllowGet);
+
+        }
+    }
 }
+

@@ -15,5 +15,7 @@ namespace CMSV2.Models
     public string StatusZone { get; set; }
 
     public string ZoneType { get; set; }
+
+        public int MovementID { get; set; }
   }
 }

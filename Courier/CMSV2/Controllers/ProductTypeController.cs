@@ -19,17 +19,10 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
             List<ProductTypeVM> lst = new List<ProductTypeVM>();
-            var data = (from c in db.ProductTypes select c).ToList();
+            var data = (from c in db.ProductTypes join d in db.ParcelTypes on c.ParcelTypeID equals d.ID join m in db.CourierMovements on c.TransportModeID equals m.MovementID select new ProductTypeVM { ProductTypeID=c.ProductTypeID,ProductName=c.ProductName,ParcelType=d.ParcelType1,MovementType=m.MovementType}).ToList();
 
-            foreach (var item in data)
-            {
-                ProductTypeVM v = new ProductTypeVM();
-                v.ProductTypeID = item.ProductTypeID;
-                v.ProductName = item.ProductName;
-              
-                lst.Add(v);
-            }
-            return View(lst);
+          
+            return View(data);
         }
 
        
@@ -37,8 +30,8 @@ namespace CMSV2.Controllers
         public ActionResult Create()
         {
             ViewBag.ParcelType = db.ParcelTypes.ToList();
-          
-            ViewBag.transport = db.TransportModes.ToList();
+
+            ViewBag.transport = db.CourierMovements.ToList(); // .TransportModes.ToList();
          
             return View();
         }
@@ -57,7 +50,7 @@ namespace CMSV2.Controllers
                 a.ProductTypeID = max + 1;
                 a.ProductName = v.ProductName;
             
-                a.ParcelTypeID = v.ParcelType;
+                a.ParcelTypeID = v.ParcelTypeID;
            
                 a.TransportModeID = v.TransportModeID;
                 a.CBMBasedCharges = v.CBMbasedCharges;
@@ -81,7 +74,7 @@ namespace CMSV2.Controllers
         {
             ViewBag.ParcelType = db.ParcelTypes.ToList();
 
-            ViewBag.transport = db.TransportModes.ToList();
+            ViewBag.transport = db.CourierMovements.ToList(); //db.TransportModes.ToList();
 
             ProductTypeVM v = new ProductTypeVM();
             ProductType a = (from c in db.ProductTypes where c.ProductTypeID == id select c).FirstOrDefault();
@@ -94,15 +87,18 @@ namespace CMSV2.Controllers
             {
                 v.ProductTypeID = a.ProductTypeID;
                 v.ProductName = a.ProductName;
-
-                v.ParcelType = a.ParcelTypeID;
+                
+                v.ParcelTypeID = a.ParcelTypeID;
 
                 v.TransportModeID = a.TransportModeID;
                 v.CBMbasedCharges = a.CBMBasedCharges;
                 v.Length = a.Length.Value;
                 v.Width = a.Width.Value;
                 v.Height = a.Height.Value;
-                v.CBM = a.CBM.Value;
+                if (a.CBM != null)
+                {
+                    v.CBM = a.CBM.Value;
+                }
             }
             return View(v);
         }
@@ -121,7 +117,7 @@ namespace CMSV2.Controllers
                 v.ProductTypeID = a.ProductTypeID;
                 v.ProductName = a.ProductName;
 
-                v.ParcelTypeID = a.ParcelType;
+                v.ParcelTypeID = a.ParcelTypeID;
 
                 v.TransportModeID = a.TransportModeID;
                 v.CBMBasedCharges = a.CBMbasedCharges;

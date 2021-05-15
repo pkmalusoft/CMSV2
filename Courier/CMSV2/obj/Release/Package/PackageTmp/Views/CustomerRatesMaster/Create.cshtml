@@ -37,9 +37,9 @@
 
 
                     var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + value.AddWtFrom  + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
-                        '<td><input type="text" class="text-right" value="' + value.AddWtFrom + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
+                        '<td><input type="text" class="text-right" value="' + value.AddWtTo + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
                         '<td><input type="text"  class="text-right" value="' + value.IncrWt + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                        '<td><input type="text" class="text-right" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
+                        //'<td><input type="text" class="text-right" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
                         '<td><input type="text"  class="text-right crate" value="' + value.AddRate  + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                         //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                         '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
@@ -63,7 +63,7 @@
         $(":text").css("border-radius", "5px");
         $("select").css("border-radius", "5px");
 
-        $("#addrate").prop("disabled", true);
+        //$("#addrate").prop("disabled", true);
 
         $("#ZoneChartID").empty();
         $('#ZoneChartID').append('<option value="0">Select</option>');
@@ -137,6 +137,7 @@
                             return {
                                 label: val.ZoneName,
                                 value: val.ZoneID,                                
+                                MID: val.MovementID
                             }
                         }))
                     }
@@ -147,11 +148,13 @@
             focus: function (event, ui) {
                 $("#ZoneChartName").val(ui.item.label);
                 $("#ZoneChartID").val(ui.item.value);
+                $('#MovementID').val(ui.item.MID).trigger('change');
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#ZoneChartName").val(i.item.label);
                 $("#ZoneChartID").val(i.item.value);
+                $('#MovementID').val(i.item.MID).trigger('change');
 
             },
         });
@@ -205,11 +208,13 @@
         });
 
         $("#addwtto").blur(function () {
-            if ($(this).val() < $("#addwtfrom").val()) {
+            if ($("#addwtfrom").val() == 'NaN')
+                $("#addwtfrom").val('');
+            if ($("#addwtfrom").val()!='' && ($(this).val() < $("#addwtfrom").val())) {
                 $(".outrange").show();
                 $(this).focus();
             }
-            else {
+            else if ($("#addwtfrom").val() != '' && $("#addwtto").val() != '') {
                 var wt = $(this).val();
                 $(this).val(parseFloat(wt).toFixed(3));
                 $(".outrange").hide();
@@ -242,7 +247,7 @@
                 var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + $("#addwtfrom").val() + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
                      '<td><input type="text"class="text-right"  value="' + $("#addwtto").val() + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
                      '<td><input type="text" class="text-right" value="' + $("#incrwt").val() + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                     '<td><input type="text" class="text-right" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
+                     //'<td><input type="text" class="text-right" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
                      '<td><input type="text" class="text-right crate" value="' + $("#addrate").val() + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                      //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                     '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
@@ -335,9 +340,9 @@
         <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
         <fieldset>
             <div class="row no-margin">
-                <div class="col-md-3">                    
+                <div class="col-md-3">
                     @Html.HiddenFor(model => model.CustomerRateID)
-                    @Html.HiddenFor(model => model.CustomerRateTypeID)                   
+                    @Html.HiddenFor(model => model.CustomerRateTypeID)
                     <label class="headinglabel required">Contract Name</label>
                     @Html.DropDownListFor(model => model.ContractRateTypeID, new SelectList(@ViewBag.CustRate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ContractRateTypeID)
@@ -352,9 +357,12 @@
                     @Html.HiddenFor(model => model.ZoneChartID)
 
                 </div>
-
+                <div class="col-xs-12 col-sm-3">
+                    <label class=" required headinglabel">Movement Type</label>
+                    @Html.DropDownListFor(model => model.MovementID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
+                </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Product Name</label>
+                    <label class="headinglabel required">Product Type</label>
                     @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ProductTypeID)
 
@@ -366,12 +374,10 @@
                     @Html.ValidationMessageFor(model => model.FAgentID)
 
                 </div>
-
-
-            </div>
-
-            <div class="row no-margin" style="padding-top: 10px">
-
+                <div class="col-xs-12 col-sm-3">
+                    <label class="headinglabel">Payment Mode</label>
+                    @Html.DropDownListFor(model => model.PaymentModeID, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
+                </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Base Weight</label>
                     @Html.TextBoxFor(model => model.BaseWt, new { @class = "form-control" })
@@ -380,12 +386,23 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Base Rate</label>
+                    <div class="flexTitle">
+                        <label class="headinglabel required">Base Rate</label>
+                        <div class="checkboxdesign no-padding  text-right" style="float:right">
+                            @Html.CheckBox("withtax", new { @name = "withtax" }) &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">With Tax</label>
+                        </div>
+                    </div>                    
                     @Html.TextBoxFor(model => model.BaseRate, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BaseRate)
 
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 20px">
+            </div>
+
+            <div class="row no-margin" style="padding-top: 10px">
+
+              
+                @*<div class="col-md-2 checkboxdesign" style="padding-top: 20px">
 
                     @Html.CheckBoxFor(model => model.withtax)&nbsp;&nbsp;<label class="headinglabel">With Tax</label>
                     @Html.ValidationMessageFor(model => model.withtax)
@@ -393,22 +410,22 @@
 
 
 
-                </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 20px">
+                </div>*@
+                @*<div class="col-md-2 checkboxdesign" style="padding-top: 20px">
 
                     @Html.CheckBoxFor(model => model.withouttax)&nbsp;&nbsp;<label class="headinglabel">Without Tax</label>
                     @Html.ValidationMessageFor(model => model.withouttax)
 
-                </div>
+                </div>*@
                 
 
 
-                    <div class="col-md-2 checkboxdesign">
+                    @*<div class="col-md-2 checkboxdesign">
 
                         @Html.CheckBoxFor(model => model.AdditionalCharges)&nbsp;&nbsp;<label class="headinglabel">Additional Charges</label>
                         @Html.ValidationMessageFor(model => model.AdditionalCharges)
 
-                    </div>
+                    </div>*@
                 
 
 
@@ -440,11 +457,11 @@
 
                 </div>
 
-                <div class="col-md-2">
+                @*<div class="col-md-2">
                     <label class="headinglabel">Contract Rate</label>
                     <input type="text" id="contractrate" class="form-control" />
 
-                </div>
+                </div>*@
                 <div class="col-md-2">
                     <label class="headinglabel">Add Rate</label>
                     <input type="text" id="addrate" class="form-control" />
@@ -472,7 +489,7 @@
                         <th>Add Wt. From</th>
                         <th>Add Wt. To</th>
                         <th>Incr. Wt.</th>
-                        <th>Contract Rate</th>
+                        @*<th>Contract Rate</th>*@
                         <th>Add Rate</th>
                         <th></th>                        
                         <thead>

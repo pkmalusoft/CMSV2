@@ -419,29 +419,50 @@ namespace CMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
+
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteManifestReceipt(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
+            return RedirectToAction("Index");
             CODReceipt a = db.CODReceipts.Find(id);
-            if (a == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
+            //if (a == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //else
+            //{
 
-                //var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
-                //foreach (InScanMaster _inscan in _inscans)
-                //{
-                //    _inscan.InvoiceID = null;
-                //    db.Entry(_inscan).State = EntityState.Modified;
-                //    db.SaveChanges();
-                //}
-                a.Deleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully deleted COD Receipt.";
+            //    //var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
+            //    //foreach (InScanMaster _inscan in _inscans)
+            //    //{
+            //    //    _inscan.InvoiceID = null;
+            //    //    db.Entry(_inscan).State = EntityState.Modified;
+            //    //    db.SaveChanges();
+            //    //}
+            //    a.Deleted = true;
+            //    db.Entry(a).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    TempData["SuccessMsg"] = "You have successfully deleted COD Receipt.";
 
 
-                return RedirectToAction("Index");
-            }
+            //    return RedirectToAction("Index");
+            //}
         }
 
         public ActionResult Details(int id)

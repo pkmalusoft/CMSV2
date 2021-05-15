@@ -1418,12 +1418,12 @@ namespace CMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetCustomerName(string term)
+        public JsonResult GetCustomerName(string term) 
         {
             var customerlist = (from c1 in db.CustomerMasters
                                 where c1.CustomerID>0 && c1.CustomerType == "CR" && c1.CustomerName.ToLower().StartsWith(term.ToLower())
                                 orderby c1.CustomerName ascending
-                                select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).ToList();                                
+                                select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).Take(100).ToList();                                
 
             return Json(customerlist , JsonRequestBehavior.AllowGet);
 

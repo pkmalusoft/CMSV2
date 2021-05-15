@@ -1,0 +1,342 @@
+﻿@model CMSV2.Models.CustomerContractVM
+@{
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+    var AWBItems = [];
+    var RemoveAWBItems = [];
+    function showmessage(msg) {
+        $('#validations').css('display', 'block');
+        if (msg == '')
+            $('#validations').val('Please fill required Details!');
+        else {
+            $('#validations').val(msg);
+        }
+    }
+    function hidemessage() {
+        $('#validations').css('display', 'none');
+
+    }
+    function deletetrans(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+         var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+    function checkduplicate(awbno) {
+        debugger;
+        var idtext = 'hdnAWbNo_';
+        var maxrow = $('#detailsbody > tr').length;
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var deleted = $('#hdndeleted_' + index).val();
+                if (deleted != "true") {
+                    var con = $('#hdnAWbNo_' + index).val();
+                    if (con.trim() == awbno.trim()) {
+                        duplicate = true;
+                        var message = 'Duplicate AWB No.!';
+                        $.notify('Duplicate AWB No.', 'error');
+                        $('#txtawb').val('');
+                        $('#txtawb').focus();
+                        //break;
+                    }
+
+                    if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                        return true;
+                    }
+                }
+            });
+            if (duplicate == true) {
+                return false;
+            }
+        }
+        else {
+
+            return true;
+        }
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "Get",
+            url: "/CustomerInvoice/GetCourierType",
+            datatype: "Json",
+            success: function (response) {
+
+                var data = response.data;
+                $('#SelectedValues').empty();
+
+                $.each(data, function (index, value) {
+
+                    var o_st = $("#MovementId").val().split(",");
+                    var flag = 0;
+                    for (var j = 0; j < o_st.length; j++) {
+
+                        if (o_st[j] == value.MovementID) {
+                            flag = 1;
+                            break;
+                        }
+
+                    }
+
+                    if (flag == 1) {
+                        $('#SelectedValues').append('<option value="' + value.MovementID + '" selected=true>' + value.MovementType + '</option>');
+                    }
+                    else {
+                        $('#SelectedValues').append('<option value="' + value.MovementID + '">' + value.MovementType + '</option>');
+                    }
+
+                });
+
+
+
+                $('#SelectedValues').multiselect({
+                    nonSelectedText: 'Select',
+                    enableClickableOptGroups: true,
+                    enableCollapsibleOptGroups: true,
+                    enableFiltering: false,
+                    includeSelectAllOption: true,
+                    selectAllValue: 'multiselect-all'
+                });
+
+            }
+        });
+
+
+    });
+    $(document).ready(function () {
+        AWBItems = [];
+
+
+        $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWB/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            console.log(val);
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#CustomerName').val(ui.item.label);
+                $('#CustomerID').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#CustomerName').val(i.item.label);
+                $('#CustomerID').val(i.item.value);
+            },
+
+        });
+
+        $("#btnSearch").click(function () {
+            debugger;
+            var CustomerID = $('#CustomerID').val();
+
+            if (CustomerID == '0' || CustomerID==null || CustomerID=='') {
+                return;
+            }
+            var o_st = $("#SelectedValues").val();
+            var selectedvalues=''
+            for (var j = 0; j < o_st.length; j++) {
+                if (selectedvalues == '')
+                    selectedvalues = o_st[j];
+                else
+                    selectedvalues = selectedvalues + ',' + o_st[j];
+            }
+            $("#detailsbody").html('');
+            $.ajax({
+                type: "Get",
+                url: "/CustomerContract/GetCustomerContract",
+                datatype: "Json",
+                data: { id: CustomerID ,CourierType: selectedvalues },
+                success: function (response) {
+                    debugger;
+                        var data = response;
+                    
+                        // var i = $('#details tr').length - 1;
+                        //$("#details").append('<tr>' + '<td id= >' + data.AWB + '<input type="hidden" value=' + $("#txtawb").val() + ' name="lst[' + i + '].AWB"></td><td><a href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        //$("#details").append('<tr awbno="' + $("#txtawb").val() + '">' + '<td>' + data.AWB + '</td><td>' + data.Origin + '</td><td>' + data.Destination + '</td><td><a awbno="' + $("#txtawb").val() + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        //$("#detailsbody").html('');
+                        $.each(data, function (index, item) {
+                            debugger;
+                            var html = '';
+                        if (data[index].ID >0) {
+                            html = html + '<td><input type="checkbox"  CustomerRateTypeId="' + data[index].CustomerRateTypeID + '" RID="' + data[index].ID  + '" checked id="chkallocate_' + index + '" /></td>';
+                        }
+                        else {
+                            html = html + '<td><input type="checkbox"  CustomerRateTypeId="' + data[index].CustomerRateTypeID + '" RID="0" id="chkallocate_' + index + '" /></td>';
+                        }
+
+                            $("#detailsbody").append('<tr><td>' + (parseInt(index) + 1) + '</td><td>' + item.CustomerRateType + '</td>' + html + ' </tr>');
+                        });
+
+
+                    }
+
+
+            });
+        });
+          
+        
+        $('#btnsave').click(function () {
+            debugger;
+            var obj = [];
+            var maxrow = $('#detailsbody > tr').length;
+            if (maxrow == 0) {
+                $.notify(' Not added,could not save!');
+                return;
+            }
+            $('#btnsave').attr('disabled', 'disabled');
+            for (i = 0; i < maxrow; i++) {
+                var allocated= $('#chkallocate_' + i).prop('checked');
+                if (allocated == true) {
+                    var item = {
+                        CustomerRateTypeId: $('#chkallocate_' + i).attr('CustomerRateTypeId')                        
+                    }
+                    obj.push(item);
+                }
+
+                if (maxrow == (i + 1)) {
+                    var selectedvalues = '';
+                    var o_st = $("#SelectedValues").val();          
+                    for (var j = 0; j < o_st.length; j++) {
+                        if (selectedvalues == '')
+                            selectedvalues = o_st[j];
+                        else
+                            selectedvalues = selectedvalues + ',' + o_st[j];
+                    }
+                    
+                    var saveobj = {
+                        CustomerId: $('#CustomerID').val(),
+                        selectedvalues: selectedvalues,
+                        Details: JSON.stringify(obj)
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/CustomerContract/SaveContract",
+                        datatype: "Json",
+                        data: saveobj,
+                        success: function (response) {
+                            if (response.status == "ok") {
+                                debugger;                               
+                                $.notify(response.message, "success");
+                                $('#btnsave').removeAttr('disabled', 'disabled');
+                                window.location = "/CustomerContract/Index";
+                            }
+                            else {
+                                $('#btnsave').removeAttr('disabled', 'disabled');
+                                $.notify(response.message, "warning");
+
+                            }
+                        }
+                    });
+                }
+            }
+
+        });
+        if (@ViewBag.EditMode == true) {
+            setTimeout(function () {
+                $('#btnSearch').trigger('click');          
+                $('#CustomerName').attr('disabled', 'disabled');                
+            },300)
+            
+        }
+        else {
+             
+        }
+
+
+    });
+
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>
+<div class="row">
+    <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
+        <div class="row no-margin btn-right" style="padding-top:10px">
+            <div class="col-md-12">
+                <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+                @*     <input type="submit" value="Save&Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" style="margin-left:5px;"  />*@
+
+                <a href='@Url.Action("Index", "InScan")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row no-margin">
+                <div class="col-md-4">
+                    <label class="headinglabel required">Customer Name.</label>
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.CustomerID)
+                    @Html.ValidationMessageFor(model => model.CustomerName)
+                </div>
+                <div class="col-md-2">
+                    @Html.HiddenFor(model => model.MovementId)
+                    <label class="headinglabel">Courier Type</label>
+                    <select id="SelectedValues" name="SelectedValues" multiple="multiple">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top:10px">
+                    <button type="button" id="btnSearch" class="btn btn-primary small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </div>
+            </div>           
+
+
+            <div class="row no-margin" style="padding-top:30px">
+
+                <div class="col-md-12">
+                    <table id="details" class="table table-responsive table-bordered" style="background-color:white">
+                        <thead>
+                        <th>S.No</th>
+                        <th>Customer Rate Type</th>                        
+                        <th></th>
+                        </thead>
+                        <tbody id="detailsbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </fieldset>
+    }
+</section>

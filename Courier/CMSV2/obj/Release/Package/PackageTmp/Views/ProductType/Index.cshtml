@@ -71,38 +71,49 @@
         <th>
            @Html.Label("Product Type")
         </th>
-    
+        <th>
+            Parcel Type
+        </th>
+        <th>Courier Type</th>
        
         <th>Action</th>
     </tr>
         </thead>
     <tfoot>
-    <tr>
-      
-        <th>
-           @Html.Label("Product Type")
-        </th>
-       
-       
-        <th style="display:none"></th>
-    </tr>
+        <tr>
+
+            <th>
+                @Html.Label("Product Type")
+            </th>
+            <th>
+                Parcel Type
+            </th>
+            <th>Courier Type</th>
+
+            <th style="display:none"></th>
+        </tr>
         </tfoot>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-      
-       
-       
-       
-        <td>
-      
-             <a href="@Url.Action("Edit", new { id = item.ProductTypeID })"><i class="fa fa-pencil"></i></a>|
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ProductName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ParcelType)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.MovementType)
+    </td>
+
+
+
+    <td>
+
+        <a href="@Url.Action("Edit", new { id = item.ProductTypeID })"><i class="fa fa-pencil"></i></a>|
         <a href="#" onclick="Delete(ID=@item.ProductTypeID)"><i class="fa fa-times"></i></a>
-        </td>
-    </tr>
+    </td>
+</tr>
 }
 
 </table>

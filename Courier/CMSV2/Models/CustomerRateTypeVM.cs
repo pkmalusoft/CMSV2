@@ -17,5 +17,7 @@ namespace CMSV2.Models
     public bool StatusDefault { get; set; }
 
     public string ZoneCategory { get; set; }
+
+    public decimal CourierCharge { get; set; }
   }
 }

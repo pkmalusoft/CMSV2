@@ -17,7 +17,7 @@
     /*.ui-autocomplete {
     z-index: 100;
     }*/
-    
+
     .deleteallocrow {
         color: red !important;
     }
@@ -41,12 +41,11 @@
 
     .bg_box, .bg_box1 {
         padding: 5px 0;
-        
     }
-     .bg_box h3, .bg_box1 h3,{
-        margin-bottom: 5px;
-       
-     }
+
+        .bg_box h3, .bg_box1 h3, {
+            margin-bottom: 5px;
+        }
 
 
     /*.detailBox:nth-of-type(2) .bg_box{
@@ -88,7 +87,7 @@
     h3 {
         margin: 5px 0;
         font-size: 19px;
-         font-weight: bold;
+        font-weight: bold;
     }
 
     hr {
@@ -231,7 +230,7 @@
             url: "/ZoneChart/GetEventVenuesList",
             datatype: "Json",
             data: { SearchText: $('#PickupLocation').val() },
-            success: function (response) {                
+            success: function (response) {
                 $('#PickupLocationPlaceId').val(response[0].place_id);
             }
         });
@@ -241,10 +240,10 @@
             var types = component.types;
             console.log(types);
             $.each(types, function (index, type) {
-                 if (type == 'sublocality' || type == 'sublocality_level_1') {
-                 
+                if (type == 'sublocality' || type == 'sublocality_level_1') {
+
                     $('#PickupSubLocality').val(component.long_name);
-                }              
+                }
             });
         });
 
@@ -274,7 +273,7 @@
                     console.log(component.long_name);
                     $('#DeliverySubLocality').val(component.long_name);
                 }
-               
+
             });
         });
 
@@ -1447,7 +1446,7 @@
         var divitems = $('#divcustomer1').find('.form-control');
 
         if (@ViewBag.EditMode== true) {
-             
+
             //if ($('#AWBProcessed').val() == True) {
             //    $('#txtAWBProcessed').val(1);
             //}
@@ -1475,7 +1474,7 @@
                 $('#materialcost').attr('Disabled', 'disabled');
             }
 
-            
+
             if ($('#InvoiceId').val() != '' && $('#InvoiceId').val() != '0') {
                 $("#CourierCharge").attr('readonly', 'readonly');
                 $("#OtherCharge").attr('readonly', 'readonly');
@@ -1591,10 +1590,10 @@
                 @if (@Model.InScanID == 0)
                 {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 11 }) }
 
-                else
-                {
+            else
+            {
                 @Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @Disabled = "disabled" })
-                }
+            }
 
             </div>
             <div class="col-md-2">
@@ -1657,33 +1656,33 @@
                             </div>
                         </div>*@
 
-                <div class="row no-margin" style="margin-top:10px!important">
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Name</label>
-                        @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
-                    </div>
+                    <div class="row no-margin" style="margin-top:10px!important">
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Name</label>
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true", @style = "", @placeholder = "Shipper Name" })
+                        </div>
 
-                    <div class="col-md-3">
-                        <label class="headinglabel required">Contact Person</label>
-                        @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
-                        @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required">Flat/Building</label>
-                        @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
-                    </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+                            @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+                        </div>
 
-                    <div class="col-md-2">
-                        <label class="headinglabel required">Street</label>
-                        @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Street</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required">Pincode</label>
-                        @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
-                    </div>
-                </div>
-                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">                       
-                      
+                    <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
+
                     </div>
                     <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
                         <div class="col-md-3">
@@ -1731,7 +1730,7 @@
                             <label class="headinglabel required">Contact Person</label>
                             @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
                         </div>
-                              
+
                         <div class="col-md-2">
                             <label class="headinglabel required">Flat/Building</label>
                             @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
@@ -1806,49 +1805,49 @@
                             @Html.TextBoxFor(model => model.DeliverySubLocality, new { @class = "form-control", @readonly = "readonly" })
                         </div>
                     </div>
-                        <div class="row no-margin" style="padding-top: 10px">
-                            <div class="col-md-2">
-                                <label class="headinglabel required">Description</label>
-                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
-                            </div>
-
-                            <div class="col-md-1">
-                                <label class="headinglabel required">Pieces</label>
-                                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
-                            </div>
-                            <div class="col-md-1">
-                                <label class="headinglabel required">Weight</label>
-                                @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
-                            </div>
-                            <div class="col-md-2">
-                                <label class="headinglabel required">Movement Type</label>
-                                @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
-                            </div>
-
-
-
-                            <div class="col-md-3">
-                                <label class="headinglabel required">Product Type</label>
-                                @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
-                            </div>
-                            <div class="col-md-3">
-                                <label class="headinglabel required">Parcel Type</label>
-                                @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
-                            </div>
-
-
+                    <div class="row no-margin" style="padding-top: 10px">
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Description</label>
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off" })
                         </div>
-                        <div class="row no-margin" style="padding-top:10px;">
-                            <div class="col-md-12">
-                                <label class="headinglabel">Remarks</label>
-                                @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
-                            </div>
+
+                        <div class="col-md-1">
+                            <label class="headinglabel required">Pieces</label>
+                            @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
                         </div>
-                      
+                        <div class="col-md-1">
+                            <label class="headinglabel required">Weight</label>
+                            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Movement Type</label>
+                            @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+
+
+
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Product Type</label>
+                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required">Parcel Type</label>
+                            @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+
+
+                    </div>
+                    <div class="row no-margin" style="padding-top:10px;">
+                        <div class="col-md-12">
+                            <label class="headinglabel">Remarks</label>
+                            @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
+                        </div>
                     </div>
 
-
                 </div>
+
+
+            </div>
 
 
             <div class="col-md-12 details1" id="divCostUpdate">
@@ -1856,79 +1855,79 @@
                     <h3 style="color:white">Cost Updation</h3><hr />
 
 
-                                                              <div class="row no-margin" style="padding-top: 10px">
+                    <div class="row no-margin" style="padding-top: 10px">
 
 
-                                                                  <div class="col-md-2">
-                                                                      <label class="headinglabel required">Customer Rate Type</label>
-                                                                      @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
-                                                                  </div>
-                                                                  <div class="col-md-2">
-                                                                      <label class="headinglabel required">Courier Charge</label>
-                                                                      @Html.TextBoxFor(model => model.CourierCharge, string.Format("{0:n2}", Model.CourierCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
-                                                                  </div>
-                                                                  <div class="col-md-1">
-                                                                      <label class="headinglabel">Other Charge</label>
-                                                                      @Html.TextBoxFor(model => model.OtherCharge, string.Format("{0:n2}", Model.OtherCharge), new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-                                                                      @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
-                                                                  </div>
-                                                                  <div class="col-md-1">
-                                                                      @*<label class="headinglabel">Add Other Charge</label>*@
-                                                                      <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
-                                                                  </div>
-                                                                  <div class="col-xs-12 col-sm-2">
-                                                                      <div class="flexTitle">                                                                          
-                                                                          <label class="headinglabel red" id="lblTaxPercent">Tax + @Model.TaxPercent %</label>
-                                                                          <div class="checkboxdesign no-padding text-right" style="float:right">
-                                                                              @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" }) &nbsp
-                                                                              <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
-                                                                          </div>
-                                                                      </div>
-                                                                      @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
-                                                                      @Html.HiddenFor(mode => Model.TaxPercent)
-                                                                  </div>
-                                                                  <div class="col-md-2">
-                                                                      <label class="headinglabel">Material Cost</label>
-                                                                      @Html.TextBoxFor(model => model.materialcost, string.Format("{0:n2}", Model.materialcost), new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
-                                                                  </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Customer Rate Type</label>
+                            @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel required">Courier Charge</label>
+                            @Html.TextBoxFor(model => model.CourierCharge, string.Format("{0:n2}", Model.CourierCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @required = "true" })
+                        </div>
+                        <div class="col-md-1">
+                            <label class="headinglabel">Other Charge</label>
+                            @Html.TextBoxFor(model => model.OtherCharge, string.Format("{0:n2}", Model.OtherCharge), new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                            @*<input type="button" style="float:right" value="O" onclick="ShowOtherChargesModal()" />*@
+                        </div>
+                        <div class="col-md-1">
+                            @*<label class="headinglabel">Add Other Charge</label>*@
+                            <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <div class="col-xs-12 col-sm-2">
+                            <div class="flexTitle">
+                                <label class="headinglabel red" id="lblTaxPercent">Tax + @Model.TaxPercent %</label>
+                                <div class="checkboxdesign no-padding text-right" style="float:right">
+                                    @Html.CheckBox("ChkTaxPercent", new { @name = "ChkTaxPercent", @onchange = "CalculateTax()" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Tax</label>
+                                </div>
+                            </div>
+                            @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control text-right", @autocomplete = "off", @readonly = "true" })
+                            @Html.HiddenFor(mode => Model.TaxPercent)
+                        </div>
+                        <div class="col-md-2">
+                            <label class="headinglabel">Material Cost</label>
+                            @Html.TextBoxFor(model => model.materialcost, string.Format("{0:n2}", Model.materialcost), new { @class = "form-control txtright textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)" })
+                        </div>
 
-                                                                  <div class="col-md-2">
-                                                                      <label class="headinglabel">Total</label>
-                                                                      @Html.TextBoxFor(model => model.totalCharge, string.Format("{0:n2}", Model.totalCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
-                                                                  </div>
-                                                                  <div class="col-md-12 inline_checkbox checkboxdesign " style="padding-top: 5px!important">
-                                                                      <div>
-                                                                          @Html.CheckBox("IsNCND", new { @name = "IsNCND" })
+                        <div class="col-md-2">
+                            <label class="headinglabel">Total</label>
+                            @Html.TextBoxFor(model => model.totalCharge, string.Format("{0:n2}", Model.totalCharge), new { @class = "form-control textright", @onchange = "setTwoNumberDecimal(this)", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-12 inline_checkbox checkboxdesign " style="padding-top: 5px!important">
+                            <div>
+                                @Html.CheckBox("IsNCND", new { @name = "IsNCND" })
 
-                                                                          <label class="headinglabel">Instructions</label>
-                                                                      </div>
-                                                                      <div>
-                                                                          @Html.CheckBox("IsCashOnly", new { @name = "IsCashOnly" })
+                                <label class="headinglabel">Instructions</label>
+                            </div>
+                            <div>
+                                @Html.CheckBox("IsCashOnly", new { @name = "IsCashOnly" })
 
-                                                                          <label class="headinglabel">NCND</label>
-                                                                      </div>
-                                                                      <div>
-                                                                          @Html.CheckBox("IsChequeOnly", new { @name = "IsChequeOnly" })
+                                <label class="headinglabel">NCND</label>
+                            </div>
+                            <div>
+                                @Html.CheckBox("IsChequeOnly", new { @name = "IsChequeOnly" })
 
-                                                                          <label class="headinglabel">Cash Only</label>
-                                                                      </div>
+                                <label class="headinglabel">Cash Only</label>
+                            </div>
 
-                                                                      <div>
-                                                                          @Html.CheckBox("IsCollectMaterial", new { @name = "IsCollectMaterial" })
+                            <div>
+                                @Html.CheckBox("IsCollectMaterial", new { @name = "IsCollectMaterial" })
 
-                                                                          <label class="headinglabel">Cheque</label>
-                                                                      </div>
-                                                                      <div>
-                                                                          @Html.CheckBox("IsDOCopyBack", new { @name = "IsDOCopyBack" })
+                                <label class="headinglabel">Cheque</label>
+                            </div>
+                            <div>
+                                @Html.CheckBox("IsDOCopyBack", new { @name = "IsDOCopyBack" })
 
-                                                                          <label class="headinglabel">Collect Material</label>
-                                                                      </div>
+                                <label class="headinglabel">Collect Material</label>
+                            </div>
 
-                                                                      <label class="headinglabel">DO Copy Back</label>
+                            <label class="headinglabel">DO Copy Back</label>
 
-                                                                  </div>
+                        </div>
 
-                                                              </div>
+                    </div>
 
 
 
@@ -1993,90 +1992,90 @@
                     <div class="col-md-6">
                         <label class="headinglabel">Created By & Date  </label>
                         @Html.DisplayFor(model => model.CreatedByName, new { @class = "form-control" }) &nbsp;&nbsp;
-    @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
-</div>
+                        @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
+                    </div>
 
 
-<div class="col-md-6">
+                    <div class="col-md-6">
 
-    <label class="headinglabel">Last Modified By & Date  </label>
+                        <label class="headinglabel">Last Modified By & Date  </label>
                         @Html.DisplayFor(model => model.LastModifiedByName, new { @class = "form-control" }) &nbsp;&nbsp;
-    @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
-</div>
+                        @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
+                    </div>
 
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-</div>
-
-
-<div class="row no-margin" style="padding-top: 10px">
-
-<div class="col-md-12 btn-right">
+        </div>
 
 
-<input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "AWB", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+        <div class="row no-margin" style="padding-top: 10px">
+
+            <div class="col-md-12 btn-right">
+
+
+                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "AWB", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 
 
 
-</div>
+            </div>
 
-</div>
-
-
-<div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
+        </div>
 
 
-</div>
+        <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
 
 
-<div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-<div class="modal-dialog">
-
-<div class="modal-content" style="border-radius:5px">
-
-<div class="modal-header">
-
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-    <h4 class="modal-title" id="exampleModalLabel">
-        Other Charges
-    </h4>
-
-</div>
+        </div>
 
 
-<div class="modal-body">
+        <div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-    <div class="container-fluid">
+            <div class="modal-dialog">
 
-        <div class="row">
+                <div class="modal-content" style="border-radius:5px">
+
+                    <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            Other Charges
+                        </h4>
+
+                    </div>
 
 
-            <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
+                    <div class="modal-body">
 
-            <table id="ExpAllocationTable" class="table table-bordered table-responsive">
+                        <div class="container-fluid">
 
-                <thead>
+                            <div class="row">
 
-                    <tr>
 
-                        <th>Other Charge</th>
+                                <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
 
-                        <th>Amount </th>
+                                <table id="ExpAllocationTable" class="table table-bordered table-responsive">
 
-                        <th>Delete </th>
+                                    <thead>
 
-                    </tr>
+                                        <tr>
 
-                </thead>
+                                            <th>Other Charge</th>
 
-                <tbody id="OtherChargeTable">
-                    @foreach (var item in Model.otherchargesVM)
-                    {
+                                            <th>Amount </th>
+
+                                            <th>Delete </th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="OtherChargeTable">
+                                        @foreach (var item in Model.otherchargesVM)
+                                        {
                                             <tr>
                                                 <td>
                                                     @item.OtherChargeName
@@ -2087,9 +2086,9 @@
                                                     <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
                                                 </td>
                                                 <td style="text-align: center;">
-                                                     
-                                                        <a href="javascript:void(0)" id="DeleteAllocationRow" ><i class="fa fa-times"></i></a>
-                                                    
+
+                                                    <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+
                                                 </td>
                                             </tr>
                                             otherchargecount++;
@@ -2413,4 +2412,4 @@
 
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>

@@ -31,6 +31,8 @@ namespace CMSV2.Models
         public Nullable<bool> WithTax { get; set; }
         public Nullable<bool> WithoutTax { get; set; }
         public Nullable<bool> AdditionalCharges { get; set; }
+        public Nullable<int> MovementID { get; set; }
+        public Nullable<int> PaymentModeID { get; set; }
     
         public virtual CourierService CourierService { get; set; }
         public virtual CourierService CourierService1 { get; set; }

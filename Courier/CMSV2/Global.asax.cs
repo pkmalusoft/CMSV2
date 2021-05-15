@@ -20,7 +20,7 @@ namespace CMSV2
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
-        {
+            {
             DateTime dt = DateTime.Parse("2017-07-25 00:00:00");
             string arabicculture = new CultureInfo("ar-AE").DateTimeFormat.GetMonthName(dt.Month);
             

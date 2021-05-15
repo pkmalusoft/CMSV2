@@ -236,8 +236,6 @@ namespace CMSV2.Models
         public virtual DbSet<EmpZoneAllocation> EmpZoneAllocations { get; set; }
         public virtual DbSet<tblVehicleType> tblVehicleTypes { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
-        public virtual DbSet<DomesticCODReceipt> DomesticCODReceipts { get; set; }
-        public virtual DbSet<DomesticCODReceiptDetail> DomesticCODReceiptDetails { get; set; }
         public virtual DbSet<EmpZoneAllocationDetail> EmpZoneAllocationDetails { get; set; }
         public virtual DbSet<ZoneChartDetail> ZoneChartDetails { get; set; }
         public virtual DbSet<MaterialCostMaster> MaterialCostMasters { get; set; }
@@ -269,6 +267,8 @@ namespace CMSV2.Models
         public virtual DbSet<ImportShipmentDetail> ImportShipmentDetails { get; set; }
         public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<ImportField> ImportFields { get; set; }
+        public virtual DbSet<DomesticCODReceipt> DomesticCODReceipts { get; set; }
+        public virtual DbSet<DomesticCODReceiptDetail> DomesticCODReceiptDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
