@@ -151,12 +151,14 @@
                 data: { placeId: $('#PlaceId').val() },
                 success: function (response) {
                     debugger;
-                    console.log(response);
+                   // console.log(response);
                     $('#ConsignorCountryName1').val(response.Country);
                     $('#ConsignorCityName1').val(response.City);
                 }
             });
         })
+
+        $('#Shipper1').focus();
     });
 
 </script>

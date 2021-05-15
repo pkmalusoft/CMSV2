@@ -8604,6 +8604,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="FAgentId" ColumnName="FAgentId" />
           <ScalarProperty Name="JobCode" ColumnName="JobCode" />
           <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
           <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />

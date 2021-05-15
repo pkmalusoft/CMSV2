@@ -2299,6 +2299,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
     <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="varchar" MaxLength="50" />
+    <Property Name="FAgentId" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>

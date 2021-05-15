@@ -2333,6 +2333,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="3" />
           <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
           <Property Name="JobCode" Type="varchar" MaxLength="50" />
+          <Property Name="FAgentId" Type="int" />
         </EntityType>
         <EntityType Name="InscanOtherCharge">
           <Key>
@@ -19337,6 +19338,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FAgentId" Type="Int32" />
         </EntityType>
         <EntityType Name="QuickInscanMaster">
           <Key>
@@ -28302,6 +28304,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="FAgentId" ColumnName="FAgentId" />
                 <ScalarProperty Name="JobCode" ColumnName="JobCode" />
                 <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
                 <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />

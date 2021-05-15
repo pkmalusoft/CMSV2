@@ -220,7 +220,27 @@
             //$(obj).val(true);
         });
 
-        
+        $('#ZoneID').change(function () {
+            //GetZoneType
+            $.ajax({
+                url: '/ZoneChart/GetZoneType', //'/AWB/GetConsigneeName',
+                datatype: "json",
+                data: {
+                    id: $('#ZoneID').val()
+                },
+                success: function (data) {
+                    if (data == 'Import') {
+                        $('#lbllocation').html('Origin Location');
+                    }
+                    else //if (data == 'Export' || data=='Domestic') {
+                    {
+                        $('#lbllocation').html('Destination Location');
+                    }
+
+                }
+            });
+        });
+
         $("#btnsave").click(function () {
             var i = $('#tbl1 > tr').length;
             if (i == 0) {
@@ -341,7 +361,7 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-5">
-                    <label class="headinglabel">Location</label>
+                    <label class="headinglabel" id="lbllocation">Location</label>
                     <input type="hidden" id="EventVenueId" class="form-control" />
                     @*<input type="text" id="TextBoxVenueLocation" class="form-control" style="background-color:bisque" />*@
                     

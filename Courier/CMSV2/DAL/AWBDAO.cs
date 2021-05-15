@@ -529,6 +529,10 @@ namespace CMSV2.DAL
                         obj.TaxPercent = dt.Rows[i]["TaxPercent"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["TaxPercent"].ToString());
                         obj.TaxAmount = dt.Rows[i]["TaxAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["TaxAmount"].ToString());
                         obj.SpecialInstructions = dt.Rows[i]["SpecialNotes"] == DBNull.Value ? "" : dt.Rows[i]["SpecialNotes"].ToString();
+                        obj.CustomerRateTypeId = dt.Rows[i]["CustomerRateID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["CustomerRateID"].ToString());
+                        obj.FAgentID  = dt.Rows[i]["FAgentId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["FAgentId"].ToString());
+                        obj.FAgentName = dt.Rows[i]["FAgentName"] == DBNull.Value ? "" : dt.Rows[i]["FAgentName"].ToString();
+                        obj.CustomerRateType = GetCustomerRateName(obj.CustomerRateTypeId);
                         list.Add(obj);
                     }
 
@@ -698,7 +702,7 @@ namespace CMSV2.DAL
 
         }
 
-        public static List<CustomerRateType> GetRateList(int CustomerId, int MovementId,int ProductTypeId,int PaymentModeId)
+        public static List<CustomerRateType> GetRateList(int CustomerId, int MovementId,int ProductTypeId,int PaymentModeId,int FAgentID,string CityName,string CountryName)
         {
             List<CustomerRateType> list = new List<CustomerRateType>();
 
@@ -710,6 +714,9 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@MovementId", MovementId);
             cmd.Parameters.AddWithValue("@ProductTypeId", ProductTypeId);
             cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
+            cmd.Parameters.AddWithValue("@FAgentId", FAgentID);
+            cmd.Parameters.AddWithValue("@CityName", CityName);
+            cmd.Parameters.AddWithValue("@CountryName", CountryName);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -723,7 +730,8 @@ namespace CMSV2.DAL
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         CustomerRateType obj = new CustomerRateType();
-                        obj.CustomerRateTypeID = CommanFunctions.ParseInt(dt.Rows[i]["CustomerRateTypeID"].ToString());
+                        //obj.CustomerRateTypeID = CommanFunctions.ParseInt(dt.Rows[i]["CustomerRateTypeID"].ToString());
+                        obj.CustomerRateTypeID = CommanFunctions.ParseInt(dt.Rows[i]["CustomerRateID"].ToString());
                         obj.CustomerRateType1 = dt.Rows[i]["CustomerRateType"].ToString();
 
                         list.Add(obj);
@@ -747,7 +755,8 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_GetCourierCharge";
             cmd.CommandType = CommandType.StoredProcedure;
             
-            cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
+           cmd.Parameters.AddWithValue("@CustomerRateId", RateTypeId);
+           // cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             cmd.Parameters.AddWithValue("@MovementId", MovementId);
             cmd.Parameters.AddWithValue("@ProductTypeId", ProductTypeId);
@@ -782,7 +791,34 @@ namespace CMSV2.DAL
             return vm;
 
         }
+        public static string GetCustomerRateName(int CustomerRateID)
+        {
+            string CustomerRateName = "";
 
+            //SP_GetCustomerRateDetail
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerRateDetail";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@CustomerRateId", CustomerRateID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    CustomerRateName = dt.Rows[0]["CustomerRateType"].ToString();
+                }
+            }
+
+            return CustomerRateName;
+        }
+
+                
         public static List<ZoneNameVM> GetZoneChartMaster(int RateTypeId)
         {
 

@@ -75,6 +75,15 @@ namespace CMSV2.Controllers
             vm.BatchDate = pFromDate;
             vm.AWBDate = pFromDate;
 
+            var branch = db.BranchMasters.Find(branchid);
+            if (branch != null)
+            {
+                vm.BranchLocation = branch.LocationName;
+                vm.BranchCountry = branch.CountryName;
+                vm.BranchCity = branch.CityName;
+            }
+
+
             vm.AssignedDate = pFromDate;
             vm.TaxPercent = 5;
             var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
@@ -125,7 +134,17 @@ namespace CMSV2.Controllers
                 vm.FOCCustomerName = "FOC CUSTOMER";
             }
 
-
+            var FAgent = db.ForwardingAgentMasters.Where(cc => cc.StatusDefault == true).FirstOrDefault();
+            if (FAgent != null)
+            {
+                vm.FAgentName = FAgent.FAgentName;
+                vm.FAgentID = FAgent.FAgentID;
+            }
+            else
+            {
+                vm.FAgentID = 0;
+                vm.FAgentName = "";
+            }
             return View(vm);
         }
         public ActionResult Edit(int id)
@@ -145,7 +164,24 @@ namespace CMSV2.Controllers
             vm.ID = v.ID;
             vm.BatchNumber = v.BatchNumber;
             vm.BatchDate = v.BatchDate;
-
+            var branch = db.BranchMasters.Find(branchid);
+            var FAgent = db.ForwardingAgentMasters.Where(cc => cc.StatusDefault == true).FirstOrDefault();
+            if (FAgent != null)
+            {
+                vm.FAgentName = FAgent.FAgentName;
+                vm.FAgentID = FAgent.FAgentID;
+            }
+            else
+            {
+                vm.FAgentID = 0;
+                vm.FAgentName = "";
+            }
+            if (branch != null)
+            {
+                vm.BranchLocation = branch.LocationName;
+                vm.BranchCountry = branch.CountryName;
+                vm.BranchCity = branch.CityName;
+            }
             vm.TaxPercent = 5;
             var defaultproducttype = db.ProductTypes.ToList().Where(cc => cc.DefaultType == true).FirstOrDefault();
             if (defaultproducttype != null)
@@ -475,12 +511,16 @@ namespace CMSV2.Controllers
             return PartialView("ConsigneeAddress", model);
         }
 
-        public JsonResult GetCustomerRateType(string term, string CustomerId,string MovementId,string ProductTypeID,string PaymentModeId)
+        public JsonResult GetCustomerRateType(string term, string CustomerId,string MovementId,string ProductTypeID,string PaymentModeId,string FAgentID,string CityName,string CountryName,string OriginCountry,string OriginCity)
         {
-            int pCustomerId = 0;
+             int pCustomerId = 0;
             int pMovementId = 0;
             int pProductTypeID = 0;
             int pPaymentModeId = 0;
+            int pAgentID = 0;
+            string pCountryname = ""; ;
+            string pcityname = "";            
+
             if (CustomerId != "")
                 pCustomerId = Convert.ToInt32(CustomerId);
 
@@ -493,8 +533,23 @@ namespace CMSV2.Controllers
             if (PaymentModeId != "")
                 pPaymentModeId = Convert.ToInt32(PaymentModeId);
 
+            if (FAgentID != "")
+                pAgentID = Convert.ToInt32(FAgentID);
+
+            if (pMovementId == 3)
+            {
+                pCountryname = OriginCountry;
+                pcityname = OriginCity;
+            }
+            else
+            {
+                pCountryname = CountryName;
+                pcityname = CityName;
+
+            }
+
             List<CustomerRateType> lst = new List<CustomerRateType>();
-            var loc = AWBDAO.GetRateList(pCustomerId, pMovementId, pProductTypeID, pPaymentModeId);
+            var loc = AWBDAO.GetRateList(pCustomerId, pMovementId, pProductTypeID, pPaymentModeId,pAgentID,pcityname,pCountryname);
 
             if (term.Trim() != "")
             {
@@ -556,6 +611,22 @@ namespace CMSV2.Controllers
             }
 
             return Json(ParcelTypeId, JsonRequestBehavior.AllowGet);
+
+        }
+
+      
+        public JsonResult GetForwardingAgent(string term)
+        {
+            if (term.Trim() != "")
+            {
+                var list = (from c in db.ForwardingAgentMasters where c.FAgentName.Contains(term.Trim()) orderby c.FAgentName select new { FAgentID = c.FAgentID, AgentName = c.FAgentName }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from c in db.ForwardingAgentMasters orderby c.FAgentName select new { FAgentID = c.FAgentID, AgentName = c.FAgentName }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
 
         }
     }

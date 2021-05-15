@@ -329,7 +329,14 @@ namespace CMSV2.Controllers
             return Json(s, JsonRequestBehavior.AllowGet);
 
         }
+        public JsonResult GetZoneType(int id)
+        {
+            StatusZone s = new StatusZone();
+            var Zonetype = (from c in db.ZoneMasters where c.ZoneID == id select c.ZoneType).FirstOrDefault();
 
+            return Json(Zonetype, JsonRequestBehavior.AllowGet);
+
+        }
         public class StatusZone
         {
             public string Status { get; set; }
@@ -451,7 +458,7 @@ namespace CMSV2.Controllers
         [HttpGet, ActionName("GetVenueDetailsByPlace")]
         public JsonResult GetVenueDetailsByPlace(string placeId)
         {
-            string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
+             string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
             string placeDetailsApi = "https://maps.googleapis.com/maps/api/place/details/xml?placeid={0}&key={1}";
 
           //  string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];

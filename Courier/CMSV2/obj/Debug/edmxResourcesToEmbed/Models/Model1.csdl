@@ -12201,6 +12201,7 @@
     <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="3" />
     <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FAgentId" Type="Int32" />
   </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>

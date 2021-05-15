@@ -52,6 +52,8 @@ namespace CMSV2.Models
         public DateTime AWBDate { get; set; }
         public string CustomerRateType { get; set; }
         public int CustomerRateTypeID { get; set; }
+        public int FAgentID { get; set; }
+        public string FAgentName { get; set; }
         public string CustomerName { get; set; }
         public string Shipper { get; set; }
         public string ConsignorContact { get; set; }
@@ -124,6 +126,13 @@ namespace CMSV2.Models
 
         public string DeliveryCity { get; set; }
         public string DeliveryCountry { get; set; }
+
+        public string OriginCity { get; set; }
+        public string OriginCountry { get; set; }
+
+        public string BranchLocation { get; set; }
+        public string BranchCity { get; set; }
+        public string BranchCountry { get; set; }
         public List<AWBBatchDetail> Details { get; set; }
     }
 
@@ -203,8 +212,11 @@ namespace CMSV2.Models
         public string RequestSource { get; set; }
         public string TransactionDate { get; set; }      
         public int ParcelTypeId { get; set; }
+        public int FAgentID { get; set; }
 
+        public string FAgentName { get; set; }
         public int CustomerRateTypeId { get; set; }
+        public string CustomerRateType { get; set; }
         public decimal MaterialCost { get; set; }
         public int StatusTypeId { get; set; }
         
