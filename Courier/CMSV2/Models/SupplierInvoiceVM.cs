@@ -11,7 +11,8 @@ namespace CMSV2.Models
         public string SupplierType { get; set; }
         public int SupplierTypeId { get; set; }
         public decimal Amount { get; set; }
-
+        public int ItemTypeId { get; set; }
+        public int ItemTypeId1 { get; set; }
         public List<SupplierInvoiceDetailVM> details { get; set; }
     }
     public class SupplierInvoiceDetailVM
@@ -32,10 +33,14 @@ namespace CMSV2.Models
         public string Currency { get; set; }
 
         public string BookNo { get; set; }
-        public int StockType { get; set; }
+        public int ItemTypeId { get; set; }
+        public int ItemId { get; set; }
         public int AWBStart { get; set; }
         public int AWBEnd { get; set; }
         public int AWBCount { get; set; }
+        public int ItemQty { get; set; }
+
+
 
         public string ItemSize { get; set; }
     }

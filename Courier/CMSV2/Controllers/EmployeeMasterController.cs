@@ -72,7 +72,7 @@ namespace CMSV2.Controllers
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
-            List<EmployeeVM > lst = (from c in db.EmployeeMasters join t in db.Designations on c.DesignationID equals t.DesignationID where c.UserID!=1 && c.BranchID== branchid && c.DepotID==depotId   select new EmployeeVM {EmployeeID=c.EmployeeID,EmployeeName=c.EmployeeName,EmployeeCode=c.EmployeeCode,Designation=t.Designation1 ,Email=c.Email}).ToList();
+            List<EmployeeVM > lst = (from c in db.EmployeeMasters join t in db.Designations on c.DesignationID equals t.DesignationID where c.UserID!=-1 && c.BranchID== branchid && c.DepotID==depotId   select new EmployeeVM {EmployeeID=c.EmployeeID,EmployeeName=c.EmployeeName,EmployeeCode=c.EmployeeCode,Designation=t.Designation1 ,Email=c.Email}).ToList();
             return View(lst);
         }
 

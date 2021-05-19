@@ -36,8 +36,9 @@ namespace CMSV2.Models
         public Nullable<bool> StatusDefault { get; set; }
         public Nullable<int> StateID { get; set; }
         public Nullable<int> CourierServiceID { get; set; }
-    
-        public virtual CurrencyMaster CurrencyMaster { get; set; }
-        public virtual ZoneCategory ZoneCategory { get; set; }
+        public string CountryName { get; set; }
+        public string CityName { get; set; }
+        public string LocationName { get; set; }
+        public string Address3 { get; set; }
     }
 }

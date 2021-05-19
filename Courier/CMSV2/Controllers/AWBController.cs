@@ -103,7 +103,8 @@ namespace CMSV2.Controllers
                 //ViewBag.City = db.CityMasters.ToList();
                 //ViewBag.Location = db.LocationMasters.ToList();
                 ViewBag.Employee = db.EmployeeMasters.ToList();
-                ViewBag.FAgent = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); // )// .ForwardingAgentMasters.ToList();
+                //ViewBag.FAgent = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); // )// .ForwardingAgentMasters.ToList();
+            ViewBag.FAgent = db.ForwardingAgentMasters.ToList();
                 ViewBag.Movement = db.CourierMovements.ToList();
                 ViewBag.ProductType = db.ProductTypes.ToList();
                 ViewBag.parceltype = db.ParcelTypes.ToList();
@@ -125,7 +126,25 @@ namespace CMSV2.Controllers
                     ViewBag.AWBNO = doa.GetMaAWBNo(companyId, branchid);
                     v.HAWBNo = ViewBag.AWBNo;
                     ViewBag.CourierStatusId = 0;
-                    v.InScanID = 0;
+                var branch = db.BranchMasters.Find(branchid);
+                var FAgent = db.ForwardingAgentMasters.Where(cc => cc.StatusDefault == true).FirstOrDefault();
+                if (FAgent != null)
+                {
+                    v.FAgentName = FAgent.FAgentName;
+                    v.FagentID = FAgent.FAgentID;
+                }
+                else
+                {
+                    v.FagentID = 0;
+                    v.FAgentName = "";
+                }
+                if (branch != null)
+                {
+                    v.BranchLocation = branch.LocationName;
+                    v.BranchCountry = branch.CountryName;
+                    v.BranchCity = branch.CityName;
+                }
+                v.InScanID = 0;
                     v.TaxPercent = 5;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
@@ -353,6 +372,7 @@ namespace CMSV2.Controllers
                     inscan.OtherCharge = v.OtherCharge;
                     inscan.CargoDescription = v.Description;
                     inscan.Remarks = v.remarks;
+                    inscan.FAgentId = v.FagentID;
                    // inscan.AWBProcessed = Convert.ToBoolean(v.AWBProcessed);
 
                     if (v.CustomCharge !=null )
@@ -2283,6 +2303,8 @@ namespace CMSV2.Controllers
             if (data == null)
             {
                 obj.Exist = 0;
+                AWBInfo info = AWBDAO.GetAWBInfo(id.Trim());
+                obj.AWBInfo = info;
             }
             else
             {
@@ -2295,7 +2317,7 @@ namespace CMSV2.Controllers
         public class AWB
         {
             public int Exist { get; set; }
-
+            public AWBInfo AWBInfo { get; set; }
         }
 
 

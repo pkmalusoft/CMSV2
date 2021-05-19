@@ -137,6 +137,11 @@
                 $('#ConsignorLocationName1').val(ui.item.label);
                 $('#PlaceId').val(ui.item.value);
                 return false;
+            },
+            focus: function (event, ui) {
+                $('#ConsignorLocationName1').val(ui.item.label);
+                $('#PlaceId').val(ui.item.value);
+                return false;
             }
         });
         ///.autocomplete("widget").addClass("CitiesAutocomplete");
@@ -151,7 +156,7 @@
                 data: { placeId: $('#PlaceId').val() },
                 success: function (response) {
                     debugger;
-                    console.log(response);
+                   // console.log(response);
                     $('#ConsignorCountryName1').val(response.Country);
                     $('#ConsignorCityName1').val(response.City);
                 }
@@ -171,7 +176,7 @@
 
     <div class="col-md-6">
         <label class="headinglabel required">Contact Person</label>
-        @Html.TextBoxFor(model => model.ConsignorContact1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+        @Html.TextBoxFor(model => model.ConsignorContact1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person",@type="search" })
         @Html.ValidationMessageFor(model => model.ConsignorContact1, "", new { @class = "text-danger", @placeholder = "Contact Person" })
     </div>
 
@@ -179,23 +184,23 @@
 <div class="row no-margin" style="margin-top:10px!important">
     <div class="col-md-4">
         <label class="headinglabel">Flat/Building</label>
-        @Html.TextBoxFor(model => model.ConsignorAddress1_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+        @Html.TextBoxFor(model => model.ConsignorAddress1_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building", @type = "search" })
     </div>
 
     <div class="col-md-4">
         <label class="headinglabel">Street</label>
-        @Html.TextBoxFor(model => model.ConsignorAddress2_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+        @Html.TextBoxFor(model => model.ConsignorAddress2_1, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street", @type = "search" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Pincode</label>
-        @Html.TextBoxFor(model => model.ConsignorAddress3_1, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+        @Html.TextBoxFor(model => model.ConsignorAddress3_1, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode", @type = "search" })
     </div>
 </div>
 
 <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
     <div class="col-md-4">
         <label class="headinglabel">Location</label>
-        @Html.TextBoxFor(model => model.ConsignorLocationName1, new { @class = "form-control txttarget autocomplete", @required = "true", @placeholder = "Location" })
+        @Html.TextBoxFor(model => model.ConsignorLocationName1, new { @class = "form-control txttarget autocomplete", @required = "true", @placeholder = "Location", @type = "search" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Origin City</label>
@@ -211,10 +216,10 @@
 
     <div class="col-md-6">
         <label class="headinglabel">Telephone No.</label>
-        @Html.TextBoxFor(model => model.ConsignorPhone1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+        @Html.TextBoxFor(model => model.ConsignorPhone1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone", @type = "search" })
     </div>
     <div class="col-md-6">
         <label class="headinglabel">Mobile No.</label>
-        @Html.TextBoxFor(model => model.ConsignorMobileNo1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+        @Html.TextBoxFor(model => model.ConsignorMobileNo1, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone", @type = "search" })
     </div>
 </div>

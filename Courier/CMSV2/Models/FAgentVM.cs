@@ -23,20 +23,21 @@ namespace CMSV2.Models
     public string Address1 { get; set; }
 
     public string Address2 { get; set; }
-
-    public string Phone { get; set; }
-
+        public string Address3 { get; set; }
+        public string AcHeadName { get; set; }
+        public string Phone { get; set; }
+        
     public string Fax { get; set; }
 
     public string Email { get; set; }
 
     public string WebSite { get; set; }
 
-    public int CountryID { get; set; }
+    public string CountryName{ get; set; }
 
-    public int StateID { get; set; }
+    public string LocationName { get; set; }
 
-    public int CityID { get; set; }
+    public string CityName{ get; set; }
 
     public int CurrencyID { get; set; }
 
@@ -50,6 +51,6 @@ namespace CMSV2.Models
 
     public string FAgentCode { get; set; }
 
-    public string CountryName { get; set; }
+     
   }
 }

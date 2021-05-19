@@ -120,7 +120,11 @@ namespace CMSV2.Models
         public int? ReceivedBy { get; set; }
 
         public int FagentID { get; set; }
+        public string FAgentName { get; set; }
 
+        public string BranchLocation { get; set; }
+        public string BranchCountry { get; set; }
+        public string BranchCity { get; set; }
         public string FAWBNo { get; set; }
 
         public Decimal VerifiedWeight { get; set; }
@@ -173,10 +177,14 @@ namespace CMSV2.Models
 
         public string PickupLocationPlaceId { get; set; }
         public string PickupLocation { get; set; }
-
+        public string OriginCountry { get; set; }
+        public string OriginCity { get; set; }
         public string DeliveryLocation { get; set; }
         public string PickupSubLocality { get; set; }
         public string DeliverySubLocality { get; set; }
+
+        public string DeliveryCountry { get; set; }
+        public string DeliveryCity { get; set; }
         public bool AWBProcessed { get; set; }
 
         public string DeliveryLocationPlaceId { get; set; }
@@ -185,6 +193,8 @@ namespace CMSV2.Models
         public string  CODStatus { get; set; }
         public string MaterialCostStatus { get; set; }
         public int InvoiceId { get; set; }
+
+        public string CustomerRateType { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
 
 

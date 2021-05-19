@@ -221,7 +221,7 @@
     <Compile Include="Controllers\CityMasterController.cs" />
     <Compile Include="Controllers\CustomerContractController.cs" />
     <Compile Include="Controllers\DevelopmentController.cs" />
-    <Compile Include="Controllers\ForwardingAgentMasterController.cs" />
+    <Compile Include="Controllers\ForwardingAgentController.cs" />
     <Compile Include="Controllers\ImportManifestController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
@@ -269,6 +269,7 @@
     <Compile Include="Controllers\OtherChargeController.cs" />
     <Compile Include="Controllers\OutScanController.cs" />
     <Compile Include="Controllers\PODController.cs" />
+    <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Controllers\VehicleTypeController.cs" />
     <Compile Include="Controllers\ParcelTypeController.cs" />
     <Compile Include="Controllers\PickUpEnquiryController.cs" />
@@ -1272,6 +1273,12 @@
     <Compile Include="Models\Item.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ItemPurchase.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ItemType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ItemUnit.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1736,6 +1743,7 @@
     <Compile Include="Models\StockDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StockVM.cs" />
     <Compile Include="Models\SubStatu.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3635,6 +3643,14 @@
     <Content Include="Views\CustomerContract\Index.cshtml" />
     <Content Include="Views\CustomerContract\Create.cshtml" />
     <Content Include="Views\CustomerRatesMaster\RateChartPrint.cshtml" />
+    <Content Include="Views\ForwardingAgent\Create.cshtml" />
+    <Content Include="Views\ForwardingAgent\Delete.cshtml" />
+    <Content Include="Views\ForwardingAgent\Details.cshtml" />
+    <Content Include="Views\ForwardingAgent\Edit.cshtml" />
+    <Content Include="Views\ForwardingAgent\Home.cshtml" />
+    <Content Include="Views\ForwardingAgent\Index.cshtml" />
+    <Content Include="Views\Stock\Index.cshtml" />
+    <Content Include="Views\Stock\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -874,6 +874,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have
           <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="150" />
           <Property Name="ConsigneePhoneNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ConsigneeContactName" Type="nvarchar" MaxLength="20" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ConsignorMaster">
           <Key>
@@ -889,6 +890,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have
           <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="150" />
           <Property Name="ConsignorPhoneNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ConsignorContactName" Type="nvarchar" MaxLength="20" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Content">
           <Key>
@@ -1777,6 +1779,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
           <Property Name="StatusDefault" Type="bit" />
           <Property Name="StateID" Type="int" />
           <Property Name="CourierServiceID" Type="int" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CityName" Type="varchar" MaxLength="200" />
+          <Property Name="LocationName" Type="varchar" MaxLength="200" />
+          <Property Name="Address3" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ForwardingAgentRate">
           <Key>
@@ -2350,8 +2356,41 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
           <Key>
             <PropertyRef Name="ItemID" />
           </Key>
-          <Property Name="ItemID" Type="int" Nullable="false" />
-          <Property Name="Item" Type="nvarchar" MaxLength="500" />
+          <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemTypeId" Type="int" />
+          <Property Name="ItemName" Type="varchar" MaxLength="200" />
+          <Property Name="ItemUnitID" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemPurchase">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseDate" Type="datetime" />
+          <Property Name="StockType" Type="varchar" MaxLength="20" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="ReferenceNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="AWBNOFrom" Type="int" />
+          <Property Name="AWBNOTo" Type="int" />
+          <Property Name="AWBCount" Type="int" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="Rate" Type="money" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="SupplierInvoiceDetailID" Type="int" />
+          <Property Name="AcFinancialYearID" Type="int" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ItemTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="ItemTypeId" />
+          </Key>
+          <Property Name="ItemTypeId" Type="int" Nullable="false" />
+          <Property Name="ItemTypeName" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ItemUnit">
           <Key>
@@ -3129,6 +3168,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.State' does not have a prim
           <Property Name="StatusClose" Type="bit" />
           <Property Name="InvoiceTotal" Type="money" />
           <Property Name="IsDeleted" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="SupplierInvoiceAWB">
           <Key>
@@ -6755,6 +6798,8 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="InScanMaster" EntityType="Self.InScanMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InscanOtherCharge" EntityType="Self.InscanOtherCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemPurchase" EntityType="Self.ItemPurchase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemUnit" EntityType="Self.ItemUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobEnquiry" EntityType="Self.JobEnquiry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobEnquiryDetails" EntityType="Self.JobEnquiryDetails" Schema="dbo" store:Type="Tables" />
@@ -7947,7 +7992,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="BranchMaster" />
           <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="CustomerMaster" />
           <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_CurrencyMaster" FromRole="CurrencyMaster" ToRole="Expense" />
-          <NavigationProperty Name="ForwardingAgentMasters" Relationship="Self.FK_ForwardingAgentMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="ForwardingAgentMaster" />
           <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster" FromRole="CurrencyMaster" ToRole="ExportShipmentDetails" />
           <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="SalesInvoice" />
@@ -8371,36 +8415,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="OriginalAmt" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="FAInvoice" Relationship="Self.FK_FAInvoiceDetails_FAInvoice" FromRole="FAInvoiceDetails" ToRole="FAInvoice" />
         </EntityType>
-        <EntityType Name="ForwardingAgentMaster">
-          <Key>
-            <PropertyRef Name="FAgentID" />
-            <PropertyRef Name="AcCompanyID" />
-          </Key>
-          <Property Name="FAgentID" Type="Int32" Nullable="false" />
-          <Property Name="AcCompanyID" Type="Int32" Nullable="false" />
-          <Property Name="FAgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CountryID" Type="Int32" Nullable="false" />
-          <Property Name="CityID" Type="Int32" Nullable="false" />
-          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
-          <Property Name="ZoneCategoryID" Type="Int32" />
-          <Property Name="StatusSigned" Type="Boolean" Nullable="false" />
-          <Property Name="StatusActive" Type="Boolean" Nullable="false" />
-          <Property Name="FAgentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="StatusDefault" Type="Boolean" />
-          <Property Name="StateID" Type="Int32" />
-          <Property Name="CourierServiceID" Type="Int32" />
-          <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_ForwardingAgentMaster_CurrencyMaster" FromRole="ForwardingAgentMaster" ToRole="CurrencyMaster" />
-          <NavigationProperty Name="ZoneCategory" Relationship="Self.FK_ForwardingAgentMaster_ZoneCategory" FromRole="ForwardingAgentMaster" ToRole="ZoneCategory" />
-        </EntityType>
         <EntityType Name="ForwardingAgentRate">
           <Key>
             <PropertyRef Name="FAgentRateID" />
@@ -8777,13 +8791,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="TaxPercentage" Type="Decimal" Precision="6" Scale="2" />
           <Property Name="Reimbursement" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="OtherCharge" Relationship="Self.FK_InscanOtherCharge_OtherCharge" FromRole="InscanOtherCharge" ToRole="OtherCharge" />
-        </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemID" />
-          </Key>
-          <Property Name="ItemID" Type="Int32" Nullable="false" />
-          <Property Name="Item1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ItemUnit">
           <Key>
@@ -9454,6 +9461,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierInvoice" ToRole="SupplierMaster" />
           <NavigationProperty Name="SupplierInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoice" ToRole="SupplierInvoiceDetail" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="SupplierType">
           <Key>
@@ -10056,7 +10067,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="ZoneCategory1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StatusBaseCategory" Type="Boolean" />
           <NavigationProperty Name="CustomerRateTypes" Relationship="Self.FK_CustomerRateType_ZoneCategory" FromRole="ZoneCategory" ToRole="CustomerRateType" />
-          <NavigationProperty Name="ForwardingAgentMasters" Relationship="Self.FK_ForwardingAgentMaster_ZoneCategory" FromRole="ZoneCategory" ToRole="ForwardingAgentMaster" />
           <NavigationProperty Name="ZoneCharts" Relationship="Self.FK_ZoneChart_ZoneCategory" FromRole="ZoneCategory" ToRole="ZoneChart" />
           <NavigationProperty Name="ZoneCharts1" Relationship="Self.FK_ZoneChart_ZoneCategory1" FromRole="ZoneCategory" ToRole="ZoneChart" />
         </EntityType>
@@ -10835,18 +10845,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ForwardingAgentMaster_CurrencyMaster">
-          <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="1" />
-          <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CurrencyMaster">
-              <PropertyRef Name="CurrencyID" />
-            </Principal>
-            <Dependent Role="ForwardingAgentMaster">
-              <PropertyRef Name="CurrencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseInvoice_CurrencyMaster">
           <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
           <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
@@ -11088,18 +11086,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             </Principal>
             <Dependent Role="FAInvoiceDetails">
               <PropertyRef Name="FAInvoiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ForwardingAgentMaster_ZoneCategory">
-          <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="0..1" />
-          <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZoneCategory">
-              <PropertyRef Name="ZoneCategoryID" />
-            </Principal>
-            <Dependent Role="ForwardingAgentMaster">
-              <PropertyRef Name="ZoneCategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11677,7 +11663,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="ExportShipmentDetails" EntityType="Self.ExportShipmentDetail" />
           <EntitySet Name="FAInvoices" EntityType="Self.FAInvoice" />
           <EntitySet Name="FAInvoiceDetails" EntityType="Self.FAInvoiceDetail" />
-          <EntitySet Name="ForwardingAgentMasters" EntityType="Self.ForwardingAgentMaster" />
           <EntitySet Name="ForwardingAgentRates" EntityType="Self.ForwardingAgentRate" />
           <EntitySet Name="ForwardingAgentRateDets" EntityType="Self.ForwardingAgentRateDet" />
           <EntitySet Name="FuelSurcharges" EntityType="Self.FuelSurcharge" />
@@ -11691,7 +11676,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySet Name="InScanInternationals" EntityType="Self.InScanInternational" />
           <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatil" />
           <EntitySet Name="InscanOtherCharges" EntityType="Self.InscanOtherCharge" />
-          <EntitySet Name="Items" EntityType="Self.Item" />
           <EntitySet Name="ItemUnits" EntityType="Self.ItemUnit" />
           <EntitySet Name="JobEnquiries" EntityType="Self.JobEnquiry" />
           <EntitySet Name="JobEnquiryDetails" EntityType="Self.JobEnquiryDetail" />
@@ -11988,10 +11972,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
             <End Role="Expense" EntitySet="Expenses" />
           </AssociationSet>
-          <AssociationSet Name="FK_ForwardingAgentMaster_CurrencyMaster" Association="Self.FK_ForwardingAgentMaster_CurrencyMaster">
-            <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
-            <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMasters" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseInvoice_CurrencyMaster" Association="Self.FK_PurchaseInvoice_CurrencyMaster">
             <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
             <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
@@ -12071,10 +12051,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <AssociationSet Name="FK_FAInvoiceDetails_FAInvoice" Association="Self.FK_FAInvoiceDetails_FAInvoice">
             <End Role="FAInvoice" EntitySet="FAInvoices" />
             <End Role="FAInvoiceDetails" EntitySet="FAInvoiceDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ForwardingAgentMaster_ZoneCategory" Association="Self.FK_ForwardingAgentMaster_ZoneCategory">
-            <End Role="ZoneCategory" EntitySet="ZoneCategories" />
-            <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMasters" />
           </AssociationSet>
           <AssociationSet Name="FK_ForwardingAgentRate_ZoneChart" Association="Self.FK_ForwardingAgentRate_ZoneChart">
             <End Role="ZoneChart" EntitySet="ZoneCharts" />
@@ -14876,6 +14852,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
             <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
           </AssociationSet>
+          <EntitySet Name="Items" EntityType="DB_9F57C4_couriertest_newModel.Item" />
+          <EntitySet Name="ItemTypes" EntityType="DB_9F57C4_couriertest_newModel.ItemType" />
+          <EntitySet Name="ItemPurchases" EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" />
+          <EntitySet Name="ForwardingAgentMasters" EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19479,6 +19459,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="ConsigneeLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ConsigneePhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ConsigneeContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ConsignorMaster">
           <Key>
@@ -19494,6 +19475,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <Property Name="ConsignorLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ConsignorPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ConsignorContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AccountSetup">
           <Key>
@@ -19695,6 +19677,78 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemTypeId" Type="Int32" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ItemUnitID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="ItemTypeId" />
+          </Key>
+          <Property Name="ItemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ItemTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ItemPurchase">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
+          <Property Name="StockType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="ReferenceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AWBNOFrom" Type="Int32" />
+          <Property Name="AWBNOTo" Type="Int32" />
+          <Property Name="AWBCount" Type="Int32" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SupplierInvoiceDetailID" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ItemTypeId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ForwardingAgentMaster">
+          <Key>
+            <PropertyRef Name="FAgentID" />
+            <PropertyRef Name="AcCompanyID" />
+          </Key>
+          <Property Name="FAgentID" Type="Int32" Nullable="false" />
+          <Property Name="AcCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="FAgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="CityID" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <Property Name="ZoneCategoryID" Type="Int32" />
+          <Property Name="StatusSigned" Type="Boolean" Nullable="false" />
+          <Property Name="StatusActive" Type="Boolean" Nullable="false" />
+          <Property Name="FAgentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="StatusDefault" Type="Boolean" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="CourierServiceID" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Address3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20873,34 +20927,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ForwardingAgentMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster">
-              <MappingFragment StoreEntitySet="ForwardingAgentMaster">
-                <ScalarProperty Name="FAgentID" ColumnName="FAgentID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="FAgentName" ColumnName="FAgentName" />
-                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
-                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
-                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-                <ScalarProperty Name="CityID" ColumnName="CityID" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-                <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
-                <ScalarProperty Name="StatusSigned" ColumnName="StatusSigned" />
-                <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
-                <ScalarProperty Name="FAgentCode" ColumnName="FAgentCode" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="StatusDefault" ColumnName="StatusDefault" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
-                <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ForwardingAgentRates">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentRate">
               <MappingFragment StoreEntitySet="ForwardingAgentRate">
@@ -21275,14 +21301,6 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
                 <ScalarProperty Name="InscanID" ColumnName="InscanID" />
                 <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
                 <ScalarProperty Name="Reimbursement" ColumnName="Reimbursement" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Items">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Item">
-              <MappingFragment StoreEntitySet="Item">
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="Item1" ColumnName="Item" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -21928,6 +21946,10 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="SupplierInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
               <MappingFragment StoreEntitySet="SupplierInvoice">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
                 <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
@@ -28544,6 +28566,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="ConsigneeMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsigneeMaster">
               <MappingFragment StoreEntitySet="ConsigneeMaster">
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
                 <ScalarProperty Name="ConsigneeContactName" ColumnName="ConsigneeContactName" />
                 <ScalarProperty Name="ConsigneePhoneNo" ColumnName="ConsigneePhoneNo" />
                 <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
@@ -28561,6 +28584,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
           <EntitySetMapping Name="ConsignorMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsignorMaster">
               <MappingFragment StoreEntitySet="ConsignorMaster">
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
                 <ScalarProperty Name="ConsignorContactName" ColumnName="ConsignorContactName" />
                 <ScalarProperty Name="ConsignorPhoneNo" ColumnName="ConsignorPhoneNo" />
                 <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
@@ -28751,6 +28775,81 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
                 <ScalarProperty Name="InScanId" ColumnName="InScanId" />
                 <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
                 <ScalarProperty Name="ReceiptDetailID" ColumnName="ReceiptDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="ItemUnitID" ColumnName="ItemUnitID" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemTypes">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ItemType">
+              <MappingFragment StoreEntitySet="ItemType">
+                <ScalarProperty Name="ItemTypeName" ColumnName="ItemTypeName" />
+                <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemPurchases">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ItemPurchase">
+              <MappingFragment StoreEntitySet="ItemPurchase">
+                <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="SupplierInvoiceDetailID" ColumnName="SupplierInvoiceDetailID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="AWBCount" ColumnName="AWBCount" />
+                <ScalarProperty Name="AWBNOTo" ColumnName="AWBNOTo" />
+                <ScalarProperty Name="AWBNOFrom" ColumnName="AWBNOFrom" />
+                <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="StockType" ColumnName="StockType" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForwardingAgentMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster">
+              <MappingFragment StoreEntitySet="ForwardingAgentMaster">
+                <ScalarProperty Name="Address3" ColumnName="Address3" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="StatusDefault" ColumnName="StatusDefault" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="FAgentCode" ColumnName="FAgentCode" />
+                <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
+                <ScalarProperty Name="StatusSigned" ColumnName="StatusSigned" />
+                <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+                <ScalarProperty Name="FAgentName" ColumnName="FAgentName" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FAgentID" ColumnName="FAgentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

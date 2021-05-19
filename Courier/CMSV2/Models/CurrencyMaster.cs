@@ -21,7 +21,6 @@ namespace CMSV2.Models
             this.BranchMasters = new HashSet<BranchMaster>();
             this.CustomerMasters = new HashSet<CustomerMaster>();
             this.Expenses = new HashSet<Expense>();
-            this.ForwardingAgentMasters = new HashSet<ForwardingAgentMaster>();
             this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.ExportShipmentDetails = new HashSet<ExportShipmentDetail>();
             this.SalesInvoices = new HashSet<SalesInvoice>();
@@ -46,8 +45,6 @@ namespace CMSV2.Models
         public virtual ICollection<CustomerMaster> CustomerMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Expense> Expenses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ForwardingAgentMaster> ForwardingAgentMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

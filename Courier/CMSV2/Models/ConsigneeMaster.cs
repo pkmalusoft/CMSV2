@@ -25,5 +25,6 @@ namespace CMSV2.Models
         public string ConsigneeLocationName { get; set; }
         public string ConsigneePhoneNo { get; set; }
         public string ConsigneeContactName { get; set; }
+        public string MobileNo { get; set; }
     }
 }

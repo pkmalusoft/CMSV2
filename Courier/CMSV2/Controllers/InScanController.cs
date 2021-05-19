@@ -255,8 +255,8 @@ namespace CMSV2.Controllers
                     db.QuickInscanMasters.Add(_qinscan);
                     db.SaveChanges();
                 }
-                if (v.QuickInscanID == 0)
-                {
+               // if (v.QuickInscanID == 0)
+            //    {
                     foreach (var item in IDetails)
                     {
                         int _inscanid = Convert.ToInt32(item.InScanId);
@@ -313,18 +313,21 @@ namespace CMSV2.Controllers
                                 db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
                             }
-                            //_awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                            _awbstatus.AWBNo = _inscan.AWBNo;
-                            _awbstatus.EntryDate = v.QuickInscanDateTime;
-                            _awbstatus.InScanId = _inscan.InScanID;
-                            _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
-                            _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
-                            _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                            _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                            _awbstatus.UserId = UserId;
-                            _awbstatus.EmpID = v.CollectedByID;
-                            db.AWBTrackStatus.Add(_awbstatus);
-                            db.SaveChanges();
+                            awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == 5).FirstOrDefault();
+                            if (awb == null)
+                            {
+                                _awbstatus.AWBNo = _inscan.AWBNo;
+                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.InScanId = _inscan.InScanID;
+                                _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
+                                _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
+                                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                                _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                                _awbstatus.UserId = UserId;
+                                _awbstatus.EmpID = v.CollectedByID;
+                                db.AWBTrackStatus.Add(_awbstatus);
+                                db.SaveChanges();
+                            }
                         }
                         else
                         {
@@ -411,7 +414,7 @@ namespace CMSV2.Controllers
                             db.SaveChanges();
                         }
                     }
-                }
+              //  }
                 if (v.QuickInscanID==0)
                     AWBDAO.GenerateAWBJobCode(v.QuickInscanDateTime);
                 //TempData["SuccessMsg"] = "You have successfully Saved InScan Items.";             

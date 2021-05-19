@@ -179,6 +179,31 @@
 
 </script>
 <script>
+    function GetCustomerRateDetail(id) {
+        $.ajax({
+            url: '/AWBBatch/GetCustomerRateDetail', //'/AWB/GetConsigneeName',
+            datatype: "json",
+            data: {
+                id: id
+            },
+            success: function (response) {
+                $('#CustomerRateType').val(response);
+            }
+            });
+    }
+
+    function GetFAgentName(id) {
+        $.ajax({
+            url: '/AWBBatch/GetFAgentName', //'/AWB/GetConsigneeName',
+            datatype: "json",
+            data: {
+                id: id
+            },
+            success: function (response) {
+                $('#FAgentName').val(response);
+            }
+        });
+    }
     function showshipperaddress() {
             var fullform = $('form#FormReceipt').serialize();
 
@@ -430,7 +455,9 @@
         $('#ItemDescription').val(ItemDescription);
         $('#Remarks').val(Remarks);
         $('#FAgentID').val(FAgentId);
+        GetFAgentName(FAgentId);
         $('#CustomerRateTypeID').val(CustomerRateTypeID);
+        GetCustomerRateDetail(CustomerRateTypeID);
         $('#lierr').html('Status : ' + statustype + ' - ' + currentcourierstatus);
         $('#OriginPlaceID').val(OriginPlaceID);
         $('#DestinationPlaceID').val(DestinationPlaceID);

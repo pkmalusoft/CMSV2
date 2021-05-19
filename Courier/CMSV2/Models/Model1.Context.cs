@@ -96,7 +96,6 @@ namespace CMSV2.Models
         public virtual DbSet<ExportShipmentDetail> ExportShipmentDetails { get; set; }
         public virtual DbSet<FAInvoice> FAInvoices { get; set; }
         public virtual DbSet<FAInvoiceDetail> FAInvoiceDetails { get; set; }
-        public virtual DbSet<ForwardingAgentMaster> ForwardingAgentMasters { get; set; }
         public virtual DbSet<ForwardingAgentRate> ForwardingAgentRates { get; set; }
         public virtual DbSet<ForwardingAgentRateDet> ForwardingAgentRateDets { get; set; }
         public virtual DbSet<FuelSurcharge> FuelSurcharges { get; set; }
@@ -110,7 +109,6 @@ namespace CMSV2.Models
         public virtual DbSet<InScanInternational> InScanInternationals { get; set; }
         public virtual DbSet<InScanInternationalDeatil> InScanInternationalDeatils { get; set; }
         public virtual DbSet<InscanOtherCharge> InscanOtherCharges { get; set; }
-        public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<ItemUnit> ItemUnits { get; set; }
         public virtual DbSet<JobEnquiry> JobEnquiries { get; set; }
         public virtual DbSet<JobEnquiryDetail> JobEnquiryDetails { get; set; }
@@ -269,6 +267,10 @@ namespace CMSV2.Models
         public virtual DbSet<ImportField> ImportFields { get; set; }
         public virtual DbSet<DomesticCODReceipt> DomesticCODReceipts { get; set; }
         public virtual DbSet<DomesticCODReceiptDetail> DomesticCODReceiptDetails { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<ItemType> ItemTypes { get; set; }
+        public virtual DbSet<ItemPurchase> ItemPurchases { get; set; }
+        public virtual DbSet<ForwardingAgentMaster> ForwardingAgentMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

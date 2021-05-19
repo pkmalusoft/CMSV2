@@ -24,7 +24,7 @@ namespace CMSV2.Controllers
             {
                 ShipmentItemVM obj = new ShipmentItemVM();
                 obj.ItemID = item.ItemID;
-                obj.Item = item.Item1;
+                obj.Item = item.ItemName;
                 lst.Add(obj);
             }
             return View(lst);
@@ -68,12 +68,12 @@ namespace CMSV2.Controllers
                 if (max == null)
                 {
                     a.ItemID = 1;
-                    a.Item1 = v.Item;
+                    a.ItemName = v.Item;
                 }
                 else
                 {
                     a.ItemID = max + 1;
-                    a.Item1 = v.Item;
+                    a.ItemName = v.Item;
                 }
 
 
@@ -101,7 +101,7 @@ namespace CMSV2.Controllers
             else
             {
                 a.ItemID = data.ItemID;
-                a.Item = data.Item1;
+                a.Item = data.ItemName;
             }
             return View(a);
         }
@@ -115,7 +115,7 @@ namespace CMSV2.Controllers
         {
             Item a = new Item();
             a.ItemID = data.ItemID;
-            a.Item1 = data.Item;
+            a.ItemName = data.Item;
             if (ModelState.IsValid)
             {
                 db.Entry(a).State = EntityState.Modified;

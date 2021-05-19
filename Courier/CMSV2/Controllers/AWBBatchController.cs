@@ -359,7 +359,7 @@ namespace CMSV2.Controllers
             {
                 shipperlist = (from c1 in db.ConsignorMasters                               
                                orderby c1.ConsignorName ascending
-                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = "" }).Distinct().ToList();
+                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo =  c1.MobileNo }).Distinct().ToList();
                 Session["ConsignorMaster"] = shipperlist;
             }
             if (term.Trim() != "")
@@ -406,7 +406,7 @@ namespace CMSV2.Controllers
                                    where c1.ConsigneeName.ToLower().StartsWith(term.ToLower())
                                    && c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
                                    orderby c1.ConsigneeName ascending
-                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = "" }).Distinct();
+                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
 
                 //var shipperlist = (from c1 in db.InScanMasters
                 //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
@@ -422,7 +422,7 @@ namespace CMSV2.Controllers
                                    where  
                                    c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
                                    orderby c1.ConsigneeName ascending
-                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = "" }).Distinct();
+                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
 
@@ -505,6 +505,79 @@ namespace CMSV2.Controllers
             return PartialView("ConsignorAddress", model);
         }
 
+        [HttpPost]
+        public JsonResult SaveConsignorAddress(Consignor model)
+        {
+            bool newentry = false;
+            ConsignorMaster obj = db.ConsignorMasters.Where(cc => cc.ConsignorName == model.ShipperName).FirstOrDefault();
+
+            if (obj == null)
+            {
+                newentry = true;
+                obj = new ConsignorMaster();
+            }
+            obj.ConsignorName = model.ShipperName;
+            obj.ConsignorContactName = model.ContactPerson;
+            obj.ConsignorPhoneNo = model.Phone;
+            obj.ConsignorAddress1 = model.Address1;
+            obj.ConsignorAddress2 = model.Address2;
+            obj.ConsignorAddress3 = model.PinCode;
+            obj.ConsignorPhoneNo = model.Phone;
+            obj.MobileNo = model.ConsignorMobileNo;
+            obj.ConsignorLocationName = model.LocationName;
+            obj.ConsignorCountryname = model.CountryName;
+            obj.ConsignorCityName = model.CityName;
+            
+            if (newentry==true)
+            {
+                db.ConsignorMasters.Add(obj);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json("Ok", JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult SaveConsigeeAddress(Consignor model)
+        {
+            bool newentry = false;
+            ConsigneeMaster obj = db.ConsigneeMasters.Where(cc => cc.ConsigneeName == model.ConsignorName && cc.ConsignorName==model.ShipperName ).FirstOrDefault();
+
+            if (obj == null)
+            {
+                newentry = true;
+                obj = new ConsigneeMaster();
+            }
+            obj.ConsignorName = model.ShipperName;
+            obj.ConsigneeName = model.ConsignorName;
+            obj.ConsigneeContactName = model.ContactPerson;
+            obj.ConsigneePhoneNo = model.Phone;
+            obj.ConsigneeAddress1 = model.Address1;
+            obj.ConsigneeAddress2 = model.Address2;
+            obj.ConsigneeAddress3 = model.PinCode;
+            obj.ConsigneePhoneNo = model.Phone;
+            obj.MobileNo = model.ConsignorMobileNo;
+            obj.ConsigneeLocationName = model.LocationName;
+            obj.ConsigneeCountryname = model.CountryName;
+            obj.ConsigneeCityName = model.CityName;
+
+            if (newentry == true)
+            {
+                db.ConsigneeMasters.Add(obj);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json("Ok", JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public ActionResult ShowConsigneeAddres(AWBBatchVM model)
         {
@@ -629,6 +702,59 @@ namespace CMSV2.Controllers
             }
 
         }
+
+        public JsonResult GetCustomerRateDetail(int id)
+        {
+            string ratename = AWBDAO.GetCustomerRateName(id);
+            return Json(ratename, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetFAgentName(int id)
+        {
+            var list = (from c in db.ForwardingAgentMasters where c.FAgentID == id orderby c.FAgentName select new { FAgentID = c.FAgentID, AgentName = c.FAgentName }).FirstOrDefault();
+            if (list != null)
+            {
+                return Json(list.AgentName, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult CheckShipperName(string term)
+        {
+            List<Consignor> shipperlist = (List<Consignor>)Session["ConsignorMaster"];
+            if (shipperlist == null)
+            {
+                shipperlist = (from c1 in db.ConsignorMasters
+                               orderby c1.ConsignorName ascending
+                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = c1.MobileNo }).Distinct().ToList();
+                Session["ConsignorMaster"] = shipperlist;
+            }
+            if (term.Trim() != "")
+            {
+
+                var shipper = shipperlist.Where(cc => cc.ShipperName.ToLower()==term.Trim().ToLower()).FirstOrDefault();
+
+                //var shipperlist = (from c1 in db.InScanMasters
+                //                   where c1.IsDeleted == false && c1.Consignor.ToLower().StartsWith(term.ToLower())
+                //                   orderby c1.Consignor ascending
+                //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
+                if (shipper!=null)
+                    return Json("Exists", JsonRequestBehavior.AllowGet);
+                else
+                    return Json("NotExists", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+            
+          
+        }
+
     }
 }
 

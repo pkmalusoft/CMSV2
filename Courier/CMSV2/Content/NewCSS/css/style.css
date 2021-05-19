@@ -6223,9 +6223,10 @@ p.indexbtnpadding {
 
 
 @media(max-width:1550px) {
-    body .headinglabel {
-        font-size: 13px;
+    body .headinglabel,body .ratelabel {
+        font-size: 13px!important;
     }
+     
     .timelineDetails label{
         font-size: 13px!important;
     }

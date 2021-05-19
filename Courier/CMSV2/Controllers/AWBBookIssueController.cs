@@ -132,7 +132,8 @@ namespace CMSV2.Controllers
                 v.ModifiedDate = DateTime.Now;
                 db.AWBBOOKIssues.Add(v);
                 db.SaveChanges();
-
+                //generate awb in inscantables
+                AWBDAO.GenerateAWBBookIssue(v.AWBBOOKIssueID);
             }
             else
             {
@@ -148,10 +149,11 @@ namespace CMSV2.Controllers
                 v.ModifiedDate = DateTime.Now;
                 db.Entry(v).State = EntityState.Modified;
                 db.SaveChanges();
+                //generate awb in inscantables
+                AWBDAO.GenerateAWBBookIssue(v.AWBBOOKIssueID);
             }
             
-            //generate awb in inscantables
-            AWBDAO.GenerateAWBBookIssue(v.AWBBOOKIssueID);
+          
 
             return RedirectToAction("Index", "AWBBookIssue", new { id = 0 });
 

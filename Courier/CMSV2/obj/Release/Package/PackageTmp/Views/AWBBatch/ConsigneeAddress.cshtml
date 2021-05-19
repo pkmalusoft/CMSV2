@@ -148,7 +148,7 @@
     </div>
     <div class="col-md-6">
         <label class="headinglabel">Contact Person</label>
-        @Html.TextBoxFor(model => model.ConsigneeContact1, new { @class = "form-control txttarget", @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeContact1, new { @class = "form-control txttarget", @required = "true",@type = "search" })
     </div>
 
 
@@ -156,40 +156,40 @@
 <div class="row no-margin" style="padding-top: 10px; ">
     <div class="col-md-4">
         <label class="headinglabel">Flat/Building</label>
-        @Html.TextBoxFor(model => model.ConsigneeAddress1_1, new { @class = "form-control txttarget", @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeAddress1_1, new { @class = "form-control txttarget", @required = "true", @type = "search" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Street</label>
-        @Html.TextBoxFor(model => model.ConsigneeAddress2_1, new { @class = "form-control txttarget" })
+        @Html.TextBoxFor(model => model.ConsigneeAddress2_1, new { @class = "form-control txttarget", @type = "search" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Pincode</label>
-        @Html.TextBoxFor(model => model.ConsigneeAddress3_1, new { @class = "form-control txttarget" })
+        @Html.TextBoxFor(model => model.ConsigneeAddress3_1, new { @class = "form-control txttarget", @type = "search" })
     </div>
 </div>
 <div class="row no-margin" style="padding-top: 10px">
     <div class="col-md-4">
         <label class="headinglabel">Consingee Location</label>
-        @Html.TextBoxFor(model => model.ConsigneeLocationName1, new { @class = "form-control txttarget autocomplete",  @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeLocationName1, new { @class = "form-control txttarget autocomplete",  @required = "true" , @type = "search" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Consignee City</label>
-        @Html.TextBoxFor(model => model.ConsigneeCityName1, new { @class = "form-control txttarget",  @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeCityName1, new { @class = "form-control txttarget",  @required = "true" , @type = "search" })
     </div>
 
     <div class="col-md-4">
         <label class="headinglabel">Consignee Country</label>
-        @Html.TextBoxFor(model => model.ConsigneeCountryName1, new { @class = "form-control txttarget",  @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeCountryName1, new { @class = "form-control txttarget",  @required = "true" , @type = "search" })
     </div>
 </div>
 <div class="row no-margin" style="padding-top: 10px">
 
     <div class="col-md-6">
         <label class="headinglabel">Telephone No</label>
-        @Html.TextBoxFor(model => model.ConsigneePhone1, new { @class = "form-control textright", @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneePhone1, new { @class = "form-control textright", @required = "true", @type = "search" })
     </div>
     <div class="col-md-6">
         <label class="headinglabel">Mobile No.</label>
-        @Html.TextBoxFor(model => model.ConsigneeMobileNo1, new { @class = "form-control textright", @required = "true" })
+        @Html.TextBoxFor(model => model.ConsigneeMobileNo1, new { @class = "form-control textright", @required = "true" , @type = "search" })
     </div>
 </div>

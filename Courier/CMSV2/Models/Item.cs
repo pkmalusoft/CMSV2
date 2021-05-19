@@ -15,6 +15,8 @@ namespace CMSV2.Models
     public partial class Item
     {
         public int ItemID { get; set; }
-        public string Item1 { get; set; }
+        public Nullable<int> ItemTypeId { get; set; }
+        public string ItemName { get; set; }
+        public Nullable<int> ItemUnitID { get; set; }
     }
 }

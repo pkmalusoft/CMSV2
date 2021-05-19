@@ -74,7 +74,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ExportShipmentDetail" Width="1.5" PointX="21.75" PointY="80.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.FAInvoice" Width="1.5" PointX="19.75" PointY="21.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.FAInvoiceDetail" Width="1.5" PointX="22" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" Width="1.5" PointX="28.5" PointY="65.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentRate" Width="1.5" PointX="27.75" PointY="57.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentRateDet" Width="1.5" PointX="30" PointY="58.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.FuelSurcharge" Width="1.5" PointX="28.75" PointY="22.125" IsExpanded="true" />
@@ -88,7 +87,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanInternational" Width="1.5" PointX="17.75" PointY="23" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanInternationalDeatil" Width="1.5" PointX="20" PointY="30.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InscanOtherCharge" Width="1.5" PointX="20" PointY="35.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Item" Width="1.5" PointX="29.75" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ItemUnit" Width="1.5" PointX="25" PointY="104.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.JobEnquiry" Width="1.5" PointX="24.75" PointY="90.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.JobEnquiryDetail" Width="1.5" PointX="28" PointY="96.125" IsExpanded="true" />
@@ -244,7 +242,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_DRSDetails_CourierStatus" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerMaster_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_Expense_CurrencyMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ForwardingAgentMaster_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_PurchaseInvoice_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_S_ExportShipmentDetails_S_CurrencyMaster" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_CurrencyMaster" ManuallyRouted="false" />
@@ -265,7 +262,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ExpenseDetails_Expense" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ExpenseDetails_ItemUnit" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_FAInvoiceDetails_FAInvoice" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ForwardingAgentMaster_ZoneCategory" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ForwardingAgentRate_ZoneChart" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ForwardingAgentRate_ZoneChart1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ForwardingAgentRateDet_ForwardingAgentRate" ManuallyRouted="false" />
@@ -376,6 +372,10 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" Width="1.5" PointX="50.625" PointY="18.625" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7B271378" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__DomesticC__Recei__7C1B37B1" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Item" Width="1.5" PointX="3.375" PointY="19.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ItemType" Width="1.5" PointX="25.375" PointY="32.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" Width="1.5" PointX="48.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" Width="1.5" PointX="48.375" PointY="24.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -110,7 +110,18 @@ namespace CMSV2.Models
             //    return false;
             return true;
         }
+        public static DateTime GetFirstDayofYear()
+        {
+            Entities1 db = new Entities1();
 
+            int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            DateTime startdate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearFrom);                                
+
+            return Convert.ToDateTime(startdate);
+
+            
+
+        }
         public static DateTime GetFirstDayofMonth()
         {
             Entities1 db = new Entities1();

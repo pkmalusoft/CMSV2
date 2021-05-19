@@ -1173,34 +1173,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ForwardingAgentMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster">
-        <MappingFragment StoreEntitySet="ForwardingAgentMaster">
-          <ScalarProperty Name="FAgentID" ColumnName="FAgentID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="FAgentName" ColumnName="FAgentName" />
-          <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
-          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Fax" ColumnName="Fax" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
-          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
-          <ScalarProperty Name="StatusSigned" ColumnName="StatusSigned" />
-          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
-          <ScalarProperty Name="FAgentCode" ColumnName="FAgentCode" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="StatusDefault" ColumnName="StatusDefault" />
-          <ScalarProperty Name="StateID" ColumnName="StateID" />
-          <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ForwardingAgentRates">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentRate">
         <MappingFragment StoreEntitySet="ForwardingAgentRate">
@@ -1575,14 +1547,6 @@
           <ScalarProperty Name="InscanID" ColumnName="InscanID" />
           <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
           <ScalarProperty Name="Reimbursement" ColumnName="Reimbursement" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Items">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Item">
-        <MappingFragment StoreEntitySet="Item">
-          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-          <ScalarProperty Name="Item1" ColumnName="Item" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2228,6 +2192,10 @@
     <EntitySetMapping Name="SupplierInvoices">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
         <MappingFragment StoreEntitySet="SupplierInvoice">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
           <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
           <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
@@ -8844,6 +8812,7 @@
     <EntitySetMapping Name="ConsigneeMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsigneeMaster">
         <MappingFragment StoreEntitySet="ConsigneeMaster">
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
           <ScalarProperty Name="ConsigneeContactName" ColumnName="ConsigneeContactName" />
           <ScalarProperty Name="ConsigneePhoneNo" ColumnName="ConsigneePhoneNo" />
           <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
@@ -8861,6 +8830,7 @@
     <EntitySetMapping Name="ConsignorMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ConsignorMaster">
         <MappingFragment StoreEntitySet="ConsignorMaster">
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
           <ScalarProperty Name="ConsignorContactName" ColumnName="ConsignorContactName" />
           <ScalarProperty Name="ConsignorPhoneNo" ColumnName="ConsignorPhoneNo" />
           <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
@@ -9051,6 +9021,81 @@
           <ScalarProperty Name="InScanId" ColumnName="InScanId" />
           <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
           <ScalarProperty Name="ReceiptDetailID" ColumnName="ReceiptDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.Item">
+        <MappingFragment StoreEntitySet="Item">
+          <ScalarProperty Name="ItemUnitID" ColumnName="ItemUnitID" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemTypes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ItemType">
+        <MappingFragment StoreEntitySet="ItemType">
+          <ScalarProperty Name="ItemTypeName" ColumnName="ItemTypeName" />
+          <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemPurchases">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ItemPurchase">
+        <MappingFragment StoreEntitySet="ItemPurchase">
+          <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="SupplierInvoiceDetailID" ColumnName="SupplierInvoiceDetailID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="AWBCount" ColumnName="AWBCount" />
+          <ScalarProperty Name="AWBNOTo" ColumnName="AWBNOTo" />
+          <ScalarProperty Name="AWBNOFrom" ColumnName="AWBNOFrom" />
+          <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
+          <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+          <ScalarProperty Name="StockType" ColumnName="StockType" />
+          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ForwardingAgentMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster">
+        <MappingFragment StoreEntitySet="ForwardingAgentMaster">
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CourierServiceID" ColumnName="CourierServiceID" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="StatusDefault" ColumnName="StatusDefault" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="FAgentCode" ColumnName="FAgentCode" />
+          <ScalarProperty Name="StatusActive" ColumnName="StatusActive" />
+          <ScalarProperty Name="StatusSigned" ColumnName="StatusSigned" />
+          <ScalarProperty Name="ZoneCategoryID" ColumnName="ZoneCategoryID" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+          <ScalarProperty Name="FAgentName" ColumnName="FAgentName" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FAgentID" ColumnName="FAgentID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

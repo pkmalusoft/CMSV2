@@ -197,7 +197,9 @@ namespace CMSV2.Controllers
                 //v.DepartmentID = vm.DepartmentID;
                 v.AcjournalID = null;
                 db.PrepaidAWBs.Add(v);
-                db.SaveChanges();             
+                db.SaveChanges();
+                //generate awb in AWBDetail
+                AWBDAO.GenerateAWBPrepaid(v.PrepaidAWBID);
             }
             else
             {
@@ -226,10 +228,11 @@ namespace CMSV2.Controllers
                 preawb.Prepaid = vm.Prepaid;
                 db.Entry(preawb).State = EntityState.Modified;
                 db.SaveChanges();
+                //posting
+                //generate awb in AWBDetail
+                AWBDAO.GenerateAWBPrepaid(vm.PrepaidAWBID);
+
             }
-            //posting
-            //generate awb in AWBDetail
-            AWBDAO.GenerateAWBPrepaid(v.PrepaidAWBID);
 
             return RedirectToAction("Index", "AWBPrepaid");
 

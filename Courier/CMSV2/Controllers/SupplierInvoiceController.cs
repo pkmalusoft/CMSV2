@@ -61,6 +61,7 @@ namespace CMSV2.Controllers
             ViewBag.Supplier = suppliers;
             ViewBag.SupplierType = db.SupplierTypes.ToList();
             ViewBag.Currency = db.CurrencyMasters.ToList();
+            ViewBag.ItemType = db.ItemTypes.ToList();
             SupplierInvoiceVM _supinvoice = new SupplierInvoiceVM();
             ViewBag.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
             if (id > 0)
@@ -83,18 +84,27 @@ namespace CMSV2.Controllers
                 List<SupplierInvoiceDetailVM> _details = new List<SupplierInvoiceDetailVM>();
                 _details = (from c in db.SupplierInvoiceDetails join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                             where c.SupplierInvoiceID == id
-                            select new SupplierInvoiceDetailVM {SupplierInvoiceDetailID=c.SupplierInvoiceDetailID,SupplierInvoiceID=c.SupplierInvoiceID,AcHeadId=c.AcHeadID,AcHeadName=a.AcHead1,Particulars=c.Particulars,TaxPercentage=c.TaxPercentage,CurrencyID=c.CurrencyID,Amount=c.Amount,Rate=c.Rate, Quantity=c.Quantity, Value=c.Value ,StockType=0 }   ).ToList();
+                            select new SupplierInvoiceDetailVM {SupplierInvoiceDetailID=c.SupplierInvoiceDetailID,SupplierInvoiceID=c.SupplierInvoiceID,AcHeadId=c.AcHeadID,AcHeadName=a.AcHead1,Particulars=c.Particulars,TaxPercentage=c.TaxPercentage,CurrencyID=c.CurrencyID,Amount=c.Amount,Rate=c.Rate, Quantity=c.Quantity, Value=c.Value ,ItemTypeId=0 }   ).ToList();
 
                 foreach(SupplierInvoiceDetailVM detail in _details)
                 {
-                    var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+                    //var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+
+                    var stock = db.ItemPurchases.Where(cc => cc.SupplierInvoiceDetailID == detail.SupplierInvoiceDetailID).FirstOrDefault();
                     if (stock!=null)
                     {
                         detail.AWBCount =Convert.ToInt32(stock.AWBCount);
                         detail.AWBStart =Convert.ToInt32(stock.AWBNOFrom);
                         detail.AWBEnd = Convert.ToInt32(stock.AWBNOTo);
-                        detail.BookNo = stock.BookNo;
-                        detail.StockType =Convert.ToInt32(stock.StockType);
+                        detail.BookNo = stock.ReferenceNo;
+                        detail.ItemId =Convert.ToInt32(stock.ItemId);
+                        var itemtypeid = db.Items.Find(detail.ItemId).ItemTypeId;
+                        if (itemtypeid!=null)
+                            detail.ItemTypeId =Convert.ToInt32(itemtypeid);
+
+                        detail.Rate = Convert.ToDecimal(stock.Rate);
+                        detail.Amount = Convert.ToDecimal(stock.Amount);
+                        
                     }
                 }
 
@@ -156,20 +166,23 @@ namespace CMSV2.Controllers
                         join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                         join cu in db.CurrencyMasters on c.CurrencyID equals cu.CurrencyID
                         where c.SupplierInvoiceID == Id
-                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value ,Currency=cu.CurrencyCode,StockType=0 }).ToList();
+                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value ,Currency=cu.CurrencyCode,ItemTypeId=0 }).ToList();
 
             
             foreach (SupplierInvoiceDetailVM detail in _details)
             {
-                var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+                //var stock = db.SupplierInvoiceStocks.Where(cc => cc.SupplierInvoiceID == detail.SupplierInvoiceID && cc.SupplierInvoiceDetailId == detail.SupplierInvoiceDetailID).FirstOrDefault();
+                var stock = db.ItemPurchases.Where(cc => cc.SupplierInvoiceDetailID == detail.SupplierInvoiceDetailID).FirstOrDefault();
                 if (stock != null)
                 {
                     detail.AWBCount = Convert.ToInt32(stock.AWBCount);
                     detail.AWBStart = Convert.ToInt32(stock.AWBNOFrom);
                     detail.AWBEnd = Convert.ToInt32(stock.AWBNOTo);
-                    detail.BookNo = stock.BookNo;
-                    detail.ItemSize = stock.ItemSize;
-                    detail.StockType = Convert.ToInt32(stock.StockType);
+                    detail.BookNo = stock.ReferenceNo;
+                    detail.ItemId = Convert.ToInt32(stock.ItemId);
+                    detail.ItemTypeId = Convert.ToInt32(stock.ItemTypeId);
+                    detail.ItemQty = Convert.ToInt32(stock.Qty);
+                    //detail.StockType = Convert.ToInt32(stock.StockType);
                 }
             }
             foreach (var item in _details)
@@ -192,12 +205,13 @@ namespace CMSV2.Controllers
                 invoice.Amount = item.Amount;
                 invoice.Value = item.Value;
                 invoice.TaxPercentage = item.TaxPercentage;
-                invoice.StockType = item.StockType;
+                invoice.ItemTypeId = item.ItemTypeId;
+                invoice.ItemId = item.ItemId;
                 invoice.BookNo = item.BookNo;
                 invoice.AWBStart = item.AWBStart;
                 invoice.AWBEnd = item.AWBEnd;
                 invoice.AWBCount = item.AWBCount;
-                invoice.ItemSize = item.ItemSize;
+                invoice.ItemQty = item.ItemQty;
                 _details1.Add(invoice);
             }
 
@@ -208,6 +222,7 @@ namespace CMSV2.Controllers
         {
             try
             {
+                int UserId = Convert.ToInt32(Session["UserID"]);
                 var IDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceDetailVM>>(Details);
                 List<SupplierInvoiceAWBVM> AWBAllocationall = new List<SupplierInvoiceAWBVM>();
                 List<SupplierInvoiceAWBVM> AWBAllocation = new List<SupplierInvoiceAWBVM>();
@@ -218,18 +233,20 @@ namespace CMSV2.Controllers
                     Supplierinvoice = new SupplierInvoice();
                 }
                 else
-                {
-                    var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
-                    db.SupplierInvoiceDetails.RemoveRange(details);
-                    db.SaveChanges();
-
+                {               
                     var consignmentdetails = (from d in db.SupplierInvoiceAWBs where d.SupplierInvoiceId == Supplierinvoice.SupplierInvoiceID select d).ToList();
                     db.SupplierInvoiceAWBs.RemoveRange(consignmentdetails);
                     db.SaveChanges();
 
-                    var stockdetails = (from d in db.SupplierInvoiceStocks where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
-                    db.SupplierInvoiceStocks.RemoveRange(stockdetails);
+                    //var stockdetails = (from d in db.SupplierInvoiceStocks where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
+                    var stockdetails = (from d in db.ItemPurchases join c in db.SupplierInvoiceDetails on d.SupplierInvoiceDetailID equals c.SupplierInvoiceDetailID where c.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
+                    db.ItemPurchases.RemoveRange(stockdetails);
                     db.SaveChanges();
+
+                    var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
+                    db.SupplierInvoiceDetails.RemoveRange(details);
+                    db.SaveChanges();
+
                 }
 
                 Supplierinvoice.SupplierID = SupplierID;
@@ -242,9 +259,18 @@ namespace CMSV2.Controllers
                 Supplierinvoice.StatusClose = false;
                 Supplierinvoice.IsDeleted = false;
                 Supplierinvoice.Remarks = Remarks;
+                
+                Supplierinvoice.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+                Supplierinvoice.ModifiedBy = UserId;
                 if (Supplierinvoice.SupplierInvoiceID == 0)
                 {
+                    Supplierinvoice.CreatedBy = UserId;
+                    Supplierinvoice.CreatedDate = CommanFunctions.GetCurrentDateTime();
                     db.SupplierInvoices.Add(Supplierinvoice);
+                }
+                else
+                {
+                    db.Entry(Supplierinvoice).State = EntityState.Modified;
                 }
                 db.SaveChanges();
                 foreach (var item in IDetails)
@@ -264,22 +290,29 @@ namespace CMSV2.Controllers
                     db.SupplierInvoiceDetails.Add(InvoiceDetail);
                     db.SaveChanges();
 
-                    if (item.StockType>0)
+                    if (item.ItemTypeId>0)
                     {
-                        var stock = new SupplierInvoiceStock();
-                        stock.SupplierInvoiceID = Supplierinvoice.SupplierInvoiceID;
-                        stock.SupplierInvoiceDetailId = InvoiceDetail.SupplierInvoiceDetailID;
-                        stock.StockType = item.StockType;
-                        stock.BookNo= item.BookNo; 
+                        var stock = new ItemPurchase();//  SupplierInvoiceStock();
+                        //stock.SupplierInvoiceID = Supplierinvoice.SupplierInvoiceID;
+                        stock.SupplierInvoiceDetailID = InvoiceDetail.SupplierInvoiceDetailID;
+                        stock.StockType = "PU";//purhcase
+                        stock.ReferenceNo= item.BookNo; 
                         stock.AWBCount = item.AWBCount;
                         stock.AWBNOFrom = item.AWBStart;
                         stock.AWBNOTo = item.AWBEnd;
+                        stock.ItemTypeId = item.ItemTypeId;
+                        stock.ItemId = item.ItemId;
+                        stock.PurchaseDate = Convert.ToDateTime(InvoiceDate);
                         stock.Rate = InvoiceDetail.Rate;
-                        stock.SupplierID = SupplierID;
+                        //stock.SupplierID = SupplierID;
                         stock.Amount = item.Amount;
-                        stock.ItemSize = item.ItemSize;
+                        stock.CreatedBy = UserId;
+                        stock.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                        stock.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+                        stock.ModifiedBy = UserId;
+                        //stock.ItemSize = item.ItemSize;
                         stock.Qty = Convert.ToInt32(item.Quantity);
-                        db.SupplierInvoiceStocks.Add(stock);
+                        db.ItemPurchases.Add(stock);
                         db.SaveChanges();
                     }
 
@@ -313,9 +346,9 @@ namespace CMSV2.Controllers
 
                 return Json(new { status = "ok", message = "Invoice Submitted Successfully!" }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return Json(new { status = "failed", message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "failed", message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
 
             }
         }

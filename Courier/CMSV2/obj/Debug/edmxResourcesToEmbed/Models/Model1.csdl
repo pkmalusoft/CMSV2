@@ -810,7 +810,6 @@
     <NavigationProperty Name="BranchMasters" Relationship="Self.FK_BranchMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="CustomerMasters" Relationship="Self.FK_CustomerMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="CustomerMaster" />
     <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_CurrencyMaster" FromRole="CurrencyMaster" ToRole="Expense" />
-    <NavigationProperty Name="ForwardingAgentMasters" Relationship="Self.FK_ForwardingAgentMaster_CurrencyMaster" FromRole="CurrencyMaster" ToRole="ForwardingAgentMaster" />
     <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="PurchaseInvoice" />
     <NavigationProperty Name="ExportShipmentDetails" Relationship="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster" FromRole="CurrencyMaster" ToRole="ExportShipmentDetails" />
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_CurrencyMaster" FromRole="CurrencyMaster" ToRole="SalesInvoice" />
@@ -1234,36 +1233,6 @@
     <Property Name="OriginalAmt" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="FAInvoice" Relationship="Self.FK_FAInvoiceDetails_FAInvoice" FromRole="FAInvoiceDetails" ToRole="FAInvoice" />
   </EntityType>
-  <EntityType Name="ForwardingAgentMaster">
-    <Key>
-      <PropertyRef Name="FAgentID" />
-      <PropertyRef Name="AcCompanyID" />
-    </Key>
-    <Property Name="FAgentID" Type="Int32" Nullable="false" />
-    <Property Name="AcCompanyID" Type="Int32" Nullable="false" />
-    <Property Name="FAgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CountryID" Type="Int32" Nullable="false" />
-    <Property Name="CityID" Type="Int32" Nullable="false" />
-    <Property Name="CurrencyID" Type="Int32" Nullable="false" />
-    <Property Name="ZoneCategoryID" Type="Int32" />
-    <Property Name="StatusSigned" Type="Boolean" Nullable="false" />
-    <Property Name="StatusActive" Type="Boolean" Nullable="false" />
-    <Property Name="FAgentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="StatusDefault" Type="Boolean" />
-    <Property Name="StateID" Type="Int32" />
-    <Property Name="CourierServiceID" Type="Int32" />
-    <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_ForwardingAgentMaster_CurrencyMaster" FromRole="ForwardingAgentMaster" ToRole="CurrencyMaster" />
-    <NavigationProperty Name="ZoneCategory" Relationship="Self.FK_ForwardingAgentMaster_ZoneCategory" FromRole="ForwardingAgentMaster" ToRole="ZoneCategory" />
-  </EntityType>
   <EntityType Name="ForwardingAgentRate">
     <Key>
       <PropertyRef Name="FAgentRateID" />
@@ -1640,13 +1609,6 @@
     <Property Name="TaxPercentage" Type="Decimal" Precision="6" Scale="2" />
     <Property Name="Reimbursement" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="OtherCharge" Relationship="Self.FK_InscanOtherCharge_OtherCharge" FromRole="InscanOtherCharge" ToRole="OtherCharge" />
-  </EntityType>
-  <EntityType Name="Item">
-    <Key>
-      <PropertyRef Name="ItemID" />
-    </Key>
-    <Property Name="ItemID" Type="Int32" Nullable="false" />
-    <Property Name="Item1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ItemUnit">
     <Key>
@@ -2317,6 +2279,10 @@
     <Property Name="IsDeleted" Type="Boolean" />
     <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierInvoice" ToRole="SupplierMaster" />
     <NavigationProperty Name="SupplierInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoice" ToRole="SupplierInvoiceDetail" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -2919,7 +2885,6 @@
     <Property Name="ZoneCategory1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="StatusBaseCategory" Type="Boolean" />
     <NavigationProperty Name="CustomerRateTypes" Relationship="Self.FK_CustomerRateType_ZoneCategory" FromRole="ZoneCategory" ToRole="CustomerRateType" />
-    <NavigationProperty Name="ForwardingAgentMasters" Relationship="Self.FK_ForwardingAgentMaster_ZoneCategory" FromRole="ZoneCategory" ToRole="ForwardingAgentMaster" />
     <NavigationProperty Name="ZoneCharts" Relationship="Self.FK_ZoneChart_ZoneCategory" FromRole="ZoneCategory" ToRole="ZoneChart" />
     <NavigationProperty Name="ZoneCharts1" Relationship="Self.FK_ZoneChart_ZoneCategory1" FromRole="ZoneCategory" ToRole="ZoneChart" />
   </EntityType>
@@ -3698,18 +3663,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ForwardingAgentMaster_CurrencyMaster">
-    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="1" />
-    <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CurrencyMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentMaster">
-        <PropertyRef Name="CurrencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PurchaseInvoice_CurrencyMaster">
     <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
     <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
@@ -3951,18 +3904,6 @@
       </Principal>
       <Dependent Role="FAInvoiceDetails">
         <PropertyRef Name="FAInvoiceID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ForwardingAgentMaster_ZoneCategory">
-    <End Role="ZoneCategory" Type="Self.ZoneCategory" Multiplicity="0..1" />
-    <End Role="ForwardingAgentMaster" Type="Self.ForwardingAgentMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ZoneCategory">
-        <PropertyRef Name="ZoneCategoryID" />
-      </Principal>
-      <Dependent Role="ForwardingAgentMaster">
-        <PropertyRef Name="ZoneCategoryID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -4540,7 +4481,6 @@
     <EntitySet Name="ExportShipmentDetails" EntityType="Self.ExportShipmentDetail" />
     <EntitySet Name="FAInvoices" EntityType="Self.FAInvoice" />
     <EntitySet Name="FAInvoiceDetails" EntityType="Self.FAInvoiceDetail" />
-    <EntitySet Name="ForwardingAgentMasters" EntityType="Self.ForwardingAgentMaster" />
     <EntitySet Name="ForwardingAgentRates" EntityType="Self.ForwardingAgentRate" />
     <EntitySet Name="ForwardingAgentRateDets" EntityType="Self.ForwardingAgentRateDet" />
     <EntitySet Name="FuelSurcharges" EntityType="Self.FuelSurcharge" />
@@ -4554,7 +4494,6 @@
     <EntitySet Name="InScanInternationals" EntityType="Self.InScanInternational" />
     <EntitySet Name="InScanInternationalDeatils" EntityType="Self.InScanInternationalDeatil" />
     <EntitySet Name="InscanOtherCharges" EntityType="Self.InscanOtherCharge" />
-    <EntitySet Name="Items" EntityType="Self.Item" />
     <EntitySet Name="ItemUnits" EntityType="Self.ItemUnit" />
     <EntitySet Name="JobEnquiries" EntityType="Self.JobEnquiry" />
     <EntitySet Name="JobEnquiryDetails" EntityType="Self.JobEnquiryDetail" />
@@ -4851,10 +4790,6 @@
       <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
       <End Role="Expense" EntitySet="Expenses" />
     </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentMaster_CurrencyMaster" Association="Self.FK_ForwardingAgentMaster_CurrencyMaster">
-      <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
-      <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMasters" />
-    </AssociationSet>
     <AssociationSet Name="FK_PurchaseInvoice_CurrencyMaster" Association="Self.FK_PurchaseInvoice_CurrencyMaster">
       <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
       <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
@@ -4934,10 +4869,6 @@
     <AssociationSet Name="FK_FAInvoiceDetails_FAInvoice" Association="Self.FK_FAInvoiceDetails_FAInvoice">
       <End Role="FAInvoice" EntitySet="FAInvoices" />
       <End Role="FAInvoiceDetails" EntitySet="FAInvoiceDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ForwardingAgentMaster_ZoneCategory" Association="Self.FK_ForwardingAgentMaster_ZoneCategory">
-      <End Role="ZoneCategory" EntitySet="ZoneCategories" />
-      <End Role="ForwardingAgentMaster" EntitySet="ForwardingAgentMasters" />
     </AssociationSet>
     <AssociationSet Name="FK_ForwardingAgentRate_ZoneChart" Association="Self.FK_ForwardingAgentRate_ZoneChart">
       <End Role="ZoneChart" EntitySet="ZoneCharts" />
@@ -7739,6 +7670,10 @@
       <End Role="DomesticCODReceipt" EntitySet="DomesticCODReceipts" />
       <End Role="DomesticCODReceiptDetail" EntitySet="DomesticCODReceiptDetails" />
     </AssociationSet>
+    <EntitySet Name="Items" EntityType="DB_9F57C4_couriertest_newModel.Item" />
+    <EntitySet Name="ItemTypes" EntityType="DB_9F57C4_couriertest_newModel.ItemType" />
+    <EntitySet Name="ItemPurchases" EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" />
+    <EntitySet Name="ForwardingAgentMasters" EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12342,6 +12277,7 @@
     <Property Name="ConsigneeLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
     <Property Name="ConsigneePhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ConsigneeContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ConsignorMaster">
     <Key>
@@ -12357,6 +12293,7 @@
     <Property Name="ConsignorLocationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
     <Property Name="ConsignorPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ConsignorContactName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="AccountSetup">
     <Key>
@@ -12558,4 +12495,76 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemTypeId" Type="Int32" />
+    <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ItemUnitID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ItemType">
+    <Key>
+      <PropertyRef Name="ItemTypeId" />
+    </Key>
+    <Property Name="ItemTypeId" Type="Int32" Nullable="false" />
+    <Property Name="ItemTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ItemPurchase">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
+    <Property Name="StockType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ItemId" Type="Int32" />
+    <Property Name="ReferenceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AWBNOFrom" Type="Int32" />
+    <Property Name="AWBNOTo" Type="Int32" />
+    <Property Name="AWBCount" Type="Int32" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="SupplierInvoiceDetailID" Type="Int32" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ItemTypeId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ForwardingAgentMaster">
+    <Key>
+      <PropertyRef Name="FAgentID" />
+      <PropertyRef Name="AcCompanyID" />
+    </Key>
+    <Property Name="FAgentID" Type="Int32" Nullable="false" />
+    <Property Name="AcCompanyID" Type="Int32" Nullable="false" />
+    <Property Name="FAgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WebSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryID" Type="Int32" Nullable="false" />
+    <Property Name="CityID" Type="Int32" Nullable="false" />
+    <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+    <Property Name="ZoneCategoryID" Type="Int32" />
+    <Property Name="StatusSigned" Type="Boolean" Nullable="false" />
+    <Property Name="StatusActive" Type="Boolean" Nullable="false" />
+    <Property Name="FAgentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="StatusDefault" Type="Boolean" />
+    <Property Name="StateID" Type="Int32" />
+    <Property Name="CourierServiceID" Type="Int32" />
+    <Property Name="CountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Address3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

@@ -170,24 +170,7 @@
     function fillInAddress() {
 
         // Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();
-        console.log(place.address_components);
-
-        //for (var component in componentForm) {
-        //  document.getElementById(component).value = '';
-        //  document.getElementById(component).disabled = false;
-        //}
-
-        // Get each component of the address from the place details,
-        // and then fill-in the corresponding field on the form.
-        //for (var i = 0; i < place.address_components.length; i++) {
-        //  var addressType = place.address_components[i].types[0];
-        //  if (componentForm[addressType]) {
-        //    var val = place.address_components[i][componentForm[addressType]];
-        //    document.getElementById(addressType).value = val;
-        //  }
-        //      }
-
+        var place = autocomplete.getPlace();        
         var postcode = '';
         $.each(place.address_components, function (index, component) {
             var types = component.types;
@@ -204,11 +187,11 @@
                 }
 
                 if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val())) {
-                    $('#MovementTypeID').val(1);
+                 //   $('#MovementTypeID').val(1);
                     $('#materialcost').removeAttr('Disabled');
                 }
                 else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
-                    $('#MovementTypeID').val(2);
+                 //   $('#MovementTypeID').val(2);
                     $('#materialcost').val(0);
                     $('#materialcost').attr('Disabled', 'disabled');
                 }
@@ -221,7 +204,7 @@
 
     }
     function fillInPickuploadAddress() {
-        debugger;
+    
         // Get the place details from the autocomplete object.
         var place = autopickuplocation.getPlace();
 
@@ -237,12 +220,18 @@
 
         var postcode = '';
         $.each(place.address_components, function (index, component) {
-            var types = component.types;
-            console.log(types);
+            var types = component.types;            
             $.each(types, function (index, type) {
                 if (type == 'sublocality' || type == 'sublocality_level_1') {
 
                     $('#PickupSubLocality').val(component.long_name);
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#OriginCity').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#OriginCountry').val(component.long_name);
                 }
             });
         });
@@ -270,8 +259,15 @@
                     postcode = component.long_name;
                 }
                 else if (type == 'sublocality' || type == 'sublocality_level_1') {
-                    console.log(component.long_name);
+                  
                     $('#DeliverySubLocality').val(component.long_name);
+                }
+                else if (type == 'locality') {
+                    //$('#hdncity').val(component.long_name);
+                    $('#DeliveryCity').val(component.long_name);
+                }
+                else if (type == 'country') {
+                    $('#DeliveryCountry').val(component.long_name);
                 }
 
             });
@@ -617,8 +613,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {
-                            console.log(val);
+                        response($.map(data, function (val, item) {                            
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,
@@ -818,11 +813,8 @@
             url: "/AWB/GetActiveStatus",
             datatype: "Json",
             data: { 'InScanID': $('#InScanID').val() },
-            success: function (response) {
-                debugger;
-                console.log(response);
-                var _detail = response.data;
-              //  console.log(_detail);
+            success: function (response) {                                
+                var _detail = response.data;              
                 //$('#ChangeStatusTypeId').val(0).tigger('change');
                 $('#ChangeStatusTypeId').val(_detail.StatusTypeID).trigger('change');
                 //if (_detail.CourierStatusID != null)
@@ -858,8 +850,7 @@
 
                     }
                     else {
-                        debugger;
-                         console.log($('#Consignee').val());
+                        
                         $("#ConsigneeContact").val('');
                         $("#ConsigneeAddress1_Building").val('');
                         $("#ConsigneeAddress2_Street").val('');
@@ -1149,8 +1140,7 @@
                         else {
                             opthtml += '<option value="' + item.id + '">' + item.text + '</option>';
                         }
-                    });
-                    console.log(opthtml);
+                    });                    
                     $('#ChangeCourierStatusId').html(opthtml);
                     $('#ChangeCourierStatusId').val($('#CourierStatusId').val()).trigger('change');
 
@@ -1214,31 +1204,127 @@
             $('#h2awb').html('<strong>' + $('#HAWBNo').val() + '</strong>');
         });
         $('#HAWBNo').change(function () {
-             $.ajax({
-                    type: "POST",
-                    url: "/AWB/GetAWB",
-                    datatype: "Json",
-                    data: { id: $("#HAWBNo").val() },
-                    success: function (data) {
-                        if (data.Exist == 0) {
-                            $("#IsAvailable").val(0);
+            $.ajax({
+                type: "POST",
+                url: "/AWB/GetAWB",
+                datatype: "Json",
+                data: { id: $("#HAWBNo").val() },
+                success: function (data) {
+                    debugger;
+                    if (data.Exist == 0) {
+                        $("#IsAvailable").val(0);
+                        var AWBInfo = data.AWBInfo;
+                        var status = AWBInfo.Status;
+                        var mode = AWBInfo.Mode;
+                        if (status == 'Available' && mode == 'Prepaid') {
+                            var charge = response.CourierCharge;
+                            $('#CourierCharge').val(parseFloat(charge).toFixed(2));
+                            $('#CourierCharge').attr('readonly', 'readonly');
+                            $('#PaymentModeId').val(0).trigger('change');
+                            $('#PaymentModeId').val(5).trigger('change');
+                            $('#PaymentModeId').attr('readonly', 'readonly');
+                            $('#PaymentModeId').attr('disabled', 'disabled');
+                        }
+                        else if (status == 'Available' && mode == 'NotPrepaid') {
+                            $('#PaymentModeId').val(0).trigger('change');
+                            $('#PaymentModeId').val(3).trigger('change');
+                            $('#PaymentModeId').removeAttr('readonly');
+                            $('#PaymentModeId').removeAttr('disabled');
                         }
                         else {
-                             $("#IsAvailable").val(1);
-                            alert("AWB Already Exist..!");
-                            $('#HAWBNo').val('');
-                            $('#HAWBNo').focus();
-                        }
+                            $('#PaymentModeId').val(0).trigger('change');
+                            $('#PaymentModeId').val(1).trigger('change');
+                            $('#customer').val('');
+                            $('#customer').attr('AWBCustomerId', 0);
+                            $('#customer').attr('AWBCustomer', '');
+                            $('#shippername').val('');
+                            $('#shippername').attr('readonly', 'readonly');
+                            $('#CustomerID').val(CustomerId);
+                            $("#ConsignorContact").val(ContactPerson);
+                            $("#ConsignorAddress1_Building").val('');
+                            $("#ConsignorAddress2_Street").val('');
 
+                            $("#ConsignorAddress3_PinCode").val('');
+
+                            $("#ConsignorPhone").val('');
+                            $("#ConsignorCountryName").val('');
+                            $("#ConsignorCityName").val('');
+                            $("#ConsignorLocationName").val('');
+                            $("#PickupLocation").val('');
+                            $("#DeliveryLocation").val('');
+                            $('#PickupSubLocality').val('');
+                            $('#DeliverySubLocality').val('');
+                            $('#OriginPlaceID').val('');
+                            $('#DestinationPlaceID').val('');
+                            $("#PickupLocation").removeAttr('readonly');
+                            $("#ConsignorMobileNo").val('');
+                        }
+                        debugger;
+                        if (status == 'Available') {
+                            var CustomerName = AWBInfo.CustomerName;
+                            var CustomerId = AWBInfo.CustomerID;
+                            var LocationName = AWBInfo.LocationName;
+                            var CityName = AWBInfo.CityName;
+                            var CountryName = AWBInfo.CountryName;
+                            var Address1 = AWBInfo.Address1;
+                            var Address2 = AWBInfo.Address2;
+                            var Address3 = AWBInfo.Address3;
+                            var PhoneNo = AWBInfo.Phone;
+                            var Mobile = AWBInfo.Mobile;
+                            var OriginLocation = AWBInfo.OriginLocation;
+                            var DestinationLocation = AWBInfo.DestinationLocation;
+                            var ContactPerson = '';
+                            var PickupSubLocality = AWBInfo.PickupSubLocality;
+                            var DeliverySubLocality = AWBInfo.DeliverySubLocality;
+                            var OriginPlaceID = AWBInfo.OriginPlaceID;
+                            var DestinationPlaceID = AWBInfo.DestinationPlaceID;
+                            //$('#InScanID').val(InScanID);
+                            //$('#QuickInScanID').val(QuickInScanId);
+                            $('#customer').val(CustomerName);
+                            $('#customer').attr('AWBCustomerId', CustomerId);
+                            $('#customer').attr('AWBCustomer', CustomerName);
+                            $('#shippername').val(CustomerName);
+                            $('#shippername').attr('readonly', 'readonly');
+                            $('#CustomerID').val(CustomerId);
+                            $("#ConsignorContact").val(ContactPerson);
+                            $("#ConsignorAddress1_Building").val(Address1);
+                            $("#ConsignorAddress2_Street").val(Address2);
+
+                            $("#ConsignorAddress3_PinCode").val(Address3);
+
+                            $("#ConsignorPhone").val(PhoneNo);
+                            $("#ConsignorCountryName").val(CountryName);
+                            $("#ConsignorCityName").val(CityName);
+                            $("#ConsignorLocationName").val(LocationName);
+                            $("#PickupLocation").val(OriginLocation);
+                            $("#DeliveryLocation").val(DestinationLocation);
+                            $('#PickupSubLocality').val(PickupSubLocality);
+                            $('#DeliverySubLocality').val(DeliverySubLocality);
+                            $('#OriginPlaceID').val(OriginPlaceID);
+                            $('#DestinationPlaceID').val(DestinationPlaceID);
+                            $("#PickUpLocation").attr('readonly', 'readonly');
+                            $("#ConsignorMobileNo").val(Mobile);
+                        }
+                        else {
+
+
+                        }
                     }
-                });
-        })
+                    else {
+                        $("#IsAvailable").val(1);
+                        alert("AWB Already Exist..!");
+                        $('#HAWBNo').val('');
+                        $('#HAWBNo').focus();
+                    }
+
+                }
+            });
+        });
         $("#btnsave").click(function () {
             debugger;
 
-            var fullform = $('#quickAWB').valid();
-            console.log(fullform);
-            if ($("#HAWBNo").val() != "") {
+            var fullform = $('#quickAWB').valid();            
+            if ($("#HAWBNo1").val() != "") {
                 $.ajax({
                     type: "POST",
                     url: "/AWB/GetAWB",
@@ -1503,6 +1589,228 @@
     }
 
 
+    });
+</script>
+<script>
+    //get courier charge
+    function getCourierCharge() {
+        debugger;
+        var CustomerRateTypeID = $('#CustomerRateTypeID').val();
+        var CustomerId = $('#CustomerID').val();
+        var MovementId = $('#MovementTypeID').val();
+        var ProductTypeID = $('#ProductTypeID').val();
+        var PaymentModeId = $('#PaymentModeId').val();
+        var Weight = $('#Weight').val();
+        var CountryName = $('#DeliveryCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
+        var CityName = $('#DeliveryCity').val(); //$("#ConsigneeCityName").val();
+        var OriginCountry = $('#OriginCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
+        var OriginCity = $('#OriginCity').val(); //$("#ConsigneeCityName").val();
+
+        $.ajax({
+            url: '/AWBBatch/GetCustomerRateType',
+            datatype: "json",
+            data: {
+                term: '', CustomerId: $('#CustomerID').val(), MovementId: $('#MovementTypeID').val(), ProductTypeID: $('#ProductTypeID').val(), PaymentModeId: $('#PaymentModeId').val(), FAgentID: $('#FagentID').val(), CityName: $('#DeliveryCity').val(), CountryName: $('#DeliveryCountry').val(), OriginCountry: OriginCountry, OriginCity: OriginCity
+            },
+            success: function (data) {
+                console.log(data);
+                var status = '';
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        debugger;
+                        if ($('#CustomerRateTypeID').val() == 0) {
+                            $('#CustomerRateType').val(data[i].CustomerRateType1);
+                            $('#CustomerRateTypeID').val(data[i].CustomerRateTypeID);
+                            GetcourierChargenew();
+                            status = "ok";
+                        }
+                        else if (data[i].CustomerRateTypeID == $('#CustomerRateTypeID').val()) {
+                            GetcourierChargenew();
+                            status = "ok";
+                        }
+
+                        if ((i + 1) == data.length) {
+                            if (status == '') {
+                                $('#CustomerRateType').val(data[0].CustomerRateType1);
+                                $('#CustomerRateTypeID').val(data[0].CustomerRateTypeID);
+                                GetcourierChargenew();
+                                status = "ok";
+                            }
+                        }
+                    }
+                }
+                else {
+                    $('#CustomerRateTypeID').val(0);
+                    $('#CustomerRateType').val("");
+                    $('#CourierCharge').val(0);
+                }
+            }
+        })
+
+    }
+    function GetcourierChargenew() {
+        var CustomerRateTypeID = $('#CustomerRateTypeID').val();
+        var CustomerId = $('#CustomerID').val();
+        var MovementId = $('#MovementTypeID').val();
+        var ProductTypeID = $('#ProductTypeID').val();
+        var PaymentModeId = $('#PaymentModeId').val();
+        var Weight = $('#Weight').val();
+        var CountryName = $('#DeliveryCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
+        var CityName = $('#DeliveryCity').val(); //$("#ConsigneeCityName").val();
+        var CountryName1 = $('#OriginCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
+        var CityName1 = $('#OriginCity').val(); //$("#ConsigneeCityName").val();
+        $.ajax({
+            type: "Post",
+            url: '/AWBBatch/GetCourierCharge',
+            datatype: "json",
+            data: {
+                CustomerRateTypeID: CustomerRateTypeID, CustomerId: CustomerId, MovementId: MovementId, ProductTypeID: ProductTypeID, PaymentModeId: PaymentModeId, Weight: Weight, CountryName: CountryName, CityName: CityName
+            },
+            success: function (response) {
+                debugger;
+                if (response != null) {
+                    if ($('#CustomerRateTypeID').val() != response.CustomerRateTypeID) {
+                        $('#CustomerRateTypeID').val(response.CustomerRateTypeID);
+                        $('#CustomerRateType').val(response.CustomerRateType);
+                    }
+                    $('#CourierCharge').val(response.CourierCharge);
+                }
+                else {
+                    $('#CustomerRateTypeID').val(0);
+                    $('#CustomerRateType').val(0);
+                    $('#CourierCharge').val(0);
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#CustomerRateType').change(function () {
+            if ($('#CustomerRateType').val() == '') {
+                $('#CustomerRateTypeID').val(0);
+            }
+            else if ($('#CustomerRateType').val() != $('#CustomerRateTypeID').attr('label')) {
+                $('#CustomerRateType').val('');
+                $('#CustomerRateTypeID').val(0);
+            }
+            getCourierCharge();
+        });
+        $("#FAgentName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWBBatch/GetForwardingAgent',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AgentName,
+                                value: val.FAgentID
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#FAgentName').val(ui.item.label);
+                $('#FAgentID').val(ui.item.value);
+                $('#FAgentID').attr('label', ui.item.label);
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#FAgentName').val(i.item.label);
+                $('#FAgentID').val(i.item.value);
+                $('#FAgentID').attr('label', i.item.label);
+            }
+        });
+        $("#FAgentName").change(function () {
+            if ($("#FAgentName").val() == '') {
+                $('#FAgentID').val(0);
+                $('#FAgentID').attr('label', '');
+            }
+            else if ($("#FAgentName").val() != $('#FAgentID').attr('label')) {
+                $('#FAgentID').val(0);
+                $('#FAgentID').attr('label', '');
+            }
+            getCourierCharge();
+        });
+
+
+        $("#Description").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWBBatch/GetTypeofGoods',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {                            
+                            return {
+                                label: val.TypeOfGood1,
+                                value: val.TypeOfGood1
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#Description').val(ui.item.value);
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#Description').val(i.item.value);
+            }
+        });
+
+
+        $('#CustomerName').change(function () {
+            getCourierCharge();
+        });
+        $('#ProductTypeID').change(function () {
+            getCourierCharge();
+        });
+        $('#PaymentModeId').change(function () {
+            getCourierCharge();
+        });
+        $('#Weight').change(function () {
+            getCourierCharge();
+        });
+        $('#DeliveryLocation').change(function () {
+            if ($('#OriginCountry').val() != $('#BranchCountry').val()) {
+                $('#MovementTypeID').val(3).trigger('change');
+            }
+            else if ($('#DeliveryCity').val() == $('#BranchCity').val()) {
+                $('#MovementTypeID').val(1).trigger('change');
+            }
+            else if ($('#DeliveryCity').val() != $('#BranchCity').val()) {
+                $('#MovementTypeID').val(2).trigger('change');
+            }
+            getCourierCharge();
+
+        });
+        $('#PickupLocation').change(function () {
+            if ($('#OriginCountry').val() != $('#BranchCountry').val()) {
+                $('#MovementTypeID').val(3).trigger('change');
+            }
+            if ($('#MovementTypeID').val() == 3) {
+                getCourierCharge();
+            }
+        });
+        $('#MovementTypeID').change(function () {
+            getCourierCharge();
+        });
+
+        
     });
 </script>
 
@@ -1790,11 +2098,18 @@
                             <label class="headinglabel">PickUp Location</label>
                             @Html.TextBoxFor(model => model.PickupLocation, new { @class = "form-control txttarget" })
                             @Html.HiddenFor(model => model.PickupLocationPlaceId)
+                            @Html.HiddenFor(model => model.OriginCountry)
+                            @Html.HiddenFor(model => model.OriginCity)
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Delivery Location </label>
                             @Html.TextBoxFor(model => model.DeliveryLocation, new { @class = "form-control txttarget" })
                             @Html.HiddenFor(model => model.DeliveryLocationPlaceId)
+                            @Html.HiddenFor(model => model.DeliveryCountry)
+                            @Html.HiddenFor(model => model.DeliveryCity)
+                            @Html.HiddenFor(model => model.BranchLocation)
+                            @Html.HiddenFor(model => model.BranchCity)
+                            @Html.HiddenFor(model => model.BranchCountry)
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">PickUp Sub Location</label>
@@ -1860,7 +2175,9 @@
 
                         <div class="col-md-2">
                             <label class="headinglabel required">Customer Rate Type</label>
-                            @Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })
+                            @Html.TextBoxFor(model => model.CustomerRateType, new { @class = "form-control", @autocomplete = "off" })
+                            @Html.HiddenFor(model => model.CustomerRateTypeID)
+                            @*@Html.DropDownListFor(model => model.CustomerRateTypeID, new SelectList(@ViewBag.customerrate, "CustomerRateTypeID", "CustomerRateType1"), "Select", new { @class = "form-control", @required = "true" })*@
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel required">Courier Charge</label>
@@ -1949,7 +2266,7 @@
 
                     <div class="col-md-3">
                         <label class="headinglabel">Forwarding Agent</label>
-                        @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "FAgentID", "FAgentName"), "Select", new { @class = "form-control" })
                     </div>
 
 

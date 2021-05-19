@@ -30,7 +30,7 @@
 
           <div class="col-md-3">
                           <label class="headinglabel">UserName</label>
-                @Html.EditorFor(model => model.UserName)
+                @Html.EditorFor(model => model.UserName ,new {@type="search" )
             @Html.ValidationMessageFor(model => model.UserName)
                      
                  </div>

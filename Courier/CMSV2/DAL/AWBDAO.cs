@@ -270,6 +270,7 @@ namespace CMSV2.DAL
                         obj.DeliverySubLocality = ds.Tables[0].Rows[0]["DeliverySubLocality"].ToString();
                         obj.OriginPlaceID = ds.Tables[0].Rows[0]["OriginPlaceID"].ToString();
                         obj.DestinationPlaceID = ds.Tables[0].Rows[0]["DestinationPlaceID"].ToString();
+                        
                     }
                     else
                     {
@@ -531,7 +532,7 @@ namespace CMSV2.DAL
                         obj.SpecialInstructions = dt.Rows[i]["SpecialNotes"] == DBNull.Value ? "" : dt.Rows[i]["SpecialNotes"].ToString();
                         obj.CustomerRateTypeId = dt.Rows[i]["CustomerRateID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["CustomerRateID"].ToString());
                         obj.FAgentID  = dt.Rows[i]["FAgentId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["FAgentId"].ToString());
-                        obj.FAgentName = dt.Rows[i]["FAgentName"] == DBNull.Value ? "" : dt.Rows[i]["FAgentName"].ToString();
+                      //  obj.FAgentName = dt.Rows[i]["FAgentName"] == DBNull.Value ? "" : dt.Rows[i]["FAgentName"].ToString();
                         obj.CustomerRateType = GetCustomerRateName(obj.CustomerRateTypeId);
                         list.Add(obj);
                     }
@@ -856,6 +857,44 @@ namespace CMSV2.DAL
 
             return vm;
 
+        }
+        #endregion
+
+        #region "StockItem"
+        public static List<StockVM> GetStockList(int branchId,int fyearid)
+        {
+            StockSearch paramobj = (StockSearch)(HttpContext.Current.Session["StockSearch"]);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetStockList";
+            cmd.CommandType = CommandType.StoredProcedure;            
+            cmd.Parameters.AddWithValue("@FYearId", fyearid);
+            cmd.Parameters.AddWithValue("@BranchId", branchId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<StockVM> objList = new List<StockVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    StockVM obj = new StockVM();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.PurchaseDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["PurchaseDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.ReferenceNo= ds.Tables[0].Rows[i]["ReferenceNo"].ToString();
+                    obj.AWBCount = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBCount"].ToString());
+                    obj.AWBNOFrom = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBNOFrom"].ToString());
+                    obj.AWBNOTo = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBNOTo"].ToString());
+                    obj.Qty = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["Qty"].ToString());
+                    obj.Rate = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Rate"].ToString());
+                    obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
         }
         #endregion
     }

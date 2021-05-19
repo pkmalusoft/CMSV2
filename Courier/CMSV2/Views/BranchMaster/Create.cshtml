@@ -43,7 +43,7 @@
 
         // When the user selects an address from the drop-down, populate the
         // address fields in the form.
-         autocomplete.addListener('place_changed', fillInAddress);
+        autocomplete.addListener('place_changed', fillInAddress);
 
 
         autocompleteCity = new google.maps.places.Autocomplete(
@@ -157,7 +157,7 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#BranchName").focus();
-              $("#btnsave").click(function () {
+        $("#btnsave").click(function () {
             var branch = $("#BranchName").val();
             var add1 = $("#Address1").val();
             var cou = $("#CountryName").val(); // $("#CountryID option:selected").val();
@@ -165,7 +165,7 @@
             var loc = $("#LocationName").val(); // option:selected").val();
             var key = $("#KeyPerson").val();
             var des = $("#DesignationID option:selected").val();
-                  var yearid = $("#AcFinancialYearID").val();
+            var yearid = $("#AcFinancialYearID").val();
 
             var phone = $("#Phone").val();
             var mob = $("#MobileNo1").val();
@@ -292,7 +292,7 @@
                     @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", id = "autocomplete", @onFocus = "geolocate()" })
                     @*@Html.DropDownListFor(model => model.LocationID, new SelectList(@ViewBag.location, "LocationID", "Location"), "Select", new { @class = "form-control" })*@
                     @* @Html.DropDownList("LocationID", String.Empty)
-            @Html.ValidationMessageFor(model => model.LocationID)*@
+                        @Html.ValidationMessageFor(model => model.LocationID)*@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">City</label>
@@ -351,18 +351,18 @@
 
                 </div>
                 @*<div class="col-md-3">
-            <label class="headinglabel">Phone No 1</label>
-            @Html.TextBoxFor(model => model.PhoneNo1, new { @class = "form-control textright" })
-            @Html.ValidationMessageFor(model => model.PhoneNo1)
+                        <label class="headinglabel">Phone No 1</label>
+                        @Html.TextBoxFor(model => model.PhoneNo1, new { @class = "form-control textright" })
+                        @Html.ValidationMessageFor(model => model.PhoneNo1)
 
-        </div>
+                    </div>
 
-        <div class="col-md-3">
-            <label class="headinglabel">Phone No 2</label>
-            @Html.TextBoxFor(model => model.PhoneNo2, new { @class = "form-control textright" })
-            @Html.ValidationMessageFor(model => model.PhoneNo2)
+                    <div class="col-md-3">
+                        <label class="headinglabel">Phone No 2</label>
+                        @Html.TextBoxFor(model => model.PhoneNo2, new { @class = "form-control textright" })
+                        @Html.ValidationMessageFor(model => model.PhoneNo2)
 
-        </div>*@
+                    </div>*@
             </div>
 
             <div class="row no-margin" style="padding-top:10px">
@@ -370,26 +370,26 @@
 
 
                 @*<div class="col-md-3">
-                    <label class="headinglabel">Phone No 3</label>
-                    @Html.TextBoxFor(model => model.PhoneNo3, new { @class = "form-control textright" })
-                    @Html.ValidationMessageFor(model => model.PhoneNo3)
+                        <label class="headinglabel">Phone No 3</label>
+                        @Html.TextBoxFor(model => model.PhoneNo3, new { @class = "form-control textright" })
+                        @Html.ValidationMessageFor(model => model.PhoneNo3)
 
-                </div>
+                    </div>
 
-                <div class="col-md-3">
-                    <label class="headinglabel">Phone No 4</label>
-                    @Html.TextBoxFor(model => model.PhoneNo4, new { @class = "form-control textright" })
-                    @Html.ValidationMessageFor(model => model.PhoneNo4)
+                    <div class="col-md-3">
+                        <label class="headinglabel">Phone No 4</label>
+                        @Html.TextBoxFor(model => model.PhoneNo4, new { @class = "form-control textright" })
+                        @Html.ValidationMessageFor(model => model.PhoneNo4)
 
-                </div>*@
+                    </div>*@
 
 
                 @*<div class="col-md-3">
-                    <label class="headinglabel">Mobile No 2</label>
-                    @Html.TextBoxFor(model => model.MobileNo2, new { @class = "form-control textright" })
-                    @Html.ValidationMessageFor(model => model.MobileNo2)
+                        <label class="headinglabel">Mobile No 2</label>
+                        @Html.TextBoxFor(model => model.MobileNo2, new { @class = "form-control textright" })
+                        @Html.ValidationMessageFor(model => model.MobileNo2)
 
-                </div>*@
+                    </div>*@
             </div>
             <div class="row no-margin" style="padding-top:10px">
 
@@ -469,20 +469,20 @@
 
             </div>
 
-                <div class="row no-margin" style="padding-top:10px">
-                    <div class="col-md-12 btn-right">
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12 btn-right">
 
-                        <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-
-
-
-                        <a href='@Url.Action("Index", "BranchMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
 
-                    </div>
+
+                    <a href='@Url.Action("Index", "BranchMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+
                 </div>
-</fieldset>
+            </div>
+        </fieldset>
     }
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>
