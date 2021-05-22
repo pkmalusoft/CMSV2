@@ -18,6 +18,8 @@ namespace CMSV2.Controllers
         [HttpGet]
         public ActionResult Index(int id=0)
         {
+            ViewBag.Movement = db.CourierMovements.ToList();
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             AWBSearch obj= (AWBSearch)Session["AWBSearch"];
             AWBSearch model = new AWBSearch();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -30,50 +32,30 @@ namespace CMSV2.Controllers
                 //int pStatusId = 0;
                 pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date; // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
-                //if (FromDate == null || ToDate == null)
-                //{
-                 
-                //}
-                //else
-                //{
-                //    pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
-                //    pToDate = Convert.ToDateTime(ToDate).AddDays(1);
-
-                //}
+                
                 obj = new AWBSearch();
                 obj.FromDate = pFromDate;
                 obj.ToDate = pToDate;
                 obj.StatusID = 0;
+                obj.Destination = "";
+                obj.MovementTypeID = 0;
+                obj.PaymentModeId = 0;
+                obj.Origin = "";
+                obj.Destination = "";
+                obj.ConsignorConsignee = "";
                 Session["AWBSearch"] = obj;
                 model.FromDate = pFromDate;
                 model.ToDate = pToDate;
                 model.StatusID = 0;
+                model.Details = new List<QuickAWBVM>();
             }
             else
             {
                 model = obj;
+                List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(obj.StatusID, obj.FromDate, obj.ToDate, branchid, depotId, model.AWBNo, obj.MovementTypeID, obj.PaymentModeId, obj.ConsignorConsignee, obj.Origin, obj.Destination);
+                model.Details = lst;
             }
-            List<QuickAWBVM> lst = PickupRequestDAO.GetAWBList(obj.StatusID, obj.FromDate, obj.ToDate, branchid, depotId, model.AWBNo);
-            model.Details = lst;
-            //List<QuickAWBVM> lst = (from c in db.InScanMasters
-            //                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
-            //                        from subpet in gj.DefaultIfEmpty()
-            //                        join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
-            //                        from subpet1 in  gj1.DefaultIfEmpty()
-            //                        //join source in db.RequestTypes on c.RequestSource equals source.Id.ToString() into gj2
-            //                        //from subpet3 in gj2.DefaultIfEmpty()
-            //                        join pay in db.tblPaymentModes  on c.PaymentModeId equals pay.ID into gj2
-            //                        from subpet2 in gj2.DefaultIfEmpty()
-            //                        where c.BranchID == branchid   && c.DepotID==depotId 
-            //                        //&& c.AcFinancialYearID==yearid                                
-            //                        && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-            //                         && (c.CourierStatusID == pStatusId || (pStatusId == 0 && c.CourierStatusID >= 4 && c.PickupRequestStatusId != null) || (pStatusId == 0 && c.PickupRequestStatusId == null))
-            //                        && c.IsDeleted==false
-            //                        orderby c.TransactionDate descending, c.AWBNo descending
-            //                        select new QuickAWBVM { HAWBNo = c.AWBNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,CreatedByName="",LastModifiedByName="" }).ToList();  //, requestsource=subpet3.RequestTypeName 
-
-            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            //ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
+                       
             ViewBag.CourierStatus = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.CourierStatusList = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();

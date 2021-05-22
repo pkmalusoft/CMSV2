@@ -28,6 +28,12 @@ namespace CMSV2.Models
         public int StatusID { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public int MovementTypeID { get; set; }
+        public int PaymentModeId { get; set; }
+        public string ConsignorConsignee { get; set; }
+        public string Origin { get; set; }
+
+        public string Destination { get; set; }
         public string AWBNo { get; set; }
         public string BatchNo { get; set; }
         public DateTime BatchDate { get; set; }

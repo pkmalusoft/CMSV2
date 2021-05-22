@@ -919,5 +919,162 @@ namespace CMSV2.Controllers
 
 
         #endregion
+
+        #region "SalesRegistersummary"
+        public ActionResult SalesRegisterSummary()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            ViewBag.Employee = db.EmployeeMasters.ToList();
+            SalesRegisterSummaryParam model = (SalesRegisterSummaryParam)Session["SalesRegisterSummaryParam"];
+            if (model == null)
+            {
+                model = new SalesRegisterSummaryParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    EmployeeID = 0,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["SalesRegisterSummaryParam"] = model;
+
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Sales Register Summary";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SalesRegisterSummary"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SalesRegisterSummary(SalesRegisterSummaryParam picker)
+        {
+
+            SalesRegisterSummaryParam model = new SalesRegisterSummaryParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                EmployeeID = picker.EmployeeID,
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["SalesRegisterSummaryParam"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateSalesReport();
+
+            return RedirectToAction("SalesReport", "Reports");
+
+
+        }
+
+
+
+        #endregion
+
+        #region "SalesReport"
+        public ActionResult SalesReport()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            ViewBag.Employee = db.EmployeeMasters.ToList();
+            SalesReportParam model = (SalesReportParam)Session["SalesReportParam"];
+            if (model == null)
+            {
+                model = new SalesReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    EmployeeID = 0,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["SalesReportParam"] = model;
+
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Sales Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SalesReport"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SalesReport(SalesReportParam picker)
+        {
+
+            SalesReportParam model = new SalesReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                EmployeeID = picker.EmployeeID,
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["SalesReportParam"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateSalesReport();
+
+            return RedirectToAction("SalesReport", "Reports");
+
+
+        }
+        #endregion
     }
 }

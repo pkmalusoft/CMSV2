@@ -3110,6 +3110,7 @@
     <Content Include="Reports\MCPaymentVoucher.rpt" />
     <Content Include="Reports\DRSReceiptVoucher.rpt" />
     <Content Include="Reports\RateChartPrint.rpt" />
+    <Content Include="Reports\SalesReport.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3651,6 +3652,7 @@
     <Content Include="Views\ForwardingAgent\Index.cshtml" />
     <Content Include="Views\Stock\Index.cshtml" />
     <Content Include="Views\Stock\Create.cshtml" />
+    <Content Include="Views\Reports\SalesRegisterSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

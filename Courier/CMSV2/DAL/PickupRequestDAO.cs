@@ -659,7 +659,7 @@ namespace CMSV2.DAL
 
         }
 
-        public static List<QuickAWBVM> GetAWBList(int StatusId,DateTime FromDate,DateTime ToDate,int BranchId,int DepotId, string AWBNo)
+        public static List<QuickAWBVM> GetAWBList(int StatusId,DateTime FromDate,DateTime ToDate,int BranchId,int DepotId, string AWBNo,int MovementId,int PaymentModeId,string ConsignorText,string Origin,string Destination)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -670,6 +670,21 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@BranchId", BranchId);
             cmd.Parameters.AddWithValue("@DepotId", DepotId);
+                         
+            cmd.Parameters.AddWithValue("@MovementId", MovementId);
+            cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
+            if (ConsignorText == null)
+                ConsignorText = "";
+            else
+                ConsignorText = ConsignorText + "%";
+            cmd.Parameters.AddWithValue("@ConsignorConsignee", ConsignorText);
+            if (Origin == null)
+                Origin = "";
+            cmd.Parameters.AddWithValue("@Origin", Origin);
+            if (Destination == null)
+                Destination = "";
+            cmd.Parameters.AddWithValue("@Destination", Destination);
+             
             if (AWBNo == null)
                 AWBNo = "";
                 cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
