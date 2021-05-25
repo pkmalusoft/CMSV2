@@ -50,8 +50,18 @@ namespace CMSV2.Models
         public DateTime? InScanDate { get; set; }
 
         public int CustomerID { get; set; }
+        public string CODCustomerName { get; set; }
+        public string CASHCustomerName { get; set; }
 
+        public string FOCCustomerName { get; set; }
+        public int FOCCustomerID { get; set; }
+        public int CODCustomerID { get; set; }
+        public int CASHCustomerId { get; set; }
+
+        public int DefaultFAgentID { get; set; }
+        public string DefaultFAgentName { get; set; }
         public bool CustomerandShipperSame { get; set; }
+        public bool ShowAllConsignee { get; set; }
         //public string ShipperName { get; set; }
         public string Consignor { get; set; }
 

@@ -294,7 +294,7 @@ namespace CMSV2.Controllers
              v.Address2 = a.Address2;
              v.Address3 = a.Address3;
              v.Phone = a.Phone;
-             //v.Email = a.Email;
+             v.Email = a.Email;
              v.Fax = a.Fax;
              v.Mobile = a.MobileNo;         
             v.CountryName = a.CountryName;
@@ -338,6 +338,7 @@ namespace CMSV2.Controllers
                 u.RoleID = a.RoleID;
                 db.UserRegistrations.Add(u);
                 db.SaveChanges();
+                v.UserID = u.UserID;
             }
 
             //if (v.Email != a.Email)

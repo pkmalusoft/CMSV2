@@ -60,25 +60,28 @@ namespace CMSV2.Controllers
 
 
 
-        public ActionResult Index()
+        public ActionResult Index(string SearchText="")
         {
             List<CustmorVM> lst = new List<CustmorVM>();
-            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite=>ite.CustomerID >0).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
-
-            foreach (var item in data)
+            if (SearchText.Trim() != "")
             {
-                CustmorVM c = new CustmorVM();
+                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerName.ToLower().Contains(SearchText.ToLower()) && ite.CustomerID > 0).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
 
-                c.CustomerID = item.CustomerID;
-                c.CustomerType = item.CustomerType;
-                c.CustomerCode = item.CustomerCode;
-                c.CustomerName = item.CustomerName;
-                c.ContactPerson = item.ContactPerson;
-                c.Mobile = item.Mobile;
-                c.Phone = item.Phone;
-                lst.Add(c);
+                foreach (var item in data)
+                {
+                    CustmorVM c = new CustmorVM();
+
+                    c.CustomerID = item.CustomerID;
+                    c.CustomerType = item.CustomerType;
+                    c.CustomerCode = item.CustomerCode;
+                    c.CustomerName = item.CustomerName;
+                    c.ContactPerson = item.ContactPerson;
+                    c.Mobile = item.Mobile;
+                    c.Phone = item.Phone;
+                    lst.Add(c);
+                }
             }
-
+            ViewBag.SearchText = SearchText;
             return View(lst);
         }
 
@@ -248,48 +251,7 @@ namespace CMSV2.Controllers
             {
                 obj.CustomerRateTypeID = c.CustomerRateTypeID;
             }
-            //UserRegistration u = new UserRegistration();
-            //if (c.Email != null)
-            //{
-            //    if (c.Email != "")
-            //    {                  
-
-            //        UserRegistration x = (from a in db.UserRegistrations where a.UserName == c.Email select a).FirstOrDefault();
-            //        if (x == null)
-            //        {
-
-            //            int max1 = (from c1 in db.UserRegistrations orderby c1.UserID descending select c1.UserID).FirstOrDefault();
-            //            u.UserID = max1 + 1;
-            //            u.UserName = c.Email;
-            //            u.EmailId = c.Email;
-            //            u.Password = obj.Password;
-            //            u.Phone = c.Phone;
-            //            u.IsActive = true;
-            //            u.RoleID = c.RoleID;
-
-
-            //        }
-            //        try
-            //        {
-            //            db.UserRegistrations.Add(u);
-            //            db.SaveChanges();
-            //        }
-            //        catch (DbEntityValidationException e)
-            //        {
-            //            foreach (var eve in e.EntityValidationErrors)
-            //            {
-            //                Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-            //                    eve.Entry.Entity.GetType().Name, eve.Entry.State);
-            //                foreach (var ve in eve.ValidationErrors)
-            //                {
-            //                    Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-            //                        ve.PropertyName, ve.ErrorMessage);
-            //                }
-
-            //            }
-            //        }
-            //    }
-            //}
+            
 
             try
             {
@@ -303,6 +265,7 @@ namespace CMSV2.Controllers
                 {
                     db.CustomerMasters.Add(obj);
                     db.SaveChanges();
+                    ReceiptDAO.ReSaveCustomerCode();
                 }
 
 
@@ -347,44 +310,46 @@ namespace CMSV2.Controllers
             //List<CourierStatu> _cstatus = new List<CourierStatu>();
             try
             {
-                string custform = "000000";
-                string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
-                string last6digit = "";
-                if (maxcustomercode == null || maxcustomercode == "")
-                {
-                    //maxcustomercode="AA000000";
-                    last6digit = "0";
 
-                }
-                else
-                {
-                    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
-                }
-                if (last6digit != "")
-                {
+                customercode = ReceiptDAO.GetMaxCustomerCode(custname);
+                //string custform = "000000";
+                //string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
+                //string last6digit = "";
+                //if (maxcustomercode==null || maxcustomercode=="")
+                //{
+                //    //maxcustomercode="AA000000";
+                //    last6digit = "0";
 
-                    string customerfirst = custname.Substring(0, 1);
-                    string customersecond = "";
-                    try
-                    {
-                        customersecond = custname.Split(' ')[1];
-                        customersecond = customersecond.Substring(0, 1);
-                    }
-                    catch (Exception ex)
-                    {
+                //}
+                //else
+                //{
+                //    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
+                //}
+                //if (last6digit !="")
+                //{
 
-                    }
+                //    string customerfirst = custname.Substring(0, 1);
+                //    string customersecond = "";
+                //    try
+                //    {
+                //        customersecond = custname.Split(' ')[1];
+                //        customersecond = customersecond.Substring(0, 1);
+                //    }
+                //    catch(Exception ex)
+                //    {
 
-                    if (customerfirst != "" && customersecond != "")
-                    {
-                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
-                    }
-                    else
-                    {
-                        customercode = customerfirst + "C" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
-                    }
+                //    }
 
-                }
+                //    if (customerfirst !="" && customersecond!="") 
+                //    {
+                //        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1); 
+                //    }
+                //    else
+                //    {
+                //        customercode = customerfirst + "C" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                //    }
+
+                //}
 
                 return Json(new { data = customercode, result = status }, JsonRequestBehavior.AllowGet);
             }

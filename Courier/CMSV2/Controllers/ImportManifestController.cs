@@ -13,6 +13,9 @@ using ExcelDataReader;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 
 namespace CMSV2.Controllers
 {
@@ -21,9 +24,36 @@ namespace CMSV2.Controllers
     {
         // GET: ImportManifest
         Entities1 db = new Entities1();
+        //private const string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
+        //private string urlParameters = "?dateTime=20-May-2021";
         public ActionResult Index()
         {
 
+            //using (var client = new HttpClient())
+            //{
+            //    client.BaseAddress = new Uri(URL);
+            //    //HTTP GET
+            //    // Add an Accept header for JSON format.
+            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //    client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+            //    client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+
+            //    // List data response.
+            //    HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        // Parse the response body.
+            //        var dataObjects = response.Content.ReadAsAsync<DataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+            //        foreach (var d in dataObjects.data)
+            //        {
+            //            Console.WriteLine("{0}", d.awbNo);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            //    }
+            //}
             int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ImportManifestSearch obj = (ImportManifestSearch)Session["ImportManifestSearch"];
             ImportManifestSearch model = new ImportManifestSearch();
@@ -370,21 +400,21 @@ namespace CMSV2.Controllers
                 {
                     if (FieldName == "DestinationCountry")
                     {
-                        var list = (from c in IDetails                                    
+                        var list = (from c in IDetails
                                     orderby c.DestinationCountry
                                     select new { SourceValue = c.DestinationCountry }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationCity")
                     {
-                        var list = (from c in IDetails                                    
+                        var list = (from c in IDetails
                                     orderby c.DestinationCity
                                     select new { SourceValue = c.DestinationCity }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else if (FieldName == "DestinationLocation")
                     {
-                        var list = (from c in IDetails                                    
+                        var list = (from c in IDetails
                                     orderby c.DestinationLocation
                                     select new { SourceValue = c.DestinationLocation }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
@@ -395,7 +425,7 @@ namespace CMSV2.Controllers
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                 }
-                
+
             }
             else
             {
@@ -405,4 +435,49 @@ namespace CMSV2.Controllers
 
         }
     }
+
+
+    public class DataObject
+        {
+          public int code { get; set; }
+        public List<productdata> data { get; set; }
+        public string message { get; set; }
+
+        }
+
+    public class productdata
+    {
+        public string shipper { get; set; }
+        public string pcs { get; set; }
+        public string awbNo { get; set; }
+
+        public string receiverName { get; set; }
+
+        public string customsValue { get; set; }
+
+        public string awbDate { get; set; }
+        public string destination { get; set; }
+
+        public string weight { get; set; }
+        public string lastStatusRemark { get; set; }
+
+        public string destinationCountry { get; set; }
+        public string content { get; set; }
+        public string reference { get; set; }
+
+        public string destinationCity { get; set; }
+
+        public string receiverAddress { get; set; }
+        public string receiverPhone { get; set; }
+        
+        public string cod { get; set; }
+        public string currency { get; set; }
+
+        public string id { get; set; }
+
+        public string bagNo { get; set; }
+
+        public string status { get; set; }
+    }
+
 }

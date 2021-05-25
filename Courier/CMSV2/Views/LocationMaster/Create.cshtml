@@ -10,11 +10,68 @@
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-      
+
         $("#Location").focus();
         $("#CityID").empty();
         $('#CityID').append('<option value="0">Select</option>');
 
+
+         $("#Location").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#Location').val(ui.item.label);
+                $('#PlaceID').val(ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#Location').val(ui.item.label);
+                $('#PlaceID').val(ui.item.value);
+                return false;
+            }
+        });
+        $('#Location').blur(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/ZoneChart/GetVenueDetailsByPlace",
+                datatype: "Json",
+                data: { placeId: $('#PlaceID').val() },
+                success: function (response) {
+                    debugger;
+                    // console.log(response);
+                    $('#CountryName').val(response.Country);
+                    $('#CityName').val(response.City);
+                }
+            });
+        });
         $("#btnsave").click(function () {
             var loc = $("#Location").val();
             var cou = $("#CountryID option:selected").val();
@@ -34,44 +91,44 @@
                 $("#validations").show();
                 return false;
             }
-           
+
             else {
                 $("#validations").hide();
                 return true;
             }
         });
 
-        $("#CountryID").change(function () {
-            $("#CityID").empty();
-            $('#CityID').append('<option value="0">Select</option>');
-            $.ajax({
-                type: "POST",
-                url: "/LocationMaster/GetCity",
-                datatype: "Json",
-                data:{id:$("#CountryID option:selected").val()},
-                success: function (data) {
-                    
+        //$("#CountryID").change(function () {
+        //    $("#CityID").empty();
+        //    $('#CityID').append('<option value="0">Select</option>');
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/LocationMaster/GetCity",
+        //        datatype: "Json",
+        //        data:{id:$("#CountryID option:selected").val()},
+        //        success: function (data) {
 
-                    $.each(data, function (index, value) {
-                        $('#CityID').append('<option value="' + value.CityID + '">' + value.City + '</option>');
-                    });
 
-                }
-            });
-        });
+        //            $.each(data, function (index, value) {
+        //                $('#CityID').append('<option value="' + value.CityID + '">' + value.City + '</option>');
+        //            });
 
-        $('#autocomplete').autocomplete({
-            serviceUrl: '/autocomplete/countries',
-            onSelect: function (suggestion) {
-                alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-            }
-        });
+        //        }
+        //    });
+        //});
+
+        //$('#autocomplete').autocomplete({
+        //    serviceUrl: '/autocomplete/countries',
+        //    onSelect: function (suggestion) {
+        //        alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+        //    }
+        //});
 
     });
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Location</h1>
+    <h1 class="headingfont">Location Master</h1>
 
 </section>
 
@@ -84,32 +141,45 @@
        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
 
-           <div class="row no-margin"> 
-               
-             <div class="col-md-3">
-                          <label class="headinglabel required">Location</label>
-                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control txttarget" })
-                 </div>
-      
+        <div class="row no-margin">
 
-               <div class="col-md-3">
-                          <label class="headinglabel required">Country</label>
-           @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control" })
-
-          
-                 </div>
-
-        <div class="col-md-3">
-                          <label class="headinglabel required">City</label>
-           @Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID","City"), "Select", new { @class = "form-control" })
-
-          
-                 </div>
-
-     
+            <div class="col-md-3">
+                <label class="headinglabel required">Location</label>
+                @Html.TextBoxFor(model => model.Location, new { @class = "form-control txttarget" })
+                @Html.HiddenFor(model => model.LocationID)
+                @Html.HiddenFor(model => model.PlaceID)
+            </div>
 
 
-         </div>
+            <div class="col-md-3">
+                <label class="headinglabel required">Country</label>
+                @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control txttarget" })
+
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel required">City</label>
+                @Html.TextBoxFor(model => model.CityName, new { @class = "form-control txttarget" })
+
+            </div>
+            <div class="col-md-3">
+                <label class="headinglabel required">Country ID</label>
+                @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control txttarget" })
+                @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })
+
+
+            </div>
+
+
+            <div class="col-md-3">
+                <label class="headinglabel required">City Id</label>
+                @Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID", "City"), "Select", new { @class = "form-control" })
+
+
+            </div>
+
+
+
+        </div>
 
       <div class="row no-margin" style="padding-top:10px">
                         <div class="col-md-12 btn-right">

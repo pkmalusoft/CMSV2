@@ -163,7 +163,12 @@
             $(":password").css({ "border-radius": "5px" });
             $("select").css({ "border-radius": "5px" });
 
-
+        if ($("#Email").val() == '') {
+            $('#Email').removeAttr('readonly');            
+        }
+        else {
+            $('#Email').attr('readonly', 'readonly');
+        }
 
             $(function () {
                 //var date = new Date("2016-09-01");
@@ -371,7 +376,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Email</label>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @required = "true",@readonly="readonly" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.Email)
 
                 </div>

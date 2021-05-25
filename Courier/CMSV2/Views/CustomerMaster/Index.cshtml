@@ -44,9 +44,20 @@
 
 </section>
 <div class="col-md-12">
-<p class="indexbtnpadding pull-right">
-    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
-</p>
+    <div class="col-md-3">
+        <label class="headinglabel">Search Contains</label>
+        <input type="text" id="SearchText" class="form-control" value="@ViewBag.SearchText" />
+        
+    </div>
+    <div class="col-md-1" style="padding-top:32px; ">
+
+       
+        @*<button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>*@
+        <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "CustomerMaster")?SearchText=' + $('#SearchText').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+    </div>
+    <p class="indexbtnpadding pull-right">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+    </p>
 </div>
 <div class="clearfix"></div>
 

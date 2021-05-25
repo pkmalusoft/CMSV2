@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using CMSV2.Models;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace CMSV2.Controllers
 {
@@ -17,6 +18,7 @@ namespace CMSV2.Controllers
 
         public ActionResult Index()
         {
+            //UpdateLocationMaster();
 
             List<LocationVM> lst = new List<LocationVM>();
             var data = db.LocationMasters.ToList();
@@ -130,7 +132,9 @@ namespace CMSV2.Controllers
             a.LocationID = l.LocationID;
             a.Location = l.Location;
             a.CityID = l.CityID;
-
+            a.PlaceID = l.PlaceID;
+            a.CountryName = l.CountryName;
+            a.CityName = l.CityName;
             if (ModelState.IsValid)
             {
                 db.Entry(a).State = EntityState.Modified;
@@ -171,11 +175,61 @@ namespace CMSV2.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
+        public void UpdateLocationMaster()
+        {
+
+            string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
+            //string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
+            string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&language=en&key={1}";
+            //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />
+            //< add key = "GooglePlaceAPIKey" value = "Your API Key" ></ add >
+            string placeApiUrl = GooglePlaceAPIUrl; // ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];
+
+            try
+            {
+                var data1 = db.LocationMasters.ToList();
+                foreach (var item in data1)
+                {
+                    placeApiUrl = placeApiUrl.Replace("{0}", item.LocationName);
+                    placeApiUrl = placeApiUrl.Replace("{1}", GooglePlaceAPIKey);// ConfigurationManager.AppSettings["GooglePlaceAPIKey"]);
+
+                    var result = new System.Net.WebClient().DownloadString(placeApiUrl);
+                    var Jsonobject = JsonConvert.DeserializeObject<RootObject>(result);
+
+                    List<Prediction> list = Jsonobject.predictions;
+                    item.PlaceID = list[0].place_id;
+                    db.Entry(item).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                
+                               
+
+                
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
     }
 }
-
+public class RootObject
+{
+    public List<Prediction> predictions { get; set; }
+    public string status { get; set; }
+}
 public class CityM
 {
     public int CityID { get; set; }
     public String City { get; set; }
+}
+
+public class Prediction
+{
+    public string description { get; set; }
+    public string id { get; set; }
+    public string place_id { get; set; }
+    public string reference { get; set; }
+    public List<string> types { get; set; }
 }

@@ -139,12 +139,37 @@
 </script>
 <script type="text/javascript">
     var objitems = [];
+    function callniceapi() {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "http://www.niceexpress.net/API/v1/getAPI.do?dateTime=20-May-2021",
+            crossDomain: true,
+            dataType: 'jsonp',
+            //data: { Details: JSON.stringify(objitems) },
+            contentType:"application/json;charset=UTF-8",
+            headers: {
+                "niceexpress-apikey": "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121",
+                "niceexpress-signature": "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece"
+            },
+            success: function (response) {
+                debugger;
+                console.log(response);
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
     function UpdateImported() {
         $.ajax({
             type: "POST",
             url: "/ImportManifest/UpdateImportedItem",
             datatype: "Json",
             data: { Details: JSON.stringify(objitems) },
+            contentType:'application/x-www-form-urlencoded',
             success: function (response) {                
                 
             },
@@ -257,7 +282,7 @@
 
         var formData = new FormData();
         formData.append('importFile', files[0]);
-
+        
         if (files.length > 0) {
             $('#btnUpload').attr('disabled', 'disabled');
             $.ajax({
@@ -352,6 +377,7 @@
 
 
     $(document).ready(function () {
+       // callniceapi();
         $('#btnFixation').click(function () {
             $.ajax({
                 type: 'POST',
@@ -819,4 +845,4 @@
 </div>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>

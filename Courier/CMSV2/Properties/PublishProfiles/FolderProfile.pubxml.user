@@ -26,10 +26,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:25</publishTime>
     </File>
     <File Include="bin/CMSV2.dll">
-      <publishTime>05/22/2021 17:49:48</publishTime>
+      <publishTime>05/25/2021 18:52:27</publishTime>
     </File>
     <File Include="bin/CMSV2.pdb">
-      <publishTime>05/22/2021 17:49:48</publishTime>
+      <publishTime>05/25/2021 18:52:27</publishTime>
     </File>
     <File Include="bin/CrystalDecisions.CrystalReports.Engine.dll">
       <publishTime>04/26/2021 17:18:25</publishTime>
@@ -232,8 +232,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/System.IO.Packaging.dll">
       <publishTime>04/26/2021 17:18:26</publishTime>
     </File>
+    <File Include="bin/System.Net.Http.Extensions.dll">
+      <publishTime>07/24/2015 14:15:58</publishTime>
+    </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>04/26/2021 17:18:26</publishTime>
+      <publishTime>07/24/2015 14:15:58</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Primitives.dll">
+      <publishTime>07/24/2015 14:15:58</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>04/26/2021 17:18:26</publishTime>
@@ -3436,6 +3442,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Reports/EmpostFeeReport.rpt">
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
+    <File Include="Reports/MaterialCostLedger.rpt">
+      <publishTime>05/24/2021 19:33:24</publishTime>
+    </File>
     <File Include="Reports/MCPaymentVoucher.rpt">
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
@@ -3445,8 +3454,17 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Reports/Report1.rpt">
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
+    <File Include="Reports/SalesRegisterCountry.rpt">
+      <publishTime>05/24/2021 19:45:40</publishTime>
+    </File>
+    <File Include="Reports/SalesRegisterSummary.rpt">
+      <publishTime>05/24/2021 17:15:45</publishTime>
+    </File>
     <File Include="Reports/SalesReport.cshtml">
       <publishTime>05/20/2021 18:51:19</publishTime>
+    </File>
+    <File Include="Reports/SalesReport.rpt">
+      <publishTime>05/24/2021 12:32:39</publishTime>
     </File>
     <File Include="Reports/SupplierAgingDetail.rpt">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -3572,7 +3590,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
     <File Include="Views/Accounts/Create.cshtml">
-      <publishTime>05/05/2021 14:00:15</publishTime>
+      <publishTime>05/24/2021 10:09:59</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcBook.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -3752,7 +3770,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:04</publishTime>
     </File>
     <File Include="Views/AgentShipment/Create.cshtml">
-      <publishTime>04/26/2021 17:18:04</publishTime>
+      <publishTime>05/24/2021 13:04:13</publishTime>
     </File>
     <File Include="Views/AgentShipment/Delete.cshtml">
       <publishTime>04/26/2021 17:18:04</publishTime>
@@ -3790,8 +3808,11 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/AWB/Create - Copy.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
+    <File Include="Views/AWB/Create - ICCs.cshtml">
+      <publishTime>05/25/2021 11:04:12</publishTime>
+    </File>
     <File Include="Views/AWB/Create.cshtml">
-      <publishTime>05/17/2021 12:43:27</publishTime>
+      <publishTime>05/25/2021 17:11:47</publishTime>
     </File>
     <File Include="Views/AWB/CreateL.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -3806,7 +3827,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
     <File Include="Views/AWB/Index.cshtml">
-      <publishTime>05/22/2021 17:47:41</publishTime>
+      <publishTime>05/25/2021 10:25:38</publishTime>
     </File>
     <File Include="Views/AWB/OtherCharge.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -3833,7 +3854,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/13/2021 16:54:21</publishTime>
     </File>
     <File Include="Views/AWBBatch/Create.cshtml">
-      <publishTime>05/18/2021 18:34:32</publishTime>
+      <publishTime>05/25/2021 11:02:02</publishTime>
     </File>
     <File Include="Views/AWBBatch/Edit.cshtml">
       <publishTime>05/17/2021 12:27:16</publishTime>
@@ -3938,7 +3959,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:04</publishTime>
     </File>
     <File Include="Views/CompanyMaster/Create.cshtml">
-      <publishTime>05/07/2021 16:45:46</publishTime>
+      <publishTime>05/24/2021 12:57:23</publishTime>
     </File>
     <File Include="Views/CompanyMaster/Delete.cshtml">
       <publishTime>04/26/2021 17:18:04</publishTime>
@@ -3947,7 +3968,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:04</publishTime>
     </File>
     <File Include="Views/CompanyMaster/Edit.cshtml">
-      <publishTime>05/07/2021 17:14:25</publishTime>
+      <publishTime>05/24/2021 12:57:20</publishTime>
     </File>
     <File Include="Views/CompanyMaster/Index.cshtml">
       <publishTime>04/26/2021 17:18:04</publishTime>
@@ -4073,13 +4094,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:04</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Edit.cshtml">
-      <publishTime>05/13/2021 16:54:21</publishTime>
+      <publishTime>05/24/2021 12:57:48</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Home.cshtml">
       <publishTime>04/26/2021 17:18:04</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Index.cshtml">
-      <publishTime>04/26/2021 17:18:04</publishTime>
+      <publishTime>05/25/2021 18:35:41</publishTime>
     </File>
     <File Include="Views/CustomerMasterNew/Create.cshtml">
       <publishTime>05/13/2021 16:54:21</publishTime>
@@ -4259,7 +4280,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/13/2021 16:54:22</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Edit.cshtml">
-      <publishTime>05/13/2021 16:54:22</publishTime>
+      <publishTime>05/24/2021 11:42:39</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Home.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4292,10 +4313,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/ExportShipment/Create.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>05/25/2021 14:54:42</publishTime>
     </File>
     <File Include="Views/ExportShipment/CreateExport.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>05/25/2021 14:56:25</publishTime>
     </File>
     <File Include="Views/ExportShipment/Details - Copy.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4337,7 +4358,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/ExportShipment/ViewImport.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>05/24/2021 12:58:22</publishTime>
     </File>
     <File Include="Views/ForwardingAgent/Create.cshtml">
       <publishTime>05/19/2021 19:04:58</publishTime>
@@ -4412,7 +4433,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/ImportManifest/Create.cshtml">
-      <publishTime>05/10/2021 11:57:13</publishTime>
+      <publishTime>05/24/2021 15:29:20</publishTime>
     </File>
     <File Include="Views/ImportManifest/ImportDataFixation.cshtml">
       <publishTime>05/05/2021 14:23:22</publishTime>
@@ -4421,7 +4442,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/03/2021 10:52:33</publishTime>
     </File>
     <File Include="Views/ImportShipment/Create.cshtml">
-      <publishTime>05/05/2021 14:05:30</publishTime>
+      <publishTime>05/24/2021 12:58:52</publishTime>
     </File>
     <File Include="Views/ImportShipment/Delete.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4466,7 +4487,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/LocationMaster/Create.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>05/25/2021 14:40:26</publishTime>
     </File>
     <File Include="Views/LocationMaster/Delete.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4475,7 +4496,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/LocationMaster/Edit.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>05/25/2021 14:41:33</publishTime>
     </File>
     <File Include="Views/LocationMaster/Index.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4751,7 +4772,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
     <File Include="Views/ReExportShipment/CreateExport.cshtml">
-      <publishTime>04/26/2021 17:18:06</publishTime>
+      <publishTime>05/24/2021 12:59:02</publishTime>
     </File>
     <File Include="Views/ReExportShipment/Details.cshtml">
       <publishTime>04/26/2021 17:18:06</publishTime>
@@ -4816,14 +4837,23 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Reports/EmposFeeReport.cshtml">
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
+    <File Include="Views/Reports/MaterialCostLedger.cshtml">
+      <publishTime>05/24/2021 19:35:03</publishTime>
+    </File>
     <File Include="Views/Reports/PrintSearch.cshtml">
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
     <File Include="Views/Reports/ReportFrame.cshtml">
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
+    <File Include="Views/Reports/SalesRegisterCountry.cshtml">
+      <publishTime>05/24/2021 19:35:52</publishTime>
+    </File>
     <File Include="Views/Reports/SalesRegisterSummary.cshtml">
-      <publishTime>05/20/2021 17:45:26</publishTime>
+      <publishTime>05/24/2021 12:36:34</publishTime>
+    </File>
+    <File Include="Views/Reports/SalesReport.cshtml">
+      <publishTime>05/24/2021 11:32:03</publishTime>
     </File>
     <File Include="Views/Reports/SupplierAging.cshtml">
       <publishTime>04/26/2021 17:18:06</publishTime>
@@ -5171,7 +5201,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/22/2021 17:49:49</publishTime>
+      <publishTime>05/25/2021 12:57:03</publishTime>
     </File>
   </ItemGroup>
 </Project>

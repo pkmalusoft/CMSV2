@@ -108,283 +108,323 @@
         font-size: 14px;
     }
 </style>
-<script type="text/javascript">
 
-    var placeSearch, autocomplete, autocompleteCity, autocompleteCountry;
-
-    var consignorlocation, consignorCity, consignorCountry;
-    var autopickuplocation, autodeliverylocation;
-    var componentForm = {
-        street_number: 'short_name',
-        route: 'long_name',
-        locality: 'long_name',
-        administrative_area_level_1: 'short_name',
-        country: 'long_name',
-        postal_code: 'short_name'
-    };
-
-    function initAutocomplete() {
-        // Create the autocomplete object, restricting the search predictions to
-        // geographical location types.
-        autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('ConsigneeLocationName'));
-
-        // Avoid paying for data that you don't need by restricting the set of
-        // place fields that are returned to just the address components.
-        autocomplete.setFields(['address_component']);
-
-        // When the user selects an address from the drop-down, populate the
-        // address fields in the form.
-        autocomplete.addListener('place_changed', fillInAddress);
-
-
-        autocompleteCity = new google.maps.places.Autocomplete(
-            document.getElementById('ConsigneeCityName'));
-
-        autocompleteCountry = new google.maps.places.Autocomplete(
-            document.getElementById('ConsigneeCountryName')); //, { types: ['geocode'] }
-
-
-        consignorlocation = new google.maps.places.Autocomplete(
-            document.getElementById('ConsignorLocationName'));
-
-        consignorCity = new google.maps.places.Autocomplete(
-            document.getElementById('ConsignorCityName'));
-
-
-        consignorCountry = new google.maps.places.Autocomplete(
-            document.getElementById('ConsignorCountryName'));
-
-        consignorlocation.addListener('place_changed', fillInAddress1);
-
-        autopickuplocation = new google.maps.places.Autocomplete(
-            document.getElementById('PickupLocation'));
-
-        autopickuplocation.addListener('place_changed', fillInPickuploadAddress);
-        autodeliverylocation = new google.maps.places.Autocomplete(
-            document.getElementById('DeliveryLocation'));
-
-        autodeliverylocation.addListener('place_changed', fillInDeliveryloadAddress);
-    }
-
-    function fillInAddress() {
-
-        // Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();        
-        var postcode = '';
-        $.each(place.address_components, function (index, component) {
-            var types = component.types;
-            $.each(types, function (index, type) {
-                if (type == 'postal_code') {
-                    postcode = component.long_name;
-                }
-                else if (type == 'locality') {
-                    //$('#hdncity').val(component.long_name);
-                    $('#ConsigneeCityName').val(component.long_name);
-                }
-                else if (type == 'country') {
-                    $('#ConsigneeCountryName').val(component.long_name);
-                }
-
-                if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val())) {
-                 //   $('#MovementTypeID').val(1);
-                    $('#materialcost').removeAttr('Disabled');
-                }
-                else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
-                 //   $('#MovementTypeID').val(2);
-                    $('#materialcost').val(0);
-                    $('#materialcost').attr('Disabled', 'disabled');
-                }
-
-                //if(type == 'administrative_area_level_1') {
-                //state = component.short_name;
-                //    }
-            });
+<script>
+    //Location Autocomplete code
+    $(document).ready(function () {
+        //ConsignorLocationName
+        $("#ConsignorLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#ConsignorLocationName').val(ui.item.label);
+                $('#ConsignorLocationName').attr('PlaceId',ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#ConsignorLocationName').val(ui.item.label);
+                $('#ConsignorLocationName').attr('PlaceId', ui.item.value);
+                return false;
+            }
         });
-
-    }
-    function fillInPickuploadAddress() {
-    
-        // Get the place details from the autocomplete object.
-        var place = autopickuplocation.getPlace();
-
-        $.ajax({
-            type: "GET",
-            url: "/ZoneChart/GetEventVenuesList",
-            datatype: "Json",
-            data: { SearchText: $('#PickupLocation').val() },
-            success: function (response) {
-                $('#PickupLocationPlaceId').val(response[0].place_id);
+        //ConsigneeLocationName
+        $("#ConsigneeLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#ConsigneeLocationName').val(ui.item.label);
+                $('#ConsigneeLocationName').attr('PlaceId',ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#ConsigneeLocationName').val(ui.item.label);
+                $('#ConsigneeLocationName').attr('PlaceId', ui.item.value);
+                return false;
             }
         });
 
-        var postcode = '';
-        $.each(place.address_components, function (index, component) {
-            var types = component.types;            
-            $.each(types, function (index, type) {
-                if (type == 'sublocality' || type == 'sublocality_level_1') {
+        $('#ConsignorLocationName').blur(function () {
 
-                    $('#PickupSubLocality').val(component.long_name);
-                }
-                else if (type == 'locality') {
-                    //$('#hdncity').val(component.long_name);
-                    $('#OriginCity').val(component.long_name);
-                }
-                else if (type == 'country') {
-                    $('#OriginCountry').val(component.long_name);
+            $.ajax({
+                type: "GET",
+                url: "/ZoneChart/GetVenueDetailsByPlace",
+                datatype: "Json",
+                data: { placeId: $('#ConsignorLocationName').attr('PlaceId') },
+                success: function (response) {
+                    debugger;
+                    // console.log(response);
+                    $('#ConsignorCountryName').val(response.Country);
+                    $('#ConsignorCityName').val(response.City);
+                    if ($("#PickupLocation").val() == '') {
+                        $("#PickupLocation").val($('#ConsignorLocationName').val());
+                        $('#PickupLocationPlaceId').val($("#PickupLocation").attr('PlaceId'));
+                        $('#OriginCountry').val(response.Country);
+                        $('#OriginCity').val(response.City);                        
+                        $('#PickupSubLocality').val(response.SubLocality);
+                        getMovementType();
+                    }
+
+                    
                 }
             });
         });
 
-    }
+        $('#ConsigneeLocationName').blur(function () {
 
-    function fillInDeliveryloadAddress() {
-        debugger;
-        // Get the place details from the autocomplete object.
-        var place = autodeliverylocation.getPlace();
-        $.ajax({
-            type: "GET",
-            url: "/ZoneChart/GetEventVenuesList",
-            datatype: "Json",
-            data: { SearchText: $('#DeliveryLocation').val() },
-            success: function (response) {
-                $('#DeliveryLocationPlaceId').val(response[0].place_id);
+            $.ajax({
+                type: "GET",
+                url: "/ZoneChart/GetVenueDetailsByPlace",
+                datatype: "Json",
+                data: { placeId: $('#ConsigneeLocationName').attr('PlaceId') },
+                success: function (response) {
+                    debugger;
+                    // console.log(response);
+                    $('#ConsigneeCountryName').val(response.Country);
+                    $('#ConsigneeCityName').val(response.City);
+                    if ($("#DeliveryLocation").val() == '') {
+                        $("#DeliveryLocation").val($('#ConsigneeLocationName').val());
+                        $('#DeliveryLocationPlaceId').val($('#ConsigneeLocationName').attr('PlaceId'));
+                        $('#DeliveryCountry').val(response.Country);
+                        $('#DeliveryCity').val(response.City);
+                        $('#DeliverySubLocality').val(response.SubLocality);
+                        getMovementType();
+                    }
+
+                }
+            });
+        });
+        $("#PickupLocation").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#PickupLocation').val(ui.item.label);
+                $('#PickupLocationPlaceId').val(ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#PickupLocation').val(ui.item.label);
+                $('#PickupLocationPlaceId').val(ui.item.value);
+                return false;
             }
         });
-        var postcode = '';
-        $.each(place.address_components, function (index, component) {
-            var types = component.types;
-            $.each(types, function (index, type) {
-                if (type == 'postal_code') {
-                    postcode = component.long_name;
-                }
-                else if (type == 'sublocality' || type == 'sublocality_level_1') {
-                  
-                    $('#DeliverySubLocality').val(component.long_name);
-                }
-                else if (type == 'locality') {
-                    //$('#hdncity').val(component.long_name);
-                    $('#DeliveryCity').val(component.long_name);
-                }
-                else if (type == 'country') {
-                    $('#DeliveryCountry').val(component.long_name);
-                }
-
-            });
+            $("#DeliveryLocation").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#DeliveryLocation').val(ui.item.label);
+                $('#DeliveryLocationPlaceId').val(ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#DeliveryLocation').val(ui.item.label);
+                $('#DeliveryLocationPlaceId').val(ui.item.value);
+                return false;
+            }
         });
+        ///.autocomplete("widget").addClass("CitiesAutocomplete");
 
-    }
-    // Bias the autocomplete object to the user's geographical location,
-    // as supplied by the browser's 'navigator.geolocation' object.
-    function geolocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                autocomplete.setBounds(circle.getBounds());
+
+
+            $('#DeliveryLocation').change(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#DeliveryLocationPlaceId').val() },
+                    success: function (response) {
+                        debugger;
+                        // console.log(response);
+                        $('#DeliveryCountry').val(response.Country);
+                        $('#DeliveryCity').val(response.City);
+                        $('#DeliverySubLocality').val(response.SubLocality);
+                        if ($('#PaymentTypeId').val() == 5) //prepaid
+                        {
+                            if ($('#DeliveryCountry').val() != '' && $('#DeliveryCountry').val() != $('#DeliveryCountry').attr('awbcountry')) {
+                                $.notify('Delivery coutry not matched with awb paid Country!');
+                                $('#DeliveryLocation').val('');
+                                $('#DeliveryLocation').focus();
+                            }
+                        }
+                        else {
+                            getMovementType();
+                            getCourierCharge();
+                        }
+                    }
+                });
+
+
+
             });
-        }
-    }
+            $('#PickupLocation').change(function () {
 
-    function geoCitylocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                autocompleteCity.setBounds(circle.getBounds());
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#PickupLocationPlaceId').val() },
+                    success: function (response) {
+                        debugger;
+                        // console.log(response);
+                        $('#OriginCountry').val(response.Country);
+                        $('#OriginCity').val(response.City);
+                        $('#PickupSubLocality').val(response.SubLocality);
+                        if ($('#PaymentModeId').val() == 5) //prepaid
+                        {
+                            if ($('#OriginCountry').val() != '' && $('#OriginCountry').val() != $('#OriginCountry').attr('awbcountry')) {
+                                $.notify('Pickup Country not matched with awb pickup Country!');
+                                $('#PickupLocation').val('');
+                                $('#PickupLocation').focus();
+                            }
+                        }
+                        else {
+                            getMovementType();
+                            getCourierCharge();
+                        }
+                    }
+                });
+
+
+
             });
-        }
-    }
 
-    function geoCountrylocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                autocompleteCountry.setBounds(circle.getBounds());
-            });
-        }
-    }
-
-
-    function fillInAddress1() {
-
-        // Get the place details from the autocomplete object.
-        var place = consignorlocation.getPlace();
-        var postcode = '';
-        $.each(place.address_components, function (index, component) {
-            var types = component.types;
-            $.each(types, function (index, type) {
-                if (type == 'postal_code') {
-                    postcode = component.long_name;
-                }
-                else if (type == 'locality') {
-
-                    $('#ConsignorCityName').val(component.long_name);
-                }
-                else if (type == 'country') {
-                    $('#ConsignorCountryName').val(component.long_name);
-                }
-            });
-        });
-
-    }
-
-    function geolocate1() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                consignorlocation.setBounds(circle.getBounds());
-            });
-        }
-    }
-
-    function geoCitylocate1() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                consignorCity.setBounds(circle.getBounds());
-            });
-        }
-    }
-
-    function geoCountrylocate1() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle(
-                    { center: geolocation, radius: position.coords.accuracy });
-                consignorCountry.setBounds(circle.getBounds());
-            });
-        }
-    }
+    })
 </script>
 <script type="text/javascript">
+    function LoadCustomerDetail() {
+        if ($('#CustomerID').val() > 0) {
+            $.ajax({
+                type: "POST",
+                url: "/PickUpRequest/GetCustomerData",
+                datatype: "Json",
+                data: { id: $('#CustomerID').val() },
+                success: function (data) {
+                    $("#custcode").val(data.CustCode);
+                    $("#Consignor").val(data.CustName);
+                    $("#ConsignorContact").val(data.ContactPerson);
+                    $("#ConsignorAddress1_Building").val(data.Address1);
+                    $("#ConsignorAddress2_Street").val(data.Address2);
+                    $("#ConsignorAddress3_PinCode").val(data.Address3);
+
+                    $("#ConsignorPhone").val(data.Phone);
+                    $("#ConsignorCountryName").val(data.CountryName);
+                    $("#ConsignorCityName").val(data.CityName);
+                    $("#ConsignorLocationName").val(data.LocationName);
+                    $("#OfficeTimeFrom").val(data.OfficeOpenTime);
+                    $("#OfficeTimeTo").val(data.OfficeCloseTime);
+                    $("#hdnCustomerType").val(data.CustomerType);
+
+                }
+            });
+        }
+    }
     function CalculateTax() {
         debugger;
         var tax = $('#ChkTaxPercent').prop('checked');
@@ -404,62 +444,27 @@
             $('#totalCharge').val(parseFloat(net).toFixed(2));
         }
         else {
-            //$('#lblTaxPercent').addClass('hide');
+            var taxpercent = 0;
+            if ($('#CourierCharge').val() == '' || $('#CourierCharge').val() == null)
+                $('#CourierCharge').val(0);
+            if ($('#OtherCharge').val() == '' || $('#OtherCharge').val() == null)
+                $('#OtherCharge').val(0);
+
+            var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
+
+            var taxval = 0;
+            $('#TaxAmount').val(parseFloat(taxval).toFixed(2));
+            var net = parseFloat(charge) + parseFloat(taxval)
+            $('#totalCharge').val(parseFloat(net).toFixed(2));
         }
 
 
     }
     //customer and shipper autocomplete
     $(document).ready(function () {
-        function LoadCustomerDetail() {
-            if ($('#CustomerID').val() > 0) {
-                $.ajax({
-                    type: "POST",
-                    url: "/PickUpRequest/GetCustomerData",
-                    datatype: "Json",
-                    data: { id: $('#CustomerID').val() },
-                    success: function (data) {
-                        $("#custcode").val(data.CustCode);
-                        $("#Consignor").val(data.CustName);
-                        $("#ConsignorContact").val(data.ContactPerson);
-                        $("#ConsignorAddress1_Building").val(data.Address1);
-                        $("#ConsignorAddress2_Street").val(data.Address2);
-                        $("#ConsignorAddress3_PinCode").val(data.Address3);
-
-                        $("#ConsignorPhone").val(data.Phone);
-                        $("#ConsignorCountryName").val(data.CountryName);
-                        $("#ConsignorCityName").val(data.CityName);
-                        $("#ConsignorLocationName").val(data.LocationName);
-                        $("#OfficeTimeFrom").val(data.OfficeOpenTime);
-                        $("#OfficeTimeTo").val(data.OfficeCloseTime);
-                        $("#hdnCustomerType").val(data.CustomerType);
-
-                    }
-                });
-            }
-        }
-        function fillcustomerdetail(modeid) {
-            $.ajax({
-                type: "GET",
-                url: "/AWB/GetWalkInCustomer",
-                datatype: "Json",
-                data: { id: modeid },
-                success: function (data) {
-                    debugger;
-                    if (data.CustomerID == 0) {
-                        alert('Predefined Customer Not Found!');
-                        $("#CustomerID").val(0);
-                        $('#customer').val('');
-                    }
-                    else {
-                        $("#CustomerID").val(data.CustomerID);
-                        $('#customer').val(data.CustomerName);
-                    }
-
-                }
-            });
-        }
+        //paymenttype change
         $('#PaymentModeId').change(function () {
+            debugger;
             var modeid = $('#PaymentModeId').val();
             if (modeid == 1) { //PKP
                 $('#divcustomer').addClass('hide');
@@ -474,120 +479,40 @@
                 $('#AcHeadName').removeAttr('required');
             }
 
-            if (modeid == 1 || modeid == 2) { //PKP
+            if (modeid == 1 || modeid == 2 || modeid == 4) { //PKP COD FOC
                 $("#customer").attr("readonly", "readonly");
                 $("#CustomerandShipperSame").attr("disabled", "disabled");
-                fillcustomerdetail(modeid);
+                if (modeid == 1) { //cash
+                    $('#customer').val($('#CASHCustomerName').val());
+                    $('#CustomerID').val($('#CASHCustomerId').val());
+                    $('#AcHeadName').focus();
+                }
+                else if (modeid == 2) 
+                { //cod
+                    $('#customer').val($('#CODCustomerName').val());
+                    $('#CustomerID').val($('#CODCustomerID').val());
+                    $('#shippername').focus();
+                }
+                else if (modeid == 4) { //FOC
+                    $('#customer').val($('#FOCCustomerName').val());
+                    $('#CustomerID').val($('#FOCCustomerID').val());
+                    $('#shippername').focus();
+                }
+                
+               // fillcustomerdetail(modeid);
 
             }
             else {
-                $('#customer').val('');
-                $('#CustomerID').val(0);
+                if ($('#CustomerID').val() == $('#CASHCustomerId').val() || $('#CustomerID').val() == $('#CODCustomerID').val())
+                {
+                    $('#customer').val('');
+                    $('#CustomerID').val(0);
+                }
                 $("#customer").removeAttr("readonly");
                 $("#CustomerandShipperSame").removeAttr("disabled", "disabled");
+                $("#customer").focus();
             }
-            if (modeid == 1 || modeid == 3) {
-                $("#Consignee").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '/AWB/GetReceiverName',
-                            datatype: "json",
-                            data: {
-                                term: request.term
-                            },
-                            success: function (data) {
-                                response($.map(data, function (val, item) {
-                                    return {
-                                        label: val.Name,
-                                        value: val.Name,
-                                        ContactPerson: val.ContactPerson,
-                                        Address1: val.Address1,
-                                        Address2: val.Address2,
-                                        Pincode: val.PinCode,
-                                        Phone: val.Phone,
-                                        CountryName: val.CountryName,
-                                        CityName: val.CityName,
-                                        LocationName: val.LocationName,
-
-                                    }
-                                }))
-                            }
-                        })
-                    },
-                    minLength: 1,
-                    autoFocus: false,
-                    focus: function (event, ui) {
-                        $('#Consignee').val(ui.item.value);
-                    },
-                    select: function (e, i) {
-                        e.preventDefault();
-                        $("#Consignee").val(i.item.label);
-                        $("#ConsigneeContact").val(i.item.ContactPerson);
-                        $("#ConsigneeAddress1_Building").val(i.item.Address1);
-                        $("#ConsigneeAddress2_Street").val(i.item.Address2);
-                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-
-                        $("#ConsigneePhone").val(i.item.Phone);
-                        $("#ConsigneeCountryName").val(i.item.CountryName);
-                        $("#ConsigneeCityName").val(i.item.CityName);
-                        $("#ConsigneeLocationName").val(i.item.LocationName);
-
-                    },
-
-                });
-            }
-            else { //code
-
-                $("#Consignee").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '/AWB/GetReceiverName', //'/AWB/GetConsigneeName',
-                            datatype: "json",
-                            data: {
-                                term: request.term
-                            },
-                            success: function (data) {
-                                response($.map(data, function (val, item) {
-                                    return {
-                                        label: val.Name,
-                                        value: val.Name,
-                                        ContactPerson: val.ContactPerson,
-                                        Address1: val.Address1,
-                                        Address2: val.Address2,
-                                        Pincode: val.PinCode,
-                                        Phone: val.Phone,
-                                        CountryName: val.CountryName,
-                                        CityName: val.CityName,
-                                        LocationName: val.LocationName,
-
-                                    }
-                                }))
-                            }
-                        })
-                    },
-                    minLength: 1,
-                    autoFocus: false,
-                    focus: function (event, ui) {
-                        $('#Consignee').val(ui.item.value);
-                    },
-                    select: function (e, i) {
-                        e.preventDefault();
-                        $("#Consignee").val(i.item.label);
-                        $("#ConsigneeContact").val(i.item.ContactPerson);
-                        $("#ConsigneeAddress1_Building").val(i.item.Address1);
-                        $("#ConsigneeAddress2_Street").val(i.item.Address2);
-
-                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-                        $("#ConsigneePhone").val(i.item.Phone);
-                        $("#ConsigneeCountryName").val(i.item.CountryName);
-                        $("#ConsigneeCityName").val(i.item.CityName);
-                        $("#ConsigneeLocationName").val(i.item.LocationName);
-
-                    },
-
-                });
-
-            }
+           
             //if ($('#CustomerID').val() == 0 && modeid != 1) {
             //    alert("For New Cash Customer....Selected Payment Type is not allowed");
             //    $('#PaymentModeId').val(1).trigger('change');
@@ -602,7 +527,6 @@
             //}
 
         });
-
 
         $("#customer").autocomplete({
             source: function (request, response) {
@@ -637,7 +561,13 @@
             },
 
         });
-
+        $('#customer').change(function () {
+            if ($("#CustomerandShipperSame").is(':checked')) {
+                $("#shippername").val($('#customer').val());
+                $("#shippername").attr('readonly', 'readonly');
+                LoadCustomerDetail();
+            }
+        })
         //checkbox check to load credit customer address for shipper
         $("#CustomerandShipperSame").click(function () {
             if ($("#CustomerandShipperSame").is(':checked')) {
@@ -667,7 +597,7 @@
         $("#shippername").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/AWB/GetShipperName',
+                    url: '/AWBBatch/GetShipperName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -714,6 +644,57 @@
             },
 
         });
+        $("#Consignee").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWBBatch/GetReceiverName', //'/AWB/GetConsigneeName',
+                    datatype: "json",
+                    data: {
+                        term: request.term, Shipper: $('#shippername').val(),ShowAll:$('#ShowAllConsignee').prop('checked')
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Name,
+                                value: val.Name,
+                                ContactPerson: val.ContactPerson,
+                                Address1: val.Address1,
+                                Address2: val.Address2,
+                                Pincode: val.PinCode,
+                                Phone: val.Phone,
+                                CountryName: val.CountryName,
+                                CityName: val.CityName,
+                                LocationName: val.LocationName,
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#Consignee').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#Consignee").val(i.item.label);
+                $("#ConsigneeContact").val(i.item.ContactPerson);
+                $("#ConsigneeAddress1_Building").val(i.item.Address1);
+                $("#ConsigneeAddress2_Street").val(i.item.Address2);
+
+                $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
+                $("#ConsigneePhone").val(i.item.Phone);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeLocationName").val(i.item.LocationName);
+
+            },
+
+        });
+
+
+
         var accounturl = '/Accounts/GetHeadsForCash';
 
         $("#AcHeadName").autocomplete({
@@ -758,8 +739,8 @@
     function noaction() {
         alert("Page under development!");
     }
-    var consigneenames = [];
-    var customernames = [];
+    
+    
      function setTwoNumberDecimal(obj) {
 
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
@@ -826,6 +807,8 @@
         });
 
     }
+
+    //not in use
      function GetConsigneeDetail() {
 
          $.ajax({
@@ -975,7 +958,23 @@
                 }
             });
     }
+    function getMovementType() {
+        debugger;
+        if ($('#OriginCountry').val() != $('#BranchCountry').val() && $('#DeliveryCountry').val() != $('#BranchCountry').val()) {
+            $('#MovementTypeID').val(4).trigger('change');//Transhipment
+        }
+        else if ($('#OriginCountry').val() != $('#BranchCountry').val()) {
+            $('#MovementTypeID').val(3).trigger('change'); //import
+        }
+        else if ($('#DeliveryCountry').val() != $('#BranchCountry').val()) {
+            $('#MovementTypeID').val(2).trigger('change');//Export
+        }
+        else if ($('#DeliveryCountry').val() == $('#BranchCountry').val()) {
+            $('#MovementTypeID').val(1).trigger('change'); //Domestic
+        }
 
+
+    }
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
@@ -1088,33 +1087,33 @@
 
         });
 
-        $('#ConsigneeCityName').change(function () {
-            if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val()))
-                 {
-                $('#MovementTypeID').val(1);
-                $('#materialcost').removeAttr('Disabled');
-                }
-                else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
-                $('#MovementTypeID').val(2);
-                $('#materialcost').val(0);
-                $('#materialcost').attr('Disabled', 'disabled');
-            }
+        //$('#ConsigneeCityName').change(function () {
+        //    if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val()))
+        //         {
+        //        $('#MovementTypeID').val(1);
+        //        $('#materialcost').removeAttr('Disabled');
+        //        }
+        //        else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
+        //        $('#MovementTypeID').val(2);
+        //        $('#materialcost').val(0);
+        //        $('#materialcost').attr('Disabled', 'disabled');
+        //    }
 
-        });
+        //});
 
-         $('#ConsigneeCountryName').change(function () {
-            if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val()))
-                 {
-                $('#MovementTypeID').val(1);
-                $('#materialcost').removeAttr('Disabled');
-                }
-                else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
-                $('#MovementTypeID').val(2);
-                $('#materialcost').val(0);
-                $('#materialcost').attr('Disabled', 'disabled');
-             }
+        // $('#ConsigneeCountryName').change(function () {
+        //    if ($('#ConsigneeCityName').val() == $('#ConsignorCityName').val() || ($('#ConsigneeCountryName').val() == $('#ConsignorCountryName').val()))
+        //         {
+        //        $('#MovementTypeID').val(1);
+        //        $('#materialcost').removeAttr('Disabled');
+        //        }
+        //        else if ($('#ConsigneeCountryName').val() != $('#ConsignorCountryName').val()) {
+        //        $('#MovementTypeID').val(2);
+        //        $('#materialcost').val(0);
+        //        $('#materialcost').attr('Disabled', 'disabled');
+        //     }
 
-         });
+        // });
 
         $('#ChangeStatusTypeId').change(function () {
             debugger;
@@ -1204,6 +1203,7 @@
             $('#h2awb').html('<strong>' + $('#HAWBNo').val() + '</strong>');
         });
         $('#HAWBNo').change(function () {
+            
             $.ajax({
                 type: "POST",
                 url: "/AWB/GetAWB",
@@ -1238,7 +1238,7 @@
                             $('#customer').attr('AWBCustomerId', 0);
                             $('#customer').attr('AWBCustomer', '');
                             $('#shippername').val('');
-                            $('#shippername').attr('readonly', 'readonly');
+                            $('#shippername').removeAttr('readonly');//, 'readonly');
                             $('#CustomerID').val(CustomerId);
                             $("#ConsignorContact").val(ContactPerson);
                             $("#ConsignorAddress1_Building").val('');
@@ -1565,6 +1565,12 @@
                 $("#CourierCharge").attr('readonly', 'readonly');
                 $("#OtherCharge").attr('readonly', 'readonly');
             }
+            if ($('#TaxAmount').val() != 0) {
+                $('#ChkTaxPercent').prop('checked', 'true');
+            }
+            else {
+                $('#ChkTaxPercent').prop('checked', 'false');
+            }
             //  setTwoNumberDecimal($("#CourierCharge")); //.val('0.00');
             //setTwoNumberDecimal($("#PackingCharge")); //.val('0.00');
             //setTwoNumberDecimal($("#OtherCharge")); //.val('0.00');
@@ -1573,6 +1579,8 @@
             //setTwoNumberDecimal($("#materialcost")); //.val('0.00');
         }
         else {
+            $('#CustomerandShipperSame').prop('checked', 'checked');
+            $('#ChkTaxPercent').prop('checked', 'checked');
               $('#TransactionDate').val(reqdate);
          $("#CourierCharge").val('0.00');
         $("#PackingCharge").val('0.00');
@@ -1605,48 +1613,79 @@
         var CityName = $('#DeliveryCity').val(); //$("#ConsigneeCityName").val();
         var OriginCountry = $('#OriginCountry').val(); //Delhi, India $("#ConsigneeCountryName").val();
         var OriginCity = $('#OriginCity').val(); //$("#ConsigneeCityName").val();
+        var checkstatus = true;
+        if (PaymentModeId == 5 || PaymentModeId == '5' && PaymentModeId == null) {
+            checkstatus = false;
+            $('#CustomerRateType').attr('placeholder', 'No RateType');
+            return;
+        }
+        if (PaymentModeId == 5 || PaymentModeId == '5' && PaymentModeId == null) {
+            checkstatus = false;
+            return;
+        }
+        else if (CustomerId == null || CustomerId == '' || CustomerId == null) {
+            checkstatus = false;
+            return;
+        }
+        else if (MovementId == null || MovementId == '') {
+            checkstatus = false;
+            return;
+        }
+        else if (ProductTypeID == null || ProductTypeID == '' || ProductTypeID == 0) {
+            checkstatus = false;
+            return;
+        }
+        else if (MovementId != 3 && (CountryName == null || CountryName == '' || CityName == '' || CityName == null)) {
+            checkstatus = false;
+            return;
+        }
+        else if (MovementId == 3 && (OriginCountry == null || OriginCountry == '' || OriginCity == '' || OriginCity == null)) {
+            checkstatus = false;
+            return;
+        }
 
-        $.ajax({
-            url: '/AWBBatch/GetCustomerRateType',
-            datatype: "json",
-            data: {
-                term: '', CustomerId: $('#CustomerID').val(), MovementId: $('#MovementTypeID').val(), ProductTypeID: $('#ProductTypeID').val(), PaymentModeId: $('#PaymentModeId').val(), FAgentID: $('#FagentID').val(), CityName: $('#DeliveryCity').val(), CountryName: $('#DeliveryCountry').val(), OriginCountry: OriginCountry, OriginCity: OriginCity
-            },
-            success: function (data) {
-                console.log(data);
-                var status = '';
-                if (data.length > 0) {
-                    for (var i = 0; i < data.length; i++) {
-                        debugger;
-                        if ($('#CustomerRateTypeID').val() == 0) {
-                            $('#CustomerRateType').val(data[i].CustomerRateType1);
-                            $('#CustomerRateTypeID').val(data[i].CustomerRateTypeID);
-                            GetcourierChargenew();
-                            status = "ok";
-                        }
-                        else if (data[i].CustomerRateTypeID == $('#CustomerRateTypeID').val()) {
-                            GetcourierChargenew();
-                            status = "ok";
-                        }
-
-                        if ((i + 1) == data.length) {
-                            if (status == '') {
-                                $('#CustomerRateType').val(data[0].CustomerRateType1);
-                                $('#CustomerRateTypeID').val(data[0].CustomerRateTypeID);
+        if (checkstatus) {
+            $.ajax({
+                url: '/AWBBatch/GetCustomerRateType',
+                datatype: "json",
+                data: {
+                    term: '', CustomerId: $('#CustomerID').val(), MovementId: $('#MovementTypeID').val(), ProductTypeID: $('#ProductTypeID').val(), PaymentModeId: $('#PaymentModeId').val(), FAgentID: $('#FagentID').val(), CityName: $('#DeliveryCity').val(), CountryName: $('#DeliveryCountry').val(), OriginCountry: OriginCountry, OriginCity: OriginCity
+                },
+                success: function (data) {
+                    console.log(data);
+                    var status = '';
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            debugger;
+                            if ($('#CustomerRateTypeID').val() == 0) {
+                                $('#CustomerRateType').val(data[i].CustomerRateType1);
+                                $('#CustomerRateTypeID').val(data[i].CustomerRateTypeID);
                                 GetcourierChargenew();
                                 status = "ok";
                             }
+                            else if (data[i].CustomerRateTypeID == $('#CustomerRateTypeID').val()) {
+                                GetcourierChargenew();
+                                status = "ok";
+                            }
+
+                            if ((i + 1) == data.length) {
+                                if (status == '') {
+                                    $('#CustomerRateType').val(data[0].CustomerRateType1);
+                                    $('#CustomerRateTypeID').val(data[0].CustomerRateTypeID);
+                                    GetcourierChargenew();
+                                    status = "ok";
+                                }
+                            }
                         }
                     }
+                    else {
+                        $('#CustomerRateTypeID').val(0);
+                        $('#CustomerRateType').val("");
+                        $('#CourierCharge').val(0);
+                    }
                 }
-                else {
-                    $('#CustomerRateTypeID').val(0);
-                    $('#CustomerRateType').val("");
-                    $('#CourierCharge').val(0);
-                }
-            }
-        })
-
+            })
+        }
     }
     function GetcourierChargenew() {
         var CustomerRateTypeID = $('#CustomerRateTypeID').val();
@@ -1684,16 +1723,16 @@
         });
     }
     $(document).ready(function () {
-        $('#CustomerRateType').change(function () {
-            if ($('#CustomerRateType').val() == '') {
-                $('#CustomerRateTypeID').val(0);
-            }
-            else if ($('#CustomerRateType').val() != $('#CustomerRateTypeID').attr('label')) {
-                $('#CustomerRateType').val('');
-                $('#CustomerRateTypeID').val(0);
-            }
-            getCourierCharge();
-        });
+        //$('#CustomerRateType').change(function () {
+        //    if ($('#CustomerRateType').val() == '') {
+        //        $('#CustomerRateTypeID').val(0);
+        //    }
+        //    else if ($('#CustomerRateType').val() != $('#CustomerRateTypeID').attr('label')) {
+        //        $('#CustomerRateType').val('');
+        //        $('#CustomerRateTypeID').val(0);
+        //    }
+        //    getCourierCharge();
+        //});
         $("#FAgentName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -1772,7 +1811,7 @@
             }
         });
 
-
+        //Courier charge call
         $('#CustomerName').change(function () {
             getCourierCharge();
         });
@@ -1798,6 +1837,9 @@
             getCourierCharge();
 
         });
+        $('#MovementTypeID').change(function () {
+            getCourierCharge();
+        });
         $('#PickupLocation').change(function () {
             if ($('#OriginCountry').val() != $('#BranchCountry').val()) {
                 $('#MovementTypeID').val(3).trigger('change');
@@ -1806,9 +1848,7 @@
                 getCourierCharge();
             }
         });
-        $('#MovementTypeID').change(function () {
-            getCourierCharge();
-        });
+       
 
         
     });
@@ -1893,6 +1933,15 @@
                 @Html.HiddenFor(model => model.UserID)
                 @Html.HiddenFor(model => model.CourierStatusId)
                 @Html.HiddenFor(model => model.StatusTypeId)
+                @Html.HiddenFor(model => model.CustomerID)
+                @Html.HiddenFor(model => model.CASHCustomerId)
+                @Html.HiddenFor(model => model.CODCustomerID)
+                @Html.HiddenFor(model => model.CODCustomerName)
+                @Html.HiddenFor(model => model.CASHCustomerName)
+                @Html.HiddenFor(model => model.FOCCustomerName)
+                @Html.HiddenFor(model => model.FOCCustomerID)
+                @Html.HiddenFor(model => model.DefaultFAgentID)
+                @Html.HiddenFor(model => model.DefaultFAgentName)
                 <input type="hidden" id="txtAWBProcessed" value="" required />
                 <label class="headinglabel required">Airway Bill No.</label>
                 @if (@Model.InScanID == 0)
@@ -1971,22 +2020,22 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="headinglabel required">Contact Person</label>
+                            <label class="headinglabel">Contact Person</label>
                             @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
                             @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
                         </div>
                         <div class="col-md-2">
-                            <label class="headinglabel required">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+                            <label class="headinglabel">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget",  @placeholder = "Flat/Building" })
                         </div>
 
                         <div class="col-md-2">
-                            <label class="headinglabel required">Street</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                            <label class="headinglabel">Street</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget",  @placeholder = "Street" })
                         </div>
                         <div class="col-md-2">
-                            <label class="headinglabel required">Pincode</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+                            <label class="headinglabel">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget",   @placeholder = "PinCode" })
                         </div>
                     </div>
                     <div class="row no-margin" style="padding-top: 10px" id="divcustomer2">
@@ -1995,23 +2044,23 @@
                     <div class="row no-margin" style="padding-top: 10px" id="divcustomer3">
                         <div class="col-md-3">
                             <label class="headinglabel required">Location</label>
-                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
+                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @placeholder = "Location" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Origin City</label>
-                            @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCitylocate1()" })
+                            @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control txttarget", @required = "true", @readonly = "readonly" })
                             @*<input class="form-control" id="ConsignorCityName" name="ConsignorCityName" type="text" readonly />*@
                             @*@Html.DropDownListFor(model => model.origincity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel required">Origin Country</label>
-                            @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @onFocus = "geoCountrylocate1()" })
+                            @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control txttarget", @required = "true", @readonly = "readonly" })
                             @*<input class="form-control" id="ConsignorCountryName" name="ConsignorCountryName" type="text" readonly />*@
                             @*@Html.DropDownListFor(model => model.origincountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
                         </div>
                         <div class="col-md-2">
-                            <label class="headinglabel required">Telephone No.</label>
-                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+                            <label class="headinglabel">Telephone No.</label>
+                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright",   @placeholder = "Telephone" })
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel required">Mobile No.</label>
@@ -2030,18 +2079,24 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="row no-margin" style="padding-top: 10px; ">
-                        <div class="col-md-3">
-                            <label class="headinglabel required">Name</label>
+                        <div class="col-md-3">                            
+                            <div class="flexTitle">
+                                <label class="headinglabel required">Consignee Name</label>
+                                <div class="checkboxdesign no-padding text-right" style="float:right">
+                                    @Html.CheckBox("ShowAllConsignee", new { @name = "ShowAllConsignee" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Show All Consignee</label>
+                                </div>
+                            </div>
                             @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @autocomplete = "off", @type = "search", @required = "true" })
                         </div>
                         <div class="col-md-3">
-                            <label class="headinglabel required">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
+                            <label class="headinglabel">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget"  })
                         </div>
 
                         <div class="col-md-2">
-                            <label class="headinglabel required">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
+                            <label class="headinglabel">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget" })
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel">Street</label>
@@ -2056,26 +2111,26 @@
                     <div class="row no-margin" style="padding-top: 10px">
                         <div class="col-md-3">
                             <label class="headinglabel required">Consingee Location</label>
-                            @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @required = "true" })
+                            @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget autocomplete",   @required = "true" })
                             @*<input class="form-control  " id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
                             @*@Html.TextBoxFor(model => model.destlocation, new { @class = "form-control txttarget" })*@
                         </div>
                         <div class="col-md-2">
                             <label class="headinglabel required">Consignee City</label>
-                            @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control txttarget", @onFocus = "geoCitylocate()", @required = "true" })
+                            @Html.TextBoxFor(model => model.ConsigneeCityName, new { @class = "form-control txttarget",  @required = "true", @readonly = "readonly" })
                             @*<input class="form-control" id="ConsigneeCityName" name="CityName" type="text" onFocus="geoCitylocate()" />*@
                             @*@Html.DropDownListFor(model => model.destinationCity, new SelectList(@ViewBag.City, "CityID", "City"), "Select", new { @class = "form-control" })*@
                         </div>
 
                         <div class="col-md-2">
                             <label class="headinglabel required">Consignee Country</label>
-                            @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @onFocus = "geoCountrylocate()", @required = "true" })
+                            @Html.TextBoxFor(model => model.ConsigneeCountryName, new { @class = "form-control txttarget", @required = "true",@readonly="readonly" })
                             @*<input class="form-control" id="ConsigneeCountryName" name="ConsigneeCountryName" type="text" onFocus="geoCountrylocate()" />*@
                             @*@Html.DropDownListFor(model => model.destinationCountry, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
                         </div>
                         <div class="col-md-2">
-                            <label class="headinglabel required">Telephone No</label>
-                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
+                            <label class="headinglabel">Telephone No</label>
+                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright"})
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Mobile No.</label>
@@ -2728,5 +2783,3 @@
 
 
 </section>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>

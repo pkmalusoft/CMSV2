@@ -194,8 +194,10 @@ namespace CMSV2.Controllers
                 ViewBag.CompanyName = company.AcCompany1;
                 ViewBag.FwdAgentId = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList();// .ForwardingAgentMasters.ToList();
                 var agent = db.AgentMasters.OrderBy(x => x.Name).ToList(); // .ToList new SelectList(db.AgentMasters.OrderBy(x => x.Name), "AgentID", "Name").ToList();
-                ViewBag.AgentList = agent; //  db.ForwardingAgentMasters.ToList();
-            ViewBag.FwdAgentId = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); //. ForwardingAgentMasters.ToList(); // .Where(d => d.IsForwardingAgent == true).ToList();
+            
+            ViewBag.AgentList = agent; //  db.ForwardingAgentMasters.ToList();
+            //ViewBag.FwdAgentId = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); //. ForwardingAgentMasters.ToList(); // .Where(d => d.IsForwardingAgent == true).ToList();
+            ViewBag.FwdAgentId = db.ForwardingAgentMasters.OrderBy(cc=>cc.FAgentName).ToList(); //. ForwardingAgentMasters.ToList(); // .Where(d => d.IsForwardingAgent == true).ToList();
             return View(_ExportShipment);
                         
         }

@@ -1251,6 +1251,41 @@ namespace CMSV2.DAL
 
             //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
         }
+
+        public static void ReSaveCustomerCode()
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_ReSaveCustomerCode";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        public static string GetMaxCustomerCode(string CustomerName)
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetMaxCustomerCode";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerName", CustomerName);
+            cmd.Connection.Open();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string cutomercode = ds.Tables[0].Rows[0][0].ToString();
+
+                return cutomercode;
+            }
+            else
+            {
+                return "";
+            }
+        }
         #endregion
     }
 }

@@ -2952,9 +2952,9 @@ namespace CMSV2.DAL
 
             }
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SalesReport.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SalesReport.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SalesReport.rpt"));
@@ -3034,13 +3034,13 @@ namespace CMSV2.DAL
             comd = new SqlCommand();
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
-            comd.CommandText = "SP_SalesReport";
-            comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
-            comd.Parameters.AddWithValue("@EmployeeId", reportparam.EmployeeID);
+            comd.CommandText = "SP_SalesRegisterSummary";
+            //comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
+            //comd.Parameters.AddWithValue("@EmployeeId", reportparam.EmployeeID);
             comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
-
+            comd.Parameters.AddWithValue("@BranchId", branchid);
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
@@ -3066,12 +3066,12 @@ namespace CMSV2.DAL
 
             }
             //generate XSD to design report            
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SalesReport.xsd"));
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SalesRegisterSummary.xsd"));
             //ds.WriteXmlSchema(writer);
             //writer.Close();
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SalesReport.rpt"));
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SalesRegisterSummary.rpt"));
 
             rd.SetDataSource(ds);
 
@@ -3101,7 +3101,7 @@ namespace CMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "SalesReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportname = "SalesRegisterSummary_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
@@ -3111,14 +3111,14 @@ namespace CMSV2.DAL
             else if (reportparam.Output == "EXCEL")
             {
 
-                reportname = "SalesReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportname = "SalesRegisterSummary_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if (reportparam.Output == "WORD")
             {
-                reportname = "SalesReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportname = "SalesRegisterSummary_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
@@ -3133,6 +3133,289 @@ namespace CMSV2.DAL
             //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+
+        public static string GenerateSalesRegisterCountryReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            SalesRegisterCountryParam reportparam = (SalesRegisterCountryParam)(HttpContext.Current.Session["SalesRegisterCountryParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_SalesRegisterCountry";
+            //comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
+            //comd.Parameters.AddWithValue("@EmployeeId", reportparam.EmployeeID);
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@FYearId", yearid);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "SalesRegisterCountry");
+            
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SalesRegisterCountry.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SalesRegisterCountry.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+           // rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);            
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Sales Register Summary Country Wise");
+            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "SalesRegisterCountry_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "SalesRegisterCountry_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "SalesRegisterCountry_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+
+        public static string GenerateMaterialCostLedgerReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            MaterialCostLedgerParam reportparam = (MaterialCostLedgerParam)(HttpContext.Current.Session["MaterialCostLedgerParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_MaterialCostLedger";            
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            if (reportparam.Shipper == null)
+                reportparam.Shipper = "";
+            if (reportparam.Receiver == null)
+                reportparam.Receiver = "";
+            comd.Parameters.AddWithValue("@Shipper", reportparam.Shipper);
+            comd.Parameters.AddWithValue("@Receiver", reportparam.Receiver);
+            comd.Parameters.AddWithValue("@FYearId", yearid);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "MaterialCostLedger");
+
+           
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "MaterialCostLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "MaterialCostLedger.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
+            //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Material Cost Ledger Report");
+            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "MaterialCostLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "MaterialCostLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "MaterialCostLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+          
+        }
+
+        public static string GenerateCustomerInvoiceRegisterReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            CustomerLedgerReportParam reportparam = (CustomerLedgerReportParam)(HttpContext.Current.Session["CustomerLedgerReportParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand(); 
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_CustomerInvoiceRegister";
+            
+            comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@FYearId", yearid);            
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "CustomerInvoiceRegister");
+
+
+            //generate XSD to design report            
+            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoiceRegister.xsd"));
+            ds.WriteXmlSchema(writer);
+            writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerInvoiceRegister.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
+            //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Material Cost Ledger Report");
+            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "CustomerInvoiceRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "CustomerInvoiceRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "CustomerInvoiceRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+
         }
     }
 }

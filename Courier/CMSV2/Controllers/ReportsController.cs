@@ -989,9 +989,9 @@ namespace CMSV2.Controllers
             Response.ClearContent();
             Response.ClearHeaders();
 
-            AccountsReportsDAO.GenerateSalesReport();
+            AccountsReportsDAO.GenerateSalesRegisterSummaryReport();
 
-            return RedirectToAction("SalesReport", "Reports");
+            return RedirectToAction("SalesRegisterSummary", "Reports");
 
 
         }
@@ -1075,6 +1075,236 @@ namespace CMSV2.Controllers
 
 
         }
+        #endregion
+
+
+        #region "MaterialCostReport"
+        public ActionResult MaterialCostLedger()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            ViewBag.Employee = db.EmployeeMasters.ToList();
+            MaterialCostLedgerParam model = (MaterialCostLedgerParam)Session["MaterialCostLedgerParam"];
+            if (model == null)
+            {
+                model = new MaterialCostLedgerParam  
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,                     
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["MaterialCostLedgerParam"] = model;
+
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Material Cost Ledger Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("MaterialCostLedger"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult MaterialCostLedger(SalesReportParam picker)
+        {
+
+            MaterialCostLedgerParam model = new MaterialCostLedgerParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
+                Output = picker.Output,                
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["SalesReportParam"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateMaterialCostLedgerReport();
+
+            return RedirectToAction("MaterialCostLedger", "Reports");
+
+
+        }
+        #endregion
+
+        #region "CustomerInvoiceRegister"
+        public ActionResult CustomerInvoiceRegister()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = (CustomerLedgerReportParam)Session["CustomInvoiceRegisterParam"];
+
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Invoice Register";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerInvoiceRegister"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerInvoiceRegister(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            Session["CustomInvoiceRegisterParam"] = model;
+            
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+
+            return RedirectToAction("CustomerInvoiceRegister", "Reports");
+
+
+        }
+        #endregion
+
+
+        #region "SalesRegisterCountry"
+        public ActionResult SalesRegisterCountry()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            ViewBag.Employee = db.EmployeeMasters.ToList();
+            SalesRegisterCountryParam model = (SalesRegisterCountryParam)Session["SalesRegisterCountryParam"];
+            if (model == null)
+            {
+                model = new SalesRegisterCountryParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,               
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["SalesRegisterCountryParam"] = model;
+
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Sales Register Country Wise";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SalesRegisterCountry"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SalesRegisterCountry(SalesRegisterCountryParam picker)
+        {
+
+            SalesRegisterCountryParam model = new SalesRegisterCountryParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,                
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["SalesRegisterCountryParam"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateSalesRegisterCountryReport();
+
+            return RedirectToAction("SalesRegisterCountry", "Reports");
+
+
+        }
+
+
+
         #endregion
     }
 }

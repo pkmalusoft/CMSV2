@@ -685,7 +685,7 @@ input::-webkit-inner-spin-button {
                                             Forward Agent
                                         </div>
                                         <div class="col-xs-7 col-sm-9">
-                                            @Html.DropDownList("FwdAgentId", new SelectList(@ViewBag.FwdAgentId, "AgentID", "Name"), "Select", new { @class = "form-control", @required = "true", @id="txtFwdAgent" })
+                                            @Html.DropDownList("FwdAgentId", new SelectList(@ViewBag.FwdAgentId, "FAgentID", "FAgentName"), "Select", new { @class = "form-control", @required = "true", @id="txtFwdAgent" })
                                         </div>
                                     </div>
                                     <div class="row" id="divassigned" style="margin-top:10px">
@@ -1304,4 +1304,4 @@ input::-webkit-inner-spin-button {
             });
         }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>

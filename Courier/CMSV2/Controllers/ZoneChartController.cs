@@ -20,6 +20,7 @@ namespace CMSV2.Controllers
 
         public ActionResult Index()
         {
+            GetEventVenuesList("dubai");
 
             List<ZoneChartVM> lst = (from c in db.ZoneCharts join t in db.ZoneCategories on c.ZoneCategoryID equals t.ZoneCategoryID join t1 in db.ZoneMasters on c.ZoneID equals t1.ZoneID select new ZoneChartVM { ZoneChartID = c.ZoneChartID, ZoneCategory = t.ZoneCategory1, ZoneName = t1.ZoneName }).ToList();
 
@@ -398,6 +399,7 @@ namespace CMSV2.Controllers
             public string State { get; set; }
          
             public string City { get; set; }
+            public string SubLocality { get; set; }
             public float Latitude { get; set; }
             public float Longitude { get; set; }
             public List<Country> Countries { get; set; }
@@ -473,7 +475,7 @@ namespace CMSV2.Controllers
                 var xmlElm = XElement.Parse(result);
                 ven = GetAllVenueDetails(xmlElm);
 
-                return Json(ven, JsonRequestBehavior.AllowGet);
+               return Json(ven, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -525,6 +527,10 @@ namespace CMSV2.Controllers
                     if (type.ToLower().Trim() == "locality") //if type is locality the get the locality  
                     {
                         ven.City = element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
+                    }
+                    else if (type.ToLower().Trim()== "sublocality_level_1")
+                    {
+                        ven.SubLocality= element.Elements().Where(e => e.Name.LocalName == "long_name").Single().Value;
                     }
                     else
                     {

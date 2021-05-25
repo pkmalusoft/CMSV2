@@ -363,10 +363,12 @@ namespace CMSV2.Controllers
                 Session["ConsignorMaster"] = shipperlist;
             }
             if (term.Trim() != "")
-            {            
-                
-                
-                    shipperlist = shipperlist.Where(cc => cc.ShipperName.ToLower().Contains(term.Trim().ToLower())).Take(100).ToList();
+            {
+                shipperlist = shipperlist.Where(cc => cc.ShipperName.ToLower().Contains(term.Trim().ToLower())).ToList();
+                if (shipperlist.Count > 100)
+                {
+                    shipperlist = shipperlist.Take(100).ToList();
+                }
 
                 //var shipperlist = (from c1 in db.InScanMasters
                 //                   where c1.IsDeleted == false && c1.Consignor.ToLower().StartsWith(term.ToLower())
@@ -391,40 +393,83 @@ namespace CMSV2.Controllers
                 //                   where c1.IsDeleted == false
                 //                   orderby c1.Consignor ascending
                 //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
-                shipperlist = shipperlist.Take(100).ToList();
+                
+                if (shipperlist.Count > 100)
+                {
+                    shipperlist = shipperlist.Take(100).ToList();
+                }
+                else
+                {
+                    //shipperlist = shipperlist.Take(100).ToList();
+                }
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
 
             }
         }
 
         [HttpGet]
-        public JsonResult GetReceiverName(string term, string Shipper)
+        public JsonResult GetReceiverName(string term, string Shipper="",bool ShowAll=false)
         {
             if (term.Trim() != "")
             {
-                var shipperlist = (from c1 in db.ConsigneeMasters
-                                   where c1.ConsigneeName.ToLower().StartsWith(term.ToLower())
-                                   && c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
-                                   orderby c1.ConsigneeName ascending
-                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
+                if (ShowAll == false)
+                {
+                    var shipperlist = (from c1 in db.ConsigneeMasters
+                                       where c1.ConsigneeName.ToLower().StartsWith(term.ToLower())
+                                       && c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
+                                       orderby c1.ConsigneeName ascending
+                                       select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
 
-                //var shipperlist = (from c1 in db.InScanMasters
-                //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
-                //                   && c1.Consignor.ToLower().StartsWith(Shipper.ToLower())
-                //                   orderby c1.Consignee ascending
-                //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo, ConsigneeMobileNo = c1.ConsigneeMobileNo }).Distinct();
-
-                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                    //var shipperlist = (from c1 in db.InScanMasters
+                    //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
+                    //                   && c1.Consignor.ToLower().StartsWith(Shipper.ToLower())
+                    //                   orderby c1.Consignee ascending
+                    //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo, ConsigneeMobileNo = c1.ConsigneeMobileNo }).Distinct();
+                    if (shipperlist.Count() > 100)
+                    {
+                        shipperlist = shipperlist.Take(100);
+                    }
+                    return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var shipperlist = (from c1 in db.ConsigneeMasters
+                                       where c1.ConsigneeName.ToLower().StartsWith(term.ToLower())                                       
+                                       orderby c1.ConsigneeName ascending
+                                       select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
+                    if (shipperlist.Count() >100)
+                    {
+                        shipperlist = shipperlist.Take(100);
+                    }
+                    return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
-                var shipperlist = (from c1 in db.ConsigneeMasters
-                                   where  
-                                   c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
-                                   orderby c1.ConsigneeName ascending
-                                   select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
-
-                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                if (ShowAll == false)
+                {
+                    var shipperlist = (from c1 in db.ConsigneeMasters
+                                       where
+                                       c1.ConsignorName.ToLower().StartsWith(Shipper.ToLower())
+                                       orderby c1.ConsigneeName ascending
+                                       select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Distinct();
+                    if (shipperlist.Count() > 100)
+                    {
+                        shipperlist = shipperlist.Take(100);
+                    }
+                    return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var shipperlist = (from c1 in db.ConsigneeMasters                                       
+                                       orderby c1.ConsigneeName ascending
+                                       select new { Name = c1.ConsigneeName, ContactPerson = c1.ConsigneeContactName, Phone = c1.ConsigneePhoneNo, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryname, Address1 = c1.ConsigneeAddress1, Address2 = c1.ConsigneeAddress2, PinCode = c1.ConsigneeAddress3, ConsigneeMobileNo = c1.MobileNo }).Take(100);
+                    //if (shipperlist.Count() > 100)
+                    //{
+                    //    shipperlist = shipperlist.Take(100);
+                    //}
+                    return Json(shipperlist, JsonRequestBehavior.AllowGet);
+                }
 
             }
 
@@ -554,7 +599,7 @@ namespace CMSV2.Controllers
                 obj = new ConsigneeMaster();
             }
             obj.ConsignorName = model.ShipperName;
-            obj.ConsigneeName = model.ConsignorName;
+            obj.ConsigneeName = model.ConsignorName; //it will return consignee name only
             obj.ConsigneeContactName = model.ContactPerson;
             obj.ConsigneePhoneNo = model.Phone;
             obj.ConsigneeAddress1 = model.Address1;

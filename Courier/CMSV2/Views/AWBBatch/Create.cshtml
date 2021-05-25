@@ -2757,10 +2757,8 @@ body .hyperlink{
                     <div class="row">
                         <div class="col-xs-12 col-sm-6">
                             <label class="headinglabel">Item Desc.</label>
-                            @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })
-                            @Html.HiddenFor(model => model.CustomerID)
-                            @Html.HiddenFor(model => model.CASHCustomerId)
-                            @Html.HiddenFor(model => model.CODCustomerID)
+                            @Html.TextBoxFor(model => model.ItemDescription, new { @class = "form-control", @autocomplete = "off" })                                                       
+                            
                         </div>
                         <div class="col-xs-12 col-sm-6">
                             <label class="headinglabel">Remarks</label>

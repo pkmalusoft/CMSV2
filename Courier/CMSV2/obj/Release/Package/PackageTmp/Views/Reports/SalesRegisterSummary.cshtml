@@ -1,4 +1,4 @@
-﻿@model CMSV2.Models.SalesReportParam
+﻿@model CMSV2.Models.SalesRegisterSummaryParam
 
 @{
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
@@ -130,7 +130,7 @@
 <section class="content-header">
     <h1 class="headingfont">@ViewBag.ReportName</h1>
 </section>
-@using (Html.BeginForm("SalesReport", "Reports", FormMethod.Post, new { @id = "customerledger" }))
+@using (Html.BeginForm("SalesRegisterSummary", "Reports", FormMethod.Post, new { @id = "customerledger" }))
 {
     @Html.AntiForgeryToken()
 
