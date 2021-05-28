@@ -271,6 +271,7 @@ namespace CMSV2.Models
         public virtual DbSet<ItemType> ItemTypes { get; set; }
         public virtual DbSet<ItemPurchase> ItemPurchases { get; set; }
         public virtual DbSet<ForwardingAgentMaster> ForwardingAgentMasters { get; set; }
+        public virtual DbSet<ImportDataFixation> ImportDataFixations { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

@@ -33,7 +33,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-<script type="text/javascript">   
+@*<script type="text/javascript">   
     var placeSearch, autocomplete, originairportCity, destinationairportCity;  
 
     var componentForm = {
@@ -136,32 +136,100 @@
             });
         }
     }
+</script>*@
+
+<script>
+    //Origin and Destination City  Autocomplete code
+    $(document).ready(function () {
+        //ConsignorLocationName
+        $("#OriginAirportCity").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#OriginAirportCity').val(ui.item.label);
+             
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#OriginAirportCity').val(ui.item.label);
+               
+                return false;
+            }
+        });
+        //ConsigneeLocationName
+        $("#DestinationAirportCity").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#DestinationAirportCity').val(ui.item.label);                
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#DestinationAirportCity').val(ui.item.label);                
+                return false;
+            }
+        });
+ 
+
+    })
 </script>
 <script type="text/javascript">
     var objitems = [];
-    function callniceapi() {
-        debugger;
-        $.ajax({
-            type: "GET",
-            url: "http://www.niceexpress.net/API/v1/getAPI.do?dateTime=20-May-2021",
-            crossDomain: true,
-            dataType: 'jsonp',
-            //data: { Details: JSON.stringify(objitems) },
-            contentType:"application/json;charset=UTF-8",
-            headers: {
-                "niceexpress-apikey": "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121",
-                "niceexpress-signature": "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece"
-            },
-            success: function (response) {
-                debugger;
-                console.log(response);
 
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
-    }
 
     function UpdateImported() {
         $.ajax({
@@ -170,8 +238,8 @@
             datatype: "Json",
             data: { Details: JSON.stringify(objitems) },
             contentType:'application/x-www-form-urlencoded',
-            success: function (response) {                
-                
+            success: function (response) {
+
             },
             error: function (err) {
                 console.log(err);
@@ -186,60 +254,72 @@
         var DestinationCountry = $('#DestinationCountry').val();
         var DestinationCity = $('#DestinationCity').val();
         var DestinationLocation = $('#DestinationLocation').val();
-        $("#listContainer").html('');
-        //$('#imgloader').removeClass('hide');
-        $('#loaderpopup').modal('show')
-        var newobjitems = [];
-        $.each(objitems, function (index, item) {
-            var i = index;
-            debugger;
-            if (Field == 'DestinationLocation') {
-                if (SourceValue == item.DestinationLocation) {
-                    item.DestinationLocation = DestinationLocation;
-                    item.DestinationCountry = DestinationCountry;
-                    item.DestinationCity = DestinationCity;
-                }
-            }
-            else if (Field == 'DestinationCountry') {
-                if (SourceValue == item.DestinationCountry) {
-                    item.DestinationCountry = DestinationCountry;
-                }
-            }
-            else if (Field == 'DestinationCity') {
-                    if (SourceValue == item.DestinationCity) {
-                        item.DestinationCity = DestinationCity;
-                    }                
-            }
-            else {
 
-            }
-            var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
-            if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
-                item.ImportType = 'Import';
-            else
-                item.ImportType = 'Transit';
-            //if (item.DestinationCity.indexOf("DUBAI") >= 0)
-            //    item.ImportType = 'Import';
-            //else
-            //    item.ImportType = 'Transit';
+        //UpdateDataFixation
+         $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateDataFixation", "ImportManifest")',
+             datatype: "html",
+             data: { TargetColumn :Field,SourceValue: SourceValue , TargetValue:DestinationCountry },
+            success: function (data) {
+                $("#listContainer").html(data);
+              }
+            });
 
-            //if (item.DestinationLocation.indexOf("DUBAI") >= 0)
-            //    item.ImportType = 'Import';
-            //else
-            //    item.ImportType = 'Transit';
+        //$("#listContainer").html('');
+        ////$('#imgloader').removeClass('hide');
+        //$('#loaderpopup').modal('show')
+        //var newobjitems = [];
+        //$.each(objitems, function (index, item) {
+        //    var i = index;
+        //    debugger;
+        //    if (Field == 'DestinationLocation') {
+        //        if (SourceValue == item.DestinationLocation) {
+        //            item.DestinationLocation = DestinationLocation;
+        //            item.DestinationCountry = DestinationCountry;
+        //            item.DestinationCity = DestinationCity;
+        //        }
+        //    }
+        //    else if (Field == 'DestinationCountry') {
+        //        if (SourceValue == item.DestinationCountry) {
+        //            item.DestinationCountry = DestinationCountry;
+        //        }
+        //    }
+        //    else if (Field == 'DestinationCity') {
+        //            if (SourceValue == item.DestinationCity) {
+        //                item.DestinationCity = DestinationCity;
+        //            }
+        //    }
+        //    else {
 
-            newobjitems.push(item);
-            if (objitems.length == (i + 1)) {
-                debugger;
-                objitems = [];
-                objitems = newobjitems;
-                additem();
-                UpdateImported();
-                $('#imgloader').addClass('hide');
-                $('#loaderpopup').modal('hide')
-                $('#fixationpopup').modal('hide');
-            }
-        });
+        //    }
+        //    var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
+        //    if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
+        //        item.ImportType = 'Import';
+        //    else
+        //        item.ImportType = 'Transit';
+        //    //if (item.DestinationCity.indexOf("DUBAI") >= 0)
+        //    //    item.ImportType = 'Import';
+        //    //else
+        //    //    item.ImportType = 'Transit';
+
+        //    //if (item.DestinationLocation.indexOf("DUBAI") >= 0)
+        //    //    item.ImportType = 'Import';
+        //    //else
+        //    //    item.ImportType = 'Transit';
+
+        //    newobjitems.push(item);
+        //    if (objitems.length == (i + 1)) {
+        //        debugger;
+        //        objitems = [];
+        //        objitems = newobjitems;
+        //        additem();
+        //        UpdateImported();
+        //        $('#imgloader').addClass('hide');
+        //        $('#loaderpopup').modal('hide')
+        //        $('#fixationpopup').modal('hide');
+        //    }
+        //});
     }
     function additem() {
         $.each(objitems, function (index, item) {
@@ -282,7 +362,7 @@
 
         var formData = new FormData();
         formData.append('importFile', files[0]);
-        
+
         if (files.length > 0) {
             $('#btnUpload').attr('disabled', 'disabled');
             $.ajax({
@@ -370,8 +450,8 @@
     });
 
     $(document).on("click", "#btnUpload", function () {
-        
-        
+
+
         $('#importFile').trigger('click');
     });
 
@@ -464,75 +544,115 @@
 
             $('#btnSave').attr('disabled', 'disabled');
             var obj = [];
-            var maxrow = $('#listContainer > tr').length;
+            var maxrow = $('#listbody > tr').length;
             if (maxrow == 0) {
                 alert('Click upload to import Items from Excel!');
                 return;
             }
-            for (i = 0; i < maxrow; i++) {
-                var deleted = $('#hdndeleted_' + i).val();
-                if (deleted == 'false') {
-                    var AWBNo = $('#hdnAWBNo_' + i).val();
-                    var AWBDate = $('#hdnAWBDate_' + i).val();
-                    var BagNo = $('#hdnBag_' + i).val();
-                    var Shipper = $('#hdnShipper_' + i).val();
-                    var Receiver = $('#hdnReceiver_' + i).val();
-                    var ReceiverContact = $('#hdnReceiverContact_' + i).val();
-                    var ReceiverAddress = $('#hdnReceiverAddress_' + i).val();
-                    var DestinationLocation = $('#hdnDestinationLocation_' + i).val();
-                    var DestinationCountry = $('#hdnDestinationCountry_' + i).val();
-                    var DestinationCity = $('#hdnDestinationCity_' + i).val();
-                    var ReceiverPhone = $('#hdnReceiverPhone_' + i).val();
-                    var Pcs = $('#hdnPcs_' + i).val();
-                    var Weight = $('#hdnWeight_' + i).val();
-                    var Content = $('#hdnContent_' + i).val();
-                    var COD = $('#hdnCOD_' + i).val();
-                    var Value = $('#hdnValue_' + i).val();
-                    var ImportType = $('#hdnImportType_' + i).val();
-                    var item = { AWBNo: AWBNo, AWBDate: AWBDate, Bag: BagNo, Shipper: Shipper, Receiver: Receiver, ReceiverContact: ReceiverContact, ReceiverAddress: ReceiverAddress, DestinationLocation: DestinationLocation, DestinationCountry: DestinationCountry, DestinationCity: DestinationCity, Pcs: Pcs, Weight: Weight, Content: Content, COD: COD, Value: Value, ReceiverPhone: ReceiverPhone, ImportType: ImportType }
-                    obj.push(item);
-                }
-                if (maxrow == (i + 1)) {
-                    //SaveImport
-                    debugger;
-                    var master = {
-                        ID: $('#ID').val(),
-                        ManifestNumber: $('#ManifestNumber').val(),
-                        AgentID: $('#AgentID').val(),
-                        ManifestDate: $('#ManifestDate').val(),
-                        //ShipmentTypeId: $('#ShipmentTypeId').val(),
-                        OriginAirportCity: $('#OriginAirportCity').val(),
-                        DestinationAirportCity: $('#DestinationAirportCity').val(),
-                        FlightDate1: $('#FlightDate1').val(),
-                        FlightNo: $('#FlightNo').val(),
-                        MAWB: $('#MAWB').val(),
-                        Type: $('#Type').val(),
-                        TotalAWB: $('#TotalAWB').val(),
-                        ParcelNo: $('#ParcelNo').val(),
-                        Weight: $('#Weight').val(),
-                        Bags: $('#Bags').val(),
-                        Route: $('#Route').val()
-                    }
-                    $.ajax({
-                        type: "POST",
-                        url: "/ImportManifest/SaveImport",
-                        datatype: "Json",
-                        data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
-                        success: function (response) {
-                            $.notify("Import Shipment Saved Succesfully!", "success");
-                            $('#btnSave').removeAttr('disabled');
-                            window.location.href = "/ImportManifest/Index";
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    });
-                }
+            var master = {
+                ID: $('#ID').val(),
+                ManifestNumber: $('#ManifestNumber').val(),
+                AgentID: $('#AgentID').val(),
+                ManifestDate: $('#ManifestDate').val(),
+                //ShipmentTypeId: $('#ShipmentTypeId').val(),
+                OriginAirportCity: $('#OriginAirportCity').val(),
+                DestinationAirportCity: $('#DestinationAirportCity').val(),
+                FlightDate1: $('#FlightDate1').val(),
+                FlightNo: $('#FlightNo').val(),
+                MAWB: $('#MAWB').val(),
+                Type: $('#Type').val(),
+                TotalAWB: $('#TotalAWB').val(),
+                ParcelNo: $('#ParcelNo').val(),
+                Weight: $('#Weight').val(),
+                Bags: $('#Bags').val(),
+                Route: $('#Route').val()
             }
+            $.ajax({
+                type: "POST",
+                url: "/ImportManifest/SaveImport",
+                datatype: "Json",
+                data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
+                success: function (response) {                    
+                    $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("CallPostAPI", "ImportManifest")',
+                            datatype: "json",
+                            data: {
+                                InputDate: $('#ManifestDate').val()
+                            },
+                            success: function (data) {
+                                $.notify("Import Shipment Saved Succesfully!", "success");
+                                $('#btnSave').removeAttr('disabled');
+                                window.location.href = "/ImportManifest/Index";
+                            }
+                        });
+               
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+            //for (i = 0; i < maxrow; i++) {
+            //    var deleted = $('#hdndeleted_' + i).val();
+            //    if (deleted == 'false') {
+            //        var AWBNo = $('#hdnAWBNo_' + i).val();
+            //        var AWBDate = $('#hdnAWBDate_' + i).val();
+            //        var BagNo = $('#hdnBag_' + i).val();
+            //        var Shipper = $('#hdnShipper_' + i).val();
+            //        var Receiver = $('#hdnReceiver_' + i).val();
+            //        var ReceiverContact = $('#hdnReceiverContact_' + i).val();
+            //        var ReceiverAddress = $('#hdnReceiverAddress_' + i).val();
+            //        var DestinationLocation = $('#hdnDestinationLocation_' + i).val();
+            //        var DestinationCountry = $('#hdnDestinationCountry_' + i).val();
+            //        var DestinationCity = $('#hdnDestinationCity_' + i).val();
+            //        var ReceiverPhone = $('#hdnReceiverPhone_' + i).val();
+            //        var Pcs = $('#hdnPcs_' + i).val();
+            //        var Weight = $('#hdnWeight_' + i).val();
+            //        var Content = $('#hdnContent_' + i).val();
+            //        var COD = $('#hdnCOD_' + i).val();
+            //        var Value = $('#hdnValue_' + i).val();
+            //        var ImportType = $('#hdnImportType_' + i).val();
+            //        var item = { AWBNo: AWBNo, AWBDate: AWBDate, Bag: BagNo, Shipper: Shipper, Receiver: Receiver, ReceiverContact: ReceiverContact, ReceiverAddress: ReceiverAddress, DestinationLocation: DestinationLocation, DestinationCountry: DestinationCountry, DestinationCity: DestinationCity, Pcs: Pcs, Weight: Weight, Content: Content, COD: COD, Value: Value, ReceiverPhone: ReceiverPhone, ImportType: ImportType }
+            //        obj.push(item);
+            //    }
+            //    if (maxrow == (i + 1)) {
+            //        //SaveImport
+            //        debugger;
+
+            //    }
+            //}
         });
         if ($('#ID').val() > 0) {
-            DisplayImprotItem();
+            //DisplayImprotItem();
         }
+        $('#btnGETAPI').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ShowItemList", "ImportManifest")',
+                datatype: "html",
+                data: {
+                    InputDate: $('#ManifestDate').val()
+                },
+                success: function (data) {
+                    $("#listContainer").html(data);
+                    var max=$('#listbody > tr').length;
+                    $('#TotalAWB').val(max);
+                }
+            });
+        });
+        @*$('#btnGETAPI1').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetAPI", "ImportManifest")',
+                dataType: 'json',
+                data: { InputDate: $('#ManifestDate').val() },
+                contentType: "application/json;charset=UTF-8",
+                success: function (data) {
+
+                }
+            });
+        })**@
 
     });
     function DisplayImprotItem() {
@@ -587,7 +707,7 @@
         });
     }
     $(function () {
-        $('#CreatedDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#ManifestDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
         $('#FlightDate1').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
 
     });
@@ -596,7 +716,7 @@
 <section class="content-header">
     <div class="row">
         <div class="col-md-5 pull-left">
-            <h1 class="headingfont">Create Shipments</h1>
+            <h1 class="headingfont">Import Shipments Upload</h1>
         </div>
         @*<div class="col-md-5 pull-right text-right">
                 <h2 class="awb"><strong>@ViewBag.AWBNo</strong></h2>
@@ -624,7 +744,7 @@
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
 
-                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true", @disabled = "true" })
+                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
 
                 </div>
 
@@ -640,10 +760,10 @@
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    @Html.LabelFor(model => model.OriginAirportCity, "Origin Airport City", htmlAttributes: new { @class = "headinglabel required"})
-
-                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @required = "true", @autocomplete = "off",@type="search" })
-                    @Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })
+                    
+                    <label class="headinglabel required">Airport City</label>
+                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @required = "true" })
+                    @*@Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })*@
 
                 </div>
                 <div class="col-md-3">
@@ -713,76 +833,27 @@
                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-1" style="padding-top:30px">
-                    <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
+                    <input class="btn btn-primary" id="btnGETAPI" type="button" value="GET API" />
+                    @*<input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
                     <input type="button" id="btnfile" style="display:none" />
-                    
-                    <a class="btn btn-primary" id="btnUpload" href="Javascript:void(0)">Upload</a>
+
+                    <a class="btn btn-primary" id="btnUpload" href="Javascript:void(0)">Upload</a>*@
                 </div>
                 <div class="col-md-1" style="padding-top:30px">
                     <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
                 </div>
+                <div class="col-md-1" style="padding-top:30px">
+                    
+                </div>
                 <div class="col-md-5 btn-right">
-                    <input type="button" value="Submit" id="btnSave" class="btn btn-primary waves-effect waves-light" />
+                    <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
                 </div>
 
             </div>                       
             
-            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-                <table class="table table-responsive table-bordered tblfont" role="grid" aria-describedby="datatable-1_info" style="min-width: 100%" id="DetailsTable">
-
-                    @*<table class="table" style="min-width: 100%">*@
-                    <thead class="input-table">
-                        <tr>
-                            <th width="20px">
-                                S.No
-                            </th>
-                            <th>
-                                AWB
-                            </th>
-                            <th>
-                                AWB Date
-                            </th>
-                            <th>
-                                Shipper
-                            </th>
-                            <th>
-                                Receiver
-                            </th>
-                            <th width="100px">
-                                Destination Location
-                            </th>
-                            <th width="100px">
-                                Destination Country
-                            </th>
-                            <th>
-                                Bag.No
-                            </th>
-                            <th>
-                                Contents
-                            </th>
-                            <th>
-                                PCS
-                            </th>
-                            <th>
-                                Weight
-                            </th>
-                            <th>
-                                Customs Value
-                            </th>
-                            <th>
-                                COD
-                            </th>
-                            <th>
-                                Type
-                            </th>
-
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody class="input-table" id="listContainer">
-                    </tbody>
-                </table>
+            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px" id="listContainer">
+                @{Html.RenderPartial("ItemList", Model);}
             </div>
             <hr />
            
@@ -845,4 +916,4 @@
 </div>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>*@

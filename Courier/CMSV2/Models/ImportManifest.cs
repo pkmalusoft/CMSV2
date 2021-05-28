@@ -10,7 +10,9 @@ namespace CMSV2.Models
         public string CompanyCountryName { get; set; }
         public string ManifestDate { get; set; }
         public string FlightDate1 { get; set; }
+        public List<ImportManifestItem> Details { get; set; }
 
+        public List<TranshipmentModel> TransDetails { get; set; }
     }
     public class ImportManifestSearch
     {
@@ -34,11 +36,13 @@ namespace CMSV2.Models
     }
     public class ImportManifestItem
     {
+        public int Sno { get; set; }
         public string Bag { get; set; }
         public string AWBNo { get; set; }
         public string AWBDate { get; set; }
         public string Rfnc { get; set; }
         public string Shipper { get; set; }
+        public string ShipperPhone { get; set; }
         public string Receiver { get; set; }
         public string ReceiverContact{ get; set; }
         public string ReceiverAddress { get; set; }
@@ -48,10 +52,12 @@ namespace CMSV2.Models
         public string DestinationCountry { get; set; }
         public string ImportType { get; set; }
         public string Content { get; set; }
-        public string Pcs { get; set; }
+        public int Pcs { get; set; }
         public string Weight {get;set;}
         public string Value { get; set; }
         public string COD { get; set; }
+        public string Currency { get; set; }
+        public int CurrencyID { get; set; }
         public string Remark { get; set; }        
         public string lastStatusRmk {get;set;}
 

@@ -404,7 +404,7 @@
     <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Applications">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -415,7 +415,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Applications' does n
     <Property Name="Description" Type="nvarchar" MaxLength="256" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Membership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Membership">
     <Key>
       <PropertyRef Name="UserId" />
@@ -443,7 +443,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Membership' does not
     <Property Name="Comment" Type="ntext" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Paths' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Paths">
     <Key>
       <PropertyRef Name="PathId" />
@@ -462,7 +462,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Paths' does not have
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_PersonalizationPerUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_PersonalizationPerUser">
     <Key>
       <PropertyRef Name="Id" />
@@ -484,7 +484,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_PersonalizationPerUs
     <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Roles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Roles">
     <Key>
       <PropertyRef Name="RoleId" />
@@ -505,7 +505,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Roles' does not have
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Users' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="aspnet_Users">
     <Key>
       <PropertyRef Name="UserId" />
@@ -963,7 +963,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.aspnet_Users' does not have
     <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="CreditNoteDetails">
     <Key>
       <PropertyRef Name="CreditNoteID" />
@@ -1818,7 +1818,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.CreditNoteDetails' does not
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ImpExp">
     <Key>
       <PropertyRef Name="ImpExpID" />
@@ -1922,6 +1922,17 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="CurrencyID" Type="int" />
     <Property Name="StatusActive" Type="bit" />
   </EntityType>
+  <EntityType Name="ImportDataFixation">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShipmentType" Type="varchar" MaxLength="20" />
+    <Property Name="FieldName" Type="varchar" MaxLength="100" />
+    <Property Name="SourceValue" Type="varchar" MaxLength="200" />
+    <Property Name="TargetValue" Type="varchar" MaxLength="200" />
+    <Property Name="UpdateDate" Type="datetime" />
+  </EntityType>
   <EntityType Name="ImportFields">
     <Key>
       <PropertyRef Name="ID" />
@@ -2005,7 +2016,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Key>
       <PropertyRef Name="InScanID" />
     </Key>
-    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
     <Property Name="ReferenceAWBNo" Type="nvarchar" MaxLength="100" />
     <Property Name="InScanDate" Type="datetime" Nullable="false" />
@@ -2306,6 +2317,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="TaxAmount" Type="decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="varchar" MaxLength="50" />
     <Property Name="FAgentId" Type="int" />
+    <Property Name="ImportShipmentId" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -3081,7 +3093,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.ImpExp' does not have a pri
     <Property Name="PageTypeId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="State">
     <Key>
       <PropertyRef Name="StateID" />
@@ -3610,7 +3622,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.State' does not have a prim
     <Property Name="InvoiceType" Type="char" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.tempCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tempCustomer">
     <Key>
       <PropertyRef Name="ID" />
@@ -3627,7 +3639,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.tempCustomer' does not have
     <Property Name="Location" Type="nvarchar" MaxLength="510" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.TempCustomerInvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempCustomerInvoice">
     <Key>
       <PropertyRef Name="ID" />
@@ -3657,7 +3669,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempCustomerInvoice' does n
     <Property Name="Consignee" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.TempInScan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempInScan">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -3707,7 +3719,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempInScan' does not have a
     <Property Name="ForwardingCharge" Type="numeric" Precision="12" Scale="2" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.TempRateDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateDetail">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3720,7 +3732,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateDetail' does not ha
     <Property Name="CustomerRate" Type="numeric" Precision="10" Scale="2" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.TempRateMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TempRateMaster">
     <Key>
       <PropertyRef Name="RateMasterID" />
@@ -3767,7 +3779,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TempRateMaster' does not ha
     <Property Name="CustomCharge" Type="money" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -3787,7 +3799,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.Transit' does not have a pr
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
@@ -6754,6 +6766,7 @@ warning 6002: The table/view 'DB_A69D99_Fastline.dbo.TransportMode' does not hav
     <EntitySet Name="HoldRelease" EntityType="Self.HoldRelease" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Import" EntityType="Self.Import" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportAgentMaster" EntityType="Self.ImportAgentMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImportDataFixation" EntityType="Self.ImportDataFixation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportFields" EntityType="Self.ImportFields" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportShipment" EntityType="Self.ImportShipment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportShipmentDetails" EntityType="Self.ImportShipmentDetails" Schema="dbo" store:Type="Tables" />

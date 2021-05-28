@@ -7674,6 +7674,7 @@
     <EntitySet Name="ItemTypes" EntityType="DB_9F57C4_couriertest_newModel.ItemType" />
     <EntitySet Name="ItemPurchases" EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" />
     <EntitySet Name="ForwardingAgentMasters" EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" />
+    <EntitySet Name="ImportDataFixations" EntityType="DB_9F57C4_couriertest_newModel.ImportDataFixation" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12137,6 +12138,7 @@
     <Property Name="TaxAmount" Type="Decimal" Precision="10" Scale="3" />
     <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FAgentId" Type="Int32" />
+    <Property Name="ImportShipmentId" Type="Int32" />
   </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>
@@ -12566,5 +12568,16 @@
     <Property Name="CityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Address3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ImportDataFixation">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShipmentType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="FieldName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SourceValue" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="TargetValue" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

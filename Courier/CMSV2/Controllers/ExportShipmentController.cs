@@ -95,7 +95,7 @@ namespace CMSV2.Controllers
                 long manifestNumber = 0;
                 _ExportShipment.ID = 0;
                 _ExportShipment.ConsignorName = company.AcCompany1;
-                _ExportShipment.ConsignorAddress = company.Address;
+                _ExportShipment.ConsignorAddress = company.Address + "\n" + company.CityName + "\n" + company.CountryName;
                 _ExportShipment.ConsignorCountryName = company.CountryName;
                 _ExportShipment.ConsignorCityName = company.CityName;
                 _ExportShipment.OriginAirportCity = company.CityName;

@@ -345,7 +345,7 @@
                         $('#DeliveryCountry').val(response.Country);
                         $('#DeliveryCity').val(response.City);
                         $('#DeliverySubLocality').val(response.SubLocality);
-                        if ($('#PaymentTypeId').val() == 5) //prepaid
+                        if ($('#PaymentModeId').val() == 5) //prepaid
                         {
                             if ($('#DeliveryCountry').val() != '' && $('#DeliveryCountry').val() != $('#DeliveryCountry').attr('awbcountry')) {
                                 $.notify('Delivery coutry not matched with awb paid Country!');
@@ -728,9 +728,9 @@
             }
         });
 
-        setTimeout(function () {
-            $('#PaymentModeId').trigger('change');
-        }, 500)
+        //setTimeout(function () {
+        //    $('#PaymentModeId').trigger('change');
+        //}, 500)
 
     });
 
@@ -743,7 +743,8 @@
     
      function setTwoNumberDecimal(obj) {
 
-       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+         $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+         CalculateTax();
     }
     function setThreeNumberDecimal(obj) {
 
@@ -1323,30 +1324,30 @@
         $("#btnsave").click(function () {
             debugger;
 
-            var fullform = $('#quickAWB').valid();            
-            if ($("#HAWBNo1").val() != "") {
-                $.ajax({
-                    type: "POST",
-                    url: "/AWB/GetAWB",
-                    datatype: "Json",
-                    data: { id: $("#HAWBNo").val() },
-                    success: function (data) {
-                        if (data.Exist == 0) {
-                            $("#IsAvailable").val(0);
-                        }
-                        else {
-                            $("#IsAvailable").val(1);
-                        }
+            //var fullform = $('#quickAWB').valid();            
+            //if ($("#HAWBNo1").val() != "") {
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "/AWB/GetAWB",
+            //        datatype: "Json",
+            //        data: { id: $("#HAWBNo").val() },
+            //        success: function (data) {
+            //            if (data.Exist == 0) {
+            //                $("#IsAvailable").val(0);
+            //            }
+            //            else {
+            //                $("#IsAvailable").val(1);
+            //            }
 
-                    }
-                });
-            }
-            if ($("#IsAvailable").val() == 1) {
-                alert("AWB Already Exist..!");
-                $('#HAWBNo').focus();
-                return false;
-            }
-            else {
+            //        }
+            //    });
+            //}
+            //if ($("#IsAvailable").val() == 1) {
+            //    alert("AWB Already Exist..!");
+            //    $('#HAWBNo').focus();
+            //    return false;
+            //}
+            //else {
 
                 var Weight = $("#Weight").val();
 
@@ -1366,17 +1367,17 @@
                     }
                     else {
 
-                        if ($('#txtAWBProcessed').val() == '') {
-                            alert($('#AWBProcessed').val());
-                            if (confirm("Please click Yes to confirm about AWBProcessed?") == true) {
-                                $('#AWBProcessed').val(true);
-                            }
-                        }
+                        //if ($('#txtAWBProcessed').val() == '') {
+                        //    alert($('#AWBProcessed').val());
+                        //    if (confirm("Please click Yes to confirm about AWBProcessed?") == true) {
+                        //        $('#AWBProcessed').val(true);
+                        //    }
+                        //}
                         $("#validations").hide();
                         return true;
                     }
                 }
-            }
+            
                 //else {
                 //    $("#validations").hide();
                 //    return true;
@@ -1570,6 +1571,20 @@
             }
             else {
                 $('#ChkTaxPercent').prop('checked', 'false');
+            }
+
+            var modeid = $('#PaymentModeId').val();
+            if (modeid == 1) { //PKP
+                $('#divcustomer').addClass('hide');
+                $('#divcash').removeClass('hide');
+                $('#AcHeadName').removeAttr('readonly');
+                $('#AcHeadName').attr('required', 'required');
+            }
+            else {
+                $('#divcustomer').removeClass('hide');
+                $('#divcustomer').removeClass('hide');
+                $('#divcash').addClass('hide');
+                $('#AcHeadName').removeAttr('required');
             }
             //  setTwoNumberDecimal($("#CourierCharge")); //.val('0.00');
             //setTwoNumberDecimal($("#PackingCharge")); //.val('0.00');

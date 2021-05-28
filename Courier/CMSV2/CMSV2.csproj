@@ -235,6 +235,7 @@
     <Compile Include="Controllers\CustomerContractController.cs" />
     <Compile Include="Controllers\DevelopmentController.cs" />
     <Compile Include="Controllers\ForwardingAgentController.cs" />
+    <Compile Include="Controllers\TranshipmentController.cs" />
     <Compile Include="Controllers\ImportManifestController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
     <Compile Include="Controllers\CODReceiptController.cs" />
@@ -1252,6 +1253,9 @@
     <Compile Include="Models\ImportAgentMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImportDataFixation.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ImportField.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1911,6 +1915,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TName.cs" />
+    <Compile Include="Models\TranshipmentMode.cs" />
     <Compile Include="Models\Transit.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3673,6 +3678,13 @@
     <Content Include="Views\Reports\MaterialCostLedger.cshtml" />
     <Content Include="Views\Reports\SalesRegisterCountry.cshtml" />
     <Content Include="Views\AWB\Create - ICCs.cshtml" />
+    <Content Include="Views\Transhipment\Create.cshtml" />
+    <Content Include="Views\Transhipment\ImportDataFixation.cshtml" />
+    <Content Include="Views\Transhipment\Index.cshtml" />
+    <Content Include="Views\ImportManifest\ItemList.cshtml" />
+    <Content Include="Views\Transhipment\ItemList.cshtml" />
+    <Content Include="Views\Transhipment\Create - Copy.cshtml" />
+    <Content Include="Template\TranshipmentTemplateEmpty.csv" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

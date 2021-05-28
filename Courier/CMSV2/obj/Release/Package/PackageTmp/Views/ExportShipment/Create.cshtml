@@ -288,22 +288,10 @@
                                 <label class="headinglabel">Consignor Name</label>
                                 <div>
                                     @Html.TextBoxFor(model => model.ConsignorName, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
+                                    @Html.HiddenFor(model => model.ConsignorCountryName, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
+                                    @Html.HiddenFor(model => model.ConsignorCityName, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ConsignorCountryName, "Origin Country", htmlAttributes: new { @class = "headinglabel" })
-                                <div>
-                                    @Html.TextBoxFor(model => model.ConsignorCountryName, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
-                                    @Html.ValidationMessageFor(model => model.ConsignorCountryName, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ConsignorCityName, "Origin City", htmlAttributes: new { @class = "headinglabel" })
-                                <div>
-                                    @Html.TextBoxFor(model => model.ConsignorCityName, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
-                                </div>
-                            </div>
+                            </div>                                                       
                             <div class="form-group">
                                 @Html.LabelFor(model => model.ConsignorAddress, "Consignor Address", htmlAttributes: new { @class = "headinglabel" })
                                 <div>

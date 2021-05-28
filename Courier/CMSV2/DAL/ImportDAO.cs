@@ -10,7 +10,7 @@ namespace CMSV2.DAL
 {
     public class ImportDAO
     {
-        public static List<ImportManifestVM> GetImportManifestList()
+        public static List<ImportManifestVM> GetImportManifestList(int ShipmentTypeId)
         {
             ImportManifestSearch paramobj = (ImportManifestSearch)(HttpContext.Current.Session["ImportManifestSearch"]);
             SqlCommand cmd = new SqlCommand();
@@ -23,7 +23,8 @@ namespace CMSV2.DAL
 
             if (paramobj.ToDate != null)
                 cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(paramobj.ToDate).ToString("MM/dd/yyyy"));
-            
+
+            cmd.Parameters.AddWithValue("@ShipmentTypeId", ShipmentTypeId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);

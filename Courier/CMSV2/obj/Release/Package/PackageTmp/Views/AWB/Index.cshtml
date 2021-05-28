@@ -340,7 +340,7 @@
                 @Html.TextBoxFor(mode => Model.AWBNo, new { @class = "form-control" })
          </div>
 
-           <div class="col-md-3">
+           <div class="col-md-2">
                 <label class="headinglabel">Shipper/Receiver</label>
                 @Html.TextBoxFor(model => model.ConsignorConsignee, new { @class = "form-control txttarget",  @placeholder = "Search Text",@type="search" })
             </div>
@@ -373,9 +373,9 @@
 
                 <div class="pull-right" style="padding-top:32px; ">
 
-                <button type="button" class="btn btn-primary small_btn mt-0" title="Clear Data" onclick="ClearData()"><i class="fa fa-minus"></i></button>&nbsp;&nbsp;
-                <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "AWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>
+                <button type="button" class="btn btn-danger  mt-0" title="Clear Data" onclick="ClearData()">Clear All</button>&nbsp;&nbsp;
+                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                <a class="btn btn-warning btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "AWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>
             </div>
 
 </div>
@@ -386,7 +386,7 @@
                 <label class="headinglabel">Movement Type</label>
                 @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control"})
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="headinglabel">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control" })
             </div>

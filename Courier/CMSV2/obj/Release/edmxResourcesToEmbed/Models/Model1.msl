@@ -8572,6 +8572,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="ImportShipmentId" ColumnName="ImportShipmentId" />
           <ScalarProperty Name="FAgentId" ColumnName="FAgentId" />
           <ScalarProperty Name="JobCode" ColumnName="JobCode" />
           <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
@@ -9096,6 +9097,18 @@
           <ScalarProperty Name="FAgentName" ColumnName="FAgentName" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
           <ScalarProperty Name="FAgentID" ColumnName="FAgentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImportDataFixations">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportDataFixation">
+        <MappingFragment StoreEntitySet="ImportDataFixation">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="TargetValue" ColumnName="TargetValue" />
+          <ScalarProperty Name="SourceValue" ColumnName="SourceValue" />
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="ShipmentType" ColumnName="ShipmentType" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

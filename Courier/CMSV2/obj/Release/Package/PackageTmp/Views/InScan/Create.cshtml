@@ -285,18 +285,18 @@
                     console.log(response);
                     if (response.status == "ok") {
                         var quickinscan = response.masterdata;
-                        $('#QuickInscanID').val(quickinscan.QuickInscanID);
-                        $('#DepotID').attr('readonly', 'readonly');
-                        $('#DepotID').val(quickinscan.DepotId).trigger('change');
-                        $('#VehicleId').val(quickinscan.VehicleId).trigger('change');
-                        $('#DriverName').val(quickinscan.DriverName);
-                        $('#CollectedByID').val(quickinscan.CollectedByID).trigger('change');
-                        $('#ReceivedByID').val(quickinscan.ReceivedByID).trigger('change');
-                        var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
-                        var cmon = myDate.getMonth() + 1;
-                        var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
-                        $('#QuickInscanDateTime').val(inscandate);
-                        $('#QuickInscanDateTime').attr('readonly', 'readonly');
+                        //$('#QuickInscanID').val(quickinscan.QuickInscanID);
+                        //$('#DepotID').attr('readonly', 'readonly');
+                        //$('#DepotID').val(quickinscan.DepotId).trigger('change');
+                        //$('#VehicleId').val(quickinscan.VehicleId).trigger('change');
+                        //$('#DriverName').val(quickinscan.DriverName);
+                        //$('#CollectedByID').val(quickinscan.CollectedByID).trigger('change');
+                        //$('#ReceivedByID').val(quickinscan.ReceivedByID).trigger('change');
+                        //var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
+                        //var cmon = myDate.getMonth() + 1;
+                        //var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                        //$('#QuickInscanDateTime').val(inscandate);
+                        //$('#QuickInscanDateTime').attr('readonly', 'readonly');
                         AWBItems = [];
                         AWBItems = response.data;
 
@@ -527,7 +527,7 @@
                 <div class="col-md-3">
                     <label class="headinglabel">Vehicle Detail</label>
                     @Html.DropDownListFor(model => model.VehicleId, new SelectList(@ViewBag.Vehicles, "VehicleID", "VehicleName"), "Select", new { @class = "form-control" })
-                    @Html.HiddenFor(model => model.VehicleId)
+                    @*@Html.HiddenFor(model => model.VehicleId)*@
 
                 </div>
                 @*<div class="col-md-3">

@@ -23,37 +23,10 @@ namespace CMSV2.Controllers
     public class ImportManifestController : Controller
     {
         // GET: ImportManifest
-        Entities1 db = new Entities1();
-        //private const string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
-        //private string urlParameters = "?dateTime=20-May-2021";
+        Entities1 db = new Entities1();       
         public ActionResult Index()
         {
-
-            //using (var client = new HttpClient())
-            //{
-            //    client.BaseAddress = new Uri(URL);
-            //    //HTTP GET
-            //    // Add an Accept header for JSON format.
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //    client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
-            //    client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
-
-            //    // List data response.
-            //    HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        // Parse the response body.
-            //        var dataObjects = response.Content.ReadAsAsync<DataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
-            //        foreach (var d in dataObjects.data)
-            //        {
-            //            Console.WriteLine("{0}", d.awbNo);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            //    }
-            //}
+                     
             int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ImportManifestSearch obj = (ImportManifestSearch)Session["ImportManifestSearch"];
             ImportManifestSearch model = new ImportManifestSearch();
@@ -61,7 +34,7 @@ namespace CMSV2.Controllers
             if (obj != null)
             {
                 List<ImportManifestVM> translist = new List<ImportManifestVM>();
-                translist = ImportDAO.GetImportManifestList();
+                translist = ImportDAO.GetImportManifestList(3);
                 model.FromDate = obj.FromDate;
                 model.ToDate = obj.ToDate;
                 model.Details = translist;
@@ -72,7 +45,7 @@ namespace CMSV2.Controllers
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
                 Session["ImportManifestSearch"] = model;
                 List<ImportManifestVM> translist = new List<ImportManifestVM>();
-                translist = ImportDAO.GetImportManifestList();
+                translist = ImportDAO.GetImportManifestList(3);
                 model.Details = translist;
 
             }
@@ -86,7 +59,7 @@ namespace CMSV2.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Create(int id = 0)
+        public ActionResult Create(int id = 0,string InputDate="")
         {
             var userid = Convert.ToInt32(Session["UserID"]);
             var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
@@ -112,6 +85,7 @@ namespace CMSV2.Controllers
             //ViewBag.AgentCity = agent.CityName;
             ViewBag.CompanyName = company.AcCompany1;
             ImportManifestVM vm = new ImportManifestVM();
+            vm.Details = new List<ImportManifestItem>();
             if (id == 0)
             {
                 vm.CompanyCountryName = CompanyCountryName;
@@ -139,12 +113,19 @@ namespace CMSV2.Controllers
                 vm.OriginAirportCity = model.OriginAirportCity;
                 vm.DestinationAirportCity = model.DestinationAirportCity;
                 vm.AgentID = model.AgentID;
+                var IDetails = (from c in db.ImportShipmentDetails where c.ImportID == vm.ID select new ImportManifestItem { AWBNo = c.AWB,   Shipper = c.Shipper, Bag = c.BagNo, COD = c.COD.ToString(), Content = c.Contents, DestinationCity = c.DestinationCity, DestinationCountry = c.DestinationCountry, Pcs = c.PCS, Receiver = c.Receiver, ReceiverAddress = c.ReceiverAddress, Value = c.CustomValue.ToString() }).ToList();
+
+                Session["ManifestImported"] = IDetails;
+                vm.Details = IDetails;
 
             }
+            
+           
+            
             return View(vm);
         }
 
-
+       
         [HttpPost]
         public JsonResult ImportFile(HttpPostedFileBase importFile)
         {
@@ -202,7 +183,7 @@ namespace CMSV2.Controllers
                                 DestinationLocation = objDataRow["DestinationLocation"].ToString(),
                                 DestinationCity = objDataRow["DestinationCity"].ToString(),
                                 DestinationCountry = objDataRow["DestinationCountry"].ToString(),
-                                Pcs = objDataRow["Pcs"].ToString(),
+                                Pcs = CommanFunctions.ParseInt(objDataRow["Pcs"].ToString()),
                                 Weight = objDataRow["Weight"].ToString(),
                                 Value = objDataRow["CustomsValue"].ToString(),
                                 COD = objDataRow["COD"].ToString(),
@@ -232,14 +213,17 @@ namespace CMSV2.Controllers
         {
             try
             {
+                var bills = new List<updateitem>();
                 var userid = Convert.ToInt32(Session["UserID"]);
                 var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
-                var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
+                //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
+                var IDetails = (List<ImportManifestItem>)Session["ManifestImported"];
                 ImportShipment importShipment = new ImportShipment();
                 if (model.ID == 0)
                 {
                     importShipment.ManifestNumber = model.ManifestNumber;
                     importShipment.CreatedDate = Convert.ToDateTime(model.ManifestDate);
+                    importShipment.ShipmentTypeId = 3;
                 }
                 else
                 {
@@ -283,10 +267,16 @@ namespace CMSV2.Controllers
 
                 foreach (var item in IDetails)
                 {
+                    updateitem uitem = new updateitem();
+                    uitem.AWBNo = item.AWBNo;
+                    uitem.synchronisedDateTime = Convert.ToDateTime(model.ManifestDate).ToString("dd-MMM-yyyy HH:mm");
+                    bills.Add(uitem);
                     ImportShipmentDetail detail = new ImportShipmentDetail();
                     detail.ImportID = importShipment.ID;
                     detail.AWB = item.AWBNo;
                     detail.AWBDate = Convert.ToDateTime(item.AWBDate);
+                    detail.Shipper = item.Shipper;
+                    detail.Contents = item.Content;
                     detail.Receiver = item.Receiver;
                     detail.ReceiverAddress = item.ReceiverAddress;
                     detail.ReceiverContact = item.ReceiverContact;
@@ -294,7 +284,7 @@ namespace CMSV2.Controllers
                     detail.DestinationCountry = item.DestinationCountry;
                     detail.DestinationCity = item.DestinationCity;
                     detail.DestinationLocation = item.DestinationLocation;
-                    detail.ImportType = item.ImportType;
+                    detail.ImportType = "Import";
                     if (item.ImportType == "Import")
                     {
                         detail.StatusTypeId = 9;
@@ -305,9 +295,8 @@ namespace CMSV2.Controllers
                         detail.StatusTypeId = 2;
                         detail.CourierStatusID = 21;
                     }
-                    detail.Shipper = item.Shipper;
-                    detail.Contents = item.Content;
-                    if (item.Pcs != "")
+                    
+                    if (item.Pcs != null)
                         detail.PCS = Convert.ToInt32(item.Pcs);
 
                     if (item.Weight != "")
@@ -317,12 +306,21 @@ namespace CMSV2.Controllers
                         detail.COD = Convert.ToDecimal(item.COD);
                     detail.BagNo = item.Bag;
                     detail.CustomValue = Convert.ToDecimal(item.Value);
-                    detail.CurrencyID = 1;
+                    var currency = db.CurrencyMasters.Where(cc => cc.CurrencyName == item.Currency).FirstOrDefault();
+                    if (currency != null)
+                        detail.CurrencyID = currency.CurrencyID;
+                    else
+                        detail.CurrencyID = 1;
+
                     db.ImportShipmentDetails.Add(detail);
                     db.SaveChanges();
 
 
                 }
+                postbill postbill = new postbill();
+                postbill.bills = bills;
+                Session["bills"] = postbill;
+               // CallPostAPI(model.ManifestDate.ToString());
                 return "ok";
             }
             catch (Exception ex)
@@ -336,7 +334,7 @@ namespace CMSV2.Controllers
         public JsonResult GetImportItem(int id)
         {
             List<ImportManifestItem> details = new List<ImportManifestItem>();
-            details = (from c in db.ImportShipmentDetails where c.ImportID == id select new ImportManifestItem { AWBNo = c.AWB, AWBDate = c.AWBDate.ToString(), Shipper = c.Shipper, Receiver = c.Receiver, ReceiverContact = c.ReceiverContact, ReceiverAddress = c.ReceiverAddress, ReceiverPhone = c.ReceiverTelephone, Content = c.Contents, Bag = c.BagNo.ToString(), Weight = c.Weight.ToString(), Pcs = c.PCS.ToString(), Value = c.CustomValue.ToString(), COD = c.COD.ToString(), DestinationCountry = c.DestinationCountry, DestinationLocation = c.DestinationLocation, DestinationCity = c.DestinationCity, ImportType = c.ImportType }).ToList();
+            details = (from c in db.ImportShipmentDetails where c.ImportID == id select new ImportManifestItem { AWBNo = c.AWB, AWBDate = c.AWBDate.ToString(), Shipper = c.Shipper, Receiver = c.Receiver, ReceiverContact = c.ReceiverContact, ReceiverAddress = c.ReceiverAddress, ReceiverPhone = c.ReceiverTelephone, Content = c.Contents, Bag = c.BagNo.ToString(), Weight = c.Weight.ToString(), Pcs = c.PCS, Value = c.CustomValue.ToString(), COD = c.COD.ToString(), DestinationCountry = c.DestinationCountry, DestinationLocation = c.DestinationLocation, DestinationCity = c.DestinationCity, ImportType = c.ImportType }).ToList();
 
             return Json(new { data = details });
 
@@ -359,7 +357,7 @@ namespace CMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSourceValue(string term, string FieldName)
+       public JsonResult GetSourceValue(string term, string FieldName)
         {
             var IDetails = (List<ImportManifestItem>)Session["ManifestImported"];
             if (IDetails != null)
@@ -434,18 +432,281 @@ namespace CMSV2.Controllers
             }
 
         }
+        
+        [HttpPost]
+        public ActionResult UpdateDataFixation(string TargetColumn,string SourceValue,string TargetValue)
+        {
+            ImportManifestVM model = new ImportManifestVM();
+            List<ImportManifestItem> Details = (List<ImportManifestItem>)Session["ManifestImported"];
+            if (TargetColumn== "DestinationCountry")
+            {
+                int i = 0;
+                foreach(var item in Details)
+                {
+                    if (item.DestinationCountry == SourceValue)
+                    {
+                        Details[i].DestinationCountry = TargetValue;
+                    }
+                    i++;
+                }
+            }
+            else if (TargetColumn == "DestinationCity")
+            {
+                int i = 0;
+                foreach (var item in Details)
+                {
+                    if (item.DestinationCity == SourceValue)
+                    {
+                        Details[i].DestinationCity = TargetValue;
+                    }
+                    i++;
+                }
+            }
+            else if (TargetColumn == "DestinationLocation")
+            {
+                int i = 0;
+                foreach (var item in Details)
+                {
+                    if (item.DestinationLocation == SourceValue)
+                    {
+                        Details[i].DestinationLocation= TargetValue;
+                    }
+                    i++;
+                }
+            }
+
+            model.Details = Details;
+            Session["ManifestImported"] = Details;
+            return View("ItemList",model);
+        }
+
+        public async Task<ActionResult> CallPostAPI(string InputDate)
+        {
+            string URL = "http://www.niceexpress.net/API/v1/postAPI.do";
+            string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
+            
+            postbill bills = (postbill)Session["bills"];
+            //List<updateitem> bills1 = new List<updateitem>();
+            //bills1.Add(bills[0]);
+            //bills1.Add(bills[1]);
+            //bills1.Add(bills[2]);
+            var json = JsonConvert.SerializeObject(bills);
+            string urlParameters = "?bills=" + json;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(URL);
+                //HTTP GET
+                // Add an Accept header for JSON format.
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+
+                // List data response.
+                //var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                //var result  = await client.PostAsync("method",content);  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                //string resultContent = await result.Content.ReadAsStringAsync();
+                var postResponse = await client.PostAsJsonAsync(URL, bills);
+                var response=postResponse.EnsureSuccessStatusCode();
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    // Parse the response body.
+
+                //    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+                //    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
+                //    // return RedirectToAction("Index");
+                //    return Json(new { Status = "ok",  Message = "API Updated Successfully " });
+                //}
+                //else
+                //{
+                //    return Json(new { Status = "Failed", Message = "API Not Updated Successfully " });
+                //}
+                return Json(new { Status = "ok", Message = "API Updated Successfully " });
+            }
+            //return "notworked";
+        }
+
+        public async Task<ActionResult> SaveItemList(string InputDate)
+        {
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.Details = new List<ImportManifestItem>();
+            string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
+            string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy");
+            string urlParameters = "?dateTime=" + idate;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(URL);
+                //HTTP GET
+                // Add an Accept header for JSON format.
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+
+                // List data response.
+                HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                if (response.IsSuccessStatusCode)
+                {
+                    // Parse the response body.
+
+                    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+                    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
+                    int sno = 0;
+                    foreach (Importproductdata d in dataObjects.data)
+                    {
+                        ImportManifestItem item = new ImportManifestItem();
+                        sno++;
+                        item.Sno = sno;
+                        item.AWBNo = d.awbNo;
+                        item.AWBDate = d.awbDate;
+                        item.Bag = d.bagNo;
+                        if (d.cod == "")
+                            item.COD = "0";
+                        else
+                            item.COD = d.cod;
+                        item.Weight = d.weight;
+                        item.ImportType = d.reference;
+                        item.Shipper = d.shipper;
+                        item.ShipperPhone = d.cnorTel;
+                        item.Content = d.content;
+                        item.DestinationCountry = d.destination;
+                        if (d.destinationCity == "")
+                            item.DestinationCity = d.destination;
+                        else
+                            item.DestinationCity = d.destinationCity;
+                        item.DestinationLocation = d.receiverAddress;
+                        if (d.receiverAddress.IndexOf(':') > 0)
+                        {
+                            string contact = d.receiverAddress.Split(':')[0];
+                            string address = d.receiverAddress.Split(':')[1];
+                            item.ReceiverContact = contact;
+                            item.ReceiverAddress = address;
+                        }
+                        else
+                        {
+                            item.ReceiverContact = "";
+                            item.ReceiverAddress = d.receiverAddress;
+                        }
+                        item.Pcs =CommanFunctions.ParseInt(d.pcs);
+                        item.Receiver = d.receiverName;
+
+
+                        item.ReceiverPhone = d.receiverPhone;
+
+                        item.Currency = d.currency;
+                        item.Value = d.customsValue;
+                        vm.Details.Add(item);
+                        // Console.WriteLine("{0}", d.awbNo);
+                    }
+                    Session["ManifestImported"] = vm.Details;
+                    return PartialView("ItemList", vm);
+                    //return View(vm);
+                    //return Json(new { data = "ok"});
+                }
+                else
+                {
+                    //return View(vm);
+                    return PartialView("ItemList", vm);
+                    //return Json(new { data = response.StatusCode });
+                    //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                }
+            }
+        }
+        public async Task<ActionResult> ShowItemList(string InputDate) 
+        {
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.Details = new List<ImportManifestItem>();
+            string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
+            string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy");
+            string urlParameters = "?dateTime=" + idate;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(URL);
+                //HTTP GET
+                // Add an Accept header for JSON format.
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+
+                // List data response.
+                HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                if (response.IsSuccessStatusCode)
+                {
+                    // Parse the response body.
+
+                    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+                    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
+                    int sno = 0;
+                    foreach (Importproductdata d in dataObjects.data)
+                    {
+                        ImportManifestItem item = new ImportManifestItem();
+                        sno++;
+                        item.Sno = sno;
+                        item.AWBNo = d.awbNo;
+                        item.AWBDate = d.awbDate;
+                        item.Bag = d.bagNo;
+                        if (d.cod == "")
+                            item.COD ="0";
+                        else
+                            item.COD = d.cod;
+                        item.Weight = d.weight;
+                        item.ImportType = d.reference;
+                        item.Shipper = d.shipper;
+                        item.ShipperPhone = d.cnorTel;
+                        item.Content = d.content;
+                        item.DestinationCountry = d.destination;
+                        if (d.destinationCity == "")
+                            item.DestinationCity = d.destination;
+                        else
+                        item.DestinationCity = d.destinationCity;
+                        item.DestinationLocation = d.receiverAddress;
+                        if (d.receiverAddress.IndexOf(':')>0)
+                        {
+                            string contact = d.receiverAddress.Split(':')[0];
+                            string address = d.receiverAddress.Split(':')[1];
+                            item.ReceiverContact = contact;
+                            item.ReceiverAddress = address;
+                        }
+                        else
+                        {
+                            item.ReceiverContact = "";
+                            item.ReceiverAddress = d.receiverAddress;
+                        }
+                        item.Pcs = CommanFunctions.ParseInt(d.pcs);
+                        item.Receiver = d.receiverName;
+                        
+                        
+                        item.ReceiverPhone = d.receiverPhone;
+
+                        item.Currency = d.currency;
+                        item.Value = d.customsValue;
+                        vm.Details.Add(item);
+                       // Console.WriteLine("{0}", d.awbNo);
+                    }
+                    Session["ManifestImported"] = vm.Details;
+                    return PartialView("ItemList",vm);
+                    //return View(vm);
+                    //return Json(new { data = "ok"});
+                }
+                else
+                {
+                    //return View(vm);
+                    return PartialView("ItemList", vm);
+                    //return Json(new { data = response.StatusCode });
+                    //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                }
+            }
+        }
     }
 
 
-    public class DataObject
+    public class MasterDataObject
         {
           public int code { get; set; }
-        public List<productdata> data { get; set; }
+        public List<Importproductdata> data { get; set; }
         public string message { get; set; }
 
         }
 
-    public class productdata
+    public class Importproductdata
     {
         public string shipper { get; set; }
         public string pcs { get; set; }
@@ -469,7 +730,7 @@ namespace CMSV2.Controllers
 
         public string receiverAddress { get; set; }
         public string receiverPhone { get; set; }
-        
+        public string cnorTel { get; set; }
         public string cod { get; set; }
         public string currency { get; set; }
 
@@ -480,4 +741,13 @@ namespace CMSV2.Controllers
         public string status { get; set; }
     }
 
+    public class postbill
+    {
+        public List<updateitem> bills { get; set; }
+    }
+    public class updateitem
+    {
+        public string AWBNo { get; set; }
+        public string synchronisedDateTime { get; set; }
+     }
 }

@@ -86,11 +86,11 @@ namespace CMSV2.Controllers
                 //ViewBag.Location = db.LocationMasters.ToList();
                 ViewBag.Employee = db.EmployeeMasters.ToList();
                 //ViewBag.FAgent = db.AgentMasters.Where(cc => cc.AgentType == 4).ToList(); // )// .ForwardingAgentMasters.ToList();
-                ViewBag.FAgent = db.ForwardingAgentMasters.ToList();
+                ViewBag.FAgent = db.ForwardingAgentMasters.OrderBy(cc=>cc.FAgentName).ToList();
                 ViewBag.Movement = db.CourierMovements.ToList();
                 ViewBag.ProductType = db.ProductTypes.ToList();
                 ViewBag.parceltype = db.ParcelTypes.ToList();
-                ViewBag.customerrate = db.CustomerRateTypes.ToList();
+                ViewBag.customerrate = db.CustomerRateTypes.OrderBy(cc=>cc.CustomerRateType1).ToList();
                //not using ViewBag.CourierDescription = db.CourierDescriptions.ToList(); // not used
                 ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
                 ViewBag.CourierStatusList = db.CourierStatus.ToList();
@@ -240,51 +240,78 @@ namespace CMSV2.Controllers
                 int yearid = Convert.ToInt32(Session["fyearid"].ToString());
                 int userid = Convert.ToInt32(Session["UserID"].ToString());
                 string AWBNo = string.Empty;
-
-                string aw = (from c in db.InScans orderby c.AWBNo descending select c.AWBNo).FirstOrDefault();
+                int DepotInScanID = 0;
                 PickupRequestDAO _dao = new PickupRequestDAO();
-              
-                AWBNo = _dao.GetMaAWBNo(companyId,branchid);                
+                if (v.InScanID == 0)
+                {                   
+                    var awbgenerate = db.AcCompanies.Find(companyId).IsAWBAutoGenrated;
+                    if (awbgenerate == null)
+                        awbgenerate = false;
+                    if (Convert.ToBoolean(awbgenerate))
+                    {
+                        AWBNo = _dao.GetMaAWBNo(companyId, branchid);
+                    }
+                    else
+                    {
+                        var checkinscan = db.InScanMasters.Where(cc => cc.AWBNo == v.HAWBNo && cc.IsDeleted==false).FirstOrDefault(); 
+                        if (checkinscan!=null)
+                        {
+                            DepotInScanID = checkinscan.InScanID;
+                            
+                        }
+
+                    }
+                }
                 try
                 {
-                    int CurrentBranchID=Convert.ToInt32(Session["CurrentBranchID"].ToString());                   
                     
                     InScanMaster inscan = new InScanMaster();
 
                     if (v.InScanID == 0)
                     {
-                        int id = (from c in db.InScanMasters orderby c.InScanID descending select c.InScanID).FirstOrDefault();
-                        inscan.InScanID = id + 1;
-                        //    _enquiry.EnquiryNo = _dao.GetMaxPickupRequest(companyId, branchid); // (id + 1).ToString();
+                        //int id = (from c in db.InScanMasters orderby c.InScanID descending select c.InScanID).FirstOrDefault();
+                        //inscan.InScanID = id + 1;
+                        if (DepotInScanID > 0)
+                        {
+                            inscan = db.InScanMasters.Find(DepotInScanID);
+                            v.InScanID = inscan.InScanID;
+                        }
+
                         inscan.AWBNo = v.HAWBNo; // _dao.GetMaAWBNo(companyId, branchid);
                         inscan.AcCompanyID = companyId;
                         inscan.BranchID = branchid;
                         inscan.DepotID = depotId;
                         inscan.AcFinancialYearID = yearid;
                         inscan.TransactionDate = v.TransactionDate;
-                        inscan.DeviceID = "WebSite";
-                        inscan.EnteredByID = Convert.ToInt32(Session["UserID"]);
+                            if (inscan.DeviceID==null)
+                            inscan.DeviceID = "WebSite";
+                        if (inscan.EnteredByID==null)
+                            inscan.EnteredByID = Convert.ToInt32(Session["UserID"]);
                         inscan.EnquiryNo = null;
                         inscan.IsEnquiry = false;
                         //inscan.PickupRequestStatusId = 4;
-                        inscan.StatusTypeId = 1;
-                        inscan.CourierStatusID = 4;
+                        if (inscan.StatusTypeId==null)
+                            inscan.StatusTypeId = 1;
+                        if (inscan.CourierStatusID==null)
+                            inscan.CourierStatusID = 4;
                         inscan.ConsignorCountryName = v.ConsignorCountryName;
                         inscan.ConsignorCityName = v.ConsignorCityName;
                         inscan.ConsignorLocationName = v.ConsignorLocationName;
                         inscan.CustomerShipperSame = v.CustomerandShipperSame;
-                        //if (v.CustomerandShipperSame==true)                            
-                        inscan.Consignor = v.shippername;
                         
-                        //inscan.ShipperName = v.ShipperName;
+                        inscan.Consignor = v.shippername;                       
+                        
                         inscan.ConsignorAddress1_Building = v.ConsignorAddress1_Building;
                         inscan.ConsignorAddress2_Street = v.ConsignorAddress2_Street;
                                     
                         inscan.ConsignorContact = v.ConsignorContact;
-                        inscan.CreatedBy = userid;
-                        //DateTime univDateTime = DateTime.Now;
-                        //DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
-                        inscan.CreatedDate = CommanFunctions.GetCurrentDateTime();
+
+                        if (inscan.CreatedBy==null)
+                            inscan.CreatedBy = userid;
+                        
+                        if (inscan.CreatedDate==null)
+                            inscan.CreatedDate = CommanFunctions.GetCurrentDateTime();
+
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
 
@@ -347,29 +374,14 @@ namespace CMSV2.Controllers
                     {
                         inscan.OtherCharge = Convert.ToDecimal(v.OtherCharge);
                     }
-                    //if (v.PackingCharge != null)
-                    //{
-                    //    inscan.PackingCharge = Convert.ToDecimal(v.PackingCharge);
-                    //}
+                 
                     if (v.Weight!=null)
                     {
                         inscan.Weight = Convert.ToDecimal(v.Weight);
                     }
-                    //if (v.paymentmode!=null)
-                    //{
-                    //    inscan.StatusPaymentMode = v.paymentmode;
-                    //}
+               
 
-                    inscan.PaymentModeId = v.PaymentModeId;
-                    
-                    //if (v.CourierType!=null)
-                    //{
-                    //    inscan.CourierDescriptionID = v.CourierType;
-                    //}
-                    //if (v.CourierMode!=null)
-                    //{
-                    //    inscan.TaxconfigurationID = v.CourierMode;
-                    //}
+                    inscan.PaymentModeId = v.PaymentModeId;                                     
 
                   
                     inscan.Consignee = v.Consignee;
@@ -417,9 +429,10 @@ namespace CMSV2.Controllers
                     //inscan.InScanDate = DateTime.UtcNow;
 
 
-                    
-                    inscan.PickedUpEmpID =v.PickedBy;
+                    if (inscan.PickedUpEmpID==null)
+                      inscan.PickedUpEmpID =v.PickedBy;
 
+                    if (inscan.DepotReceivedBy==null)
                     inscan.DepotReceivedBy = v.ReceivedBy;
 
                     inscan.IsNCND = v.IsNCND;
@@ -433,9 +446,10 @@ namespace CMSV2.Controllers
                     inscan.DeliverySubLocality = v.DeliverySubLocality;
                     inscan.OriginPlaceID = v.PickupLocationPlaceId;
                     inscan.DestinationPlaceID = v.DeliveryLocationPlaceId;
+                    inscan.AWBProcessed = true;
                     InScanInternationalDeatil isid = new InScanInternationalDeatil();
                     InScanInternational isi = new InScanInternational();
-                    if (v.InScanID == 0)
+                    if (v.InScanID == 0 && DepotInScanID==0)
                     {
 
                         if (inscan.PickedUpEmpID != null)
@@ -497,23 +511,11 @@ namespace CMSV2.Controllers
                                 inscan.CourierStatusID = 5; //received at origin facility
                             }
                        }
-
-                        isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        isi = db.InScanInternationals.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        if (isid==null)
-                        {
-                            isid=new InScanInternationalDeatil();
-                            isid.InScanID = inscan.InScanID;
-                        }
-                        if (isi == null)
-                        {
-                            isi = new InScanInternational();
-                            isi.InScanID = inscan.InScanID;
-                        }
-
+                       
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
 
+                        //Material cost table update
                         MaterialCostMaster mc = new MaterialCostMaster();
                         mc = db.MaterialCostMasters.Where(cc => cc.InScanID == inscan.InScanID).FirstOrDefault();
                         if (mc!=null)
@@ -535,6 +537,11 @@ namespace CMSV2.Controllers
                             db.MaterialCostMasters.Add(mc);
                             db.SaveChanges();
                         }
+
+
+
+
+
                         try
                         {
                             SaveConsignorAddress(v);
@@ -567,6 +574,19 @@ namespace CMSV2.Controllers
 
                     if (v.FagentID >0)
                     {
+                        isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
+                        isi = db.InScanInternationals.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
+                        if (isid == null)
+                        {
+                            isid = new InScanInternationalDeatil();
+                            isid.InScanID = inscan.InScanID;
+                        }
+                        if (isi == null)
+                        {
+                            isi = new InScanInternational();
+                            isi.InScanID = inscan.InScanID;                            
+                        }
+
                         if (v.FagentID != null)
                         {
                             isi.FAgentID = v.FagentID;
@@ -575,16 +595,29 @@ namespace CMSV2.Controllers
                         if (v.ForwardingCharge != null)
                         {
                             isi.ForwardingCharge = Convert.ToDecimal(v.ForwardingCharge);
+                            isid.ForwardingCharge = Convert.ToDecimal(v.ForwardingCharge);
                         }
                         isi.StatusAssignment = false;
                         isi.ForwardingAWBNo = v.FAWBNo;
-                        isi.ForwardingDate = DateTime.UtcNow;
+                        isi.ForwardingDate = inscan.TransactionDate; // DateTime.UtcNow;
+                        isi.VerifiedWeight =Convert.ToDouble(inscan.Weight);
 
-                        if (isi.InScanInternationalID == 0)
+                        isid.VerifiedWeight = inscan.Weight;
+
+                        if (isi.InScanInternationalID==0)
                         {
                             db.InScanInternationals.Add(isi);
                             db.SaveChanges();
+                        }
+                        else
+                        {
+                            db.Entry(isi).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
 
+                        if (isid.InScanInternationalDeatilID == 0)
+                        {                           
+                          
                             isid.InscanInternationalID = isi.InScanInternationalID;
                             db.InScanInternationalDeatils.Add(isid);
                             db.SaveChanges();
@@ -592,7 +625,7 @@ namespace CMSV2.Controllers
                         else
                         {
 
-                            db.Entry(isi).State = EntityState.Modified;
+                            db.Entry(isid).State = EntityState.Modified;
                             db.SaveChanges();
                         }
                     }
@@ -1598,7 +1631,7 @@ namespace CMSV2.Controllers
                 obj = new ConsigneeMaster();
             }
             obj.ConsignorName = model.shippername;
-            obj.ConsigneeName = model.consigneename;
+            obj.ConsigneeName = model.Consignee;
             obj.ConsigneeContactName = model.ConsigneeContact;
             obj.ConsigneeAddress1 = model.ConsigneeAddress1_Building;
             obj.ConsigneeAddress2 = model.ConsigneeAddress2_Street;
@@ -2408,6 +2441,10 @@ namespace CMSV2.Controllers
                 obj.Exist = 0;
                 AWBInfo info = AWBDAO.GetAWBInfo(id.Trim());
                 obj.AWBInfo = info;
+            }
+            else if(data!=null && data.AWBProcessed==false)
+            {
+                obj.Exist = 0;
             }
             else
             {
