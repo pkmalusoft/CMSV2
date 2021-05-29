@@ -458,6 +458,21 @@
 
     $(document).ready(function () {
        // callniceapi();
+
+        $('#ManifestDate').change(function () {
+             $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetManifestNo", "ImportManifest")',
+                datatype: "json",
+                data: {
+                    ManifestDateTime: $('#ManifestDate').val()
+                },
+                success: function (data) {
+                    $('#ManifestNumber').val(data);
+                }
+            });
+
+        })
         $('#btnFixation').click(function () {
             $.ajax({
                 type: 'POST',
@@ -572,21 +587,31 @@
                 url: "/ImportManifest/SaveImport",
                 datatype: "Json",
                 data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
-                success: function (response) {                    
-                    $.ajax({
+                success: function (response) {
+                    debugger;
+                    if (response.status == "ok") {
+                        console.log(response.data);
+                    
+                        $.ajax({
                             type: 'POST',
                             url: '@Url.Action("CallPostAPI", "ImportManifest")',
                             datatype: "json",
-                            data: {
-                                InputDate: $('#ManifestDate').val()
-                            },
+                            //contentType: "application/json;charset=UTF-8",
+                            //data: {
+                            //    InputDate: $('#ManifestDate').val()
+                            //},
                             success: function (data) {
                                 $.notify("Import Shipment Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 window.location.href = "/ImportManifest/Index";
                             }
                         });
-               
+                    }
+                    else {
+                        $.notify(response.Message, "error");
+                        //console.log(response.Message);
+                    }
+
                 },
                 error: function (err) {
                     console.log(err);

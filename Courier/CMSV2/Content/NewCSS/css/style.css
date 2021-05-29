@@ -6003,7 +6003,9 @@ hr {
 .justify-between {
     justify-content: space-between;
 }
-
+.align-end{
+    align-items: flex-end;
+}
 .m-top {
     margin-top: 25px;
 }
@@ -6194,6 +6196,14 @@ p.indexbtnpadding {
     padding: 0 5px !important;
     border-radius: 5px !important;
 }
+.sm_btn {
+    min-width: 25px !important;
+    width: 30px !important;
+    margin-top: 32px;
+    font-size: 15px;
+    padding: 0 5px !important;
+    border-radius: 5px !important;
+}
 
 .t-read-only td {
     color: #35b8eb;
@@ -6226,11 +6236,13 @@ p.indexbtnpadding {
     body .headinglabel,body .ratelabel {
         font-size: 13px!important;
     }
-     
+     .mt-3{
+        margin-top: 28px;
+     }
     .timelineDetails label{
         font-size: 13px!important;
     }
-    .small_btn {
+    .small_btn,.sm-btn {
         margin-top: 28px;
     }
    .btn-res{

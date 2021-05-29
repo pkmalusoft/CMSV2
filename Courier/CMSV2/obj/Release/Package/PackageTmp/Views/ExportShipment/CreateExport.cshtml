@@ -462,7 +462,8 @@ input::-webkit-inner-spin-button {
             </div>
 
             <div class="col-md-12" id="Details">
-                <hr />
+                <hr  style="margin-bottom: 20px!important; border-top: 1px solid #35b8eb;
+"/>
                 <div class="row">
                     <span style="color:red;display:none" id="DetailsError">* Please fill all required fields</span>
                 </div>
@@ -518,7 +519,7 @@ input::-webkit-inner-spin-button {
 
                 
 
-                    <div class="col-md-1 reve_rates1">
+                    <div class="col-md-1 ">
                         <label class="headinglabel required">Bag</label>
                         <input type="text" id="tBagNo" name="tBagNo" class="form-control text-right" />
                     </div>
@@ -541,12 +542,12 @@ input::-webkit-inner-spin-button {
 
 
 
-                    <div class="col-md-3 ">
+                    <div class="col-md-2 ">
                         <label class="headinglabel required">Destination </label>
                         <input id="tDestinationCityID" name="tDestinationCityID" type="text" class="form-control" onfocus="geoCitylocate()">
                     </div>
 
-                    <div class="col-md-1  form-group bt-right">
+                    <div class="col-md-4  bt-right">
 
                         <input type="hidden" id="tId" name="tId" value="0" />
                         <input type="hidden" id="tfwdagent" name="tfwdagent" value="0" />
@@ -555,17 +556,24 @@ input::-webkit-inner-spin-button {
                         <input type="hidden" id="tfwdcharge" name="tfwdcharge" value="0" />
                         <input type="hidden" id="totherchrg" name="totherchrg" value="0" />
                         <input type="hidden" id="tfwdflight" name="tfwdflight" value="" />
-                        <div class="row form-group" id="addbtndiv" style="text-align:right;">
-                            <button type="button" class="btn btn-primary sm_btn btnwidth" onclick="addShipment1()"  id="Newbtn"><i class="fa fa-plus"></i></button>
+                        <div class="form-group flex justify-between mt-3 form-group" id="addbtndiv" style="">
+                            <button type="button" class="btn btn-primary sm_btn mt-0 btnwidth" onclick="addShipment1()"  id="Newbtn"><i class="fa fa-plus"></i></button>
+                             <button class="btn btn-danger ">Clear All</button>
+                     <button type="submit" class="btn btn-primary btnwidth" >Save</button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
                             @*<button type="button" class="btn btn-secondary small_btn waves-effect waves-light" style="margin:0 0 0 0 !important" onclick="CancelDetails()">Cancel</button>*@
                         </div>
-                        <div class="" id="updatebtndiv" style="text-align:right;margin-top:10px;display:none">
+                        <div class="" id="updatebtndiv" style="margin-top:10px;display:none">
                             <button type="button" class="btn sm_btn btn-primary btnwidth"  onclick="UpdateDetails()" id="Updatebtn"><i class="fa fa-check"></i></button>&nbsp;&nbsp;
                             <button type="button" class="btn btn-danger sm_btn btnwidth float-right"  onclick="CancelDetails()"><i class="fa fa-times"></i></button>
+
+
                         </div>
 
 
                     </div>
+                   
+                  
                 </div>
             </div>
 
@@ -650,10 +658,7 @@ input::-webkit-inner-spin-button {
 
         </div>*@
             <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12 btn-right">
-                    <input type="submit" value="Save" class="btn btn-primary btnwidth" />&nbsp;&nbsp;
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
-                </div>
+                
             </div>
             }
 

@@ -89,8 +89,8 @@ namespace CMSV2.Controllers
             if (id == 0)
             {
                 vm.CompanyCountryName = CompanyCountryName;
-                vm.ManifestNumber = ImportDAO.GetMaxManifestNo(1, 1);
                 vm.ManifestDate = CommanFunctions.GetCurrentDateTime().ToString();
+                vm.ManifestNumber = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, Convert.ToDateTime(vm.ManifestDate), "I");                
                 vm.ID = 0;
             }
             else
@@ -209,7 +209,7 @@ namespace CMSV2.Controllers
 
 
         [HttpPost]
-        public string SaveImport(string Master, string Details)
+        public JsonResult SaveImport(string Master, string Details)
         {
             try
             {
@@ -320,12 +320,14 @@ namespace CMSV2.Controllers
                 postbill postbill = new postbill();
                 postbill.bills = bills;
                 Session["bills"] = postbill;
-               // CallPostAPI(model.ManifestDate.ToString());
-                return "ok";
+                var json = JsonConvert.SerializeObject(bills);
+                // CallPostAPI(model.ManifestDate.ToString());
+                return Json(new { status="ok", data =bills });
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                //return ex.Message;
+                return Json(new { status = "Failed", Message=ex.Message });
 
             }
         }
@@ -480,18 +482,15 @@ namespace CMSV2.Controllers
             return View("ItemList",model);
         }
 
-        public async Task<ActionResult> CallPostAPI(string InputDate)
+        [HttpPost]
+        public async Task<ActionResult> CallPostAPI()
         {
             string URL = "http://www.niceexpress.net/API/v1/postAPI.do";
-            string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
+            //string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
             
-            postbill bills = (postbill)Session["bills"];
-            //List<updateitem> bills1 = new List<updateitem>();
-            //bills1.Add(bills[0]);
-            //bills1.Add(bills[1]);
-            //bills1.Add(bills[2]);
-            var json = JsonConvert.SerializeObject(bills);
-            string urlParameters = "?bills=" + json;
+            postbill bills = (postbill)Session["bills"];            
+            //var json = JsonConvert.SerializeObject(bills);
+            //string urlParameters = "?bills=" + json;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(URL);
@@ -520,7 +519,8 @@ namespace CMSV2.Controllers
                 //{
                 //    return Json(new { Status = "Failed", Message = "API Not Updated Successfully " });
                 //}
-                return Json(new { Status = "ok", Message = "API Updated Successfully " });
+                
+                return Json(new { Status = "ok", Message = "API Updated Successfully " }, JsonRequestBehavior.AllowGet);
             }
             //return "notworked";
         }
@@ -694,6 +694,26 @@ namespace CMSV2.Controllers
                     //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 }
             }
+        }
+
+        [HttpGet]
+        public string GetManifestNo(string ManifestDateTime)
+        {
+            var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+            var BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+            DateTime mDateTime = CommanFunctions.GetCurrentDateTime();
+            try
+            {
+                mDateTime = Convert.ToDateTime(ManifestDateTime);
+            }
+            catch(Exception ex)
+            {
+                mDateTime = CommanFunctions.GetCurrentDateTime();
+            }
+             
+            string manifestno = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, mDateTime, "I");
+            return manifestno;
+
         }
     }
 

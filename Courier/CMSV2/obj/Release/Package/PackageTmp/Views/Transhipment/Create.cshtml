@@ -144,12 +144,38 @@
     }
     function CallAutoFixation() {
         //AutoDataFixation
+        $('#loaderpopup').modal('show')
           $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: '@Url.Action("AutoDataFixation", "Transhipment")',
-             datatype: "json",             
+             datatype: "json",
             success: function (data) {
-                alert(data);
+                
+                if (data == "ok") {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ShowItemList", "Transhipment")',
+                        datatype: "html",
+                        success: function (data) {
+                            $("#listContainer").html(data);
+                            var max = $('#listbody > tr').length;
+                            $('#loaderpopup').modal('hide')
+                            $('#btnUpload').removeAttr('disabled');
+                            $('#TotalAWB').val(max);
+                        },
+                        error: function (err) {
+                            $('#loaderpopup').modal('hide')
+                            console.log(err);
+                        }
+                    });
+                }
+                else {
+                    $('#loaderpopup').modal('hide')
+                }
+              },
+            error: function (err) {
+                  $('#loaderpopup').modal('hide')
+                  console.log(err);
               }
             });
     }
@@ -176,7 +202,7 @@
         else {
             TargetValue = DestinationValue;
         }
-        
+
         //UpdateDataFixation
          $.ajax({
                 type: 'POST',
@@ -316,6 +342,10 @@
                         $('#btnUpload').removeAttr('disabled');
                         $.notify(response.Message, 'error');
                     }
+                },
+                error: function (err) {
+                    $('#loaderpopup').modal('hide')
+                    console.log(err);
                 }
             });
         }
@@ -333,6 +363,21 @@
 
     $(document).ready(function () {
        // callniceapi();
+
+        $('#ManifestDate').change(function () {
+             $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetManifestNo", "Transhipment")',
+                datatype: "json",
+                data: {
+                    ManifestDateTime: $('#ManifestDate').val()
+                },
+                success: function (data) {
+                    $('#ManifestNumber').val(data);
+                }
+            });
+
+        })
         $('#btnFixation').click(function () {
             $.ajax({
                 type: 'POST',
@@ -450,7 +495,7 @@
                 success: function (response) {
                     $.notify("Transhipment Saved Succesfully!", "success");
                     $('#btnSave').removeAttr('disabled');
-                    window.location.href = "/ImportManifest/Index";
+                    window.location.href = "/Transhipment/Index";
                     @*$.ajax({
                             type: 'POST',
                             url: '@Url.Action("CallPostAPI", "ImportManifest")',
@@ -729,7 +774,7 @@
 
             </div>                       
             
-            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px" id="listContainer">
+            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll" id="listContainer">
                 @{Html.RenderPartial("ItemList", Model);}
             </div>
             <hr />

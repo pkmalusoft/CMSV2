@@ -93,8 +93,11 @@ namespace CMSV2.Controllers
                 
                 //deleting the details items
                 var details = (from d in db.ZoneChartDetails where d.ZoneChartID== z.ZoneChartID select d).ToList();
-                db.ZoneChartDetails.RemoveRange(details);
-                db.SaveChanges();
+                if (details != null)
+                {
+                    db.ZoneChartDetails.RemoveRange(details);
+                    db.SaveChanges();
+                }
             }
 
                 List<ZoneChartDetail> l = new List<ZoneChartDetail>();
