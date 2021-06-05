@@ -17,12 +17,22 @@ namespace CMSV2.DAL
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_ImportManifestList";
             cmd.CommandType = CommandType.StoredProcedure;
+            if (paramobj.AWBNo==null)
+            {
+                paramobj.AWBNo = "";
+            }
+            cmd.Parameters.AddWithValue("@AWBNO", paramobj.AWBNo);
 
             if (paramobj.FromDate != null)
                 cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
+            else
+                cmd.Parameters.AddWithValue("@FromDate", "");
 
             if (paramobj.ToDate != null)
                 cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(paramobj.ToDate).ToString("MM/dd/yyyy"));
+            else
+                cmd.Parameters.AddWithValue("@ToDate", "");
+
 
             cmd.Parameters.AddWithValue("@ShipmentTypeId", ShipmentTypeId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -53,6 +63,7 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_ImportManifestList";
             cmd.CommandType = CommandType.StoredProcedure;
 
+            cmd.Parameters.AddWithValue("@AWBNO", "");
             if (paramobj.FromDate != null)
                 cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
 

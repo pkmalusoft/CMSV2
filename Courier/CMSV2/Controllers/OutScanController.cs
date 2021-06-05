@@ -36,17 +36,20 @@ namespace CMSV2.Controllers
                 obj = new OutScanSearch();
                 obj.FromDate = pFromDate;
                 obj.ToDate = pToDate;
-                Session["InScanSearch"] = obj;
+                obj.DRSDetails = new List<DRSVM>();
+                Session["OutScanSearch"] = obj;
                 model.FromDate = pFromDate;
                 model.ToDate = pToDate;
+                model.DRSDetails = new List<DRSVM>();
+                obj.DRSDetails = new List<DRSVM>();
             }
             else
             {
                 model = obj;
+                obj.DRSDetails = new List<DRSVM>();
             }
             List<DRSVM> lst = PickupRequestDAO.GetOutScanList(obj.FromDate, obj.ToDate, yearid, branchid, depotId);
-            model.Details = lst;
-
+            model.DRSDetails = lst;            
             return View(model);
 
 
@@ -119,6 +122,8 @@ namespace CMSV2.Controllers
         public class DRSDet
         {
             public int InScanID { get; set; }
+            public bool deleted { get; set; }
+            public int ShipmentDetailID { get; set; }
             public string AWB { get; set; }
             public string consignor { get; set; }
             public string consignee { get; set; }
@@ -127,6 +132,8 @@ namespace CMSV2.Controllers
             public string address { get; set; }
             public decimal COD { get; set; }
             public decimal MaterialCost { get; set; }
+
+            public decimal CustomValue { get; set; }
         }
 
         public JsonResult GetAWBData(string id)
@@ -146,6 +153,7 @@ namespace CMSV2.Controllers
                 {
 
                     obj.AWB = l.AWBNo;
+                    obj.ShipmentDetailID = 0;
                     obj.InScanID = l.InScanID;
                         obj.consignor = l.Consignor;
                     obj.consignee = l.Consignee;
@@ -156,7 +164,7 @@ namespace CMSV2.Controllers
                         obj.address = l.ConsigneeCountryName;
                     }
                     if (l.CourierCharge != null)
-                        obj.COD = Convert.ToDecimal(l.CourierCharge);
+                        obj.COD = Convert.ToDecimal(l.NetTotal);// + Convert.ToDecimal(l.OtherCharge);
                     else
                         obj.COD = 0;
                     if (l.MaterialCost != null)
@@ -170,7 +178,47 @@ namespace CMSV2.Controllers
             }
             else
             {
-                return Json(new { status = "failed",data =l, message = "Data Not Found" }, JsonRequestBehavior.AllowGet);
+                //12  At Destination Customs Facility Depot Outscan
+                var import = db.ImportShipmentDetails.Where(cc => cc.CourierStatusID == 21 && cc.AWB == id.Trim() && cc.DRSID == null).FirstOrDefault();
+                if (import != null)
+                {
+                    DRSDet obj = new DRSDet();
+                    if (import != null)
+                    {
+
+                        obj.AWB = import.AWB;
+                        obj.InScanID = 0;
+                        obj.ShipmentDetailID = import.ShipmentDetailID;
+                        obj.consignor = import.Shipper;
+                        obj.consignee = import.Receiver;
+                        if (import.DestinationCity!= null)
+                        {
+                            obj.city = import.DestinationCity.ToString();
+                            obj.phone = import.ReceiverTelephone;
+                            obj.address = import.ReceiverAddress;
+                        }
+                        
+                        if (import.COD != null)
+                            obj.COD = Convert.ToDecimal(import.COD);
+                        else
+                            obj.COD = 0;
+
+                        if (import.CustomValue != null)
+                            obj.MaterialCost= Convert.ToDecimal(import.CustomValue);
+                        else
+                            obj.MaterialCost = 0;
+
+                        
+
+                    }
+
+                    return Json(new { status = "ok", data = obj, message = "Data Found" }, JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    return Json(new { status = "failed", data = l, message = "Data Not Found" }, JsonRequestBehavior.AllowGet);
+                }
             }
             //return Json(obj, JsonRequestBehavior.AllowGet);
         }
@@ -182,7 +230,7 @@ namespace CMSV2.Controllers
 
             //var data = (from c in db.DRSDetails where c.DRSID == id select c).ToList();
             var lstawb = (from c in db.InScanMasters where c.DRSID == id select c).ToList();
-            //var lstawb = (from c in db.DRSDetails where c.DRSID == id select c).ToList();
+            var lstawb1 = (from c in db.ImportShipmentDetails where c.DRSID == id select c).ToList();
             if (lstawb != null)
             {
                 foreach (var item in lstawb)
@@ -209,12 +257,41 @@ namespace CMSV2.Controllers
                 }
                 
             }
+
+            if (lstawb1 != null)
+            {
+                foreach (var item in lstawb1)
+                {
+                    var l = (from c in db.ImportShipmentDetails where c.AWB == item.AWB select c).FirstOrDefault();
+                    DRSDet obj = new DRSDet();
+                    obj.AWB = l.AWB;
+                    obj.InScanID = 0;
+                    obj.ShipmentDetailID = l.ShipmentDetailID;
+                    obj.consignor = l.Shipper;
+                    obj.consignee = l.Receiver;
+                    if (l.DestinationCity != null)
+                        obj.city = l.DestinationCity.ToString();
+                    if (l.ReceiverTelephone != null)
+                        obj.phone = l.ReceiverTelephone;
+                    if (l.DestinationCountry != null)
+                        obj.address = l.DestinationCountry;
+                    if (l.COD != null)
+                        obj.COD = Convert.ToDecimal(l.COD);
+                    if (l.CustomValue != null)
+                        obj.MaterialCost = Convert.ToDecimal(l.CustomValue);
+                    else
+                        obj.MaterialCost = 0;
+                    list.Add(obj);
+                }
+
+            }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult Create(DRSVM v)
         {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             int UserId = Convert.ToInt32(Session["UserID"].ToString());
             int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
@@ -228,13 +305,8 @@ namespace CMSV2.Controllers
                 DR objdrs = new DR();
             if (v.DRSID == 0)
             {
-                int max = (from c in db.DRS orderby c.DRSID descending select c.DRSID).FirstOrDefault();
-                if (max == null)
-                    max = 1;
-                else
-                    max = max + 1;
-
-                objdrs.DRSID = max;
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                v.DRSNo = _dao.GetMaxDRSNo(CompanyId, BranchId);
                 objdrs.DRSNo = v.DRSNo;
                 objdrs.BranchID = BranchId;
                 objdrs.AcCompanyID = CompanyId;
@@ -242,6 +314,7 @@ namespace CMSV2.Controllers
                 objdrs.StatusInbound = false;
                 objdrs.DrsType = "Courier";
                 objdrs.CreatedBy = UserId;
+                objdrs.FYearId = yearid;
                 objdrs.CreatedDate = CommanFunctions.GetCurrentDateTime();
                 
             }
@@ -275,7 +348,7 @@ namespace CMSV2.Controllers
                 foreach (var item in data)
                 {
 
-                    var awbtrack = db.AWBTrackStatus.Where(cc => cc.InScanId == item.InScanID && cc.ShipmentStatus == "OUTSCAN" && cc.CourierStatus == "Out for Delivery at Origin").First();
+                    var awbtrack = db.AWBTrackStatus.Where(cc => cc.InScanId == item.InScanID && cc.ShipmentStatus == "Depot Outscan" && cc.CourierStatus == "Out For Delivery").First();
                     db.AWBTrackStatus.Remove(awbtrack);
                     db.SaveChanges();
 
@@ -290,7 +363,7 @@ namespace CMSV2.Controllers
                     }
                     else
                     {
-                        _inscan.CourierStatusID =db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out for Delivery at Origin").FirstOrDefault().CourierStatusID;;
+                        _inscan.CourierStatusID =db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Depot Outscan").FirstOrDefault().CourierStatusID;;
                         _inscan.StatusTypeId = 2;
                     }
                     db.Entry(_inscan).State = EntityState.Modified;
@@ -306,72 +379,66 @@ namespace CMSV2.Controllers
             foreach (var item in v.lst)
             {
 
-                var _inscan = db.InScanMasters.Find(item.InScanID);
-                _inscan.DRSID = objdrs.DRSID;                                
-                _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Outscan").First().ID;
-                _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out For Delivery").FirstOrDefault().CourierStatusID;             
-                db.Entry(_inscan).State = EntityState.Modified;
-                db.SaveChanges();
-
-                //updateing awbstaus table for tracking
-                AWBTrackStatu _awbstatus = new AWBTrackStatu();
-                int? id = (from c in db.AWBTrackStatus orderby c.AWBTrackStatusId descending select c.AWBTrackStatusId).FirstOrDefault();
-
-                if (id == null)
-                    id = 1;
-                else
-                    id = id + 1;
-
-                _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                _awbstatus.AWBNo = _inscan.AWBNo;
-                _awbstatus.EntryDate = DateTime.Now;
-                _awbstatus.InScanId = _inscan.InScanID;
-                _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
-                _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
-                _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                _awbstatus.UserId = UserId;
-                _awbstatus.EmpID = v.DeliveredBy;
-                db.AWBTrackStatus.Add(_awbstatus);
-                db.SaveChanges();
-
-                MaterialCostMaster mc = new MaterialCostMaster();
-                mc = db.MaterialCostMasters.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
-                if (mc != null)
+                if (item.InScanID > 0) //Doemstic item
                 {
-                    mc.DRSID = objdrs.DRSID; 
-                    mc.Status = "OUTSCAN";
-                    db.Entry(mc).State = EntityState.Modified;
+                    var _inscan = db.InScanMasters.Find(item.InScanID);
+                    _inscan.DRSID = objdrs.DRSID;
+                    _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Outscan").First().ID;
+                    _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out For Delivery").FirstOrDefault().CourierStatusID;
+                    db.Entry(_inscan).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    //updateing awbstaus table for tracking
+                    AWBTrackStatu _awbstatus = new AWBTrackStatu();                                     
+                    _awbstatus.AWBNo = _inscan.AWBNo;
+                    _awbstatus.EntryDate = objdrs.DRSDate;
+                    _awbstatus.InScanId = _inscan.InScanID;
+                    _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
+                    _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
+                    _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                    _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                    _awbstatus.UserId = UserId;
+                    _awbstatus.EmpID = v.DeliveredBy;
+                    db.AWBTrackStatus.Add(_awbstatus);
+                    db.SaveChanges();
+
+                    MaterialCostMaster mc = new MaterialCostMaster();
+                    mc = db.MaterialCostMasters.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
+                    if (mc != null)
+                    {
+                        mc.DRSID = objdrs.DRSID;
+                        mc.Status = "OUTSCAN";
+                        db.Entry(mc).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else if(item.InScanID==0 && item.ShipmentDetailID>0) //Import items
+                {
+                    var _inscan = db.ImportShipmentDetails.Find(item.ShipmentDetailID);
+                    _inscan.DRSID = objdrs.DRSID;
+                    _inscan.StatusTypeId = 3;// db.tblStatusTypes.Where(cc => cc.Name == "Depot Outscan").First().ID;
+                    _inscan.CourierStatusID = 8; //Out for delivery ;// db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Out For Delivery").FirstOrDefault().CourierStatusID;
+                    db.Entry(_inscan).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    //updateing awbstaus table for tracking
+                    AWBTrackStatu _awbstatus = new AWBTrackStatu();                                       
+                    _awbstatus.AWBNo = _inscan.AWB;
+                    _awbstatus.EntryDate = objdrs.DRSDate;
+                    _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
+                    _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
+                    _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
+                    _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                    _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                    _awbstatus.UserId = UserId;
+                    _awbstatus.EmpID = v.DeliveredBy;
+                    db.AWBTrackStatus.Add(_awbstatus);
                     db.SaveChanges();
                 }
-
             }
 
 
-            //foreach (var item in v.lst)
-            //{
-            //    DRSDetail d = new DRSDetail();
-            //    d.DRSID = objdrs.DRSID;
-            //    d.AWBNO = item.AWB;
-            //    d.InScanID = item.InScanID;
-            //    d.CourierCharge = item.COD;
-            //    d.MaterialCost = 0;
-            //    d.StatusPaymentMode = "PKP";
-            //    d.CCReceived = 0;
-            //    d.CCStatuspaymentType = "CS";
-            //    d.MCReceived = 0;
-            //    d.MCStatuspaymentType = "CS";
-            //    d.Remarks = "";
-            //    d.ReceiverName = item.Consignee;
-            //    d.CourierStatusID = 9;
-            //    d.StatusAWB = "DD";
-            //    d.EmployeeID = Convert.ToInt32(Session["UserID"].ToString());
-            //    d.ReturnTime = DateTime.Now;
-
-            //    db.DRSDetails.Add(d);
-            //    db.SaveChanges();
-
-            //}
+           
             TempData["success"] = "DRS Saved Successfully.";
             return RedirectToAction("Index");
          

@@ -3417,5 +3417,82 @@ namespace CMSV2.DAL
 
 
         }
+
+
+        public static string CustomerVATTaxInvoiceReport(int id, string InvoiceDetailIDs="")
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_VATTaxInvoiceReport";
+            comd.Parameters.AddWithValue("@InvoiceId", id);
+            comd.Parameters.AddWithValue("@InvoiceDetailIDs", InvoiceDetailIDs);            
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "TAXInvoiceReport");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "VATTaxInvoicePrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "VATTaxInvoicePrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            //   rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("INVOICE");
+
+            //string totalwords = NumberToWords.ConvertAmount(Convert.ToDouble(ds.Tables[0].Rows[0]["InvoiceTotal"].ToString()), monetaryunit);
+
+            //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            //rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "VATTaxInvoicePrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            //reportparam.ReportFileName = reportname;
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
     }
 }

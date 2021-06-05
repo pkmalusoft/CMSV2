@@ -47,7 +47,8 @@ namespace CMSV2.Controllers
                 var loc = db.GetZoneChartByCustomer(r.CustomerRateTypeID);
                 Zones lst = new Zones(); 
                 lst = (from c in loc where c.ZoneChartID==r.ZoneChartID select new Zones { ZoneID = c.ZoneChartID, ZoneName = c.ZoneName }).FirstOrDefault();
-                vm.ZoneChartName = lst.ZoneName;
+                if (lst!=null)
+                    vm.ZoneChartName = lst.ZoneName;
                 //vm.CountryID = r.CountryID.Value;
                 vm.FAgentID = r.FAgentID.Value;
                 vm.CustomerRateID = r.CustomerRateID;

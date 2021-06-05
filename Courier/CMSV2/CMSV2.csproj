@@ -223,6 +223,7 @@
     <Compile Include="Controllers\AgentCollectionRateController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\AgentDeliveryRateController.cs" />
+    <Compile Include="Controllers\TaxInvoiceController.cs" />
     <Compile Include="Controllers\AgentShipmentController.cs" />
     <Compile Include="Controllers\AWBBatchController.cs" />
     <Compile Include="Controllers\AWBBookIssueController.cs" />
@@ -538,6 +539,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AnalysisHeadSelectByID_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\APIDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AreaMaster.cs">
@@ -1722,6 +1726,13 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SessionDataModel.cs" />
+    <Compile Include="Models\ShipmentInvoice.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShipmentInvoiceDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShipmentInvoiceVM.cs" />
     <Compile Include="Models\ShipmentItemVM.cs" />
     <Compile Include="Models\SOP_AcHeadForCombo_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -3132,6 +3143,7 @@
     <Content Include="Reports\MaterialCostLedger.rpt" />
     <Content Include="Reports\SalesRegisterCountry.rpt" />
     <Content Include="Reports\SalesRegisterSummary.rpt" />
+    <Content Include="Reports\VATTaxInvoicePrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3685,6 +3697,13 @@
     <Content Include="Views\Transhipment\ItemList.cshtml" />
     <Content Include="Views\Transhipment\Create - Copy.cshtml" />
     <Content Include="Template\TranshipmentTemplate.csv" />
+    <Content Include="Views\InBound\ItemList.cshtml" />
+    <Content Include="Views\TaxInvoice\Index.cshtml" />
+    <Content Include="Views\TaxInvoice\Create.cshtml" />
+    <Content Include="Views\TaxInvoice\ItemList.cshtml" />
+    <Content Include="Views\TaxInvoice\InvoicePrint.cshtml" />
+    <Content Include="Views\TaxInvoice\Details.cshtml" />
+    <Content Include="Views\InBound\Create - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

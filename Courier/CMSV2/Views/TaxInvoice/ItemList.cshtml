@@ -1,0 +1,46 @@
+﻿@model CMSV2.Models.ShipmentInvoiceVM
+@{
+    int i = 0; 
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table1 = $('#DetailsTable').DataTable({ "paging": false, "sPaginationType": "simple" });
+
+    });
+</script>
+<table class="table table-responsive table-bordered tblfont" role="grid" style="min-width: 100%" id="DetailsTable">
+    <thead>
+    <th style="width:12%">AWB No.</th>
+    <th>Bag</th>
+    <th>Shipper</th>
+    <th>Invoice Value</th>
+    <th>Tax %</th>
+    <th>Tax Amount</th>
+    <th>Admin Charges</th>    
+    </thead>
+    <tbody class="input-table" id="listbody">
+        @foreach (var item in Model.Details)
+        {
+        <tr>
+            <td>
+                @Html.HiddenFor(model => model.Details[i].ShipmentInvoiceDetailID, new { })
+                @Html.CheckBoxFor(model => model.Details[i].AWBChecked, new { @id = "hdnawbchecked_" + @i, @awb = item.AWBNo, shipmentdetailid = item.ShipmentInvoiceDetailID, @class = "checkfilter calfield", style = "margin-left:10px;" })
+                @item.AWBNo
+            </td>
+            <td>@item.BagNo</td>
+            <td>
+                @item.Shipper
+            </td>
+            <td>
+                @item.InvoiceValue
+            </td>
+            <td>@item.TaxP</td>
+            <td>@item.Tax</td>
+            <td>@item.adminCharges</td>            
+        </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+

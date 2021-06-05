@@ -119,5 +119,6 @@ namespace CMSV2.Models
         public string JobCode { get; set; }
         public Nullable<int> FAgentId { get; set; }
         public Nullable<int> ImportShipmentId { get; set; }
+        public int PODID { get; set; }
     }
 }

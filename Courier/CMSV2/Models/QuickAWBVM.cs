@@ -15,7 +15,18 @@ namespace CMSV2.Models
     {
         public string AWBNo { get; set; }
         public QuickAWBVM AWB { get; set; }
+        public POD PODStatus { get; set; }        
+        public PODImage PODImage { get; set; }
         public List<AWBTrackStatusVM> Details { get; set; }
+    }
+
+    public class PODImage
+    {
+
+        public int id { get; set; }
+        public int PODID { get; set; }
+        public byte[] image { get; set; }
+        
     }
     public class AWBTrackStatusVM :AWBTrackStatu
     {

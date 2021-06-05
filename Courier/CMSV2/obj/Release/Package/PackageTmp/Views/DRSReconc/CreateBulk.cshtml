@@ -754,7 +754,7 @@
         @*@Html.HiddenFor(model => model.StatusEntry)*@
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.ReconciledAmount)
-    <div class="row  drsReceipt">
+    <div class="row  drsReceipt" style="padding-bottom: 24px;"> 
         <div class="col-xs-12 col-sm-2">
             <label class="headinglabel required">Delivered By</label>
             @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
@@ -782,11 +782,62 @@
             @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control", @readonly = "readonly" })
             <input type="hidden" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1 text-right">
             <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:33px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
         </div>
+
+         <div class="col-md-11 btn-right" style="padding-top: 10px">
+                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnSave" name="Command" />
+                    <a href='@Url.Action("Index", "DRSReconc", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+                </div>
+       
     </div>
     }
+
+               
+    <div class="row">
+        <div class="col-lg-12">
+            <table  border="1"  class="table table-bordered ">
+              <tr style="font-weight: bold">
+                        <td></td>
+                        <td>Total</td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalCOD" value="0" /></td>
+                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalMC" value="0" /></td>
+                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalReceipt" value="0" /></td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
+                        
+                         <td colspan="1" class="text-right">
+                            <label id="lbshortage">SHORTAGE</label>
+                        </td>
+                        <td colspan="1">
+                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
+                        </td>
+                    </tr>
+                    @*<tr>
+                        <td></td>
+                        <td></td>
+                        <td colspan="1" class="text-right">
+                            DRS Receipt
+                        </td>
+                        <td colspan="1">
+                            <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
+                        </td>
+                    </tr>*@
+                   
+                    @*<tr>
+                            <td colspan="6" class="text-right">
+                                TOTAL
+                            </td>
+                            <td colspan="2">
+
+                            </td>
+                        </tr>*@
+                </table>
+        </div>
+    </div>
     <div class="row no-margin">   
         <div class="col-lg-12">
             <table border="1"  class="table table-bordered table-responsive">
@@ -840,54 +891,10 @@
                     }
                 </tbody>
                 <tfoot>
-                    <tr style="font-weight: bold">
-                        <td></td>
-                        <td>Total</td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalCOD" value="0" /></td>
-                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalMC" value="0" /></td>
-                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalReceipt" value="0" /></td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
-                        
-                    </tr>
-                    @*<tr>
-                        <td></td>
-                        <td></td>
-                        <td colspan="1" class="text-right">
-                            DRS Receipt
-                        </td>
-                        <td colspan="1">
-                            <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
-                        </td>
-                    </tr>*@
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td colspan="1" class="text-right">
-                            <label id="lbshortage">SHORTAGE</label>
-                        </td>
-                        <td colspan="1">
-                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
-                        </td>
-                    </tr>
-                    @*<tr>
-                            <td colspan="6" class="text-right">
-                                TOTAL
-                            </td>
-                            <td colspan="2">
-
-                            </td>
-                        </tr>*@
+                  
                 </tfoot>
             </table>
-            <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12 btn-right">
-                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnSave" name="Command" />
-                    <a href='@Url.Action("Index", "DRSReconc", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
-                </div>
-            </div>
+          
         </div>
 
     </div>

@@ -105,37 +105,46 @@ namespace CMSV2.Controllers
 
 
             customername = "WALK-IN-CUSTOMER";
-            var CashCustomer = (from c1 in db.CustomerMasters
-                                where c1.CustomerName.Trim() == customername
-                                orderby c1.CustomerName ascending
-                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (CashCustomer != null)
-            {
-                v.CASHCustomerId = CashCustomer.CustomerID;
-                v.CASHCustomerName = customername;
-            }
+            v.CASHCustomerId = -1; 
+            v.CASHCustomerName = customername;
+            
+            //var CashCustomer = (from c1 in db.CustomerMasters
+            //                    where c1.CustomerName.Trim() == customername
+            //                    orderby c1.CustomerName ascending
+            //                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            //if (CashCustomer != null)
+            //{
+            //    v.CASHCustomerId = CashCustomer.CustomerID;
+            //    v.CASHCustomerName = customername;
+            //}
 
             customername = "COD-CUSTOMER";
-            var CODCustomer = (from c1 in db.CustomerMasters
-                               where c1.CustomerName == customername
-                               orderby c1.CustomerName ascending
-                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (CODCustomer != null)
-            {
-                v.CODCustomerID = CODCustomer.CustomerID;
-                v.CODCustomerName = "COD-CUSTOMER";
-            }
+            v.CODCustomerID = -2;
+            v.CODCustomerName = "COD-CUSTOMER";
+
+            //var CODCustomer = (from c1 in db.CustomerMasters
+            //                   where c1.CustomerName == customername
+            //                   orderby c1.CustomerName ascending
+            //                   select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            //if (CODCustomer != null)
+            //{
+            //    v.CODCustomerID = CODCustomer.CustomerID;
+            //    v.CODCustomerName = "COD-CUSTOMER";
+            //}
 
             customername = "FOC CUSTOMER";
-            var FOCCustomer = (from c1 in db.CustomerMasters
-                               where c1.CustomerName == customername
-                               orderby c1.CustomerName ascending
-                               select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
-            if (FOCCustomer != null)
-            {
-                v.FOCCustomerID = FOCCustomer.CustomerID;
-                v.FOCCustomerName = "FOC CUSTOMER";
-            }
+            v.FOCCustomerID = -3;
+            v.FOCCustomerName = "FOC CUSTOMER";
+
+            //var FOCCustomer = (from c1 in db.CustomerMasters
+            //                   where c1.CustomerName == customername
+            //                   orderby c1.CustomerName ascending
+            //                   select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName }).FirstOrDefault();
+            //if (FOCCustomer != null)
+            //{
+            //    v.FOCCustomerID = FOCCustomer.CustomerID;
+            //    v.FOCCustomerName = "FOC CUSTOMER";
+            //}
             var FAgent = db.ForwardingAgentMasters.Where(cc => cc.StatusDefault == true).FirstOrDefault();
             if (FAgent != null)
             {
@@ -149,7 +158,7 @@ namespace CMSV2.Controllers
             }
             if (id == 0)
                 {
-                    ViewBag.Enquiry = db.InScanMasters.Where(dd => dd.CourierStatusID == 4).ToList();
+                //ViewBag.Enquiry = db.InScanMasters.FirstOrDefault();//.Where(dd => dd.CourierStatusID == 4).ToList();
                     PickupRequestDAO doa = new PickupRequestDAO();
                     var awbgenerate = db.AcCompanies.Find(companyId).IsAWBAutoGenrated;
                 if (awbgenerate == null)
@@ -178,6 +187,7 @@ namespace CMSV2.Controllers
                     v.PaymentModeId = 1;
                 v.CustomerID = v.CASHCustomerId;
                 v.customer = v.CASHCustomerName;
+                v.FagentID = v.DefaultFAgentID;
                     ViewBag.EditMode = "false";
                     int userId = Convert.ToInt32(Session["UserID"].ToString());
                     var useremp = (from e in db.EmployeeMasters where e.UserID == userId select e).First();
@@ -201,8 +211,8 @@ namespace CMSV2.Controllers
             }
                 else
                 {
-                
-                ViewBag.Enquiry = db.InScanMasters.ToList();
+
+                //ViewBag.Enquiry = db.InScanMasters.FirstOrDefault();
                     v = GetAWBDetail(id);
                 v.TaxPercent = 5;
                 otherchargesvm = (from c in db.InscanOtherCharges join o in db.OtherCharges on c.OtherChargeID equals o.OtherChargeID where c.InscanID == id select new OtherChargeDetailVM { InscanID = id, OtherChargeID = c.OtherChargeID, OtherChargeName = o.OtherCharge1, Amount = c.Amount }).ToList();
@@ -542,15 +552,15 @@ namespace CMSV2.Controllers
 
 
 
-                        try
-                        {
-                            SaveConsignorAddress(v);
-                            SaveConsigeeAddress(v);
-                        }
-                        catch(Exception ex)
-                        {
+                        //try
+                        //{
+                        //    SaveConsignorAddress(v);
+                        //    SaveConsigeeAddress(v);
+                        //}
+                        //catch(Exception ex)
+                        //{
 
-                        }
+                        //}
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         //    _dao.AWBAccountsPosting(inscan.InScanID);
 
@@ -1068,7 +1078,10 @@ namespace CMSV2.Controllers
                     }
              }
             
-
+             if (data.FAgentId!=null)
+            {
+                inscan.FagentID = Convert.ToInt32(data.FAgentId);
+            }
                 var d = (from c in db.InScanInternationals where c.InScanID == inscan.InScanID select c).FirstOrDefault();
                 if (d != null)
                 {
@@ -1078,6 +1091,15 @@ namespace CMSV2.Controllers
                     //inscan.VerifiedWeight = d.VerifiedWeight;
                     inscan.ForwardingCharge = d.ForwardingCharge;
                 }
+
+
+            var custrate = db.CustomerRates.Find(data.CustomerRateID);
+            if (custrate!=null)
+            {
+                var ratettype = db.CustomerRateTypes.Find(custrate.CustomerRateTypeID);
+                inscan.CustomerRateType = ratettype.CustomerRateType1;
+                inscan.CustomerRateTypeID = Convert.ToInt32(data.CustomerRateID);
+            }
 
             return inscan;
 
@@ -1586,73 +1608,154 @@ namespace CMSV2.Controllers
         
         public void SaveConsignorAddress(QuickAWBVM model)
         {
+
             bool newentry = false;
-            ConsignorMaster obj = db.ConsignorMasters.Where(cc => cc.ConsignorName == model.shippername).FirstOrDefault();
+            try
+            {
 
-            if (obj == null)
-            {
-                newentry = true;
-                obj = new ConsignorMaster();
-            }
-            obj.ConsignorName = model.shippername;
-            obj.ConsignorContactName = model.ConsignorContact;
-            obj.ConsignorPhoneNo = model.ConsignorPhone;
-            obj.ConsignorAddress1 = model.ConsignorAddress1_Building;
-            obj.ConsignorAddress2 = model.ConsignorAddress2_Street;
-            obj.ConsignorAddress3 = model.ConsignorAddress3_PinCode;
-            obj.MobileNo = model.ConsignorMobile;
-            obj.ConsignorLocationName = model.ConsignorLocationName;
-            obj.ConsignorCountryname = model.ConsignorCountryName;
-            obj.ConsignorCityName = model.ConsignorCityName;
 
-            if (newentry == true)
-            {
-                db.ConsignorMasters.Add(obj);
-                db.SaveChanges();
+                ConsignorMaster obj = db.ConsignorMasters.Where(cc => cc.ConsignorName == model.shippername).FirstOrDefault();
+
+                if (obj == null)
+                {
+                    newentry = true;
+                    obj = new ConsignorMaster();
+                }
+                obj.ConsignorName = model.shippername;
+                if (model.ConsignorContact == null)
+                {
+                    obj.ConsignorContactName = "";
+                }
+                else
+                {
+                    obj.ConsignorContactName = model.ConsignorContact;
+                }
+                //obj.ConsignorContactName = model.ConsignorContact;
+                obj.ConsignorPhoneNo = model.ConsignorPhone;
+                if (model.ConsignorAddress1_Building == null)
+                {
+                    obj.ConsignorAddress1 = "";
+                }
+                else
+                {
+                    obj.ConsignorAddress1 = model.ConsignorAddress1_Building;
+                }
+                if (model.ConsignorAddress2_Street == null)
+                {
+                    obj.ConsignorAddress2 = "";
+                }
+                else
+                {
+                    obj.ConsignorAddress2 = model.ConsignorAddress2_Street;
+                }
+                if (model.ConsignorAddress3_PinCode == null)
+                {
+                    obj.ConsignorAddress3 = "";
+                }
+                else
+                {
+                    obj.ConsignorAddress3 = model.ConsignorAddress3_PinCode;
+                }
+                obj.MobileNo = model.ConsignorMobile;
+                obj.ConsignorLocationName = model.ConsignorLocationName;
+                obj.ConsignorCountryname = model.ConsignorCountryName;
+                obj.ConsignorCityName = model.ConsignorCityName;
+
+                if (newentry == true)
+                {
+                    db.ConsignorMasters.Add(obj);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
+                string exmessage = ex.Message;
             }
-             
         }
 
 
         
         public void SaveConsigeeAddress(QuickAWBVM model)
         {
-            bool newentry = false;
-            ConsigneeMaster obj = db.ConsigneeMasters.Where(cc => cc.ConsigneeName == model.Consignee && cc.ConsignorName == model.shippername).FirstOrDefault();
+           bool newentry = false;
+            try
+            {
+                ConsigneeMaster obj = db.ConsigneeMasters.Where(cc => cc.ConsigneeName == model.Consignee && cc.ConsignorName == model.shippername).FirstOrDefault();
 
-            if (obj == null)
-            {
-                newentry = true;
-                obj = new ConsigneeMaster();
-            }
-            obj.ConsignorName = model.shippername;
-            obj.ConsigneeName = model.Consignee;
-            obj.ConsigneeContactName = model.ConsigneeContact;
-            obj.ConsigneeAddress1 = model.ConsigneeAddress1_Building;
-            obj.ConsigneeAddress2 = model.ConsigneeAddress2_Street;
-            obj.ConsigneeAddress3 = model.ConsigneeAddress3_PinCode;
-            obj.ConsigneePhoneNo = model.ConsigneePhone;
-            obj.MobileNo = model.ConsigneeMobile;
-            obj.ConsigneeLocationName = model.ConsigneeLocationName;
-            obj.ConsigneeCountryname = model.ConsigneeCountryName;
-            obj.ConsigneeCityName = model.ConsigneeCityName;
+                if (obj == null)
+                {
+                    newentry = true;
+                    obj = new ConsigneeMaster();
+                }
+                obj.ConsignorName = model.shippername;
+                obj.ConsigneeName = model.Consignee;
+                if (model.ConsigneeContact==null)
+                {
+                    obj.ConsigneeContactName = "";
+                }
+                else
+                {
+                    obj.ConsigneeContactName = model.ConsigneeContact;
+                }
+                if (model.ConsigneeAddress1_Building==null)
+                {
+                    obj.ConsigneeAddress1 = "";
+                }
+                else
+                {
+                    obj.ConsigneeAddress1 = model.ConsigneeAddress1_Building;
+                }
+                if (model.ConsigneeAddress2_Street==null)
+                {
+                    obj.ConsigneeAddress2 = "";
+                }
+                else
+                {
+                    obj.ConsigneeAddress2 = model.ConsigneeAddress2_Street;
+                }
+                if (model.ConsigneeAddress3_PinCode==null)
+                {
+                    obj.ConsigneeAddress3 = "";
+                    
+                }
+                else
+                {
+                    obj.ConsigneeAddress3 = model.ConsigneeAddress3_PinCode;
+                }
+                if (model.ConsigneePhone == null)
+                {
+                    obj.ConsigneePhoneNo = "";
+                }
+                else
+                {
+                    obj.ConsigneePhoneNo = model.ConsigneePhone;
+                }
+                
+                obj.MobileNo = model.ConsigneeMobile;
+                obj.ConsigneeLocationName = model.ConsigneeLocationName;
+                obj.ConsigneeCountryname = model.ConsigneeCountryName;
+                obj.ConsigneeCityName = model.ConsigneeCityName;
 
-            if (newentry == true)
-            {
-                db.ConsigneeMasters.Add(obj);
-                db.SaveChanges();
+                if (newentry == true)
+                {
+                    db.ConsigneeMasters.Add(obj);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
+                string exmessage = ex.Message;
             }
-             
         }
         public class selectdata
         {
@@ -1725,13 +1828,30 @@ namespace CMSV2.Controllers
                                          where c.InScanId == model.AWB.InScanID
                                          orderby c.EntryDate
                                          select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName }).ToList();
+
+                        model.PODStatus = db.PODs.Where(cc => cc.InScanID == model.AWB.InScanID).FirstOrDefault();
+
                     }
                     else
                     {
-                        model.AWB = new QuickAWBVM();
+                        model.AWB = (from c in db.ImportShipmentDetails where c.AWB == obj.AWBNo select new QuickAWBVM { InScanID = c.ShipmentDetailID, HAWBNo = c.AWB, Consignor = c.Shipper, ConsignorContact = "", ConsignorCountryName = "", ConsignorAddress1_Building = "", ConsignorAddress2_Street = "", ConsignorAddress3_PinCode = "", ConsigneeAddress1_Building = c.ReceiverAddress, ConsigneeAddress2_Street = "", ConsigneeAddress3_PinCode = "", Consignee = c.Receiver, ConsigneeContact = c.ReceiverContact, ConsigneeCountryName = "", Pieces = c.PCS.ToString(), Weight = c.Weight, CourierCharge = c.COD, OtherCharge = 0, totalCharge = c.COD, Description = c.Contents, IsCashOnly = false, IsNCND = false, IsChequeOnly = false, IsCollectMaterial = false, IsDOCopyBack = false, PaymentModeId = 3 }).FirstOrDefault();
+                        if (model.AWB!=null)
+                        {                         
                         List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
-                        model.Details = details;
-                    }
+                            model.Details = (from c in db.AWBTrackStatus
+                                             join c1 in db.EmployeeMasters on c.EmpID equals c1.EmployeeID
+                                             where c.ShipmentDetailID == model.AWB.InScanID
+                                             orderby c.EntryDate
+                                             select new AWBTrackStatusVM { ShipmentDetailID = c.ShipmentDetailID, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName ,CourierStatusId=c.CourierStatusId }).ToList();
+                            //model.Details = details;
+                        }
+                        else
+                        {
+                            model.AWB = new QuickAWBVM();
+                            List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
+                            model.Details = details;
+                        }
+                }
                 }
                 else
                 {

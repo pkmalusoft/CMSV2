@@ -14,7 +14,7 @@ namespace CMSV2.Controllers
     public class InScanController : Controller
     {
         Entities1 db = new Entities1();
-        public ActionResult Index()
+        public ActionResult Index() 
         {
 
             InScanSearch obj = (InScanSearch)Session["InScanSearch"];

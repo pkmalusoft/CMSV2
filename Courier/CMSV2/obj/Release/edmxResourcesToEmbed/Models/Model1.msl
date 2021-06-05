@@ -38,6 +38,7 @@
     <EntitySetMapping Name="AcCompanies">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcCompany">
         <MappingFragment StoreEntitySet="AcCompany">
+          <ScalarProperty Name="EnableAPI" ColumnName="EnableAPI" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
           <ScalarProperty Name="AcCompany1" ColumnName="AcCompany" />
           <ScalarProperty Name="ParentID" ColumnName="ParentID" />
@@ -8369,6 +8370,7 @@
     <EntitySetMapping Name="DRSRecPays">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
         <MappingFragment StoreEntitySet="DRSRecPay">
+          <ScalarProperty Name="DRSBased" ColumnName="DRSBased" />
           <ScalarProperty Name="DRRID" ColumnName="DRRID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="BranchId" ColumnName="BranchId" />
@@ -8572,6 +8574,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
           <ScalarProperty Name="ImportShipmentId" ColumnName="ImportShipmentId" />
           <ScalarProperty Name="FAgentId" ColumnName="FAgentId" />
           <ScalarProperty Name="JobCode" ColumnName="JobCode" />
@@ -8860,6 +8863,7 @@
     <EntitySetMapping Name="DRS">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
         <MappingFragment StoreEntitySet="DRS">
+          <ScalarProperty Name="TotalCustomValue" ColumnName="TotalCustomValue" />
           <ScalarProperty Name="TotalCourierCharge" ColumnName="TotalCourierCharge" />
           <ScalarProperty Name="FYearId" ColumnName="FYearId" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -8926,6 +8930,12 @@
     <EntitySetMapping Name="ImportShipmentDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
         <MappingFragment StoreEntitySet="ImportShipmentDetails">
+          <ScalarProperty Name="ShipmentInvoiceId" ColumnName="ShipmentInvoiceId" />
+          <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
+          <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+          <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+          <ScalarProperty Name="MAWB" ColumnName="MAWB" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
           <ScalarProperty Name="ImportType" ColumnName="ImportType" />
           <ScalarProperty Name="DestinationLocation" ColumnName="DestinationLocation" />
           <ScalarProperty Name="CODReceiptId" ColumnName="CODReceiptId" />
@@ -8958,6 +8968,7 @@
     <EntitySetMapping Name="AWBTrackStatus">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
         <MappingFragment StoreEntitySet="AWBTrackStatus">
+          <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
           <ScalarProperty Name="EmpID" ColumnName="EmpID" />
           <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -9109,6 +9120,54 @@
           <ScalarProperty Name="FieldName" ColumnName="FieldName" />
           <ScalarProperty Name="ShipmentType" ColumnName="ShipmentType" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APIDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.APIDetail">
+        <MappingFragment StoreEntitySet="APIDetail">
+          <ScalarProperty Name="APISignatureValue" ColumnName="APISignatureValue" />
+          <ScalarProperty Name="APISignature" ColumnName="APISignature" />
+          <ScalarProperty Name="APIKeyValue" ColumnName="APIKeyValue" />
+          <ScalarProperty Name="APIKeyname" ColumnName="APIKeyname" />
+          <ScalarProperty Name="APILink" ColumnName="APILink" />
+          <ScalarProperty Name="APIType" ColumnName="APIType" />
+          <ScalarProperty Name="AppPage" ColumnName="AppPage" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShipmentInvoices">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ShipmentInvoice">
+        <MappingFragment StoreEntitySet="ShipmentInvoice">
+          <ScalarProperty Name="MAWB" ColumnName="MAWB" />
+          <ScalarProperty Name="FYearId" ColumnName="FYearId" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="ShipmentImportID" ColumnName="ShipmentImportID" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="ShipmentInvoiceID" ColumnName="ShipmentInvoiceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShipmentInvoiceDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail">
+        <MappingFragment StoreEntitySet="ShipmentInvoiceDetails">
+          <ScalarProperty Name="adminCharges" ColumnName="adminCharges" />
+          <ScalarProperty Name="TaxP" ColumnName="TaxP" />
+          <ScalarProperty Name="Tax" ColumnName="Tax" />
+          <ScalarProperty Name="InvoiceValue" ColumnName="InvoiceValue" />
+          <ScalarProperty Name="ShipmentInvoiceID" ColumnName="ShipmentInvoiceID" />
+          <ScalarProperty Name="ShipmentImportDetailID" ColumnName="ShipmentImportDetailID" />
+          <ScalarProperty Name="ShipmentInvoiceDetailID" ColumnName="ShipmentInvoiceDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

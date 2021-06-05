@@ -35,5 +35,6 @@ namespace CMSV2.Models
         public Nullable<int> BranchId { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<int> DRRID { get; set; }
+        public bool DRSBased { get; set; }
     }
 }

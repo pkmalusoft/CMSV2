@@ -65,7 +65,8 @@ namespace CMSV2.Controllers
             List<CustmorVM> lst = new List<CustmorVM>();
             if (SearchText.Trim() != "")
             {
-                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerName.ToLower().Contains(SearchText.ToLower()) && ite.CustomerID > 0).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").ToList();
+                //var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerName.ToLower().Contains(SearchText.ToLower()) && ite.CustomerID > 0).Where(ite => ite.CustomerType == "CS" || ite.CustomerType == "CR").OrderBy(cc=>cc.CustomerName).ToList();
+                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite => ite.CustomerName.ToLower().Contains(SearchText.ToLower()) && ite.CustomerID > 0).OrderBy(cc => cc.CustomerName).ToList();
 
                 foreach (var item in data)
                 {
@@ -80,6 +81,25 @@ namespace CMSV2.Controllers
                     c.Phone = item.Phone;
                     lst.Add(c);
                 }
+            }
+            else
+            {
+                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).OrderBy(cc=>cc.CustomerName).Take(100).ToList();
+
+                foreach (var item in data)
+                {
+                    CustmorVM c = new CustmorVM();
+
+                    c.CustomerID = item.CustomerID;
+                    c.CustomerType = item.CustomerType;
+                    c.CustomerCode = item.CustomerCode;
+                    c.CustomerName = item.CustomerName;
+                    c.ContactPerson = item.ContactPerson;
+                    c.Mobile = item.Mobile;
+                    c.Phone = item.Phone;
+                    lst.Add(c);
+                }
+
             }
             ViewBag.SearchText = SearchText;
             return View(lst);

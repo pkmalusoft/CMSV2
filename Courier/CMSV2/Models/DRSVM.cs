@@ -35,9 +35,7 @@ namespace CMSV2.Models
     public string DrsType { get; set; }
 
     public string Depot { get; set; }
-
     public List<DRSAWB> lst { get; set; }
-
     public string Deliver { get; set; }
 
     public string vehicle { get; set; }
@@ -52,7 +50,7 @@ namespace CMSV2.Models
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
-        public List<DRSVM> Details { get; set; }
+        public List<DRSVM> DRSDetails { get; set; }
 
     }
 }

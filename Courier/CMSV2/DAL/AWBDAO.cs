@@ -45,14 +45,14 @@ namespace CMSV2.DAL
             if (paramobj.DocumentNo != null)
                 cmd.Parameters.AddWithValue("@DocumentNo", paramobj.DocumentNo);
 
-            if (paramobj.FromDate!=null)
-            cmd.Parameters.AddWithValue("@FromDate",  Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
+            if (paramobj.FromDate != null)
+                cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
 
             if (paramobj.ToDate != null)
                 cmd.Parameters.AddWithValue("@ToDate", Convert.ToDateTime(paramobj.ToDate).ToString("MM/dd/yyyy"));
-            
+
             cmd.Parameters.AddWithValue("@BranchID", branchId);
-            
+
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -85,7 +85,7 @@ namespace CMSV2.DAL
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
-            da.Fill(ds);            
+            da.Fill(ds);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 return ds.Tables[0].Rows[0][0].ToString();
@@ -108,11 +108,11 @@ namespace CMSV2.DAL
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
-                        cmd.CommandText = "SP_GenerateAWBBookIssue"; 
+                        cmd.CommandText = "SP_GenerateAWBBookIssue";
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Connection = con;
                         con.Open();
-                        cmd.Parameters.AddWithValue("@AWBBookIssueID", AWBBookIssueID);                        
+                        cmd.Parameters.AddWithValue("@AWBBookIssueID", AWBBookIssueID);
                         cmd.ExecuteNonQuery();
 
                     }
@@ -123,7 +123,7 @@ namespace CMSV2.DAL
                 return ex.Message;
             }
             return "OK";
-           
+
 
         }
 
@@ -209,7 +209,7 @@ namespace CMSV2.DAL
                     obj.AWBNOTo = ds.Tables[0].Rows[i]["AWBNOTo"].ToString();
                     obj.Reference = ds.Tables[0].Rows[i]["Reference"].ToString();
                     obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
-                    
+
                     objList.Add(obj);
                 }
             }
@@ -228,12 +228,12 @@ namespace CMSV2.DAL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-                     
+
             if (ds != null && ds.Tables.Count > 0)
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    
+
                     obj.ReferenceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["ReferenceID"].ToString());
                     obj.AWBNo = ds.Tables[0].Rows[0]["AWBNo"].ToString();
                     obj.Status = ds.Tables[0].Rows[0]["Status"].ToString();
@@ -253,7 +253,7 @@ namespace CMSV2.DAL
                     }
                     if (obj.Status == "Available" && (obj.Mode == "Prepaid" || obj.Mode == "NotPrepaid"))
                     {
-                        obj.CustomerID = ds.Tables[0].Rows[0]["CustomerID"]== DBNull.Value ?0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"].ToString());
+                        obj.CustomerID = ds.Tables[0].Rows[0]["CustomerID"] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[0]["CustomerID"].ToString());
                         obj.CustomerName = ds.Tables[0].Rows[0]["CustomerName"].ToString();
                         obj.OriginLocation = ds.Tables[0].Rows[0]["OriginLocation"].ToString();
                         obj.DestinationLocation = ds.Tables[0].Rows[0]["DestinationLocation"].ToString();
@@ -270,7 +270,7 @@ namespace CMSV2.DAL
                         obj.DeliverySubLocality = ds.Tables[0].Rows[0]["DeliverySubLocality"].ToString();
                         obj.OriginPlaceID = ds.Tables[0].Rows[0]["OriginPlaceID"].ToString();
                         obj.DestinationPlaceID = ds.Tables[0].Rows[0]["DestinationPlaceID"].ToString();
-                        
+
                     }
                     else
                     {
@@ -280,7 +280,7 @@ namespace CMSV2.DAL
             }
 
             return obj;
-           
+
         }
         public static AWBBatchDetail GetAWBTrackStatus(string AWBNo)
         {
@@ -299,34 +299,34 @@ namespace CMSV2.DAL
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    
-                    if (ds.Tables[0].Rows[0]["Status"].ToString()== "StatusAvailable")
+
+                    if (ds.Tables[0].Rows[0]["Status"].ToString() == "StatusAvailable")
                     {
                         DataRow dr = ds.Tables[0].Rows[0];
                         obj.AWBTrackStatus = "Available";
                         obj.AssignedEmployeeID = dr["AssignedEmployeeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AssignedEmployeeID"].ToString());
                         obj.AssignedForCollection = dr["AssignedForCollection"] == DBNull.Value ? false : Convert.ToBoolean(dr["AssignedForCollection"].ToString());
-                        obj.AssignedDate = dr["AssignedDate"] == DBNull.Value ? "" :dr["AssignedDate"].ToString();
+                        obj.AssignedDate = dr["AssignedDate"] == DBNull.Value ? "" : dr["AssignedDate"].ToString();
                         obj.QuickInscanId = dr["QuickInscanId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuickInscanId"].ToString());
                         obj.InscanVehicleId = dr["InscanVehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InscanVehicleId"].ToString());
                         obj.PickedUpEmpID = dr["PickedUpEmpID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PickedUpEmpID"].ToString()); //collected person id
-                        obj.PickedupDate = dr["PickedupDate"] == DBNull.Value ? "" : dr["PickedupDate"].ToString();                        
-                        obj.CollectedBy= dr["CollectedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["CollectedBy"].ToString());
+                        obj.PickedupDate = dr["PickedupDate"] == DBNull.Value ? "" : dr["PickedupDate"].ToString();
+                        obj.CollectedBy = dr["CollectedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["CollectedBy"].ToString());
                         obj.ReceivedDate = dr["ReceivedDate"] == DBNull.Value ? "" : dr["ReceivedDate"].ToString();
                         obj.DepotReceivedBy = dr["DepotReceivedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DepotReceivedBy"].ToString());
-                        obj.ReceivedBy= dr["ReceivedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReceivedBy"].ToString());
+                        obj.ReceivedBy = dr["ReceivedBy"] == DBNull.Value ? false : Convert.ToBoolean(dr["ReceivedBy"].ToString());
                         obj.OutScanDelivery = dr["OutScanDelivery"] == DBNull.Value ? false : Convert.ToBoolean(dr["OutScanDelivery"].ToString());
                         obj.OutscanVehicleId = dr["OutscanVehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutscanVehicleId"].ToString());
-                        obj.OutscanVehicleId = dr["OutScanDeliveredID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutScanDeliveredID"].ToString());                        
+                        obj.OutscanVehicleId = dr["OutScanDeliveredID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["OutScanDeliveredID"].ToString());
                         obj.OutScanDate = dr["OutScanDate"] == DBNull.Value ? "" : dr["OutScanDate"].ToString();
                         obj.DelieveryAttemptDate = dr["DelieveryAttemptDate"] == DBNull.Value ? "" : dr["DelieveryAttemptDate"].ToString();
                         obj.DeliveryAttemptedBy = dr["DeliveryAttemptedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DeliveryAttemptedBy"].ToString());
-                        obj.Delivered=dr["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(dr["Delivered"].ToString());
+                        obj.Delivered = dr["Delivered"] == DBNull.Value ? false : Convert.ToBoolean(dr["Delivered"].ToString());
                         obj.DeliveredDate = dr["DeliveredDate"] == DBNull.Value ? "" : dr["DeliveredDate"].ToString();
                         obj.DeliveredBy = dr["DeliveredBy"] == DBNull.Value ? 0 : Convert.ToInt32(dr["DeliveredBy"].ToString());
                         obj.CourierId = dr["CourierId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CourierId"].ToString());
                         obj.VehicleId = dr["VehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VehicleId"].ToString());
-                        
+
                         return obj;
                     }
                     else
@@ -334,10 +334,10 @@ namespace CMSV2.DAL
                         DataRow dr = ds.Tables[0].Rows[0];
                         obj.AWBTrackStatus = "Available";
                         obj.CourierId = dr["CourierId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CourierId"].ToString());
-                        obj.VehicleId = dr["VehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VehicleId"].ToString());                        
+                        obj.VehicleId = dr["VehicleId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["VehicleId"].ToString());
                         return obj;
                     }
-                    
+
                 }
             }
 
@@ -397,7 +397,7 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_CheckAWBStock";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@AWBFrom", AWBFrom);
-            cmd.Parameters.AddWithValue("@AWBTo", AWBTo);          
+            cmd.Parameters.AddWithValue("@AWBTo", AWBTo);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -408,31 +408,31 @@ namespace CMSV2.DAL
             if (ds != null && ds.Tables.Count > 0)
             {
                 status1 = Convert.ToBoolean(ds.Tables[0].Rows[0]["Status1"].ToString());
-                status2 =Convert.ToBoolean( ds.Tables[0].Rows[0]["Status2"].ToString());
+                status2 = Convert.ToBoolean(ds.Tables[0].Rows[0]["Status2"].ToString());
                 result = ds.Tables[0].Rows[0]["Message"].ToString();
 
                 if (status1 == true && status2 == true)
                     return "ok";
                 else
                     return result;
-                
+
             }
 
             return "failed";
-            
+
         }
-        public static List<AWBDetailVM> CheckAWBDuplicate(int AWBFrom,int AWBTo, int AWBBookIssueID,int PrePaidAWBID )
+        public static List<AWBDetailVM> CheckAWBDuplicate(int AWBFrom, int AWBTo, int AWBBookIssueID, int PrePaidAWBID)
         {
-            
+
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_CheckAWBDuplicate";
-            cmd.CommandType = CommandType.StoredProcedure;            
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@AWBFrom", AWBFrom);
             cmd.Parameters.AddWithValue("@AWBTo", AWBTo);
             cmd.Parameters.AddWithValue("@AWBBookIssueID", AWBBookIssueID);
             cmd.Parameters.AddWithValue("@PrePaidAWBID", PrePaidAWBID);
-            
+
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -445,7 +445,7 @@ namespace CMSV2.DAL
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     AWBDetailVM obj = new AWBDetailVM();
-                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();                    
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();
                     objList.Add(obj);
                 }
             }
@@ -454,10 +454,10 @@ namespace CMSV2.DAL
         #endregion
 
         #region "AWBBAtch"
-        public  static List<AWBBatchDetail> GetBatchAWBInfo(int BatchID)
+        public static List<AWBBatchDetail> GetBatchAWBInfo(int BatchID)
         {
             List<AWBBatchDetail> list = new List<AWBBatchDetail>();
-           
+
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GETBatchAWB";
@@ -512,15 +512,15 @@ namespace CMSV2.DAL
                         obj.CourierCharge = dt.Rows[i]["CourierCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["CourierCharge"].ToString());
                         obj.MaterialCost = dt.Rows[i]["MaterialCost"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["MaterialCost"].ToString());
                         obj.OtherCharge = dt.Rows[i]["OtherCharge"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["OtherCharge"].ToString());
-                        obj.NetTotal= dt.Rows[i]["NetTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["NetTotal"].ToString());
+                        obj.NetTotal = dt.Rows[i]["NetTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["NetTotal"].ToString());
                         obj.PaymentModeId = dt.Rows[i]["PaymentModeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["PaymentModeId"].ToString());
                         obj.MovementID = dt.Rows[i]["MovementID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["MovementID"].ToString());
                         obj.ParcelTypeId = dt.Rows[i]["ParcelTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["ParcelTypeId"].ToString());
                         obj.DocumentTypeId = dt.Rows[i]["DocumentTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["DocumentTypeId"].ToString());
                         obj.ProductTypeID = dt.Rows[i]["ProductTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["ProductTypeID"].ToString());
-                        obj.PaymentModeText= dt.Rows[i]["PaymentModeText"].ToString();
-                        obj.CargoDescription =dt.Rows[i]["CargoDescription"].ToString();
-                        obj.Pieces = dt.Rows[i]["Pieces"] ==DBNull.Value ? "": dt.Rows[i]["Pieces"].ToString();
+                        obj.PaymentModeText = dt.Rows[i]["PaymentModeText"].ToString();
+                        obj.CargoDescription = dt.Rows[i]["CargoDescription"].ToString();
+                        obj.Pieces = dt.Rows[i]["Pieces"] == DBNull.Value ? "" : dt.Rows[i]["Pieces"].ToString();
                         obj.Weight = dt.Rows[i]["Weight"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["Weight"].ToString());
                         obj.PickupRequestDate = dt.Rows[i]["PickupRequestDate"] == DBNull.Value ? "" : Convert.ToDateTime(dt.Rows[i]["PickupRequestDate"].ToString()).ToString("dd/MM/yyyy");
                         obj.AssignedEmployeeID = dt.Rows[i]["AssignedEmployeeID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["AssignedEmployeeID"].ToString());
@@ -531,8 +531,8 @@ namespace CMSV2.DAL
                         obj.TaxAmount = dt.Rows[i]["TaxAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dt.Rows[i]["TaxAmount"].ToString());
                         obj.SpecialInstructions = dt.Rows[i]["SpecialNotes"] == DBNull.Value ? "" : dt.Rows[i]["SpecialNotes"].ToString();
                         obj.CustomerRateTypeId = dt.Rows[i]["CustomerRateID"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["CustomerRateID"].ToString());
-                        obj.FAgentID  = dt.Rows[i]["FAgentId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["FAgentId"].ToString());
-                      //  obj.FAgentName = dt.Rows[i]["FAgentName"] == DBNull.Value ? "" : dt.Rows[i]["FAgentName"].ToString();
+                        obj.FAgentID = dt.Rows[i]["FAgentId"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["FAgentId"].ToString());
+                        //  obj.FAgentName = dt.Rows[i]["FAgentName"] == DBNull.Value ? "" : dt.Rows[i]["FAgentName"].ToString();
                         obj.CustomerRateType = GetCustomerRateName(obj.CustomerRateTypeId);
                         list.Add(obj);
                     }
@@ -552,7 +552,7 @@ namespace CMSV2.DAL
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetAWBBatchList";
             cmd.CommandType = CommandType.StoredProcedure;
-           
+
             if (paramobj.FromDate != null)
                 cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(paramobj.FromDate).ToString("MM/dd/yyyy"));
 
@@ -575,7 +575,7 @@ namespace CMSV2.DAL
                     obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
                     obj.BatchNumber = ds.Tables[0].Rows[i]["BatchNumber"].ToString();
                     obj.BatchDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["BatchDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
-                    obj.AWBNumbers = ds.Tables[0].Rows[i]["AWBNumbers"].ToString();                    
+                    obj.AWBNumbers = ds.Tables[0].Rows[i]["AWBNumbers"].ToString();
                     objList.Add(obj);
                 }
             }
@@ -601,7 +601,7 @@ namespace CMSV2.DAL
             }
 
         }
-        public static string SaveAWBBatch(int BATCHID  ,int BranchID,int AcCompanyID,int DepotID, int UserID , int FYearID, string Details)
+        public static string SaveAWBBatch(int BATCHID, int BranchID, int AcCompanyID, int DepotID, int UserID, int FYearID, string Details)
         {
             try
             {
@@ -630,7 +630,7 @@ namespace CMSV2.DAL
                     return "No AWB added";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return ex.Message;
             }
@@ -688,7 +688,7 @@ namespace CMSV2.DAL
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Connection = con;
                         con.Open();
-                        cmd.Parameters.AddWithValue("@BatchDate",BatchDate.ToString("MM/dd/yyyy"));
+                        cmd.Parameters.AddWithValue("@BatchDate", BatchDate.ToString("MM/dd/yyyy"));
                         cmd.ExecuteNonQuery();
 
                     }
@@ -703,7 +703,7 @@ namespace CMSV2.DAL
 
         }
 
-        public static List<CustomerRateType> GetRateList(int CustomerId, int MovementId,int ProductTypeId,int PaymentModeId,int FAgentID,string CityName,string CountryName)
+        public static List<CustomerRateType> GetRateList(int CustomerId, int MovementId, int ProductTypeId, int PaymentModeId, int FAgentID, string CityName, string CountryName)
         {
             List<CustomerRateType> list = new List<CustomerRateType>();
 
@@ -747,7 +747,7 @@ namespace CMSV2.DAL
 
         }
 
-        public static CustomerRateTypeVM GetCourierCharge(int RateTypeId, int CustomerId, int MovementId, int ProductTypeId, int PaymentModeId,decimal Weight,string CountryName,string CityName)
+        public static CustomerRateTypeVM GetCourierCharge(int RateTypeId, int CustomerId, int MovementId, int ProductTypeId, int PaymentModeId, decimal Weight, string CountryName, string CityName)
         {
             decimal CourierCharge = 0;
             CustomerRateTypeVM vm = new CustomerRateTypeVM();
@@ -755,16 +755,16 @@ namespace CMSV2.DAL
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetCourierCharge";
             cmd.CommandType = CommandType.StoredProcedure;
-            
-           cmd.Parameters.AddWithValue("@CustomerRateId", RateTypeId);
-           // cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
+
+            cmd.Parameters.AddWithValue("@CustomerRateId", RateTypeId);
+            // cmd.Parameters.AddWithValue("@CustomerRateTypeId", RateTypeId);
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             cmd.Parameters.AddWithValue("@MovementId", MovementId);
             cmd.Parameters.AddWithValue("@ProductTypeId", ProductTypeId);
             cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
             cmd.Parameters.AddWithValue("@Weight", Weight);
             cmd.Parameters.AddWithValue("@CountryName", CountryName);
-            cmd.Parameters.AddWithValue("@CityName", CityName);            
+            cmd.Parameters.AddWithValue("@CityName", CityName);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -779,9 +779,9 @@ namespace CMSV2.DAL
                     {
                         vm.CustomerRateType = dt.Rows[i]["CustomerRateType"].ToString();
                         vm.CustomerRateTypeID = Convert.ToInt32(dt.Rows[i]["CustomerRateTypeId"].ToString());
-                        vm.CourierCharge = Convert.ToDecimal(dt.Rows[i]["CourierCharge"].ToString());                        
+                        vm.CourierCharge = Convert.ToDecimal(dt.Rows[i]["CourierCharge"].ToString());
 
-                        
+
                     }
 
                 }
@@ -819,7 +819,7 @@ namespace CMSV2.DAL
             return CustomerRateName;
         }
 
-                
+
         public static List<ZoneNameVM> GetZoneChartMaster(int RateTypeId)
         {
 
@@ -842,7 +842,7 @@ namespace CMSV2.DAL
                     DataTable dt = ds.Tables[0];
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        ZoneNameVM obj = new ZoneNameVM();   
+                        ZoneNameVM obj = new ZoneNameVM();
                         obj.ZoneID = Convert.ToInt32(dt.Rows[i]["ZoneChartID"].ToString());
                         obj.MovementID = Convert.ToInt32(dt.Rows[i]["MovementId"].ToString());
                         obj.ZoneName = dt.Rows[i]["ZoneName"].ToString();
@@ -861,13 +861,13 @@ namespace CMSV2.DAL
         #endregion
 
         #region "StockItem"
-        public static List<StockVM> GetStockList(int branchId,int fyearid)
+        public static List<StockVM> GetStockList(int branchId, int fyearid)
         {
             StockSearch paramobj = (StockSearch)(HttpContext.Current.Session["StockSearch"]);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetStockList";
-            cmd.CommandType = CommandType.StoredProcedure;            
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@FYearId", fyearid);
             cmd.Parameters.AddWithValue("@BranchId", branchId);
 
@@ -884,7 +884,7 @@ namespace CMSV2.DAL
                     StockVM obj = new StockVM();
                     obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
                     obj.PurchaseDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["PurchaseDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
-                    obj.ReferenceNo= ds.Tables[0].Rows[i]["ReferenceNo"].ToString();
+                    obj.ReferenceNo = ds.Tables[0].Rows[i]["ReferenceNo"].ToString();
                     obj.AWBCount = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBCount"].ToString());
                     obj.AWBNOFrom = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBNOFrom"].ToString());
                     obj.AWBNOTo = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AWBNOTo"].ToString());
@@ -897,5 +897,30 @@ namespace CMSV2.DAL
             return objList;
         }
         #endregion
+
+        public static PODImage GetPODImage(int PODID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "Select * From POD where PODId=" + PODID.ToString();
+            cmd.CommandType = CommandType.Text;
+            PODImage _podimage = new PODImage();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<StockVM> objList = new List<StockVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    _podimage.id = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["id"].ToString());
+                    _podimage.PODID = CommanFunctions.ParseInt(ds.Tables[0].Rows[0]["PODID"].ToString());
+                    // _podimage.image = Convert.ToSByte(ds.Tables[0].Rows[0]["PODID"].ToString());
+                }
+            }
+            return _podimage;
+        }
     }
 }

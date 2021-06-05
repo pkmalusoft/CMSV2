@@ -75,6 +75,7 @@
           <Property Name="CompanyLogo" Type="image" />
           <Property Name="Logo" Type="nvarchar(max)" />
           <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
+          <Property Name="EnableAPI" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountHeadControl">
           <Key>
@@ -207,7 +208,7 @@
           <Property Name="AcHeadID" Type="int" />
           <Property Name="AnalysisHeadID" Type="int" />
           <Property Name="Amount" Type="money" />
-          <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="Remarks" Type="varchar" MaxLength="200" />
           <Property Name="BranchID" Type="int" />
           <Property Name="PartyID" Type="int" />
           <Property Name="PartyType" Type="nchar" MaxLength="1" />
@@ -230,7 +231,7 @@
           <Property Name="VoucherType" Type="nvarchar" MaxLength="3" />
           <Property Name="TransType" Type="smallint" />
           <Property Name="StatusDelete" Type="bit" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+          <Property Name="Remarks" Type="varchar" MaxLength="200" />
           <Property Name="UserID" Type="int" />
           <Property Name="ShiftID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
@@ -399,6 +400,19 @@
           <Property Name="AnalysisHead" Type="nvarchar" MaxLength="50" />
           <Property Name="AnalysisGroupID" Type="int" />
           <Property Name="BranchID" Type="int" />
+        </EntityType>
+        <EntityType Name="APIDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AppPage" Type="varchar" MaxLength="100" />
+          <Property Name="APIType" Type="varchar" MaxLength="20" />
+          <Property Name="APILink" Type="nvarchar" MaxLength="200" />
+          <Property Name="APIKeyname" Type="varchar" MaxLength="200" />
+          <Property Name="APIKeyValue" Type="varchar" MaxLength="300" />
+          <Property Name="APISignature" Type="varchar" MaxLength="200" />
+          <Property Name="APISignatureValue" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="AreaMaster">
           <Key>
@@ -650,6 +664,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Users' does not have a p
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="ShipmentDetailID" Type="int" />
           <Property Name="EmpID" Type="int" />
+          <Property Name="APIStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BranchMaster">
           <Key>
@@ -1507,6 +1522,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="FYearId" Type="int" />
           <Property Name="TotalCourierCharge" Type="money" />
+          <Property Name="TotalCustomValue" Type="money" />
         </EntityType>
         <EntityType Name="DRSRecPay">
           <Key>
@@ -1533,6 +1549,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Property Name="BranchId" Type="int" />
           <Property Name="UserID" Type="int" />
           <Property Name="DRRID" Type="int" />
+          <Property Name="DRSBased" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="DRSRecPayDetails">
           <Key>
@@ -2045,6 +2062,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="CODReceiptId" Type="int" />
           <Property Name="DestinationLocation" Type="nvarchar" MaxLength="1000" />
           <Property Name="ImportType" Type="varchar" MaxLength="20" />
+          <Property Name="Route" Type="varchar" MaxLength="50" />
+          <Property Name="MAWB" Type="varchar" MaxLength="50" />
+          <Property Name="GroupCode" Type="varchar" MaxLength="200" />
+          <Property Name="FlightDate" Type="datetime" />
+          <Property Name="FlightNo" Type="varchar" MaxLength="50" />
+          <Property Name="ShipmentInvoiceId" Type="int" />
         </EntityType>
         <EntityType Name="InScan">
           <Key>
@@ -2352,6 +2375,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="JobCode" Type="varchar" MaxLength="50" />
           <Property Name="FAgentId" Type="int" />
           <Property Name="ImportShipmentId" Type="int" />
+          <Property Name="PODID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="InscanOtherCharge">
           <Key>
@@ -3112,6 +3136,38 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
           <Property Name="JobID" Type="int" />
           <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ShipmentInvoice">
+          <Key>
+            <PropertyRef Name="ShipmentInvoiceID" />
+          </Key>
+          <Property Name="ShipmentInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="ShipmentImportID" Type="int" />
+          <Property Name="AcCompanyID" Type="int" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="InvoiceTotal" Type="money" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="BranchId" Type="int" />
+          <Property Name="FYearId" Type="int" />
+          <Property Name="MAWB" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ShipmentInvoiceDetails">
+          <Key>
+            <PropertyRef Name="ShipmentInvoiceDetailID" />
+          </Key>
+          <Property Name="ShipmentInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShipmentImportDetailID" Type="int" />
+          <Property Name="ShipmentInvoiceID" Type="int" />
+          <Property Name="InvoiceValue" Type="money" />
+          <Property Name="Tax" Type="money" />
+          <Property Name="TaxP" Type="money" />
+          <Property Name="adminCharges" Type="money" />
         </EntityType>
         <EntityType Name="StaffNotes">
           <Key>
@@ -6722,6 +6778,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="AgentMaster" EntityType="Self.AgentMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnalysisGroup" EntityType="Self.AnalysisGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnalysisHead" EntityType="Self.AnalysisHead" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="APIDetail" EntityType="Self.APIDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AreaMaster" EntityType="Self.AreaMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="aspnet_PersonalizationAllUsers" EntityType="Self.aspnet_PersonalizationAllUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="aspnet_Profile" EntityType="Self.aspnet_Profile" Schema="dbo" store:Type="Tables" />
@@ -6865,6 +6922,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="RoleMaster" EntityType="Self.RoleMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesInvoice" EntityType="Self.SalesInvoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesInvoiceDetails" EntityType="Self.SalesInvoiceDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShipmentInvoice" EntityType="Self.ShipmentInvoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShipmentInvoiceDetails" EntityType="Self.ShipmentInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StaffNotes" EntityType="Self.StaffNotes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StockDetails" EntityType="Self.StockDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
@@ -7282,6 +7341,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_AcCompany_CurrencyMaster" FromRole="AcCompany" ToRole="CurrencyMaster" />
           <NavigationProperty Name="Designation" Relationship="Self.FK_AcCompany_Designation" FromRole="AcCompany" ToRole="Designation" />
           <NavigationProperty Name="LocationMaster" Relationship="Self.FK_AcCompany_LocationMaster" FromRole="AcCompany" ToRole="LocationMaster" />
+          <Property Name="EnableAPI" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AcFinancialYear">
           <Key>
@@ -7398,7 +7458,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="AcHeadID" Type="Int32" />
           <Property Name="AnalysisHeadID" Type="Int32" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="BranchID" Type="Int32" />
           <Property Name="PartyID" Type="Int32" />
           <Property Name="PartyType" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
@@ -7421,7 +7481,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="VoucherType" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="TransType" Type="Int16" />
           <Property Name="StatusDelete" Type="Boolean" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="ShiftID" Type="Int32" />
           <Property Name="AcCompanyID" Type="Int32" />
@@ -14870,6 +14930,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="ItemPurchases" EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" />
           <EntitySet Name="ForwardingAgentMasters" EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" />
           <EntitySet Name="ImportDataFixations" EntityType="DB_9F57C4_couriertest_newModel.ImportDataFixation" />
+          <EntitySet Name="APIDetails" EntityType="DB_9F57C4_couriertest_newModel.APIDetail" />
+          <EntitySet Name="ShipmentInvoices" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoice" />
+          <EntitySet Name="ShipmentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19057,6 +19120,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="BranchId" Type="Int32" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="DRRID" Type="Int32" />
+          <Property Name="DRSBased" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRegistration">
           <Key>
@@ -19334,6 +19398,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FAgentId" Type="Int32" />
           <Property Name="ImportShipmentId" Type="Int32" />
+          <Property Name="PODID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="QuickInscanMaster">
           <Key>
@@ -19525,6 +19590,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="FYearId" Type="Int32" />
           <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalCustomValue" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="ImportShipment">
           <Key>
@@ -19597,6 +19663,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="CODReceiptId" Type="Int32" />
           <Property Name="DestinationLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="ImportType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Route" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GroupCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ShipmentInvoiceId" Type="Int32" />
         </EntityType>
         <EntityType Name="AWBTrackStatu">
           <Key>
@@ -19613,6 +19685,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="ShipmentDetailID" Type="Int32" />
           <Property Name="EmpID" Type="Int32" />
+          <Property Name="APIStatus" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="ImportField">
           <Key>
@@ -19775,6 +19848,51 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="TargetValue" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="APIDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AppPage" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="APIType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="APILink" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="APIKeyname" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="APIKeyValue" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="APISignature" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="APISignatureValue" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ShipmentInvoice">
+          <Key>
+            <PropertyRef Name="ShipmentInvoiceID" />
+          </Key>
+          <Property Name="ShipmentInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="ShipmentImportID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="FYearId" Type="Int32" />
+          <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ShipmentInvoiceDetail">
+          <Key>
+            <PropertyRef Name="ShipmentInvoiceDetailID" />
+          </Key>
+          <Property Name="ShipmentInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShipmentImportDetailID" Type="Int32" />
+          <Property Name="ShipmentInvoiceID" Type="Int32" />
+          <Property Name="InvoiceValue" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Tax" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TaxP" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="adminCharges" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19818,6 +19936,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="AcCompanies">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcCompany">
               <MappingFragment StoreEntitySet="AcCompany">
+                <ScalarProperty Name="EnableAPI" ColumnName="EnableAPI" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
                 <ScalarProperty Name="AcCompany1" ColumnName="AcCompany" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
@@ -28149,6 +28268,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="DRSRecPays">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSRecPay">
               <MappingFragment StoreEntitySet="DRSRecPay">
+                <ScalarProperty Name="DRSBased" ColumnName="DRSBased" />
                 <ScalarProperty Name="DRRID" ColumnName="DRRID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
@@ -28352,6 +28472,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
                 <ScalarProperty Name="ImportShipmentId" ColumnName="ImportShipmentId" />
                 <ScalarProperty Name="FAgentId" ColumnName="FAgentId" />
                 <ScalarProperty Name="JobCode" ColumnName="JobCode" />
@@ -28640,6 +28761,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="DRS">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DR">
               <MappingFragment StoreEntitySet="DRS">
+                <ScalarProperty Name="TotalCustomValue" ColumnName="TotalCustomValue" />
                 <ScalarProperty Name="TotalCourierCharge" ColumnName="TotalCourierCharge" />
                 <ScalarProperty Name="FYearId" ColumnName="FYearId" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -28706,6 +28828,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="ImportShipmentDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
               <MappingFragment StoreEntitySet="ImportShipmentDetails">
+                <ScalarProperty Name="ShipmentInvoiceId" ColumnName="ShipmentInvoiceId" />
+                <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="MAWB" ColumnName="MAWB" />
+                <ScalarProperty Name="Route" ColumnName="Route" />
                 <ScalarProperty Name="ImportType" ColumnName="ImportType" />
                 <ScalarProperty Name="DestinationLocation" ColumnName="DestinationLocation" />
                 <ScalarProperty Name="CODReceiptId" ColumnName="CODReceiptId" />
@@ -28738,6 +28866,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="AWBTrackStatus">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
               <MappingFragment StoreEntitySet="AWBTrackStatus">
+                <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
                 <ScalarProperty Name="EmpID" ColumnName="EmpID" />
                 <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -28889,6 +29018,54 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
                 <ScalarProperty Name="ShipmentType" ColumnName="ShipmentType" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="APIDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.APIDetail">
+              <MappingFragment StoreEntitySet="APIDetail">
+                <ScalarProperty Name="APISignatureValue" ColumnName="APISignatureValue" />
+                <ScalarProperty Name="APISignature" ColumnName="APISignature" />
+                <ScalarProperty Name="APIKeyValue" ColumnName="APIKeyValue" />
+                <ScalarProperty Name="APIKeyname" ColumnName="APIKeyname" />
+                <ScalarProperty Name="APILink" ColumnName="APILink" />
+                <ScalarProperty Name="APIType" ColumnName="APIType" />
+                <ScalarProperty Name="AppPage" ColumnName="AppPage" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShipmentInvoices">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ShipmentInvoice">
+              <MappingFragment StoreEntitySet="ShipmentInvoice">
+                <ScalarProperty Name="MAWB" ColumnName="MAWB" />
+                <ScalarProperty Name="FYearId" ColumnName="FYearId" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="ShipmentImportID" ColumnName="ShipmentImportID" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ShipmentInvoiceID" ColumnName="ShipmentInvoiceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShipmentInvoiceDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail">
+              <MappingFragment StoreEntitySet="ShipmentInvoiceDetails">
+                <ScalarProperty Name="adminCharges" ColumnName="adminCharges" />
+                <ScalarProperty Name="TaxP" ColumnName="TaxP" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="InvoiceValue" ColumnName="InvoiceValue" />
+                <ScalarProperty Name="ShipmentInvoiceID" ColumnName="ShipmentInvoiceID" />
+                <ScalarProperty Name="ShipmentImportDetailID" ColumnName="ShipmentImportDetailID" />
+                <ScalarProperty Name="ShipmentInvoiceDetailID" ColumnName="ShipmentInvoiceDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

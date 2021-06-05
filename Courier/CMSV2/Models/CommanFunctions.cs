@@ -144,7 +144,30 @@ namespace CMSV2.Models
             //}
 
         }
+        public static DateTime GetFirstDayofWeek()
+        {
+            double hours = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["GMTHours"].ToString());
+            Entities1 db = new Entities1();
 
+            int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            DateTime startdate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearFrom);
+            DateTime enddate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearTo);
+
+            string vdate = "01" + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Year.ToString();
+            DateTime todaydate = DateTime.UtcNow.AddHours(hours);// DateTimeOffset.Now.Date; // DateTime.Now.Date;            
+            todaydate = todaydate.AddDays(-4);
+
+            return Convert.ToDateTime(todaydate);
+
+            //if (todaydate>=startdate && todaydate <=enddate ) //current date between current financial year
+            //    return Convert.ToDateTime(vdate);
+            //else
+            //{
+            //    vdate = "01" + "-" + enddate.Month.ToString() + "-" + enddate.Year.ToString();
+            //    return Convert.ToDateTime(vdate);
+            //}
+
+        }
         public static DateTime GetLastDayofMonth()
         {
             Entities1 db = new Entities1();

@@ -32,5 +32,6 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> FYearId { get; set; }
         public Nullable<decimal> TotalCourierCharge { get; set; }
+        public Nullable<decimal> TotalCustomValue { get; set; }
     }
 }

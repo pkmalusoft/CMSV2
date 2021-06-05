@@ -7,7 +7,10 @@ using CMSV2.Models;
 using System.Data;
 using CMSV2.DAL;
 using System.Data.Entity;
-
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
 namespace CMSV2.Controllers
 {
     [SessionExpireFilter]
@@ -114,9 +117,14 @@ namespace CMSV2.Controllers
                 vm.QuickInscanID = 0;
                 
                 PickupRequestDAO _dao = new PickupRequestDAO();
+                vm.QuickInscanDateTime = CommanFunctions.GetCurrentDateTime();
+                vm.ImportDate = vm.QuickInscanDateTime;
                 vm.InScanSheetNo = _dao.GetMaxInScanSheetNo(companyid,BranchId,"Import");
                 vm.DepotID = depotid;
                 ViewBag.EditMode ="false";
+                List<InBoundAWBList> awblist = new List<InBoundAWBList>();
+                vm.AWBDetail = awblist;
+                Session["InboundAWB"] = vm.AWBDetail;
                 return View(vm);                
             }
             else
@@ -124,6 +132,7 @@ namespace CMSV2.Controllers
                 QuickInscanMaster qvm = db.QuickInscanMasters.Find(id);
                 InScanVM vm = new InScanVM();
                 vm.QuickInscanID = qvm.QuickInscanID;
+                vm.QuickInscanDateTime = qvm.QuickInscanDateTime;
                 vm.AgentID = Convert.ToInt32(qvm.AgentID);
                 vm.ReceivedByID = Convert.ToInt32(qvm.ReceivedByID);
                 vm.DriverName = qvm.DriverName;
@@ -131,178 +140,65 @@ namespace CMSV2.Controllers
                 vm.VehicleId = Convert.ToInt32(qvm.VehicleId);
                 vm.DepotID = Convert.ToInt32(qvm.DepotId);
                 vm.BranchId = Convert.ToInt32(qvm.BranchId);
+                
                 ViewBag.EditMode = "true";
                 ViewBag.Title = "InScan Import - Modify";
+                var awblist = (from _qmaster in db.QuickInscanMasters
+                       join _shipdetail in db.ImportShipmentDetails on _qmaster.QuickInscanID equals _shipdetail.QuickInscanID
+                       join _shipment in db.ImportShipments on _shipdetail.ImportID equals _shipment.ID
+                       where _qmaster.QuickInscanID == qvm.QuickInscanID
+                       orderby _shipdetail.AWB descending
+                       select new InBoundAWBList
+                       {
+                           ShipmentDetailID = _shipdetail.ShipmentDetailID,
+                           AWB = _shipdetail.AWB,
+                           OriginCity = _shipment.ConsignorCityName,
+                           OriginCountry = _shipment.ConsignorCountryName,
+                           DestinationCity = _shipdetail.DestinationCity,
+                           DestinationCountry = _shipdetail.DestinationCountry,
+                           Shipper = _shipdetail.Shipper,
+                           Receiver = _shipdetail.Receiver,
+                           CourierStatusId= _shipdetail.CourierStatusID,
+                           RemoveAllowed =true,
+                           AWBChecked=true,
+                           MAWB =_shipdetail.MAWB,
+                           ImportDate =_shipment.CreatedDate                           
+                           //StatusTypeId _shipdetail.StatusTypeId
+                       }).ToList();
+
+                if (awblist.Count > 0)
+                {                    
+                        vm.MAWB = awblist[0].MAWB;
+                        vm.ImportDate = awblist[0].ImportDate;
+                    
+
+                }
+                int i = 0;
+                foreach(var item in awblist)
+                {
+                    if (item.CourierStatusId!=21) //received at desitnation/nice facility
+                    {
+                        awblist[i].RemoveAllowed = false;
+                    }
+                    i++;
+                }
+                vm.AWBDetail = awblist;
+                Session["InboundAWB"] = vm.AWBDetail;
                 return View(vm);
             }
             
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(InScanVM v)
-        {
-            //InScan inscan = new InScan();
-            int UserId = Convert.ToInt32(Session["UserID"].ToString());
-            int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-            var inscanitems = v.SelectedInScanId.Split(',');
-
-            try
-            {
-                QuickInscanMaster _qinscan = new QuickInscanMaster();
-                if (v.QuickInscanID > 0)
-                {
-                    _qinscan = db.QuickInscanMasters.Find(v.QuickInscanID);
-                }
-                else
-                {
-                    int? maxid = (from c in db.QuickInscanMasters orderby c.QuickInscanID descending select c.QuickInscanID).FirstOrDefault();
-
-                    if (maxid == null)
-                        _qinscan.QuickInscanID = 1;
-                    else
-                        _qinscan.QuickInscanID = Convert.ToInt32(maxid) + 1;
-
-                    _qinscan.AcFinancialYearID = yearid;
-                }
-
-                _qinscan.InscanSheetNumber = v.InScanSheetNo;
-                _qinscan.AcCompanyId = CompanyId;
-                _qinscan.ReceivedByID = v.ReceivedByID;
-                _qinscan.AgentID = v.AgentID;
-                //_qinscan.CollectedByID = v.CollectedByID;
-                _qinscan.QuickInscanDateTime = v.QuickInscanDateTime;
-                _qinscan.VehicleId = v.VehicleId;
-                _qinscan.DriverName = v.DriverName;
-                _qinscan.BranchId = BranchId;
-                _qinscan.DepotId = v.DepotID;
-                _qinscan.UserId = UserId;
-                _qinscan.Source = "Import";
-                if (v.QuickInscanID > 0)
-                {
-                    db.Entry(_qinscan).State = EntityState.Modified;
-                    if (v.RemovedInScanId!=null)
-                    { 
-                    var removeinscanitems = v.RemovedInScanId.Split(',');
-
-                        foreach (var _item in removeinscanitems)
-                        {
-                            int _inscanid = Convert.ToInt32(_item);
-
-                            var _inscan = db.ImportShipmentDetails.Find(_inscanid);
-                            _inscan.QuickInscanID = null;
-
-                            var couriercstatus = db.CourierStatus.Where(c => c.CourierStatus == "Export Manifest Prepared").FirstOrDefault();
-                            if (couriercstatus != null)
-                            {
-                                _inscan.CourierStatusID = couriercstatus.CourierStatusID;
-                            }
-                            var statustype = db.tblStatusTypes.Where(c => c.Name == "READY TO EXPORT").FirstOrDefault();
-                            if (statustype != null)
-                            {
-                                _inscan.StatusTypeId = statustype.ID;
-                            }
-
-                            db.Entry(_inscan).State = EntityState.Modified;
-                            db.SaveChanges();
-
-                            //updateing awbstaus table for tracking
-                            AWBTrackStatu _awbstatus = new AWBTrackStatu();
-                            int? id = (from c in db.AWBTrackStatus orderby c.AWBTrackStatusId descending select c.AWBTrackStatusId).FirstOrDefault();
-
-                            if (id == null)
-                                id = 1;
-                            else
-                                id = id + 1;
-
-                            _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                            _awbstatus.AWBNo = _inscan.AWB;
-                            _awbstatus.EntryDate = DateTime.Now;
-                            _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
-                            _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
-                            _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
-                            _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                            _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                            _awbstatus.UserId = UserId;
-
-                            db.AWBTrackStatus.Add(_awbstatus);
-                            db.SaveChanges();
-                        }
-                    }
-                }
-                else
-                {
-                    db.QuickInscanMasters.Add(_qinscan);
-                    db.SaveChanges();
-                }
-                if (v.SelectedInScanId != null)
-                {
-                    foreach (var item in inscanitems)
-                    {
-                        int _inscanid = Convert.ToInt32(item);
-                        ImportShipmentDetail _inscan = db.ImportShipmentDetails.Find(_inscanid);
-                        _inscan.QuickInscanID = _qinscan.QuickInscanID;
-                        _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
-                        _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
-                        db.Entry(_inscan).State = EntityState.Modified;
-                        db.SaveChanges();
-
-                        //updateing awbstaus table for tracking
-                        AWBTrackStatu _awbstatus = new AWBTrackStatu();
-                        int? id = (from c in db.AWBTrackStatus orderby c.AWBTrackStatusId descending select c.AWBTrackStatusId).FirstOrDefault();
-
-                        if (id == null)
-                            id = 1;
-                        else
-                            id = id + 1;
-
-                        _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                        _awbstatus.AWBNo = _inscan.AWB;
-                        _awbstatus.EntryDate = DateTime.Now;
-                        _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
-                        _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
-                        _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
-                        _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                        _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                        _awbstatus.UserId = UserId;
-
-                        db.AWBTrackStatus.Add(_awbstatus);
-                        db.SaveChanges();
-                    }
-                }
-                TempData["SuccessMsg"] = "You have successfully Saved InScan Import Items.";             
-                return RedirectToAction("Index");
-                
-
-              //  return Json(new { status = "ok", message = "You have successfully Saved InScan Items.!" }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                TempData["WarningMsg"] = ex.Message;
-                ViewBag.depot = (from c in db.tblDepots where c.BranchID == BranchId select c).ToList();
-                ViewBag.employee = db.EmployeeMasters.ToList();
-                ViewBag.employeerec = db.EmployeeMasters.ToList();
-                ViewBag.Vehicles = db.VehicleMasters.ToList();
-                ViewBag.Agents = db.AgentMasters.ToList();
-                ViewBag.CourierService = db.CourierServices.ToList();
-                return View(v);
-                //return Json(new { status = "Failed", message = ex.Message }, JsonRequestBehavior.AllowGet);
-                //return Json("Failed", JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
+        
+         [HttpPost]
         public JsonResult SaveQuickInScan(InScanVM v)
         {
-            //InScan inscan = new InScan();
+            PickupRequestDAO _dao = new PickupRequestDAO();
+            var bills = new List<updateitem>();            
+            var IDetails = JsonConvert.DeserializeObject<List<AWBList>>(v.Details);
             int UserId = Convert.ToInt32(Session["UserID"].ToString());
             int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString()); 
-
-            var inscanitems = v.SelectedInScanId.Split(',');
+            int CompanyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());                     
 
             try
             {
@@ -312,17 +208,12 @@ namespace CMSV2.Controllers
                     _qinscan = db.QuickInscanMasters.Find(v.QuickInscanID);
                 }
                 else
-                {
-                    int? maxid = (from c in db.QuickInscanMasters orderby c.QuickInscanID descending select c.QuickInscanID).FirstOrDefault();
-
-                    if (maxid == null)
-                        _qinscan.QuickInscanID = 1;
-                    else
-                        _qinscan.QuickInscanID = Convert.ToInt32(maxid) + 1;
-                }
+                {                   
+                    v.InScanSheetNo = _dao.GetMaxInScanSheetNo(CompanyId, BranchId, "Import"); 
+                    _qinscan.InscanSheetNumber = v.InScanSheetNo;
+                    _qinscan.AcCompanyId = CompanyId;
+                }                              
                 
-                _qinscan.InscanSheetNumber = v.InScanSheetNo;
-                _qinscan.AcCompanyId = CompanyId;
                 _qinscan.ReceivedByID = v.ReceivedByID;
                 _qinscan.AgentID = v.AgentID;
                 //_qinscan.CollectedByID = v.CollectedByID;
@@ -389,42 +280,66 @@ namespace CMSV2.Controllers
                     db.SaveChanges();
                 }
 
-                foreach (var item in inscanitems)
+                foreach (var item in IDetails)
                 {
-                    int _inscanid =Convert.ToInt32(item);
+                    int _inscanid = Convert.ToInt32(item.InScanId);
                     ImportShipmentDetail _inscan = db.ImportShipmentDetails.Find(_inscanid);
-                    _inscan.QuickInscanID = _qinscan.QuickInscanID;                    
-                    _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
-                    _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
-                    db.Entry(_inscan).State = EntityState.Modified;
-                    db.SaveChanges();
+                    if (item.AWBChecked && v.QuickInscanID == 0)
+                    {
+                        updateitem uitem = new updateitem();
+                        uitem.AWBNo = item.AWB;
+                        uitem.synchronisedDateTime = Convert.ToDateTime(_qinscan.QuickInscanDateTime).ToString("dd-MMM-yyyy HH:mm");
+                        bills.Add(uitem);
+
+                        _inscan.QuickInscanID = _qinscan.QuickInscanID;
+                        _inscan.StatusTypeId = 9;// db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
+                        _inscan.CourierStatusID = 21;// db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                        db.Entry(_inscan).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else if(item.AWBChecked==false && v.QuickInscanID>0)
+                    {
+                        _inscan.QuickInscanID = null;
+                        _inscan.StatusTypeId = 9;// db.tblStatusTypes.Where(cc => cc.Name == "INSCAN").First().ID;
+                        _inscan.CourierStatusID = 12;// db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+                        db.Entry(_inscan).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    
 
                     //updateing awbstaus table for tracking
                     AWBTrackStatu _awbstatus = new AWBTrackStatu();
-                    int? id = (from c in db.AWBTrackStatus orderby c.AWBTrackStatusId descending select c.AWBTrackStatusId).FirstOrDefault();
+                    if (item.AWBChecked && v.QuickInscanID == 0)
+                    {
+                        _awbstatus = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWB && cc.CourierStatusId == 21).FirstOrDefault();
+                        if (_awbstatus == null)
+                        {
+                            _awbstatus = new AWBTrackStatu();
+                            _awbstatus.AWBNo = _inscan.AWB;
+                            _awbstatus.EntryDate = DateTime.Now;
+                            _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
+                            _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
+                            _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
+                            _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
+                            _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
+                            _awbstatus.UserId = UserId;
+                            _awbstatus.EmpID = v.ReceivedByID; // db.EmployeeMasters.Where(cc => cc.UserID == UserId).FirstOrDefault().EmployeeID;
+                            db.AWBTrackStatus.Add(_awbstatus);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (item.AWBChecked ==false && v.QuickInscanID > 0)
+                    {
+                        _awbstatus = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWB && cc.CourierStatusId == 21).FirstOrDefault();
+                        db.AWBTrackStatus.Remove(_awbstatus);
+                        db.SaveChanges();
 
-                    if (id == null)
-                        id = 1;
-                    else
-                        id = id + 1;
-
-                    _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
-                    _awbstatus.AWBNo = _inscan.AWB;
-                    _awbstatus.EntryDate = DateTime.Now;
-                    _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
-                    _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
-                    _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
-                    _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
-                    _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
-                    _awbstatus.UserId = UserId;
-
-                    db.AWBTrackStatus.Add(_awbstatus);
-                    db.SaveChanges();
+                    } 
                 }
                 
                 //TempData["SuccessMsg"] = "You have successfully Saved InScan Items.";             
            
-                return Json(new { status = "ok", message = "You have successfully Saved InScan Items.!" } , JsonRequestBehavior.AllowGet);
+                return Json(new { status = "ok", message = "You have successfully Saved Import InScan Items.!" } , JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {
@@ -476,18 +391,20 @@ namespace CMSV2.Controllers
         }
         public JsonResult GetAWBDetail(string id)
         {
+            InScanVM vm = new InScanVM();
+            vm.AWBDetail = (List<InBoundAWBList>)Session["InboundAWB"];
             InBoundAWBList obj = new InBoundAWBList();
             //var lst = (from c in db.InScanMasters where c.AWBNo == id select c).FirstOrDefault();
             var couriercstatus = db.CourierStatus.Where(c => c.CourierStatus == "Export Manifest Prepared").FirstOrDefault();
-            int CourierStatusId= 0;
-            if (couriercstatus != null)
-            {
-                CourierStatusId = couriercstatus.CourierStatusID;
-            }
-            else
-            {
-                return Json(new { status = "failed", data = obj, message = "Courier Status Not found" }, JsonRequestBehavior.AllowGet);
-            }
+            int CourierStatusId = 12; // 0;At Destination Customs Facility
+            //if (couriercstatus != null)
+            //{
+            //    CourierStatusId = couriercstatus.CourierStatusID;
+            //}
+            //else
+            //{
+            //    return Json(new { status = "failed", data = obj, message = "Courier Status Not found" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var lst = (from c in db.ImportShipmentDetails join i in db.ImportShipments on c.ImportID equals i.ID
                        where c.AWB == id &&  c.CourierStatusID == CourierStatusId
@@ -507,26 +424,124 @@ namespace CMSV2.Controllers
                  obj.Receiver = lst.Receiver;
                  obj.Shipper = lst.Shipper;
                  obj.ShipmentDetailID = lst.ShipmentDetailID;
-
+                obj.AWBChecked = true;
+                vm.AWBDetail.Add(obj);
+                Session["InboundAWB"] = vm.AWBDetail;
                 return Json(new { status = "ok", data = obj, message = "AWB Number found" }, JsonRequestBehavior.AllowGet);
 
                 
             }            
             
         }
-        public class InBoundAWBList
-        {            
-            public int ShipmentDetailID { get; set; }
-            public string ConsignorName { get; set; }
-            public string AWB { get; set; }
-            public string OriginCountry { get; set; }
-            public string OriginCity { get; set; }
 
-            public string DestinationCountry { get; set; }
-            public string DestinationCity { get; set; }
+        public JsonResult GetMAWBList(string term,string ImportDate)
+        {
+            DateTime pManifestDate;
+            DateTime pManifestDate1;
+            pManifestDate = Convert.ToDateTime(ImportDate).Date;
+            pManifestDate1 = Convert.ToDateTime(ImportDate).Date.AddDays(1);
 
-            public string Receiver { get; set; }
-            public string Shipper { get; set; }
+
+            var lst = (from c in db.ImportShipments join d in db.ImportShipmentDetails on c.ID equals d.ImportID
+                       where c.CreatedDate >= pManifestDate.Date && c.CreatedDate < pManifestDate1 && d.QuickInscanID==null
+                       select new { MAWB = d.MAWB + ":" + d.Route }).Distinct().ToList();  //forwarded to agent status only
+
+            return Json(lst, JsonRequestBehavior.AllowGet);            
+
+        }
+
+        public JsonResult GetMAWBDetail(string ImportDate,string MAWB,bool checkall)
+        {
+            DateTime pManifestDate;
+            DateTime pManifestDate1;
+            pManifestDate = Convert.ToDateTime(ImportDate).Date;
+            pManifestDate1 = Convert.ToDateTime(ImportDate).Date.AddDays(1);
+            InScanVM vm = new InScanVM();
+            List<InBoundAWBList> AWBDetail = new List<InBoundAWBList>();
+            if (MAWB.IndexOf(':')>0)
+            {
+                MAWB = MAWB.Split(':')[0];
+            }
+            var couriercstatus = db.CourierStatus.Where(c => c.CourierStatus == "Export Manifest Prepared").FirstOrDefault();
+            int CourierStatusId = 12; // 0;At Destination Customs Facility            
+
+            var lst = (from c in db.ImportShipmentDetails
+                       join i in db.ImportShipments on c.ImportID equals i.ID
+                       where c.MAWB == MAWB && i.CreatedDate>= pManifestDate.Date && i.CreatedDate <pManifestDate1 && c.CourierStatusID == CourierStatusId && c.QuickInscanID == null
+                       select new InBoundAWBList {ConsignorName=i.ConsignorName, OriginCountry= i.ConsignorCountryName, OriginCity=i.ConsignorCityName,DestinationCity= c.DestinationCity, DestinationCountry= c.DestinationCountry, AWB=c.AWB, ShipmentDetailID= c.ShipmentDetailID, Shipper=c.Shipper, Receiver= c.Receiver ,AWBChecked= checkall, RemoveAllowed=true }).ToList();  //forwarded to agent status only
+
+            
+            if (lst == null)
+            {
+                return Json(new { status = "Failed", Message = "AWB No. Not found" }, JsonRequestBehavior.AllowGet);
+            }
+            else if (lst.Count>0)
+            {
+                //foreach (var item in lst)
+                //{
+                //    InBoundAWBList obj = new InBoundAWBList();
+                //    obj.ConsignorName = item.ConsignorName;
+                //    obj.OriginCountry = item.ConsignorCountryName;
+                //    obj.OriginCity = item.ConsignorCityName;
+                //    obj.DestinationCity = item.DestinationCity;
+                //    obj.DestinationCountry = item.DestinationCountry;
+                //    obj.AWB = item.AWB;
+                //    obj.Receiver = item.Receiver;
+                //    obj.Shipper = item.Shipper;
+                //    obj.ShipmentDetailID = item.ShipmentDetailID;
+                //    AWBDetail.Add(obj);
+
+                //}
+                
+                Session["InboundAWB"] = lst;
+                return Json(new { status = "ok", Message = "AWB Number found" }, JsonRequestBehavior.AllowGet);
+
+
+            }
+            else
+            {
+                Session["InboundAWB"] = AWBDetail;
+                return Json(new { status = "Failed", Message = "No AWB Number found" }, JsonRequestBehavior.AllowGet);
+
+
+            }
+
+        }
+        [HttpPost]
+        public async Task<ActionResult> CallPostAPI()
+        {
+            string URL = "http://www.niceexpress.net/API/v1/postAPI.do";
+            //string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
+
+            postbill bills = (postbill)Session["bills"];
+            //var json = JsonConvert.SerializeObject(bills);
+            //string urlParameters = "?bills=" + json;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(URL);
+                //HTTP GET
+                // Add an Accept header for JSON format.
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+
+                // List data response.
+                //var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                //var result  = await client.PostAsync("method",content);  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                //string resultContent = await result.Content.ReadAsStringAsync();
+                var postResponse = await client.PostAsJsonAsync(URL, bills);
+                var response = postResponse.EnsureSuccessStatusCode();
+                
+                return Json(new { Status = "ok", Message = "API Updated Successfully " }, JsonRequestBehavior.AllowGet);
+            }
+            //return "notworked";
+        }
+
+        public ActionResult ShowAWBList()
+        {
+            InScanVM vm = new InScanVM();
+            vm.AWBDetail = (List<InBoundAWBList>)Session["InboundAWB"];
+            return PartialView("ItemList", vm);
         }
         //
         // GET: /InScan/Edit/5

@@ -1,5 +1,4 @@
 ﻿@model CMSV2.Models.OutScanSearch
-
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
@@ -22,14 +21,17 @@
 }
 
 <style>
-     tfoot {
-            display: table-header-group;
-     }
-        </style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
         $('#dataTables-example tfoot th').each(function () {
             var title = $(this).text();
             $(this).html('<input type="text" style="width:100%" />');
@@ -58,119 +60,146 @@
     <h1 class="headingfont">OutScan</h1>
 
 </section>
-<p class="indexbtnpadding pull-right" style="padding-right:15px;">
-    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
-</p>
-<div class="clearfix"></div>
+@using (@Html.BeginForm("Index", "OutScan", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-1">
+                <label class="headinglabel">From</label>
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right " })
+            </div>
 
-<section class="content">
-      @if (TempData["SuccessMsg"] != null)
-    {
-    @* <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                            <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                            <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
-                                        </div>*@
-             <script type="text/javascript">
+            <div class="col-md-1">
+                <label class="headinglabel">To </label>
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+            </div>
+
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
+                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+            <div class="pull-left" style="padding-top:32px;">
+                <p class="indexbtnpadding" style="padding-right:15px">
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled", @title = "Create Not allowed in this Financial year!" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <section class="content">
+        @if (TempData["SuccessMsg"] != null)
+        {           
+            <script type="text/javascript">
                  $(document).ready(function () {
                      $.notify("@TempData["SuccessMsg"]", "success");
                       });
-                                                </script>
-    }
-    <div class="table-responsive tblbackground" style="padding:15px">
-<table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            </script>
+        }
+        <div class="table-responsive tblbackground" style="padding:15px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
 
-    <thead>
-    <tr>
-      
-        <th>
-           DRS No.
-        </th>
-        <th>
-            @Html.Label("Date")
-        </th>
-        <th>
-            @Html.Label("Courier")
-        </th>
-         <th>
-            @Html.Label("Vehicle")
-        </th>
-         <th>
-            @Html.Label("COD")
-        </th>
-         <th>
-            @Html.Label("Material Cost")
-        </th>
-       
-        <th>Action</th>
-    </tr>
-        </thead>
-    <tfoot>
-         <tr>
-      
-         <th>
-           DRS No.
-        </th>
-        <th class="right_text">
-            @Html.Label("Date")
-        </th>
-        <th>
-            @Html.Label("Courier")
-        </th>
-         <th>
-            @Html.Label("Vehicle")
-        </th>
-         <th>
-            @Html.Label("COD")
-        </th>
-         <th>
-            @Html.Label("Material Cost")
-        </th>
-       
-        <th style="display:none"></th>
-    </tr>
-    </tfoot>
-@foreach (var item in Model.Details) {
-    <tr>
-        <td style="text-align:right">
-            @Html.DisplayFor(modelItem => item.DRSNo)
-        </td>
-      
-        <td>
-             @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.DRSDate)
-        </td>
-        
-        <td>
-            @Html.DisplayFor(modelItem => item.Deliver)
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.vehicle)
-        </td>
-         <td style="text-align:right">
-             
-             @Html.DisplayFor(modelItem => item.TotalCourierCharge )
-         </td>      
-         <td style="text-align:right">
-             @Html.DisplayFor(modelItem => item.TotalMaterialCost)
-         </td>      
-      
-        
-         <td>
-             @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
-             <a href="@Url.Action("Create", new { id = item.DRSID })"><i class="fa fa-pencil"></i></a>|
-             @*<a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>*@
-             @if (isprint)
-             {
-                 <a target="_blank" href="@Url.Action("DRSRunSheet", "OutScan", new { id = item.DRSID })"><i class="fa fa-print"></i></a>
-             }
-         </td>
-    </tr>
-}
+                <thead>
+                    <tr>
 
-</table>
+                        <th>
+                            DRS No.
+                        </th>
+                        <th>
+                            @Html.Label("Date")
+                        </th>
+                        <th>
+                            @Html.Label("Courier")
+                        </th>
+                        <th>
+                            @Html.Label("Vehicle")
+                        </th>
+                        <th>
+                            @Html.Label("COD")
+                        </th>
+                        <th>
+                            @Html.Label("Material Cost")
+                        </th>
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+
+                        <th>
+                            DRS No.
+                        </th>
+                        <th class="right_text">
+                            @Html.Label("Date")
+                        </th>
+                        <th>
+                            @Html.Label("Courier")
+                        </th>
+                        <th>
+                            @Html.Label("Vehicle")
+                        </th>
+                        <th>
+                            @Html.Label("COD")
+                        </th>
+                        <th>
+                            @Html.Label("Material Cost")
+                        </th>
+
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in @Model.DRSDetails)
+                    {
+                        <tr>
+                            <td style="text-align:right">
+                                @Html.DisplayFor(modelItem=>item.DRSNo)
+                            </td>
+
+                            <td>
+                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.DRSDate)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Deliver)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vehicle)
+                            </td>
+                            <td style="text-align:right">
+
+                                @Html.DisplayFor(modelItem => item.TotalCourierCharge)
+                            </td>
+                            <td style="text-align:right">
+                                @Html.DisplayFor(modelItem => item.TotalMaterialCost)
+                            </td>
+
+
+                            <td>
+                                @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
+                                <a href="@Url.Action("Create", new { id = item.DRSID })"><i class="fa fa-pencil"></i></a>|
+                                @*<a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>*@
+                                @if (isprint)
+                                {
+                                    <a target="_blank" href="@Url.Action("DRSRunSheet", "OutScan", new { id = item.DRSID })"><i class="fa fa-print"></i></a>
+                                }
+                            </td>
+                            </tr>
+                            }
+                    </tbody>
+            </table>
         </div>
     </section>
-
+}
 <script type="text/javascript">
     function Delete(ID) {
         if (confirm("Are you sure, You want to Delete OutScan?")) {

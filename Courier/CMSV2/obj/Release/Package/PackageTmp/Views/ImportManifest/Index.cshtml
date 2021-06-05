@@ -75,6 +75,13 @@
     <div class="row no-margin">
         <div class=" d-flex">
             <div class="col-md-1">
+                <label class="headinglabel">AWBNo</label>
+                @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control text-right" })
+                
+                
+            </div>
+
+            <div class="col-md-1">
                 <label class="headinglabel">From Date</label>
                 @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
             </div>

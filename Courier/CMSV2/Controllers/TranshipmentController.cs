@@ -66,7 +66,7 @@ namespace CMSV2.Controllers
             var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
             var BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
 
-            var agent = db.AgentMasters.ToList(); // .Where(cc => cc.UserID == userid).FirstOrDefault();
+            var agent = db.CustomerMasters.Where(cc => cc.CustomerType == "CL").ToList();//  db.AgentMasters.ToList(); // .Where(cc => cc.UserID == userid).FirstOrDefault();
             var company = db.AcCompanies.FirstOrDefault(); // .Select(x => new { Address = x.Address1 
             string selectedVal = ""; ;
             var types = new List<SelectListItem>
@@ -337,15 +337,15 @@ namespace CMSV2.Controllers
                         detail.FAgentId = fage.FAgentID;
 
                     }
-
-                    if (item.customer!="")
-                    {
-                        var customer = db.CustomerMasters.Where(cc => cc.CustomerName == item.Customer).FirstOrDefault();
-                        if (customer!=null)
-                        {
-                            detail.CustomerID = customer.CustomerID;
-                        }
-                    }
+                    detail.CustomerID = importShipment.AgentID;
+                    //if (item.customer!="")
+                    //{
+                    //    var customer = db.CustomerMasters.Where(cc => cc.CustomerName == item.Customer).FirstOrDefault();
+                    //    if (customer!=null)
+                    //    {
+                    //        detail.CustomerID = customer.CustomerID;
+                    //    }
+                    //}
                     if (item.PaymentMode=="Customer")
                     {
                         detail.PaymentModeId = 3;

@@ -147,17 +147,18 @@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Value Date</label>
-                    @Html.TextBoxFor(model => model.ValueDate, String.Format("{0:dd-MMM-yyyy}", Model.ValueDate), new { @class = "form-control text-right" })
+                    @*@Html.TextBoxFor(model => model.ValueDate, String.Format("{0:dd-MMM-yyyy}", Model.ValueDate), new { @class = "form-control text-right" })*@
+                    @Html.TextBoxFor(model => model.ValueDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.ValueDate)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Purchase Date</label>
-                    @Html.TextBoxFor(model => model.PurchaseDate, String.Format("{0:dd-MMM-yyyy}", Model.PurchaseDate), new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.PurchaseDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.PurchaseDate)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Reg Expiry date</label>
-                    @Html.TextBoxFor(model => model.RegExpirydate, String.Format("{0:dd-MMM-yyyy}", Model.RegExpirydate), new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.RegExpirydate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.RegExpirydate)
                 </div>
             </div>

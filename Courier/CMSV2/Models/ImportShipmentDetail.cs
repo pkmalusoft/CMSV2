@@ -40,5 +40,11 @@ namespace CMSV2.Models
         public Nullable<int> CODReceiptId { get; set; }
         public string DestinationLocation { get; set; }
         public string ImportType { get; set; }
+        public string Route { get; set; }
+        public string MAWB { get; set; }
+        public string GroupCode { get; set; }
+        public Nullable<System.DateTime> FlightDate { get; set; }
+        public string FlightNo { get; set; }
+        public Nullable<int> ShipmentInvoiceId { get; set; }
     }
 }

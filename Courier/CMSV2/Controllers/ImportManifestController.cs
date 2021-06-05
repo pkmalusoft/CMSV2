@@ -37,12 +37,14 @@ namespace CMSV2.Controllers
                 translist = ImportDAO.GetImportManifestList(3);
                 model.FromDate = obj.FromDate;
                 model.ToDate = obj.ToDate;
+                model.AWBNo = obj.AWBNo;
                 model.Details = translist;
             }
             else
             {
                 model.FromDate = CommanFunctions.GetLastDayofMonth().Date;
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+                model.AWBNo = "";
                 Session["ImportManifestSearch"] = model;
                 List<ImportManifestVM> translist = new List<ImportManifestVM>();
                 translist = ImportDAO.GetImportManifestList(3);
@@ -84,10 +86,12 @@ namespace CMSV2.Controllers
             //ViewBag.AgentName = agent.Name;
             //ViewBag.AgentCity = agent.CityName;
             ViewBag.CompanyName = company.AcCompany1;
+            
             ImportManifestVM vm = new ImportManifestVM();
             vm.Details = new List<ImportManifestItem>();
             if (id == 0)
             {
+                vm.EnableAPI = company.EnableAPI;
                 vm.CompanyCountryName = CompanyCountryName;
                 vm.ManifestDate = CommanFunctions.GetCurrentDateTime().ToString();
                 vm.ManifestNumber = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, Convert.ToDateTime(vm.ManifestDate), "I");                
@@ -97,10 +101,11 @@ namespace CMSV2.Controllers
             {
                 vm.CompanyCountryName = CompanyCountryName;
                 ImportShipment model = db.ImportShipments.Find(id);
+                vm.EnableAPI = company.EnableAPI;
                 vm.ID = model.ID;
                 vm.ManifestNumber = model.ManifestNumber;
                 vm.ManifestDate = model.CreatedDate.ToString();
-                vm.FlightDate1 = model.FlightDate.ToString();
+                vm.FlightDate1 = "";// model.FlightDate.ToString();
                 vm.FlightNo = model.FlightNo;
                 vm.MAWB = model.MAWB;
                 vm.Route = model.Route;
@@ -114,8 +119,13 @@ namespace CMSV2.Controllers
                 vm.DestinationAirportCity = model.DestinationAirportCity;
                 vm.AgentID = model.AgentID;
                 var IDetails = (from c in db.ImportShipmentDetails where c.ImportID == vm.ID select new ImportManifestItem { AWBNo = c.AWB,   Shipper = c.Shipper, Bag = c.BagNo, COD = c.COD.ToString(), Content = c.Contents, DestinationCity = c.DestinationCity, DestinationCountry = c.DestinationCountry, Pcs = c.PCS, Receiver = c.Receiver, ReceiverAddress = c.ReceiverAddress, Value = c.CustomValue.ToString() }).ToList();
-
-                Session["ManifestImported"] = IDetails;
+                int i = 0;
+                foreach (var item in IDetails)
+                {
+                    IDetails[i].Sno = i + 1;
+                    i++;
+                }
+                    Session["ManifestImported"] = IDetails;
                 vm.Details = IDetails;
 
             }
@@ -134,20 +144,22 @@ namespace CMSV2.Controllers
             try
             {
                 var fileData = GetDataFromCSVFile(importFile.InputStream);
+                ImportManifestVM vm = new ImportManifestVM();
+                vm.Details = fileData;
+                Session["ManifestImported"] = vm.Details;
 
-                //var dtEmployee = fileData.ToDataTable();
-                //var tblEmployeeParameter = new SqlParameter("tblEmployeeTableType", SqlDbType.Structured)
-                //{
-                //    TypeName = "dbo.tblTypeEmployee",
-                //    Value = dtEmployee
-                //};
-                //await db.Database.ExecuteSqlCommandAsync("EXEC spBulkImportEmployee @tblEmployeeTableType", tblEmployeeParameter);
                 return Json(new { Status = 1, data = fileData, Message = "File Imported Successfully " });
             }
             catch (Exception ex)
             {
                 return Json(new { Status = 0, Message = ex.Message });
             }
+        }
+        public ActionResult ShowImportItemList()
+        {
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.Details = (List<ImportManifestItem>)Session["ManifestImported"];
+            return PartialView("ItemList", vm);
         }
         private List<ImportManifestItem> GetDataFromCSVFile(Stream stream)
         {
@@ -166,12 +178,15 @@ namespace CMSV2.Controllers
 
                     if (dataSet.Tables.Count > 0)
                     {
+                        int i = 1;
                         var dataTable = dataSet.Tables[0];
                         foreach (DataRow objDataRow in dataTable.Rows)
                         {
+                            
                             if (objDataRow.ItemArray.All(x => string.IsNullOrEmpty(x?.ToString()))) continue;
                             empList.Add(new ImportManifestItem()
                             {
+                                Sno = i++,
                                 Bag = objDataRow["BagNo"].ToString(),
                                 AWBNo = objDataRow["AWBNo"].ToString(),
                                 AWBDate = objDataRow["AWBDate"].ToString(),
@@ -188,12 +203,15 @@ namespace CMSV2.Controllers
                                 Value = objDataRow["CustomsValue"].ToString(),
                                 COD = objDataRow["COD"].ToString(),
                                 Content = objDataRow["Content"].ToString(),
-                                ImportType = "Import"
+                                ImportType = "Import",
+                                
                                 // Reference = objDataRow["Content"].ToString(),
 
 
 
                             });
+                            
+
                             //AWBNo AWBDate Bag NO.	Shipper ReceiverName    ReceiverContactName ReceiverPhone   ReceiverAddress DestinationLocation DestinationCountry Pcs Weight CustomsValue    COD Content Reference Status  SynchronisedDateTime
 
                         }
@@ -204,6 +222,22 @@ namespace CMSV2.Controllers
             {
                 throw;
             }
+
+            int j = 0;
+            foreach (var item in empList)
+            {
+                if (item.ReceiverAddress.IndexOf(':') > 0)
+                {
+                    string contact = item.ReceiverAddress.Split(':')[0];
+                    string address = item.ReceiverAddress.Split(':')[1];
+                    item.ReceiverContact = contact;
+                    item.ReceiverAddress = address;
+                    empList[j].ReceiverAddress = address;
+                    empList[j].ReceiverContact = contact;
+                }
+                j++;
+            }
+
             return empList;
         }
 
@@ -215,6 +249,7 @@ namespace CMSV2.Controllers
             {
                 var bills = new List<updateitem>();
                 var userid = Convert.ToInt32(Session["UserID"]);
+                int yearid = Convert.ToInt32(Session["fyearid"].ToString());
                 var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
                 //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
                 var IDetails = (List<ImportManifestItem>)Session["ManifestImported"];
@@ -231,6 +266,7 @@ namespace CMSV2.Controllers
                 }
                 importShipment.Bags = model.Bags;
                 importShipment.FlightNo = model.FlightNo;
+                if (model.FlightDate1!="" && model.FlightDate1!=null)
                 importShipment.FlightDate = Convert.ToDateTime(model.FlightDate1);
                 importShipment.LastEditedByLoginID = userid;
                 importShipment.MAWB = model.MAWB;
@@ -239,7 +275,7 @@ namespace CMSV2.Controllers
                 importShipment.Status = 1;
                 importShipment.DestinationAirportCity = model.DestinationAirportCity;
                 importShipment.OriginAirportCity = model.OriginAirportCity;
-                importShipment.AcFinancialYearID = 3;
+                importShipment.AcFinancialYearID = yearid;
                 importShipment.TotalAWB = model.TotalAWB;
                 importShipment.Bags = model.Bags;
                 importShipment.ParcelNo = model.ParcelNo;
@@ -285,15 +321,18 @@ namespace CMSV2.Controllers
                     detail.DestinationCity = item.DestinationCity;
                     detail.DestinationLocation = item.DestinationLocation;
                     detail.ImportType = "Import";
-                    if (item.ImportType == "Import")
+                    detail.Route = item.route;
+                    detail.GroupCode = item.groupCode;
+                    detail.MAWB = item.MAWB;
+                    if (detail.ImportType == "Import")
                     {
-                        detail.StatusTypeId = 9;
-                        detail.CourierStatusID = 20;
+                        detail.StatusTypeId = 3;
+                        detail.CourierStatusID = 12;  //At Destination Customs Facility
                     }
                     else
                     {
                         detail.StatusTypeId = 2;
-                        detail.CourierStatusID = 21;
+                        detail.CourierStatusID = 21; 
                     }
                     
                     if (item.Pcs != null)
@@ -311,16 +350,36 @@ namespace CMSV2.Controllers
                         detail.CurrencyID = currency.CurrencyID;
                     else
                         detail.CurrencyID = 1;
-
+                    
+                    
                     db.ImportShipmentDetails.Add(detail);
                     db.SaveChanges();
+
+                    //AWB Track status
+                    AWBTrackStatu _awbstatus = new AWBTrackStatu();
+                    _awbstatus = db.AWBTrackStatus.Where(cc => cc.AWBNo == detail.AWB && cc.CourierStatusId == 12).FirstOrDefault();
+                    if (_awbstatus == null)
+                    {
+                        _awbstatus = new AWBTrackStatu();
+                        _awbstatus.AWBNo = detail.AWB;
+                        _awbstatus.EntryDate = importShipment.CreatedDate;
+                        _awbstatus.ShipmentDetailID = detail.ShipmentDetailID;
+                        _awbstatus.StatusTypeId = Convert.ToInt32(detail.StatusTypeId);
+                        _awbstatus.CourierStatusId = Convert.ToInt32(detail.CourierStatusID);
+                        _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(detail.StatusTypeId).Name;
+                        _awbstatus.CourierStatus = db.CourierStatus.Find(detail.CourierStatusID).CourierStatus;
+                        _awbstatus.UserId = userid;
+                        _awbstatus.EmpID = db.EmployeeMasters.Where(cc => cc.UserID == userid).FirstOrDefault().EmployeeID;
+                        db.AWBTrackStatus.Add(_awbstatus);
+                        db.SaveChanges();
+                    }
 
 
                 }
                 postbill postbill = new postbill();
                 postbill.bills = bills;
                 Session["bills"] = postbill;
-                var json = JsonConvert.SerializeObject(bills);
+                //var json = JsonConvert.SerializeObject(bills);
                 // CallPostAPI(model.ManifestDate.ToString());
                 return Json(new { status="ok", data =bills });
             }
@@ -476,7 +535,7 @@ namespace CMSV2.Controllers
                     i++;
                 }
             }
-
+            SaveDataFixation(TargetColumn, SourceValue, TargetValue);
             model.Details = Details;
             Session["ManifestImported"] = Details;
             return View("ItemList",model);
@@ -587,7 +646,9 @@ namespace CMSV2.Controllers
                         }
                         item.Pcs =CommanFunctions.ParseInt(d.pcs);
                         item.Receiver = d.receiverName;
-
+                        item.MAWB = d.MAWB;
+                        item.groupCode = d.groupcode;
+                        item.route = d.route;
 
                         item.ReceiverPhone = d.receiverPhone;
 
@@ -597,6 +658,8 @@ namespace CMSV2.Controllers
                         // Console.WriteLine("{0}", d.awbNo);
                     }
                     Session["ManifestImported"] = vm.Details;
+                    vm.Route = vm.Details[0].route; 
+                    
                     return PartialView("ItemList", vm);
                     //return View(vm);
                     //return Json(new { data = "ok"});
@@ -672,12 +735,15 @@ namespace CMSV2.Controllers
                         }
                         item.Pcs = CommanFunctions.ParseInt(d.pcs);
                         item.Receiver = d.receiverName;
-                        
+                        item.route = d.route;
+                        item.groupCode = d.groupcode;
+                        item.MAWB = d.MAWB;
                         
                         item.ReceiverPhone = d.receiverPhone;
 
                         item.Currency = d.currency;
                         item.Value = d.customsValue;
+                        item.route = d.route;
                         vm.Details.Add(item);
                        // Console.WriteLine("{0}", d.awbNo);
                     }
@@ -714,6 +780,141 @@ namespace CMSV2.Controllers
             string manifestno = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, mDateTime, "I");
             return manifestno;
 
+        }
+
+
+        public string GetDataFixation(string FieldName, string SourceValue)
+        {
+            ImportDataFixation importdata = new ImportDataFixation();
+            string Targetvalue = "";
+            var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
+            if (data != null)
+                Targetvalue = data.TargetValue;
+
+            return Targetvalue;
+
+        }
+
+        [HttpPost]
+        public string AutoDataFixation()
+        {
+            ImportManifestVM model = new ImportManifestVM();
+            List<ImportManifestItem> Details = (List<ImportManifestItem>)Session["ManifestImported"];
+            DataTable dt = ToDataTable(Details);
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                var colname = dt.Columns[i].ColumnName;
+                int rowindex = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    string targetvalue = GetDataFixation(colname, row[colname].ToString());
+                    if (targetvalue != "" && targetvalue != null)
+                    {
+                        dt.Rows[rowindex][colname] = targetvalue;
+                    }
+
+                    rowindex++;
+                }
+
+            }
+            List<ImportManifestItem> list =ImportManifestList(dt);
+            Session["ManifestImported"] = list;
+            model.Details = list;
+            return "ok";
+
+
+        }
+        /// <summary>
+        /// this will udpate fixation in to importdatafixation table
+        /// </summary>
+        /// <param name="FieldName"></param>
+        /// <param name="SourceValue"></param>
+        /// <param name="TargetValue"></param>
+        public void SaveDataFixation(string FieldName, string SourceValue, string TargetValue)
+        {
+            ImportDataFixation importdata = new ImportDataFixation();
+            var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
+            if (data == null)
+            {
+                importdata.ShipmentType = "Transhipment";
+                importdata.FieldName = FieldName;
+                importdata.SourceValue = SourceValue;
+                importdata.TargetValue = TargetValue;
+                importdata.UpdateDate = CommanFunctions.GetCurrentDateTime();
+                db.ImportDataFixations.Add(importdata);
+                db.SaveChanges();
+            }
+            else
+            {
+
+                data.TargetValue = TargetValue;
+                data.UpdateDate = CommanFunctions.GetCurrentDateTime();
+                db.Entry(data).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+
+        }
+
+
+        public static DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Defining type of data column gives proper data table 
+                var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name, type);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
+
+        public static List<ImportManifestItem> ImportManifestList(DataTable dt)
+        {
+            var empList = new List<ImportManifestItem>();
+            int i = 0;
+            foreach (DataRow objDataRow in dt.Rows)
+            {
+                empList.Add(new ImportManifestItem()
+                {
+                    Sno = i++,
+                    Bag = objDataRow["Bag"].ToString(),
+                    AWBNo = objDataRow["AWBNo"].ToString(),
+                    AWBDate = objDataRow["AWBDate"].ToString(),
+                    Shipper = objDataRow["Shipper"].ToString(),
+                    Receiver = objDataRow["Receiver"].ToString(),
+                    ReceiverContact = objDataRow["ReceiverContact"].ToString(),
+                    ReceiverPhone = objDataRow["ReceiverPhone"].ToString(),
+                    ReceiverAddress = objDataRow["ReceiverAddress"].ToString(),
+                    DestinationLocation = objDataRow["DestinationLocation"].ToString(),
+                    DestinationCity = objDataRow["DestinationCity"].ToString(),
+                    DestinationCountry = objDataRow["DestinationCountry"].ToString(),
+                    Pcs = CommanFunctions.ParseInt(objDataRow["Pcs"].ToString()),
+                    Weight = objDataRow["Weight"].ToString(),
+                    Value = objDataRow["Value"].ToString(),
+                    COD = objDataRow["COD"].ToString(),
+                    Content = objDataRow["Content"].ToString(),
+                    ImportType = "Import"
+
+
+                });
+            }
+            return empList;
         }
     }
 
@@ -755,9 +956,12 @@ namespace CMSV2.Controllers
         public string currency { get; set; }
 
         public string id { get; set; }
-
+        
         public string bagNo { get; set; }
 
+        public string MAWB { get; set; }
+        public string route { get; set; }
+        public string groupcode { get; set; }
         public string status { get; set; }
     }
 

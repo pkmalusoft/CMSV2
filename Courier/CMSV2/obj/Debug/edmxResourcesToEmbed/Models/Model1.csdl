@@ -87,6 +87,7 @@
     <NavigationProperty Name="CurrencyMaster" Relationship="Self.FK_AcCompany_CurrencyMaster" FromRole="AcCompany" ToRole="CurrencyMaster" />
     <NavigationProperty Name="Designation" Relationship="Self.FK_AcCompany_Designation" FromRole="AcCompany" ToRole="Designation" />
     <NavigationProperty Name="LocationMaster" Relationship="Self.FK_AcCompany_LocationMaster" FromRole="AcCompany" ToRole="LocationMaster" />
+    <Property Name="EnableAPI" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="AcFinancialYear">
     <Key>
@@ -203,7 +204,7 @@
     <Property Name="AcHeadID" Type="Int32" />
     <Property Name="AnalysisHeadID" Type="Int32" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="BranchID" Type="Int32" />
     <Property Name="PartyID" Type="Int32" />
     <Property Name="PartyType" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
@@ -226,7 +227,7 @@
     <Property Name="VoucherType" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
     <Property Name="TransType" Type="Int16" />
     <Property Name="StatusDelete" Type="Boolean" />
-    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="UserID" Type="Int32" />
     <Property Name="ShiftID" Type="Int32" />
     <Property Name="AcCompanyID" Type="Int32" />
@@ -7675,6 +7676,9 @@
     <EntitySet Name="ItemPurchases" EntityType="DB_9F57C4_couriertest_newModel.ItemPurchase" />
     <EntitySet Name="ForwardingAgentMasters" EntityType="DB_9F57C4_couriertest_newModel.ForwardingAgentMaster" />
     <EntitySet Name="ImportDataFixations" EntityType="DB_9F57C4_couriertest_newModel.ImportDataFixation" />
+    <EntitySet Name="APIDetails" EntityType="DB_9F57C4_couriertest_newModel.APIDetail" />
+    <EntitySet Name="ShipmentInvoices" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoice" />
+    <EntitySet Name="ShipmentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -11862,6 +11866,7 @@
     <Property Name="BranchId" Type="Int32" />
     <Property Name="UserID" Type="Int32" />
     <Property Name="DRRID" Type="Int32" />
+    <Property Name="DRSBased" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="UserRegistration">
     <Key>
@@ -12139,6 +12144,7 @@
     <Property Name="JobCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FAgentId" Type="Int32" />
     <Property Name="ImportShipmentId" Type="Int32" />
+    <Property Name="PODID" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="QuickInscanMaster">
     <Key>
@@ -12330,6 +12336,7 @@
     <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
     <Property Name="FYearId" Type="Int32" />
     <Property Name="TotalCourierCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalCustomValue" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="ImportShipment">
     <Key>
@@ -12402,6 +12409,12 @@
     <Property Name="CODReceiptId" Type="Int32" />
     <Property Name="DestinationLocation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="ImportType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Route" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GroupCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="FlightDate" Type="DateTime" Precision="3" />
+    <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ShipmentInvoiceId" Type="Int32" />
   </EntityType>
   <EntityType Name="AWBTrackStatu">
     <Key>
@@ -12418,6 +12431,7 @@
     <Property Name="UserId" Type="Int32" Nullable="false" />
     <Property Name="ShipmentDetailID" Type="Int32" />
     <Property Name="EmpID" Type="Int32" />
+    <Property Name="APIStatus" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="ImportField">
     <Key>
@@ -12579,5 +12593,50 @@
     <Property Name="SourceValue" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="TargetValue" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="APIDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AppPage" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="APIType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="APILink" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="APIKeyname" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="APIKeyValue" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="APISignature" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="APISignatureValue" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ShipmentInvoice">
+    <Key>
+      <PropertyRef Name="ShipmentInvoiceID" />
+    </Key>
+    <Property Name="ShipmentInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+    <Property Name="ShipmentImportID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="EmployeeID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="BranchId" Type="Int32" />
+    <Property Name="FYearId" Type="Int32" />
+    <Property Name="MAWB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ShipmentInvoiceDetail">
+    <Key>
+      <PropertyRef Name="ShipmentInvoiceDetailID" />
+    </Key>
+    <Property Name="ShipmentInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShipmentImportDetailID" Type="Int32" />
+    <Property Name="ShipmentInvoiceID" Type="Int32" />
+    <Property Name="InvoiceValue" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Tax" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TaxP" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="adminCharges" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
 </Schema>

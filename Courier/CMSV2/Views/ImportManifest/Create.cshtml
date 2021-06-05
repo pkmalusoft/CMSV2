@@ -230,7 +230,43 @@
 <script type="text/javascript">
     var objitems = [];
 
+    function CallAutoFixation() {
+        //AutoDataFixation
+        $('#loaderpopup').modal('show')
+          $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AutoDataFixation", "ImportManifest")',
+             datatype: "json",
+            success: function (data) {
 
+                if (data == "ok") {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ShowImportItemList", "ImportManifest")',
+                        datatype: "html",
+                        success: function (data) {
+                            $("#listContainer").html(data);
+                            var max = $('#listbody > tr').length;
+                            $('#loaderpopup').modal('hide')
+                            $('#btnUpload').removeAttr('disabled');
+                            $('#TotalAWB').val(max);
+                        },
+                        error: function (err) {
+                            $('#loaderpopup').modal('hide')
+                            console.log(err);
+                        }
+                    });
+                }
+                else {
+                    $('#loaderpopup').modal('hide')
+                }
+              },
+            error: function (err) {
+                  $('#loaderpopup').modal('hide')
+                  console.log(err);
+              }
+            });
+    }
     function UpdateImported() {
         $.ajax({
             type: "POST",
@@ -374,74 +410,31 @@
                 success: function (response) {
                     if (response.Status === 1) {
                         var data = response.data;
-                        //$('#imgloader').removeClass('hide');
-                        $('#loaderpopup').modal('show')
-                        $("#listContainer").html('');
-                        $.each(data, function (index, item) {
-
-                            debugger;
-                            var i = $('#listContainer > tr').length;
-                            var ReceiverContact = item.ReceiverContact;
-                            var ReceiverAddress = item.ReceiverAddress;
-                            if (ReceiverAddress.indexOf(":") >= 0) {
-                                var addr = ReceiverAddress.split(':');
-                                ReceiverContact = addr[0];
-                                ReceiverAddress = addr[1];
-                            }
-                            var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
-                            if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
-                                item.ImportType = 'Import';
-                            else
-                                item.ImportType = 'Transit';
-                            objitems.push(item);
-                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWBNo_' + i + '"  value="' + item.AWBNo + '" /> ';
-                            datahtml = datahtml + '<input type="hidden" id="hdnBag_' + i + '"  value="' + item.Bag + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnAWBDate_' + i + '"  value="' + item.AWBDate + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnShipper_' + i + '"  value="' + item.Shipper + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnReceiver_' + i + '"  value="' + item.Receiver + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverContact_' + i + '"  value="' + ReceiverContact + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverPhone_' + i + '"  value="' + item.ReceiverPhone + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnReceiverAddress_' + i + '"  value="' + ReceiverAddress + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationLocation_' + i + '"  value="' + item.DestinationLocation + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCountry_' + i + '"  value="' + item.DestinationCountry + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnDestinationCity_' + i + '"  value="' + item.DestinationCity + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnPcs_' + i + '"  value="' + item.Pcs + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnWeight_' + i + '"  value="' + item.Weight + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnValue_' + i + '"  value="' + item.Value + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnCOD_' + i + '"  value="' + item.COD + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnContent_' + i + '"  value="' + item.Content + '"/>';
-                            datahtml = datahtml + '<input type="hidden" id="hdnImportType_' + i + '"  value="' + item.ImportType + '"/>';
-                            var html = '<tr><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWBNo + '</td><td>' + item.AWBDate + '</td><td>' + item.Shipper + '</td>' +
-                                '<td><strong>' + item.Receiver + '</strong><br/><span style="color:blue">' + ReceiverContact + '</span></br>' + ReceiverAddress + '<br/>' + item.ReceiverPhone + '</td>' +
-                                '<td>' + item.DestinationLocation + '</td><td>' + item.DestinationCity + '<br/>' + item.DestinationCountry + '</td>' +
-                                '<td>' + item.Bag + '</td>' +
-                                '<td>' + item.Content + '</td>' +
-                                '<td>' + item.Pcs + '</td>' +
-                                '<td class="text-right">' + parseFloat(item.Weight).toFixed(3) + '</td>' +
-                                '<td class="text-right">' + parseFloat(item.Value).toFixed(2) + '</td>' +
-                                '<td class="text-right">' + item.COD + '</td>' +
-                                '<td class="text-right">' + item.ImportType + '</td></tr>';
-
-                            $("#listContainer").append(html);
-                            $('#TotalAWB').val(index + 1);
-                            if ((index + 1) == data.length) {
-                                UpdateImported();
-                                //$('#imgloader').addClass('hide');
-                                $('#loaderpopup').modal('hide');
+                        $('#loaderpopup').modal('show');
+                              $.ajax({
+                              type: 'POST',
+                              url: '@Url.Action("ShowImportItemList", "ImportManifest")',
+                              datatype: "html",
+                            success: function (data) {
+                                    $("#listContainer").html(data);
+                                var max = $('#listbody > tr').length;
+                                $('#loaderpopup').modal('hide')
                                 $('#btnUpload').removeAttr('disabled');
+                                    $('#TotalAWB').val(max);
                             }
-                            //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
-                            //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
-                            //<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td>
-                        });
-
+                      });
 
                     } else {
-                        //alert("Failed to Import");
+                        $('#loaderpopup').modal('hide')
                         $('#btnUpload').removeAttr('disabled');
-                        $.notify(response.message, 'error');
+                        $.notify(response.Message, 'error');
                     }
+                },
+                error: function (err) {
+                    $('#loaderpopup').modal('hide')
+                    console.log(err);
                 }
+
             });
         }
         else {
@@ -496,74 +489,80 @@
                 $('#AgentID').focus();
                 return;
             }
-            else if ($('#Route').val() == '') {
+            else if ($('#ManifestDate').val() == '') {
                 $.notify('Please Fill Required Fields!');
-                $('#Route').focus();
+                $('#ManifestDate').focus();
                 return;
             }
-            //else if ($('#Type').val() == '') {
+            //else if ($('#Route').val() == '') {
             //    $.notify('Please Fill Required Fields!');
-            //    $('#ShipmentTypeId').focus();
+            //    $('#Route').focus();
             //    return;
             //}
-            else if ($('#OriginAirportCity').val() == '') {
-                    $.notify('Please Fill Required Fields!');
-                $('#OriginAirportCity').focus();
-                    return;
-            }
-            else if ($('#DestinationAirportCity').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#DestinationAirportCity').focus();
-                    return;
-            }
-            else if ($('#FlightDate1').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#FlightDate1').focus();
-                return;
-            }
-            else if ($('#FlightNo').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#FlightNo').focus();
-                return;
-            }
-            else if ($('#MAWB').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#MAWB').focus();
-                return;
-            }
-            else if ($('#TotalAWB').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#TotalAWB').focus();
-                return;
-            }
-            else if ($('#ParcelNo').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#ParcelNo').focus();
-                return;
-            }
-            else if ($('#Weight').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Weight').focus();
-                return;
-            }
-            else if ($('#Bags').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Bags').focus();
-                return;
-            }
-            else if ($('#Bags').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Bags').focus();
-                return;
-            }
+            ////else if ($('#Type').val() == '') {
+            ////    $.notify('Please Fill Required Fields!');
+            ////    $('#ShipmentTypeId').focus();
+            ////    return;
+            ////}
+            //else if ($('#OriginAirportCity').val() == '') {
+            //        $.notify('Please Fill Required Fields!');
+            //    $('#OriginAirportCity').focus();
+            //        return;
+            //}
+            //else if ($('#DestinationAirportCity').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#DestinationAirportCity').focus();
+            //        return;
+            //}
+            //else if ($('#FlightDate1').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#FlightDate1').focus();
+            //    return;
+            //}
+            //else if ($('#FlightNo').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#FlightNo').focus();
+            //    return;
+            //}
+            //else if ($('#MAWB').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#MAWB').focus();
+            //    return;
+            //}
+            //else if ($('#TotalAWB').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#TotalAWB').focus();
+            //    return;
+            //}
+            //else if ($('#ParcelNo').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#ParcelNo').focus();
+            //    return;
+            //}
+            //else if ($('#Weight').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Weight').focus();
+            //    return;
+            //}
+            //else if ($('#Bags').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Bags').focus();
+            //    return;
+            //}
+            //else if ($('#Bags').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Bags').focus();
+            //    return;
+            //}
 
-            $('#btnSave').attr('disabled', 'disabled');
+            
             var obj = [];
             var maxrow = $('#listbody > tr').length;
             if (maxrow == 0) {
                 alert('Click upload to import Items from Excel!');
                 return;
             }
+            $('#btnSave').attr('disabled', 'disabled');
             var master = {
                 ID: $('#ID').val(),
                 ManifestNumber: $('#ManifestNumber').val(),
@@ -582,6 +581,7 @@
                 Bags: $('#Bags').val(),
                 Route: $('#Route').val()
             }
+            $('#loaderpopup').modal('show');
             $.ajax({
                 type: "POST",
                 url: "/ImportManifest/SaveImport",
@@ -589,32 +589,38 @@
                 data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
                 success: function (response) {
                     debugger;
-                    if (response.status == "ok") {
-                        console.log(response.data);
-                    
-                        $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("CallPostAPI", "ImportManifest")',
-                            datatype: "json",
-                            //contentType: "application/json;charset=UTF-8",
-                            //data: {
-                            //    InputDate: $('#ManifestDate').val()
-                            //},
-                            success: function (data) {
+                    $('#loaderpopup').modal('show');
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("CallPostAPI", "InBound")',
+                        datatype: "json",
+                        //contentType: "application/json;charset=UTF-8",
+                        //data: {
+                        //    InputDate: $('#ManifestDate').val()
+                        //},
+                        success: function (data) {
+                            if (response.status == "ok") {
+                                $('#loaderpopup').modal('hide');
                                 $.notify("Import Shipment Saved Succesfully!", "success");
                                 $('#btnSave').removeAttr('disabled');
                                 window.location.href = "/ImportManifest/Index";
+
                             }
-                        });
-                    }
-                    else {
-                        $.notify(response.Message, "error");
-                        //console.log(response.Message);
-                    }
+                            else {
+                                $('#loaderpopup').modal('hide');
+                                $.notify(response.Message, "error");
+                                $('#btnSave').removeAttr('disabled');
+                                //console.log(response.Message);
+                            }
+                        }
+                    });
+                    
 
                 },
                 error: function (err) {
+                    $('#loaderpopup').modal('hide');
                     console.log(err);
+                    $('#btnSave').removeAttr('disabled');
                 }
             });
 
@@ -660,9 +666,14 @@
                     InputDate: $('#ManifestDate').val()
                 },
                 success: function (data) {
+                    debugger;
                     $("#listContainer").html(data);
-                    var max=$('#listbody > tr').length;
-                    $('#TotalAWB').val(max);
+                    var max = $('#listbody > tr').length;
+                    var html = $('#listbody > tr >td:first').html();
+                    $('#TotalAWB').val(max);                    
+                    if (html =='No data available in table') {
+                        $.notify("No Import Items are available!", "error");
+                    }
                 }
             });
         });
@@ -735,6 +746,9 @@
         $('#ManifestDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
         $('#FlightDate1').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
 
+        if ($('#EnableAPI').val() == 'False') {
+            $('#btnGETAPI').attr('disabled', 'disabled');
+        }
     });
 </script>
 
@@ -757,40 +771,61 @@
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
           
-            <div class="row">
-                <div class="col-md-3">
-                    @Html.HiddenFor(mode=>Model.ID)
-                    @Html.HiddenFor(mode=>Model.CompanyCountryName)
-                    @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
+        <div class="row">
+            <div class="col-md-2">
+                @Html.HiddenFor(mode => Model.ID)
+                @Html.HiddenFor(mode => Model.EnableAPI)
+                @Html.HiddenFor(mode => Model.CompanyCountryName)
+                @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
 
-                    @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
-
-                </div>
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
-
-                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
-
-                </div>
-
-                <div class="col-md-3">
-                    <label class="headinglabel required">Agent</label>
-                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel required">Route</label>
-                    @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @required = "true", @autocomplete = "off" })
-                </div>
+                @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
 
             </div>
-            <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
+
+                @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Agent</label>
+                @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                <input class="btn btn-primary" id="btnGETAPI" type="button" value="GET API" />
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
+                <input type="button" id="btnfile" style="display:none" />
+                <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpload" title="Upload Excel" href="Javascript:void(0)"><i class=" fa fa-file-o"></i></a>
+            </div>
+
+            <div class="col-md-1" style="padding-top:30px">
+                <input class="btn btn-primary" id="btnFixation" title="Manual Data Fixation" type="button" value="Data Fix" />
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                @*<input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />*@
+                <a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>
+            </div>
+            <div class="col-md-2 btn-right">
+                <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
+            </div>
+            @*<div class="col-md-3">
+            <label class="headinglabel required">Route</label>
+            @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @required = "true", @autocomplete = "off" })
+        </div>*@
+
+        </div>
+            <!--<div class="row">
                 <div class="col-md-3">
                     
-                    <label class="headinglabel required">Airport City</label>
-                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @required = "true" })
+                    <label class="headinglabel">Airport City</label>
+                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @required = "true" })-->
                     @*@Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })*@
 
-                </div>
+                <!--</div>
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.DestinationAirportCity, "Destination Airport City", htmlAttributes: new { @class = "headinglabel required"})
 
@@ -802,19 +837,19 @@
 
                 <div class="col-md-3">
                     
-                    <label class="headinglabel required">Flight No</label>
+                    <label class="headinglabel">Flight No</label>
                     @Html.TextBoxFor(model => model.FlightNo, new { @class = "form-control", @required = "true",@autocomplete="off" })
 
                     @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Flight Date</label>
+                    <label class="headinglabel">Flight Date</label>
                     @Html.TextBoxFor(model => model.FlightDate1, new { @class = "form-control", @required = "true", @autocomplete = "off" })
 
                     @Html.ValidationMessageFor(model => model.FlightDate1, "", new { @class = "text-danger" })
 
-                </div>
+                </div>-->
                 @*<div class="col-md-2">
                     <label class="headinglabel required">Type</label>
                     @Html.DropDownListFor(model => model.Type, (IEnumerable<SelectListItem>)ViewBag.Type, Model.Type, htmlAttributes: new { @class = "form-control", @required = "true", @selected = @Model.Type })
@@ -822,62 +857,46 @@
 
                 </div>*@
 
-            </div>
+            <!--</div>-->
             <div class="row">
-                <div class="col-md-1">
-                    @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
+                @*<div class="col-md-1">
+                    @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel" })
 
-                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
+                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-1">
-                    <label class="headinglabel required">Parcel No.</label>
-                    @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right", @required = "true" })
+                    <label class="headinglabel">Parcel No.</label>
+                    @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right"})
                     @Html.ValidationMessageFor(model => model.ParcelNo, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-1">
-                    <label class="headinglabel required">Bag</label>
+                    <label class="headinglabel">Bag</label>
 
-                    @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right", @required = "true" })
+                    @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.Bags, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-1">
-                    <label class="headinglabel required">Weight</label>
-                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right", @required = "true" })
+                    <label class="headinglabel" >Weight</label>
+                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right" } )
                     @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
 
-                </div>
+                </div>*@
 
-                <div class="col-md-1">
-                    <label class="headinglabel required">Total AWB</label>
+                <div class="col-md-1 hide">
+                    <label class="headinglabel">Total AWB</label>
 
-                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control text-right", @min = 1, @required = "true" })
+                    @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control text-right", @min = 1 })
                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="btn btn-primary" id="btnGETAPI" type="button" value="GET API" />
-                    @*<input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
-                    <input type="button" id="btnfile" style="display:none" />
-
-                    <a class="btn btn-primary" id="btnUpload" href="Javascript:void(0)">Upload</a>*@
-                </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
-                </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    
-                </div>
-                <div class="col-md-5 btn-right">
-                    <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
-                </div>
+                
 
             </div>                       
             
-            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px" id="listContainer">
+            <div class="table-responsive tblbackground" style="padding: 15px;margin-top: 20px;max-height:400px;overflow-y: scroll;overflow-x:scroll" id="listContainer">
                 @{Html.RenderPartial("ItemList", Model);}
             </div>
             <hr />

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TAXInvoiceReport">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ShipmentInvoiceID" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
+              <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ShipmentImportID" type="xs:int" minOccurs="0" />
+              <xs:element name="AcCompanyID" type="xs:int" minOccurs="0" />
+              <xs:element name="AcJournalID" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceTotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="EmployeeID" type="xs:int" minOccurs="0" />
+              <xs:element name="CreatedBy" type="xs:int" minOccurs="0" />
+              <xs:element name="CreatedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ModifiedBy" type="xs:int" minOccurs="0" />
+              <xs:element name="ModifiedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="BranchId" type="xs:int" minOccurs="0" />
+              <xs:element name="FYearId" type="xs:int" minOccurs="0" />
+              <xs:element name="MAWB" type="xs:string" minOccurs="0" />
+              <xs:element name="ShipmentInvoiceDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="ShipmentImportDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="ShipmentInvoiceID1" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceValue" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Tax" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxP" type="xs:decimal" minOccurs="0" />
+              <xs:element name="adminCharges" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ShipmentDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="ImportID" type="xs:int" minOccurs="0" />
+              <xs:element name="AWB" type="xs:string" minOccurs="0" />
+              <xs:element name="AWBDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="PCS" type="xs:int" minOccurs="0" />
+              <xs:element name="Weight" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Contents" type="xs:string" minOccurs="0" />
+              <xs:element name="Shipper" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomValue" type="xs:decimal" minOccurs="0" />
+              <xs:element name="COD" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Receiver" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceiverContact" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceiverAddress" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceiverTelephone" type="xs:string" minOccurs="0" />
+              <xs:element name="DestinationCountry" type="xs:string" minOccurs="0" />
+              <xs:element name="DestinationCity" type="xs:string" minOccurs="0" />
+              <xs:element name="BagNo" type="xs:string" minOccurs="0" />
+              <xs:element name="CurrencyID" type="xs:int" minOccurs="0" />
+              <xs:element name="ExportShipmentID" type="xs:int" minOccurs="0" />
+              <xs:element name="QuickInscanID" type="xs:int" minOccurs="0" />
+              <xs:element name="StatusTypeId" type="xs:int" minOccurs="0" />
+              <xs:element name="CourierStatusID" type="xs:int" minOccurs="0" />
+              <xs:element name="DRSID" type="xs:int" minOccurs="0" />
+              <xs:element name="CODReceiptId" type="xs:int" minOccurs="0" />
+              <xs:element name="DestinationLocation" type="xs:string" minOccurs="0" />
+              <xs:element name="ImportType" type="xs:string" minOccurs="0" />
+              <xs:element name="Route" type="xs:string" minOccurs="0" />
+              <xs:element name="MAWB1" type="xs:string" minOccurs="0" />
+              <xs:element name="GroupCode" type="xs:string" minOccurs="0" />
+              <xs:element name="FlightDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="FlightNo" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

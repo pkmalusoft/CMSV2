@@ -7,6 +7,7 @@ namespace CMSV2.Models
 {
     public class ImportManifestVM : ImportShipment
     {
+        public bool EnableAPI { get; set; }
         public string CompanyCountryName { get; set; }
         public string ManifestDate { get; set; }
         public string FlightDate1 { get; set; }
@@ -16,7 +17,7 @@ namespace CMSV2.Models
     }
     public class ImportManifestSearch
     {
-
+        public string AWBNo { get; set; }        
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
@@ -60,6 +61,10 @@ namespace CMSV2.Models
         public int CurrencyID { get; set; }
         public string Remark { get; set; }        
         public string lastStatusRmk {get;set;}
+        public string route { get; set; }
+        public string MAWB { get; set; }
+        public string status { get; set; }
+        public string groupCode { get; set; }
 
     }
 }

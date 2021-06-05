@@ -323,7 +323,7 @@
                     if (response.Status === 1) {
                         var data = response.data;
                         //$('#imgloader').removeClass('hide');
-                        $('#loaderpopup').modal('show')
+                        $('#loaderpopup').modal('show');
                               $.ajax({
                               type: 'POST',
                               url: '@Url.Action("ShowItemList", "Transhipment")',
@@ -673,7 +673,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Agent</label>
-                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Route</label>

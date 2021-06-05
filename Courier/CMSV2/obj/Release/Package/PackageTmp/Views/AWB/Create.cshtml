@@ -471,6 +471,7 @@
                 $('#divcash').removeClass('hide');
                 $('#AcHeadName').removeAttr('readonly');
                 $('#AcHeadName').attr('required', 'required');
+                $('#shippername').removeAttr('readonly');
             }
             else {
                 $('#divcustomer').removeClass('hide');
@@ -481,6 +482,7 @@
 
             if (modeid == 1 || modeid == 2 || modeid == 4) { //PKP COD FOC
                 $("#customer").attr("readonly", "readonly");
+                $('#shippername').removeAttr('readonly');
                 $("#CustomerandShipperSame").attr("disabled", "disabled");
                 if (modeid == 1) { //cash
                     $('#customer').val($('#CASHCustomerName').val());
@@ -1695,7 +1697,7 @@
                     }
                     else {
                         $('#CustomerRateTypeID').val(0);
-                        $('#CustomerRateType').val("");
+                        $('#CustomerRateType').val("Manual Rate");
                         $('#CourierCharge').val(0);
                     }
                 }
@@ -1728,11 +1730,13 @@
                         $('#CustomerRateType').val(response.CustomerRateType);
                     }
                     $('#CourierCharge').val(response.CourierCharge);
+                    CalculateTax();
                 }
                 else {
                     $('#CustomerRateTypeID').val(0);
                     $('#CustomerRateType').val(0);
                     $('#CourierCharge').val(0);
+                    CalculateTax();
                 }
             }
         });
@@ -1976,8 +1980,8 @@
             </div>
             <div class="col-md-2">
                 <label class="headinglabel">Pickup Request No.</label>
-                @*@Html.TextBoxFor(model => model.EnquiryNo, new { @class = "form-control" })*@
-                @Html.DropDownListFor(model => model.EnquiryNo, new SelectList(@ViewBag.Enquiry, "EnquiryNo", "EnquiryNo"), "Select", new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.EnquiryNo, new { @class = "form-control" })
+                @*@Html.DropDownListFor(model => model.EnquiryNo, new SelectList(@ViewBag.Enquiry, "EnquiryNo", "EnquiryNo"), "Select", new { @class = "form-control" })*@
             </div>
             <div class="col-md-2">
                 <label class="headinglabel required">Payment Mode</label>
@@ -2036,7 +2040,7 @@
 
                         <div class="col-md-3">
                             <label class="headinglabel">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @placeholder = "Contact Person" })
                             @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
                         </div>
                         <div class="col-md-2">

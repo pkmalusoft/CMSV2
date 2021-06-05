@@ -9,7 +9,7 @@ namespace CMSV2.Models
   public class DRSAWB
   {
     public int InScanID { get; set; }
-
+        public int ShipmentDetailID { get; set; }
     public string AWB { get; set; }
         public string Consignor { get; set; }
         public string Consignee { get; set; }
@@ -22,5 +22,7 @@ namespace CMSV2.Models
 
     public decimal COD { get; set; }
         public decimal MaterialCost { get; set; }
+
+        public decimal CustomValue { get; set; }
     }
 }

@@ -51,8 +51,9 @@
     .colorblue {
         color: #273ef3;
     }
+  
     .period{
-            border: 1px solid #ccc;
+            border: 1px solid #07a7e3;
             margin-bottom: 10px;
             padding: 7px 7px 0 7px;
     }
@@ -71,6 +72,27 @@
         margin:0;
         font-size: 14px;
     }
+    .search_title{
+      padding: 10px;
+        margin-right: -15px;
+        margin-left: -15px;
+        margin-top: 0;
+        margin-bottom: 28px;
+        color: #ffffff;
+        background: #35b8eb;
+        font-weight: 500;
+        border-bottom: 1px solid #ccc;
+}
+
+    .search_box{  
+    border: 1px solid #07a7e3;
+    margin: 20px;
+    padding-top: 0;
+    padding-bottom: 15px;
+}
+ .search_box input, .search_box select{  
+    border: 1px solid #07a7e3;
+}
     /* .dataTables_paginate
          {
              display:block!important;
@@ -328,15 +350,18 @@
 
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Air WayBill</h1>
+    <h1 class="headingfont">Shipment - Create</h1>
 
 </section>
 @using (@Html.BeginForm("Index", "AWB", FormMethod.Post, new { @class = "form-horizontal" }))
 {
+    <div class="search_box">
     <div class="row no-margin">
 
+        <h4 class="search_title">Advance Search</h4>
+
         <div class="col-md-2">
-                <label class="headinglabel">Air waybill</label>
+                <label class="headinglabel">Tracking Number</label>
                 @Html.TextBoxFor(mode => Model.AWBNo, new { @class = "form-control" })
          </div>
 
@@ -345,13 +370,20 @@
                 @Html.TextBoxFor(model => model.ConsignorConsignee, new { @class = "form-control txttarget",  @placeholder = "Search Text",@type="search" })
             </div>
 
-             <div class="col-md-2">
+             <div class="col-md-3">
                 <input type="hidden" id="InScanID" />
                 <input type="hidden" id="CourierStatusId" />
                 <input type="hidden" id="StatusTypeId" />
                 <label class="headinglabel">Status</label>
                 @Html.DropDownListFor(mode => Model.StatusID, new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
             </div>
+
+
+         <div class="col-md-2">
+                <label class="headinglabel">Movement Type</label>
+                @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control"})
+            </div>
+            
 
             <div class="col-md-3 period">
                 <div>
@@ -370,27 +402,17 @@
             
         <div class="abs-elem"><h4>Period</h4></div>
         </div>
-
-                <div class="pull-right" style="padding-top:32px; ">
-
-                <button type="button" class="btn btn-danger  mt-0" title="Clear Data" onclick="ClearData()">Clear All</button>&nbsp;&nbsp;
-                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                <a class="btn btn-warning btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "AWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>
-            </div>
+             
 
 </div>
         <div class="row">
            
           
-            <div class="col-md-2">
-                <label class="headinglabel">Movement Type</label>
-                @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control"})
-            </div>
-            <div class="col-md-2">
+           
+              <div class="col-md-2">
                 <label class="headinglabel">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control" })
             </div>
-          
             <div class="col-md-2">
                 <label class="headinglabel">Origin</label>
                 @Html.TextBoxFor(model => model.Origin, new { @class = "form-control txttarget", @placeholder = "Select Origin" })
@@ -400,10 +422,28 @@
                 @Html.TextBoxFor(model => model.Destination, new { @class = "form-control txttarget",  @placeholder = "Select Destination" })
 
             </div>
+
+            <div class="col-md-3">
             
+               <div class="" style="padding-top:32px; ">
+
+                <button type="button" class="btn btn-danger  mt-0" title="Clear Data" onclick="ClearData()">Clear All</button>&nbsp;&nbsp;
+                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                
+            </div>
+        </div>
         
-            <div class="pull-right" style="padding-top:32px;">
-                <p class="indexbtnpadding">
+
+        </div>
+    </div>
+
+        <div class="text-right row">
+        <div class="d-flex" >
+
+                <a class="btn btn-warning btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "AWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>
+
+                
+                <p class="indexbtnpadding" style="margin-left:4px;">
                     @if (@ViewBag.PageID == "0")
                     {
                         if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)

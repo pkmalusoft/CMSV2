@@ -23,12 +23,51 @@
 <script type="text/javascript">
     var AWBItems = [];
     var RemoveAWBItems = [];
+    function deletetrans(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
+    function checkduplicate(awbno) {
+        debugger;
+        var idtext = 'hdnAWbNo_';
+        var maxrow = $('#detailsbody > tr').length;
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var deleted = $('#hdndeleted_' + index).val();
+                if (deleted != "true") {
+                    var con = $('#hdnAWbNo_' + index).val();
+                    if (con.trim() == awbno.trim()) {
+                        duplicate = true;
+                        var message = 'Duplicate AWB No.!';
+                        $.notify('Duplicate AWB No.', 'error');
+                        $('#txtawb').val('');
+                        $('#txtawb').focus();
+                        //break;
+                    }
+
+                    if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                        return true;
+                    }
+                }
+            });
+            if (duplicate == true) {
+                return false;
+            }
+        }
+        else {
+
+            return true;
+        }
+    }
     $(document).ready(function () {
         AWBItems = [];
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
                        
         $("#txtawb").change(function () {
+            $('#btAdd').attr('disabled', 'disabled');             
             $('#btnAdd').trigger('click');
         });
 
@@ -58,18 +97,15 @@
         })
         $("#btnAdd").click(function () {
             if ($("#txtawb").val().trim() == '') {
+                $('#btnAdd').removeAttr('disabled');
+                return;
+            }
+            else if (checkduplicate($('#txtawb').val()) == false) {
+                $('#btnAdd').removeAttr('disabled');
                 return;
             }
             else {
-                $('#btAdd').attr('disabled', 'disabled');
-                $.each(AWBItems, function (index, item) {
-                    if (item.AWB == $('#txtawb').val().trim()) {
-                        alert('Duplicate AWB No.!');
-                        $("#txtawb").val('');
-                        $("#txtawb").focus();
-                        return false;
-                    }
-                });
+                $('#btAdd').attr('disabled', 'disabled');             
             }
 
             if ($("#txtawb").val().trim() != '') {
@@ -84,18 +120,20 @@
                         if (response.status == "ok") {
                             debugger;
                             var data = response.data;
+                            AWBItems = [];
                             AWBItems.push(data);
-                            $("#detailsbody").html('');
+                            //$("#detailsbody").html('');
                             $.each(AWBItems, function (index, item) {
 
                                 var i = $('#details tr').length - 1;
                                 // $('#details tr').length - 1;
-                                $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type = "hidden" value=' + item.consignor + ' name = "lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
+                                var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" name="lst[' + i + '].deleted" /><input type="hidden" id="hdnShipmentDetailID_' + i + '"  value="' + item.ShipmentDetailID + '" name="lst[' + i + '].ShipmentDetailID" />';
+                                $("#detailsbody").append('<tr>' + '<td>' + datahtml + item.AWB + '<input type="hidden" id="hdnAWbNo_' + i + '" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type = "hidden" value=' + item.consignor + ' name = "lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
                                     + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
                                     + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
                                     + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
-                                    + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
-                                    + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                                    + '<td>' + item.MaterialCost+ '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
+                                    + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a></td></tr>');
 
                             });
 
@@ -126,42 +164,7 @@
             }
 
         });
-
-        $("#details").on('click', '.rem', function () {            
-            var remove_awbono = $(this).attr('awbno');
-            var tempAWBItems = [];
-            $.each(AWBItems, function (index, value) {
             
-                if (value.AWB == remove_awbono) {
-                    RemoveAWBItems.push(value);
-                    return;
-                }
-            });
-            $.each(AWBItems, function (index, value) {
-            
-                if (value.AWB != remove_awbono) {
-                    tempAWBItems.push(value);
-                }
-
-            });
-            AWBItems = [];
-            AWBItems = tempAWBItems;
-            //$(this).parent().parent().remove();
-            $("#detailsbody").html('');
-            $.each(AWBItems, function (index, item) {
-                debugger;
-                // $('#details tr').length - 1;
-                var i = $('#details tr').length - 1;
-                $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type="hidden" value=' + item.consignor + ' name="lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td><td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
-                    + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
-                    + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
-                    + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
-                    + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
-                    + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td ></tr>');
-
-
-            });
-        });
 
 
         $("#btnsave").click(function () {
@@ -170,7 +173,8 @@
             var del = $("#DeliveredBy option:selected").val();
             var vec = $("#VehicleID option:selected").val();
             var check = $("#CheckedBy option:selected").val();
-
+            var maxrow = $('#detailsbody > tr').length;
+          
             if (drs == "") {
                 $("#validations").show();
                 $("#DRSDate").focus();
@@ -191,13 +195,16 @@
                 $("#VehicleID").focus();
                 return false;
             }
-          
-            else if (AWBItems.length == 0)
-            {
-                $("#validations").hide();
-                alert('Add OutScanning AWB Items save!');
-                return false;
+           else if (maxrow == 0) {
+                $.notify('Add OutScanning AWB Items to Save!');
+                return;
             }
+            //else if (AWBItems.length == 0)
+            //{
+            //    $("#validations").hide();
+            //    alert('Add OutScanning AWB Items save!');
+            //    return false;
+            //}
             else {
                 $("#validations").hide();
                 return true;
@@ -260,15 +267,7 @@
       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
       <fieldset>
           <div class="row no-margin" style="padding-top:10px; padding-bottom:30px">
-              <div class="col-md-12 btn-right">
-                  <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-
-
-                  @*     <input type="submit" value="Save&Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" style="margin-left:5px;"  />*@
-
-                  <a href='@Url.Action("Index", "OutScan", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
-
-              </div>
+             
           </div>
           <div class="row no-margin">
 
@@ -306,7 +305,16 @@
 
               </div>
               <div class="col-md-3" style="padding-top:10px">
-                  <button type="button" class="btn btn-primary small_btn " id="btnAdd"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-primary small_btn hide " id="btnAdd"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+              </div>
+              <div class="col-md-6 btn-right">
+                  <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+                  @*     <input type="submit" value="Save&Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" style="margin-left:5px;"  />*@
+
+                  <a href='@Url.Action("Index", "OutScan", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
               </div>
           </div>
 
@@ -317,11 +325,11 @@
                   <table border="1" class="table table-responsive table-bordered" style="width: 100%" id="details">
                       <thead>
                       <th>AWB No.</th>
-                      <th>Consignor</th>
-                      <th>Consignee</th>
-                      <th>Consignee Phone</th>
-                      <th>Consignee City</th>
-                      <th>Consignee Country</th>
+                      <th>Shipper</th>
+                      <th>Receiver</th>
+                      <th>Receiver City</th>
+                      <th>Receiver Phone</th>
+                      <th>Receiver Address</th>
                       <th>COD</th>
                       <th>Material Cost</th>
                       <th></th>

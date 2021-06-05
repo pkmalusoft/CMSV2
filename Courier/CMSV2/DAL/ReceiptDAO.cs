@@ -764,6 +764,7 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
             cmd.Parameters.AddWithValue("@DeliveredBy", RecPy.DeliveredBy);
             cmd.Parameters.AddWithValue("@BranchId", RecPy.BranchId);
+            cmd.Parameters.AddWithValue("@DRSBased", RecPy.DRSBased);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);

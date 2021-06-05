@@ -1,0 +1,207 @@
+﻿@model CMSV2.Models.ShipmentInvoiceVM
+
+
+@{
+  
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+    <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+    
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+        $('#btnaddall').click(function () {
+          
+            var checkall = $('#CheckAll').prop('checked');
+            $('#btnaddall').attr('disabled', 'disabled');
+             $.ajax({
+                type: "Get",
+                 url: "/TaxInvoice/GetInvoiceDetail",
+                datatype: "Json",
+                 data: {
+                     ShipmentInvoiceID: $("#ShipmentInvoiceID").val(), checkall: checkall },
+                 success: function (response) {
+                     if (response.status == "ok") {
+                         $.ajax({
+                             type: 'POST',
+                             url: '@Url.Action("ShowAWBList", "TaxInvoice")',
+                             datatype: "html",
+                             success: function (data) {
+                                 $("#listContainer").html(data);
+                                 $('#btnaddall').removeAttr('disabled');
+
+                             },
+                             error: function (err) {
+                                 console.log(err);
+                                 $('#btnaddall').removeAttr('disabled');
+                             }
+                         });
+                     }
+                 }
+            });
+        });
+
+
+        $('#btnprint').click(function () {
+                  
+
+            var obj = [];
+            var shipmentdetailids = '';
+            var maxrow = $('#listbody > tr').length;
+            $('#btnprint').attr('disabled', 'disabled');
+            for (i = 0; i < maxrow; i++) {
+                debugger;
+                //var deleted = $('#hdndeleted_' + i).val();
+                var checked = $('#hdnawbchecked_' + i).prop('checked');
+
+                if (checked) {
+
+                    if (shipmentdetailids == '') {
+                        shipmentdetailids = $('#hdnawbchecked_' + i).attr('shipmentdetailid');
+                    }
+                    else {
+                        shipmentdetailids = shipmentdetailids + ',' + $('#hdnawbchecked_' + i).attr('shipmentdetailid');
+                    }
+                }
+                 
+
+                if (maxrow == (i + 1) && shipmentdetailids !='') {    
+                    $('#btnprint').removeAttr('disabled');
+                    var printurl="/TaxInvoice/InvoicePrint?id=" + $('#ShipmentInvoiceID').val() + "&Details=" + shipmentdetailids;
+                    window.open(printurl, '_blank');
+                    
+                    //$.ajax({
+                    //    type: "POST",
+                    //    url: "/TaxInvoice/InvoicePrintSelected",
+                    //    datatype: "Json",
+                    //    data: {
+                    //        id: $('#ShipmentInvoiceID').val(), AWBDetails: JSON.stringify(obj)
+                    //    } ,
+                    //    success: function (response) {
+                    //        $.notify("VAT Invoice Saved Succesfully!", "success");
+                    //        $('#btnprint').removeAttr('disabled');
+                    //        window.location = "/TaxInvoice/Index";
+                    //    }
+                    //});
+                }
+                else if (maxrow == (i + 1) && shipmentdetailids == '') {
+                    $.notify('Select Invoice Detail to Print!');
+                    return;
+                }
+            }
+
+        });
+
+       
+
+
+    });
+
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">
+        VAT Invoice Details
+    </h1>
+
+</section>
+
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+    else if (TempData["WarningMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["WarningMsg"]", "error");
+                 });
+        </script>
+    }
+
+    @using (Html.BeginForm("Details", "TaxInvoice", FormMethod.Post, new { @id = "taxinvoice" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row">
+
+            </div>
+
+            <div class="row no-margin">
+                <div class="col-md-2">
+                    @Html.HiddenFor(model => model.ShipmentInvoiceID, new { })
+                    @Html.HiddenFor(model => model.ShipmentImportID, new { })
+                    <label class="headinglabel required">Invoice No.</label>
+                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @readonly = "true" })
+                    @Html.ValidationMessageFor(model => model.InvoiceNo)
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel required">Invoice Date</label>
+
+                    @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right", @readonly = "true" })
+                    @Html.ValidationMessageFor(model => model.InvoiceDate)
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Entered By</label>
+                    @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @readonly = "true" })
+                </div>
+                <div class="col-md-2">
+                    <div class="flexTitle">
+                        <label class="headinglabel required">MAWB</label>
+                        <div class="checkboxdesign no-padding  text-right" style="float:right">
+                            @Html.CheckBox("CheckAll", new { @name = "CheckAll", @checked = "checked" }) &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Print All</label>
+                        </div>
+                    </div>                    
+                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @readonly = "true" })
+                </div>
+                <div class="col-md-1" style="padding-top:30px">
+                    <button type="button" id="btnaddall" class="btn btn-primary mt-0 small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </div>
+                <div class="col-md-3 btn-right" style="padding-top:20px;">
+                    <div class="row no-margin btn-right" style="padding-top:10px">
+                        <div class="col-md-12">
+                            <input type="button" value="Print" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnprint" />
+                            <a href='@Url.Action("Index", "TaxInvoice")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr />          
+
+            <div class="table-responsive tblbackground" style="padding: 15px;margin-top:20px;min-height:400px;max-height:400px;overflow-y: scroll;" id="listContainer">
+                @{Html.RenderPartial("ItemList", Model);}
+            </div>
+
+
+
+
+        </fieldset>
+    }
+</section>

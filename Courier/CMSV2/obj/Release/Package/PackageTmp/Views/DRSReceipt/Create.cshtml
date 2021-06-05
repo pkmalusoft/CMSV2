@@ -83,6 +83,19 @@
         //$("#FMoney").attr("readonly", false);
         $("#PaymentMode").focus();
 
+        $("#DRSBased").click(function () {
+            if (!$("#DRSBased").is(':checked')) {
+                $('#DRSNo').attr('readonly', 'readonly');
+                $('#DRSNo').val('');   
+                $('#DRSID').val(0);
+                $('#DRSNo').removeAttr('required');
+            }
+            else {
+                $('#DRSNo').removeAttr('readonly');
+                $('#DRSNo').attr('required', 'required');
+            }
+        });
+
         if ('@Model.DRSRecPayID' == 0) {
             $("#divCash").css({ "display": "none" });
             $("#divBank").css({ "display": "block" });
@@ -507,7 +520,13 @@
             @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
         </div>
         <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">DRS Number</label>
+            <div class="flexTitle">
+                <label class="headinglabel">DRS Number</label>
+                <div class="checkboxdesign no-padding  text-right" style="float:right">
+                    @Html.CheckBox("DRSBased", new { @name = "DRSBased", @checked = "checked" }) &nbsp
+                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">DRS Based</label>
+                </div>
+            </div>            
             @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control", @required = true })
             @Html.HiddenFor(mode => Model.DRSID)
         </div>

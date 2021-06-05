@@ -124,19 +124,18 @@
                 @Html.DropDownList("StatusId", new SelectList(@ViewBag.PickupRequestStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
             </div>*@
             <div class="col-md-1">
-                <label class="headinglabel">From</label>
-                <input id="FromDate" class="form-control text-right"  name="FromDate" type="text" value="@ViewBag.FromDate" />
-                @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+                <label class="headinglabel">From Date</label>                
+                @Html.TextBoxFor(model=>model.FromDate,new { @class = "form-control txttarget" })
             </div>
 
             <div class="col-md-1">
-                <label class="headinglabel">To </label>
-                <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
-                @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+                <label class="headinglabel">To Date</label>
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control txttarget" })
             </div>
 			
-            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;" >
-             <a  class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
             </div>
         <div class="pull-left" style="padding-top:32px;">
             <p class="indexbtnpadding" style="padding-right:15px">
@@ -250,7 +249,7 @@
                                 @Html.DisplayFor(modelItem => item.InScanSheetNo)
                             </td>
                             <td class="text-right">
-                                @CMSV2.Models.CommanFunctions.GetLongDateFormat(item.QuickInscanDateTime)
+                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.QuickInscanDateTime)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CollectedBy)

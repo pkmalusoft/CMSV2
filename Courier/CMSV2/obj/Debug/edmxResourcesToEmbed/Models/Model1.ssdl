@@ -70,6 +70,7 @@
     <Property Name="CompanyLogo" Type="image" />
     <Property Name="Logo" Type="nvarchar(max)" />
     <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
+    <Property Name="EnableAPI" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="AccountHeadControl">
     <Key>
@@ -202,7 +203,7 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AnalysisHeadID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="varchar(max)" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="BranchID" Type="int" />
     <Property Name="PartyID" Type="int" />
     <Property Name="PartyType" Type="nchar" MaxLength="1" />
@@ -225,7 +226,7 @@
     <Property Name="VoucherType" Type="nvarchar" MaxLength="3" />
     <Property Name="TransType" Type="smallint" />
     <Property Name="StatusDelete" Type="bit" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="UserID" Type="int" />
     <Property Name="ShiftID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
@@ -394,6 +395,19 @@
     <Property Name="AnalysisHead" Type="nvarchar" MaxLength="50" />
     <Property Name="AnalysisGroupID" Type="int" />
     <Property Name="BranchID" Type="int" />
+  </EntityType>
+  <EntityType Name="APIDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AppPage" Type="varchar" MaxLength="100" />
+    <Property Name="APIType" Type="varchar" MaxLength="20" />
+    <Property Name="APILink" Type="nvarchar" MaxLength="200" />
+    <Property Name="APIKeyname" Type="varchar" MaxLength="200" />
+    <Property Name="APIKeyValue" Type="varchar" MaxLength="300" />
+    <Property Name="APISignature" Type="varchar" MaxLength="200" />
+    <Property Name="APISignatureValue" Type="varchar" MaxLength="300" />
   </EntityType>
   <EntityType Name="AreaMaster">
     <Key>
@@ -616,6 +630,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Users' does not have a p
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ShipmentDetailID" Type="int" />
     <Property Name="EmpID" Type="int" />
+    <Property Name="APIStatus" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="BranchMaster">
     <Key>
@@ -1473,6 +1488,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="ModifiedDate" Type="datetime" />
     <Property Name="FYearId" Type="int" />
     <Property Name="TotalCourierCharge" Type="money" />
+    <Property Name="TotalCustomValue" Type="money" />
   </EntityType>
   <EntityType Name="DRSRecPay">
     <Key>
@@ -1499,6 +1515,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="BranchId" Type="int" />
     <Property Name="UserID" Type="int" />
     <Property Name="DRRID" Type="int" />
+    <Property Name="DRSBased" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="DRSRecPayDetails">
     <Key>
@@ -2011,6 +2028,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="CODReceiptId" Type="int" />
     <Property Name="DestinationLocation" Type="nvarchar" MaxLength="1000" />
     <Property Name="ImportType" Type="varchar" MaxLength="20" />
+    <Property Name="Route" Type="varchar" MaxLength="50" />
+    <Property Name="MAWB" Type="varchar" MaxLength="50" />
+    <Property Name="GroupCode" Type="varchar" MaxLength="200" />
+    <Property Name="FlightDate" Type="datetime" />
+    <Property Name="FlightNo" Type="varchar" MaxLength="50" />
+    <Property Name="ShipmentInvoiceId" Type="int" />
   </EntityType>
   <EntityType Name="InScan">
     <Key>
@@ -2318,6 +2341,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="JobCode" Type="varchar" MaxLength="50" />
     <Property Name="FAgentId" Type="int" />
     <Property Name="ImportShipmentId" Type="int" />
+    <Property Name="PODID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -3078,6 +3102,38 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="JobID" Type="int" />
     <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="ShipmentInvoice">
+    <Key>
+      <PropertyRef Name="ShipmentInvoiceID" />
+    </Key>
+    <Property Name="ShipmentInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceDate" Type="datetime" />
+    <Property Name="ShipmentImportID" Type="int" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="InvoiceTotal" Type="money" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="BranchId" Type="int" />
+    <Property Name="FYearId" Type="int" />
+    <Property Name="MAWB" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ShipmentInvoiceDetails">
+    <Key>
+      <PropertyRef Name="ShipmentInvoiceDetailID" />
+    </Key>
+    <Property Name="ShipmentInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShipmentImportDetailID" Type="int" />
+    <Property Name="ShipmentInvoiceID" Type="int" />
+    <Property Name="InvoiceValue" Type="money" />
+    <Property Name="Tax" Type="money" />
+    <Property Name="TaxP" Type="money" />
+    <Property Name="adminCharges" Type="money" />
   </EntityType>
   <EntityType Name="StaffNotes">
     <Key>
@@ -6688,6 +6744,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="AgentMaster" EntityType="Self.AgentMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AnalysisGroup" EntityType="Self.AnalysisGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AnalysisHead" EntityType="Self.AnalysisHead" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="APIDetail" EntityType="Self.APIDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AreaMaster" EntityType="Self.AreaMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_PersonalizationAllUsers" EntityType="Self.aspnet_PersonalizationAllUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="aspnet_Profile" EntityType="Self.aspnet_Profile" Schema="dbo" store:Type="Tables" />
@@ -6831,6 +6888,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="RoleMaster" EntityType="Self.RoleMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SalesInvoice" EntityType="Self.SalesInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SalesInvoiceDetails" EntityType="Self.SalesInvoiceDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShipmentInvoice" EntityType="Self.ShipmentInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShipmentInvoiceDetails" EntityType="Self.ShipmentInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StaffNotes" EntityType="Self.StaffNotes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StockDetails" EntityType="Self.StockDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />

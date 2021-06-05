@@ -105,6 +105,7 @@ namespace CMSV2.Controllers
                     cust.DRSID = dpay.DRSID;
                     var drsno= Context1.DRS.Find(cust.DRSID);
                     cust.DRSNo = drsno.DRSNo;
+                    cust.DRSBased = dpay.DRSBased;
                     cust.DRSDate = drsno.DRSDate;
                     cust.Remarks = dpay.Remarks;
                     cust.DRSAmount =Convert.ToDecimal(drsno.TotalCourierCharge);

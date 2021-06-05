@@ -1,0 +1,278 @@
+﻿@model CMSV2.Models.ShipmentInvoiceSearch
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/AgentInvoice/Index";
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        CMSV2.Models.SourceMastersModel obj = new CMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+
+
+<script type="text/javascript">
+    function showprint() {
+        if ($('#ShipmentInvoiceDetailId').val() == '' || $('#ShipmentInvoiceDetailId').val() == '0') {
+            $.notify('Select Invoiced AWBNo. to Print!');
+            $('#ShipmentInvoiceDetailId').val(0);
+            return;
+        }   
+        if ($('#ShipmentInvoiceId').val() == '') {
+            $('#ShipmentInvoiceId').val(0);
+        }
+        var  detailid=$('#ShipmentInvoiceDetailId').val();
+        var Id= $('#ShipmentInvoiceId').val();
+        var printurl = "/TaxInvoice/InvoicePrint?id=" + Id + "&Details=" + detailid;
+        window.open(printurl, '_blank');
+    }
+    $(document).ready(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" style="width:100%" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+        $("#AWBNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/TaxInvoice/GetImportAWBList',
+                    datatype: "json",
+                    data: {
+                        term: request.term 
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AWB,
+                                value: val.ShipmentInvoiceDetailId,
+                                Id:val.ShipmentInvoiceId
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#AWBNo").val(i.item.label);
+                $('#ShipmentInvoiceDetailId').val(i.item.value);
+                $('#ShipmentInvoiceDetailId').attr('label', i.item.label);
+                $('#ShipmentInvoiceId').val(i.item.Id);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AWBNo").val(i.item.label);
+                $('#ShipmentInvoiceDetailId').val(i.item.value);
+                $('#ShipmentInvoiceDetailId').attr('label',i.item.label);
+                $('#ShipmentInvoiceId').val(i.item.Id);
+            }
+        });
+
+        $('#AWBNo').change(function () {
+            if ($('#AWBNo').val() == '') {
+                $('#ShipmentInvoiceDetailId').val(0);
+            }
+            else if ($('#AWBNo').val() != $('#ShipmentInvoiceDetailId').attr('label')) {
+                $('#AWBNo').val('');
+                $('#ShipmentInvoiceDetailId').val(0);
+                $('#AWBNo').focus('');
+            }
+
+        });
+
+        
+    });
+
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">VAT Invoice</h1>
+
+</section>
+@using (@Html.BeginForm("Index", "TaxInvoice", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="row no-margin">
+        <div class=" d-flex">
+            <div class="col-md-1">
+                <label class="headinglabel">AWBNo</label>
+                @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.ShipmentInvoiceDetailId)
+                @Html.HiddenFor(model => model.ShipmentInvoiceId)
+
+            </div>
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+                <a class="btn btn-warning btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="showprint()"><i class="fa fa-print" aria-hidden="true"></i></a>
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">From</label>
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right " })
+            </div>
+
+            <div class="col-md-1">
+                <label class="headinglabel">To </label>
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+            </div>
+
+            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
+                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
+                <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+            <div class="pull-left" style="padding-top:32px;">
+                <p class="indexbtnpadding" style="padding-right:15px">
+                    @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled", @title = "Create Not allowed in this Financial year!" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <section class="content">
+        @if (TempData["SuccessMsg"] != null)
+        {           
+            <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["SuccessMsg"]", "success");
+                      });
+            </script>
+        }
+        <div class="table-responsive tblbackground" style="padding:15px">
+            <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+
+                <thead>
+                    <tr>
+                        <th>
+                            Invoice No.
+                        </th>
+                        <th>
+                            @Html.Label("Invoice Date")
+                        </th>
+                        <th>
+                            @Html.Label("Invoice Total")
+                        </th>
+                        <th>
+                            @Html.Label("Entered By")
+                        </th>
+                        <th>
+                            @Html.Label("MAWB")
+                        </th>
+
+                        <th>
+                            @Html.Label("Import Date")
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+
+                        <th>
+                            Invoice No.
+                        </th>
+                        <th class="right_text">
+                            @Html.Label("Date")
+                        </th>
+                        <th>
+                            @Html.Label("Invoice Total")
+                        </th>
+                        <th>
+                            @Html.Label("Entered By")
+                        </th>
+                        <th>
+                            @Html.Label("MAWB")
+                        </th>
+
+                        <th>
+                            @Html.Label("Import date")
+                        </th>
+                        <th style="display:none"></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in @Model.Details)
+                    {
+                    <tr>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.InvoiceNo)
+                        </td>
+
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.InvoiceDate)
+                        </td>
+
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.InvoiceTotal)
+                        </td>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.EnteredBy)
+                        </td>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.MAWB)
+                        </td>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.ImportDate)
+                        </td>
+                        <td>
+
+                            <a href="@Url.Action("Create", new { id = item.ShipmentInvoiceID })"><i class="fa fa-pencil"></i></a>|
+                            <a href="@Url.Action("Details", new { id = item.ShipmentInvoiceID })"><i class="fa fa-eye"></i></a>|
+                            @if (isprint)
+                            {
+                                <a class="aprint" target="_blank" href="InvoicePrint?id=@item.ShipmentInvoiceID"><i class="fa fa-print"></i></a>
+                            }
+                        </td>
+                    </tr>
+                            }
+                    </tbody>
+            </table>
+        </div>
+    </section>
+}
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Agent Invoice?")) {
+            window.location.href = "/AgentInvoice/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

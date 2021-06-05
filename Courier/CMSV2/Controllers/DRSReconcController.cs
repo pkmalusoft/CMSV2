@@ -130,7 +130,7 @@ namespace CMSV2.Controllers
                                //join c2 in db.DRS on c1.DRSID equals c2.DRSID
                                where c1.DocumentNo.ToLower().Contains(term.ToLower()) && c1.FYearID ==FyearId
                                 && c1.DRRID==null
-                                && (c1.DeliveredBy==DeliveredBy || c1.DeliveredBy==DeliveredBy)
+                                && (c1.DeliveredBy==DeliveredBy || DeliveredBy== 0)
                                orderby c1.DocumentNo ascending
                                select new { DRSRecPayId=c1.DRSRecPayID,DRSRecPayDate=c1.DRSRecPayDate,DocumentNo=c1.DocumentNo, DRSID = c1.DRSID, DeliveredBy = c1.DeliveredBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
 
@@ -142,7 +142,7 @@ namespace CMSV2.Controllers
                                //join c2 in db.DRS on c1.DRSID equals c2.DRSID
                                where c1.FYearID ==FyearId
                                && c1.DRRID == null
-                               && (c1.DeliveredBy == DeliveredBy || c1.DeliveredBy == DeliveredBy)
+                               && (c1.DeliveredBy == DeliveredBy || DeliveredBy == 0)
                                orderby c1.DocumentNo ascending
                                select new { DRSRecPayId = c1.DRSRecPayID, DRSRecPayDate = c1.DRSRecPayDate, DocumentNo = c1.DocumentNo, DRSID = c1.DRSID,DeliveredBy=c1.DeliveredBy, ReceivedAmount = c1.ReceivedAmount }).ToList();
                 return Json(drslist, JsonRequestBehavior.AllowGet);

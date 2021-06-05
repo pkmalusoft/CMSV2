@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 namespace CMSV2.Models
 {
-  public class InScanVM
-  {
+    public class InScanVM
+    {
         public InScanVM()
         {
             lst = new List<AWBDetailsVM>();
@@ -18,14 +18,14 @@ namespace CMSV2.Models
         public int QuickInscanID { get; set; }
         public int DepotID { get; set; }
         public string DepotName { get; set; }
-        public string InScanSheetNo{ get; set; }
+        public string InScanSheetNo { get; set; }
         public int VehicleId { get; set; }
-        public string DriverName { get; set; }        
-        public int BranchId { get; set; }        
+        public string DriverName { get; set; }
+        public int BranchId { get; set; }
         public int UserId { get; set; }
         public int CollectedByID { get; set; }
         public int AgentID { get; set; }
-        public int ReceivedByID { get; set; }        
+        public int ReceivedByID { get; set; }
         public DateTime QuickInscanDateTime { get; set; }
         public string SelectedInScanId { get; set; }
         public string RemovedInScanId { get; set; }
@@ -33,16 +33,48 @@ namespace CMSV2.Models
         public string CollectedBy { get; set; }
         public string AgentName { get; set; }
         public string ReceivedBy { get; set; }
+
+        public string MAWB { get; set; } //Shipment MAWB
+        public DateTime ImportDate { get; set; } //shipment IMport Date
         public List<AWBDetailsVM> lst { get; set; }
         public string Details { get; set; }
+
+        public List<InBoundAWBList>  AWBDetail {get; set; }
         public string Source { get; set; }
   }
-    public class AWBList
+
+public class InBoundAWBList
+{
+    public int Sno { get; set; }
+    public int ShipmentDetailID { get; set; }
+    public string ConsignorName { get; set; }
+    public string AWB { get; set; }
+    public string OriginCountry { get; set; }
+    public string OriginCity { get; set; }
+
+    public string DestinationCountry { get; set; }
+    public string DestinationCity { get; set; }
+
+    public string Receiver { get; set; }
+    public string Shipper { get; set; }
+    public bool AWBChecked { get; set; }
+
+    public int? CourierStatusId { get; set; }
+    public int? StatusTypeId { get; set; }
+    public string CourierStatus { get; set; }
+    public string StatusType { get; set; }
+        public string MAWB { get; set; }
+        public DateTime ImportDate { get; set; }
+    public bool RemoveAllowed { get; set; }
+        
+}
+public class AWBList
     {
         public int InScanId { get; set; }
         public string AWB { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
+        public bool AWBChecked { get; set; }
     }
 
     public class InScanSearch 

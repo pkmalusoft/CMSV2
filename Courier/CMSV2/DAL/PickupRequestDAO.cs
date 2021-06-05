@@ -208,6 +208,45 @@ namespace CMSV2.DAL
 
         }
 
+        public string GetMaxTaxInvoiceNo(int Companyid, int BranchId, int FYearId)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "GetTAXInvoiceNo";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@CompanyId", Companyid);
+                        cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        cmd.Parameters.AddWithValue("@FYearId", FYearId);
+                        con.Open();
+                        SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
+                        SqlDA.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            MaxPickUpNo = dt.Rows[0][0].ToString();
+
+
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return MaxPickUpNo;
+
+        }
+
         public string GetMaxDRSNo(int Companyid, int BranchId)
         {
             DataTable dt = new DataTable();
@@ -850,6 +889,71 @@ namespace CMSV2.DAL
             return objList;
         }
 
+
+        public static List<ShipmentInvoiceVM> GetShipmentMAWBList()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetShipmentMAWB";
+            cmd.CommandType = CommandType.StoredProcedure;                        
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<ShipmentInvoiceVM> objList = new List<ShipmentInvoiceVM>();
+            ShipmentInvoiceVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new ShipmentInvoiceVM();
+                    obj.MAWB = ds.Tables[0].Rows[i]["MAWB"].ToString();
+                    obj.ShipmentImportID = Convert.ToInt32(ds.Tables[0].Rows[i]["ShipmentImportID"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        public static List<ShipmentInvoiceVM> GetTaxInvoiceList( string AWBNo, DateTime FromDate, DateTime ToDate, int FyearId, int BranchId, int DepotId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetTAxInvoiceList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            if (AWBNo==null)
+                cmd.Parameters.AddWithValue("@AWBNo", "");
+            else
+                cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            cmd.Parameters.AddWithValue("@BranchID", BranchId);
+            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<ShipmentInvoiceVM> objList = new List<ShipmentInvoiceVM>();
+            ShipmentInvoiceVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new ShipmentInvoiceVM();
+                    obj.ShipmentInvoiceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ShipmentInvoiceID"].ToString());
+                    obj.InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"].ToString();
+                    obj.InvoiceDate  = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString());
+                    obj.InvoiceTotal  = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());
+                    obj.EnteredBy = ds.Tables[0].Rows[i]["EnteredBy"].ToString();
+                    obj.MAWB = ds.Tables[0].Rows[i]["MAWB"].ToString();
+                    if (ds.Tables[0].Rows[i]["ImportDate"]!=System.DBNull.Value)
+                        obj.ImportDate =  Convert.ToDateTime(ds.Tables[0].Rows[i]["ImportDate"].ToString());
+
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
         public static List<CustomerContractVM> GetCustomerContracts(int CustomerId,string CourierType)
         {
             SqlCommand cmd = new SqlCommand();

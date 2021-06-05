@@ -364,7 +364,7 @@ namespace CMSV2.Controllers
             }
             if (term.Trim() != "")
             {
-                shipperlist = shipperlist.Where(cc => cc.ShipperName.ToLower().Contains(term.Trim().ToLower())).ToList();
+                shipperlist = shipperlist.Where(cc => cc.ConsignorName.ToLower().Contains(term.Trim().ToLower())).ToList();
                 if (shipperlist.Count > 100)
                 {
                     shipperlist = shipperlist.Take(100).ToList();
