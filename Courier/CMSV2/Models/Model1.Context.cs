@@ -263,7 +263,6 @@ namespace CMSV2.Models
         public virtual DbSet<DR> DRS { get; set; }
         public virtual DbSet<ImportShipment> ImportShipments { get; set; }
         public virtual DbSet<ImportShipmentDetail> ImportShipmentDetails { get; set; }
-        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
         public virtual DbSet<ImportField> ImportFields { get; set; }
         public virtual DbSet<DomesticCODReceipt> DomesticCODReceipts { get; set; }
         public virtual DbSet<DomesticCODReceiptDetail> DomesticCODReceiptDetails { get; set; }
@@ -275,6 +274,11 @@ namespace CMSV2.Models
         public virtual DbSet<APIDetail> APIDetails { get; set; }
         public virtual DbSet<ShipmentInvoice> ShipmentInvoices { get; set; }
         public virtual DbSet<ShipmentInvoiceDetail> ShipmentInvoiceDetails { get; set; }
+        public virtual DbSet<AgentInvoice> AgentInvoices { get; set; }
+        public virtual DbSet<AgentInvoiceDetail> AgentInvoiceDetails { get; set; }
+        public virtual DbSet<tblDeliveryAttempt> tblDeliveryAttempts { get; set; }
+        public virtual DbSet<tblPodImage> tblPodImages { get; set; }
+        public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

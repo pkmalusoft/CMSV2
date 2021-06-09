@@ -12,6 +12,7 @@ namespace CMSV2.Models
         public string CreditNoteNo { get; set; }
         public DateTime Date { get; set; }
         public int CustomerID { get; set; }
+        public  bool ForInvoice { get; set; }
         public int AcHeadID { get; set; }
         public int AcJournalID { get; set; }
         public decimal InvoiceAmount { get; set; }

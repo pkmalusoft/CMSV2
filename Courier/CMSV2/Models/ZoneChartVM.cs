@@ -17,8 +17,9 @@ namespace CMSV2.Models
     public int ZoneID { get; set; }
 
     public string ZoneCategory { get; set; }
-
-    public string ZoneName { get; set; }
+        public string Cities { get; set; }
+        public string Countries { get; set; }
+        public string ZoneName { get; set; }
 
     public int depotcountry { get; set; }
 

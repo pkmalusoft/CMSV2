@@ -369,6 +369,7 @@ namespace CMSV2.Controllers
                     inscan.ConsignorPhone = v.ConsignorPhone;
                     inscan.ConsignorMobileNo = v.ConsignorMobile;
                     inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
+                    inscan.ConsignorContact = v.ConsignorContact;
                     //inscan.AcJournalID = ajm.AcJournalID;
                     if (v.AcheadID!=null)
                     {
@@ -552,15 +553,15 @@ namespace CMSV2.Controllers
 
 
 
-                        //try
-                        //{
-                        //    SaveConsignorAddress(v);
-                        //    SaveConsigeeAddress(v);
-                        //}
-                        //catch(Exception ex)
-                        //{
+                        try
+                        {
+                            SaveConsignorAddress(v);
+                            SaveConsigeeAddress(v);
+                        }
+                        catch (Exception ex)
+                        {
 
-                        //}
+                        }
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         //    _dao.AWBAccountsPosting(inscan.InScanID);
 
@@ -1253,6 +1254,7 @@ namespace CMSV2.Controllers
             _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(inscan.StatusTypeId).Name;
             _awbstatus.CourierStatus = db.CourierStatus.Find(inscan.CourierStatusID).CourierStatus;
             _awbstatus.UserId = uid;
+            
 
             db.AWBTrackStatus.Add(_awbstatus);
             db.SaveChanges();
@@ -1529,7 +1531,7 @@ namespace CMSV2.Controllers
         public JsonResult GetCustomerName(string term) 
         {
             var customerlist = (from c1 in db.CustomerMasters
-                                where c1.CustomerID>0 && c1.CustomerType == "CR" && c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                where c1.CustomerID>0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
                                 orderby c1.CustomerName ascending
                                 select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).Take(100).ToList();                                
 
@@ -1771,7 +1773,7 @@ namespace CMSV2.Controllers
             public int CourierStatusID { get; set; }
 
             public string CourierStatusText { get; set; }
-
+            
         }
 
         public ActionResult AWBTimeline()
@@ -1781,15 +1783,51 @@ namespace CMSV2.Controllers
             if (obj==null)
             {
                 model.AWB = new QuickAWBVM();
+                model.AWB.ConsigneeAddress2_Street = "";
+                model.AWB.Consignee = "";
+                model.AWB.InScanID = 0;
+                model.AWB.HAWBNo = "";
+                model.AWBNo = "";
+                model.AWB.Consignor = "";
+                model.AWB.ConsignorContact = "";
+                model.AWB.ConsignorCountryName = "";
+                model.AWB.ConsignorAddress1_Building = "";
+                model.AWB.ConsignorAddress2_Street = "";
+                model.AWB.ConsignorAddress3_PinCode = "";
+                model.AWB.ConsigneeAddress3_PinCode = "";
+                model.AWB.ConsigneeAddress2_Street = "";
+                model.AWB.ConsigneeAddress1_Building = "";
+                model.AWB.Consignee = "";
+                model.AWB.ConsigneeContact = "";
+                model.AWB.ConsigneeCountryName = "";
+                model.AWB.Pieces = "";
+                model.AWB.Weight = 0;
+                model.AWB.CourierCharge = 0;
+                model.AWB.OtherCharge = 0;
+                model.AWB.totalCharge = 0;
+                model.AWB.Description = "";
+                model.AWB.IsCashOnly = false;
+                model.AWB.IsNCND = false;
+                model.AWB.IsNCND = false;
+                model.AWB.IsChequeOnly = false;
+                model.AWB.IsChequeOnly = false;
+                model.AWB.IsCollectMaterial = false;
+                model.AWB.IsCollectMaterial = false;
+                model.AWB.IsDOCopyBack = false;
+                model.AWB.PaymentModeId = null;
+                model.AWB.ConsigneePhone = "";
+                model.AWB.ConsigneeMobile ="";
                 model.Details = new List<AWBTrackStatusVM>();
                 model.AWBNo = "";
+                model.PODImage = new tblPodImage();
+                model.PODStatus = new POD();
             }
             else
             {
                 model.AWBNo = obj.AWBNo;
                 if (obj.AWBNo!=null || obj.AWBNo!="" )
                 {      model.AWBNo = obj.AWBNo;
-                    model.AWB = (from c in db.InScanMasters where (c.IsDeleted == false || c.IsDeleted == null) && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName,ConsignorAddress1_Building=c.ConsignorAddress1_Building,ConsignorAddress2_Street=c.ConsignorAddress2_Street,ConsignorAddress3_PinCode=c.ConsignorAddress3_PinCode,  ConsigneeAddress1_Building=c.ConsigneeAddress1_Building,ConsigneeAddress2_Street=c.ConsigneeAddress2_Street,ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,  Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId }).FirstOrDefault();
+                    model.AWB = (from c in db.InScanMasters where (c.IsDeleted == false || c.IsDeleted == null) && c.AWBNo == obj.AWBNo select new QuickAWBVM { InScanID = c.InScanID, HAWBNo = c.AWBNo, Consignor = c.Consignor, ConsignorContact = c.Consignor, ConsignorCountryName = c.ConsignorCountryName,ConsignorAddress1_Building=c.ConsignorAddress1_Building,ConsignorAddress2_Street=c.ConsignorAddress2_Street,ConsignorAddress3_PinCode=c.ConsignorAddress3_PinCode,  ConsigneeAddress1_Building=c.ConsigneeAddress1_Building,ConsigneeAddress2_Street=c.ConsigneeAddress2_Street,ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,  Consignee = c.Consignee, ConsigneeContact = c.ConsigneeContact, ConsigneeCountryName = c.ConsigneeCountryName, Pieces = c.Pieces, Weight = c.Weight, CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, totalCharge = c.NetTotal ,Description=c.CargoDescription,IsCashOnly=c.IsCashOnly,IsNCND=c.IsNCND,IsChequeOnly=c.IsChequeOnly,IsCollectMaterial=c.IsCollectMaterial, IsDOCopyBack=c.IsDOCopyBack,PaymentModeId=c.PaymentModeId ,ConsigneePhone=c.ConsigneePhone,ConsigneeMobile=c.ConsigneeMobileNo }).FirstOrDefault();
                     string specialinstruc = "";
                     if (model.AWB != null)
                     {
@@ -1830,11 +1868,20 @@ namespace CMSV2.Controllers
                                          select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName }).ToList();
 
                         model.PODStatus = db.PODs.Where(cc => cc.InScanID == model.AWB.InScanID).FirstOrDefault();
+                        if (model.PODStatus != null)
+                        {
+                            string podid = model.PODStatus.PODID.ToString();
 
+                            model.PODImage = db.tblPodImages.Where(cc => cc.PODID == podid).FirstOrDefault();
+                        }
+                        else
+                        {
+                            model.PODImage = new tblPodImage();
+                        }
                     }
                     else
                     {
-                        model.AWB = (from c in db.ImportShipmentDetails where c.AWB == obj.AWBNo select new QuickAWBVM { InScanID = c.ShipmentDetailID, HAWBNo = c.AWB, Consignor = c.Shipper, ConsignorContact = "", ConsignorCountryName = "", ConsignorAddress1_Building = "", ConsignorAddress2_Street = "", ConsignorAddress3_PinCode = "", ConsigneeAddress1_Building = c.ReceiverAddress, ConsigneeAddress2_Street = "", ConsigneeAddress3_PinCode = "", Consignee = c.Receiver, ConsigneeContact = c.ReceiverContact, ConsigneeCountryName = "", Pieces = c.PCS.ToString(), Weight = c.Weight, CourierCharge = c.COD, OtherCharge = 0, totalCharge = c.COD, Description = c.Contents, IsCashOnly = false, IsNCND = false, IsChequeOnly = false, IsCollectMaterial = false, IsDOCopyBack = false, PaymentModeId = 3 }).FirstOrDefault();
+                        model.AWB = (from c in db.ImportShipmentDetails where c.AWB == obj.AWBNo select new QuickAWBVM { InScanID = c.ShipmentDetailID, HAWBNo = c.AWB, Consignor = c.Shipper, ConsignorContact = "", ConsignorCountryName = "", ConsignorAddress1_Building = "", ConsignorAddress2_Street = "", ConsignorAddress3_PinCode = "", ConsigneeAddress1_Building = c.ReceiverAddress, ConsigneeAddress2_Street = "", ConsigneeAddress3_PinCode = "", Consignee = c.Receiver, ConsigneeContact = c.ReceiverContact, ConsigneeCountryName = "", Pieces = c.PCS.ToString(), Weight = c.Weight, CourierCharge = c.COD,materialcost=c.CustomValue, OtherCharge = 0, totalCharge = c.COD, Description = c.Contents, IsCashOnly = false, IsNCND = false, IsChequeOnly = false, IsCollectMaterial = false, IsDOCopyBack = false, PaymentModeId = 3 ,ConsigneePhone=c.ReceiverTelephone }).FirstOrDefault();
                         if (model.AWB!=null)
                         {                         
                         List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
@@ -1844,6 +1891,27 @@ namespace CMSV2.Controllers
                                              orderby c.EntryDate
                                              select new AWBTrackStatusVM { ShipmentDetailID = c.ShipmentDetailID, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName ,CourierStatusId=c.CourierStatusId }).ToList();
                             //model.Details = details;
+                            model.AWB.paymentmode = "COD";
+                            model.AWB.CODStatus = "Not Applicable";
+                            model.AWB.MaterialCostStatus = "Not Applicable";
+                            model.PODStatus = db.PODs.Where(cc => cc.ShipmentDetailId == model.AWB.InScanID).FirstOrDefault();
+                            if (model.PODStatus != null)
+                            {
+                                string podid = model.PODStatus.PODID.ToString();
+                                var podimage= db.tblPodImages.Where(cc => cc.PODID.Contains(podid)).FirstOrDefault();
+                                if (podimage==null)
+                                {
+                                    model.PODImage = new tblPodImage();
+                                }
+                                else
+                                {
+                                    model.PODImage = podimage;
+                                }
+                            }
+                            else
+                            {
+                                model.PODImage = new tblPodImage();
+                            }
                         }
                         else
                         {

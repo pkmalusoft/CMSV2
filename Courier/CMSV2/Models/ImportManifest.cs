@@ -23,6 +23,15 @@ namespace CMSV2.Models
 
         public List<ImportManifestVM> Details { get; set; }
     }
+    public class TranshipmentAWB
+    {
+        public string AWBNo { get; set; }
+        public int InScanId{ get; set; }
+        public string Message { get; set; }
+        public string Status { get; set; }
+        
+        
+    }
 
     public class ImportManifestFixation
     {

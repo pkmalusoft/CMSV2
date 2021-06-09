@@ -355,20 +355,24 @@ namespace CMSV2.Controllers
         public JsonResult GetShipperName(string term)
         {
             List<Consignor> shipperlist = (List<Consignor>)Session["ConsignorMaster"];
-            if (shipperlist == null)
-            {
-                shipperlist = (from c1 in db.ConsignorMasters                               
-                               orderby c1.ConsignorName ascending
-                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo =  c1.MobileNo }).Distinct().ToList();
-                Session["ConsignorMaster"] = shipperlist;
-            }
+            //if (shipperlist == null)
+            //{
+            //    shipperlist = (from c1 in db.ConsignorMasters                               
+            //                   orderby c1.ConsignorName ascending
+            //                   select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorContactName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo =  c1.MobileNo }).Distinct().ToList();
+            //    Session["ConsignorMaster"] = shipperlist;
+            //}
             if (term.Trim() != "")
             {
-                shipperlist = shipperlist.Where(cc => cc.ConsignorName.ToLower().Contains(term.Trim().ToLower())).ToList();
-                if (shipperlist.Count > 100)
-                {
-                    shipperlist = shipperlist.Take(100).ToList();
-                }
+                shipperlist = (from c1 in db.ConsignorMasters
+                               where c1.ConsignorName.ToLower().Contains(term.Trim().ToLower())
+                               orderby c1.ConsignorName ascending
+                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorContactName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = c1.MobileNo }).Distinct().Take(20).ToList();
+                //shipperlist = shipperlist.Where(cc => cc.ShipperName.ToLower().Contains(term.Trim().ToLower())).ToList();
+                //if (shipperlist.Count > 100)
+                //{
+                //    shipperlist = shipperlist.Take(100).ToList();
+                //}
 
                 //var shipperlist = (from c1 in db.InScanMasters
                 //                   where c1.IsDeleted == false && c1.Consignor.ToLower().StartsWith(term.ToLower())
@@ -393,7 +397,9 @@ namespace CMSV2.Controllers
                 //                   where c1.IsDeleted == false
                 //                   orderby c1.Consignor ascending
                 //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode, ConsignorMobileNo = c1.ConsignorMobileNo }).Distinct();
-                
+                shipperlist = (from c1 in db.ConsignorMasters                               
+                               orderby c1.ConsignorName ascending
+                               select new Consignor { ShipperName = c1.ConsignorName, ContactPerson = c1.ConsignorContactName, Phone = c1.ConsignorPhoneNo, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryname, Address1 = c1.ConsignorAddress1, Address2 = c1.ConsignorAddress2, PinCode = c1.ConsignorAddress3, ConsignorMobileNo = c1.MobileNo }).Distinct().Take(20).ToList();
                 if (shipperlist.Count > 100)
                 {
                     shipperlist = shipperlist.Take(100).ToList();

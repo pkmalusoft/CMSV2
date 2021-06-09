@@ -37,8 +37,7 @@
             </th>       
             <th>
                 AWB Date
-            </th>
-            <th>Customer</th>
+            </th>         
             <th>
                 Shipper
             </th>
@@ -81,66 +80,112 @@
             <th>Courier Type
             </th>
             <th>
-                Product Type
-            </th>
-            <th>
-                Movement Type
-            </th>
+                Parcel Type
+            </th>           
         </tr>
     </thead>
     <tbody class="input-table" id="listbody">
         @foreach (var item in Model.TransDetails)
         {
-            <tr>
-                <td>
-                    @item.SNo
-                </td>
-                <td>
-                    @item.HAWBNo
-                </td>              
-                <td>
-                    @item.AWBDate
-                </td>
-                <td>
-                    @item.Customer
-                </td>
-                <td>
-                    @item.Consignor
-                </td>
-                <td> @item.ConsignorCountryName</td>
-                <td>@item.Consignee </td>
-                <td>@item.ConsigneeCountryName </td>
-                <td>@item.Weight</td>
-                <td>
-                    @item.Pieces
-                </td>
-                <td>
-                    @item.CourierCharge
-                </td>
-                <td>
-                    @item.OtherCharge
-                </td>
-                <td>
-                    @item.PaymentMode
-                </td>
-                <td>@item.ReceivedBy</td>
-                <td>
-                    @item.CollectedBy
-                </td>          
-                <td>
-                    @item.FAWBNo
-                </td>
-                <td>
-                    @item.FAgentName
-                </td>
-                <td>
-                    @item.CourierType
-                </td>
-                <td>
-                    @item.ProductType
-                </td>
-                <td>@item.MovementType</td>
-            </tr>
+            if (@item.DataError)
+            {
+                <tr style="color:red" title="@item.ErrorMessage">
+                    <td>
+                        @item.SNo
+                    </td>
+                    <td>
+                        @item.HAWBNo
+                    </td>
+                    <td>
+                        @item.AWBDate
+                    </td>
+                    <td>
+                        @item.Consignor
+                    </td>
+                    <td> @item.ConsignorCountryName</td>
+                    <td>@item.Consignee </td>
+                    <td>@item.ConsigneeCountryName </td>
+                    <td>@item.Weight</td>
+                    <td>
+                        @item.Pieces
+                    </td>
+                    <td>
+                        @item.CourierCharge
+                    </td>
+                    <td>
+                        @item.OtherCharge
+                    </td>
+                    <td>
+                        @item.PaymentMode
+                    </td>
+                    <td>@item.ReceivedBy</td>
+                    <td>
+                        @item.CollectedBy
+                    </td>
+                    <td>
+                        @item.FAWBNo
+                    </td>
+                    <td>
+                        @item.FAgentName
+                    </td>
+                    <td>
+                        @item.CourierType
+                    </td>
+                    <td>
+                        @item.ParcelType
+                    </td>
+                  
+                </tr>
+            }
+            else
+            {
+                <tr style="color:black">
+                    <td>
+                        @item.SNo
+                    </td>
+                    <td>
+                        @item.HAWBNo
+                    </td>
+                    <td>
+                        @item.AWBDate
+                    </td>
+                    <td>
+                        @item.Consignor
+                    </td>
+                    <td> @item.ConsignorCountryName</td>
+                    <td>@item.Consignee </td>
+                    <td>@item.ConsigneeCountryName </td>
+                    <td>@item.Weight</td>
+                    <td>
+                        @item.Pieces
+                    </td>
+                    <td>
+                        @item.CourierCharge
+                    </td>
+                    <td>
+                        @item.OtherCharge
+                    </td>
+                    <td>
+                        @item.PaymentMode
+                    </td>
+                    <td>@item.ReceivedBy</td>
+                    <td>
+                        @item.CollectedBy
+                    </td>
+                    <td>
+                        @item.FAWBNo
+                    </td>
+                    <td>
+                        @item.FAgentName
+                    </td>
+                    <td>
+                        @item.CourierType
+                    </td>
+                    <td>
+                        @item.ParcelType
+                    </td>                  
+                </tr>
+            }
         }
     </tbody>
 </table>

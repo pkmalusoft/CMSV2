@@ -20,5 +20,6 @@ namespace CMSV2.Models
         public Nullable<int> DebitAccountId { get; set; }
         public Nullable<int> CreditAccountId { get; set; }
         public string SalesType { get; set; }
+        public string ParcelType { get; set; }
     }
 }

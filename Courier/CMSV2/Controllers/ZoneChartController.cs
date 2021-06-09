@@ -20,10 +20,10 @@ namespace CMSV2.Controllers
 
         public ActionResult Index()
         {
-            GetEventVenuesList("dubai");
+            //GetEventVenuesList("dubai");
 
-            List<ZoneChartVM> lst = (from c in db.ZoneCharts join t in db.ZoneCategories on c.ZoneCategoryID equals t.ZoneCategoryID join t1 in db.ZoneMasters on c.ZoneID equals t1.ZoneID select new ZoneChartVM { ZoneChartID = c.ZoneChartID, ZoneCategory = t.ZoneCategory1, ZoneName = t1.ZoneName }).ToList();
-
+            //List<ZoneChartVM> lst = (from c in db.ZoneCharts join t in db.ZoneCategories on c.ZoneCategoryID equals t.ZoneCategoryID join t1 in db.ZoneMasters on c.ZoneID equals t1.ZoneID select new ZoneChartVM { ZoneChartID = c.ZoneChartID, ZoneCategory = t.ZoneCategory1, ZoneName = t1.ZoneName }).ToList();
+            List<ZoneChartVM> lst=PickupRequestDAO.GetZoneChartList();
             return View(lst);
         }
 

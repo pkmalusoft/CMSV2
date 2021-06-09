@@ -8706,6 +8706,7 @@
     <EntitySetMapping Name="PODs">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
         <MappingFragment StoreEntitySet="POD">
+          <ScalarProperty Name="ShipmentDetailId" ColumnName="ShipmentDetailId" />
           <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
           <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />
           <ScalarProperty Name="Remarks" ColumnName="Remarks" />
@@ -8851,6 +8852,7 @@
     <EntitySetMapping Name="AccountSetups">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AccountSetup">
         <MappingFragment StoreEntitySet="AccountSetup">
+          <ScalarProperty Name="ParcelType" ColumnName="ParcelType" />
           <ScalarProperty Name="SalesType" ColumnName="SalesType" />
           <ScalarProperty Name="CreditAccountId" ColumnName="CreditAccountId" />
           <ScalarProperty Name="DebitAccountId" ColumnName="DebitAccountId" />
@@ -8962,24 +8964,6 @@
           <ScalarProperty Name="AWB" ColumnName="AWB" />
           <ScalarProperty Name="ImportID" ColumnName="ImportID" />
           <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AWBTrackStatus">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
-        <MappingFragment StoreEntitySet="AWBTrackStatus">
-          <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
-          <ScalarProperty Name="EmpID" ColumnName="EmpID" />
-          <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="CourierStatus" ColumnName="CourierStatus" />
-          <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
-          <ScalarProperty Name="ShipmentStatus" ColumnName="ShipmentStatus" />
-          <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
-          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
-          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-          <ScalarProperty Name="InScanId" ColumnName="InScanId" />
-          <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9168,6 +9152,98 @@
           <ScalarProperty Name="ShipmentInvoiceID" ColumnName="ShipmentInvoiceID" />
           <ScalarProperty Name="ShipmentImportDetailID" ColumnName="ShipmentImportDetailID" />
           <ScalarProperty Name="ShipmentInvoiceDetailID" ColumnName="ShipmentInvoiceDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AgentInvoices">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AgentInvoice">
+        <MappingFragment StoreEntitySet="AgentInvoice">
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+          <ScalarProperty Name="CCharge" ColumnName="CCharge" />
+          <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+          <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
+          <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
+          <ScalarProperty Name="calogidate" ColumnName="calogidate" />
+          <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
+          <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
+          <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
+          <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
+          <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
+          <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
+          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="InvoiceTax" ColumnName="InvoiceTax" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="AgentInvoiceID" ColumnName="AgentInvoiceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AgentInvoiceDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AgentInvoiceDetail">
+        <MappingFragment StoreEntitySet="AgentInvoiceDetails">
+          <ScalarProperty Name="NetValue" ColumnName="NetValue" />
+          <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+          <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
+          <ScalarProperty Name="CustomCharge" ColumnName="CustomCharge" />
+          <ScalarProperty Name="FuelSurcharge" ColumnName="FuelSurcharge" />
+          <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+          <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+          <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
+          <ScalarProperty Name="InScanInternationalDetailID" ColumnName="InScanInternationalDetailID" />
+          <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
+          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+          <ScalarProperty Name="AgentInvoiceID" ColumnName="AgentInvoiceID" />
+          <ScalarProperty Name="AgentInvoiceDetailID" ColumnName="AgentInvoiceDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblDeliveryAttempts">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt">
+        <MappingFragment StoreEntitySet="tblDeliveryAttempts">
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="reason" ColumnName="reason" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPodImages">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPodImage">
+        <MappingFragment StoreEntitySet="tblPodImages">
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AWBTrackStatus">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
+        <MappingFragment StoreEntitySet="AWBTrackStatus">
+          <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
+          <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+          <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CourierStatus" ColumnName="CourierStatus" />
+          <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
+          <ScalarProperty Name="ShipmentStatus" ColumnName="ShipmentStatus" />
+          <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+          <ScalarProperty Name="InScanId" ColumnName="InScanId" />
+          <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

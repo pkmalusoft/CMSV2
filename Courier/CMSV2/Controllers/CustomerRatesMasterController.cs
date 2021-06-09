@@ -18,7 +18,8 @@ namespace CMSV2.Controllers
 
         public ActionResult Index()
         {
-            var data = db.GetCustomerRates();
+            var data = PickupRequestDAO.GetCustomerRateList();
+            //var data = db.GetCustomerRates();
             return View(data);
         }
 

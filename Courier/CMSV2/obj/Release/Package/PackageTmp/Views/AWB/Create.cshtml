@@ -618,6 +618,7 @@
                                 CountryName: val.CountryName,
                                 CityName: val.CityName,
                                 LocationName: val.LocationName,
+                                MobileNo: val.ConsignorMobileNo
 
                             }
                         }))
@@ -626,8 +627,19 @@
             },
             minLength: 1,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#shippername').val(ui.item.value);
+            focus: function (event, i) {
+                $('#shippername').val(i.item.value);
+                $("#ConsignorContact").val(i.item.ContactPerson);
+                $("#ConsignorAddress1_Building").val(i.item.Address1);
+                $("#ConsignorAddress2_Street").val(i.item.Address2);
+
+                $("#ConsignorAddress3_PinCode").val(i.item.Pincode);
+
+                $("#ConsignorPhone").val(i.item.Phone);
+                $("#ConsignorCountryName").val(i.item.CountryName);
+                $("#ConsignorCityName").val(i.item.CityName);
+                $("#ConsignorLocationName").val(i.item.LocationName);
+                $('#ConsignorMobile').val(i.item.MobileNo);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -642,6 +654,7 @@
                 $("#ConsignorCountryName").val(i.item.CountryName);
                 $("#ConsignorCityName").val(i.item.CityName);
                 $("#ConsignorLocationName").val(i.item.LocationName);
+                $('#ConsignorMobile').val(i.item.MobileNo);
 
             },
 
@@ -667,6 +680,7 @@
                                 CountryName: val.CountryName,
                                 CityName: val.CityName,
                                 LocationName: val.LocationName,
+                                MobileNo: val.ConsigneeMobileNo
 
                             }
                         }))
@@ -675,8 +689,18 @@
             },
             minLength: 1,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#Consignee').val(ui.item.value);
+            focus: function (event, i) {
+                $("#Consignee").val(i.item.label);
+                $("#ConsigneeContact").val(i.item.ContactPerson);
+                $("#ConsigneeAddress1_Building").val(i.item.Address1);
+                $("#ConsigneeAddress2_Street").val(i.item.Address2);
+
+                $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
+                $("#ConsigneePhone").val(i.item.Phone);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeLocationName").val(i.item.LocationName);
+                $('#ConsigneeMobile').val(i.item.MobileNo);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -690,6 +714,7 @@
                 $("#ConsigneeCountryName").val(i.item.CountryName);
                 $("#ConsigneeCityName").val(i.item.CityName);
                 $("#ConsigneeLocationName").val(i.item.LocationName);
+                $('#ConsigneeMobile').val(i.item.MobileNo);
 
             },
 
@@ -1859,6 +1884,11 @@
         $('#MovementTypeID').change(function () {
             getCourierCharge();
         });
+
+        $('#FagentID').change(function () {
+            getCourierCharge();
+        })
+
         $('#PickupLocation').change(function () {
             if ($('#OriginCountry').val() != $('#BranchCountry').val()) {
                 $('#MovementTypeID').val(3).trigger('change');
@@ -2008,7 +2038,7 @@
 
 
         <div class="row no-margin">
-            <div class="col-md-12 detailBox" style="padding-top:20px">
+            <div class="col-md-12 detailBox" style="padding-top:0px">
                 <div class="bg_box">
                     <div class="row">
                         <div class="col-md-12">
@@ -2369,12 +2399,12 @@
 
                     <div class="col-md-6">
                         <label class="headinglabel">Picked up By</label>
-                        @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control",@disabled="disabled" })
                     </div>
 
                     <div class="col-md-6">
                         <label class="headinglabel">Depot Received By</label>
-                        @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @disabled = "disabled" })
                     </div>
 
                 </div>

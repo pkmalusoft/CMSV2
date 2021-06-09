@@ -89,6 +89,7 @@
     <Property Name="DebitAccountId" Type="int" />
     <Property Name="CreditAccountId" Type="int" />
     <Property Name="SalesType" Type="varchar" MaxLength="50" />
+    <Property Name="ParcelType" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="AcFinancialYear">
     <Key>
@@ -345,6 +346,58 @@
     <Property Name="AccountType" Type="nvarchar" MaxLength="100" />
     <Property Name="AcCategoryId" Type="int" />
     <Property Name="BranchId" Type="int" />
+  </EntityType>
+  <EntityType Name="AgentInvoice">
+    <Key>
+      <PropertyRef Name="AgentInvoiceID" />
+    </Key>
+    <Property Name="AgentInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
+    <Property Name="InvoiceTax" Type="money" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="StatusClose" Type="bit" Nullable="false" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="OtherCharge" Type="money" />
+    <Property Name="FuelPer" Type="money" />
+    <Property Name="AdminPer" Type="money" />
+    <Property Name="FuelAmt" Type="money" />
+    <Property Name="AdminAmt" Type="money" />
+    <Property Name="ChargeableWT" Type="float" />
+    <Property Name="CalogiRef" Type="nvarchar" MaxLength="200" />
+    <Property Name="calogidate" Type="datetime" />
+    <Property Name="statusColoader" Type="bit" />
+    <Property Name="CostAmt" Type="money" />
+    <Property Name="Revenue" Type="money" />
+    <Property Name="CCharge" Type="money" />
+    <Property Name="InvoiceTotal" Type="money" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="AcFinancialYearID" Type="int" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+  </EntityType>
+  <EntityType Name="AgentInvoiceDetails">
+    <Key>
+      <PropertyRef Name="AgentInvoiceDetailID" />
+    </Key>
+    <Property Name="AgentInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AgentInvoiceID" Type="int" />
+    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierCharge" Type="money" />
+    <Property Name="InScanInternationalDetailID" Type="int" />
+    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
+    <Property Name="InscanID" Type="int" />
+    <Property Name="TaxPercentage" Type="int" />
+    <Property Name="OtherCharge" Type="money" />
+    <Property Name="FuelSurcharge" Type="money" />
+    <Property Name="CustomCharge" Type="money" />
+    <Property Name="RecPayStatus" Type="int" />
+    <Property Name="RecPayDetailId" Type="int" />
+    <Property Name="NetValue" Type="money" />
   </EntityType>
   <EntityType Name="AgentMaster">
     <Key>
@@ -2723,6 +2776,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
     <Property Name="UpdationDate" Type="datetime" />
     <Property Name="IsSkyLarkUpdate" Type="bit" />
+    <Property Name="ShipmentDetailId" Type="int" />
   </EntityType>
   <EntityType Name="PODSignature">
     <Key>
@@ -3482,6 +3536,16 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
     <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
     <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="tblDeliveryAttempts">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="reason" Type="text" Nullable="false" />
+    <Property Name="image" Type="text" Nullable="false" />
+    <Property Name="DRSID" Type="text" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+  </EntityType>
   <EntityType Name="tblDepot">
     <Key>
       <PropertyRef Name="ID" />
@@ -3511,6 +3575,14 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="PaymentModeText" Type="varchar" MaxLength="100" />
     <Property Name="PaymentModeCode" Type="varchar" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="tblPodImages">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PODID" Type="text" Nullable="false" />
+    <Property Name="image" Type="text" Nullable="false" />
   </EntityType>
   <EntityType Name="tblPurchaseInvoiceOtherCharges">
     <Key>
@@ -5603,8 +5675,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
   <Function Name="GetMaxSupplierCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
     <Parameter Name="InputString" Type="varchar" Mode="In" />
   </Function>
-  <Function Name="GetMaxVoucherNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
-    <Parameter Name="InputString" Type="varchar" Mode="In" />
+  <Function Name="GetMaxVoucherNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VoucherType" Type="varchar" Mode="In" />
+    <Parameter Name="FYearId" Type="int" Mode="In" />
   </Function>
   <Function Name="GetMaxVoucherNoForRP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
     <Parameter Name="InputString" Type="varchar" Mode="In" />
@@ -6741,6 +6814,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="AcOPInvoiceDetails" EntityType="Self.AcOPInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcOPInvoiceMaster" EntityType="Self.AcOPInvoiceMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcType" EntityType="Self.AcType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AgentInvoice" EntityType="Self.AgentInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AgentInvoiceDetails" EntityType="Self.AgentInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AgentMaster" EntityType="Self.AgentMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AnalysisGroup" EntityType="Self.AnalysisGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AnalysisHead" EntityType="Self.AnalysisHead" Schema="dbo" store:Type="Tables" />
@@ -6913,9 +6988,11 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="tblAgentRecPayDetail" EntityType="Self.tblAgentRecPayDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblCustomerAdjustment" EntityType="Self.tblCustomerAdjustment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblCustomerAdjustmentDetail" EntityType="Self.tblCustomerAdjustmentDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDeliveryAttempts" EntityType="Self.tblDeliveryAttempts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDepot" EntityType="Self.tblDepot" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDocumentType" EntityType="Self.tblDocumentType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPaymentMode" EntityType="Self.tblPaymentMode" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPodImages" EntityType="Self.tblPodImages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseInvoiceOtherCharges" EntityType="Self.tblPurchaseInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblSalesInvoiceOtherCharges" EntityType="Self.tblSalesInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblShipmentType" EntityType="Self.tblShipmentType" Schema="dbo" store:Type="Tables" />

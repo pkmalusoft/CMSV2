@@ -128,7 +128,50 @@ namespace CMSV2.Controllers
             vm.TransDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
             return PartialView("ItemList", vm);
         }
+        
+        [HttpGet]
+        public JsonResult CheckDuplicationTranshipment(string ManifestDate, string MAWB,int AgentID)
+        {
+            Session["TranshipmentAgentID"] = AgentID;
+            //string AWBNos = "";
 
+            //List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+
+            //string AWBNos = "";
+            //foreach (var item in fileData)
+            //{
+            //    if (AWBNos == "")
+            //    {
+            //        AWBNos = item.HAWBNo;
+            //    }
+            //    else
+            //    {
+            //        AWBNos = AWBNos + "," + item.HAWBNo;
+            //    }
+
+            //}
+
+            List<TranshipmentAWB> item = PickupRequestDAO.CheckTranshipment(Convert.ToDateTime(ManifestDate), MAWB, "");
+            
+            if (item.Count>0)
+            {
+                if (item[0].Status=="Ok")
+                {
+                    return Json(new { status="ok"},JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "Failed",Message=item[0].Message }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            else
+            {
+                return Json(new { status = "Failed", Message ="" }, JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
         [HttpPost]
         public JsonResult ImportFile(HttpPostedFileBase importFile)
         {
@@ -137,7 +180,8 @@ namespace CMSV2.Controllers
             try
             {
                 var fileData = GetDataFromCSVFile(importFile.InputStream);
-
+               
+                //var duplawb = (from c in fileData join d in db.InScanMasters on c.HAWBNo equals d.AWBNo select c).ToList();
                 ImportManifestVM vm = new ImportManifestVM();
                 vm.TransDetails = fileData; 
                  Session["ManifestTranshipment"] = vm.TransDetails;
@@ -150,6 +194,7 @@ namespace CMSV2.Controllers
         }
         private List<TranshipmentModel> GetDataFromCSVFile(Stream stream)
         {
+            int AgentID = (int)Session["TranshipmentAgentID"];
             var empList = new List<TranshipmentModel>();
             try
             {
@@ -173,6 +218,7 @@ namespace CMSV2.Controllers
                             empList.Add(new TranshipmentModel()
                             {
                                 SNo = i++,
+                                CustomerId= AgentID,
                                 HAWBNo = objDataRow["HAWBNo"].ToString(),
                                 AWBDate = objDataRow["AWBDate"].ToString(),
                                 Customer = objDataRow["Customer"].ToString(),
@@ -199,6 +245,7 @@ namespace CMSV2.Controllers
                                 FAWBNo = objDataRow["FwdNo"].ToString(),
                                 FAgentName = objDataRow["ForwardingAgent"].ToString(),
                                 CourierType = objDataRow["Couriertype"].ToString(),
+                                ParcelType = objDataRow["ParcelType"].ToString(),
                                 MovementType = objDataRow["MovementType"].ToString(),
                                 CourierStatus = objDataRow["CourierStatus"].ToString(),
                                 remarks = objDataRow["Remarks"].ToString() //Department and Bag no is missing                                                               
@@ -218,12 +265,249 @@ namespace CMSV2.Controllers
             return empList;
         }
 
+        public JsonResult CheckDataValidation()
+        {
+            List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            int i = 0;
+            foreach (var item in TransDetail)
+            {
+                bool dataError = false;
+                string ErrorMessage = "";
 
+                if (item.CourierType != "")
+                {
+                    var productype = db.ProductTypes.Where(cc => cc.ProductName == item.CourierType).FirstOrDefault();
+                    if (productype == null)
+                    {
+                        dataError = true;
+                        ErrorMessage = TransDetail[i].ErrorMessage + "Invalid Courier type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ProductTypeID = productype.ProductTypeID;
+                    }
+
+                }
+                 if (item.ParcelType != "")
+                {
+                    var productype = db.ParcelTypes.Where(cc => cc.ParcelType1 == item.ParcelType).FirstOrDefault();
+                    if (productype == null)
+                    {
+                        dataError = true;
+                        TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ParcelTypeID = productype.ID;                        
+                    }
+                }
+                 else if (item.ProductType=="")
+                {
+                    dataError = true;
+                }
+                
+                if (item.Weight == null || item.Weight == 0)
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                }
+                else if (TransDetail[i].ConsigneeCountryName== null || TransDetail[i].ConsigneeCountryName=="")
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + " Country name";
+                }
+                else if (item.FAgentName != "")
+                {
+                    var fage = db.ForwardingAgentMasters.Where(cc => cc.FAgentName == item.FAgentName).FirstOrDefault();
+                    if (fage==null)
+                    {
+                        dataError = true;
+                    }
+                    else
+                    {
+                        TransDetail[i].FagentID = fage.FAgentID;
+                    }
+                    
+                }
+                
+                if (item.PaymentMode == "Customer")
+                {
+                    TransDetail[i].PaymentModeId = 3;
+                }
+                
+                if (item.ReceivedBy != "")
+                {
+                    var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.ReceivedBy).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].DepotReceivedBy = emp.EmployeeID;
+                    }
+                }
+                
+                if (item.CollectedBy != "")
+                {
+                    var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.CollectedBy).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].PickedUpEmpID = emp.EmployeeID;
+                    }
+
+                }
+                
+                if (item.CourierStatus != "")
+                {
+                    var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
+                    if (courierstatus != null)
+                    {
+                        TransDetail[i].CourierStatusID = courierstatus.CourierStatusID;
+                        TransDetail[i].StatusTypeId = courierstatus.StatusTypeID;
+                    }
+                }
+                else
+                {
+                    TransDetail[i].DataError = false;
+                }
+
+                if (dataError == false)
+                {
+                    List<CustomerRateType> lst = GetCustomerRateType("", TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", TransDetail[i].FagentID.ToString(), "", TransDetail[i].ConsigneeCountryName, "", "");
+                    if (lst.Count > 0)
+                    {
+                        CustomerRateTypeVM vm = GetCourierCharge(lst[0].CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                        if (vm.CustomerRateTypeID > 0)
+                        {
+                            TransDetail[i].CustomerRateID = vm.CustomerRateTypeID;
+
+                            vm = GetCourierCharge(vm.CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                            if (vm.CourierCharge != null && vm.CourierCharge != 0)
+                            {
+                                TransDetail[i].CourierCharge = vm.CourierCharge;
+                                TransDetail[i].DataError = false;
+                            }
+                            else
+                            {
+                                TransDetail[i].DataError = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TransDetail[i].DataError = true;
+                    }
+
+                    TransDetail[i].OtherCharge = 0;
+                    
+                }
+                else
+                {
+                    TransDetail[i].DataError = true;
+                }
+
+                i++;
+            }
+            Session["ManifestTranshipment"] = TransDetail;
+            var itemcount = (from c in TransDetail where c.DataError == true select c).ToList();
+            if (itemcount.Count > 0)
+            {
+                return Json(new { status = "Falied",Message="Invalid Data" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            
+
+        }
+        public List<CustomerRateType> GetCustomerRateType(string term, string CustomerId, string MovementId, string ProductTypeID, string PaymentModeId, string FAgentID, string CityName, string CountryName, string OriginCountry, string OriginCity)
+        {
+            int pCustomerId = 0;
+            int pMovementId = 0;
+            int pProductTypeID = 0;
+            int pPaymentModeId = 0;
+            int pAgentID = 0;
+            string pCountryname = ""; ;
+            string pcityname = "";
+
+            if (CustomerId != "")
+                pCustomerId = Convert.ToInt32(CustomerId);
+
+            if (MovementId != "")
+                pMovementId = Convert.ToInt32(MovementId);
+
+            if (ProductTypeID != "")
+                pProductTypeID = Convert.ToInt32(ProductTypeID);
+
+            if (PaymentModeId != "")
+                pPaymentModeId = Convert.ToInt32(PaymentModeId);
+
+            if (FAgentID != "")
+                pAgentID = Convert.ToInt32(FAgentID);
+
+            if (pMovementId == 3)
+            {
+                pCountryname = OriginCountry;
+                pcityname = OriginCity;
+            }
+            else
+            {
+                pCountryname = CountryName;
+                pcityname = CityName;
+
+            }
+
+            List<CustomerRateType> lst = new List<CustomerRateType>();
+            var loc = AWBDAO.GetRateList(pCustomerId, pMovementId, pProductTypeID, pPaymentModeId, pAgentID, pcityname, pCountryname);
+
+            if (term.Trim() != "")
+            {
+                lst = (from c in loc where c.CustomerRateType1.Contains(term) orderby c.CustomerRateType1 select c).ToList();
+            }
+            else
+            {
+                lst = (from c in loc orderby c.CustomerRateType1 select c).ToList();
+            }
+            return lst;
+        }
+        public CustomerRateTypeVM GetCourierCharge(string CustomerRateTypeID, string CustomerId, string MovementId, string ProductTypeID, string PaymentModeId, string Weight, string CountryName, string CityName)
+        {
+            int pRateTypeID = 0;
+            int pCustomerId = 0;
+            int pMovementId = 0;
+            int pProductTypeID = 0;
+            int pPaymentModeId = 0;
+            decimal pWeight = 0;
+            if (CustomerRateTypeID != "")
+            {
+                pRateTypeID = Convert.ToInt32(CustomerRateTypeID);
+            }
+            if (CustomerId != "")
+                pCustomerId = Convert.ToInt32(CustomerId);
+
+            if (MovementId != "")
+                pMovementId = Convert.ToInt32(MovementId);
+
+            if (ProductTypeID != "")
+                pProductTypeID = Convert.ToInt32(ProductTypeID);
+
+            if (PaymentModeId != "")
+                pPaymentModeId = Convert.ToInt32(PaymentModeId);
+
+            if (Weight != "")
+                pWeight = Convert.ToDecimal(Weight);
+
+            CustomerRateTypeVM vm = AWBDAO.GetCourierCharge(pRateTypeID, pCustomerId, pMovementId, pProductTypeID, pPaymentModeId, pWeight, CountryName, CityName);
+
+            return vm;
+        }
         [HttpPost]
         public string SaveImport(string Master, string Details)
         {
             try
             {
+                int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                int DepotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+                int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                int FyearId = Convert.ToInt32(Session["fyearid"]);
                 var userid = Convert.ToInt32(Session["UserID"]);
                 var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
                 //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
@@ -233,6 +517,8 @@ namespace CMSV2.Controllers
                 {
                     importShipment.ManifestNumber = model.ManifestNumber;
                     importShipment.CreatedDate = Convert.ToDateTime(model.ManifestDate);
+                    importShipment.ManifestNumber = ImportDAO.GetMaxManifestNo(companyid, BranchID, importShipment.CreatedDate, "T");
+                    
                     importShipment.ShipmentTypeId = 4;
                 }
                 else
@@ -241,7 +527,10 @@ namespace CMSV2.Controllers
                 }
                 importShipment.Bags = model.Bags;
                 importShipment.FlightNo = model.FlightNo;
-                importShipment.FlightDate = Convert.ToDateTime(model.FlightDate1);
+                if (model.FlightDate1 != null)
+                {
+                    importShipment.FlightDate = Convert.ToDateTime(model.FlightDate1);
+                }
                 importShipment.LastEditedByLoginID = userid;
                 importShipment.MAWB = model.MAWB;
                 importShipment.TotalAWB = model.TotalAWB;
@@ -294,42 +583,47 @@ namespace CMSV2.Controllers
                     detail.ConsigneeCityName = item.ConsigneeCityName;
                     detail.Consignor = item.Consignor;
 
-                    detail.ParcelTypeId = 1;
-
-                    detail.ProductTypeID = 1;
-
+                    detail.ParcelTypeId = item.ParcelTypeID;
+                    detail.CustomerRateID = item.CustomerRateID;
+                    detail.ProductTypeID =item.ProductTypeID;
                     detail.MovementID = 4;
 
-                    if (item.CourierType !="")
-                    {
-                        var productype = db.ProductTypes.Where(cc => cc.ProductName == item.CourierType).FirstOrDefault();
-                        if (productype != null)
-                        {
-                            detail.ProductTypeID = productype.ProductTypeID;
-                        }
+                    //if (item.CourierType !="")
+                    //{
+                    //    var productype = db.ProductTypes.Where(cc => cc.ProductName == item.CourierType).FirstOrDefault();
+                    //    if (productype != null)
+                    //    {
+                    //        detail.ProductTypeID = productype.ProductTypeID;
+                    //    }
 
-                    }
-                    if (item.ProductType!= "")
-                    {
-                        var productype = db.ParcelTypes.Where(cc => cc.ParcelType1 == item.ProductType).FirstOrDefault();
-                        if (productype != null)
-                        {
-                            detail.ParcelTypeId = productype.ParcelTypeID;
-                        }
+                    //}
+                    //if (item.ProductType!= "")
+                    //{
+                    //    var productype = db.ParcelTypes.Where(cc => cc.ParcelType1 == item.ProductType).FirstOrDefault();
+                    //    if (productype != null)
+                    //    {
+                    //        detail.ParcelTypeId = productype.ParcelTypeID;
+                    //    }
 
-                    }
+                    //}
 
                     if (item.Weight != null)
                         detail.Weight = Convert.ToDecimal(item.Weight);
 
                     if (item.Pieces != null)
-                        detail.Pieces = item.Pieces;                   
+                        detail.Pieces = item.Pieces;
 
-                    if (item.CourierCharge !=null)
+                    if (item.CourierCharge != null)
                         detail.CourierCharge = Convert.ToDecimal(item.CourierCharge);
+                    else
+                        detail.CourierCharge = 0;
 
                     if (item.OtherCharge != null)
                         detail.OtherCharge = Convert.ToDecimal(item.OtherCharge);
+                    else
+                        detail.OtherCharge = 0;
+
+                    detail.NetTotal = detail.CourierCharge + detail.OtherCharge;
 
                     if (item.FAgentName != "")
                     {
@@ -380,6 +674,15 @@ namespace CMSV2.Controllers
 
                     if (item.InScanID == 0)
                     {
+                        detail.IsDeleted = false;
+                        detail.BranchID = BranchID;
+                        detail.DepotID = DepotId;
+                        detail.CreatedBy = userid;
+                        detail.LastModifiedBy = userid;
+                        detail.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                        detail.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
+                        detail.AcFinancialYearID = FyearId;
+                        detail.AcFinancialYearID = companyid;
                         db.InScanMasters.Add(detail);
                         db.SaveChanges();
                     }
@@ -514,7 +817,7 @@ namespace CMSV2.Controllers
                     i++;
                 }
             }
-            else if (TargetColumn == "ForwardingAagent")
+            else if (TargetColumn == "ForwardingAgent" || TargetColumn == "FAgentName")
             {
                 int i = 0;
                 foreach (var item in Details)
@@ -550,6 +853,31 @@ namespace CMSV2.Controllers
                     i++;
                 }
             }
+            else if (TargetColumn == "CourierType")
+            {
+                int i = 0;
+                foreach (var item in Details)
+                {
+                    if (item.CourierType == SourceValue)
+                    {
+                        Details[i].CourierType = TargetValue;
+                    }
+                    i++;
+                }
+            }
+            else if (TargetColumn == "ParcelType")
+            {
+                int i = 0;
+                foreach (var item in Details)
+                {
+                    if (item.ParcelType == SourceValue || item.ParcelType==null)
+                    {
+                        Details[i].ParcelType = TargetValue;
+                    }
+                    i++;
+                }
+            }
+            
             SaveDataFixation(TargetColumn, SourceValue, TargetValue);
             model.TransDetails = Details;
             Session["ManifestTranshipment"] = Details;
@@ -588,17 +916,16 @@ namespace CMSV2.Controllers
 
         }
 
-        public string GetDataFixation(string FieldName, string SourceValue)
+        public string GetDataFixation(List<ImportDataFixation> importdata,  string FieldName, string SourceValue)
         {
-            ImportDataFixation importdata = new ImportDataFixation();
+            //ImportDataFixation importdata = new ImportDataFixation();
             string Targetvalue = "";
-            var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
+            //var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
+            var data = (from c in importdata where c.ShipmentType == "Transhipment" && c.FieldName == FieldName && c.SourceValue == SourceValue select c).FirstOrDefault();
             if (data != null)
                 Targetvalue = data.TargetValue;
 
             return Targetvalue;
-
-
 
 
         }
@@ -609,14 +936,23 @@ namespace CMSV2.Controllers
             ImportManifestVM model = new ImportManifestVM();
             List<TranshipmentModel> Details = (List<TranshipmentModel>)Session["ManifestTranshipment"];
             DataTable dt = ToDataTable(Details);
+            string sourcecol = "";
+            ImportDataFixation importdata = new ImportDataFixation();            
+            var data = db.ImportDataFixations.ToList();
+
             for (int i = 0; i < dt.Columns.Count; i++)
             {
-                var colname = dt.Columns[i].ColumnName;
+                var colname = dt.Columns[i].ColumnName.Trim();
+                if (colname == "ParcelType")
+                    sourcecol = "Parceltype";
+                //else
+                //{ sourcecol = colname
+                //}
                 int rowindex = 0;
                 foreach (DataRow row in dt.Rows)
                 {
-                    string targetvalue = GetDataFixation(colname, row[colname].ToString());
-                    if (targetvalue != "" && targetvalue!=null)
+                    string targetvalue = GetDataFixation(data, colname, row[colname].ToString());
+                    if (targetvalue != "")
                     {
                         dt.Rows[rowindex][colname] = targetvalue;
                     }
@@ -665,7 +1001,7 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.ConsigneeLocationName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "ForwardingAgent")
+                    else if (FieldName == "FAgentName")
                     {
                         var list = (from c in IDetails
                                     where c.FAgentName.ToLower().Contains(term.Trim().ToLower())
@@ -716,12 +1052,12 @@ namespace CMSV2.Controllers
                         return Json(list, JsonRequestBehavior.AllowGet);
 
                     }
-                    else if (FieldName == "ProductType")
+                    else if (FieldName == "ParcelType")
                     {
                         var list = (from c in IDetails
-                                    where c.ProductType.ToLower().Contains(term.Trim().ToLower())
+                                    where c.ParcelType.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ProductType
-                                    select new { SourceValue = c.ProductType }).Distinct().ToList();
+                                    select new { SourceValue = c.ParcelType }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
 
                     }
@@ -754,7 +1090,7 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.ConsigneeLocationName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "ForwardingAgent")
+                    else if (FieldName == "FAgentName")
                     {
                         var list = (from c in IDetails
                                     orderby c.FAgentName
@@ -798,11 +1134,11 @@ namespace CMSV2.Controllers
                         return Json(list, JsonRequestBehavior.AllowGet);
 
                     }
-                    else if (FieldName == "ProductType")
+                    else if (FieldName == "ParcelType")
                     {
                         var list = (from c in IDetails                                    
-                                    orderby c.ProductType
-                                    select new { SourceValue = c.ProductType }).Distinct().ToList();
+                                    orderby c.ParcelType
+                                    select new { SourceValue = c.ParcelType }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
 
                     }
@@ -847,21 +1183,27 @@ namespace CMSV2.Controllers
                     }
                     else if (FieldName == "CourierType")
                     {
-                        var list = (from c in db.CustomerRateTypes
-                                    where c.CustomerRateType1.ToLower().Contains(term.Trim().ToLower())
-                                    orderby c.CustomerRateType1
-                                    select new { SourceValue = c.CustomerRateType1 }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
-                    }
-                    else if (FieldName == "ProductType")
-                    {
                         var list = (from c in db.ProductTypes
                                     where c.ProductName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ProductName
                                     select new { SourceValue = c.ProductName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
+                        //var list = (from c in db.CustomerRateTypes
+                        //            where c.CustomerRateType1.ToLower().Contains(term.Trim().ToLower())
+                        //            orderby c.CustomerRateType1
+                        //            select new { SourceValue = c.CustomerRateType1 }).Distinct().ToList();
+                        //return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "ForwardingAgent")
+                    else if (FieldName == "ParcelType")
+                    {                     
+
+                        var list = (from c in db.ParcelTypes
+                                    where c.ParcelType1.ToLower().Contains(term.Trim().ToLower())
+                                    orderby c.ParcelType1
+                                    select new { SourceValue = c.ParcelType1 }).Distinct().ToList();
+                        return Json(list, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (FieldName == "FAgentName")
                     {
                         var list = (from c in db.ForwardingAgentMasters
                                     where c.FAgentName.ToLower().Contains(term.Trim().ToLower())
@@ -899,7 +1241,7 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.CourierStatus }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "ForwardingAgent")
+                    else if (FieldName == "FAgentName")
                     {
                         var list = (from c in db.ForwardingAgentMasters
                                     orderby c.FAgentName
@@ -913,19 +1255,24 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.CustomerName }).Distinct().ToList().Take(100);
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "CourierType")
-                    {
-                        var list = (from c in db.CustomerRateTypes                                    
-                                    orderby c.CustomerRateType1
-                                    select new { SourceValue = c.CustomerRateType1 }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
-                    }
-                    else if (FieldName == "ProductType")
+                    else if (FieldName == "CourierType") //--Productytpe
                     {
                         var list = (from c in db.ProductTypes
-                                    
+
                                     orderby c.ProductName
                                     select new { SourceValue = c.ProductName }).Distinct().ToList();
+                        return Json(list, JsonRequestBehavior.AllowGet);
+                        //var list = (from c in db.CustomerRateTypes                                    
+                        //            orderby c.CustomerRateType1
+                        //            select new { SourceValue = c.CustomerRateType1 }).Distinct().ToList();
+                        //return Json(list, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (FieldName == "ParcelType")
+                    {
+                        var list = (from c in db.ParcelTypes
+
+                                    orderby c.ParcelType1
+                                    select new { SourceValue = c.ParcelType1 }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
                     else
@@ -993,7 +1340,7 @@ namespace CMSV2.Controllers
         public static List<TranshipmentModel> TranshipmentList(DataTable dt)
         {
             var empList = new List<TranshipmentModel>();
-            int i = 0;
+            int i = 1;
             foreach (DataRow objDataRow in dt.Rows)
             {
                 empList.Add(new TranshipmentModel()
@@ -1024,10 +1371,11 @@ namespace CMSV2.Controllers
                     FAWBNo = objDataRow["FAWBNo"].ToString(),
                     FAgentName = objDataRow["FAgentName"].ToString(),
                     CourierType = objDataRow["CourierType"].ToString(),
+                    ParcelType = objDataRow["ParcelType"].ToString(),
                     MovementType = objDataRow["MovementType"].ToString(),
                     CourierStatus = objDataRow["CourierStatus"].ToString(),
-                    remarks = objDataRow["remarks"].ToString() //Department and Bag no is missing                                                               
-
+                    remarks = objDataRow["remarks"].ToString(), //Department and Bag no is missing                                                               
+                    DataError = Convert.ToBoolean(objDataRow["DataError"].ToString())
 
                 });
             }

@@ -40,7 +40,12 @@ namespace CMSV2.Models
     public bool withouttax { get; set; }
 
     public bool AdditionalCharges { get; set; }
+        public string CustomerRateType { get; set; }
+        public string ZoneCategory { get; set; }
+        public string ZoneName { get; set; }
 
-    public List<CustRateDetailsVM> CustRateDetails { get; set; }
+        public string ProductName { get; set; }
+        public string FAgentName { get; set; }
+        public List<CustRateDetailsVM> CustRateDetails { get; set; }
   }
 }

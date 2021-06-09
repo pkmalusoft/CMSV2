@@ -146,6 +146,7 @@ namespace CMSV2.Controllers
                             awbtrack.CourierStatusId = 13; //Shipment Delivered
                             awbtrack.EntryDate =Convert.ToDateTime(item.DeliveredDate);
                             awbtrack.UserId = Convert.ToInt32(Session["UserID"].ToString());
+                            
                             db.AWBTrackStatus.Add(awbtrack);
                             db.SaveChanges();
                         }
@@ -157,6 +158,7 @@ namespace CMSV2.Controllers
                             awbtrack.CourierStatusId =10; //9	Attempted To Deliver -- Delivery Pending  Depot Outscan 10 
                             awbtrack.EntryDate = Convert.ToDateTime(item.DelieveryAttemptDate);
                             awbtrack.UserId = Convert.ToInt32(Session["UserID"].ToString());
+                            
                             db.AWBTrackStatus.Add(awbtrack);
                             db.SaveChanges();
                         }

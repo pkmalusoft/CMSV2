@@ -316,7 +316,7 @@ namespace CMSV2.Controllers
                         {
                             _awbstatus = new AWBTrackStatu();
                             _awbstatus.AWBNo = _inscan.AWB;
-                            _awbstatus.EntryDate = DateTime.Now;
+                            _awbstatus.EntryDate = DateTime.UtcNow; // DateTime.Now;
                             _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                             _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
                             _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);

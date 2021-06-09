@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CMSV2.Models.GetCustomerRates_Result>
+﻿@model IEnumerable<CMSV2.Models.CustRateVM>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
@@ -52,11 +52,12 @@
                     <th>
                         @Html.Label("Customer Rate")
                     </th>
-
                     <th>
                         @Html.Label("Zone")
                     </th>
-
+                    <th>
+                        @Html.Label("Zone Category")
+                    </th>
                     <th>
                         @Html.Label("Product Name")
                     </th>
@@ -70,14 +71,16 @@
 
             <tfoot>
                 <tr>
-                   <th>
+                    <th>
                         @Html.Label("Customer Rate")
                     </th>
 
                     <th>
                         @Html.Label("Zone")
                     </th>
-
+                    <th>
+                        @Html.Label("Zone Category")
+                    </th>
                     <th class="form-100">
                         @Html.Label("Product Name")
                     </th>
@@ -93,28 +96,30 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerRateType)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ZoneName)
-                        </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerRateType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ZoneName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ZoneCategory)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FAgentName)
+                    </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CourierService)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FAgentName)
-                        </td>
-
-                        <td>
-                            <a href="@Url.Action("Create", new { id = item.CustomerRateID })"><i class="fa fa-pencil"></i></a>|
-                            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
-                            <a href="#" onclick="Delete(ID=@item.CustomerRateID)"><i class="fa fa-times"></i></a>
-                            <a class="aprint" target="_blank" href="RateChartPrint?id=@item.CustomerRateID" title="Invoice Printing"><i class="fa fa-print"></i></a>
-                        </td>
-                    </tr>
+                    <td>
+                        <a href="@Url.Action("Create", new { id = item.CustomerRateID })"><i class="fa fa-pencil"></i></a>|
+                        @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+                        <a href="#" onclick="Delete(ID=@item.CustomerRateID)"><i class="fa fa-times"></i></a>
+                        <a class="aprint" target="_blank" href="RateChartPrint?id=@item.CustomerRateID" title="Invoice Printing"><i class="fa fa-print"></i></a>
+                    </td>
+                </tr>
                 }
             </tbody>
 

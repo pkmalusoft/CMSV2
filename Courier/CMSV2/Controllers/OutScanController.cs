@@ -391,14 +391,14 @@ namespace CMSV2.Controllers
                     //updateing awbstaus table for tracking
                     AWBTrackStatu _awbstatus = new AWBTrackStatu();                                     
                     _awbstatus.AWBNo = _inscan.AWBNo;
-                    _awbstatus.EntryDate = objdrs.DRSDate;
+                    _awbstatus.EntryDate = DateTime.UtcNow;// objdrs.DRSDate;
                     _awbstatus.InScanId = _inscan.InScanID;
                     _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
                     _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
                     _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                     _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                     _awbstatus.UserId = UserId;
-                    _awbstatus.EmpID = v.DeliveredBy;
+                    _awbstatus.EmpID = v.DeliveredBy;                    
                     db.AWBTrackStatus.Add(_awbstatus);
                     db.SaveChanges();
 
@@ -431,7 +431,7 @@ namespace CMSV2.Controllers
                     _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                     _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                     _awbstatus.UserId = UserId;
-                    _awbstatus.EmpID = v.DeliveredBy;
+                    _awbstatus.EmpID = v.DeliveredBy;                 
                     db.AWBTrackStatus.Add(_awbstatus);
                     db.SaveChanges();
                 }

@@ -24,5 +24,6 @@ namespace CMSV2.Models
         public string Remarks { get; set; }
         public Nullable<System.DateTime> UpdationDate { get; set; }
         public Nullable<bool> IsSkyLarkUpdate { get; set; }
+        public Nullable<int> ShipmentDetailId { get; set; }
     }
 }

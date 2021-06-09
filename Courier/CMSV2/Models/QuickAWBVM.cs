@@ -13,10 +13,16 @@ namespace CMSV2.Models
 {
     public class AWBTracking
     {
+        public AWBTracking()
+        {
+            AWB = new QuickAWBVM();
+            //POD = new POD();
+            //tblPodImage = new tblPodImage();
+        }
         public string AWBNo { get; set; }
         public QuickAWBVM AWB { get; set; }
         public POD PODStatus { get; set; }        
-        public PODImage PODImage { get; set; }
+        public tblPodImage PODImage { get; set; }
         public List<AWBTrackStatusVM> Details { get; set; }
     }
 

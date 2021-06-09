@@ -149,16 +149,20 @@
                         @Html.HiddenFor(model => model.ID)
                         @Html.HiddenFor(model => model.DebitAccountId)
                         @Html.HiddenFor(model => model.CreditAccountId)
-                        @Html.TextBoxFor(model => model.PageName, new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.PageName, new { @class = "form-control", @readonly = "readonly" })
 
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Trans Type</label>
-                        @Html.TextBoxFor(model => model.TransType, new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.TransType, new { @class = "form-control", @readonly = "readonly" })
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Sales Type</label>
-                        @Html.TextBoxFor(model => model.SalesType, new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.SalesType, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="required headinglabel">Parcel Type</label>
+                        @Html.TextBoxFor(model => model.ParcelType, new { @class = "form-control",@readonly="readonly" })
                     </div>
                     <div class="col-md-4">
                         <label class="required headinglabel">Debit Account Head</label>

@@ -98,6 +98,9 @@
                     </th>
                     <th>Sales Type </th>
                     <th>
+                        Parcel Type
+                    </th>
+                    <th>
                         Debit Head
                     </th>
                     <th>
@@ -115,6 +118,12 @@
                         Trans Type
                     </th>
                     <th>
+                        Sales Type
+                    </th>
+                    <th>
+                        Parcel Type
+                    </th>
+                    <th>
                         Debit Head
                     </th>
                     <th>
@@ -127,34 +136,37 @@
 
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        
-                        <td>                             
-                            @Html.DisplayFor(modelItem => item.PageName)
-                        </td>
-                        <td>
-                            @item.TransType
-                        </td>
-                        <td>
-                            @item.SalesType
-                        </td>
-                        <td>
-                            @item.DebitHead
-                        </td>
-                        <td>
-                            @item.CreditHead
-                        </td>
+                <tr>
 
-                        <td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PageName)
+                    </td>
+                    <td>
+                        @item.TransType
+                    </td>
+                    <td>
+                        @item.SalesType
+                    </td>
+                    <td>
+                        @item.ParcelType   
+                    </td>
+                    <td>
+                        @item.DebitHead
+                    </td>
+                    <td>
+                        @item.CreditHead
+                    </td>
 
-                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
-                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+                    <td>
 
-                        </td>
+                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>
+                        @*<a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>*@
+
+                    </td>
 
 
 
-                    </tr>
+                </tr>
                    
                 }
             </tbody>

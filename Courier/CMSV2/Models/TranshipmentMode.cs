@@ -58,6 +58,10 @@ namespace CMSV2.Models
 
             public decimal? CourierCharge { get; set; }
          public string ReceivedBy { get; set; }
+        public int CourierStatusID { get; set; }
+        //public int StatusTypeId { get; set; }
+        public int DepotReceivedBy { get; set; }
+        public int PickedUpEmpID { get; set; }
         public string CollectedBy { get; set; }
             public decimal? OtherCharge { get; set; }
 
@@ -71,6 +75,7 @@ namespace CMSV2.Models
             public Decimal ForwardingCharge { get; set; }
          public string CourierStatus { get; set; }
             public string CourierType { get; set; }
+            public string ParcelType { get; set; }
             public string ProductType { get; set; }
             public string MovementType { get; set; }
             public string remarks { get; set; }
@@ -176,9 +181,10 @@ namespace CMSV2.Models
             public int InvoiceId { get; set; }
 
             public string CustomerRateType { get; set; }
-           
+            public int CustomerRateID { get; set; }
 
-
+        public bool DataError { get; set; }
+            public string ErrorMessage { get; set; }
 
     }
 }

@@ -371,7 +371,7 @@ namespace CMSV2.Controllers
 
             var lst = (from c in db.ImportShipmentDetails
                        join imp in db.ImportShipments on c.ImportID equals imp.ID
-                       where c.MAWB == MAWB && c.ImportID == ShipmentImportID
+                       where c.MAWB.Trim() == MAWB.Trim() && c.ImportID == ShipmentImportID
                        && c.CustomValue > 0 && c.CustomValue <= 269 && c.ShipmentInvoiceId == null
                        select new ShipmentInvoiceDetailVM { Shipper = c.Shipper, CurrencyID = c.CurrencyID, BagNo = c.BagNo, AWBNo = c.AWB, ShipmentImportDetailID = c.ShipmentDetailID, TaxP = 5, Tax = 0, CustomValue = c.CustomValue, adminCharges = 0, AWBChecked = checkall }).ToList();  //forwarded to agent status only
 

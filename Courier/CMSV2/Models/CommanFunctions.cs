@@ -155,7 +155,7 @@ namespace CMSV2.Models
 
             string vdate = "01" + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Year.ToString();
             DateTime todaydate = DateTime.UtcNow.AddHours(hours);// DateTimeOffset.Now.Date; // DateTime.Now.Date;            
-            todaydate = todaydate.AddDays(-4);
+            todaydate = todaydate.AddDays(-7);
 
             return Convert.ToDateTime(todaydate);
 

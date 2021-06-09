@@ -223,6 +223,7 @@
     <Compile Include="Controllers\AgentCollectionRateController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\AgentDeliveryRateController.cs" />
+    <Compile Include="Controllers\COLoaderInvoiceController.cs" />
     <Compile Include="Controllers\TaxInvoiceController.cs" />
     <Compile Include="Controllers\AgentShipmentController.cs" />
     <Compile Include="Controllers\AWBBatchController.cs" />
@@ -516,6 +517,13 @@
     <Compile Include="Models\AgentCollectionRateVM.cs" />
     <Compile Include="Models\AgentDeliveryRateDetailVM.cs" />
     <Compile Include="Models\AgentDeliveryRateVM.cs" />
+    <Compile Include="Models\AgentInvoice.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AgentInvoiceDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AgentInvoiceVM.cs" />
     <Compile Include="Models\AgentMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1856,6 +1864,9 @@
     <Compile Include="Models\tblCustomerAdjustmentDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblDeliveryAttempt.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblDepot.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1863,6 +1874,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblPaymentMode.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblPodImage.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblPurchaseInvoiceOtherCharge.cs">
@@ -3704,6 +3718,18 @@
     <Content Include="Views\TaxInvoice\InvoicePrint.cshtml" />
     <Content Include="Views\TaxInvoice\Details.cshtml" />
     <Content Include="Views\InBound\Create - Copy.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Create - Copy.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Create.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Details.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Edit.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Index.cshtml" />
+    <Content Include="Views\COLoaderInvoice\InvoiceList.cshtml" />
+    <Content Include="Views\COLoaderInvoice\InvoicePrint.cshtml" />
+    <Content Include="Views\COLoaderInvoice\InvoiceSearch - Copy %282%29.cshtml" />
+    <Content Include="Views\COLoaderInvoice\InvoiceSearch.cshtml" />
+    <Content Include="Views\COLoaderInvoice\MultipleInvoice.cshtml" />
+    <Content Include="Views\COLoaderInvoice\Table.cshtml" />
+    <Content Include="Views\COLoaderInvoice\ItemList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

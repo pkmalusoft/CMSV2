@@ -42,7 +42,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                model.FromDate = CommanFunctions.GetLastDayofMonth().Date;
+                model.FromDate = CommanFunctions.GetFirstDayofWeek().Date; // CommanFunctions.GetLastDayofMonth().Date;
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
                 model.AWBNo = "";
                 Session["ImportManifestSearch"] = model;
@@ -204,7 +204,9 @@ namespace CMSV2.Controllers
                                 COD = objDataRow["COD"].ToString(),
                                 Content = objDataRow["Content"].ToString(),
                                 ImportType = "Import",
-                                
+                                route = objDataRow["Route"].ToString(),
+                                groupCode= objDataRow["GroupCode"].ToString(),
+                                MAWB = objDataRow["MAWB"].ToString(),
                                 // Reference = objDataRow["Content"].ToString(),
 
 
@@ -247,18 +249,21 @@ namespace CMSV2.Controllers
         {
             try
             {
+                int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 var bills = new List<updateitem>();
                 var userid = Convert.ToInt32(Session["UserID"]);
                 int yearid = Convert.ToInt32(Session["fyearid"].ToString());
                 var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
+                int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
                 //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
                 var IDetails = (List<ImportManifestItem>)Session["ManifestImported"];
                 ImportShipment importShipment = new ImportShipment();
                 if (model.ID == 0)
                 {
-                    importShipment.ManifestNumber = model.ManifestNumber;
+                    
                     importShipment.CreatedDate = Convert.ToDateTime(model.ManifestDate);
                     importShipment.ShipmentTypeId = 3;
+                    importShipment.ManifestNumber = ImportDAO.GetMaxManifestNo(companyid, BranchID, importShipment.CreatedDate, "I");
                 }
                 else
                 {
@@ -361,8 +366,8 @@ namespace CMSV2.Controllers
                     if (_awbstatus == null)
                     {
                         _awbstatus = new AWBTrackStatu();
-                        _awbstatus.AWBNo = detail.AWB;
-                        _awbstatus.EntryDate = importShipment.CreatedDate;
+                        _awbstatus.AWBNo = detail.AWB;                        
+                        _awbstatus.EntryDate = DateTime.UtcNow; // importShipment.CreatedDate;
                         _awbstatus.ShipmentDetailID = detail.ShipmentDetailID;
                         _awbstatus.StatusTypeId = Convert.ToInt32(detail.StatusTypeId);
                         _awbstatus.CourierStatusId = Convert.ToInt32(detail.CourierStatusID);
@@ -370,6 +375,7 @@ namespace CMSV2.Controllers
                         _awbstatus.CourierStatus = db.CourierStatus.Find(detail.CourierStatusID).CourierStatus;
                         _awbstatus.UserId = userid;
                         _awbstatus.EmpID = db.EmployeeMasters.Where(cc => cc.UserID == userid).FirstOrDefault().EmployeeID;
+                        
                         db.AWBTrackStatus.Add(_awbstatus);
                         db.SaveChanges();
                     }

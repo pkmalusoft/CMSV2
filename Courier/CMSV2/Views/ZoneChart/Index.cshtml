@@ -75,40 +75,54 @@
         <th>
             @Html.Label("Zone Name")
         </th>
-    
-       
+        <th>
+            @Html.Label("Countries")
+        </th>
+        @*<th>
+            @Html.Label("Cities")
+        </th>*@
         <th>Action</th>
     </tr>
         </thead>
     <tfoot>
-         <tr>
-         <th>
-           @Html.Label("Zone Category")
-        </th>
-        <th>
-            @Html.Label("Zone Name")
-        </th>
-     
-       
-        <th style="display:none"></th>
-    </tr>
+        <tr>
+            <th>
+                @Html.Label("Zone Category")
+            </th>
+            <th>
+                @Html.Label("Zone Name")
+            </th>
+            <th>
+                @Html.Label("Countries")
+            </th>
+            @*<th>
+                @Html.Label("Cities")
+            </th>*@
+
+            <th style="display:none"></th>
+        </tr>
     </tfoot>
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ZoneCategory)
-        </td>
-      
-        <td>
-            @Html.DisplayFor(modelItem => item.ZoneName)
-        </td>
-  
-        <td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ZoneCategory)
+    </td>
+
+    <td>
+        @Html.DisplayFor(modelItem => item.ZoneName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Countries)
+    </td>
+    @*<td>
+        @Html.DisplayFor(modelItem => item.Cities)
+    </td>*@
+    <td>
         @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
-             <a href="@Url.Action("Create", new { id = item.ZoneChartID })"><i class="fa fa-pencil"></i></a>|
+        <a href="@Url.Action("Create", new { id = item.ZoneChartID })"><i class="fa fa-pencil"></i></a>|
         <a href="#" onclick="Delete(ID=@item.ZoneChartID)"><i class="fa fa-times"></i></a>
-        </td>
-    </tr>
+    </td>
+</tr>
 }
 
 </table>

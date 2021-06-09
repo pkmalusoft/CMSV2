@@ -208,6 +208,45 @@ namespace CMSV2.DAL
 
         }
 
+        public string GetMaxAgentInvoiceNo(int Companyid, int BranchId, int FYearId)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "GetMaxAgentInvoiceNo";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@CompanyId", Companyid);
+                        cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        cmd.Parameters.AddWithValue("@FYearId", FYearId);
+                        con.Open();
+                        SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
+                        SqlDA.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            MaxPickUpNo = dt.Rows[0][0].ToString();
+
+
+                        con.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return MaxPickUpNo;
+
+        }
+
         public string GetMaxTaxInvoiceNo(int Companyid, int BranchId, int FYearId)
         {
             DataTable dt = new DataTable();
@@ -823,6 +862,8 @@ namespace CMSV2.DAL
             return objList;
         }
 
+        
+
         public static List<InScanVM> GetInScanList(DateTime FromDate, DateTime ToDate, int FyearId,int BranchId,int DepotId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -988,7 +1029,180 @@ namespace CMSV2.DAL
             return objList;
         }
 
-     
+        public static List<ZoneChartVM> GetZoneChartList()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetZoneChartList";
+            cmd.CommandType = CommandType.StoredProcedure;           
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<ZoneChartVM> objList = new List<ZoneChartVM>();
+            ZoneChartVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new ZoneChartVM();
+                    obj.ZoneChartID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ZoneChartID"].ToString());
+                    obj.ZoneCategoryID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ZoneCategoryID"].ToString());
+                    obj.ZoneID = Convert.ToInt32(ds.Tables[0].Rows[i]["ZoneID"].ToString());
+                    obj.ZoneName = ds.Tables[0].Rows[i]["ZoneName"].ToString();
+                    obj.ZoneCategory = ds.Tables[0].Rows[i]["ZoneCategory"].ToString();
+                    obj.Cities = ds.Tables[0].Rows[i]["Cities"].ToString();
+                    obj.Countries = ds.Tables[0].Rows[i]["Countries"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+
+        public static List<CustRateVM> GetCustomerRateList()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerRates";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<CustRateVM> objList = new List<CustRateVM>();
+            CustRateVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new CustRateVM();
+                    obj.CustomerRateID   = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerRateID"].ToString());
+                    obj.CustomerRateTypeID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerRateTypeID"].ToString());                    
+                    obj.CustomerRateType = ds.Tables[0].Rows[i]["CustomerRateType"].ToString();
+                    obj.ZoneCategory = ds.Tables[0].Rows[i]["ZoneCategory"].ToString();
+                    obj.ZoneName= ds.Tables[0].Rows[i]["ZoneName"].ToString();
+                    obj.ProductName = ds.Tables[0].Rows[i]["ProductName"].ToString();
+                    obj.FAgentName = ds.Tables[0].Rows[i]["FAgentName"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        #region "COLOADER Invoice"
+        public static List<AgentInvoiceVM> GetAgentInvoiceList(DateTime FromDate, DateTime ToDate, string InvoiceNo, int FyearId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAgentInvoiceList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            if (InvoiceNo == null)
+                InvoiceNo = "";
+            cmd.Parameters.AddWithValue("@InvoiceNo", InvoiceNo);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AgentInvoiceVM> objList = new List<AgentInvoiceVM>();
+            AgentInvoiceVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AgentInvoiceVM();
+                    obj.AgentInvoiceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AgentInvoiceID"].ToString());
+                    obj.InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"].ToString();
+                    obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString());
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    obj.CustomerID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerID"].ToString());
+                    obj.InvoiceTotal = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        public static List<AgentInvoiceDetailVM> GetAgentShipmentList(int CustomerId,DateTime FromDate, DateTime ToDate, string MAWB)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAgentAWBList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            
+            if (MAWB == null)
+                MAWB = "";
+            cmd.Parameters.AddWithValue("@MAWB", MAWB);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AgentInvoiceDetailVM> objList = new List<AgentInvoiceDetailVM>();
+            AgentInvoiceDetailVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AgentInvoiceDetailVM();
+                    obj.AgentInvoiceDetailID = 0;
+                    obj.AgentInvoiceID = 0;
+                    obj.InscanID = Convert.ToInt32(ds.Tables[0].Rows[i]["InscanID"].ToString());
+                    obj.AWBDateTime= Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString());
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();                                        
+                    obj.ConsigneeName = ds.Tables[0].Rows[i]["Consignee"].ToString();
+                    obj.ConsigneeCountryName = ds.Tables[0].Rows[i]["ConsigneeCountryName"].ToString();                    
+                    obj.CourierCharge= CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CourierCharge"].ToString());
+                    obj.OtherCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
+                    obj.TaxPercentage = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["TaxPercent"].ToString());
+                    
+                    obj.NetValue = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["NetTotal"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
+
+
+        #region "Transhipment"
+        public static List<TranshipmentAWB> CheckTranshipment(DateTime ManifestDate, string MAWB, string AWBNos)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetTranshipmentDuplicate";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ManifestDate", ManifestDate.ToString("MM/dd/yyyy"));            
+            cmd.Parameters.AddWithValue("@MAWB", MAWB);
+            if (AWBNos == null)
+                AWBNos = "";
+            cmd.Parameters.AddWithValue("@AWBNos", AWBNos);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<TranshipmentAWB> objList = new List<TranshipmentAWB>();
+            TranshipmentAWB obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new TranshipmentAWB();
+                    obj.InScanId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InscanId"].ToString());
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();                    
+                    obj.Status = ds.Tables[0].Rows[i]["Status"].ToString();
+                    obj.Message = ds.Tables[0].Rows[i]["Message"].ToString();
+
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
     }
 
 }

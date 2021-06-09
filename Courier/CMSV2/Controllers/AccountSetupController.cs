@@ -59,7 +59,7 @@ namespace CMSV2.Controllers
                 vm.PageName = v.PageName;
                 vm.TransType = v.TransType;
                 vm.SalesType = v.SalesType;
-
+                vm.ParcelType = v.ParcelType;
 
             }
             

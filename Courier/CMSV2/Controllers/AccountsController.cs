@@ -1490,6 +1490,7 @@ new AcGroupModel()
             {
                 ViewBag.Title = "Journal Voucher - Create";
                 obj.AcJournalID = 0;
+                obj.TransDate = CommanFunctions.GetCurrentDateTime().Date;
             }
             return View(obj);
 

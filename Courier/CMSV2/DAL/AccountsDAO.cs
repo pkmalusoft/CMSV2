@@ -952,6 +952,7 @@ namespace CMSV2.DAL
                     obj.PageName = ds.Tables[0].Rows[i]["PageName"].ToString();
                     obj.TransType = ds.Tables[0].Rows[i]["TransType"].ToString();
                     obj.SalesType = ds.Tables[0].Rows[i]["SalesType"].ToString();
+                    obj.ParcelType = ds.Tables[0].Rows[i]["ParcelType"].ToString();
                     obj.DebitHead = ds.Tables[0].Rows[i]["DebitHead"].ToString();
                     obj.CreditHead = ds.Tables[0].Rows[i]["CreditHead"].ToString();                    
 

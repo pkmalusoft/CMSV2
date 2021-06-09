@@ -7659,7 +7659,6 @@
     <EntitySet Name="DRS" EntityType="DB_9F57C4_couriertest_newModel.DR" />
     <EntitySet Name="ImportShipments" EntityType="DB_9F57C4_couriertest_newModel.ImportShipment" />
     <EntitySet Name="ImportShipmentDetails" EntityType="DB_9F57C4_couriertest_newModel.ImportShipmentDetail" />
-    <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
     <EntitySet Name="ImportFields" EntityType="DB_9F57C4_couriertest_newModel.ImportField" />
     <EntitySet Name="DomesticCODReceipts" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceipt" />
     <EntitySet Name="DomesticCODReceiptDetails" EntityType="DB_9F57C4_couriertest_newModel.DomesticCODReceiptDetail" />
@@ -7679,6 +7678,11 @@
     <EntitySet Name="APIDetails" EntityType="DB_9F57C4_couriertest_newModel.APIDetail" />
     <EntitySet Name="ShipmentInvoices" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoice" />
     <EntitySet Name="ShipmentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail" />
+    <EntitySet Name="AgentInvoices" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoice" />
+    <EntitySet Name="AgentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoiceDetail" />
+    <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
+    <EntitySet Name="tblPodImages" EntityType="DB_9F57C4_couriertest_newModel.tblPodImage" />
+    <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12179,6 +12183,7 @@
     <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="UpdationDate" Type="DateTime" Precision="3" />
     <Property Name="IsSkyLarkUpdate" Type="Boolean" />
+    <Property Name="ShipmentDetailId" Type="Int32" />
   </EntityType>
   <EntityType Name="SupplierInvoiceStock">
     <Key>
@@ -12313,6 +12318,7 @@
     <Property Name="DebitAccountId" Type="Int32" />
     <Property Name="CreditAccountId" Type="Int32" />
     <Property Name="SalesType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ParcelType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="DR">
     <Key>
@@ -12415,23 +12421,6 @@
     <Property Name="FlightDate" Type="DateTime" Precision="3" />
     <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ShipmentInvoiceId" Type="Int32" />
-  </EntityType>
-  <EntityType Name="AWBTrackStatu">
-    <Key>
-      <PropertyRef Name="AWBTrackStatusId" />
-    </Key>
-    <Property Name="AWBTrackStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="InScanId" Type="Int32" />
-    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="StatusTypeId" Type="Int32" Nullable="false" />
-    <Property Name="ShipmentStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CourierStatusId" Type="Int32" Nullable="false" />
-    <Property Name="CourierStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="UserId" Type="Int32" Nullable="false" />
-    <Property Name="ShipmentDetailID" Type="Int32" />
-    <Property Name="EmpID" Type="Int32" />
-    <Property Name="APIStatus" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="ImportField">
     <Key>
@@ -12638,5 +12627,92 @@
     <Property Name="Tax" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="TaxP" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="adminCharges" Type="Decimal" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="AgentInvoice">
+    <Key>
+      <PropertyRef Name="AgentInvoiceID" />
+    </Key>
+    <Property Name="AgentInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="InvoiceTax" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FuelPer" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AdminPer" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FuelAmt" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AdminAmt" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ChargeableWT" Type="Double" />
+    <Property Name="CalogiRef" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="calogidate" Type="DateTime" Precision="3" />
+    <Property Name="statusColoader" Type="Boolean" />
+    <Property Name="CostAmt" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Revenue" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+  </EntityType>
+  <EntityType Name="AgentInvoiceDetail">
+    <Key>
+      <PropertyRef Name="AgentInvoiceDetailID" />
+    </Key>
+    <Property Name="AgentInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AgentInvoiceID" Type="Int32" />
+    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="InScanInternationalDetailID" Type="Int32" />
+    <Property Name="StatusPaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InscanID" Type="Int32" />
+    <Property Name="TaxPercentage" Type="Int32" />
+    <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FuelSurcharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CustomCharge" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="RecPayStatus" Type="Int32" />
+    <Property Name="RecPayDetailId" Type="Int32" />
+    <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="tblDeliveryAttempt">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reason" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DRSID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="tblPodImage">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PODID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="AWBTrackStatu">
+    <Key>
+      <PropertyRef Name="AWBTrackStatusId" />
+    </Key>
+    <Property Name="AWBTrackStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InScanId" Type="Int32" />
+    <Property Name="AWBNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusTypeId" Type="Int32" Nullable="false" />
+    <Property Name="ShipmentStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CourierStatusId" Type="Int32" Nullable="false" />
+    <Property Name="CourierStatus" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ShipmentDetailID" Type="Int32" />
+    <Property Name="EmpID" Type="Int32" />
+    <Property Name="APIStatus" Type="Boolean" Nullable="false" />
   </EntityType>
 </Schema>

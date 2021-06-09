@@ -181,6 +181,7 @@ namespace CMSV2.DAL
                         FAWBNo = objDataRow["FAWBNo"].ToString(),
                         FAgentName = objDataRow["FAgentName"].ToString(),
                         CourierType = objDataRow["CourierType"].ToString(),
+                        ParcelType= objDataRow["ParcelType"].ToString(),
                         MovementType = objDataRow["MovementType"].ToString(),
                         CourierStatus = objDataRow["CourierStatus"].ToString(),
                         remarks = objDataRow["remarks"].ToString() //Department and Bag no is missing                                                               

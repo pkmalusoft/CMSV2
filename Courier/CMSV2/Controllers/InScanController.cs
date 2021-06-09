@@ -251,7 +251,7 @@ namespace CMSV2.Controllers
                                 _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(StatusTypeId).Name;
                                 _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
                                 _awbstatus.UserId = UserId;
-                                _awbstatus.EmpID = v.CollectedByID;
+                                _awbstatus.EmpID = v.CollectedByID;                                
                                 db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
 
@@ -273,7 +273,8 @@ namespace CMSV2.Controllers
                                 _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                                 _awbstatus.UserId = UserId;
                                 _awbstatus.EmpID = v.CollectedByID;
-                                db.AWBTrackStatus.Add(_awbstatus);
+                            
+                            db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
                             }
                             awb = db.AWBTrackStatus.Where(cc => cc.AWBNo == _inscan.AWBNo && cc.CourierStatusId == 5).FirstOrDefault();
@@ -288,7 +289,8 @@ namespace CMSV2.Controllers
                                 _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                                 _awbstatus.UserId = UserId;
                                 _awbstatus.EmpID = v.CollectedByID;
-                                db.AWBTrackStatus.Add(_awbstatus);
+                            
+                            db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
                             }
                         }
@@ -343,7 +345,8 @@ namespace CMSV2.Controllers
                                 _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
                                 _awbstatus.UserId = UserId;
                                 _awbstatus.EmpID = v.CollectedByID;
-                                db.AWBTrackStatus.Add(_awbstatus);
+                            
+                            db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
 
                             }
@@ -362,7 +365,8 @@ namespace CMSV2.Controllers
                                 _awbstatus.CourierStatus = db.CourierStatus.Find(CourierStatusID).CourierStatus;
                                 _awbstatus.UserId = UserId;
                                 _awbstatus.EmpID = v.CollectedByID;
-                                db.AWBTrackStatus.Add(_awbstatus);
+                            
+                            db.AWBTrackStatus.Add(_awbstatus);
                                 db.SaveChanges();
                             }
                             //Received At Origin Facility
@@ -376,7 +380,8 @@ namespace CMSV2.Controllers
                             _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                             _awbstatus.UserId = UserId;
                             _awbstatus.EmpID = v.CollectedByID;
-                            db.AWBTrackStatus.Add(_awbstatus);
+                        
+                        db.AWBTrackStatus.Add(_awbstatus);
                             db.SaveChanges();
                         }
                     }

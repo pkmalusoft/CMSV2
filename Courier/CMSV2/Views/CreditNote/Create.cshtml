@@ -123,6 +123,40 @@
             changeMonth: true
         });
 
+        $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CreditNote/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerName,
+                                CustomerId: val.CustomerID,
+                                type: val.CustomerType
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#CustomerName").val(ui.item.value);
+                $('#CustomerID').val(i.item.CustomerId);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerID').val(i.item.CustomerId);
+            },
+
+        });
+
         $("#CustomerID").change(function () {
             var ID = $('#CustomerID').val();
             $.ajax({
@@ -189,9 +223,42 @@
             }
         });
 
+        $("#ForInvoice").click(function () {
+            if ($("#ForInvoice").is(':checked')) {
+                $('#InvoiceNo').removeAttr('readonly');
+                $('#InvoiceNo').attr('required', 'required');
+                $('#InvoiceDate').removeAttr('readonly');
+                $('#InvoiceDate').attr('required', 'required');
+                
+            }
+            else {
+                $('#InvoiceNo').attr('readonly', 'readonly');
+                $('#InvoiceDate').attr('readonly', 'readonly');
+                $('#InvoiceNo').val('');
+                $('#InvoiceDate').val('');
+                $('#InvoiceID').val(0);
+                $('#InvoiceID').removeAttr('required');
+            }
+        });
+
         if ($('#CreditNoteID').val() !=0)
         {
             $("#CustomerID").attr('readonly', 'readonly');
+            if ($("#ForInvoice").is(':checked')) {
+                $('#InvoiceNo').removeAttr('readonly');
+                $('#InvoiceNo').attr('required', 'required');
+                $('#InvoiceDate').removeAttr('readonly');
+                $('#InvoiceDate').attr('required', 'required');
+
+            }
+            else {
+                $('#InvoiceNo').attr('readonly', 'readonly');
+                $('#InvoiceDate').attr('readonly', 'readonly');
+                $('#InvoiceNo').val('');
+                $('#InvoiceDate').val('');
+                $('#InvoiceID').val(0);
+                $('#InvoiceID').removeAttr('required');
+            }
 
         }
 
@@ -292,12 +359,18 @@
                     <div class=" row" style="">
                         <div class="col-md-6">
                             <label class="headinglabel required">Customer</label>
-
-                            @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })
-                            @Html.ValidationMessageFor(model => model.CustomerID)
+                            @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @required = "true" })
+                            @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })*@
+                            @Html.HiddenFor(model => model.CustomerID)
                         </div>
                         <div class="col-md-6">
-                            <label class="required headinglabel">Invoice No.</label>
+                            <div class="flexTitle">
+                                <label class="required headinglabel">Invoice No.</label>
+                                <div class="checkboxdesign no-padding  text-right" style="float:right">
+                                    @Html.CheckBoxFor(model=>model.ForInvoice, new { @name = "ForInvoice", @checked = "checked" }) &nbsp
+                                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">For Invoice</label>
+                                </div>
+                            </div>                            
                             @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @required = "true" })
                             @Html.ValidationMessageFor(model => model.InvoiceNo)
                             <input type="hidden" id="TradingInvoice" name="TradingInvoice" value="" class="form-control" />
