@@ -49,7 +49,7 @@
         $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
 
-     var table = $('#datatable-1').DataTable();
+     var table = $('#dataTables-example').DataTable();
 
 </script>
 <script type="text/javascript">
@@ -57,36 +57,59 @@
 
 
 
-         $('#datatable-1 tfoot th').each(function () {
+         $('#dataTables-example tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width:100%" />');
             });
+        var table = $('#dataTables-example').DataTable({ "aaSorting": [], "sPaginationType": "full_numbers" });
 
+        table.columns().every(function () {
+            var that = this;
 
-            var table = $('#datatable-1').dataTable({
-                "bDestroy": true,
-                //"order": []
-                "aaSorting": [],
-                "searching": false
-           });
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        //    var table = $('#dataTables-example').dataTable({
+        //        "bDestroy": true,
+        //        //"order": []
+        //        "aaSorting": [],
+        //        "searching": false
+        //    });
+        //  table.columns().every(function () {
+        //    var that = this;
+
+        //    $('input', this.footer()).on('keyup change', function () {
+        //        if (that.search() !== this.value) {
+        //            that
+        //                .search(this.value)
+        //                .draw();
+        //        }
+        //    });
+        //});
 
         if ('@ismodify' == 'False')
         {
-            $('#datatable-1').find('.aedit').each(function () {
+            $('#dataTables-example').find('.aedit').each(function () {
                 debugger;
                 $(this).addClass('hide');
             });
         }
         if ('@isdelete' == 'False')
         {
-            $('#datatable-1').find('.adelete').each(function () {
+            $('#dataTables-example').find('.adelete').each(function () {
                 debugger;
                 $(this).addClass('hide');
             });
         }
         if ('@isprint' == 'False')
         {
-            $('#datatable-1').find('.aprint').each(function () {
+            $('#dataTables-example').find('.aprint').each(function () {
                 debugger;
                 $(this).addClass('hide');
             });
@@ -144,7 +167,7 @@
     </div>
 </div>
             <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-                <table class="table table-responsive table-bordered tblfont" id="datatable-1">
+                <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
                     <thead>
                         <tr>
                             <th>
@@ -172,7 +195,7 @@
                                 Customer Name
                             </th>
                             <th>Invoice Amount</th>
-                            <th width="15%"></th>
+                            <th style="display:none"></th>
                         </tr>
                     </tfoot>
                     @{Html.RenderPartial("Table", Model);}

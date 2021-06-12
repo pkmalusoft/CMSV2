@@ -3158,6 +3158,7 @@
     <Content Include="Reports\SalesRegisterCountry.rpt" />
     <Content Include="Reports\SalesRegisterSummary.rpt" />
     <Content Include="Reports\VATTaxInvoicePrint.rpt" />
+    <Content Include="Reports\CustomerInvoicePrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3686,7 +3687,7 @@
     <Content Include="Views\DRSReconc\CreateBulk.cshtml" />
     <Content Include="Views\ImportManifest\Index.cshtml" />
     <Content Include="Views\ImportManifest\Create.cshtml" />
-    <Content Include="Template\ImportTemplate.csv" />
+    <Content Include="Template\ImportShipmentTemplate.csv" />
     <Content Include="Views\ImportManifest\ImportDataFixation.cshtml" />
     <Content Include="Views\CustomerContract\Index.cshtml" />
     <Content Include="Views\CustomerContract\Create.cshtml" />
@@ -3730,6 +3731,8 @@
     <Content Include="Views\COLoaderInvoice\MultipleInvoice.cshtml" />
     <Content Include="Views\COLoaderInvoice\Table.cshtml" />
     <Content Include="Views\COLoaderInvoice\ItemList.cshtml" />
+    <Content Include="Views\Accounts\TrialBalance.cshtml" />
+    <Content Include="Views\Accounts\PLTradingReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

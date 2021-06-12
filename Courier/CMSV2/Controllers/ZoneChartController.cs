@@ -90,19 +90,20 @@ namespace CMSV2.Controllers
                 z.ZoneID = v.ZoneID;
                 db.Entry(z).State = EntityState.Modified;
                 db.SaveChanges();
-                
+
                 //deleting the details items
-                var details = (from d in db.ZoneChartDetails where d.ZoneChartID== z.ZoneChartID select d).ToList();
-                if (details != null)
-                {
-                    db.ZoneChartDetails.RemoveRange(details);
-                    db.SaveChanges();
-                }
+                //var details = (from d in db.ZoneChartDetails where d.ZoneChartID == z.ZoneChartID select d).ToList();
+                //if (details != null)
+                //{
+                //    db.ZoneChartDetails.RemoveRange(details);
+                //    db.SaveChanges();
+                //}
             }
 
                 List<ZoneChartDetail> l = new List<ZoneChartDetail>();
             foreach (var i in v.Details)
             {
+
                 var location = db.LocationMasters.Where(cc => cc.PlaceID == i.PlaceID).FirstOrDefault();
                 int LocationID = 0;
                 if (location==null)
@@ -120,8 +121,11 @@ namespace CMSV2.Controllers
                 {
                     LocationID = location.LocationID;
                 }
-
                 ZoneChartDetail s = new ZoneChartDetail();
+
+                if (i.ZoneChartDetailID > 0)
+                    s = db.ZoneChartDetails.Find(i.ZoneChartDetailID);
+                
                 //s.CountryName = i.CountryName;
                 //s.ZoneChartID = z.ZoneChartID;
                 //s.CityName = i.CityName;
@@ -131,9 +135,17 @@ namespace CMSV2.Controllers
                 s.PlaceID = i.PlaceID;
                 s.SubLocality = i.SubLocality;
                 s.ZoneChartID = z.ZoneChartID;
-                db.ZoneChartDetails.Add(s);
-                db.SaveChanges();
-                l.Add(s);
+                if (i.ZoneChartDetailID == 0)
+                {
+                    db.ZoneChartDetails.Add(s);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.Entry(s).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                //l.Add(s);
 
             }
 

@@ -789,7 +789,7 @@
             </div>
 
             <div class="col-md-2">
-                <label class="headinglabel required">CO Loader</label>
+                <label class="headinglabel required">Agent</label>                
                 @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
             </div>
             <div class="col-md-1" style="padding-top:30px">
@@ -805,8 +805,8 @@
                 <input class="btn btn-primary" id="btnFixation" title="Manual Data Fixation" type="button" value="Data Fix" />
             </div>
             <div class="col-md-1" style="padding-top:30px">
-                @*<input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />*@
-                <a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>
+                <input class="btn btn-primary" type="button" value="Auto Fix" onclick="CallAutoFixation()" />
+                @*<a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>*@
             </div>
             <div class="col-md-2 btn-right">
                 <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />

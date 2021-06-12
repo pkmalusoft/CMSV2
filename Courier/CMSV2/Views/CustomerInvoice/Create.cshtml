@@ -151,7 +151,7 @@
                     @Html.ValidationMessageFor(model => model.FuelPer)
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel">Other Charge</label>
+                    <label class="headinglabel">Clearance Charge</label>
                     @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.OtherCharge)
                 </div>
@@ -223,7 +223,7 @@
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
-                                <td>Other Charges</td>
+                                <td>Clearance Charge</td>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"> <label class="headinglabel" id="lblothercharge"></label></td>

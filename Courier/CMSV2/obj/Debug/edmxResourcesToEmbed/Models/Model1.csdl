@@ -12184,6 +12184,7 @@
     <Property Name="UpdationDate" Type="DateTime" Precision="3" />
     <Property Name="IsSkyLarkUpdate" Type="Boolean" />
     <Property Name="ShipmentDetailId" Type="Int32" />
+    <Property Name="DeliveryLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="SupplierInvoiceStock">
     <Key>

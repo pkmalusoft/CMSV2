@@ -2811,6 +2811,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="UpdationDate" Type="datetime" />
           <Property Name="IsSkyLarkUpdate" Type="bit" />
           <Property Name="ShipmentDetailId" Type="int" />
+          <Property Name="DeliveryLocation" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="PODSignature">
           <Key>
@@ -19515,6 +19516,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="UpdationDate" Type="DateTime" Precision="3" />
           <Property Name="IsSkyLarkUpdate" Type="Boolean" />
           <Property Name="ShipmentDetailId" Type="Int32" />
+          <Property Name="DeliveryLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SupplierInvoiceStock">
           <Key>
@@ -28757,6 +28759,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySetMapping Name="PODs">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
               <MappingFragment StoreEntitySet="POD">
+                <ScalarProperty Name="DeliveryLocation" ColumnName="DeliveryLocation" />
                 <ScalarProperty Name="ShipmentDetailId" ColumnName="ShipmentDetailId" />
                 <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
                 <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />

@@ -326,6 +326,9 @@ namespace CMSV2.Controllers
                 db.Entry(_invoice).State = EntityState.Modified;
                 db.SaveChanges();
 
+                //Accounts Posting
+
+                _dao.GenerateTaxInvoicePosting(_invoice.ShipmentInvoiceID);
                 //TempData["SuccessMsg"] = "You have successfully Saved InScan Items.";             
 
                 return Json(new { status = "ok", message = "You have successfully Saved VAT Invoice!" }, JsonRequestBehavior.AllowGet);

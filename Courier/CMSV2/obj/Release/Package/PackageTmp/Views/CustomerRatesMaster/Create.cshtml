@@ -25,9 +25,12 @@
                     if (i == 0) {
                         x = $("#BaseRate").val();
                         x = parseFloat(x) + parseFloat(value.AddRate);
+                        x = parseFloat(x).toFixed(2);
+
                     }
                     else {
-                        x = parseFloat(x) + parseFloat(value.AddRate);
+                        x = parseFloat(x) + parseFloat(value.AddRate)
+                        x = parseFloat(x).toFixed(2);
                     }
                     //$("#details").append('<tr>' + '<td>' + value.AddWtFrom + '<input type="hidden" value=' + value.AddWtFrom + ' name="CustRateDetails[' + i + '].AddWtFrom"></td>' + '<td>' + value.AddWtTo + '<input type="hidden" value=' + value.AddWtTo + ' name="CustRateDetails[' + i + '].AddWtTo"></td>' + '<td>' + value.IncrWt + '<input type="hidden" value=' + value.IncrWt + ' name="CustRateDetails[' + i + '].IncrWt"></td>' + '<td>' + x + '<input type="hidden" value=' + x + ' name="CustRateDetails[' + i + '].ContractRate"></td>'
                     //    + '<td>' + value.AddRate + '<input type="hidden" value=' + value.AddRate + ' name="CustRateDetails[' + i + '].AddRate"></td>' +                         
@@ -39,7 +42,7 @@
                     var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + value.AddWtFrom  + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
                         '<td><input type="text" class="text-right" value="' + value.AddWtTo + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
                         '<td><input type="text"  class="text-right" value="' + value.IncrWt + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                        //'<td><input type="text" class="text-right" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
+                        '<td><input type="text" class="text-right" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
                         '<td><input type="text"  class="text-right crate" value="' + value.AddRate  + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                         //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                         '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
@@ -247,7 +250,7 @@
                 var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + $("#addwtfrom").val() + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
                      '<td><input type="text"class="text-right"  value="' + $("#addwtto").val() + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
                      '<td><input type="text" class="text-right" value="' + $("#incrwt").val() + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                     //'<td><input type="text" class="text-right" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
+                     '<td><input type="text" class="text-right" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
                      '<td><input type="text" class="text-right crate" value="' + $("#addrate").val() + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                      //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                     '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
@@ -379,15 +382,16 @@
                     @Html.DropDownListFor(model => model.PaymentModeID, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
                 </div>
                 <div class="col-md-3">
+                    <div class="col-md-4">
                     <label class="headinglabel required">Base Weight</label>
                     @Html.TextBoxFor(model => model.BaseWt, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BaseWt)
                     @Html.HiddenFor(model => model.hfAddCustomerRate)
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-8">
                     <div class="flexTitle">
-                        <label class="headinglabel required">Base Rate</label>
+                        <label class="headinglabel required">B. Rate</label>
                         <div class="checkboxdesign no-padding  text-right" style="float:right">
                             @Html.CheckBox("withtax", new { @name = "withtax" }) &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">With Tax</label>
@@ -397,6 +401,16 @@
                     @Html.ValidationMessageFor(model => model.BaseRate)
 
                 </div>
+            </div>
+            <div class="col-md-3">
+
+
+
+                <div class=" btn-right" style="padding-top: 25px">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerRatesMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+               
+            </div>
+            </div>  
             </div>
 
             <div class="row no-margin" style="padding-top: 10px">
@@ -456,12 +470,11 @@
                     <input type="text" id="incrwt" class="form-control" />
 
                 </div>
-
-                @*<div class="col-md-2">
+                <div class="col-md-2">
                     <label class="headinglabel">Contract Rate</label>
                     <input type="text" id="contractrate" class="form-control" />
 
-                </div>*@
+                </div>
                 <div class="col-md-2">
                     <label class="headinglabel">Add Rate</label>
                     <input type="text" id="addrate" class="form-control" />
@@ -489,7 +502,7 @@
                         <th>Add Wt. From</th>
                         <th>Add Wt. To</th>
                         <th>Incr. Wt.</th>
-                        @*<th>Contract Rate</th>*@
+                        <th>Contract Rate</th>
                         <th>Add Rate</th>
                         <th></th>                        
                         <thead>
@@ -500,13 +513,7 @@
             </div>
 
 
-            <div class="row no-margin" style="padding-top: 10px">
-
-
-                <div class="col-md-12 btn-right" style="padding-top: 25px">
-                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerRatesMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-                </div>
-            </div>
+        
         </fieldset>
     }
 </section>

@@ -605,7 +605,61 @@ namespace CMSV2.DAL
 
         }
 
+        public string GenerateTaxInvoicePosting(int Id)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
 
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GenerateTaxInvoicePosting " + Id.ToString();
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
+
+        public string GenerateCOLoaderPosting(int Id)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GenerateCOLoaderInvoicePosting " + Id.ToString();
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
 
         //Generate COD Receipt posting
         public string GenerateCODPosting(int Id)
@@ -753,14 +807,20 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@PaymentModeId", PaymentModeId);
             if (ConsignorText == null)
                 ConsignorText = "";
-            else
+            else if(ConsignorText!="")
                 ConsignorText = ConsignorText + "%";
             cmd.Parameters.AddWithValue("@ConsignorConsignee", ConsignorText);
-            if (Origin == null)
+            if (Origin == null )
                 Origin = "";
+            else if (Origin.Trim() == "")
+                Origin = "";
+
             cmd.Parameters.AddWithValue("@Origin", Origin);
             if (Destination == null)
                 Destination = "";
+            else if (Destination.Trim() == "")
+                Destination = "";
+
             cmd.Parameters.AddWithValue("@Destination", Destination);
              
             if (AWBNo == null)
@@ -855,7 +915,7 @@ namespace CMSV2.DAL
                     obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString());
                     obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     obj.CustomerID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerID"].ToString());
-                    obj.InvoiceTotal = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());                    
+                    obj.InvoiceTotal = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());                    
                     objList.Add(obj);
                 }
             }
@@ -1119,7 +1179,7 @@ namespace CMSV2.DAL
                     obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString());
                     obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     obj.CustomerID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerID"].ToString());
-                    obj.InvoiceTotal = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());
+                    obj.InvoiceTotal = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());
                     objList.Add(obj);
                 }
             }

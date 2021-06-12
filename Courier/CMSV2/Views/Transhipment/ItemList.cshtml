@@ -38,12 +38,12 @@
             <th>
                 AWB Date
             </th>         
-            <th>
+            @*<th>
                 Shipper
             </th>
             <th>
                 Shipper Country
-            </th>
+            </th>*@
             <th width="100px">
                Receiver
             </th>
@@ -62,9 +62,9 @@
             <th>
                 Other Charge
             </th>
-            <th>
+            @*<th>
                 Payment Mode
-            </th>
+            </th>*@
             <th>
                 Receiver By
             </th>
@@ -99,10 +99,10 @@
                     <td>
                         @item.AWBDate
                     </td>
-                    <td>
+                    @*<td>
                         @item.Consignor
                     </td>
-                    <td> @item.ConsignorCountryName</td>
+                    <td> @item.ConsignorCountryName</td>*@
                     <td>@item.Consignee </td>
                     <td>@item.ConsigneeCountryName </td>
                     <td>@item.Weight</td>
@@ -115,9 +115,9 @@
                     <td>
                         @item.OtherCharge
                     </td>
-                    <td>
+                    @*<td>
                         @item.PaymentMode
-                    </td>
+                    </td>*@
                     <td>@item.ReceivedBy</td>
                     <td>
                         @item.CollectedBy
@@ -149,10 +149,10 @@
                     <td>
                         @item.AWBDate
                     </td>
-                    <td>
+                    @*<td>
                         @item.Consignor
                     </td>
-                    <td> @item.ConsignorCountryName</td>
+                    <td> @item.ConsignorCountryName</td>*@
                     <td>@item.Consignee </td>
                     <td>@item.ConsigneeCountryName </td>
                     <td>@item.Weight</td>
@@ -164,10 +164,7 @@
                     </td>
                     <td>
                         @item.OtherCharge
-                    </td>
-                    <td>
-                        @item.PaymentMode
-                    </td>
+                    </td>                    
                     <td>@item.ReceivedBy</td>
                     <td>
                         @item.CollectedBy

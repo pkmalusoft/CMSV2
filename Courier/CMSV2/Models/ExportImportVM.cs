@@ -165,7 +165,36 @@ namespace CMSV2.Models
         public int[] SelectedValues { get; set; }
 
     }
+    public class AccountsReportParam1
+    {
+        public int AcHeadId { get; set; }
+        public string AcHeadName { get; set; }
 
+        public DateTime AsOnDate { get; set; }
+
+        public int AcTypeId { get; set; }
+        public int AcGroupId { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+        public string VoucherTypeId { get; set; }
+        public int[] SelectedValues { get; set; }
+
+    }
+
+    public class LabelPrintingParam
+    {
+        public int LabelStartNo { get; set; }
+        public int LabelQty { get; set; }
+        public int Increment { get; set; }
+        public int InScanId { get; set; }
+
+        public string ConsignmentNo { get; set; }
+        public string Output { get; set; }
+
+        public string ReportFileName { get; set; }
+    }
     public class CustomerLedgerReportParam
     {
         public int CustomerId { get; set; }

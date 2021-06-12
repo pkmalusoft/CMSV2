@@ -424,7 +424,7 @@ namespace CMSV2.Controllers
                     //updateing awbstaus table for tracking
                     AWBTrackStatu _awbstatus = new AWBTrackStatu();                                       
                     _awbstatus.AWBNo = _inscan.AWB;
-                    _awbstatus.EntryDate = objdrs.DRSDate;
+                    _awbstatus.EntryDate = DateTime.UtcNow;//  objdrs.DRSDate;
                     _awbstatus.ShipmentDetailID = _inscan.ShipmentDetailID;
                     _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
                     _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);
@@ -546,7 +546,7 @@ namespace CMSV2.Controllers
 
                     _awbstatus.AWBTrackStatusId = Convert.ToInt32(id);
                     _awbstatus.AWBNo = _inscan.AWBNo;
-                    _awbstatus.EntryDate = DateTime.Now;
+                    _awbstatus.EntryDate = DateTime.UtcNow; // DateTime.Now;
                     _awbstatus.InScanId = _inscan.InScanID;
                     _awbstatus.StatusTypeId = Convert.ToInt32(_inscan.StatusTypeId);
                     _awbstatus.CourierStatusId = Convert.ToInt32(_inscan.CourierStatusID);

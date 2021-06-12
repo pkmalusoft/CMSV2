@@ -752,94 +752,13 @@ namespace CMSV2.Controllers
 
         public ActionResult InvoicePrint(int id)
         {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            NumberToWords _numtoword = new NumberToWords();
-
-            ViewBag.Customer = db.CustomerMasters.ToList();
-            ViewBag.Movement = db.CourierMovements.ToList();
-            var _invoice = db.CustomerInvoices.Find(id);
-            CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
-            _custinvoice.CustomerInvoiceID = _invoice.CustomerInvoiceID;
-            _custinvoice.InvoiceDate = _invoice.InvoiceDate;
-            _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
-            _custinvoice.CustomerID = _invoice.CustomerID;
-            var _cust = db.CustomerMasters.Find(_invoice.CustomerID);
-            _custinvoice.CustomerName = _cust.CustomerName;
-            _custinvoice.CustomerCountryName = _cust.CountryName;
-            _custinvoice.CustomerCityName = _cust.CityName;
-            _custinvoice.CustomerPhoneNo = _cust.Phone;
-
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            _custinvoice.FuelPer = _invoice.FuelPer;
-            _custinvoice.FuelAmt = _invoice.FuelAmt;
-            _custinvoice.AdminPer = _invoice.AdminPer;
-            _custinvoice.AdminAmt = _invoice.AdminAmt;
-            _custinvoice.OtherCharge = _invoice.OtherCharge;
-            _custinvoice.ChargeableWT = _invoice.ChargeableWT;
-            _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
-            //_custinvoice.invoiceFooter = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" select c.Text1).FirstOrDefault();
-            _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "InvoiceFooter" && c.BranchId==branchid select c).FirstOrDefault();
-            var comp = db.AcCompanies.Find(companyid);
-
-            _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
-            if (comp.LogoFileName=="" || comp.LogoFileName==null)
-            {
-                ViewBag.LogoPath = "/UploadFiles/" + "defaultlogo.png";
-            }
-            else
-            {
-                ViewBag.LogoPath = "/UploadFiles/" + comp.LogoFileName;
-            }
-            string monetaryunit= Session["MonetaryUnit"].ToString();
-            _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
-
-            List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
-                        join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM
-                        {
-                            CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-                            CustomerInvoiceID = c.CustomerInvoiceID,
-                            Origin =ins.ConsignorCountryName,
-                            AWBNo = c.AWBNo,
-                            AWBDateTime = ins.TransactionDate,
-                            Weight =ins.Weight,
-                            Pieces =ins.Pieces,                            
-                            CustomCharge = c.CustomCharge,
-                            CourierCharge = c.CourierCharge,
-                            OtherCharge = c.OtherCharge,
-                            ConsigneeCountryName = ins.ConsigneeCountryName,
-                            ConsigneeName = ins.Consignee,
-                            //StatusPaymentMode = c.StatusPaymentMode,
-                            MovementId=ins.MovementID,
-                            ParcelTypeId=ins.ParcelTypeId,
-                            InscanID = c.InscanID,
-                            AWBChecked = true
-                        }).ToList();
-
-            int _index = 0;
-            foreach (var item in _details)
-            {
-                if (_index == 0)
-                {
-                    _custinvoice.CourierMovement = db.CourierMovements.Find(item.MovementId).MovementType;
-                    _custinvoice.ParcelType = db.ParcelTypes.Find(item.ParcelTypeId).ParcelType1;
-                }
-
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                _custinvoice.TotalCharges += _details[_index].TotalCharges;
-                _index++;
-            }
-
-            _custinvoice.CustomerInvoiceDetailsVM = _details;
-
-            Session["InvoiceListing"] = _details;
-            return View(_custinvoice);
-
+            ViewBag.ReportName = "Invoice Printing";
+            LabelPrintingParam picker = SessionDataModel.GetLabelPrintParam();
+            string monetaryunit = Session["MonetaryUnit"].ToString();
+            AccountsReportsDAO.CustomerInvoiceReport(id, monetaryunit);
+            //AccountsReportsDAO.CustomerTaxInvoiceReport(id, monetaryunit);
+            return View();
         }
-
 
 
         public ActionResult MultipleInvoice()
@@ -917,6 +836,7 @@ namespace CMSV2.Controllers
 
         }
 
+        
         //[HttpPost]
         ////[ValidateAntiForgeryToken]
         //public ActionResult AddOrRemoveAWBNo(CustomerInvoiceVM _CustomerInvoice, int? i)

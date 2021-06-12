@@ -8706,6 +8706,7 @@
     <EntitySetMapping Name="PODs">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.POD">
         <MappingFragment StoreEntitySet="POD">
+          <ScalarProperty Name="DeliveryLocation" ColumnName="DeliveryLocation" />
           <ScalarProperty Name="ShipmentDetailId" ColumnName="ShipmentDetailId" />
           <ScalarProperty Name="IsSkyLarkUpdate" ColumnName="IsSkyLarkUpdate" />
           <ScalarProperty Name="UpdationDate" ColumnName="UpdationDate" />

@@ -60,7 +60,7 @@
         $("#CustomerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/CustomerReceipt/GetCustomerName',
+                    url: '/AWB/GetCustomerName',
                     datatype: "json",
                     data: {
                         term: request.term

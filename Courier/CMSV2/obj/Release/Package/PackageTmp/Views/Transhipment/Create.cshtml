@@ -189,13 +189,13 @@
 
         var TargetValue = "";
 
-        if (Field == 'DestinationLocation') {
+        if (Field == 'ConsigneeLocationName') {
             TargetValue = DestinationLocation;
         }
-        else if (Field == 'DestinationCountry') {
+        else if (Field == 'ConsigneeCountryName') {
             TargetValue = DestinationCountry;
         }
-        else if (Field == 'DestinationCity') {
+        else if (Field == 'ConsigneeCityName') {
             TargetValue = DestinationCity;
         }
         else {
@@ -210,6 +210,13 @@
              data: { TargetColumn: Field, SourceValue: SourceValue, TargetValue: TargetValue },
             success: function (data) {
                 $("#listContainer").html(data);
+                $('#SourceValue').val('');
+                $('#TargetValue').val('');
+                $('#DestinationCity').val('');
+                $('#DestinationLocation').val('');
+                $('#DestinationCountry').val('');
+                $('#spanmsg').html('Fixation Saved Succesfully!')
+                $('#SourceValue').focus();
               }
             });
 
@@ -466,7 +473,7 @@
                 url: '@Url.Action("ShowImportDataFixation", "Transhipment")',
                 datatype: "html",
                 data: {
-                    FieldName: 'DestinationCountry'
+                    FieldName: 'ConsigneeCountryName'
                 },
                 success: function (data) {
                     $("#popupContainer").html(data);
@@ -509,36 +516,36 @@
                 $('#AgentID').focus();
                 return;
             }
-            else if ($('#Route').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Route').focus();
-                return;
-            }
+            //else if ($('#Route').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Route').focus();
+            //    return;
+            //}
             //else if ($('#Type').val() == '') {
             //    $.notify('Please Fill Required Fields!');
             //    $('#ShipmentTypeId').focus();
             //    return;
             //}
-            else if ($('#OriginAirportCity').val() == '') {
-                    $.notify('Please Fill Required Fields!');
-                $('#OriginAirportCity').focus();
-                    return;
-            }
-            else if ($('#DestinationAirportCity').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#DestinationAirportCity').focus();
-                    return;
-            }
-            else if ($('#FlightDate1').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#FlightDate1').focus();
-                return;
-            }
-            else if ($('#FlightNo').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#FlightNo').focus();
-                return;
-            }
+            //else if ($('#OriginAirportCity').val() == '') {
+            //        $.notify('Please Fill Required Fields!');
+            //    $('#OriginAirportCity').focus();
+            //        return;
+            //}
+            //else if ($('#DestinationAirportCity').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#DestinationAirportCity').focus();
+            //        return;
+            //}
+            //else if ($('#FlightDate1').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#FlightDate1').focus();
+            //    return;
+            //}
+            //else if ($('#FlightNo').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#FlightNo').focus();
+            //    return;
+            //}
             else if ($('#MAWB').val() == '') {
                 $.notify('Please Fill Required Fields!');
                 $('#MAWB').focus();
@@ -549,26 +556,26 @@
                 $('#TotalAWB').focus();
                 return;
             }
-            else if ($('#ParcelNo').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#ParcelNo').focus();
-                return;
-            }
-            else if ($('#Weight').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Weight').focus();
-                return;
-            }
-            else if ($('#Bags').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Bags').focus();
-                return;
-            }
-            else if ($('#Bags').val() == '') {
-                $.notify('Please Fill Required Fields!');
-                $('#Bags').focus();
-                return;
-            }
+            //else if ($('#ParcelNo').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#ParcelNo').focus();
+            //    return;
+            //}
+            //else if ($('#Weight').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Weight').focus();
+            //    return;
+            //}
+            //else if ($('#Bags').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Bags').focus();
+            //    return;
+            //}
+            //else if ($('#Bags').val() == '') {
+            //    $.notify('Please Fill Required Fields!');
+            //    $('#Bags').focus();
+            //    return;
+            //}
 
             saveimport();
 
@@ -711,41 +718,66 @@
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
           
-            <div class="row">
-                <div class="col-md-3">
-                    @Html.HiddenFor(mode=>Model.ID)
-                    @Html.HiddenFor(mode=>Model.CompanyCountryName)
-                    @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
+        <div class="row">
+            <div class="col-md-2">
+                @Html.HiddenFor(mode => Model.ID)
+                @Html.HiddenFor(mode => Model.CompanyCountryName)
+                @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
 
-                    @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
-
-                </div>
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
-
-                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
-
-                </div>
-
-                <div class="col-md-3">
-                    <label class="headinglabel required">Agent</label>
-                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel">Route</label>
-                    @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @autocomplete = "off" })
-                </div>
+                @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
 
             </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
+
+                @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-2">
+                <label class="headinglabel required">Agent</label>
+                @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
+
+                @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
+                @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-md-1" style="padding-top:30px">
+                <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
+                <input type="button" id="btnfile" style="display:none" />
+
+                <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpload" title="Upload Excel" href="Javascript:void(0)"><i class=" fa fa-file-o"></i></a>
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fix" title="Data Fixation" />
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                <a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>
+                @*<input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />*@
+            </div>
+            <div class="col-md-1" style="padding-top:30px">
+                <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpdateRate" title="Rate Update" href="Javascript:void(0)"><i class=" fa fa-money"></i></a>
+                @*<input class="btn btn-primary" id="btnUpdateRate" type="button" value="Update Rate" />*@
+            </div>
+            @*<div class="col-md-5 text-right">
+
+
+
+            </div>*@
+        </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     
-                    <label class="headinglabel required">Airport City</label>
+                    <label class="headinglabel" >Airport City</label>
                     @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @type="text",@autocomplete="off" })
                     @*@Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })*@
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     @Html.LabelFor(model => model.DestinationAirportCity, "Destination Airport City", htmlAttributes: new { @class = "headinglabel"})
 
                     @Html.TextBoxFor(model => model.DestinationAirportCity, new { @class = "form-control",   @autocomplete = "off", @type = "search" })
@@ -754,7 +786,7 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-1">
                     
                     <label class="headinglabel">Flight No</label>
                     @Html.TextBoxFor(model => model.FlightNo, new { @class = "form-control", @autocomplete="off" })
@@ -762,12 +794,16 @@
                     @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-1">
                     <label class="headinglabel">Flight Date</label>
                     @Html.TextBoxFor(model => model.FlightDate1, new { @class = "form-control", @autocomplete = "off" })
 
                     @Html.ValidationMessageFor(model => model.FlightDate1, "", new { @class = "text-danger" })
 
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Route</label>
+                    @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @autocomplete = "off" })
                 </div>
                 @*<div class="col-md-2">
                     <label class="headinglabel required">Type</label>
@@ -776,17 +812,11 @@
 
                 </div>*@
 
-            </div>
-            <div class="row">
+           
+        
+              
                 <div class="col-md-1">
-                    @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
-
-                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-1">
-                    <label class="headinglabel required">Parcel No.</label>
+                    <label class="headinglabel">Parcel No.</label>
                     @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right", @required = "true" })
                     @Html.ValidationMessageFor(model => model.ParcelNo, "", new { @class = "text-danger" })
 
@@ -805,35 +835,20 @@
 
                 </div>
 
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label class="headinglabel required">Total AWB</label>
 
                     @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control text-right", @min = 1, @required = "true" })
                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
-                    <input type="button" id="btnfile" style="display:none" />
-
-                    <a class="btn btn-primary" id="btnUpload" href="Javascript:void(0)">Upload</a>
-                </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fixation" />
-                </div>
-
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />
-                </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <input class="btn btn-primary" id="btnUpdateRate" type="button" value="Update Rate" />
-                </div>
-                <div class="col-md-4 btn-right">
+               
+                <div class="col-md-12 btn-right " style="padding-top:10px!important;
+                padding-bottom:30px;">
                     <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
                 </div>
 
-            </div>                       
-            
+          </div>
             <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll" id="listContainer">
                 @{Html.RenderPartial("ItemList", Model);}
             </div>
@@ -865,6 +880,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="padding-top: 5px">
+                <span id="spanmsg" style="color:red" ></span>
                 <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>

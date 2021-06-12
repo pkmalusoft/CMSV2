@@ -100,162 +100,7 @@ input[type=checkbox], input[type=radio] {
         setTwoNumberDecimal($('#FuelPer'));
         setTwoNumberDecimal($('#OtherCharge'));
         setTwoNumberDecimal($('#CustomerInvoiceTax'));
-                    
-
     });
-        //    $("#btnadd").click(function () {
-        //        //var newaddrate;
-        //        //var contract;
-        //        //var prevrate;
-
-        //        //if (flagedit == 1) {
-        //        //    var row = $("#details").find("tr:eq('" + currentindex + "')");
-        //        //    var prevrow = $("#details").find("tr:eq('" + currentindex - 1 + "')");
-        //        //    var newrow = $("#details").find("tr:eq('" + currentindex + 1 + "')");
-        //        //    alert(currentindex);
-        //        //    alert(lastindex);
-        //        //    alert("Hiii");
-        //        //    if (currentindex == 1 && currentindex == lastindex) {
-
-        //        //        contract = $("#contractrate").val();
-        //        //        prevrate = $("#BaseRate").val();
-        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
-
-
-        //        //        $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
-        //        //        $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
-        //        //        $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
-        //        //        $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
-
-        //        //        $(row).find("td:eq(0)").text($("#addwtfrm").val());
-        //        //        $(row).find("td:eq(1)").text($("#addwtto").val());
-        //        //        $(row).find("td:eq(2)").text($("#incrwt").val());
-        //        //        $(row).find("td:eq(3)").text($("#contractrate").val());
-        //        //        $(row).find("td:eq(4)").text($("#addrate").val());
-
-
-        //        //    }
-        //        //    else if (currentindex == lastindex && lastindex > 1) {
-        //        //        contract = $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        prevrate = $(prevrow).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
-
-        //        //        $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
-        //        //        $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
-        //        //        $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
-        //        //        $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
-
-        //        //        $(row).find("td:eq(0)").text($("#addwtfrm").val());
-        //        //        $(row).find("td:eq(1)").text($("#addwtto").val());
-        //        //        $(row).find("td:eq(2)").text($("#incrwt").val());
-        //        //        $(row).find("td:eq(3)").text($("#contractrate").val());
-        //        //        $(row).find("td:eq(4)").text($("#addrate").val());
-        //        //    }
-        //        //    else if ((currentindex < lastindex) && currentindex==1 ) {
-        //        //        contract = $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        prevrate = $(prevrow).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //        newaddrate = parseFloat(contract) - parseFloat(prevrate);
-        //        //    }
-
-
-
-        //        //    $(row).find("td:eq(0)").find('input[type=hidden]').val($("#addwtfrm").val());
-        //        //    $(row).find("td:eq(1)").find('input[type=hidden]').val($("#addwtto").val());
-        //        //    $(row).find("td:eq(2)").find('input[type=hidden]').val($("#incrwt").val());
-        //        //    $(row).find("td:eq(3)").find('input[type=hidden]').val($("#contractrate").val());
-        //        //    $(row).find("td:eq(4)").find('input[type=hidden]').val($("#addrate").val());
-
-        //        //    $(row).find("td:eq(0)").text($("#addwtfrm").val());
-        //        //    $(row).find("td:eq(1)").text($("#addwtto").val());
-        //        //    $(row).find("td:eq(2)").text($("#incrwt").val());
-        //        //    $(row).find("td:eq(3)").text($("#contractrate").val());
-        //        //    $(row).find("td:eq(4)").text($("#addrate").val());
-
-        //        //    lastindex = $("#details tr:last").index('tr');
-
-
-
-
-        //        //    currentindex = 0;
-        //        //    nextindex = 0;
-        //        //    lastindex = 0;
-
-        //        //    flagedit = 0;
-        //        //}
-        //        //else {
-        //        if (CheckForNull() == true) {
-        //            var i = $('#details tr').length - 1;
-
-        //            $("#details").append('<tr>' + '<td>' + $("#addwtfrom").val() + '<input type="hidden" value=' + $("#addwtfrom").val() + ' name="FAgentRateDetails[' + i + '].AddWtFrom"></td>' +
-        //                '<td>' + $("#addwtto").val() + '<input type="hidden" value=' + $("#addwtto").val() + ' name="FAgentRateDetails[' + i + '].AddWtTo"></td>' + '<td>' + $("#incrwt").val() + '<input type="hidden" value=' + $("#incrwt").val() + ' name="FAgentRateDetails[' + i + '].IncrWt"></td>' + '<td>' + $("#contractrate").val() + '<input type="hidden" value=' + $("#contractrate").val() + ' name="FAgentRateDetails[' + i + '].ContractRate"></td>' + '<td>' + $("#addrate").val() + '<input type="hidden" class="crate" value=' + $("#addrate").val() + ' name="FAgentRateDetails[' + i + '].AddRate"></td><td><input type="button" class="btnedit" onclick="check(this)" value="Click"></td></tr>');
-
-        //            $("#addwtfrom").val('');
-        //            $("#addwtto").val('');
-        //            $("#incrwt").val('');
-        //            $("#contractrate").val('');
-        //            $("#addrate").val('');
-
-        //            var x = $("#details tr:last td:nth-child(2)");
-        //            var c = $(x).text();
-        //            var decAdditionalRate = (parseFloat(c) + 0.001).toFixed(3);
-
-        //            $("#addwtfrom").val(decAdditionalRate);
-        //        }
-        //        //}
-
-        //        $("#addwtto").focus();
-        //    });
-
-
-        //    function CheckForNull() {
-
-        //        if ($("#addwtfrom").val() == "" || $("#addwtto").val() == "" || $("#incrwt").val() == "" || $("#contractrate").val() == "" || $("#addrate").val() == "") {
-        //            $(".error").show();
-        //            return false;
-        //        }
-        //        else {
-        //            $(".error").hide();
-        //            return true;
-        //        }
-        //    }
-        //    //$(".btnedit").click(function () {
-        //    //    alert("hii");
-        //    //    var x = $(this).parent("<td>").parent("<tr>");
-
-        //    //    var x1 = $(x).find("td:first-child").text();
-        //    //    alert(x1);
-        //    //});
-
-
-        //});
-
-        //function check(x)
-        //{
-
-        //    var crow = $(x).parent("td").parent("tr");
-        //    currentindex = $(crow).index('this');
-        //    nextindex = parseInt(currentindex) + 1;
-
-        //    var addwtfrm = $(crow).find("td:eq(0)").find('input[type=hidden]').val();
-        //    var addwtto = $(crow).find("td:eq(1)").find('input[type=hidden]').val();
-        //    var incrwt = $(crow).find("td:eq(2)").find('input[type=hidden]').val();
-        //    var contract = $(crow).find("td:eq(3)").find('input[type=hidden]').val();
-        //    var addrate = $(crow).find("td:eq(4)").find('input[type=hidden]').val();
-
-        //    $("#addwtfrom").val(addwtfrm);
-        //    $("#addwtto").val(addwtto);
-        //    $("#incrwt").val(incrwt);
-        //    $("#contractrate").val(contract);
-        //    $("#addrate").val(addrate);
-        //    flagedit = 1;
-
-
-    
-
-    /*code*/
-
 </script>
 
 <section class="content-header">
@@ -317,7 +162,7 @@ input[type=checkbox], input[type=radio] {
                     @Html.ValidationMessageFor(model => model.FuelPer)
                 </div>
                 <div class="col-md-2 w-6">
-                    <label class="headinglabel">OtherCharge</label>
+                    <label class="headinglabel">Clearance Charge</label>
                     @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.OtherCharge)
                 </div>
@@ -426,7 +271,7 @@ input[type=checkbox], input[type=radio] {
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
-                                <td>Other Charges</td>
+                                <td>Clearance Charges</td>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label></td>

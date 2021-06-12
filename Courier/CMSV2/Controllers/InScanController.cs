@@ -243,7 +243,7 @@ namespace CMSV2.Controllers
                             if (awb == null)
                             {
                                 _awbstatus.AWBNo = _inscan.AWBNo;
-                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.EntryDate = DateTime.UtcNow;// v.QuickInscanDateTime;
                                 _awbstatus.InScanId = _inscan.InScanID;
                                 _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
                                 _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
@@ -264,7 +264,7 @@ namespace CMSV2.Controllers
                             if (awb == null)
                             {
                                 _awbstatus.AWBNo = _inscan.AWBNo;
-                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                            _awbstatus.EntryDate = DateTime.UtcNow; // v.QuickInscanDateTime;
                                 _awbstatus.InScanId = _inscan.InScanID;
                                 _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
                                 _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
@@ -281,7 +281,7 @@ namespace CMSV2.Controllers
                             if (awb == null)
                             {
                                 _awbstatus.AWBNo = _inscan.AWBNo;
-                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.EntryDate = DateTime.UtcNow;// v.QuickInscanDateTime;
                                 _awbstatus.InScanId = _inscan.InScanID;
                                 _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
                                 _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);
@@ -336,7 +336,7 @@ namespace CMSV2.Controllers
                             {
                                 //Assigned For Collection
                                 _awbstatus.AWBNo = _inscan.AWBNo;
-                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.EntryDate = DateTime.UtcNow;// v.QuickInscanDateTime;
                                 _awbstatus.InScanId = _inscan.InScanID;
                                 _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
                                 _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
@@ -356,7 +356,7 @@ namespace CMSV2.Controllers
                             if (awb == null)
                             {
                                 _awbstatus.AWBNo = _inscan.AWBNo;
-                                _awbstatus.EntryDate = v.QuickInscanDateTime;
+                                _awbstatus.EntryDate = DateTime.UtcNow;// v.QuickInscanDateTime;
                                 _awbstatus.InScanId = _inscan.InScanID;
                                 _awbstatus.StatusTypeId = StatusTypeId;// Convert.ToInt32(_inscan.StatusTypeId);
                                 _awbstatus.CourierStatusId = CourierStatusID;// Convert.ToInt32(_inscan.CourierStatusID);
@@ -372,7 +372,7 @@ namespace CMSV2.Controllers
                             //Received At Origin Facility
                         _awbstatus = new AWBTrackStatu();
                             _awbstatus.AWBNo = _inscan.AWBNo;
-                            _awbstatus.EntryDate = v.QuickInscanDateTime;
+                            _awbstatus.EntryDate = DateTime.UtcNow;//  v.QuickInscanDateTime;
                             _awbstatus.InScanId = _inscan.InScanID;
                             _awbstatus.StatusTypeId = 2;// Convert.ToInt32(_inscan.StatusTypeId);
                             _awbstatus.CourierStatusId = 5;// Convert.ToInt32(_inscan.CourierStatusID);

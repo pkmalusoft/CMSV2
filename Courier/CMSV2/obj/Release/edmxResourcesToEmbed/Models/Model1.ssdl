@@ -2777,6 +2777,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="UpdationDate" Type="datetime" />
     <Property Name="IsSkyLarkUpdate" Type="bit" />
     <Property Name="ShipmentDetailId" Type="int" />
+    <Property Name="DeliveryLocation" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="PODSignature">
     <Key>

@@ -3937,61 +3937,217 @@ new AcGroupModel()
             }
         }
         #region
-        public ActionResult Ledger(int id)
+        public ActionResult Ledger()
         {
-            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            //ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
-            //ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
-            //ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
-            //ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
-            //ViewBag.CourierStatusId = 0;
-            if (id == 1) //Ledger
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pFromDate;
+            DateTime pToDate;
+
+            if (reportparam == null)
             {
-                ViewBag.ReportName = "Accounts Ledger";
-                ViewBag.ReportId = "1";
-                Session["ReportId"] = "1";
-                if (Session["ReportOutput"] != null)
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam();
+                reportparam.FromDate = pFromDate;
+                reportparam.ToDate = pToDate;
+                reportparam.AcHeadId = 0;
+                reportparam.AcHeadName = "";
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
-                    string currentreport = Session["ReportOutput"].ToString();
-                    if (!currentreport.Contains("AccLedger"))
-                    {
-                        Session["ReportOutput"] = null;
-                    }
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AccLedger"))
+                {
+                    Session["ReportOutput"] = null;
                 }
             }
-            else if (id == 2)
+            ViewBag.ReportName = "Ledger Report";
+            return View(reportparam);
+        }
+
+        [HttpPost]
+        public ActionResult Ledger(AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
             {
-                ViewBag.ReportName = "Trial Balance";
-                ViewBag.ReportId = "2";
-                Session["ReportId"] = "2";
-                if (Session["ReportOutput"] != null)
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                AcHeadId = picker.AcHeadId,
+                AcHeadName = picker.AcHeadName,
+                Output = picker.Output
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            AccountsReportsDAO.GenerateLedgerReport();
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return RedirectToAction("Ledger", "Accounts");
+
+
+
+        }
+        public ActionResult TrialBalance()
+        {
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pFromDate;
+            DateTime pToDate;
+
+            if (reportparam == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam1();
+                reportparam.AsOnDate = pToDate;
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.AsOnDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.AsOnDate.Date.ToString() == "01-01-0001")
                 {
-                    string currentreport = Session["ReportOutput"].ToString();
-                    if (!currentreport.Contains("AccTrialBal"))
-                    {
-                        Session["ReportOutput"] = null;
-                    }
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.AsOnDate = pFromDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AccTrialBal"))
+                {
+                    Session["ReportOutput"] = null;
                 }
             }
-            else if (id == 3)
+            ViewBag.ReportName = "Trial Balance Report";
+            return View(reportparam);
+        }
+
+        [HttpPost]
+        public ActionResult TrialBalance(AccountsReportParam1 picker)
+        {
+            AccountsReportParam1 model = new AccountsReportParam1
             {
-                ViewBag.ReportName = "Trading Account";
-                ViewBag.ReportId = "3";
-                if (Session["ReportOutput"] != null)
-                {
-                    string currentreport = Session["ReportOutput"].ToString();
-                    if (!currentreport.Contains("AccTrading"))
-                    {
-                        Session["ReportOutput"] = null;
-                    }
-                }
-                Session["ReportId"] = "3";
-                
+                AsOnDate = picker.AsOnDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = picker.Output
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam1(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            AccountsReportsDAO.GenerateTrialBalanceReport();
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return RedirectToAction("TrialBalance", "Accounts");
+
+
+
+        }
+
+        public ActionResult PLTradingReport()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam2();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pFromDate;
+            DateTime pToDate;
+
+            if (reportparam == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam();
+                reportparam.FromDate = pFromDate;
+                reportparam.ToDate = pToDate;
+                reportparam.AcHeadId = 0;
+                reportparam.AcHeadName = "";
+                reportparam.Output = "PDF";
             }
-       
-            
-            return View();
-            
+            else
+            {
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
+                {
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AccTrading"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+            ViewBag.ReportName = "PL/Trading Report";
+            return View(reportparam);
+        }
+
+        [HttpPost]
+        public ActionResult PLTradingReport(AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = picker.Output
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam2(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            AccountsReportsDAO.GenerateTradingAccountReport();
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return RedirectToAction("PLTradingReport", "Accounts");
+
+
+
         }
 
         public ActionResult ReportFrame()

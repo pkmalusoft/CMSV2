@@ -527,7 +527,7 @@ namespace CMSV2.Controllers
                 }
                 importShipment.Bags = model.Bags;
                 importShipment.FlightNo = model.FlightNo;
-                if (model.FlightDate1 != null)
+                if (model.FlightDate1 != null && model.FlightDate1!="")
                 {
                     importShipment.FlightDate = Convert.ToDateTime(model.FlightDate1);
                 }
@@ -781,7 +781,7 @@ namespace CMSV2.Controllers
         {
             ImportManifestVM model = new ImportManifestVM();
             List<TranshipmentModel> Details = (List<TranshipmentModel>)Session["ManifestTranshipment"];
-            if (TargetColumn == "DestinationCountry")
+            if (TargetColumn == "ConsigneeCountryName")
             {
                 int i = 0;
                 foreach (var item in Details)
@@ -793,7 +793,7 @@ namespace CMSV2.Controllers
                     i++;
                 }
             }
-            else if (TargetColumn == "DestinationCity")
+            else if (TargetColumn == "ConsigneeCityName")
             {
                 int i = 0;
                 foreach (var item in Details)
@@ -977,7 +977,7 @@ namespace CMSV2.Controllers
             {
                 if (term.Trim() != "")
                 {
-                    if (FieldName == "DestinationCountry")
+                    if (FieldName == "DestinationCountry" || FieldName =="ConsigneeCountryName")
                     {
                         var list = (from c in IDetails
                                     where c.ConsigneeCountryName.ToLower().Contains(term.Trim().ToLower())
@@ -985,7 +985,7 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.ConsigneeCountryName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "DestinationCity")
+                    else if (FieldName == "DestinationCity" ||  FieldName=="ConsigneeCityName")
                     {
                         var list = (from c in IDetails
                                     where c.ConsigneeCityName.ToLower().Contains(term.Trim().ToLower())
@@ -993,7 +993,7 @@ namespace CMSV2.Controllers
                                     select new { SourceValue = c.ConsigneeCityName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "DestinationLocation")
+                    else if (FieldName == "DestinationLocation" || FieldName =="ConsigneeLocationName")
                     {
                         var list = (from c in IDetails
                                     where c.ConsigneeLocationName.ToLower().Contains(term.Trim().ToLower())
@@ -1069,21 +1069,21 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-                    if (FieldName == "DestinationCountry")
+                    if (FieldName == "DestinationCountry" || FieldName == "ConsigneeCountryName")
                     {
                         var list = (from c in IDetails
                                     orderby c.ConsigneeCountryName
                                     select new { SourceValue = c.ConsigneeCountryName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "DestinationCity")
+                    else if (FieldName == "DestinationCity" || FieldName == "ConsigneeCityName")
                     {
                         var list = (from c in IDetails
                                     orderby c.ConsigneeCityName
                                     select new { SourceValue = c.ConsigneeCityName }).Distinct().ToList();
                         return Json(list, JsonRequestBehavior.AllowGet);
                     }
-                    else if (FieldName == "DestinationLocation")
+                    else if (FieldName == "DestinationLocation" || FieldName == "ConsigneeLocationName")
                     {
                         var list = (from c in IDetails
                                     orderby c.ConsigneeLocationName

@@ -63,7 +63,23 @@ namespace CMSV2.Models
         {
             return (CustomerLedgerReportParam)System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"];
         }
+        public static AccountsReportParam1 GetAccountsParam1()
+        {
+            return (AccountsReportParam1)System.Web.HttpContext.Current.Session["AccountsParam1"];
+        }
+        public static void SetAccountsParam1(AccountsReportParam1 reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AccountsParam1"] = reportparam;
+        }
 
+        public static AccountsReportParam GetAccountsParam2()
+        {
+            return (AccountsReportParam)System.Web.HttpContext.Current.Session["AccountsParam2"];
+        }
+        public static void SetAccountsParam2(AccountsReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AccountsParam2"] = reportparam;
+        }
         public static void SetCustomerLedgerParam(CustomerLedgerReportParam reportparam)
         {
             System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
@@ -92,6 +108,12 @@ namespace CMSV2.Models
         public static void SetTaxReportParam(TaxReportParam reportparam)
         {
             System.Web.HttpContext.Current.Session["TaxReportParam"] = reportparam;
+        }
+
+        public static LabelPrintingParam GetLabelPrintParam()
+        {
+            return (LabelPrintingParam)System.Web.HttpContext.Current.Session["LabelPrintingParam"];
+
         }
         public static void SetCookie(byte[] arr)
         {

@@ -504,6 +504,7 @@ namespace CMSV2.Controllers
                         isi.InScanID = inscan.InScanID;
                         isi.InScanInternationalID = 0;
                         TempData["SuccessMsg"] = customersavemessage  + "\n" + "You have successfully Added Quick AirWay Bill.";
+
                     }
                     else
                     {
@@ -549,19 +550,6 @@ namespace CMSV2.Controllers
                             db.SaveChanges();
                         }
 
-
-
-
-
-                        try
-                        {
-                            SaveConsignorAddress(v);
-                            SaveConsigeeAddress(v);
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         //    _dao.AWBAccountsPosting(inscan.InScanID);
 
@@ -570,18 +558,7 @@ namespace CMSV2.Controllers
                         
                     }
 
-                    //if (v.InScanID == 0)
-                    //{
-                    //    try
-                    //    {
-                    //        db.InScanInternationalDeatils.Add(isid);
-                    //        db.SaveChanges();
-                    //    }
-                    //    catch(Exception ex1)
-                    //    {
-                    //        string err = ex1.Message;
-                    //    }
-                    //}
+                  
 
                     if (v.FagentID >0)
                     {
@@ -686,9 +663,20 @@ namespace CMSV2.Controllers
                         db.SaveChanges();
 
                     }
+
+                    try
+                    {
+                        SaveConsignorAddress(v);
+                        SaveConsigeeAddress(v);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
                     //accounts posting  for payment mode pickupcash and cod and Account on 30/nov/2020
                     //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
-                        _dao.AWBAccountsPosting(inscan.InScanID);
+                    _dao.AWBAccountsPosting(inscan.InScanID);
 
 
                     return RedirectToAction("Index");
@@ -1530,12 +1518,26 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetCustomerName(string term) 
         {
-            var customerlist = (from c1 in db.CustomerMasters
-                                where c1.CustomerID>0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
-                                orderby c1.CustomerName ascending
-                                select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).Take(100).ToList();                                
+            if (term.Trim()!="")
+            {
+                var customerlist = (from c1 in db.CustomerMasters
+                                    where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                    orderby c1.CustomerName ascending
+                                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
 
-            return Json(customerlist , JsonRequestBehavior.AllowGet);
+                return Json(customerlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var customerlist = (from c1 in db.CustomerMasters
+                                    where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") 
+                                    orderby c1.CustomerName ascending
+                                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
+                return Json(customerlist, JsonRequestBehavior.AllowGet);
+            }
+            
+
+          
 
         }
 

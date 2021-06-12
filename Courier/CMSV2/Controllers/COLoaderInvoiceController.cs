@@ -168,6 +168,10 @@ namespace CMSV2.Controllers
                 _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
                 _custinvoice.CreatedBy = userid;
+                _custinvoice.AdminAmt = model.AdminAmt;
+                _custinvoice.FuelAmt = model.FuelAmt;
+                _custinvoice.OtherCharge = model.OtherCharge;
+                _custinvoice.InvoiceTax = model.InvoiceTax;
                 _custinvoice.CreatedDate = CommanFunctions.GetCurrentDateTime();
                 _custinvoice.ModifiedBy = userid;
                 _custinvoice.ModifiedDate = CommanFunctions.GetCurrentDateTime();
@@ -205,9 +209,9 @@ namespace CMSV2.Controllers
 
                 //Accounts Posting
                 PickupRequestDAO _dao = new PickupRequestDAO();
-                //_dao.GenerateInvoicePosting(_custinvoice.AgentInvoiceID);
+                _dao.GenerateCOLoaderPosting(_custinvoice.AgentInvoiceID);
 
-                TempData["SuccessMsg"] = "You have successfully Saved the Customer Invoice";
+                TempData["SuccessMsg"] = "You have successfully Saved the CO Loader Invoice";
                 return RedirectToAction("Index");
             }
             else
