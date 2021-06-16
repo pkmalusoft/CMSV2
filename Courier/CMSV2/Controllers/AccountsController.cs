@@ -1742,7 +1742,7 @@ new AcGroupModel()
             ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
             lsttype.Add(new VoucherTypeVM { TypeName = "All" }); 
-            var typeitems  = (from c in db.AcJournalMasters where (c.VoucherType=="CBP" || c.VoucherType == "CBR" || c.VoucherType=="BKR" || c.VoucherType=="BKP") select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
+            var typeitems  = (from c in db.AcJournalMasters where (c.VoucherType=="CBP" || c.VoucherType == "CBR" || c.VoucherType=="BKR" || c.VoucherType=="BKP" || c.VoucherType=="BK" || c.VoucherType=="CB" ) select new VoucherTypeVM { TypeName = c.VoucherType }).Distinct().ToList();
             foreach(VoucherTypeVM Item in typeitems)
             {
                 lsttype.Add(Item);
@@ -4631,7 +4631,7 @@ new AcGroupModel()
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("ProfileLossReport"))
+                if (!currentreport.Contains("DayBook"))
                 {
                     Session["ReportOutput"] = null;
                 }
@@ -4663,6 +4663,7 @@ new AcGroupModel()
             model.Output = picker.Output;
             model.Filters = picker.Filters;
             model.SelectedValues = picker.SelectedValues;
+            model.VoucherTypeId = "";
             if (picker.SelectedValues != null)
             {
                 foreach (var item in picker.SelectedValues)
@@ -4691,7 +4692,7 @@ new AcGroupModel()
             if (model.Output != "PDF")
                 return RedirectToAction("Download", "Accounts", new { file = "a" });
             else
-                return View();            
+                return RedirectToAction("DayBook", "Accounts");// return View(model);            
 
         }
 

@@ -15,9 +15,9 @@ namespace CMSV2.Models
     public partial class tblDeliveryAttempt
     {
         public int id { get; set; }
-        public string reason { get; set; }
         public string image { get; set; }
-        public string DRSID { get; set; }
         public System.DateTime date { get; set; }
+        public Nullable<int> DRSID { get; set; }
+        public Nullable<int> ReasonID { get; set; }
     }
 }

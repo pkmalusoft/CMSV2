@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CMSV2.Models;
-
+using CMSV2.DAL;
 namespace CMSV2.Controllers
 {
     [SessionExpire]
@@ -19,19 +19,19 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
             List<VehiclesVM> lst = new List<VehiclesVM>();
-            var data = db.VehicleMasters.ToList();
+            lst = PickupRequestDAO.GetVehiclesVM(); //
 
-            foreach (var item in data)
-            {
-                VehiclesVM v = new VehiclesVM();
+            //foreach (var item in data)
+            //{
+            //    VehiclesVM v = new VehiclesVM();
 
-                v.VehicleID = item.VehicleID;
-                v.VehicleDescription = item.VehicleDescription;
-                v.RegistrationNo = item.RegistrationNo;
-                v.Model = item.Model;
-                v.VehicleNO = item.VehicleNo;
-                lst.Add(v);
-            }
+            //    v.VehicleID = item.VehicleID;
+            //    v.VehicleDescription = item.VehicleDescription;
+            //    v.RegistrationNo = item.RegistrationNo;
+            //    v.Model = item.Model;
+            //    v.VehicleNO = item.VehicleNo;
+            //    lst.Add(v);
+            //}
 
 
             return View(lst);
@@ -116,7 +116,7 @@ namespace CMSV2.Controllers
                 return RedirectToAction("Index");
            
 
-            return View();
+            
         }
 
         //

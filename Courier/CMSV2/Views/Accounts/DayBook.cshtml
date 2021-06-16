@@ -41,7 +41,7 @@
             { Id: 4, Text: 'COD Posting' },
             { Id: 5, Text: 'Invoice Posting' },
             { Id: 6, Text: 'Receipt Posting' }];
-        $('#vouchertypeid').empty();
+        $('#SelectedValues').empty();
         var flag = 0;
         debugger;
         for (var i = 0; i < 7; i++) {
@@ -50,17 +50,17 @@
 
                 if (o_st[j] == i) {
                     flag = 1;
-                    $('#vouchertypeid').append('<option value="' + i + '" selected=true>' + items[i].Text + '</option>');
+                    $('#SelectedValues').append('<option value="' + i + '" selected=true>' + items[i].Text + '</option>');
                     break;
                 }
             }
             if (flag == 0) {
 
-                $('#vouchertypeid').append('<option value="' + i + '">' + items[i].Text + '</option>');
+                $('#SelectedValues').append('<option value="' + i + '">' + items[i].Text + '</option>');
             }
 
             if (i == 6) {
-                $('#vouchertypeid').multiselect({
+                $('#SelectedValues').multiselect({
                     nonSelectedText: 'Select',
                     enableClickableOptGroups: true,
                     enableCollapsibleOptGroups: true,
@@ -107,7 +107,7 @@
         <div class="col-md-2">
             <label class="headinglabel required ">Voucher Type</label>
 
-            <select id="vouchertypeid" name="SelectedValues" multiple="multiple" class="form-control">
+            <select id="SelectedValues" name="SelectedValues" multiple="multiple" class="form-control">
                 <option value="0">All</option>
                 <option value="1">Cash Receipts & Payments</option>
                 <option value="2">Journal</option>

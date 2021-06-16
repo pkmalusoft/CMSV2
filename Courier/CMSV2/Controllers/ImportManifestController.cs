@@ -375,7 +375,7 @@ namespace CMSV2.Controllers
                         _awbstatus.CourierStatus = db.CourierStatus.Find(detail.CourierStatusID).CourierStatus;
                         _awbstatus.UserId = userid;
                         _awbstatus.EmpID = db.EmployeeMasters.Where(cc => cc.UserID == userid).FirstOrDefault().EmployeeID;
-                        
+                        _awbstatus.APIStatus = true;
                         db.AWBTrackStatus.Add(_awbstatus);
                         db.SaveChanges();
                     }

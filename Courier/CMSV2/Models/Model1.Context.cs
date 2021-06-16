@@ -134,7 +134,6 @@ namespace CMSV2.Models
         public virtual DbSet<Period> Periods { get; set; }
         public virtual DbSet<PeriodType> PeriodTypes { get; set; }
         public virtual DbSet<PickUpRequestStatu> PickUpRequestStatus { get; set; }
-        public virtual DbSet<PODSignature> PODSignatures { get; set; }
         public virtual DbSet<PrepaidAWBInvoice> PrepaidAWBInvoices { get; set; }
         public virtual DbSet<PrepaidAWBInvoiceDetail> PrepaidAWBInvoiceDetails { get; set; }
         public virtual DbSet<ProductCategoryMaster> ProductCategoryMasters { get; set; }
@@ -216,7 +215,6 @@ namespace CMSV2.Models
         public virtual DbSet<TempRateDetail> TempRateDetails { get; set; }
         public virtual DbSet<TempRateMaster> TempRateMasters { get; set; }
         public virtual DbSet<Transit> Transits { get; set; }
-        public virtual DbSet<TransportMode> TransportModes { get; set; }
         public virtual DbSet<CODReceipt> CODReceipts { get; set; }
         public virtual DbSet<CODReceiptDetail> CODReceiptDetails { get; set; }
         public virtual DbSet<AccountHeadControl> AccountHeadControls { get; set; }
@@ -276,9 +274,12 @@ namespace CMSV2.Models
         public virtual DbSet<ShipmentInvoiceDetail> ShipmentInvoiceDetails { get; set; }
         public virtual DbSet<AgentInvoice> AgentInvoices { get; set; }
         public virtual DbSet<AgentInvoiceDetail> AgentInvoiceDetails { get; set; }
-        public virtual DbSet<tblDeliveryAttempt> tblDeliveryAttempts { get; set; }
-        public virtual DbSet<tblPodImage> tblPodImages { get; set; }
         public virtual DbSet<AWBTrackStatu> AWBTrackStatus { get; set; }
+        public virtual DbSet<TransportMode> TransportModes { get; set; }
+        public virtual DbSet<tblPodImage> tblPodImages { get; set; }
+        public virtual DbSet<PODSignature> PODSignatures { get; set; }
+        public virtual DbSet<PkpDelAttemptReason> PkpDelAttemptReasons { get; set; }
+        public virtual DbSet<tblDeliveryAttempt> tblDeliveryAttempts { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

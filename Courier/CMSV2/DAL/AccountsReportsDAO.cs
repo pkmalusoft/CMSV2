@@ -128,9 +128,7 @@ namespace CMSV2.DAL
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
@@ -219,9 +217,7 @@ namespace CMSV2.DAL
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
@@ -288,9 +284,7 @@ namespace CMSV2.DAL
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trading Account";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);            
@@ -993,9 +987,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer          
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1085,9 +1077,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1177,9 +1167,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1268,9 +1256,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1364,9 +1350,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1461,9 +1445,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1570,8 +1552,8 @@ namespace CMSV2.DAL
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
             // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1751,9 +1733,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1858,9 +1838,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1949,9 +1927,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -2969,9 +2945,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -3083,9 +3057,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -3179,9 +3151,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
            // rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);            
@@ -3278,9 +3248,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -3370,9 +3338,7 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -3571,6 +3537,90 @@ namespace CMSV2.DAL
             //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
 
             //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+
+
+        public static string COLoaderInvoiceReport(int id, string output)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_CoLoadInvoicePrint";
+            comd.Parameters.AddWithValue("@AgentInvoiceId", id);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AgentInvoiceReport");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AgentInvoicePrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AgentInvoiceReport.rpt"));
+
+            rd.SetDataSource(ds);
+
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            //   rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("CO Loader Invoice");
+
+           // string totalwords = NumberToWords.ConvertAmount(Convert.ToDouble(ds.Tables[0].Rows[0]["InvoiceTotal"].ToString()), monetaryunit);
+
+            //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            //rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+
+            if (output == "PDF")
+            {
+                string reportname = "AgentInvoiceReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+                string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                //reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+                HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+                rd.Close();
+                rd.Dispose();
+                return reportpath;
+            }
+            else
+            {
+                string reportname1 = "AgentInvoiceReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                string reportpath1 = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname1);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath1);
+                HttpContext.Current.Session["ExcelOutput"] = "~/ReportsPDF/" + reportname1;
+                rd.Close();
+                rd.Dispose();
+                return reportpath1;
+            }
+             
         }
     }
 }

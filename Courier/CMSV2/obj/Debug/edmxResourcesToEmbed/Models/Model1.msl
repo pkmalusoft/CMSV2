@@ -1867,17 +1867,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PODSignatures">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PODSignature">
-        <MappingFragment StoreEntitySet="PODSignature">
-          <ScalarProperty Name="PODSignatureID" ColumnName="PODSignatureID" />
-          <ScalarProperty Name="SignatureImage" ColumnName="SignatureImage" />
-          <ScalarProperty Name="PODID" ColumnName="PODID" />
-          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-          <ScalarProperty Name="statusUpdate" ColumnName="statusUpdate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PrepaidAWBInvoices">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PrepaidAWBInvoice">
         <MappingFragment StoreEntitySet="PrepaidAWBInvoice">
@@ -3004,14 +2993,6 @@
           <ScalarProperty Name="AcCompanyIDOrigin" ColumnName="AcCompanyIDOrigin" />
           <ScalarProperty Name="AcCompanyIDDestination" ColumnName="AcCompanyIDDestination" />
           <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TransportModes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TransportMode">
-        <MappingFragment StoreEntitySet="TransportMode">
-          <ScalarProperty Name="TransportModeID" ColumnName="TransportModeID" />
-          <ScalarProperty Name="Mode" ColumnName="Mode" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9210,26 +9191,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblDeliveryAttempts">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt">
-        <MappingFragment StoreEntitySet="tblDeliveryAttempts">
-          <ScalarProperty Name="date" ColumnName="date" />
-          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-          <ScalarProperty Name="image" ColumnName="image" />
-          <ScalarProperty Name="reason" ColumnName="reason" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblPodImages">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPodImage">
-        <MappingFragment StoreEntitySet="tblPodImages">
-          <ScalarProperty Name="image" ColumnName="image" />
-          <ScalarProperty Name="PODID" ColumnName="PODID" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AWBTrackStatus">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
         <MappingFragment StoreEntitySet="AWBTrackStatus">
@@ -9245,6 +9206,53 @@
           <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
           <ScalarProperty Name="InScanId" ColumnName="InScanId" />
           <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TransportModes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TransportMode">
+        <MappingFragment StoreEntitySet="TransportMode">
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="TransportModeID" ColumnName="TransportModeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPodImages">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPodImage">
+        <MappingFragment StoreEntitySet="tblPodImages">
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PODSignatures">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PODSignature">
+        <MappingFragment StoreEntitySet="PODSignature">
+          <ScalarProperty Name="SignatureImage" ColumnName="SignatureImage" />
+          <ScalarProperty Name="statusUpdate" ColumnName="statusUpdate" />
+          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
+          <ScalarProperty Name="PODSignatureID" ColumnName="PODSignatureID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PkpDelAttemptReasons">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason">
+        <MappingFragment StoreEntitySet="PkpDelAttemptReasons">
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblDeliveryAttempts">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt">
+        <MappingFragment StoreEntitySet="tblDeliveryAttempts">
+          <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

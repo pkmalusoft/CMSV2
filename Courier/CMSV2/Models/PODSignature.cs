@@ -15,9 +15,9 @@ namespace CMSV2.Models
     public partial class PODSignature
     {
         public int PODSignatureID { get; set; }
-        public byte[] SignatureImage { get; set; }
         public Nullable<int> PODID { get; set; }
         public Nullable<int> InscanID { get; set; }
         public Nullable<bool> statusUpdate { get; set; }
+        public string SignatureImage { get; set; }
     }
 }

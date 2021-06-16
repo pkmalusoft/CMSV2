@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "AcOpeningMaster";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     var i = 0;
     var isadd = true;
     var ismodify = true;
@@ -41,8 +42,8 @@
     }
 
     function setNumberDecimal(obj) {
-
-       $(obj).val(parseFloat($(obj).val()).toFixed(3));
+        
+        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
     function orderrownumber() {
         var itemcount = $('#dataTables-example > tbody > tr').length;
@@ -89,10 +90,10 @@
         });
         $('.text-right').blur(function () {
             if (isNaN(parseInt($(this).val()))) {
-                $(this).val('0.000');
+                $(this).val('0.00');
             } else {
                 var amt = parseFloat($(this).val());
-                $(this).val(amt.toFixed(3));
+                $(this).val(amt.toFixed(@_decimal));
             }
         });
         $('.text-right').change(function () {
@@ -145,10 +146,10 @@
 
             $('.text-right').blur(function () {
                 if (isNaN(parseInt($(this).val()))) {
-                    $(this).val('0.000');
+                    $(this).val('0.00');
                 } else {
                     var amt = parseFloat($(this).val());
-                    $(this).val(amt.toFixed(3));
+                    $(this).val(amt.toFixed(@_decimal));
                 }
                 var id = $(this).attr('id').split('_')[0];
                 var id1 = $(this).attr('id').split('_')[1];
@@ -466,15 +467,15 @@
 
                         @if (item.Amount > 0)
                         {
-                            <td><input type="text" class="form-control text-right " value="@item.Amount" id="txtDebit_@i" />  </td>
-                            <td><input type="text" class="form-control text-right" value="0.000" id="txtCredit_@i" />  </td>
+                            <td><input type="text" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetDecimalFormat( @item.Amount,"2")" id="txtDebit_@i" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />  </td>
+                            <td><input type="text" class="form-control text-right" value="0.00" id="txtCredit_@i" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />  </td>
 
                                 }
                                 else
                                 {
                                     var credit = -1 * item.Amount;
-                            <td><input type="text" class="form-control text-right " value="0.000" id="txtDebit_@i" />  </td>
-                            <td><input type="text" class="form-control text-right" value="@credit" id="txtCredit_@i" />  </td>
+                            <td><input type="text" class="form-control text-right " value="0.00" id="txtDebit_@i"  onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)"/>  </td>
+                            <td><input type="text" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetDecimalFormat(credit,"2")" id="txtCredit_@i" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />  </td>
 
                         }
 

@@ -589,8 +589,11 @@
                 data: { Master: JSON.stringify(master), Details: JSON.stringify(obj) },
                 success: function (response) {
                     debugger;
-                    $('#loaderpopup').modal('show');
-                    $.ajax({
+                    $('#loaderpopup').modal('hide');
+                    $.notify("Import Shipment Saved Succesfully!", "success");
+                    $('#btnSave').removeAttr('disabled');
+                    window.location.href = "/ImportManifest/Index";
+                    @*$.ajax({
                         type: 'POST',
                         url: '@Url.Action("CallPostAPI", "InBound")',
                         datatype: "json",
@@ -613,7 +616,7 @@
                                 //console.log(response.Message);
                             }
                         }
-                    });
+                    });*@
                     
 
                 },

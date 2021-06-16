@@ -1460,6 +1460,9 @@
     </Compile>
     <Compile Include="Models\PickupRequestStatusVM.cs" />
     <Compile Include="Models\PickupRequestVM.cs" />
+    <Compile Include="Models\PkpDelAttemptReason.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\POD.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3125,6 +3128,7 @@
     <Content Include="Reports\CODSummary.rpt" />
     <Content Include="Reports\AWBRegister_ParcelType.rpt" />
     <Content Include="Reports\AWBRegister_Payment.rpt" />
+    <Content Include="Reports\AgentInvoiceReport.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>

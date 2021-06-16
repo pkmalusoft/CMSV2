@@ -1922,16 +1922,6 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PickRequestStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="PODSignature">
-    <Key>
-      <PropertyRef Name="PODSignatureID" />
-    </Key>
-    <Property Name="PODSignatureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="SignatureImage" Type="Binary" MaxLength="Max" FixedLength="false" />
-    <Property Name="PODID" Type="Int32" />
-    <Property Name="InscanID" Type="Int32" />
-    <Property Name="statusUpdate" Type="Boolean" />
-  </EntityType>
   <EntityType Name="PrepaidAWBInvoice">
     <Key>
       <PropertyRef Name="PrepaidAWBInvoiceID" />
@@ -3083,14 +3073,6 @@
     <Property Name="AcCompanyIDOrigin" Type="Int32" Nullable="false" />
     <Property Name="AcCompanyIDDestination" Type="Int32" Nullable="false" />
     <Property Name="VehicleID" Type="Int32" Nullable="false" />
-  </EntityType>
-  <EntityType Name="TransportMode">
-    <Key>
-      <PropertyRef Name="TransportModeID" />
-      <PropertyRef Name="Mode" />
-    </Key>
-    <Property Name="TransportModeID" Type="Int32" Nullable="false" />
-    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
   <Association Name="FK_AcBankDetails_AcJournalMaster">
     <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1">
@@ -4520,7 +4502,6 @@
     <EntitySet Name="Periods" EntityType="Self.Period" />
     <EntitySet Name="PeriodTypes" EntityType="Self.PeriodType" />
     <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatu" />
-    <EntitySet Name="PODSignatures" EntityType="Self.PODSignature" />
     <EntitySet Name="PrepaidAWBInvoices" EntityType="Self.PrepaidAWBInvoice" />
     <EntitySet Name="PrepaidAWBInvoiceDetails" EntityType="Self.PrepaidAWBInvoiceDetail" />
     <EntitySet Name="ProductCategoryMasters" EntityType="Self.ProductCategoryMaster" />
@@ -4602,7 +4583,6 @@
     <EntitySet Name="TempRateDetails" EntityType="Self.TempRateDetail" />
     <EntitySet Name="TempRateMasters" EntityType="Self.TempRateMaster" />
     <EntitySet Name="Transits" EntityType="Self.Transit" />
-    <EntitySet Name="TransportModes" EntityType="Self.TransportMode" />
     <AssociationSet Name="FK_AcBankDetails_AcJournalMaster" Association="Self.FK_AcBankDetails_AcJournalMaster">
       <End Role="AcJournalMaster" EntitySet="AcJournalMasters" />
       <End Role="AcBankDetails" EntitySet="AcBankDetails" />
@@ -7680,9 +7660,12 @@
     <EntitySet Name="ShipmentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail" />
     <EntitySet Name="AgentInvoices" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoice" />
     <EntitySet Name="AgentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoiceDetail" />
-    <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
-    <EntitySet Name="tblPodImages" EntityType="DB_9F57C4_couriertest_newModel.tblPodImage" />
     <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
+    <EntitySet Name="TransportModes" EntityType="DB_9F57C4_couriertest_newModel.TransportMode" />
+    <EntitySet Name="tblPodImages" EntityType="DB_9F57C4_couriertest_newModel.tblPodImage" />
+    <EntitySet Name="PODSignatures" EntityType="DB_9F57C4_couriertest_newModel.PODSignature" />
+    <EntitySet Name="PkpDelAttemptReasons" EntityType="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason" />
+    <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12403,7 +12386,7 @@
     <Property Name="Receiver" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="ReceiverContact" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="ReceiverAddress" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="ReceiverTelephone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReceiverTelephone" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="DestinationCountry" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="DestinationCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="BagNo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
@@ -12681,24 +12664,6 @@
     <Property Name="RecPayDetailId" Type="Int32" />
     <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="tblDeliveryAttempt">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="reason" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="DRSID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
-  </EntityType>
-  <EntityType Name="tblPodImage">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PODID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="AWBTrackStatu">
     <Key>
       <PropertyRef Name="AWBTrackStatusId" />
@@ -12715,5 +12680,47 @@
     <Property Name="ShipmentDetailID" Type="Int32" />
     <Property Name="EmpID" Type="Int32" />
     <Property Name="APIStatus" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TransportMode">
+    <Key>
+      <PropertyRef Name="TransportModeID" />
+    </Key>
+    <Property Name="TransportModeID" Type="Int32" Nullable="false" />
+    <Property Name="Mode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblPodImage">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PODID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="PODSignature">
+    <Key>
+      <PropertyRef Name="PODSignatureID" />
+    </Key>
+    <Property Name="PODSignatureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PODID" Type="Int32" />
+    <Property Name="InscanID" Type="Int32" />
+    <Property Name="statusUpdate" Type="Boolean" />
+    <Property Name="SignatureImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="PkpDelAttemptReason">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblDeliveryAttempt">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="ReasonID" Type="Int32" />
   </EntityType>
 </Schema>

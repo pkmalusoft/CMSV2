@@ -22,33 +22,33 @@
 <tbody>
     @foreach (var item in Model.Details)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceDate)
-            </td>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvoiceNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvoiceDate)
+        </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceTotal)
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td style="text-align:right">
+            @CMSV2.Models.CommanFunctions.GetFormatNumber(item.InvoiceTotal, _decimal)
 
-            </td>
-            <td style="font-size:13px" >
-                @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
-                <a  class="aprint" target="_blank" href="InvoicePrint?id=@item.AgentInvoiceID"><i class="fa fa-print"></i></a>
+        </td>
+        <td style="font-size:13px">
+            @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
+            @*<a class="aprint" target="_blank" href="InvoicePrint?id=@item.AgentInvoiceID"><i class="fa fa-print"></i></a>*@
+            <a class="aprint" target="_blank" href="InvoicePrint?id=@item.AgentInvoiceID" title="Invoice Printing"><i class="fa fa-print"></i></a>
+            <a class="aview" href="Details?id=@item.AgentInvoiceID"><i class="fa fa-eye"></i></a><br />
 
-                <a class="aview"  href="Details?id=@item.AgentInvoiceID"><i class="fa fa-eye"></i></a><br />                
-                
-                <a  class="aedit" href="Edit?id=@item.AgentInvoiceID"><i class="fa fa-pencil"></i></a>
-                
-                <a class="adelete"  href="#" onclick="Delete(@item.AgentInvoiceID)"><i class="fa fa-times"></i></a>
+            <a class="aedit" href="Edit?id=@item.AgentInvoiceID"><i class="fa fa-pencil"></i></a>
 
-            </td>
-        </tr>
+            <a class="adelete" href="#" onclick="Delete(@item.AgentInvoiceID)"><i class="fa fa-times"></i></a>
+
+        </td>
+    </tr>
     }
 </tbody>
 <script type="text/javascript">

@@ -1628,7 +1628,7 @@
         }
         else {
             $('#CustomerandShipperSame').prop('checked', 'checked');
-            $('#ChkTaxPercent').prop('checked', 'checked');
+            //$('#ChkTaxPercent').prop('checked', 'checked');
               $('#TransactionDate').val(reqdate);
          $("#CourierCharge").val('0.00');
         $("#PackingCharge").val('0.00');
@@ -2234,14 +2234,17 @@
                             @Html.HiddenFor(model => model.BranchCity)
                             @Html.HiddenFor(model => model.BranchCountry)
                         </div>
+
                         <div class="col-md-3">
-                            <label class="headinglabel">PickUp Sub Location</label>
-                            @Html.TextBoxFor(model => model.PickupSubLocality, new { @class = "form-control", @readonly = "readonly" })
+                            <label class="headinglabel">Forwarding Agent</label>
+                            @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "FAgentID", "FAgentName"), "Select", new { @class = "form-control" })
                         </div>
+
+
                         <div class="col-md-3">
-                            <label class="headinglabel">Delivery Sub Location</label>
-                            @Html.TextBoxFor(model => model.DeliverySubLocality, new { @class = "form-control", @readonly = "readonly" })
-                        </div>
+                            <label class="headinglabel">Forwarding Agent Number</label>
+                            @Html.TextBoxFor(model => model.FAWBNo, new { @class = "form-control" })
+                        </div>                       
                     </div>
                     <div class="row no-margin" style="padding-top: 10px">
                         <div class="col-md-2">
@@ -2261,9 +2264,6 @@
                             <label class="headinglabel required">Movement Type</label>
                             @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
                         </div>
-
-
-
                         <div class="col-md-3">
                             <label class="headinglabel required">Product Type</label>
                             @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
@@ -2273,17 +2273,22 @@
                             @Html.DropDownListFor(model => model.ParcelTypeID, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })
                         </div>
 
-
                     </div>
                     <div class="row no-margin" style="padding-top:10px;">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="headinglabel">Remarks</label>
                             @Html.TextBoxFor(model => model.remarks, new { @class = "form-control txttarget" })
                         </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel">PickUp Sub Location</label>
+                            @Html.TextBoxFor(model => model.PickupSubLocality, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel">Delivery Sub Location</label>
+                            @Html.TextBoxFor(model => model.DeliverySubLocality, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
                     </div>
-
                 </div>
-
 
             </div>
 
@@ -2378,39 +2383,22 @@
             </div>
         </div>
         <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="row no-margin" style="padding-top: 10px" id="divforwardingagent">
-
                     <h3 style="color:white">Forwarding Agent Details</h3><hr />
-
                 </div>
-
                 <div class="row no-margin" style="padding-top: 10px">
-
-                    <div class="col-md-3">
-                        <label class="headinglabel">Forwarding Agent</label>
-                        @Html.DropDownListFor(model => model.FagentID, new SelectList(@ViewBag.FAgent, "FAgentID", "FAgentName"), "Select", new { @class = "form-control" })
-                    </div>
-
-
-                    <div class="col-md-3">
-                        <label class="headinglabel">Forwarding Agent Number</label>
-                        @Html.TextBoxFor(model => model.FAWBNo, new { @class = "form-control" })
-                    </div>
-
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label class="headinglabel">Forwarding Agent Flight</label>
                         @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label class="headinglabel">Forwarding Rate</label>
                         @Html.TextBoxFor(model => model.ForwardingCharge, new { @class = "form-control textright" })
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row no-margin" style="padding-top: 10px">
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                 <h3 style="color:white">Audit Details</h3><hr />
 
@@ -2418,7 +2406,7 @@
 
                     <div class="col-md-6">
                         <label class="headinglabel">Picked up By</label>
-                        @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control",@disabled="disabled" })
+                        @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @disabled = "disabled" })
                     </div>
 
                     <div class="col-md-6">
@@ -2447,6 +2435,9 @@
                 </div>
 
             </div>
+        </div>
+        <div class="row no-margin" style="padding-top: 10px">
+         
 
         </div>
 

@@ -29,9 +29,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
     <script type="text/javascript">
-
-
+       
         $(function () {
             $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
             
@@ -60,30 +64,29 @@
             $("select").css({ "border-radius": "5px" });
 
             $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
-            //$('#FromDate').datepicker("setDate", new Date());
-
-
-            //LoadList();
-
-            //var table = $('#dataTables-example').DataTable({ "sPaginationType": none });
-
-            //var table = $('#dataTables-example').DataTable();
-            var table = $('#dataTables-example').dataTable({
-                "bDestroy": true,
-                //"order": []
-                 "aaSorting": []
-            }).fnDestroy();
-
-
             $('#dataTables-example tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width:100%" />');
+            });
 
+            var table = $('#dataTables-example').DataTable({
+                "aaSorting": []
+                //"dom": '<"top"i>rt<"top"flp><"clear">',
+                //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                //"pagingType": "simple"
+            });
+            table.draw();
+            table.columns().every(function () {
+                var that = this;
 
-                //var table = $('#dataTables-example').DataTable();
-
-
-
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
             });
        
 
@@ -134,8 +137,8 @@
             </div>
 			
             <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
-                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
+                @*<button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>*@
+                <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>
             </div>
         <div class="pull-left" style="padding-top:32px;">
             <p class="indexbtnpadding" style="padding-right:15px">

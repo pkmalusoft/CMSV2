@@ -2102,7 +2102,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="Receiver" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="ReceiverContact" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="ReceiverAddress" Type="varchar" MaxLength="500" Nullable="false" />
-          <Property Name="ReceiverTelephone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReceiverTelephone" Type="varchar" MaxLength="200" />
           <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
           <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
           <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
@@ -2796,6 +2796,13 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PickRequestStatus" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="PkpDelAttemptReasons">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Reason" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="POD">
           <Key>
             <PropertyRef Name="PODID" />
@@ -2818,10 +2825,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
             <PropertyRef Name="PODSignatureID" />
           </Key>
           <Property Name="PODSignatureID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SignatureImage" Type="varbinary(max)" />
           <Property Name="PODID" Type="int" />
           <Property Name="InscanID" Type="int" />
           <Property Name="statusUpdate" Type="bit" />
+          <Property Name="SignatureImage" Type="text" />
         </EntityType>
         <EntityType Name="PrepaidAWB">
           <Key>
@@ -3576,10 +3583,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="reason" Type="text" Nullable="false" />
           <Property Name="image" Type="text" Nullable="false" />
-          <Property Name="DRSID" Type="text" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="DRSID" Type="int" />
+          <Property Name="ReasonID" Type="int" />
         </EntityType>
         <EntityType Name="tblDepot">
           <Key>
@@ -3616,8 +3623,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PODID" Type="text" Nullable="false" />
           <Property Name="image" Type="text" Nullable="false" />
+          <Property Name="PODID" Type="int" />
         </EntityType>
         <EntityType Name="tblPurchaseInvoiceOtherCharges">
           <Key>
@@ -3961,12 +3968,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="AcCompanyIDDestination" Type="int" Nullable="false" />
           <Property Name="VehicleID" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TransportMode">
           <Key>
             <PropertyRef Name="TransportModeID" />
-            <PropertyRef Name="Mode" />
           </Key>
           <Property Name="TransportModeID" Type="int" Nullable="false" />
           <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -6973,6 +6977,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="Period" EntityType="Self.Period" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PeriodType" EntityType="Self.PeriodType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PkpDelAttemptReasons" EntityType="Self.PkpDelAttemptReasons" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="POD" EntityType="Self.POD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PODSignature" EntityType="Self.PODSignature" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrepaidAWB" EntityType="Self.PrepaidAWB" Schema="dbo" store:Type="Tables" />
@@ -7043,6 +7048,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="tblVehicleType" EntityType="Self.tblVehicleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TempCommission" EntityType="Self.TempCommission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tempTable" EntityType="Self.tempTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
@@ -7268,12 +7274,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     [Transit].[AcCompanyIDDestination] AS [AcCompanyIDDestination], 
     [Transit].[VehicleID] AS [VehicleID]
     FROM [dbo].[Transit] AS [Transit]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="TransportMode" EntityType="Self.TransportMode" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [TransportMode].[TransportModeID] AS [TransportModeID], 
-    [TransportMode].[Mode] AS [Mode]
-    FROM [dbo].[TransportMode] AS [TransportMode]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK__CODReceip__Recei__3F1C4B12" Association="Self.FK__CODReceip__Recei__3F1C4B12">
             <End Role="CODReceipt" EntitySet="CODReceipt" />
@@ -9254,16 +9254,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PickRequestStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="PODSignature">
-          <Key>
-            <PropertyRef Name="PODSignatureID" />
-          </Key>
-          <Property Name="PODSignatureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SignatureImage" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="PODID" Type="Int32" />
-          <Property Name="InscanID" Type="Int32" />
-          <Property Name="statusUpdate" Type="Boolean" />
-        </EntityType>
         <EntityType Name="PrepaidAWBInvoice">
           <Key>
             <PropertyRef Name="PrepaidAWBInvoiceID" />
@@ -10415,14 +10405,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="AcCompanyIDOrigin" Type="Int32" Nullable="false" />
           <Property Name="AcCompanyIDDestination" Type="Int32" Nullable="false" />
           <Property Name="VehicleID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TransportMode">
-          <Key>
-            <PropertyRef Name="TransportModeID" />
-            <PropertyRef Name="Mode" />
-          </Key>
-          <Property Name="TransportModeID" Type="Int32" Nullable="false" />
-          <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <Association Name="FK_AcBankDetails_AcJournalMaster">
           <End Role="AcJournalMaster" Type="Self.AcJournalMaster" Multiplicity="0..1">
@@ -11852,7 +11834,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="Periods" EntityType="Self.Period" />
           <EntitySet Name="PeriodTypes" EntityType="Self.PeriodType" />
           <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatu" />
-          <EntitySet Name="PODSignatures" EntityType="Self.PODSignature" />
           <EntitySet Name="PrepaidAWBInvoices" EntityType="Self.PrepaidAWBInvoice" />
           <EntitySet Name="PrepaidAWBInvoiceDetails" EntityType="Self.PrepaidAWBInvoiceDetail" />
           <EntitySet Name="ProductCategoryMasters" EntityType="Self.ProductCategoryMaster" />
@@ -11934,7 +11915,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="TempRateDetails" EntityType="Self.TempRateDetail" />
           <EntitySet Name="TempRateMasters" EntityType="Self.TempRateMaster" />
           <EntitySet Name="Transits" EntityType="Self.Transit" />
-          <EntitySet Name="TransportModes" EntityType="Self.TransportMode" />
           <AssociationSet Name="FK_AcBankDetails_AcJournalMaster" Association="Self.FK_AcBankDetails_AcJournalMaster">
             <End Role="AcJournalMaster" EntitySet="AcJournalMasters" />
             <End Role="AcBankDetails" EntitySet="AcBankDetails" />
@@ -15012,9 +14992,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <EntitySet Name="ShipmentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.ShipmentInvoiceDetail" />
           <EntitySet Name="AgentInvoices" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoice" />
           <EntitySet Name="AgentInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AgentInvoiceDetail" />
-          <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
-          <EntitySet Name="tblPodImages" EntityType="DB_9F57C4_couriertest_newModel.tblPodImage" />
           <EntitySet Name="AWBTrackStatus" EntityType="DB_9F57C4_couriertest_newModel.AWBTrackStatu" />
+          <EntitySet Name="TransportModes" EntityType="DB_9F57C4_couriertest_newModel.TransportMode" />
+          <EntitySet Name="tblPodImages" EntityType="DB_9F57C4_couriertest_newModel.tblPodImage" />
+          <EntitySet Name="PODSignatures" EntityType="DB_9F57C4_couriertest_newModel.PODSignature" />
+          <EntitySet Name="PkpDelAttemptReasons" EntityType="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason" />
+          <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -19735,7 +19718,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="Receiver" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="ReceiverContact" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="ReceiverAddress" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="ReceiverTelephone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverTelephone" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="DestinationCountry" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="DestinationCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="BagNo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
@@ -20013,24 +19996,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="RecPayDetailId" Type="Int32" />
           <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
-        <EntityType Name="tblDeliveryAttempt">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="reason" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="DRSID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
-        </EntityType>
-        <EntityType Name="tblPodImage">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PODID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="AWBTrackStatu">
           <Key>
             <PropertyRef Name="AWBTrackStatusId" />
@@ -20047,6 +20012,48 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
           <Property Name="ShipmentDetailID" Type="Int32" />
           <Property Name="EmpID" Type="Int32" />
           <Property Name="APIStatus" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransportMode">
+          <Key>
+            <PropertyRef Name="TransportModeID" />
+          </Key>
+          <Property Name="TransportModeID" Type="Int32" Nullable="false" />
+          <Property Name="Mode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblPodImage">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PODID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PODSignature">
+          <Key>
+            <PropertyRef Name="PODSignatureID" />
+          </Key>
+          <Property Name="PODSignatureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PODID" Type="Int32" />
+          <Property Name="InscanID" Type="Int32" />
+          <Property Name="statusUpdate" Type="Boolean" />
+          <Property Name="SignatureImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PkpDelAttemptReason">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblDeliveryAttempt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DRSID" Type="Int32" />
+          <Property Name="ReasonID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -21920,17 +21927,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PODSignatures">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PODSignature">
-              <MappingFragment StoreEntitySet="PODSignature">
-                <ScalarProperty Name="PODSignatureID" ColumnName="PODSignatureID" />
-                <ScalarProperty Name="SignatureImage" ColumnName="SignatureImage" />
-                <ScalarProperty Name="PODID" ColumnName="PODID" />
-                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-                <ScalarProperty Name="statusUpdate" ColumnName="statusUpdate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PrepaidAWBInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PrepaidAWBInvoice">
               <MappingFragment StoreEntitySet="PrepaidAWBInvoice">
@@ -23057,14 +23053,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
                 <ScalarProperty Name="AcCompanyIDOrigin" ColumnName="AcCompanyIDOrigin" />
                 <ScalarProperty Name="AcCompanyIDDestination" ColumnName="AcCompanyIDDestination" />
                 <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TransportModes">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TransportMode">
-              <MappingFragment StoreEntitySet="TransportMode">
-                <ScalarProperty Name="TransportModeID" ColumnName="TransportModeID" />
-                <ScalarProperty Name="Mode" ColumnName="Mode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29263,26 +29251,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblDeliveryAttempts">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt">
-              <MappingFragment StoreEntitySet="tblDeliveryAttempts">
-                <ScalarProperty Name="date" ColumnName="date" />
-                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-                <ScalarProperty Name="image" ColumnName="image" />
-                <ScalarProperty Name="reason" ColumnName="reason" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPodImages">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPodImage">
-              <MappingFragment StoreEntitySet="tblPodImages">
-                <ScalarProperty Name="image" ColumnName="image" />
-                <ScalarProperty Name="PODID" ColumnName="PODID" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AWBTrackStatus">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
               <MappingFragment StoreEntitySet="AWBTrackStatus">
@@ -29298,6 +29266,53 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
                 <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
                 <ScalarProperty Name="InScanId" ColumnName="InScanId" />
                 <ScalarProperty Name="AWBTrackStatusId" ColumnName="AWBTrackStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransportModes">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TransportMode">
+              <MappingFragment StoreEntitySet="TransportMode">
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="TransportModeID" ColumnName="TransportModeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPodImages">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPodImage">
+              <MappingFragment StoreEntitySet="tblPodImages">
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PODSignatures">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PODSignature">
+              <MappingFragment StoreEntitySet="PODSignature">
+                <ScalarProperty Name="SignatureImage" ColumnName="SignatureImage" />
+                <ScalarProperty Name="statusUpdate" ColumnName="statusUpdate" />
+                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
+                <ScalarProperty Name="PODSignatureID" ColumnName="PODSignatureID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PkpDelAttemptReasons">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason">
+              <MappingFragment StoreEntitySet="PkpDelAttemptReasons">
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDeliveryAttempts">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt">
+              <MappingFragment StoreEntitySet="tblDeliveryAttempts">
+                <ScalarProperty Name="ReasonID" ColumnName="ReasonID" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

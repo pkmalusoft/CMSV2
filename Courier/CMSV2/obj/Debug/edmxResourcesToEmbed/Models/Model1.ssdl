@@ -2068,7 +2068,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Receiver" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="ReceiverContact" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="ReceiverAddress" Type="varchar" MaxLength="500" Nullable="false" />
-    <Property Name="ReceiverTelephone" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ReceiverTelephone" Type="varchar" MaxLength="200" />
     <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
     <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
     <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
@@ -2762,6 +2762,13 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PickRequestStatus" Type="varchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="PkpDelAttemptReasons">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Reason" Type="varchar" MaxLength="200" />
+  </EntityType>
   <EntityType Name="POD">
     <Key>
       <PropertyRef Name="PODID" />
@@ -2784,10 +2791,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
       <PropertyRef Name="PODSignatureID" />
     </Key>
     <Property Name="PODSignatureID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SignatureImage" Type="varbinary(max)" />
     <Property Name="PODID" Type="int" />
     <Property Name="InscanID" Type="int" />
     <Property Name="statusUpdate" Type="bit" />
+    <Property Name="SignatureImage" Type="text" />
   </EntityType>
   <EntityType Name="PrepaidAWB">
     <Key>
@@ -3542,10 +3549,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="reason" Type="text" Nullable="false" />
     <Property Name="image" Type="text" Nullable="false" />
-    <Property Name="DRSID" Type="text" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="DRSID" Type="int" />
+    <Property Name="ReasonID" Type="int" />
   </EntityType>
   <EntityType Name="tblDepot">
     <Key>
@@ -3582,8 +3589,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PODID" Type="text" Nullable="false" />
     <Property Name="image" Type="text" Nullable="false" />
+    <Property Name="PODID" Type="int" />
   </EntityType>
   <EntityType Name="tblPurchaseInvoiceOtherCharges">
     <Key>
@@ -3927,12 +3934,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
     <Property Name="AcCompanyIDDestination" Type="int" Nullable="false" />
     <Property Name="VehicleID" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="TransportMode">
     <Key>
       <PropertyRef Name="TransportModeID" />
-      <PropertyRef Name="Mode" />
     </Key>
     <Property Name="TransportModeID" Type="int" Nullable="false" />
     <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -6939,6 +6943,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="Period" EntityType="Self.Period" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PeriodType" EntityType="Self.PeriodType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PkpDelAttemptReasons" EntityType="Self.PkpDelAttemptReasons" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="POD" EntityType="Self.POD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PODSignature" EntityType="Self.PODSignature" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWB" EntityType="Self.PrepaidAWB" Schema="dbo" store:Type="Tables" />
@@ -7009,6 +7014,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     <EntitySet Name="tblVehicleType" EntityType="Self.tblVehicleType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TempCommission" EntityType="Self.TempCommission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tempTable" EntityType="Self.tempTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
@@ -7234,12 +7240,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.TransportMode' does not have a 
     [Transit].[AcCompanyIDDestination] AS [AcCompanyIDDestination], 
     [Transit].[VehicleID] AS [VehicleID]
     FROM [dbo].[Transit] AS [Transit]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="TransportMode" EntityType="Self.TransportMode" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [TransportMode].[TransportModeID] AS [TransportModeID], 
-    [TransportMode].[Mode] AS [Mode]
-    FROM [dbo].[TransportMode] AS [TransportMode]</DefiningQuery>
     </EntitySet>
     <AssociationSet Name="FK__CODReceip__Recei__3F1C4B12" Association="Self.FK__CODReceip__Recei__3F1C4B12">
       <End Role="CODReceipt" EntitySet="CODReceipt" />

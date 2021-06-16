@@ -23,6 +23,8 @@ namespace CMSV2.Models
         public QuickAWBVM AWB { get; set; }
         public POD PODStatus { get; set; }        
         public tblPodImage PODImage { get; set; }
+        public PODSignature PODSignature { get; set; }
+        public Image SignatureImage { get; set; }
         public List<AWBTrackStatusVM> Details { get; set; }
     }
 

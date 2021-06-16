@@ -533,18 +533,15 @@ namespace CMSV2.Controllers
         }
         public ActionResult Details(int id)        
         {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ViewBag.Customer = db.CustomerMasters.ToList();
             ViewBag.Movement = db.CourierMovements.ToList();
-            var _invoice = db.CustomerInvoices.Find(id);
-            CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
-            _custinvoice.CustomerInvoiceID = _invoice.CustomerInvoiceID;
+            var _invoice = db.AgentInvoices.Find(id);
+            AgentInvoiceVM _custinvoice = new AgentInvoiceVM();
+            _custinvoice.AgentInvoiceID = _invoice.AgentInvoiceID;
             _custinvoice.InvoiceDate = _invoice.InvoiceDate;
-            _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
+            _custinvoice.InvoiceNo = _invoice.InvoiceNo;
             _custinvoice.CustomerID = _invoice.CustomerID;
-            _custinvoice.CustomerName = db.CustomerMasters.Find(_invoice.CustomerID).CustomerName;
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
+            _custinvoice.InvoiceTax = _invoice.InvoiceTax;
             _custinvoice.FuelPer = _invoice.FuelPer;
             _custinvoice.FuelAmt = _invoice.FuelAmt;
             _custinvoice.AdminPer = _invoice.AdminPer;
@@ -552,20 +549,15 @@ namespace CMSV2.Controllers
             _custinvoice.OtherCharge = _invoice.OtherCharge;
             _custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
-            
-            string monetaryunit = Session["MonetaryUnit"].ToString();
-            _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
 
-            var comp = db.AcCompanies.Find(companyid);
-            _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
-            List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
+            List<AgentInvoiceDetailVM> _details = new List<AgentInvoiceDetailVM>();
+            _details = (from c in db.AgentInvoiceDetails
                         join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM
+                        where c.AgentInvoiceID == id
+                        select new AgentInvoiceDetailVM
                         {
-                            CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-                            CustomerInvoiceID = c.CustomerInvoiceID,
+                            AgentInvoiceDetailID = c.AgentInvoiceDetailID,
+                            AgentInvoiceID = c.AgentInvoiceID,
                             AWBNo = c.AWBNo,
                             AWBDateTime = ins.TransactionDate,
                             CustomCharge = c.CustomCharge,
@@ -573,116 +565,71 @@ namespace CMSV2.Controllers
                             OtherCharge = c.OtherCharge,
                             ConsigneeCountryName = ins.ConsigneeCountryName,
                             ConsigneeName = ins.Consignee,
-                            //StatusPaymentMode = c.StatusPaymentMode,
+                            StatusPaymentMode = c.StatusPaymentMode,
                             InscanID = c.InscanID,
                             AWBChecked = true
                         }).ToList();
 
             int _index = 0;
+
             foreach (var item in _details)
             {
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                _custinvoice.TotalCharges += _details[_index].TotalCharges;
+                _details[_index].NetValue = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _custinvoice.InvoiceTotal += _details[_index].NetValue;
                 _index++;
             }
 
-            _custinvoice.CustomerInvoiceDetailsVM = _details;
+            _custinvoice.Details = _details;
 
             Session["InvoiceListing"] = _details;
-            return View(_custinvoice);
+            return View(_custinvoice);            
 
         }
 
-        public ActionResult InvoicePrint(int id)
+        public ActionResult InvoicePrint(int id,string output="PDF")
         {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            NumberToWords _numtoword = new NumberToWords();
-
-            ViewBag.Customer = db.CustomerMasters.ToList();
-            ViewBag.Movement = db.CourierMovements.ToList();
-            var _invoice = db.CustomerInvoices.Find(id);
-            CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
-            _custinvoice.CustomerInvoiceID = _invoice.CustomerInvoiceID;
-            _custinvoice.InvoiceDate = _invoice.InvoiceDate;
-            _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
-            _custinvoice.CustomerID = _invoice.CustomerID;
-            var _cust = db.CustomerMasters.Find(_invoice.CustomerID);
-            _custinvoice.CustomerName = _cust.CustomerName;
-            _custinvoice.CustomerCountryName = _cust.CountryName;
-            _custinvoice.CustomerCityName = _cust.CityName;
-            _custinvoice.CustomerPhoneNo = _cust.Phone;
-
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            _custinvoice.FuelPer = _invoice.FuelPer;
-            _custinvoice.FuelAmt = _invoice.FuelAmt;
-            _custinvoice.AdminPer = _invoice.AdminPer;
-            _custinvoice.AdminAmt = _invoice.AdminAmt;
-            _custinvoice.OtherCharge = _invoice.OtherCharge;
-            _custinvoice.ChargeableWT = _invoice.ChargeableWT;
-            _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
-            //_custinvoice.invoiceFooter = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" select c.Text1).FirstOrDefault();
-            _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "InvoiceFooter" && c.BranchId==branchid select c).FirstOrDefault();
-            var comp = db.AcCompanies.Find(companyid);
-
-            _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
-            if (comp.LogoFileName=="" || comp.LogoFileName==null)
+            ViewBag.ReportName = "CO Loader Invoice Printing";              
+            ViewBag.ReportId=id;
+            string filepath=AccountsReportsDAO.COLoaderInvoiceReport(id,output);
+            
+            if (output != "PDF")
             {
-                ViewBag.LogoPath = "/UploadFiles/" + "defaultlogo.png";
+                return RedirectToAction("DownloadFile", "COLoader", new { filePath = filepath });
             }
             else
             {
-                ViewBag.LogoPath = "/UploadFiles/" + comp.LogoFileName;
-            }
-            string monetaryunit= Session["MonetaryUnit"].ToString();
-            _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
+                return View();
+            }            
+        }
+        //[HttpPost]
+        //public ActionResult InvoicePrint([Bind(Include = "ReportId")] int ReportId)
+        //{
+        //   //string reportpath=AccountsReportsDAO.COLoaderInvoiceReport(id, "EXCEL");
 
-            List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
-                        join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM
-                        {
-                            CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-                            CustomerInvoiceID = c.CustomerInvoiceID,
-                            Origin =ins.ConsignorCountryName,
-                            AWBNo = c.AWBNo,
-                            AWBDateTime = ins.TransactionDate,
-                            Weight =ins.Weight,
-                            Pieces =ins.Pieces,                            
-                            CustomCharge = c.CustomCharge,
-                            CourierCharge = c.CourierCharge,
-                            OtherCharge = c.OtherCharge,
-                            ConsigneeCountryName = ins.ConsigneeCountryName,
-                            ConsigneeName = ins.Consignee,
-                            //StatusPaymentMode = c.StatusPaymentMode,
-                            MovementId=ins.MovementID,
-                            ParcelTypeId=ins.ParcelTypeId,
-                            InscanID = c.InscanID,
-                            AWBChecked = true
-                        }).ToList();
+        //    return RedirectToAction("InvoicePrint", "COLoader",new { id = ReportId, output = "EXCEL" });
+        //    //return Json(new { data = reportpath }, JsonRequestBehavior.AllowGet);
 
-            int _index = 0;
-            foreach (var item in _details)
-            {
-                if (_index == 0)
-                {
-                    _custinvoice.CourierMovement = db.CourierMovements.Find(item.MovementId).MovementType;
-                    _custinvoice.ParcelType = db.ParcelTypes.Find(item.ParcelTypeId).ParcelType1;
-                }
+        //}
 
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                _custinvoice.TotalCharges += _details[_index].TotalCharges;
-                _index++;
-            }
+        public FileResult DownloadFile(int id)
+        {
+            string filepath = AccountsReportsDAO.COLoaderInvoiceReport(id, "EXCEL");
+            string filename = "AgentInvoiceReport_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx"; // Server.MapPath("~" + filePath);
 
-            _custinvoice.CustomerInvoiceDetailsVM = _details;
-
-            Session["InvoiceListing"] = _details;
-            return View(_custinvoice);
-
+            byte[] fileBytes = GetFile(filepath);
+            return File(
+                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filename);
         }
 
+        byte[] GetFile(string s)
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
+        }
         [HttpGet]
         public JsonResult GetCustomerName(string term)
         {

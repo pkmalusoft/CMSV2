@@ -15,7 +15,7 @@ namespace CMSV2.Models
     public partial class tblPodImage
     {
         public int id { get; set; }
-        public string PODID { get; set; }
         public string image { get; set; }
+        public Nullable<int> PODID { get; set; }
     }
 }

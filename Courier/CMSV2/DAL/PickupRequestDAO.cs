@@ -1263,6 +1263,37 @@ namespace CMSV2.DAL
             return objList;
         }
         #endregion
+
+        #region "VehcileList"
+        public static List<VehiclesVM> GetVehiclesVM()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_VehicleList";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<VehiclesVM> objList = new List<VehiclesVM>();
+            VehiclesVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new VehiclesVM();
+                    obj.VehicleID = Convert.ToInt32(ds.Tables[0].Rows[i]["VehicleID"].ToString());
+                    obj.VehicleDescription = ds.Tables[0].Rows[i]["VehicleDescription"].ToString();
+                    obj.VehicleNO =ds.Tables[0].Rows[i]["VehicleNo"].ToString();
+                    obj.RegistrationNo = ds.Tables[0].Rows[i]["RegistrationNo"].ToString();
+                    obj.Model = ds.Tables[0].Rows[i]["Model"].ToString();                    
+                    obj.EmployeeName = ds.Tables[0].Rows[i]["EmployeeName"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
     }
 
 }

@@ -65,23 +65,26 @@
     <div class="table-responsive tblbackground" style="padding:15px">
 <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
     <thead>
-    <tr>
-        <th>
-           @Html.Label("Vehicle No")
-        </th>
-        <th>
-          @Html.Label("Registration No")
-        </th>
-       
-        <th>
-          @Html.Label("Model")
-        </th>
-        <th>
-          @Html.Label("Vehicle Description")
-        </th>
-        <th>Action</th>
-       
-    </tr>
+        <tr>
+            <th>
+                @Html.Label("Vehicle No")
+            </th>
+            <th>
+                @Html.Label("Registration No")
+            </th>
+
+            <th>
+                @Html.Label("Model")
+            </th>
+            <th>
+                @Html.Label("Vehicle Description")
+            </th>
+            <th>
+                @Html.Label("Employee Name")
+            </th>
+            <th>Action</th>
+
+        </tr>
         </thead>
 
     <tfoot>
@@ -98,6 +101,9 @@
         </th>
         <th>
           @Html.Label("Vehicle Description")
+        </th>
+        <th>
+            @Html.Label("Employee Name")
         </th>
         <th style="display:none"></th>
        
@@ -118,8 +124,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.VehicleDescription)
         </td>
-        
-        
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeName)
+        </td>        
        
         <td>
          @*   @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@

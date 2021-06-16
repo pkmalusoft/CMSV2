@@ -7,6 +7,8 @@ using CMSV2.Models;
 using System.Data;
 using CMSV2.DAL;
 using System.Data.Entity;
+using System.Drawing;
+using System.IO;
 
 namespace CMSV2.Controllers
 {
@@ -184,7 +186,7 @@ namespace CMSV2.Controllers
                 v.InScanID = 0;
                     v.TaxPercent = 5;
                     
-                    v.PaymentModeId = 1;
+                    v.PaymentModeId = 3;
                 v.CustomerID = v.CASHCustomerId;
                 v.customer = v.CASHCustomerName;
                 v.FagentID = v.DefaultFAgentID;
@@ -1777,7 +1779,17 @@ namespace CMSV2.Controllers
             public string CourierStatusText { get; set; }
             
         }
+        //public static Image ConvertToImage(Binary iBinary)
+        //{
+        //    var arrayBinary = iBinary.ToArray();
+        //    Image rImage = null;
 
+        //    using (MemoryStream ms = new MemoryStream(arrayBinary))
+        //    {
+        //        rImage = Image.FromStream(ms);
+        //    }
+        //    return rImage;
+        //}
         public ActionResult AWBTimeline()
         {
             AWBTracking obj = (AWBTracking)Session["AWBTracking"];
@@ -1868,17 +1880,27 @@ namespace CMSV2.Controllers
                                          where c.InScanId == model.AWB.InScanID
                                          orderby c.EntryDate
                                          select new AWBTrackStatusVM { InScanId = c.InScanId, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName }).ToList();
-
+                        int i = 0;
+                        if (model.Details != null)
+                        {
+                            foreach (var item in model.Details)
+                            {
+                                model.Details[i].EntryDate = Convert.ToDateTime(model.Details[i].EntryDate).AddHours(4);
+                                i++;
+                            }
+                        }
                         model.PODStatus = db.PODs.Where(cc => cc.InScanID == model.AWB.InScanID).FirstOrDefault();
                         if (model.PODStatus != null)
                         {
-                            string podid = model.PODStatus.PODID.ToString();
-
+                            int podid = model.PODStatus.PODID;
+                            model.PODStatus.ReceivedTime = CommanFunctions.GetBranchDateTime(Convert.ToDateTime(model.PODStatus.ReceivedTime));
                             model.PODImage = db.tblPodImages.Where(cc => cc.PODID == podid).FirstOrDefault();
                         }
                         else
                         {
                             model.PODImage = new tblPodImage();
+                            model.PODStatus = new POD();
+                            model.PODSignature = new PODSignature();
                         }
                     }
                     else
@@ -1892,6 +1914,16 @@ namespace CMSV2.Controllers
                                              where c.ShipmentDetailID == model.AWB.InScanID
                                              orderby c.EntryDate
                                              select new AWBTrackStatusVM { ShipmentDetailID = c.ShipmentDetailID, EntryDate = c.EntryDate, CourierStatus = c.CourierStatus, ShipmentStatus = c.ShipmentStatus, UserName = c1.EmployeeName ,CourierStatusId=c.CourierStatusId }).ToList();
+
+                            int i = 0;
+                            if (model.Details != null)
+                            {
+                                foreach (var item in model.Details)
+                                {
+                                    model.Details[i].EntryDate = CommanFunctions.GetBranchDateTime(Convert.ToDateTime(model.Details[i].EntryDate)); 
+                                    i++;
+                                }
+                            }
                             //model.Details = details;
                             model.AWB.paymentmode = "COD";
                             model.AWB.CODStatus = "Not Applicable";
@@ -1899,8 +1931,10 @@ namespace CMSV2.Controllers
                             model.PODStatus = db.PODs.Where(cc => cc.ShipmentDetailId == model.AWB.InScanID).FirstOrDefault();
                             if (model.PODStatus != null)
                             {
-                                string podid = model.PODStatus.PODID.ToString();
-                                var podimage= db.tblPodImages.Where(cc => cc.PODID.Contains(podid)).FirstOrDefault();
+                                int podid = model.PODStatus.PODID;
+
+                                model.PODStatus.ReceivedTime = CommanFunctions.GetBranchDateTime(Convert.ToDateTime(model.PODStatus.ReceivedTime));
+                                var podimage= db.tblPodImages.Where(cc => cc.PODID==podid).FirstOrDefault();
                                 if (podimage==null)
                                 {
                                     model.PODImage = new tblPodImage();
@@ -1909,9 +1943,24 @@ namespace CMSV2.Controllers
                                 {
                                     model.PODImage = podimage;
                                 }
+                                int? podid1 =Convert.ToInt32(podid);
+                                var podignature = db.PODSignatures.Where(cc => cc.PODID== podid1).FirstOrDefault();
+                                if (podignature == null)
+                                {
+                                    model.PODSignature= new PODSignature();
+                                }
+                                else
+                                {
+                                    model.PODSignature = podignature;
+                                    //Image dd = ConvertToImage(model.PODSignature.SignatureImage);
+                                    //string ss = Convert.ToBase64String(model.PODSignature.SignatureImage);
+                                }
+
                             }
                             else
                             {
+                                model.PODStatus = new POD();
+                                model.PODSignature = new PODSignature();
                                 model.PODImage = new tblPodImage();
                             }
                         }

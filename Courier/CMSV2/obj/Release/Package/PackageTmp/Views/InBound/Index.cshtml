@@ -185,27 +185,28 @@
             //$('#FromDate').datepicker("setDate", new Date());
 
 
-            //LoadList();
-
-            //var table = $('#dataTables-example').DataTable({ "sPaginationType": none });
-
-            //var table = $('#dataTables-example').DataTable();
-            var table = $('#dataTables-example').dataTable({
-                "bDestroy": true,
-                //"order": []
-                 "aaSorting": []
-            }).fnDestroy();
-
-
             $('#dataTables-example tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width:100%" />');
+            });
+            var table = $('#dataTables-example').DataTable({
+                "aaSorting": []
+                //"dom": '<"top"i>rt<"top"flp><"clear">',
+                //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                //"pagingType": "simple"
+            });
+            table.draw();
+            table.columns().every(function () {
+                var that = this;
 
-
-                //var table = $('#dataTables-example').DataTable();
-
-
-
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
             });
             $("#ChangeStatusId").change(function () {
                 debugger;
