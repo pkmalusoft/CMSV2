@@ -9,7 +9,7 @@
 
 
         //var table1 = $('#DetailsTable').DataTable({ "sPaginationType": "simple" });
-        var table1 = $('#DetailsTable').DataTable({ "paging":false, "sPaginationType": "simple" });
+        //var table1 = $('#DetailsTable').DataTable({ "paging":false, "sPaginationType": "simple" });
 
         //table1.columns().every(function () {
         //    var that = this;
@@ -155,15 +155,15 @@
                     <td> @item.ConsignorCountryName</td>*@
                     <td>@item.Consignee </td>
                     <td>@item.ConsigneeCountryName </td>
-                    <td>@item.Weight</td>
+                    <td>   @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Weight, "3")</td>
                     <td>
                         @item.Pieces
                     </td>
-                    <td>
-                        @item.CourierCharge
+                    <td class="text-right">
+                      @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.CourierCharge,"2")
                     </td>
-                    <td>
-                        @item.OtherCharge
+                    <td class="text-right">
+                        @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.OtherCharge, "2")
                     </td>                    
                     <td>@item.ReceivedBy</td>
                     <td>

@@ -20,7 +20,5 @@ namespace CMSV2.Models
         public decimal AdditionalWeightTo { get; set; }
         public decimal IncrementalWeight { get; set; }
         public decimal AdditionalRate { get; set; }
-    
-        public virtual CustomerRate CustomerRate { get; set; }
     }
 }

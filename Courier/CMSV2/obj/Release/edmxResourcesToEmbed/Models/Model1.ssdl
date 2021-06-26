@@ -1242,8 +1242,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerID" Type="int" />
     <Property Name="CustomerRateTypeID" Type="int" />
   </EntityType>
   <EntityType Name="CustomerNotification">
@@ -1295,7 +1295,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Key>
       <PropertyRef Name="CustomerRateDetID" />
     </Key>
-    <Property Name="CustomerRateDetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerRateDetID" Type="int" Nullable="false" />
     <Property Name="CustomerRateID" Type="int" Nullable="false" />
     <Property Name="AdditionalWeightFrom" Type="money" Nullable="false" />
     <Property Name="AdditionalWeightTo" Type="money" Nullable="false" />

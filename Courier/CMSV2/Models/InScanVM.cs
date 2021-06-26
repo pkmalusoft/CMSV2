@@ -75,6 +75,10 @@ public class AWBList
         public string Origin { get; set; }
         public string Destination { get; set; }
         public bool AWBChecked { get; set; }
+        public int ShipmentDetailId { get; set; }
+
+        public int? CourierStatusId { get; set; }
+        public int? DRSID { get; set; }
     }
 
     public class InScanSearch 

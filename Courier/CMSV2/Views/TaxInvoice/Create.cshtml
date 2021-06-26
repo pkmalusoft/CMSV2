@@ -128,7 +128,7 @@
                  url: "/TaxInvoice/GetMAWBDetail",
                 datatype: "Json",
                  data: {
-                     ShipmentImportID: $("#ShipmentImportID").val(), MAWB: $('#MAWB').val(), checkall: checkall },
+                     ShipmentImportID: $("#ShipmentImportID").val(), MAWB: $('#MAWB').val(), checkall: false },
                  success: function (response) {
                      if (response.status == "ok") {
                          $.ajax({
@@ -268,7 +268,7 @@
                     @Html.HiddenFor(model => model.ShipmentInvoiceID, new { })
                     @Html.HiddenFor(model => model.ShipmentImportID, new { })
                     <label class="headinglabel required">Invoice No.</label>
-                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @required = "true" })
+                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @readonly = "true", @required = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceNo)
                 </div>
                 <div class="col-md-2">
@@ -283,13 +283,14 @@
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @required = "true" })
                 </div>
                 <div class="col-md-2">
-                    <div class="flexTitle">
-                        <label class="headinglabel required">MAWB</label>
+                    <label class="headinglabel required">MAWB</label>
+                    @*<div class="flexTitle">
+
                         <div class="checkboxdesign no-padding  text-right" style="float:right">
                             @Html.CheckBox("CheckAll", new { @name = "CheckAll", @checked = "checked" }) &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Select All</label>
                         </div>
-                    </div>                    
+                    </div>*@
                     @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
                 </div>
                 <div class="col-md-1" style="padding-top:30px">

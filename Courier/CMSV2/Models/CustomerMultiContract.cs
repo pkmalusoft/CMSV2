@@ -14,8 +14,8 @@ namespace CMSV2.Models
     
     public partial class CustomerMultiContract
     {
-        public long ID { get; set; }
-        public int CustomerID { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> CustomerID { get; set; }
         public Nullable<int> CustomerRateTypeID { get; set; }
     }
 }

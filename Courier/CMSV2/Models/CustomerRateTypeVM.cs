@@ -20,4 +20,22 @@ namespace CMSV2.Models
 
     public decimal CourierCharge { get; set; }
   }
+
+
+    public class CustomerRateVM
+    {
+        public int CourierServiceID { get; set; }
+
+        public int MovementID { get; set; }
+
+        public int FAgentID { get; set; }
+
+        public int CustomerRateID { get; set; }
+
+        public string CustomerRateType { get; set; }
+
+        public string CountryName { get; set; }
+
+        public string CityName { get; set; }
+    }
 }

@@ -126,6 +126,22 @@
 <script type="text/javascript">
     var objitems = [];
 
+    function CheckProcess() {
+        $.ajax({
+            type: "Post",
+            url: "/Transhipment/GetProcessedStatus",
+            datatype: "Json",
+            //async :true,
+            //data: { ManifestDate: $('#ManifestDate').val(), MAWB: $('#MAWB').val() },
+            success: function (response) {
+                debugger;
+                var TotalRow = response.TotalRow;
+                var ProcessedCount = response.ProcessedCount;
+                var ProcessingRow = response.ProcessingRow;
+                $('#divProcessStatus').html('<h4>TotalRow:' + TotalRow + '  ProcessedCount :' + ProcessedCount + ' Processing Row:'+ ProcessingRow + '</h4>');
+            }
+        });
+    }
 
     function UpdateImported() {
         $.ajax({
@@ -145,6 +161,7 @@
     function CallAutoFixation() {
         //AutoDataFixation
         $('#loaderpopup').modal('show')
+        $('#divProcessStatus').html('<h2 style="color:red">Data Auto Fixation</h2>');
           $.ajax({
                 type: 'POST',
                 url: '@Url.Action("AutoDataFixation", "Transhipment")',
@@ -159,27 +176,31 @@
                             $("#listContainer").html(data);
                             var max = $('#listbody > tr').length;
                             $('#loaderpopup').modal('hide')
+                            $('#divProcessStatus').html('');
                             $('#btnUpload').removeAttr('disabled');
                             $('#TotalAWB').val(max);
                         },
                         error: function (err) {
                             $('#loaderpopup').modal('hide')
+                            $('#divProcessStatus').html('');
                             console.log(err);
                         }
                     });
                 }
                 else {
-                    $('#loaderpopup').modal('hide')
+                    $('#loaderpopup').modal('hide');
+                    $('#divProcessStatus').html('');
                 }
               },
             error: function (err) {
                   $('#loaderpopup').modal('hide')
-                  console.log(err);
+                 $('#divProcessStatus').html('');
               }
             });
     }
     function savefixation() {
         debugger;
+        $('#btnsavefixation').attr('disabled', 'disabled');
         var Field = $('#FieldName').val();
         var SourceValue = $('#SourceValue').val();
         var DestinationValue = $('#DestinationValue').val();
@@ -216,6 +237,7 @@
                 $('#DestinationLocation').val('');
                 $('#DestinationCountry').val('');
                 $('#spanmsg').html('Fixation Saved Succesfully!')
+                $('#btnsavefixation').removeAttr('disabled');
                 $('#SourceValue').focus();
               }
             });
@@ -313,6 +335,8 @@
     }
     function saveimport() {
         $('#btnSave').attr('disabled', 'disabled');
+        $('#loaderpopup').modal('show');
+        $('#divProcessStatus').html('<h2 style="color:red">Data Save Processing</h2>');
         var obj = [];
         var maxrow = $('#listbody > tr').length;
         if (maxrow == 0) {
@@ -345,21 +369,10 @@
             success: function (response) {
                 $.notify("Transhipment Saved Succesfully!", "success");
                 $('#btnSave').removeAttr('disabled');
+                $('#loaderpopup').modal('hide');
+                $('#divProcessStatus').html('');
                 window.location.href = "/Transhipment/Index";
-                @* $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("CallPostAPI", "ImportManifest")',
-                    datatype: "json",
-                    data: {
-                        InputDate: $('#ManifestDate').val()
-                    },
-                    success: function (data) {
-                        $.notify("Import Shipment Saved Succesfully!", "success");
-                        $('#btnSave').removeAttr('disabled');
-                        window.location.href = "/ImportManifest/Index";
-                    }
-                });*@
-
+                
                 },
             error: function (err) {
                 console.log(err);
@@ -374,6 +387,8 @@
 
         if (files.length > 0) {
             $('#btnUpload').attr('disabled', 'disabled');
+            $('#loaderpopup').modal('show');            
+            $('#divProcessStatus').html('<h2 style="color:red">Data Processing</h2>');
             $.ajax({
                 url: '/Transhipment/ImportFile',
                 data: formData,
@@ -382,9 +397,8 @@
                 processData: false,
                 success: function (response) {
                     if (response.Status === 1) {
-                        var data = response.data;
+                        //var data = response.data;
                         //$('#imgloader').removeClass('hide');
-                        $('#loaderpopup').modal('show');
                               $.ajax({
                               type: 'POST',
                               url: '@Url.Action("ShowItemList", "Transhipment")',
@@ -412,6 +426,7 @@
         }
         else {
             $('#btnUpload').removeAttr('disabled');
+            $('#loaderpopup').modal('hide')
         }
     });
 
@@ -452,7 +467,7 @@
 
     $(document).ready(function () {
        // callniceapi();
-
+        var RateProcessing = false;
         $('#ManifestDate').change(function () {
              $.ajax({
                 type: 'GET',
@@ -484,26 +499,35 @@
 
         $('#btnUpdateRate').click(function () {
             $('#loaderpopup').modal('show');
+            RateProcessing = true;
+            //setInterval(function () {
+            //    if (RateProcessing == true) {
+            //        CheckProcess();
+            //    }
+            //}, 500)
+
              $.ajax({
                 type: "GET",
                 url: "/Transhipment/CheckDataValidation",
                 datatype: "Json",
                 //data: { ManifestDate: $('#ManifestDate').val(), MAWB: $('#MAWB').val() },
                 success: function (response) {
-                    var status = response.status;                    
+                    var status = response.status;
                          $.ajax({
                         type: 'POST',
                         url: '@Url.Action("ShowItemList", "Transhipment")',
                         datatype: "html",
-                        success: function (data) {
-                            $("#listContainer").html(data);       
+                             success: function (data) {
+                                RateProcessing = false;
+                            $("#listContainer").html(data);
                             $('#loaderpopup').modal('hide')
                         },
-                        error: function (err) {
+                             error: function (err) {
+                                 RateProcessing = false;
                             $('#loaderpopup').modal('hide')
                             console.log(err);
                         }
-                    });                    
+                    });
                 }
             });
 
@@ -587,7 +611,7 @@
                 success: function (response) {
                     var status = response.status;
                     if (status == "ok")
-                       
+
                     else {
                          $.ajax({
                         type: 'POST',
@@ -881,7 +905,7 @@
             </div>
             <div class="modal-footer" style="padding-top: 5px">
                 <span id="spanmsg" style="color:red" ></span>
-                <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
+                <button type="button" class="btn btn-primary" id="btnsavefixation" onclick="savefixation()">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -892,24 +916,30 @@
     <div class="modal-dialog">
         <div class="modal-content" style="border-radius:5px">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
                 <h4 class="modal-title" id="LoaderModalLabel">
-                    Data Importing
+                    Transhipment Uploading
                 </h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12" style="text-align:center" >
-                         <h2>Processing...</h2>
+                    <div class="col-md-12" style="text-align:center">
+                        <h2>Processing...</h2>
                         <img src="~/Content/img/loading-gif-free-download-6.gif" id="imgloader" class="" style="padding-left:15px;height:60px;width:60px;" />
                     </div>
+                    
                 </div>
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center" id="divProcessStatus">
+                        
+                    </div>
+                </div>
+                </div>
+                @*<div class="modal-footer" style="padding-top: 5px">
+            <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>*@
             </div>
-            @*<div class="modal-footer" style="padding-top: 5px">
-                <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>*@
-        </div>
     </div>
 </div>
 

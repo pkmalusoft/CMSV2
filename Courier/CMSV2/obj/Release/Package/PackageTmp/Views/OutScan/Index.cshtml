@@ -1,7 +1,7 @@
 ﻿@model CMSV2.Models.OutScanSearch
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";    
     var isadd = true;
     var ismodify = true;
     var isdelete = true;
@@ -38,7 +38,7 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers", "aaSorting": [] });
 
         table.columns().every(function () {
             var that = this;
@@ -128,7 +128,15 @@
                         <th>
                             @Html.Label("Material Cost")
                         </th>
-
+                        <th>
+                            @Html.Label("Total AWB")
+                        </th>
+                        <th>
+                            @Html.Label("API Success")
+                        </th>
+                        <th>
+                            @Html.Label("API Failed")
+                        </th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -153,47 +161,61 @@
                         <th>
                             @Html.Label("Material Cost")
                         </th>
-
+                        <th>
+                            @Html.Label("Total AWB")
+                        </th>
+                        <th>
+                            @Html.Label("API Success")
+                        </th>
+                        <th>
+                            @Html.Label("API Failed")
+                        </th>
                         <th style="display:none"></th>
                     </tr>
                 </tfoot>
                 <tbody>
                     @foreach (var item in @Model.DRSDetails)
                     {
-                        <tr>
-                            <td style="text-align:right">
-                                @Html.DisplayFor(modelItem=>item.DRSNo)
-                            </td>
+                    <tr>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.DRSNo)
+                        </td>
 
-                            <td>
-                                @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.DRSDate)
-                            </td>
+                        <td>
+                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(item.DRSDate)
+                        </td>
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Deliver)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.vehicle)
-                            </td>
-                            <td style="text-align:right">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vehicle)
+                        </td>
+                        <td style="text-align:right">
 
-                                @Html.DisplayFor(modelItem => item.TotalCourierCharge)
-                            </td>
-                            <td style="text-align:right">
-                                @Html.DisplayFor(modelItem => item.TotalMaterialCost)
-                            </td>
-
-
-                            <td>
-                                @*    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
-                                <a href="@Url.Action("Create", new { id = item.DRSID })"><i class="fa fa-pencil"></i></a>|
-                                @*<a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>*@
-                                @if (isprint)
-                                {
-                                    <a target="_blank" href="@Url.Action("DRSRunSheet", "OutScan", new { id = item.DRSID })"><i class="fa fa-print"></i></a>
-                                }
-                            </td>
-                            </tr>
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalCourierCharge, "2")
+                        </td>
+                        <td style="text-align:right">
+                            @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalMaterialCost, "2")
+                        </td>
+                        <td style="text-align:right">
+                            @item.TotalAWB
+                        </td>
+                        <td style="text-align:right">
+                            @item.APISuccess
+                        </td>
+                        <td style="text-align:right">
+                            @item.APIFailed
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Create", new { id = item.DRSID })"><i class="fa fa-pencil"></i></a>|
+                            @*<a href="#" onclick="Delete(ID=@item.DRSID)"><i class="fa fa-times"></i></a>*@
+                            @if (isprint)
+                            {
+                                <a target="_blank" href="@Url.Action("DRSRunSheet", "OutScan", new { id = item.DRSID })"><i class="fa fa-print"></i></a>
+                            }
+                        </td>
+                    </tr>
                             }
                     </tbody>
             </table>

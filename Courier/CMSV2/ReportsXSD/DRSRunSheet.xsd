@@ -6,8 +6,15 @@
         <xs:element name="DRSRunSheet">
           <xs:complexType>
             <xs:sequence>
+              <xs:element name="DRSNo" type="xs:string" minOccurs="0" />
+              <xs:element name="DRSDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="VehicleName" type="xs:string" minOccurs="0" />
+              <xs:element name="CourierName" type="xs:string" minOccurs="0" />
+              <xs:element name="CourierStatus" type="xs:string" minOccurs="0" />
+              <xs:element name="DeliveredOn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="APIStatus" type="xs:boolean" minOccurs="0" />
               <xs:element name="InScanID" type="xs:int" minOccurs="0" />
-              <xs:element name="JobCode" type="xs:int" minOccurs="0" />
+              <xs:element name="JobCode" type="xs:string" minOccurs="0" />
               <xs:element name="AWBNo" type="xs:string" minOccurs="0" />
               <xs:element name="CustomerID" type="xs:int" minOccurs="0" />
               <xs:element name="Consignor" type="xs:string" minOccurs="0" />
@@ -30,7 +37,7 @@
               <xs:element name="ConsigneeLocationName" type="xs:string" minOccurs="0" />
               <xs:element name="AssignedEmployeeID" type="xs:int" minOccurs="0" />
               <xs:element name="CourierCharge" type="xs:decimal" minOccurs="0" />
-              <xs:element name="Pieces" type="xs:string" minOccurs="0" />
+              <xs:element name="Pieces" type="xs:int" minOccurs="0" />
               <xs:element name="Weight" type="xs:decimal" minOccurs="0" />
               <xs:element name="CargoDescription" type="xs:string" minOccurs="0" />
               <xs:element name="SpecialInstructions" type="xs:string" minOccurs="0" />
@@ -41,8 +48,8 @@
               <xs:element name="ParcelTypeId" type="xs:int" minOccurs="0" />
               <xs:element name="MaterialCost" type="xs:decimal" minOccurs="0" />
               <xs:element name="DRSID" type="xs:int" minOccurs="0" />
-              <xs:element name="DRSDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="DRSNo" type="xs:string" minOccurs="0" />
+              <xs:element name="DRSDate1" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="DRSNo1" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

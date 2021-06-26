@@ -637,6 +637,42 @@ namespace CMSV2.DAL
 
         }
 
+        public static string SaveTranshipmentUpload(int ImportShipmentId, int BranchID, int AcCompanyID, int DepotID, int UserID, int FYearID, string Details)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_SaveTranshipmentUpload";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ImportShipmentID", ImportShipmentId);
+                cmd.Parameters.AddWithValue("@BranchID", BranchID);
+                cmd.Parameters.AddWithValue("@AcCompanyID", AcCompanyID);
+                cmd.Parameters.AddWithValue("@DepotID", DepotID);
+                cmd.Parameters.AddWithValue("@UserID", UserID);
+                cmd.Parameters.AddWithValue("@FYearId", FYearID);
+                cmd.Parameters.AddWithValue("@FormatForXMLitem", Details);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    return "Ok";
+                }
+                else
+                {
+                    return "No AWB added";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
+
         public static string UpdateAWBBatch(int BATCHID, int BranchID, int AcCompanyID, int DepotID, int UserID, int FYearID, string Details)
         {
             try
@@ -746,6 +782,49 @@ namespace CMSV2.DAL
             return list;
 
         }
+
+        public static List<CustomerRateVM> GetAllRateList(int CustomerId)
+        {
+            List<CustomerRateVM> list = new List<CustomerRateVM>();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAllCustomerRate";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        CustomerRateVM obj = new CustomerRateVM();
+                        obj.CourierServiceID = CommanFunctions.ParseInt(dt.Rows[i]["CourierServiceID"].ToString());
+                        obj.MovementID = CommanFunctions.ParseInt(dt.Rows[i]["MovementID"].ToString());
+                        obj.FAgentID = CommanFunctions.ParseInt(dt.Rows[i]["FAgentID"].ToString());
+                        obj.CustomerRateID = CommanFunctions.ParseInt(dt.Rows[i]["CustomerRateID"].ToString());
+                        obj.CustomerRateType = dt.Rows[i]["CustomerRateType"].ToString();
+                        obj.CountryName = dt.Rows[i]["CountryName"].ToString();
+                        obj.CityName = dt.Rows[i]["CityName"].ToString();
+                        list.Add(obj);
+                    }
+
+                }
+
+            }
+
+
+            return list;
+
+        }
+
 
         public static CustomerRateTypeVM GetCourierCharge(int RateTypeId, int CustomerId, int MovementId, int ProductTypeId, int PaymentModeId, decimal Weight, string CountryName, string CityName)
         {

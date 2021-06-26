@@ -170,18 +170,19 @@
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employeerec, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @readonly = "true" })
                 </div>
                 <div class="col-md-2">
-                    <div class="flexTitle">
-                        <label class="headinglabel required">MAWB</label>
+                    @*<div class="flexTitle">
+
                         <div class="checkboxdesign no-padding  text-right" style="float:right">
                             @Html.CheckBox("CheckAll", new { @name = "CheckAll", @checked = "checked" }) &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Print All</label>
                         </div>
-                    </div>                    
+                    </div>*@
+                    <label class="headinglabel required">MAWB</label>
                     @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @readonly = "true" })
                 </div>
-                <div class="col-md-1" style="padding-top:30px">
+                @*<div class="col-md-1" style="padding-top:30px">
                     <button type="button" id="btnaddall" class="btn btn-primary mt-0 small_btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                </div>
+                </div>*@
                 <div class="col-md-3 btn-right" style="padding-top:20px;">
                     <div class="row no-margin btn-right" style="padding-top:10px">
                         <div class="col-md-12">

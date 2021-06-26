@@ -20,9 +20,10 @@
         padding-right: 4px;
     }
 
-    .form-group{
+    .form-group {
         margin-bottom: 5px;
     }
+
     .timelineRight {
         padding-left: 4px;
     }
@@ -62,8 +63,9 @@
         text-align: right;
         position: absolute;
     }
-    .pl-2{
-        padding-left:10px;
+
+    .pl-2 {
+        padding-left: 10px;
     }
 
     .timelineRow li:nth-of-type(1):after {
@@ -86,10 +88,11 @@
         width: 210px;
     }
 
-    textarea{
+    textarea {
         resize: none;
-        height:100px;
+        height: 100px;
     }
+
     .timelineRow li:nth-of-type(5):after {
         background: #ce504c;
         width: 230px;
@@ -126,11 +129,12 @@
         font-weight: bold;
     }
 
-    .address{
-        border:1px solid #ccc;
-        padding:10px;
+    .address {
+        border: 1px solid #ccc;
+        padding: 10px;
         margin-bottom: 10px;
     }
+
     .Aiwaybillcontrol {
         float: none;
         margin: auto;
@@ -141,7 +145,18 @@
     }
 </style>
 
-
+<section>
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["ErrorMsg"]", "error");
+                      $('#AWBNo').val('');
+                      $('#AWBNo').focus();
+                 });
+        </script>
+    }
+</section>
 
 <section class="timelineBlock">
     <div class="container-fluid">
@@ -149,98 +164,59 @@
         <div class="row">
             @using (@Html.BeginForm("AWBTimeline", "AWB", FormMethod.Post))
             {
-
-            <div class="col-md-6 timelineDetails">
-                <div class=" Aiwaybillcontrol">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group ">
-                                <label class="headinglabel">AIRWAY BILL: </label>
-                                @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
-                            </div>
-                        </div>
-                        <div class="col-md-1 mt-3">
-                            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Shipper</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.Consignor" />
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <label>Receiver</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.Consignee" />
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="address">
-                                <h4>@Model.AWB.ConsigneeAddress1_Building  &nbsp; &nbsp; @Model.AWB.ConsigneeAddress2_Street <br /> @Model.AWB.ConsigneeAddress3_PinCode </h4>
-                                <h4>@Model.AWB.ConsigneeAddress3_PinCode</h4>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="address">
-                                <h4>@Model.AWB.ConsigneeAddress1_Building &nbsp;&nbsp; @Model.AWB.ConsigneeAddress2_Street <br /> @Model.AWB.ConsigneeAddress3_PinCode</h4>
-                                @*<h4>@Html.DisplayFor(mode=>mode.AWB.ConsigneePhone) </h4>*@
+                    <div class="col-md-6 timelineDetails">
+                        <div class=" Aiwaybillcontrol">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group ">
+                                        <label class="headinglabel">AIRWAY BILL: </label>
+                                        @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = true })
+                                    </div>
+                                </div>
+                                <div class="col-md-1 mt-3">
+                                    <button type="submit" class="btn btn-primary" style="min-width:50px!Important;" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                </div>
 
                             </div>
 
                         </div>
 
 
-                    </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Shipper</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.Consignor" />
+                                </div>
 
-                </div>
+                                <div class="col-md-6">
 
+                                    <label>Receiver</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.Consignee" />
 
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>origin</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.ConsignorCountryName" />
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <label>Destination</label>
-                            <input type="" name="" class="form-control" value="@Model.AWB.ConsigneeCountryName" />
-
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class=" row">
-                        <div class="col-md-3 flex flex-wrap">
-
-                            <div>
-                                <label>Pieces</label>
-                                <input type="text" name="" class="form-control" value="@Model.AWB.Pieces" />
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="pl-2">
+                        <div class="form-group">
 
-                                <label>Weight</label>
-                                <input type="text" name="" class="form-control" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.Weight,"3")" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="address">
+                                        <h4>@Model.AWB.ConsigneeAddress1_Building  &nbsp; &nbsp; @Model.AWB.ConsigneeAddress2_Street <br /> @Model.AWB.ConsigneeAddress3_PinCode </h4>
+                                        <h4>@Model.AWB.ConsigneeAddress3_PinCode</h4>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="address">
+                                        <h4>@Model.AWB.ConsigneeAddress1_Building &nbsp;&nbsp; @Model.AWB.ConsigneeAddress2_Street <br /> @Model.AWB.ConsigneeAddress3_PinCode</h4>
+                                        @*<h4>@Html.DisplayFor(mode=>mode.AWB.ConsigneePhone) </h4>*@
+
+                                    </div>
+
+                                </div>
 
 
                             </div>
@@ -248,160 +224,198 @@
                         </div>
 
 
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>origin</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.ConsignorCountryName" />
+                                </div>
 
-                        <div class="col-md-2">
-                            <label>Courier Charge</label>
-                            <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.CourierCharge)" />
+                                <div class="col-md-6">
+
+                                    <label>Destination</label>
+                                    <input type="" name="" class="form-control" value="@Model.AWB.ConsigneeCountryName" />
+
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-2">
 
-                            <label>Other Charge</label>
-                            <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.OtherCharge)" />
+
+                        <div class="form-group">
+                            <div class=" row">
+                                <div class="col-md-3 flex flex-wrap">
+
+                                    <div>
+                                        <label>Pieces</label>
+                                        <input type="text" name="" class="form-control" value="@Model.AWB.Pieces" />
+                                    </div>
+
+                                    <div class="pl-2">
+
+                                        <label>Weight</label>
+                                        <input type="text" name="" class="form-control" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.Weight,"3")" />
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="col-md-2">
+                                    <label>Courier Charge</label>
+                                    <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.CourierCharge)" />
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <label>Other Charge</label>
+                                    <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.OtherCharge)" />
+
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Tax Amount</label>
+                                    <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.TaxAmount)" />
+                                </div>
+
+                                <div class="col-md-3 flex">
+
+                                    <div>
+                                        <label>T. Charge</label>
+                                        <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.totalCharge)" />
+
+                                    </div>
+                                    <div class="pl-2">
+
+                                        <label>M. Cost</label>
+                                        <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.materialcost)" />
+
+                                    </div>
+
+                                </div>
+                            </div>
 
                         </div>
 
-                        <div class="col-md-2">
-                            <label>Tax Amount</label>
-                            <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.TaxAmount)" />
-                        </div>
+                        <div class="form-group">
 
-                        <div class="col-md-3 flex">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Shipper Instruction</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.SpecialNotes" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Item Description</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.Description" />
+                                </div>
 
-                            <div>
-                                <label>T. Charge</label>
-                                <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.totalCharge)" />
+                                <div class="col-md-3">
+                                    <label>Payment Mode</label>
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.paymentmode" />
+                                </div>
 
                             </div>
-                            <div class="pl-2">
+                        </div>
 
-                                <label>M. Cost</label>
-                                <input type="text" name="" class="form-control text-right" value="@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AWB.materialcost)" />
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>COD Status</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.CODStatus" />
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Material Cost Status</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="" class="form-control" value="@Model.AWB.MaterialCostStatus" />
+                                </div>
 
                             </div>
 
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>POD Receiver Name</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="" class="form-control" value="@Model.PODStatus.ReceiverName" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Received Time</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="" class="form-control" value="@Model.PODStatus.ReceivedTime" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>POD Delivery Location</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="" class="form-control" value="@Model.PODStatus.DeliveryLocation" />
+                                </div>
 
-                </div>
-
-                <div class="form-group">
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>Shipper Instruction</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.SpecialNotes" />
-                        </div>
-                        <div class="col-md-6">
-                            <label>Item Description</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.Description" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label>Payment Mode</label>
-                            <input type="text" name="" class="form-control" value="@Model.AWB.paymentmode" />
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>COD Status</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" name="" class="form-control" value="@Model.AWB.CODStatus" />
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Material Cost Status</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" name="" class="form-control" value="@Model.AWB.MaterialCostStatus" />
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>POD Receiver Name</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="" class="form-control" value="@Model.PODStatus.ReceiverName" />
-                        </div>
-                        <div class="col-md-2">
-                            <label>Received Time</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="" class="form-control" value="@Model.PODStatus.ReceivedTime" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>POD Delivery Location</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="" class="form-control" value="@Model.PODStatus.DeliveryLocation" />
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Shipment Photo</label>
-                            @*@Html.DisplayFor(model => model.PODImage.image)*@
-                            @if (@Model.PODImage != null)
-                            {
-                                if (@Model.PODImage.image != null)
-                                {
-                                    if (@Model.PODImage.image != "")
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Shipment Photo</label>
+                                    @*@Html.DisplayFor(model => model.PODImage.image)*@
+                                    @if (@Model.PODImage != null)
                                     {
-                                        <img style="width:100px;height:100px" src="@Model.PODImage.image" alt="AlternateText" />
-                                    }
-                                }
-                            }
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>POD Signature</label>
-                            @if (@Model.PODSignature != null)
-                            {
-                                if (@Model.PODSignature.SignatureImage != null)
-                                {
-                                    if (@Model.PODSignature.SignatureImage != "")
-                                    {
-                                        <img style="width:100px;height:100px" src="@Url.Content(@Model.PODSignature.SignatureImage)" alt="AlternateText" />
-                                    }
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-                        <div class="col-md-5 timelineRow">
-                            <div class="timelineLeft col-md-6 text-right">
-
-                                <ul>
-                                    @foreach (var item in Model.Details)
-                                    {
-                                        if (item.CourierStatusId <= 4)
+                                        if (@Model.PODImage.image != null)
                                         {
-                                            <li>
-                                                <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
-                                                <p>@item.UserName</p>
-                                                <h4>@item.CourierStatus</h4>
-                                            </li>
+                                            if (@Model.PODImage.image != "")
+                                            {
+                                                <img style="width:100px;height:100px" src="@Model.PODImage.image" alt="AlternateText" />
+                                            }
                                         }
                                     }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>POD Signature</label>
+                                    @if (@Model.PODSignature != null)
+                                    {
+                                        if (@Model.PODSignature.SignatureImage != null)
+                                        {
+                                            if (@Model.PODSignature.SignatureImage != "")
+                                            {
+                                                <img style="width:100px;height:100px" src="@Url.Content(@Model.PODSignature.SignatureImage)" alt="AlternateText" />
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 timelineRow">
+                        <div class="timelineLeft col-md-6 text-right">
+
+                            <ul>
+                                @foreach (var item in Model.Details)
+                                {
+                                    if (item.CourierStatusId <= 4)
+                                    {
+                                        <li>
+                                            <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
+                                            <p>@item.UserName</p>
+                                            <h4>@item.CourierStatus</h4>
+                                        </li>
+                                    }
+                                }
 
 
-                                    @*<li>
+                                @*<li>
                                 <p>22-07-2020 <span>10.30 Am</span></p>
                                 <h4>Pick Up Request</h4>
                             </li>
@@ -421,23 +435,23 @@
                                 <p>22-07-2020 <span>10.30 Am</span></p>
                                 <h4>Received at Facility</h4>
                             </li>*@
-                                </ul>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="timelineRight col-md-6 pull-right">
-                                <ul>
-                                    @foreach (var item in Model.Details)
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="timelineRight col-md-6 pull-right">
+                            <ul>
+                                @foreach (var item in Model.Details)
+                                {
+                                    if (item.CourierStatusId > 4)
                                     {
-                                        if (item.CourierStatusId > 4)
-                                        {
-                                            <li>
-                                                <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
-                                                <p>@item.UserName</p>
-                                                <h4>@item.CourierStatus</h4>
-                                            </li>
-                                        }
+                                        <li>
+                                            <p>@CMSV2.Models.CommanFunctions.GetLongDateFormat(@item.EntryDate)</p>
+                                            <p>@item.UserName</p>
+                                            <h4>@item.CourierStatus</h4>
+                                        </li>
                                     }
-                                    @*<li>
+                                }
+                                @*<li>
                                 <p>22-07-2020 <span>10.30 Am</span></p>
                                 <h4>Sorting in process</h4>
                             </li>
@@ -457,12 +471,12 @@
                                 <p>22-07-2020 <span>10.30 Am</span></p>
                                 <h4>Received at Facility</h4>
                             </li>*@
-                                </ul>
-                            </div>
-                            <div class="clearfix"></div>
+                            </ul>
                         </div>
-                        }
+                        <div class="clearfix"></div>
                     </div>
-                </div>
+                    }
+            </div>
+    </div>
 
 </section>

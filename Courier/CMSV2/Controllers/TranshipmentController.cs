@@ -122,34 +122,93 @@ namespace CMSV2.Controllers
 
             return View(vm);
         }
+
+        public ActionResult Edit(int id = 0)
+        {
+            var userid = Convert.ToInt32(Session["UserID"]);
+            var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+            var BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+
+            var agent = db.CustomerMasters.Where(cc => cc.CustomerType == "CL").ToList();//  db.AgentMasters.ToList(); // .Where(cc => cc.UserID == userid).FirstOrDefault();
+            var company = db.AcCompanies.FirstOrDefault(); // .Select(x => new { Address = x.Address1 
+            string selectedVal = ""; ;
+            var types = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Select Shipment Type", Value = null, Selected = selectedVal == null},
+                new SelectListItem{Text = "Transhipment", Value = "Transhipment", Selected = selectedVal == "Transhipment"},
+                new SelectListItem{Text = "Import", Value = "Import", Selected = selectedVal == "Import"},
+            };
+
+            ViewBag.Type = types;
+            var currency = new SelectList(db.CurrencyMasters.OrderBy(x => x.CurrencyName), "CurrencyID", "CurrencyName").ToList();
+            ViewBag.CurrencyID = db.CurrencyMasters.ToList();  // db.CurrencyMasters.ToList();
+            ViewBag.Currencies = db.CurrencyMasters.ToList();
+            ViewBag.Agent = agent;
+            string CompanyCountryName = db.BranchMasters.Find(BranchID).CountryName;
+            //ViewBag.AgentName = agent.Name;
+            //ViewBag.AgentCity = agent.CityName;
+            ViewBag.CompanyName = company.AcCompany1;
+            ImportManifestVM vm = new ImportManifestVM();
+            if (id == 0)
+            {
+                vm.CompanyCountryName = CompanyCountryName;
+                vm.ManifestDate = CommanFunctions.GetCurrentDateTime().ToString();
+                vm.ManifestNumber = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, Convert.ToDateTime(vm.ManifestDate), "T");
+                vm.ID = 0;
+                vm.TransDetails = new List<TranshipmentModel>();
+            }
+            else
+            {
+                vm.CompanyCountryName = CompanyCountryName;
+                ImportShipment model = db.ImportShipments.Find(id);
+                vm.ID = model.ID;
+                vm.ManifestNumber = model.ManifestNumber;
+                vm.ManifestDate = model.CreatedDate.ToString();
+                vm.FlightDate1 = model.FlightDate.ToString();
+                vm.FlightNo = model.FlightNo;
+                vm.MAWB = model.MAWB;
+                vm.Route = model.Route;
+                vm.ParcelNo = model.ParcelNo;
+                vm.Bags = model.Bags;
+                vm.Type = model.Type;
+                vm.Route = model.Route;
+                vm.Weight = model.Weight;
+                vm.TotalAWB = model.TotalAWB;
+                vm.OriginAirportCity = model.OriginAirportCity;
+                vm.DestinationAirportCity = model.DestinationAirportCity;
+                vm.AgentID = model.AgentID;
+                Session["TranshipmentAgentID"] = vm.AgentID;
+                var AllRateList = AWBDAO.GetAllRateList(vm.AgentID);
+                Session["CustomerRateList"] = AllRateList;
+                vm.TransDetails = new List<TranshipmentModel>();
+                //var IDEtails = (from c in db.InScanMasters where c.ImportShipmentId == vm.ID select new TranshipmentModel { InScanID=c.InScanID, HAWBNo =c.AWBNo,AWBDate=c.TransactionDate.ToString("dd-MM-yyyy"),Consignor=c.Consignor,ConsignorCountryName=c.ConsignorCountryName,ConsignorCityName=c.ConsignorCityName,Consignee=c.Consignee,ConsigneeCityName=c.ConsigneeCityName,Weight=c.Weight,Pieces=c.Pieces,CourierCharge=c.CourierCharge,OtherCharge=c.OtherCharge}).ToList();
+                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID);
+                vm.TransDetails = IDetails;
+                Session["ManifestTranshipment"] = IDetails;
+            }
+
+            return View(vm);
+        }
         public ActionResult ShowItemList()
         {
             ImportManifestVM vm = new ImportManifestVM();
             vm.TransDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
             return PartialView("ItemList", vm);
         }
-        
+        public ActionResult ShowEditItemList()
+        {
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.TransDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            return PartialView("EditItemList", vm);
+        }
+
         [HttpGet]
         public JsonResult CheckDuplicationTranshipment(string ManifestDate, string MAWB,int AgentID)
         {
             Session["TranshipmentAgentID"] = AgentID;
-            //string AWBNos = "";
 
-            //List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
-
-            //string AWBNos = "";
-            //foreach (var item in fileData)
-            //{
-            //    if (AWBNos == "")
-            //    {
-            //        AWBNos = item.HAWBNo;
-            //    }
-            //    else
-            //    {
-            //        AWBNos = AWBNos + "," + item.HAWBNo;
-            //    }
-
-            //}
+            
+            
 
             List<TranshipmentAWB> item = PickupRequestDAO.CheckTranshipment(Convert.ToDateTime(ManifestDate), MAWB, "");
             
@@ -157,6 +216,9 @@ namespace CMSV2.Controllers
             {
                 if (item[0].Status=="Ok")
                 {
+                    var AllRateList = AWBDAO.GetAllRateList(AgentID);
+                    Session["CustomerRateList"] = AllRateList;
+
                     return Json(new { status="ok"},JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -185,7 +247,7 @@ namespace CMSV2.Controllers
                 ImportManifestVM vm = new ImportManifestVM();
                 vm.TransDetails = fileData; 
                  Session["ManifestTranshipment"] = vm.TransDetails;
-                return Json(new { Status = 1, data = fileData, Message = "File Imported Successfully " });
+                return Json(new { Status = 1, data = "OK", Message = "File Imported Successfully " });
             }
             catch (Exception ex)
             {
@@ -267,16 +329,23 @@ namespace CMSV2.Controllers
 
         public JsonResult CheckDataValidation()
         {
+            List<CustomerRateVM> RateList = (List<CustomerRateVM>)Session["CustomerRateList"];
             List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            var productype = db.ProductTypes.ToList();
+            var parceltype = db.ParcelTypes.ToList();
+            var EmpList = db.EmployeeMasters.ToList();
+            var fage = db.ForwardingAgentMasters.ToList();
+            var CustomerId = Convert.ToInt32(Session["TranshipmentAgentID"].ToString());
+            var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
             int i = 0;
             foreach (var item in TransDetail)
             {
                 bool dataError = false;
                 string ErrorMessage = "";
 
-                if (item.CourierType != "")
+                if (item.CourierType != "" && TransDetail[i].ProductTypeID==0)
                 {
-                    var productype = db.ProductTypes.Where(cc => cc.ProductName == item.CourierType).FirstOrDefault();
+                    var productype1 = (from p in productype where p.ProductName == item.CourierType select p).FirstOrDefault();
                     if (productype == null)
                     {
                         dataError = true;
@@ -284,24 +353,24 @@ namespace CMSV2.Controllers
                     }
                     else
                     {
-                        TransDetail[i].ProductTypeID = productype.ProductTypeID;
+                        TransDetail[i].ProductTypeID = productype1.ProductTypeID;
                     }
 
                 }
-                 if (item.ParcelType != "")
+                 if (item.ParcelType != "" && TransDetail[i].ParcelTypeID==0)
                 {
-                    var productype = db.ParcelTypes.Where(cc => cc.ParcelType1 == item.ParcelType).FirstOrDefault();
-                    if (productype == null)
+                    var productype1 = (from p in parceltype where p.ParcelType1 == item.ParcelType select p).FirstOrDefault();
+                    if (productype1 == null)
                     {
                         dataError = true;
                         TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
                     }
                     else
                     {
-                        TransDetail[i].ParcelTypeID = productype.ID;                        
+                        TransDetail[i].ParcelTypeID = productype1.ID;                        
                     }
                 }
-                 else if (item.ProductType=="")
+                 else if (item.ParcelType == "")
                 {
                     dataError = true;
                 }
@@ -316,16 +385,16 @@ namespace CMSV2.Controllers
                     dataError = true;
                     TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + " Country name";
                 }
-                else if (item.FAgentName != "")
+                else if (item.FAgentName != "" && TransDetail[i].FagentID==0)
                 {
-                    var fage = db.ForwardingAgentMasters.Where(cc => cc.FAgentName == item.FAgentName).FirstOrDefault();
-                    if (fage==null)
+                    var fage1 = (from f in fage where f.FAgentName == item.FAgentName select f).FirstOrDefault();
+                    if (fage1==null)
                     {
                         dataError = true;
                     }
                     else
                     {
-                        TransDetail[i].FagentID = fage.FAgentID;
+                        TransDetail[i].FagentID = fage1.FAgentID;
                     }
                     
                 }
@@ -335,18 +404,18 @@ namespace CMSV2.Controllers
                     TransDetail[i].PaymentModeId = 3;
                 }
                 
-                if (item.ReceivedBy != "")
+                if (item.ReceivedBy != "" && TransDetail[i].DepotReceivedBy==0)
                 {
-                    var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.ReceivedBy).FirstOrDefault();
+                    var emp = (from e in EmpList where e.EmployeeName == item.ReceivedBy select e).FirstOrDefault();
                     if (emp != null)
                     {
                         TransDetail[i].DepotReceivedBy = emp.EmployeeID;
                     }
                 }
                 
-                if (item.CollectedBy != "")
+                if (item.CollectedBy != "" && TransDetail[i].PickedUpEmpID==0)
                 {
-                    var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.CollectedBy).FirstOrDefault();
+                    var emp =(from e in EmpList where e.EmployeeName == item.CollectedBy select e).FirstOrDefault();
                     if (emp != null)
                     {
                         TransDetail[i].PickedUpEmpID = emp.EmployeeID;
@@ -354,31 +423,37 @@ namespace CMSV2.Controllers
 
                 }
                 
-                if (item.CourierStatus != "")
+                //if (item.CourierStatus != "")
+                //{
+                  
+                //    if (courierstatus != null)
+                //    {
+                //        TransDetail[i].CourierStatusID = courierstatus.CourierStatusID;
+                //        TransDetail[i].StatusTypeId = courierstatus.StatusTypeID;
+                //    }
+                //}
+                //else
+                //{
+                //    TransDetail[i].DataError = false;
+                //}
+                if (TransDetail[i].CourierCharge==null)
                 {
-                    var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
-                    if (courierstatus != null)
-                    {
-                        TransDetail[i].CourierStatusID = courierstatus.CourierStatusID;
-                        TransDetail[i].StatusTypeId = courierstatus.StatusTypeID;
-                    }
-                }
-                else
-                {
-                    TransDetail[i].DataError = false;
+                    TransDetail[i].CourierCharge = 0;
                 }
 
-                if (dataError == false)
+                if (dataError == false && TransDetail[i].CourierCharge==0)
                 {
-                    List<CustomerRateType> lst = GetCustomerRateType("", TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", TransDetail[i].FagentID.ToString(), "", TransDetail[i].ConsigneeCountryName, "", "");
-                    if (lst.Count > 0)
+                    //List<CustomerRateType> lst = GetCustomerRateType("", CustomerId "4", TransDetail[i].ProductTypeID.ToString(), "3", TransDetail[i].FagentID.ToString(), "", TransDetail[i].ConsigneeCountryName, "", "");
+                    var rate = (from r in RateList where r.CourierServiceID == TransDetail[i].ProductTypeID && r.MovementID == 4 && r.FAgentID == TransDetail[i].FagentID && r.CountryName == TransDetail[i].ConsigneeCountryName select r).FirstOrDefault();
+                    if (rate !=null)
                     {
-                        CustomerRateTypeVM vm = GetCourierCharge(lst[0].CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
-                        if (vm.CustomerRateTypeID > 0)
+                        //CustomerRateTypeVM vm = GetCourierCharge(lst[0].CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                        //CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                        if (rate.CustomerRateID > 0)
                         {
-                            TransDetail[i].CustomerRateID = vm.CustomerRateTypeID;
+                            TransDetail[i].CustomerRateID = rate.CustomerRateID; // vm.CustomerRateTypeID;
 
-                            vm = GetCourierCharge(vm.CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                            CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
                             if (vm.CourierCharge != null && vm.CourierCharge != 0)
                             {
                                 TransDetail[i].CourierCharge = vm.CourierCharge;
@@ -389,6 +464,10 @@ namespace CMSV2.Controllers
                                 TransDetail[i].DataError = true;
                             }
                         }
+                        else
+                        {
+                            TransDetail[i].DataError = true;
+                        }
                     }
                     else
                     {
@@ -398,14 +477,19 @@ namespace CMSV2.Controllers
                     TransDetail[i].OtherCharge = 0;
                     
                 }
-                else
+                else if(TransDetail[i].CourierCharge==0)
                 {
                     TransDetail[i].DataError = true;
                 }
-
+                else
+                {
+                    TransDetail[i].DataError = false; 
+                }
+                Session["ProcessingRow"] = i;
+                Session["ManifestTranshipment"] = TransDetail;
                 i++;
             }
-            Session["ManifestTranshipment"] = TransDetail;
+           
             var itemcount = (from c in TransDetail where c.DataError == true select c).ToList();
             if (itemcount.Count > 0)
             {
@@ -416,6 +500,368 @@ namespace CMSV2.Controllers
                 return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
             }
             
+
+        }
+
+
+
+        public string CheckDataValidation1()
+        {
+            List<CustomerRateVM> RateList = (List<CustomerRateVM>)Session["CustomerRateList"];
+            List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            var productype = db.ProductTypes.ToList();
+            var parceltype = db.ParcelTypes.ToList();
+            var EmpList = db.EmployeeMasters.ToList();
+            var fage = db.ForwardingAgentMasters.ToList();
+            var CustomerId = Convert.ToInt32(Session["TranshipmentAgentID"].ToString());
+            var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
+            int i = 0;
+            foreach (var item in TransDetail)
+            {
+                bool dataError = false;
+                string ErrorMessage = "";
+
+                if (item.CourierType != "")
+                {
+                    var productype1 = (from p in productype where p.ProductName == item.CourierType select p).FirstOrDefault();
+                    if (productype == null)
+                    {
+                        dataError = true;
+                        ErrorMessage = TransDetail[i].ErrorMessage + "Invalid Courier type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ProductTypeID = productype1.ProductTypeID;
+                    }
+
+                }
+                if (item.ParcelType != "")
+                {
+                    var productype1 = (from p in parceltype where p.ParcelType1 == item.ParcelType select p).FirstOrDefault();
+                    if (productype1 == null)
+                    {
+                        dataError = true;
+                        TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ParcelTypeID = productype1.ID;
+                    }
+                }
+                else if (item.ProductType == "")
+                {
+                    dataError = true;
+                }
+
+                if (item.Weight == null || item.Weight == 0)
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                }
+                else if (TransDetail[i].ConsigneeCountryName == null || TransDetail[i].ConsigneeCountryName == "")
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + " Country name";
+                }
+                else if (item.FAgentName != "")
+                {
+                    var fage1 = (from f in fage where f.FAgentName == item.FAgentName select f).FirstOrDefault();
+                    if (fage1 == null)
+                    {
+                        dataError = true;
+                    }
+                    else
+                    {
+                        TransDetail[i].FagentID = fage1.FAgentID;
+                    }
+
+                }
+
+                if (item.PaymentMode == "Customer")
+                {
+                    TransDetail[i].PaymentModeId = 3;
+                }
+
+                if (item.ReceivedBy != "")
+                {
+                    var emp = (from e in EmpList where e.EmployeeName == item.ReceivedBy select e).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].DepotReceivedBy = emp.EmployeeID;
+                    }
+                }
+
+                if (item.CollectedBy != "")
+                {
+                    var emp = (from e in EmpList where e.EmployeeName == item.CollectedBy select e).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].PickedUpEmpID = emp.EmployeeID;
+                    }
+
+                }
+
+                if (item.CourierStatus != "")
+                {
+
+                    if (courierstatus != null)
+                    {
+                        TransDetail[i].CourierStatusID = courierstatus.CourierStatusID;
+                        TransDetail[i].StatusTypeId = courierstatus.StatusTypeID;
+                    }
+                }
+                else
+                {
+                    TransDetail[i].DataError = false;
+                }
+                if (TransDetail[i].CourierCharge == null)
+                {
+                    TransDetail[i].CourierCharge = 0;
+                }
+
+                //if (dataError == false && TransDetail[i].CourierCharge == 0)
+                //{
+                //    //List<CustomerRateType> lst = GetCustomerRateType("", CustomerId "4", TransDetail[i].ProductTypeID.ToString(), "3", TransDetail[i].FagentID.ToString(), "", TransDetail[i].ConsigneeCountryName, "", "");
+                //    var rate = (from r in RateList where r.CourierServiceID == TransDetail[i].ProductTypeID && r.MovementID == 4 && r.FAgentID == TransDetail[i].FagentID && r.CountryName == TransDetail[i].ConsigneeCountryName select r).FirstOrDefault();
+                //    if (rate != null)
+                //    {
+                //        //CustomerRateTypeVM vm = GetCourierCharge(lst[0].CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                //        //CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                //        if (rate.CustomerRateID > 0)
+                //        {
+                //            TransDetail[i].CustomerRateID = rate.CustomerRateID; // vm.CustomerRateTypeID;
+
+                //            CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                //            if (vm.CourierCharge != null && vm.CourierCharge != 0)
+                //            {
+                //                TransDetail[i].CourierCharge = vm.CourierCharge;
+                //                TransDetail[i].DataError = false;
+                //            }
+                //            else
+                //            {
+                //                TransDetail[i].DataError = true;
+                //            }
+                //        }
+                //        else
+                //        {
+                //            TransDetail[i].DataError = true;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        TransDetail[i].DataError = true;
+                //    }
+
+                //    TransDetail[i].OtherCharge = 0;
+
+                //}
+                //else
+                //{
+                //    TransDetail[i].DataError = true;
+                //}
+                Session["ProcessingRow"] = i;
+                Session["ManifestTranshipment"] = TransDetail;
+                i++;
+            }
+
+            var itemcount = (from c in TransDetail where c.DataError == true select c).ToList();
+            
+            if (itemcount.Count > 0)
+            {
+                return "Failed";
+            }
+            else
+            {
+                return "ok";
+            }
+
+
+        }
+
+
+        public JsonResult CheckEditDataValidation(bool AllItem,string Details)
+        {
+            List<CustomerRateVM> RateList = (List<CustomerRateVM>)Session["CustomerRateList"];
+            List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            var productype = db.ProductTypes.ToList();
+            var parceltype = db.ParcelTypes.ToList();
+            var EmpList = db.EmployeeMasters.ToList();
+            var fage = db.ForwardingAgentMasters.ToList();
+            var CustomerId = Convert.ToInt32(Session["TranshipmentAgentID"].ToString());
+            var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
+            int i = 0;
+            foreach (var item in TransDetail)
+            {
+                bool dataError = false;
+                string ErrorMessage = "";
+
+                if (item.CourierType != "" && TransDetail[i].ProductTypeID == 0)
+                {
+                    var productype1 = (from p in productype where p.ProductName == item.CourierType select p).FirstOrDefault();
+                    if (productype == null)
+                    {
+                        dataError = true;
+                        ErrorMessage = TransDetail[i].ErrorMessage + "Invalid Courier type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ProductTypeID = productype1.ProductTypeID;
+                    }
+
+                }
+                if (item.ParcelType != "" && TransDetail[i].ParcelTypeID == 0)
+                {
+                    var productype1 = (from p in parceltype where p.ParcelType1 == item.ParcelType select p).FirstOrDefault();
+                    if (productype1 == null)
+                    {
+                        dataError = true;
+                        TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                    }
+                    else
+                    {
+                        TransDetail[i].ParcelTypeID = productype1.ID;
+                    }
+                }
+                else if (item.ParcelType == "")
+                {
+                    dataError = true;
+                }
+
+                if (item.Weight == null || item.Weight == 0)
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + "Parcel Type";
+                }
+                else if (TransDetail[i].ConsigneeCountryName == null || TransDetail[i].ConsigneeCountryName == "")
+                {
+                    dataError = true;
+                    TransDetail[i].ErrorMessage = TransDetail[i].ErrorMessage + " Country name";
+                }
+                else if (item.FAgentName != "" && TransDetail[i].FagentID == 0)
+                {
+                    var fage1 = (from f in fage where f.FAgentName == item.FAgentName select f).FirstOrDefault();
+                    if (fage1 == null)
+                    {
+                        dataError = true;
+                    }
+                    else
+                    {
+                        TransDetail[i].FagentID = fage1.FAgentID;
+                    }
+
+                }
+
+                if (item.PaymentMode == "Customer")
+                {
+                    TransDetail[i].PaymentModeId = 3;
+                }
+
+                if (item.ReceivedBy != "" && TransDetail[i].DepotReceivedBy == 0)
+                {
+                    var emp = (from e in EmpList where e.EmployeeName == item.ReceivedBy select e).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].DepotReceivedBy = emp.EmployeeID;
+                    }
+                }
+
+                if (item.CollectedBy != "" && TransDetail[i].PickedUpEmpID == 0)
+                {
+                    var emp = (from e in EmpList where e.EmployeeName == item.CollectedBy select e).FirstOrDefault();
+                    if (emp != null)
+                    {
+                        TransDetail[i].PickedUpEmpID = emp.EmployeeID;
+                    }
+
+                }
+
+                //if (item.CourierStatus != "")
+                //{
+
+                //    if (courierstatus != null)
+                //    {
+                //        TransDetail[i].CourierStatusID = courierstatus.CourierStatusID;
+                //        TransDetail[i].StatusTypeId = courierstatus.StatusTypeID;
+                //    }
+                //}
+                //else
+                //{
+                //    TransDetail[i].DataError = false;
+                //}
+                if (TransDetail[i].CourierCharge == null)
+                {
+                    TransDetail[i].CourierCharge = 0;
+                }
+
+                if (dataError == false && TransDetail[i].CourierCharge == 0)
+                {
+                    //List<CustomerRateType> lst = GetCustomerRateType("", CustomerId "4", TransDetail[i].ProductTypeID.ToString(), "3", TransDetail[i].FagentID.ToString(), "", TransDetail[i].ConsigneeCountryName, "", "");
+                    var rate = (from r in RateList where r.CourierServiceID == TransDetail[i].ProductTypeID && r.MovementID == 4 && r.FAgentID == TransDetail[i].FagentID && r.CountryName == TransDetail[i].ConsigneeCountryName select r).FirstOrDefault();
+                    if (rate != null)
+                    {
+                        //CustomerRateTypeVM vm = GetCourierCharge(lst[0].CustomerRateTypeID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                        //CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                        if (rate.CustomerRateID > 0)
+                        {
+                            TransDetail[i].CustomerRateID = rate.CustomerRateID; // vm.CustomerRateTypeID;
+
+                            CustomerRateTypeVM vm = GetCourierCharge(rate.CustomerRateID.ToString(), TransDetail[i].CustomerId.ToString(), "4", TransDetail[i].ProductTypeID.ToString(), "3", item.Weight.ToString(), TransDetail[i].ConsigneeCountryName, "");
+                            if (vm.CourierCharge != null && vm.CourierCharge != 0)
+                            {
+                                TransDetail[i].CourierCharge = vm.CourierCharge;
+                                TransDetail[i].DataError = false;
+                            }
+                            else
+                            {
+                                TransDetail[i].DataError = true;
+                            }
+                        }
+                        else
+                        {
+                            TransDetail[i].DataError = true;
+                        }
+                    }
+                    else
+                    {
+                        TransDetail[i].DataError = true;
+                    }
+
+                    TransDetail[i].OtherCharge = 0;
+
+                }
+                else if (TransDetail[i].CourierCharge == 0)
+                {
+                    TransDetail[i].DataError = true;
+                }
+                else
+                {
+                    TransDetail[i].DataError = false;
+                }
+                Session["ProcessingRow"] = i;
+                Session["ManifestTranshipment"] = TransDetail;
+                i++;
+            }
+
+            var itemcount = (from c in TransDetail where c.DataError == true select c).ToList();
+            if (itemcount.Count > 0)
+            {
+                return Json(new { status = "Falied", Message = "Invalid Data" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+        [HttpPost]
+        public JsonResult GetProcessedStatus()
+        {
+            List<TranshipmentModel> TransDetail = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            var TotalCount = (from c in TransDetail select c).ToList();
+            var processedcount = (from c in TransDetail where c.CourierCharge > 0 select c).ToList();
+            int ProcessingRow = Convert.ToInt32(Session["ProcessingRow"]);
+            return Json(new { TotalRow =TotalCount, ProcessedCount= processedcount,ProcessingRow=ProcessingRow}, JsonRequestBehavior.AllowGet);
 
         }
         public List<CustomerRateType> GetCustomerRateType(string term, string CustomerId, string MovementId, string ProductTypeID, string PaymentModeId, string FAgentID, string CityName, string CountryName, string OriginCountry, string OriginCity)
@@ -538,7 +984,7 @@ namespace CMSV2.Controllers
                 importShipment.Status = 1;
                 importShipment.DestinationAirportCity = model.DestinationAirportCity;
                 importShipment.OriginAirportCity = model.OriginAirportCity;
-                importShipment.AcFinancialYearID = 3;
+                importShipment.AcFinancialYearID = FyearId;
                 importShipment.TotalAWB = model.TotalAWB;
                 importShipment.Bags = model.Bags;
                 importShipment.ParcelNo = model.ParcelNo;
@@ -563,7 +1009,12 @@ namespace CMSV2.Controllers
                     //db.SaveChanges();
 
                 }
-
+                //DataTable ds = new DataTable();
+                //DataSet dt = new DataSet();                
+                //dt = ToDataTable(IDetails);                
+                //string xml = dt.GetXml();
+                //AWBDAO.SaveTranshipmentUpload(importShipment.ID,1,1,1,1,1,)
+                var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
                 foreach (var item in IDetails)
                 {
                     InScanMaster detail = new InScanMaster();
@@ -625,12 +1076,16 @@ namespace CMSV2.Controllers
 
                     detail.NetTotal = detail.CourierCharge + detail.OtherCharge;
 
-                    if (item.FAgentName != "")
+                    if (item.FAgentName != "" && item.FagentID==0)
                     {
                         var fage = db.ForwardingAgentMasters.Where(cc => cc.FAgentName == item.FAgentName).FirstOrDefault();
                         detail.FAgentId = fage.FAgentID;
-
                     }
+                    else
+                    {
+                        detail.FAgentId = item.FagentID;
+                    }
+
                     detail.CustomerID = importShipment.AgentID;
                     //if (item.customer!="")
                     //{
@@ -644,16 +1099,20 @@ namespace CMSV2.Controllers
                     {
                         detail.PaymentModeId = 3;
                     }
-                    if (item.ReceivedBy!="")
+                    else { detail.PaymentModeId = 3; }
+                    if (item.ReceivedBy != "" && item.DepotReceivedBy == 0)
                     {
                         var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.ReceivedBy).FirstOrDefault();
-                        if (emp!=null)
+                        if (emp != null)
                         {
                             detail.DepotReceivedBy = emp.EmployeeID;
                         }
 
                     }
-                    if (item.CollectedBy != "")
+                    else {
+                        detail.DepotReceivedBy = item.DepotReceivedBy;
+                    }
+                    if (item.CollectedBy != "" && item.PickedUpEmpID==0)
                     {
                         var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.CollectedBy).FirstOrDefault();
                         if (emp != null)
@@ -662,15 +1121,12 @@ namespace CMSV2.Controllers
                         }
 
                     }
-                    if (item.CourierStatus!="")
+                    else
                     {
-                        var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
-                        if (courierstatus!=null)
-                        {
-                            detail.CourierStatusID = courierstatus.CourierStatusID;
-                            detail.StatusTypeId = courierstatus.StatusTypeID;
-                        }
+                        detail.PickedUpEmpID = item.PickedUpEmpID;
                     }
+                    detail.CourierStatusID = courierstatus.CourierStatusID;
+                    detail.StatusTypeId = courierstatus.StatusTypeID;
 
                     if (item.InScanID == 0)
                     {
@@ -692,7 +1148,7 @@ namespace CMSV2.Controllers
                         db.SaveChanges();
                     }
 
-                    if (detail.FAgentId > 0)
+                    if (detail.FAgentId != 0)
                     {
                         isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == detail.InScanID).FirstOrDefault();
                         isi = db.InScanInternationals.Where(cc => cc.InScanID == detail.InScanID).FirstOrDefault();
@@ -707,6 +1163,257 @@ namespace CMSV2.Controllers
                         {
                             isi = new InScanInternational();
                             isi.InScanID = detail.InScanID;
+                            isi.FAgentID = Convert.ToInt32(detail.FAgentId);
+                            isi.ForwardingCharge = Convert.ToDecimal(item.ForwardingCharge);
+                            isi.StatusAssignment = false;
+                            isi.ForwardingAWBNo = item.FAWBNo;
+                            isi.ForwardingDate = detail.TransactionDate; // DateTime.UtcNow;
+                            isi.VerifiedWeight = Convert.ToDouble(detail.Weight);
+
+                        }
+
+                        if (isi.InScanInternationalID == 0)
+                        {
+                            db.InScanInternationals.Add(isi);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            db.Entry(isi).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+
+                        if (isid.InScanInternationalDeatilID == 0)
+                        {
+
+                            isid.InscanInternationalID = isi.InScanInternationalID;
+                            db.InScanInternationalDeatils.Add(isid);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+
+                            db.Entry(isid).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+                }
+                return "ok";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+
+            }
+        }
+
+
+
+        public string EditSaveImport(string Master, string Details)
+        {
+            try
+            {
+                int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                int DepotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+                int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                int FyearId = Convert.ToInt32(Session["fyearid"]);
+                var userid = Convert.ToInt32(Session["UserID"]);
+                var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
+                //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
+                var IDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+                ImportShipment importShipment = new ImportShipment();
+                if (model.ID == 0)
+                {
+                    importShipment.ManifestNumber = model.ManifestNumber;
+                    importShipment.CreatedDate = Convert.ToDateTime(model.ManifestDate);
+                    importShipment.ManifestNumber = ImportDAO.GetMaxManifestNo(companyid, BranchID, importShipment.CreatedDate, "T");
+
+                    importShipment.ShipmentTypeId = 4;
+                }
+                else
+                {
+                    importShipment = db.ImportShipments.Find(model.ID);
+                }
+                importShipment.Bags = model.Bags;
+                importShipment.FlightNo = model.FlightNo;
+                if (model.FlightDate1 != null && model.FlightDate1 != "")
+                {
+                    importShipment.FlightDate = Convert.ToDateTime(model.FlightDate1);
+                }
+                importShipment.LastEditedByLoginID = userid;
+                importShipment.MAWB = model.MAWB;
+                importShipment.TotalAWB = model.TotalAWB;
+                importShipment.Type = "";
+                importShipment.Status = 1;
+                importShipment.DestinationAirportCity = model.DestinationAirportCity;
+                importShipment.OriginAirportCity = model.OriginAirportCity;
+                importShipment.AcFinancialYearID = FyearId;
+                importShipment.TotalAWB = model.TotalAWB;
+                importShipment.Bags = model.Bags;
+                importShipment.ParcelNo = model.ParcelNo;
+                importShipment.AgentID = model.AgentID;
+                importShipment.Weight = model.Weight;
+                importShipment.Route = model.Route;
+                importShipment.AgentLoginID = 1;
+                importShipment.LastEditedByLoginID = 1;
+
+                if (model.ID == 0)
+                {
+                    db.ImportShipments.Add(importShipment);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.Entry(importShipment).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    //var details = (from d in db.ImportShipmentDetails where d.ImportID == model.ID select d).ToList();
+                    //db.ImportShipmentDetails.RemoveRange(details);
+                    //db.SaveChanges();
+
+                }
+                //DataTable ds = new DataTable();
+                //DataSet dt = new DataSet();                
+                //dt = ToDataTable(IDetails);                
+                //string xml = dt.GetXml();
+                //AWBDAO.SaveTranshipmentUpload(importShipment.ID,1,1,1,1,1,)
+                var courierstatus = db.CourierStatus.Where(cc => cc.CourierStatus == "Shipment Delivered").FirstOrDefault();
+                foreach (var item in IDetails)
+                {
+                    InScanMaster detail = new InScanMaster();
+                    InScanInternationalDeatil isid = new InScanInternationalDeatil();
+                    InScanInternational isi = new InScanInternational();
+
+                    if (item.InScanID > 0)
+                        detail = db.InScanMasters.Find(item.InScanID);
+
+                    detail.ImportShipmentId = importShipment.ID; //forignkey reference for import tranashipment
+                    detail.AWBNo = item.HAWBNo;
+                    detail.TransactionDate = Convert.ToDateTime(item.AWBDate);
+                    detail.Consignee = item.Consignee;
+                    detail.ConsigneeAddress1_Building = item.ConsigneeAddress1_Building;
+                    detail.ConsignorPhone = item.ConsignorPhone;
+                    detail.ConsigneeCountryName = item.ConsigneeCountryName;
+                    detail.ConsigneeCityName = item.ConsigneeCityName;
+                    detail.Consignor = item.Consignor;
+
+                    detail.ParcelTypeId = item.ParcelTypeID;
+                    detail.CustomerRateID = item.CustomerRateID;
+                    detail.ProductTypeID = item.ProductTypeID;
+                    detail.MovementID = 4;                    
+
+                    if (item.Weight != null)
+                        detail.Weight = Convert.ToDecimal(item.Weight);
+
+                    if (item.Pieces != null)
+                        detail.Pieces = item.Pieces;
+
+                    if (item.CourierCharge != null)
+                        detail.CourierCharge = Convert.ToDecimal(item.CourierCharge);
+                    else
+                        detail.CourierCharge = 0;
+
+                    if (item.OtherCharge != null)
+                        detail.OtherCharge = Convert.ToDecimal(item.OtherCharge);
+                    else
+                        detail.OtherCharge = 0;
+
+                    detail.NetTotal = detail.CourierCharge + detail.OtherCharge;
+
+                    if (item.FAgentName != "" && item.FagentID == 0)
+                    {
+                        var fage = db.ForwardingAgentMasters.Where(cc => cc.FAgentName == item.FAgentName).FirstOrDefault();
+                        detail.FAgentId = fage.FAgentID;
+                    }
+                    else
+                    {
+                        detail.FAgentId = item.FagentID;
+                    }
+
+                    detail.CustomerID = importShipment.AgentID;
+                    
+                   
+                    if (item.ReceivedBy != "" && item.DepotReceivedBy == 0)
+                    {
+                        var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.ReceivedBy).FirstOrDefault();
+                        if (emp != null)
+                        {
+                            detail.DepotReceivedBy = emp.EmployeeID;
+                        }
+
+                    }
+                    else
+                    {
+                        detail.DepotReceivedBy = item.DepotReceivedBy;
+                    }
+                    if (item.CollectedBy != "" && item.PickedUpEmpID == 0)
+                    {
+                        var emp = db.EmployeeMasters.Where(cc => cc.EmployeeName == item.CollectedBy).FirstOrDefault();
+                        if (emp != null)
+                        {
+                            detail.PickedUpEmpID = emp.EmployeeID;
+                        }
+
+                    }
+                    else
+                    {
+                        detail.PickedUpEmpID = item.PickedUpEmpID;
+                    }
+                    detail.CourierStatusID = courierstatus.CourierStatusID;
+                    detail.StatusTypeId = courierstatus.StatusTypeID;
+
+                    if (item.InScanID == 0)
+                    {
+                        detail.IsDeleted = false;
+                        detail.BranchID = BranchID;
+                        detail.DepotID = DepotId;
+                        detail.CreatedBy = userid;
+                        detail.LastModifiedBy = userid;
+                        detail.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                        detail.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
+                        detail.AcFinancialYearID = FyearId;
+                        detail.AcFinancialYearID = companyid;
+                        db.InScanMasters.Add(detail);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        detail.LastModifiedBy = userid;
+                        detail.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
+                        db.Entry(detail).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    if (detail.FAgentId != 0)
+                    {
+                        isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == detail.InScanID).FirstOrDefault();
+                        isi = db.InScanInternationals.Where(cc => cc.InScanID == detail.InScanID).FirstOrDefault();
+                        if (isid == null)
+                        {
+                            isid = new InScanInternationalDeatil();
+                            isid.InScanID = detail.InScanID;
+                            isid.ForwardingCharge = Convert.ToDecimal(item.ForwardingCharge);
+                            isid.VerifiedWeight = detail.Weight;
+                        }
+                        else
+                        {
+                            isid.ForwardingCharge = Convert.ToDecimal(item.ForwardingCharge);
+                            isid.VerifiedWeight = detail.Weight;
+                        }
+                        if (isi == null)
+                        {
+                            isi = new InScanInternational();
+                            isi.InScanID = detail.InScanID;
+                            isi.FAgentID = Convert.ToInt32(detail.FAgentId);
+                            isi.ForwardingCharge = Convert.ToDecimal(item.ForwardingCharge);
+                            isi.StatusAssignment = false;
+                            isi.ForwardingAWBNo = item.FAWBNo;
+                            isi.ForwardingDate = detail.TransactionDate; // DateTime.UtcNow;
+                            isi.VerifiedWeight = Convert.ToDouble(detail.Weight);
+
+                        }
+                        else
+                        {
                             isi.FAgentID = Convert.ToInt32(detail.FAgentId);
                             isi.ForwardingCharge = Convert.ToDecimal(item.ForwardingCharge);
                             isi.StatusAssignment = false;
@@ -921,7 +1628,7 @@ namespace CMSV2.Controllers
             //ImportDataFixation importdata = new ImportDataFixation();
             string Targetvalue = "";
             //var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
-            var data = (from c in importdata where c.ShipmentType == "Transhipment" && c.FieldName == FieldName && c.SourceValue == SourceValue select c).FirstOrDefault();
+            var data = (from c in importdata where c.ShipmentType == "Transhipment" && c.FieldName == FieldName && c.SourceValue.Trim() == SourceValue select c).FirstOrDefault();
             if (data != null)
                 Targetvalue = data.TargetValue;
 
@@ -943,15 +1650,18 @@ namespace CMSV2.Controllers
             for (int i = 0; i < dt.Columns.Count; i++)
             {
                 var colname = dt.Columns[i].ColumnName.Trim();
-                if (colname == "ParcelType")
-                    sourcecol = "Parceltype";
+                if (colname == "FAgentName")
+                    sourcecol = "FAgentName";
                 //else
                 //{ sourcecol = colname
                 //}
                 int rowindex = 0;
                 foreach (DataRow row in dt.Rows)
                 {
-                    string targetvalue = GetDataFixation(data, colname, row[colname].ToString());
+                    if (row[colname] == null)
+                        row[colname] = "";
+
+                    string targetvalue = GetDataFixation(data, colname, row[colname].ToString().Trim());
                     if (targetvalue != "")
                     {
                         dt.Rows[rowindex][colname] = targetvalue;
@@ -964,7 +1674,9 @@ namespace CMSV2.Controllers
             List<TranshipmentModel> list = TranshipmentList(dt);
             Session["ManifestTranshipment"] = list;
             model.TransDetails = list;
-            return "ok";
+            string result=CheckDataValidation1();
+            
+            return result;
             
 
         }
@@ -1381,7 +2093,7 @@ namespace CMSV2.Controllers
             }
             return empList;
         }
-
+        
     }
 
         public class DataObject

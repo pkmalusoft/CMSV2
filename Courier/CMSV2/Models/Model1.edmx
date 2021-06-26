@@ -1276,8 +1276,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
           <Property Name="CustomerRateTypeID" Type="int" />
         </EntityType>
         <EntityType Name="CustomerNotification">
@@ -1329,7 +1329,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Key>
             <PropertyRef Name="CustomerRateDetID" />
           </Key>
-          <Property Name="CustomerRateDetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerRateDetID" Type="int" Nullable="false" />
           <Property Name="CustomerRateID" Type="int" Nullable="false" />
           <Property Name="AdditionalWeightFrom" Type="money" Nullable="false" />
           <Property Name="AdditionalWeightTo" Type="money" Nullable="false" />
@@ -2707,6 +2707,20 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AcHeadID" Type="int" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="OutScanReturn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InScanID" Type="int" />
+          <Property Name="ShipmentDetailID" Type="int" />
+          <Property Name="PrevDRSID" Type="int" />
+          <Property Name="AWBNo" Type="varchar" MaxLength="50" />
+          <Property Name="PrevCourierStatusId" Type="int" />
+          <Property Name="QuickInScanId" Type="int" />
+          <Property Name="CreatedBy" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="OutstandingInvoiceDetails">
           <Key>
@@ -6967,6 +6981,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="OtherChargeInvoiceDetails" EntityType="Self.OtherChargeInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OtherChargesType" EntityType="Self.OtherChargesType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OthereChargesType" EntityType="Self.OthereChargesType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OutScanReturn" EntityType="Self.OutScanReturn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OutstandingInvoiceDetails" EntityType="Self.OutstandingInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PageControlField" EntityType="Self.PageControlField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PageControlMaster" EntityType="Self.PageControlMaster" Schema="dbo" store:Type="Tables" />
@@ -8302,14 +8317,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="CountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="CustomerMultiContract">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerID" Type="Int32" Nullable="false" />
-          <Property Name="CustomerRateTypeID" Type="Int32" />
-        </EntityType>
         <EntityType Name="CustomerNotification">
           <Key>
             <PropertyRef Name="NotificationId" />
@@ -8347,7 +8354,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <NavigationProperty Name="CustomerRateType1" Relationship="Self.FK_CustomerRate_CustomerRateType1" FromRole="CustomerRate" ToRole="CustomerRateType" />
           <NavigationProperty Name="ZoneChart" Relationship="Self.FK_CustomerRate_ZoneChart" FromRole="CustomerRate" ToRole="ZoneChart" />
           <NavigationProperty Name="ZoneChart1" Relationship="Self.FK_CustomerRate_ZoneChart1" FromRole="CustomerRate" ToRole="ZoneChart" />
-          <NavigationProperty Name="CustomerRateDets" Relationship="Self.FK_CustomerRateDet_CustomerRate" FromRole="CustomerRate" ToRole="CustomerRateDet" />
           <Property Name="MovementID" Type="Int32" />
           <Property Name="PaymentModeID" Type="Int32" />
         </EntityType>
@@ -8363,18 +8369,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_CustomerRateAssign_CustomerMaster" FromRole="CustomerRateAssign" ToRole="CustomerMaster" />
           <NavigationProperty Name="CustomerRateType" Relationship="Self.FK_CustomerRateAssign_CustomerRateType" FromRole="CustomerRateAssign" ToRole="CustomerRateType" />
-        </EntityType>
-        <EntityType Name="CustomerRateDet">
-          <Key>
-            <PropertyRef Name="CustomerRateDetID" />
-          </Key>
-          <Property Name="CustomerRateDetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerRateID" Type="Int32" Nullable="false" />
-          <Property Name="AdditionalWeightFrom" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="AdditionalWeightTo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="IncrementalWeight" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="AdditionalRate" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <NavigationProperty Name="CustomerRate" Relationship="Self.FK_CustomerRateDet_CustomerRate" FromRole="CustomerRateDet" ToRole="CustomerRate" />
         </EntityType>
         <EntityType Name="CustomerRateType">
           <Key>
@@ -11146,20 +11140,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CustomerRateDet_CustomerRate">
-          <End Role="CustomerRate" Type="Self.CustomerRate" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="CustomerRateDet" Type="Self.CustomerRateDet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerRate">
-              <PropertyRef Name="CustomerRateID" />
-            </Principal>
-            <Dependent Role="CustomerRateDet">
-              <PropertyRef Name="CustomerRateID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerRateAssign_CustomerRateType">
           <End Role="CustomerRateType" Type="Self.CustomerRateType" Multiplicity="0..1" />
           <End Role="CustomerRateAssign" Type="Self.CustomerRateAssign" Multiplicity="*" />
@@ -11780,11 +11760,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="CustomerEnquiries" EntityType="Self.CustomerEnquiry" />
           <EntitySet Name="CustomerInvoiceDetails" EntityType="Self.CustomerInvoiceDetail" />
           <EntitySet Name="CustomerMasters" EntityType="Self.CustomerMaster" />
-          <EntitySet Name="CustomerMultiContracts" EntityType="Self.CustomerMultiContract" />
           <EntitySet Name="CustomerNotifications" EntityType="Self.CustomerNotification" />
           <EntitySet Name="CustomerRates" EntityType="Self.CustomerRate" />
           <EntitySet Name="CustomerRateAssigns" EntityType="Self.CustomerRateAssign" />
-          <EntitySet Name="CustomerRateDets" EntityType="Self.CustomerRateDet" />
           <EntitySet Name="CustomerRateTypes" EntityType="Self.CustomerRateType" />
           <EntitySet Name="CustSuppJVs" EntityType="Self.CustSuppJV" />
           <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetail" />
@@ -12158,10 +12136,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <AssociationSet Name="FK_CustomerRate_ZoneChart1" Association="Self.FK_CustomerRate_ZoneChart1">
             <End Role="ZoneChart" EntitySet="ZoneCharts" />
             <End Role="CustomerRate" EntitySet="CustomerRates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerRateDet_CustomerRate" Association="Self.FK_CustomerRateDet_CustomerRate">
-            <End Role="CustomerRate" EntitySet="CustomerRates" />
-            <End Role="CustomerRateDet" EntitySet="CustomerRateDets" />
           </AssociationSet>
           <AssociationSet Name="FK_CustomerRateAssign_CustomerRateType" Association="Self.FK_CustomerRateAssign_CustomerRateType">
             <End Role="CustomerRateType" EntitySet="CustomerRateTypes" />
@@ -14998,6 +14972,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="PODSignatures" EntityType="DB_9F57C4_couriertest_newModel.PODSignature" />
           <EntitySet Name="PkpDelAttemptReasons" EntityType="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason" />
           <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
+          <EntitySet Name="CustomerRateDets" EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" />
+          <EntitySet Name="CustomerMultiContracts" EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" />
+          <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20055,6 +20032,39 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="DRSID" Type="Int32" />
           <Property Name="ReasonID" Type="Int32" />
         </EntityType>
+        <EntityType Name="CustomerRateDet">
+          <Key>
+            <PropertyRef Name="CustomerRateDetID" />
+          </Key>
+          <Property Name="CustomerRateDetID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerRateID" Type="Int32" Nullable="false" />
+          <Property Name="AdditionalWeightFrom" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="AdditionalWeightTo" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="IncrementalWeight" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="AdditionalRate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="CustomerMultiContract">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="CustomerRateTypeID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OutScanReturn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="ShipmentDetailID" Type="Int32" />
+          <Property Name="PrevDRSID" Type="Int32" />
+          <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrevCourierStatusId" Type="Int32" />
+          <Property Name="QuickInScanId" Type="Int32" />
+          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20981,15 +20991,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerMultiContracts">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMultiContract">
-              <MappingFragment StoreEntitySet="CustomerMultiContract">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerNotifications">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerNotification">
               <MappingFragment StoreEntitySet="CustomerNotification">
@@ -21035,18 +21036,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerRateDets">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerRateDet">
-              <MappingFragment StoreEntitySet="CustomerRateDet">
-                <ScalarProperty Name="CustomerRateDetID" ColumnName="CustomerRateDetID" />
-                <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
-                <ScalarProperty Name="AdditionalWeightFrom" ColumnName="AdditionalWeightFrom" />
-                <ScalarProperty Name="AdditionalWeightTo" ColumnName="AdditionalWeightTo" />
-                <ScalarProperty Name="IncrementalWeight" ColumnName="IncrementalWeight" />
-                <ScalarProperty Name="AdditionalRate" ColumnName="AdditionalRate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29313,6 +29302,42 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
                 <ScalarProperty Name="date" ColumnName="date" />
                 <ScalarProperty Name="image" ColumnName="image" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerRateDets">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerRateDet">
+              <MappingFragment StoreEntitySet="CustomerRateDet">
+                <ScalarProperty Name="AdditionalRate" ColumnName="AdditionalRate" />
+                <ScalarProperty Name="IncrementalWeight" ColumnName="IncrementalWeight" />
+                <ScalarProperty Name="AdditionalWeightTo" ColumnName="AdditionalWeightTo" />
+                <ScalarProperty Name="AdditionalWeightFrom" ColumnName="AdditionalWeightFrom" />
+                <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
+                <ScalarProperty Name="CustomerRateDetID" ColumnName="CustomerRateDetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerMultiContracts">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMultiContract">
+              <MappingFragment StoreEntitySet="CustomerMultiContract">
+                <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OutScanReturns">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.OutScanReturn">
+              <MappingFragment StoreEntitySet="OutScanReturn">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="QuickInScanId" ColumnName="QuickInScanId" />
+                <ScalarProperty Name="PrevCourierStatusId" ColumnName="PrevCourierStatusId" />
+                <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+                <ScalarProperty Name="PrevDRSID" ColumnName="PrevDRSID" />
+                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

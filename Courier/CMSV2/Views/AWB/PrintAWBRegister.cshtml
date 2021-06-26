@@ -217,6 +217,15 @@
                     <th width="10%">
                         TOTAL CHARGE
                     </th>
+                    <th>
+                        Fwd Agent
+                    </th>
+                    <th>
+                        Consignee Address
+                    </th>
+                    <th>
+                        Description
+                    </th>
                 </tr>
             </thead>
 
@@ -224,59 +233,69 @@
                 @foreach (var item in Model)
                 {
 
-                    pcstot = pcstot + Convert.ToInt32(@item.Pieces);
+                    //pcstot = pcstot + Convert.ToInt32(@item.Pieces);
                     weighttot = weighttot + Convert.ToDecimal(@item.Weight);
                     nettotal = nettotal + Convert.ToDecimal(@item.totalCharge);
                     couriercharge = couriercharge + Convert.ToDecimal(@item.CourierCharge);
                     othercharge = othercharge + Convert.ToDecimal(@item.OtherCharge);
 
-                    <tr style="border:1px solid #afa7a7">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HAWBNo)
-                        </td>
-                        <td class="text-right">
-                            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InScanDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.shippername)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.consigneename)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ConsigneePhone)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.origin)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.destination)
-                        </td>
-                        <td style="text-align:right">
-                            @Html.DisplayFor(modelItem => item.Pieces)
+                <tr style="border:1px solid #afa7a7">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HAWBNo)
+                    </td>
+                    <td class="text-right">
+                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InScanDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.shippername)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.consigneename)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConsigneePhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.origin)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.destination)
+                    </td>
+                    <td style="text-align:right">
+                        @Html.DisplayFor(modelItem => item.Pieces)
 
-                        </td>
-                        <td style="text-align:right">
-                            @*@Html.DisplayFor(modelItem => item.Weight)*@
-                            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.Weight, "3")
+                    </td>
+                    <td style="text-align:right">
+                        @*@Html.DisplayFor(modelItem => item.Weight)*@
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.Weight, "3")
 
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.paymentmode)
-                        </td>
-                        <td class="textright" style="text-align: right">
-                            @*@Html.DisplayFor(modelItem => item.CourierCharge)*@
-                            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge, @_decimal.ToString())
-                        </td>
-                        <td style="text-align:right">
-                            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, @_decimal.ToString())
-                            @*@Html.DisplayFor(modelItem => item.OtherCharge)*@
-                        </td>
-                        <td style="text-align: right">
-                            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.totalCharge, @_decimal.ToString())
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.paymentmode)
+                    </td>
+                    <td class="textright" style="text-align: right">
+                        @*@Html.DisplayFor(modelItem => item.CourierCharge)*@
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge, @_decimal.ToString())
+                    </td>
+                    <td style="text-align:right">
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, @_decimal.ToString())
+                        @*@Html.DisplayFor(modelItem => item.OtherCharge)*@
+                    </td>
+                    <td style="text-align: right">
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.totalCharge, @_decimal.ToString())
 
-                        </td>
-                    </tr>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FAgentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConsigneeAddress1_Building) <br />
+                        @Html.DisplayFor(modelItem => item.ConsigneeAddress3_PinCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.Description)
+                    </td>
+                </tr>
                     i++;
                 }
 
@@ -314,6 +333,7 @@
                     <td style="text-align: right">
                         @CMSV2.Models.CommanFunctions.GetFormatNumber(@nettotal, _decimal.ToString())
                     </td>
+                   
                 </tr>
             </tfoot>
         </table>

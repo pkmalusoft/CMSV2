@@ -4087,7 +4087,7 @@ new AcGroupModel()
             ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
             ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
 
-            DateTime pFromDate;
+            DateTime pFromDate; 
             DateTime pToDate;
 
             if (reportparam == null)

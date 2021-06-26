@@ -58,11 +58,9 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerEnquiry" Width="1.5" PointX="26.75" PointY="77.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Width="1.5" PointX="20" PointY="45.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerMaster" Width="1.5" PointX="19.5" PointY="77.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" Width="1.5" PointX="27.75" PointY="11.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerNotification" Width="1.5" PointX="9.75" PointY="29.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRate" Width="1.5" PointX="24.75" PointY="64.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateAssign" Width="1.5" PointX="24.75" PointY="74.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" Width="1.5" PointX="27" PointY="62.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateType" Width="1.5" PointX="22.5" PointY="65.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustSuppJV" Width="1.5" PointX="27.75" PointY="14.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNoteDetail" Width="1.5" PointX="27.75" PointY="29.125" IsExpanded="true" />
@@ -254,7 +252,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRate_CustomerRateType1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRate_ZoneChart" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRate_ZoneChart1" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRateDet_CustomerRate" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRateAssign_CustomerRateType" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerRateType_ZoneCategory" ManuallyRouted="false" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_ExpenseDetails_Expense" ManuallyRouted="false" />
@@ -385,6 +382,9 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PODSignature" Width="1.5" PointX="34.375" PointY="13.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PkpDelAttemptReason" Width="1.5" PointX="44.375" PointY="6.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" Width="1.5" PointX="48.375" PointY="42.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" Width="1.5" PointX="42.375" PointY="48.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" Width="1.5" PointX="48.375" PointY="45.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" Width="1.5" PointX="48.375" PointY="48.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

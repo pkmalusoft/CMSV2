@@ -10,7 +10,88 @@
     var nextindex = 0;
     var lastindex = 0;
     var nextcontractrate = 0;
+    function getmaxweight() {
+        debugger; 
+        
+        var maxweight = 0;
+        var maxrow = $('#details > tr').length;
+        if (maxrow == 0) {
+            maxweight = parseFloat($('#BaseWt').val()) + parseFloat('.001');            
+            return maxweight;
+        }
 
+        for (var i = maxrow; i >= 0; i--) {
+            if ($('#hdndeleted_' + i).val() == 'false') {
+                maxweight = parseFloat($('#txtWtTo_' + i).val()) + parseFloat('.001');
+                return maxweight;
+            }
+        }
+        
+    }
+    function getmaxIncrweight() {
+        debugger;
+
+        var maxweight = 0;
+        var maxrow = $('#details > tr').length;
+        if (maxrow == 0) {
+            return 0.5;
+        }
+        for (var i = maxrow; i >=0; i--) {
+            if ($('#hdndeleted_' + i).val() == 'false') {
+                maxweight = parseFloat($('#txtIncrWt_' + i).val());
+                return maxweight;
+            }
+        }
+
+    }
+    function getmaxbaserate() {
+        var idtext = 'txtContractRate_';
+        var maxweight = 0;
+        var maxrow = $('#details > tr').length;
+        if (maxrow == 0) {
+            return $('#BaseRate').val();
+        }
+        for (var i = maxrow; i >= 0; i--) {
+            if ($('#hdndeleted_' + i).val() == 'false') {
+                maxweight = $('#txtContractRate_' + i).val();
+                return maxweight;
+            }
+        }
+
+    }
+
+    function getmaxbaserate1(index) {
+        var idtext = 'txtContractRate_';
+        var maxweight = 0;
+        var maxrow = $('#details > tr').length - 1;
+        for (var i = index; i >= 0; i--) {
+            if ($('#hdndeleted_' + i).val() == 'false') {
+                maxweight = $('#txtContractRate_' + i ).val();
+                return maxweight;
+            }
+        }
+
+    }
+    function contractdatecal(index) {
+        debugger;
+        if (index == 0 || index==-1) //|| $("#hfAddCustomerRate").val() == 0) {
+        {
+            if ($("#BaseRate").val() != "" && $("#txtContractRate_" + index).val() != "") {
+                var AddittionalRate = parseFloat($("#txtContractRate_" + index).val()) - parseFloat($("#BaseRate").val());
+
+                $("#txtAddRate_" + index).val(AddittionalRate.toFixed(2));
+            }
+        }
+        else {
+
+            var baserate = parseFloat(getmaxbaserate1(index-1));
+            var decAdditionalRate;
+            decAdditionalRate = parseFloat($("#txtContractRate_" + index).val()) - parseFloat(baserate);
+            $("#txtAddRate_" + index).val(decAdditionalRate.toFixed(2));
+            $("#txtContractRate_" + index).val(parseFloat($("#txtContractRate_" + index).val()).toFixed(2));
+        }
+
+    }
     function DisplayRateDetails() {
        
         $.ajax({
@@ -37,13 +118,13 @@
                     //    '<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a>' +
                     //    '<a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
                     //    '</tr> ');
+                    //CustomerRateDetID
 
-
-                    var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + value.AddWtFrom  + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
-                        '<td><input type="text" class="text-right" value="' + value.AddWtTo + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
-                        '<td><input type="text"  class="text-right" value="' + value.IncrWt + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                        '<td><input type="text" class="text-right" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
-                        '<td><input type="text"  class="text-right crate" value="' + value.AddRate  + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
+                    var html = '<tr><td><input type="hidden" name="CustRateDetails[' + i + '].CustomerRateDetID" value ="' + value.CustomerRateDetID + '" id = "hdnCustomerRateDetID_' + i + '" /><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + value.AddWtFrom  + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
+                        '<td><input type="text" class="text-right" id="txtWtTo_' + i + '"  value="' + value.AddWtTo + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
+                        '<td><input type="text"  class="text-right" id="txtIncrWt_' + i + '" value="' + value.IncrWt + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
+                        '<td><input type="text" class="text-right"  id="txtContractRate_' + i + '" value="' + x + '" name="CustRateDetails[' + i + '].ContractRate" onchange="contractdatecal(' + i + ')" ></td>' +
+                        '<td><input type="text"  class="text-right crate" id="txtAddRate_' + i + '" value="' + value.AddRate  + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                         //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                         '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
                         +'</tr>';
@@ -55,7 +136,8 @@
 
                 var temp = parseFloat($("#details tr:last").find("td:eq(1)").text()) + parseFloat("0.001");
                 $("#addwtfrom").val(parseFloat(temp).toFixed(3));
-
+                $('#addwtfrom').val(getmaxweight());                 
+                $('#incrwt').val(getmaxIncrweight());
             }
 
         });
@@ -121,6 +203,7 @@
             $("#BaseRate").focus();
 
         });
+        
         $("#BaseRate").blur(function () {
             var wt = $(this).val();
 
@@ -162,30 +245,14 @@
             },
         });
 
-        //$("#ContractRateTypeID").change(function () {
-        //    $("#ZoneChartID").empty();
-        //    $('#ZoneChartID').append('<option value="0">Select</option>');
-
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/CustomerRatesMaster/GetZoneByCustomer",
-        //        datatype: "Json",
-        //        data: { contractid: $("#ContractRateTypeID option:selected").val() },
-        //        success: function (data) {
-
-
-        //            $.each(data, function (index, value) {
-        //                $('#ZoneChartID').append('<option value="' + value.ZoneID + '">' + value.ZoneName + '</option>');
-        //            });
-
-        //        }
-        //    });
-        //});
-
-        $("#contractrate").blur(function () {
-            var rowCount = $('#details tr').length - 1;
-
-            if (rowCount == 0 || $("#hfAddCustomerRate").val() == 0) {
+    
+       
+        $("#contractrate").change(function () {
+            debugger;
+            var rowCount = $('#details > tr').length;// - 1;
+            
+            if (rowCount == 0) //|| $("#hfAddCustomerRate").val() == 0) {
+            {
                 if ($("#BaseRate").val() != "" && $("#contractrate").val() != "") {
                     var AddittionalRate = parseFloat($("#contractrate").val()) - parseFloat($("#BaseRate").val());
 
@@ -194,26 +261,30 @@
             }
             else {
 
-
+                var baserate = parseFloat(getmaxbaserate());
                 var decAdditionalRate;
-                var x = $("#details tr:last td:nth-child(4)");
-
-                var c = $(x).text();
-                decAdditionalRate = parseFloat($("#contractrate").val()) - parseFloat(c);
+                //var x = $("#details tr:last td:nth-child(4)");
+                //var c = $(x).text();
+                decAdditionalRate = parseFloat($("#contractrate").val()) - parseFloat(baserate);
 
                 $("#addrate").val(decAdditionalRate.toFixed(2));
             }
 
-            var w = $(this).val();
-            $(this).val(parseFloat(w).toFixed(2));
+            //var w = $(this).val();
+            //$(this).val(parseFloat(w).toFixed(2));
 
             $("#hfAddCustomerRate").val(parseInt(rowCount) + 1);
         });
 
+        
+        //$("#addwtfrom").blur(function () {
+            
+        //});
         $("#addwtto").blur(function () {
-            if ($("#addwtfrom").val() == 'NaN')
-                $("#addwtfrom").val('');
-            if ($("#addwtfrom").val()!='' && ($(this).val() < $("#addwtfrom").val())) {
+            if ($("#addwtfrom").val() == 'NaN') {              
+               $("#addwtfrom").val('');
+            }
+            if ($("#addwtfrom").val()!='' && (parseFloat($(this).val()) <  parseFloat($("#addwtfrom").val()))) {
                 $(".outrange").show();
                 $(this).focus();
             }
@@ -223,9 +294,9 @@
                 $(".outrange").hide();
 
                 var addwtfrm = $("#addwtfrom").val();
-                var incr = parseFloat(wt) - parseFloat(addwtfrm);
+                var incr = parseFloat(wt) - parseFloat(addwtfrm) + parseFloat('.001');
 
-                $("#incrwt").val(parseFloat(incr).toFixed(3));
+                $("#incrwt").val(getmaxIncrweight());
 
                 $("#incrwt").focus();
             }
@@ -233,13 +304,13 @@
 
         $("#incrwt").blur(function () {
             var wt = $(this).val();
-            $(this).val(parseFloat(wt).toFixed(3));
+            $(this).val(getmaxIncrweight());
 
         });
 
         $("#btnadd").click(function () {
             if (CheckForNull() == true) {
-                var i = $('#details tr').length - 1;
+                var i = $('#details > tr').length;
 
                 //$("#details").append('<tr>' + '<td>' + $("#addwtfrom").val() + '<input type="hidden" value=' + $("#addwtfrom").val() + ' name="CustRateDetails[' + i + '].AddWtFrom"></td>' +
                 //    '<td>' + $("#addwtto").val() + '<input type="hidden" value=' + $("#addwtto").val() + ' name="CustRateDetails[' + i + '].AddWtTo"></td>' + '<td>' + $("#incrwt").val() + '<input type="hidden" value=' + $("#incrwt").val() + ' name="CustRateDetails[' + i + '].IncrWt"></td>' + '<td>' + $("#contractrate").val() + '<input type="hidden" value=' + $("#contractrate").val() + ' name="CustRateDetails[' + i + '].ContractRate"></td>' + '<td>' + $("#addrate").val() + '<input type="hidden" class="crate" value=' + $("#addrate").val() + ' name="CustRateDetails[' + i + '].AddRate"></td>' +
@@ -247,11 +318,11 @@
                 //    '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
                 //    '</tr> ');
 
-                var html = '<tr><td><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + $("#addwtfrom").val() + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
-                     '<td><input type="text"class="text-right"  value="' + $("#addwtto").val() + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
-                     '<td><input type="text" class="text-right" value="' + $("#incrwt").val() + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
-                     '<td><input type="text" class="text-right" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate"></td>' +
-                     '<td><input type="text" class="text-right crate" value="' + $("#addrate").val() + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
+                var html = '<tr><td><input type="hidden" name="CustRateDetails[' + i + '].CustomerRateDetID" value ="0" id = "hdnCustomerRateDetID_' + i + '" /><input class="hdndeleted" type="hidden" name="CustRateDetails[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type="text" class="text-right" value="' + $("#addwtfrom").val() + '" name="CustRateDetails[' + i + '].AddWtFrom" /></td>' +
+                    '<td><input type="text"class="text-right" id="txtWtTo_' + i + '"   value="' + $("#addwtto").val() + '" name="CustRateDetails[' + i + '].AddWtTo"></td>' +
+                    '<td><input type="text" class="text-right"  id="txtIncrWt_' + i + '"  value="' + $("#incrwt").val() + '" name="CustRateDetails[' + i + '].IncrWt"></td>' +
+                    '<td><input type="text" class="text-right" id="txtContractRate_' + i + '" value="' + $("#contractrate").val() + '" name="CustRateDetails[' + i + '].ContractRate" onchange="contractdatecal(' + i + ')" ></td>' +
+                    '<td><input type="text" class="text-right crate"  id="txtAddRate_' + i + '" value="' + $("#addrate").val() + '" name="CustRateDetails[' + i + '].AddRate"></td>' +
                      //'<td><a href="javascript:void(0)" onclick="check(this)" value="Click"><i class="fa fa-pencil"></i></a></td>' +
                     '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>' +
                     +'</tr>';
@@ -263,11 +334,12 @@
                 $("#contractrate").val('');
                 $("#addrate").val('');
 
-                var x = $("#details tr:last td:nth-child(2)");
-                var c = $(x).text();
-                var decAdditionalRate = (parseFloat(c) + 0.001).toFixed(3);
+                //var x = $("#details tr:last td:nth-child(2)");
+                //var c = $(x).text();
+                //var decAdditionalRate = (parseFloat(c) + 0.001).toFixed(3);
 
-                $("#addwtfrom").val(decAdditionalRate);
+                //$("#addwtfrom").val(decAdditionalRate);
+                $('#addwtfrom').val(getmaxweight());
             }
             //}
 
@@ -295,27 +367,27 @@
         $("#contractrate").val('');
         $("#addrate").val('');
     }
-    function check(x) {
+    //function check(x) {
 
-        var crow = $(x).parent("td").parent("tr");
-        currentindex = $(crow).index('this');
-        nextindex = parseInt(currentindex) + 1;
+    //    var crow = $(x).parent("td").parent("tr");
+    //    currentindex = $(crow).index('this');
+    //    nextindex = parseInt(currentindex) + 1;
 
-        var addwtfrm = $(crow).find("td:eq(0)").find('input[type=hidden]').val();
-        var addwtto = $(crow).find("td:eq(1)").find('input[type=hidden]').val();
-        var incrwt = $(crow).find("td:eq(2)").find('input[type=hidden]').val();
-        var contract = $(crow).find("td:eq(3)").find('input[type=hidden]').val();
-        var addrate = $(crow).find("td:eq(4)").find('input[type=hidden]').val();
+    //    var addwtfrm = $(crow).find("td:eq(0)").find('input[type=hidden]').val();
+    //    var addwtto = $(crow).find("td:eq(1)").find('input[type=hidden]').val();
+    //    var incrwt = $(crow).find("td:eq(2)").find('input[type=hidden]').val();
+    //    var contract = $(crow).find("td:eq(3)").find('input[type=hidden]').val();
+    //    var addrate = $(crow).find("td:eq(4)").find('input[type=hidden]').val();
 
-        $("#addwtfrom").val(addwtfrm);
-        $("#addwtto").val(addwtto);
-        $("#incrwt").val(incrwt);
-        $("#contractrate").val(contract);
-        $("#addrate").val(addrate);
-        flagedit = 1;
+    //    $("#addwtfrom").val(addwtfrm);
+    //    $("#addwtto").val(addwtto);
+    //    $("#incrwt").val(incrwt);
+    //    $("#contractrate").val(contract);
+    //    $("#addrate").val(addrate);
+    //    flagedit = 1;
 
 
-    }
+    //}
 
     function CheckForNull() {
 
@@ -377,19 +449,19 @@
                     @Html.ValidationMessageFor(model => model.FAgentID)
 
                 </div>
-                <div class="col-xs-12 col-sm-3">
+                <div class="col-xs-12 col-sm-2">
                     <label class="headinglabel">Payment Mode</label>
                     @Html.DropDownListFor(model => model.PaymentModeID, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
                 </div>
                 <div class="col-md-3">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                     <label class="headinglabel required">Base Weight</label>
                     @Html.TextBoxFor(model => model.BaseWt, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BaseWt)
                     @Html.HiddenFor(model => model.hfAddCustomerRate)
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="flexTitle">
                         <label class="headinglabel required">B. Rate</label>
                         <div class="checkboxdesign no-padding  text-right" style="float:right">

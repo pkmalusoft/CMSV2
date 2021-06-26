@@ -1307,6 +1307,8 @@ namespace CMSV2.Controllers
                    join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
                    from subpet1 in gj1.DefaultIfEmpty()
                    join pay in db.tblPaymentModes on c.PaymentModeId equals pay.ID
+                   join fwd in db.ForwardingAgentMasters on c.FAgentId equals fwd.FAgentID into gj2
+                   from subpet2 in gj2.DefaultIfEmpty()
                    where c.BranchID == branchid
                    && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
                    
@@ -1333,7 +1335,12 @@ namespace CMSV2.Controllers
                        totalCharge = c.NetTotal,
                        MovementTypeID = c.MovementID == null ? 0 : c.MovementID.Value,
                        paymentmode=pay.PaymentModeText,
-                       ConsigneePhone = c.ConsigneePhone
+                       ConsigneePhone = c.ConsigneePhone,
+                       ConsigneeAddress1_Building =c.ConsigneeAddress1_Building + "," + c.ConsigneeAddress2_Street,
+                       ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,
+                       Description =c.CargoDescription,
+
+                       
                    }).ToList();
 
             if (datePicker.SelectedValues != null)
@@ -1834,7 +1841,8 @@ namespace CMSV2.Controllers
                 model.Details = new List<AWBTrackStatusVM>();
                 model.AWBNo = "";
                 model.PODImage = new tblPodImage();
-                model.PODStatus = new POD();
+                model.PODStatus = new POD();                
+                model.PODSignature = new PODSignature();                
             }
             else
             {
@@ -1962,13 +1970,18 @@ namespace CMSV2.Controllers
                                 model.PODStatus = new POD();
                                 model.PODSignature = new PODSignature();
                                 model.PODImage = new tblPodImage();
+                                
                             }
                         }
                         else
                         {
                             model.AWB = new QuickAWBVM();
                             List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
+                            model.PODStatus = new POD();
+                            model.PODSignature = new PODSignature();
+                            model.PODImage = new tblPodImage();
                             model.Details = details;
+                            TempData["ErrorMsg"] = "AWB No. Not Found!";
                         }
                 }
                 }
@@ -1976,7 +1989,11 @@ namespace CMSV2.Controllers
                 {
                     model.AWB = new QuickAWBVM();
                     List<AWBTrackStatusVM> details = new List<AWBTrackStatusVM>();
+                    model.PODStatus = new POD();
+                    model.PODSignature = new PODSignature();
+                    model.PODImage = new tblPodImage();
                     model.Details = details;
+                    TempData["ErrorMsg"] = "AWB No. Not Found!";
                 }
             }
             return View(model);

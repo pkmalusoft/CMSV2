@@ -105,12 +105,12 @@ namespace CMSV2.Controllers
                 {
                     db.Entry(r).State = EntityState.Modified;
                     db.SaveChanges();
-                    var data = (from c in db.CustomerRateDets where c.CustomerRateID == v.CustomerRateID select c).ToList();
-                    foreach (var item in data)
-                    {
-                        db.CustomerRateDets.Remove(item);
-                        db.SaveChanges();
-                    }
+                    //var data = (from c in db.CustomerRateDets where c.CustomerRateID == v.CustomerRateID select c).ToList();
+                    //foreach (var item in data)
+                    //{
+                    //    db.CustomerRateDets.Remove(item);
+                    //    db.SaveChanges();
+                    //}
                 }
                 else
                 {
@@ -124,19 +124,47 @@ namespace CMSV2.Controllers
                     {
                         if (item.Deleted == false)
                         {
+                            if (item.CustomerRateDetID == 0)
+                            {
+                                var acgrps = (from d in db.CustomerRateDets orderby d.CustomerRateDetID descending select d.CustomerRateDetID).FirstOrDefault();
+                                var maxid = acgrps + 1;
+                                CustomerRateDet a = new CustomerRateDet();
+                                a.CustomerRateDetID = maxid;
+                                a.CustomerRateID = r.CustomerRateID;
+                                a.AdditionalWeightFrom = item.AddWtFrom;
+                                a.AdditionalWeightTo = item.AddWtTo;
+                                a.IncrementalWeight = item.IncrWt;
+                                a.AdditionalRate = item.AddRate;
+
+                                db.CustomerRateDets.Add(a);
+                                db.SaveChanges();
+                            }
+                            else if (item.CustomerRateDetID > 0)
+                            {
+                                CustomerRateDet a = new CustomerRateDet();
+                                a = db.CustomerRateDets.Find(item.CustomerRateDetID);
+
+                                a.CustomerRateID = r.CustomerRateID;
+                                a.AdditionalWeightFrom = item.AddWtFrom;
+                                a.AdditionalWeightTo = item.AddWtTo;
+                                a.IncrementalWeight = item.IncrWt;
+                                a.AdditionalRate = item.AddRate;
+
+                                db.Entry(a).State = EntityState.Modified;
+                                db.SaveChanges();
+
+                            }
+                        }
+                        else if (item.Deleted == true && item.CustomerRateDetID > 0)
+                        {
                             CustomerRateDet a = new CustomerRateDet();
-
-                            a.CustomerRateID = r.CustomerRateID;
-                            a.AdditionalWeightFrom = item.AddWtFrom;
-                            a.AdditionalWeightTo = item.AddWtTo;
-                            a.IncrementalWeight = item.IncrWt;
-                            a.AdditionalRate = item.AddRate;
-
-                            db.CustomerRateDets.Add(a);
+                            a = db.CustomerRateDets.Find(item.CustomerRateDetID);
+                            db.CustomerRateDets.Remove(a);
                             db.SaveChanges();
+
                         }
                     }
-                }
+                    }
 
                 return RedirectToAction("Index");
 
@@ -209,25 +237,40 @@ namespace CMSV2.Controllers
             db.Entry(r).State = EntityState.Modified;
             db.SaveChanges();
 
-            var data = (from c in db.CustomerRateDets where c.CustomerRateID == v.CustomerRateID select c).ToList();
-            foreach (var item in data)
-            {
-                db.CustomerRateDets.Remove(item);
-                db.SaveChanges();
-            }
+            //var data = (from c in db.CustomerRateDets where c.CustomerRateID == v.CustomerRateID select c).ToList();
+            //foreach (var item in data)
+            //{
+            //    db.CustomerRateDets.Remove(item);
+            //    db.SaveChanges();
+            //}
 
             foreach (var item in v.CustRateDetails)
             {
-                CustomerRateDet a = new CustomerRateDet();
+                if (item.CustomerRateDetID == 0)
+                {
+                    CustomerRateDet a = new CustomerRateDet();
+                    a.CustomerRateID = r.CustomerRateID;
+                    a.AdditionalWeightFrom = item.AddWtFrom;
+                    a.AdditionalWeightTo = item.AddWtTo;
+                    a.IncrementalWeight = item.IncrWt;
+                    a.AdditionalRate = item.AddRate;
 
-                a.CustomerRateID = r.CustomerRateID;
-                a.AdditionalWeightFrom = item.AddWtFrom;
-                a.AdditionalWeightTo = item.AddWtTo;
-                a.IncrementalWeight = item.IncrWt;
-                a.AdditionalRate = item.AddRate;
+                    db.CustomerRateDets.Add(a);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    CustomerRateDet a = new CustomerRateDet();
+                    a = db.CustomerRateDets.Find(item.CustomerRateDetID);
+                    a.CustomerRateID = r.CustomerRateID;
+                    a.AdditionalWeightFrom = item.AddWtFrom;
+                    a.AdditionalWeightTo = item.AddWtTo;
+                    a.IncrementalWeight = item.IncrWt;
+                    a.AdditionalRate = item.AddRate;
 
-                db.CustomerRateDets.Add(a);
-                db.SaveChanges();
+                    db.Entry(a).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
 
             return RedirectToAction("Index");
@@ -237,7 +280,7 @@ namespace CMSV2.Controllers
         public class det
         {
             public int CustomerRateID { get; set; }
-
+            public int CustomerRateDetID { get; set; }
             public decimal AddWtFrom { get; set; }
             public decimal AddWtTo { get; set; }
             public decimal IncrWt { get; set; }
@@ -260,9 +303,8 @@ namespace CMSV2.Controllers
                 foreach (var item in data)
                 {
                     det d = new det();
-
+                      d.CustomerRateDetID = item.CustomerRateDetID;
                     d.CustomerRateID = item.CustomerRateID;
-
                     d.AddWtFrom = item.AdditionalWeightFrom;
                     d.AddWtTo = item.AdditionalWeightTo;
                     d.IncrWt = item.IncrementalWeight;

@@ -1,4 +1,7 @@
 ﻿@model CMSV2.Models.ImportManifestVM
+    @{ 
+        var _decimal = @Session["Decimal"].ToString();
+    }
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -100,12 +103,14 @@
                 <td>
                     @item.Pcs
                 </td>
-                <td>
+                <td style="text-align:right">
                     @item.Weight
                 </td>
-                <td>@item.Value</td>
                 <td>
-                    @item.COD
+                    @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.Value, _decimal)
+                </td>
+                <td>
+                    @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.COD, _decimal)                    
                 </td>          
                 <td>
                     @item.Currency

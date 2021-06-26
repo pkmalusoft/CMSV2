@@ -983,7 +983,13 @@ namespace CMSV2.DAL
                     obj.DRSNo = ds.Tables[0].Rows[i]["DRSNo"].ToString();
                     obj.DRSDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["DRSDate"].ToString());
                     obj.Deliver = ds.Tables[0].Rows[i]["DeliveredBy"].ToString();
+                    obj.CourierName = ds.Tables[0].Rows[i]["CourierName"].ToString();
                     obj.vehicle = ds.Tables[0].Rows[i]["vehicle"].ToString();
+                    obj.TotalCourierCharge= CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TotalCourierCharge"].ToString());
+                    obj.TotalMaterialCost = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TotalMaterialCost"].ToString());
+                    obj.TotalAWB=CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["TotalAWB"].ToString());
+                    obj.APISuccess = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["APISuccess"].ToString());
+                    obj.APIFailed = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["APIFailed"].ToString());
                     objList.Add(obj);
                 }
             }
@@ -1220,7 +1226,7 @@ namespace CMSV2.DAL
                     obj.OtherCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
                     obj.TaxPercentage = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["TaxPercent"].ToString());
                     
-                    obj.NetValue = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["NetTotal"].ToString());
+                    obj.NetValue = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["NetTotal"].ToString());
                     objList.Add(obj);
                 }
             }

@@ -23,7 +23,10 @@ namespace CMSV2.Models
 
     public Decimal? TotalCourierCharge { get; set; }
         public Decimal? TotalMaterialCost{ get; set; }
+        public int TotalAWB { get; set; }
 
+        public int APISuccess { get; set; }
+        public int APIFailed { get; set; }
         public int? VehicleID { get; set; }
 
     public string StatusDRS { get; set; }
@@ -37,7 +40,7 @@ namespace CMSV2.Models
     public string Depot { get; set; }
     public List<DRSAWB> lst { get; set; }
     public string Deliver { get; set; }
-
+        public string CourierName { get; set; }
     public string vehicle { get; set; }
 
     public Decimal Cash { get; set; }

@@ -11,6 +11,7 @@ namespace CMSV2.Models
         public string CompanyCountryName { get; set; }
         public string ManifestDate { get; set; }
         public string FlightDate1 { get; set; }
+        public string CustomerName { get; set; }
         public List<ImportManifestItem> Details { get; set; }
 
         public List<TranshipmentModel> TransDetails { get; set; }

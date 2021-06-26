@@ -921,15 +921,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CustomerMultiContracts">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMultiContract">
-        <MappingFragment StoreEntitySet="CustomerMultiContract">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CustomerNotifications">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerNotification">
         <MappingFragment StoreEntitySet="CustomerNotification">
@@ -975,18 +966,6 @@
           <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
           <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
           <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CustomerRateDets">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerRateDet">
-        <MappingFragment StoreEntitySet="CustomerRateDet">
-          <ScalarProperty Name="CustomerRateDetID" ColumnName="CustomerRateDetID" />
-          <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
-          <ScalarProperty Name="AdditionalWeightFrom" ColumnName="AdditionalWeightFrom" />
-          <ScalarProperty Name="AdditionalWeightTo" ColumnName="AdditionalWeightTo" />
-          <ScalarProperty Name="IncrementalWeight" ColumnName="IncrementalWeight" />
-          <ScalarProperty Name="AdditionalRate" ColumnName="AdditionalRate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9253,6 +9232,27 @@
           <ScalarProperty Name="date" ColumnName="date" />
           <ScalarProperty Name="image" ColumnName="image" />
           <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerRateDets">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerRateDet">
+        <MappingFragment StoreEntitySet="CustomerRateDet">
+          <ScalarProperty Name="AdditionalRate" ColumnName="AdditionalRate" />
+          <ScalarProperty Name="IncrementalWeight" ColumnName="IncrementalWeight" />
+          <ScalarProperty Name="AdditionalWeightTo" ColumnName="AdditionalWeightTo" />
+          <ScalarProperty Name="AdditionalWeightFrom" ColumnName="AdditionalWeightFrom" />
+          <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
+          <ScalarProperty Name="CustomerRateDetID" ColumnName="CustomerRateDetID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerMultiContracts">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMultiContract">
+        <MappingFragment StoreEntitySet="CustomerMultiContract">
+          <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

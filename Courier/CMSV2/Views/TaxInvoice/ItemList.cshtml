@@ -1,16 +1,33 @@
 ﻿@model CMSV2.Models.ShipmentInvoiceVM
 @{
-    int i = 0; 
+    int i = 0;
+    var _decimal = @Session["Decimal"].ToString();
 }
 <script type="text/javascript">
     $(document).ready(function () {
         var table1 = $('#DetailsTable').DataTable({ "paging": false, "sPaginationType": "simple" });
 
+
+        $('#Selectall')
+        $("#Selectall").click(function () {
+            var idtext = 'hdnawbchecked_';
+            if ($("#Selectall").is(':checked')) {
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    $(item).prop('checked', true);
+                });
+            }
+            else {
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                    $(item).prop('checked', false);
+                });
+            }
+        });
+
     });
 </script>
 <table class="table table-responsive table-bordered tblfont" role="grid" style="min-width: 100%" id="DetailsTable">
     <thead>
-    <th style="width:12%">AWB No.</th>
+    <th style="width:12%"><input type="checkbox" style="width:20px;" class="Selectall" id="Selectall" value="0" name="Selectall" />AWB No.</th>
     <th>Bag</th>
     <th>Shipper</th>
     <th>Invoice Value</th>
@@ -31,12 +48,18 @@
             <td>
                 @item.Shipper
             </td>
-            <td>
-                @item.InvoiceValue
+            <td style="text-align:right">                
+                @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.InvoiceValue, _decimal)
             </td>
-            <td>@item.TaxP</td>
-            <td>@item.Tax</td>
-            <td>@item.adminCharges</td>            
+            <td style="text-align:right">
+                @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.TaxP, _decimal)
+            </td>
+            <td style="text-align:right">
+                @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.Tax, _decimal)
+            </td>
+            <td style="text-align:right">
+                @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.adminCharges, _decimal)
+            </td>            
         </tr>
             i++;
         }

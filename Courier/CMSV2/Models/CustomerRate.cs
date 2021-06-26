@@ -14,12 +14,6 @@ namespace CMSV2.Models
     
     public partial class CustomerRate
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CustomerRate()
-        {
-            this.CustomerRateDets = new HashSet<CustomerRateDet>();
-        }
-    
         public int CustomerRateID { get; set; }
         public int CustomerRateTypeID { get; set; }
         public int CourierServiceID { get; set; }
@@ -40,7 +34,5 @@ namespace CMSV2.Models
         public virtual CustomerRateType CustomerRateType1 { get; set; }
         public virtual ZoneChart ZoneChart { get; set; }
         public virtual ZoneChart ZoneChart1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerRateDet> CustomerRateDets { get; set; }
     }
 }

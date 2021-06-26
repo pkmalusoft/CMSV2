@@ -60,7 +60,7 @@ namespace CMSV2.DAL
             ImportManifestSearch paramobj = (ImportManifestSearch)(HttpContext.Current.Session["TranshipmentSearch"]);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "SP_ImportManifestList";
+            cmd.CommandText = "SP_TranshipmentManifestList";
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@AWBNO", "");
@@ -84,6 +84,8 @@ namespace CMSV2.DAL
                     ImportManifestVM obj = new ImportManifestVM();
                     obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
                     obj.ManifestNumber = ds.Tables[0].Rows[i]["ManifestNumber"].ToString();
+                    obj.MAWB= ds.Tables[0].Rows[i]["MAWB"].ToString();
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     obj.CreatedDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CreatedDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());                    
                     objList.Add(obj);
                 }
@@ -156,6 +158,7 @@ namespace CMSV2.DAL
                     awbList.Add(new TranshipmentModel()
                     {
                         SNo = i++,
+                        InScanID = Convert.ToInt32(objDataRow["InScanID"].ToString()),
                         HAWBNo = objDataRow["HAWBNo"].ToString(),
                         AWBDate = objDataRow["AWBDate"].ToString(),
                         Customer = objDataRow["Customer"].ToString(),
@@ -182,10 +185,18 @@ namespace CMSV2.DAL
                         FAgentName = objDataRow["FAgentName"].ToString(),
                         CourierType = objDataRow["CourierType"].ToString(),
                         ParcelType= objDataRow["ParcelType"].ToString(),
+                        ParcelTypeID =Convert.ToInt32(objDataRow["ParcelTypeId"].ToString()),
+                        ProductTypeID = Convert.ToInt32(objDataRow["ProductTypeID"].ToString()),
+                        PickedUpEmpID = Convert.ToInt32(objDataRow["PickedUpEmpID"].ToString()),
+                        DepotReceivedBy = Convert.ToInt32(objDataRow["DepotReceivedBy"].ToString()),
+                        CourierStatusID = Convert.ToInt32(objDataRow["CourierStatusID"].ToString()),
+                        StatusTypeId = Convert.ToInt32(objDataRow["StatusTypeId"].ToString()),
+                        FagentID= Convert.ToInt32(objDataRow["FAgentID"].ToString()),
                         MovementType = objDataRow["MovementType"].ToString(),
                         CourierStatus = objDataRow["CourierStatus"].ToString(),
-                        remarks = objDataRow["remarks"].ToString() //Department and Bag no is missing                                                               
-
+                        remarks = objDataRow["remarks"].ToString(), //Department and Bag no is missing                                                               
+                        DataError = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString())==0 ? true :false,
+                        AWBChecked = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()) == 0 ? true : false
                     });
                     //AWBNo AWBDate Bag NO.	Shipper ReceiverName    ReceiverContactName ReceiverPhone   ReceiverAddress DestinationLocation DestinationCountry Pcs Weight CustomsValue    COD Content Reference Status  SynchronisedDateTime
 

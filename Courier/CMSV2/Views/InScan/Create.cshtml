@@ -218,7 +218,7 @@
                         $.each(AWBItems, function (index, item) {
                             debugger;
                             var i = $('#detailsbody > tr').length;
-                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /> ' 
+                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /> <input type="hidden" id="hdnShipmentDetailId_' + i + '"  value="' + item.ShipmentDetailId + '" /><input type="hidden" id="hdnCourierStatusId_' + i + '"  value="' + item.CourierStatusId + '" /><input type="hidden" id="hdnDRSID_' + i + '"  value="' + item.DRSID + '" /> ' 
                             $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a></td></tr>');
                         });
                         $('#btnadd').removeAttr('disabled');
@@ -280,7 +280,7 @@
                                 item.Destination = "";
                             }
                             var i = $('#detailsbody > tr').length;
-                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /> '
+                            var datahtml = '<input type="hidden" class="hdndeleted" id="hdndeleted_' + i + '"  value="false" /> <input type="hidden" id="hdnAWbNo_' + i + '"  value="' + item.AWB + '" />  <input type="hidden" id="hdnInScanId_' + i + '"  value="' + item.InScanId + '" /><input type="hidden" id="hdnShipmentDetailId_' + i + '"  value="' + item.ShipmentDetailId + '" />  '
                             $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
                             //<a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a>
                             //$("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td></td></tr>');
@@ -354,7 +354,10 @@
                         AWB: $('#hdnAWbNo_' + i).val(),
                         InScanId: $('#hdnInScanId_' + i).val(),
                         Origin: "",
-                        Destination: ""
+                        Destination: "",
+                        ShipmentDetailId: $('#hdnShipmentDetailId_' + i).val(),
+                        DRSID: $('#hdnDRS_' + i).val(),
+                        CourierStatusId: $('#hdnCourierStatusId_' + i).val()
                     }
                     obj.push(item);
                 }

@@ -185,6 +185,7 @@ namespace CMSV2.Models
 
         public bool DataError { get; set; }
             public string ErrorMessage { get; set; }
+        public bool AWBChecked { get; set; }
 
     }
 }

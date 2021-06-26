@@ -127,7 +127,7 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
@@ -216,7 +216,7 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
@@ -283,10 +283,10 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            string reporttile = "Trading Account";
+            string reporttile = "PL/Trading Report";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);            
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
@@ -505,8 +505,9 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
             // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue("Default Report");
             string period = "Reprot Period as on Date "; // + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
@@ -819,8 +820,9 @@ namespace CMSV2.DAL
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
             // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");

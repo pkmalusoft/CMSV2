@@ -6211,12 +6211,45 @@ p.indexbtnpadding {
     border-radius: 5px !important;
 }
 .sm_btn {
-    min-width: 25px !important;
+    min-width: 45px !important;
     width: 30px !important;
     margin-top: 32px;
     font-size: 15px;
     padding: 0 5px !important;
     border-radius: 5px !important;
+}
+.btn_template{
+    background: #a349a4!important;
+    border-color:#a349a4!important;
+}
+.btn-verify{
+     background: #99d9ea!important;
+    border-color:#99d9ea!important;
+}
+.dataTables_filter label input[type="search"]{
+    margin-left:10px!important;
+}
+.btn_top_gap{
+    margin-top: 32px;
+}
+.sm_filter_box{
+    border: 1px solid #ccc;
+    position: relative;
+}
+.sm_filter_box  .filter_box_title{
+    position: absolute;
+    top: -20px;
+    left:0;
+    right:0;
+    text-align: center;
+}
+.filter_icon{
+    margin-top:33px!important;
+}
+.filter_box_title h5{
+    display: inline-block;
+    background: #f8fbff;
+    padding:2px 10px;
 }
 
 .t-read-only td {
@@ -6253,12 +6286,16 @@ p.indexbtnpadding {
      .mt-3{
         margin-top: 28px;
      }
+    .filter_icon{
+        margin-top:29px!important;
+}
     .timelineDetails label{
         font-size: 13px!important;
     }
-    .small_btn,.sm-btn {
+    .small_btn,.sm_btn,.btn_top_gap {
         margin-top: 28px;
     }
+
    .btn-res{
         padding-top:0!important;
    } 

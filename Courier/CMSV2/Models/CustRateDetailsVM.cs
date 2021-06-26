@@ -10,6 +10,7 @@ namespace CMSV2.Models
 {
   public class CustRateDetailsVM
   {
+        public int CustomerRateDetID { get; set; }
         public bool Deleted { get; set; }
     public Decimal AddWtFrom { get; set; }
 

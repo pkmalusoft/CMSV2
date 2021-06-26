@@ -80,11 +80,9 @@ namespace CMSV2.Models
         public virtual DbSet<CustomerEnquiry> CustomerEnquiries { get; set; }
         public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
         public virtual DbSet<CustomerMaster> CustomerMasters { get; set; }
-        public virtual DbSet<CustomerMultiContract> CustomerMultiContracts { get; set; }
         public virtual DbSet<CustomerNotification> CustomerNotifications { get; set; }
         public virtual DbSet<CustomerRate> CustomerRates { get; set; }
         public virtual DbSet<CustomerRateAssign> CustomerRateAssigns { get; set; }
-        public virtual DbSet<CustomerRateDet> CustomerRateDets { get; set; }
         public virtual DbSet<CustomerRateType> CustomerRateTypes { get; set; }
         public virtual DbSet<CustSuppJV> CustSuppJVs { get; set; }
         public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
@@ -280,6 +278,9 @@ namespace CMSV2.Models
         public virtual DbSet<PODSignature> PODSignatures { get; set; }
         public virtual DbSet<PkpDelAttemptReason> PkpDelAttemptReasons { get; set; }
         public virtual DbSet<tblDeliveryAttempt> tblDeliveryAttempts { get; set; }
+        public virtual DbSet<CustomerRateDet> CustomerRateDets { get; set; }
+        public virtual DbSet<CustomerMultiContract> CustomerMultiContracts { get; set; }
+        public virtual DbSet<OutScanReturn> OutScanReturns { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

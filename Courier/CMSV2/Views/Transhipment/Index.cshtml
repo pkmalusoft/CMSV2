@@ -86,9 +86,9 @@
 
             <div class="pull-left" style=" padding-right:15px;padding-left:15px;">
                 @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
-                <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                <button class="btn btn-success sm_btn" type="submit" id="btnsearch" ><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
-            <div class="pull-left" style="padding-top:32px;">
+            <div class="pull-left btn_top_gap" >
                 <p class="indexbtnpadding">
                     @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                     {
@@ -97,7 +97,7 @@
                     else
                     {
                         @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
-                        <input type="button" value="Download Template" class="btn btn-primary" onClick="window.location.href='/Template/TranshipmentTemplate.csv'">
+                        <input type="button" value="Download Template" class="btn btn-primary btn_template" onClick="window.location.href='/Template/TranshipmentTemplate.csv'">
                     }
 
                 </p>
@@ -127,7 +127,10 @@
                         @Html.Label("Manifest Date")
                     </th>
                     <th>
-                        @Html.Label("Consignor")
+                        @Html.Label("MAWB")
+                    </th>
+                    <th>
+                        @Html.Label("Customer")
                     </th>
                     <th>Action</th>
                 </tr>
@@ -141,9 +144,11 @@
                         @Html.Label("Manifest Date")
                     </th>
                     <th>
-                        @Html.Label("Consignor")
+                        @Html.Label("MAWB")
                     </th>
-
+                    <th>
+                        @Html.Label("Customer")
+                    </th>
 
                     <th style="display:none"></th>
                 </tr>
@@ -151,22 +156,25 @@
 
             @foreach (var item in Model.Details)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ManifestNumber)
-                    </td>
-                    <td>
-                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.CreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ConsignorName)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManifestNumber)
+            </td>
+            <td>
+                @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MAWB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
 
-                        @*<a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>*@
-                    </td>
-                </tr>
+                @*<a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>*@
+            </td>
+        </tr>
             }
 
         </table>
