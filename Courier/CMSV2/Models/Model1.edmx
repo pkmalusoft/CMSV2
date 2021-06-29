@@ -348,9 +348,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AccountType" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountType" Type="varchar" MaxLength="100" />
           <Property Name="AcCategoryId" Type="int" />
           <Property Name="BranchId" Type="int" />
+          <Property Name="TBOrder" Type="int" />
+          <Property Name="PLOrder" Type="int" />
+          <Property Name="BSOrder" Type="int" />
         </EntityType>
         <EntityType Name="AgentInvoice">
           <Key>
@@ -1271,6 +1274,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Property Name="ApprovedOn" Type="datetime" />
           <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
           <Property Name="CountryCode" Type="varchar" MaxLength="10" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="CustomerMultiContract">
           <Key>
@@ -1920,6 +1927,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Property Name="Remarks" Type="varchar" MaxLength="1000" />
           <Property Name="ActionType" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="BranchId" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="CourierStatusId" Type="int" />
+          <Property Name="ShipmentDetailId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2084,6 +2097,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
           <Property Name="ParcelNo" Type="int" />
           <Property Name="Route" Type="varchar" MaxLength="20" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="EnteredDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ImportShipmentDetails">
           <Key>
@@ -2719,8 +2736,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="AWBNo" Type="varchar" MaxLength="50" />
           <Property Name="PrevCourierStatusId" Type="int" />
           <Property Name="QuickInScanId" Type="int" />
-          <Property Name="CreatedBy" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
         </EntityType>
         <EntityType Name="OutstandingInvoiceDetails">
           <Key>
@@ -3040,6 +3057,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="Source" Type="varchar" MaxLength="20" />
           <Property Name="AgentID" Type="int" />
           <Property Name="AcFinancialYearID" Type="int" />
+          <Property Name="OutScanReturned" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Quotation">
           <Key>
@@ -7647,9 +7665,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="AcCategoryId" Type="Int32" />
           <Property Name="BranchId" Type="Int32" />
+          <Property Name="TBOrder" Type="Int32" />
+          <Property Name="PLOrder" Type="Int32" />
+          <Property Name="BSOrder" Type="Int32" />
         </EntityType>
         <EntityType Name="AgentMaster">
           <Key>
@@ -8316,6 +8337,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
           <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="CountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="CustomerNotification">
           <Key>
@@ -8631,6 +8656,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="ActionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="BranchId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CourierStatusId" Type="Int32" />
+          <Property Name="ShipmentDetailId" Type="Int32" />
         </EntityType>
         <EntityType Name="Import">
           <Key>
@@ -19460,6 +19491,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AgentID" Type="Int32" />
           <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="OutScanReturned" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="POD">
           <Key>
@@ -19677,6 +19709,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
           <Property Name="ParcelNo" Type="Int32" />
           <Property Name="Route" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="EnteredDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="ImportShipmentDetail">
           <Key>
@@ -20062,8 +20098,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PrevCourierStatusId" Type="Int32" />
           <Property Name="QuickInScanId" Type="Int32" />
-          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20348,6 +20384,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="AcTypes">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcType">
               <MappingFragment StoreEntitySet="AcType">
+                <ScalarProperty Name="BSOrder" ColumnName="BSOrder" />
+                <ScalarProperty Name="PLOrder" ColumnName="PLOrder" />
+                <ScalarProperty Name="TBOrder" ColumnName="TBOrder" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AccountType" ColumnName="AccountType" />
                 <ScalarProperty Name="AcCategoryId" ColumnName="AcCategoryId" />
@@ -20942,6 +20981,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="CustomerMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMaster">
               <MappingFragment StoreEntitySet="CustomerMaster">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
                 <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
                 <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
@@ -21286,6 +21329,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="HoldReleases">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.HoldRelease">
               <MappingFragment StoreEntitySet="HoldRelease">
+                <ScalarProperty Name="ShipmentDetailId" ColumnName="ShipmentDetailId" />
+                <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="HoldReleaseid" ColumnName="HoldReleaseid" />
                 <ScalarProperty Name="InScanId" ColumnName="InScanId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
@@ -28716,6 +28765,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="QuickInscanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
               <MappingFragment StoreEntitySet="QuickInscanMaster">
+                <ScalarProperty Name="OutScanReturned" ColumnName="OutScanReturned" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="AgentID" ColumnName="AgentID" />
                 <ScalarProperty Name="Source" ColumnName="Source" />
@@ -28921,6 +28971,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="ImportShipments">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipment">
               <MappingFragment StoreEntitySet="ImportShipment">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="EnteredDate" ColumnName="EnteredDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Route" ColumnName="Route" />
                 <ScalarProperty Name="ParcelNo" ColumnName="ParcelNo" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />
@@ -29329,8 +29383,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="OutScanReturns">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.OutScanReturn">
               <MappingFragment StoreEntitySet="OutScanReturn">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="QuickInScanId" ColumnName="QuickInScanId" />
                 <ScalarProperty Name="PrevCourierStatusId" ColumnName="PrevCourierStatusId" />
                 <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />

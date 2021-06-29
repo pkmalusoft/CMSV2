@@ -71,6 +71,10 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> ApprovedOn { get; set; }
         public string PlaceID { get; set; }
         public string CountryCode { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CityMaster CityMaster { get; set; }

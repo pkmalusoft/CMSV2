@@ -21,7 +21,7 @@ namespace CMSV2.Models
         public string AWBNo { get; set; }
         public Nullable<int> PrevCourierStatusId { get; set; }
         public Nullable<int> QuickInScanId { get; set; }
-        public Nullable<System.DateTime> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
     }
 }

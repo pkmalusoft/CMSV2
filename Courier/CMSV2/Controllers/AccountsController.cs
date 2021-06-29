@@ -4149,7 +4149,69 @@ new AcGroupModel()
 
 
         }
+        public ActionResult BalanceSheetReport()
+        {
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
 
+            //ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            //ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pToDate;
+            if (reportparam == null)
+            {
+
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam1();
+                reportparam.AsOnDate = pToDate;
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.AsOnDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.AsOnDate.Date.ToString() == "01-01-0001")
+                {
+                    pToDate = CommanFunctions.GetLastDayofMonth().Date; //.AddDays(-1);
+                    reportparam.AsOnDate = pToDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AccBalanceSheet"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+            ViewBag.ReportName = "Balance Sheet Report";
+            return View(reportparam);
+        }
+        [HttpPost]
+        public ActionResult BalanceSheetReport(AccountsReportParam1 picker)
+        {
+            AccountsReportParam1 model = new AccountsReportParam1
+            {
+                AsOnDate = picker.AsOnDate,
+                Output = picker.Output
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam1(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateBalanceSheetReport();
+            if (model.Output != "PDF")
+                return RedirectToAction("Download1", "Accounts", new { filetype = model.Output });
+            else
+                return RedirectToAction("BalanceSheetReport", "Accounts");
+
+
+
+        }
         public ActionResult ReportFrame()
         {
             if (Session["ReportOutput"] != null)

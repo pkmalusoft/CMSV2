@@ -5,16 +5,20 @@
 // Assembly location: D:\Courier09022018\Decompiled\obj\Release\Package\PackageTmp\bin\CMSV2.dll
 
 using System;
+using System.Collections.Generic;
 
 namespace CMSV2.Models
 {
   public class HoldVM
   {
-    public int InScanID { get; set; }
-
-    public string AWBNo { get; set; }
-
-    public DateTime TransactionnDate { get; set; }
+        public int HoldReleaseID { get; set; }
+        public int InScanID { get; set; }
+        public int ShipmentDetailID { get; set; }
+        
+        public string EnteredBy { get; set; }
+        public string AWBNo { get; set; }
+        public DateTime EntryDate { get; set; }
+        public DateTime AWBDate { get; set; }
         public DateTime date { get; set; }
 
     public int? CollectedBy { get; set; }
@@ -45,17 +49,28 @@ namespace CMSV2.Models
 
     public string OriginName { get; set; }
 
-    public int HeldBy { get; set; }
+    public int EmployeeID { get; set; }
 
-    public DateTime HeldOn { get; set; }
-
-    public string HeldResoan { get; set; }
+    
+    public string Remarks { get; set; }
 
     public string countryname { get; set; }
      public string CollectedByName { get; set; }
 
     public string CourierStatus { get; set; }
+        public int CourierStatusID { get; set; }
         public string Action { get; set; } //Create/Edit
         public string ActionType { get; set; } //Hold/Release
+        public string AWBType { get; set; }
+        public List<HoldVM> HistoryDetails { get; set; }
+    }
+
+
+    public class HoldSearch
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public int ActionType { get; set; }
+        public List<HoldVM> Details { get; set; }
     }
 }

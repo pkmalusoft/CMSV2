@@ -11,9 +11,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#HeldOn').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
-
-
+        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
 
 </script>
@@ -33,14 +31,14 @@
         var curr_year = d.getFullYear();
 
         var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
-        if ($("#Action").val() == "Create") {
-            $('#HeldOn').val(reqdate);
+        if ($('#HoldReleaseID').val() > 0) {
+            $("#AWBNo").attr("readonly", "readonly");
+            $("#EntryDate").attr("readonly", "readonly");
         }
         else {
-            $("#AWBNo").attr("readonly", "readonly");
+            
         }
-        
-        $("#HeldBy").val($("#employeeid").val()).trigger('change');
+                
         $('#AWBNo').focus();
         $("#AWBNo").change(function () {
             var id = $("#AWBNo").val();
@@ -55,10 +53,11 @@
                         var data = response.data;
                         console.log(data);
                         $("#InScanID").val(data.InScanID);
-                        var myDate = new Date(data.date.match(/\d+/)[0] * 1);                        
+                        $('#ShipmentDetailID').val(data.ShipmentDetailID);
+                        var myDate = new Date(data.AWBDate.match(/\d+/)[0] * 1);
                         var cmon = myDate.getMonth() + 1;
-                        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
-                        $('#date').val(collectdate);                        
+                        var collectdate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear(); // + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
+                        $('#AWBDate').val(collectdate);
                         $("#Consignor").val(data.Consignor);
                         $("#Consignee").val(data.Consignee);
                         $("#Pieces").val(data.Pieces);
@@ -68,20 +67,22 @@
                         $("#ConsigneeCountry").val(data.ConsigneeCountry);
                         $("#StatusPaymentMOde").val(data.StatusPaymentMOde);
                         $("#CollectedByName").val(data.CollectedByName);
+                        $("#CourierStatus").val(data.CourierStatus);
+                        $("#ActionType").val(data.ActionType);
+                        $('#CourierStatusID').val(data.CourierStatusID);
 
+                       $.ajax({
+                             type: 'POST',
+                             url: '@Url.Action("ShowItemList", "Hold")',
+                             datatype: "html",
+                             success: function (data) {
+                                 $("#listContainer").html(data);                                 
 
-                        //$.each(AWBItems, function (index, item) {
-
-                        //    var i = $('#details tr').length - 1;
-                        //    // $('#details tr').length - 1;
-                        //    $("#detailsbody").append('<tr>' + '<td>' + item.AWB + '<input type="hidden" value=' + item.AWB + ' name="lst[' + i + '].AWB"><input type="hidden" value=' + item.InScanID + ' name="lst[' + i + '].InScanID"></td><td>' + item.consignor + '<input type = "hidden" value=' + item.consignor + ' name = "lst[' + i + '].consignor"></td><td>' + item.consignee + '<input type="hidden" value=' + item.consignee + ' name="lst[' + i + '].Consignee"></td>' + '<td>' + item.city + '<input type="hidden" value=' + item.city + ' name="lst[' + i + '].City"></td>'
-                        //        + '<td>' + item.phone + '<input type="hidden" value=' + item.phone + ' name="lst[' + i + '].Phone"></td>'
-                        //        + '<td>' + item.address + '<input type="hidden" value=' + item.address + ' name="lst[' + i + '].Address"></td>'
-                        //        + '<td>' + item.COD + '<input type="hidden" value=' + item.COD + ' name="lst[' + i + '].COD"></td>'
-                        //        + '<td>' + item.MaterialCost + '<input type="hidden" value=' + item.MaterialCost + ' name="lst[' + i + '].MaterialCost"></td>'
-                        //        + '<td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-
-                        //});
+                             },
+                             error: function (err) {
+                                 console.log(err);
+                             }
+                         });
 
 
 
@@ -119,36 +120,57 @@
             <div class="row no-margin" style="padding-top:25px;">
                 <div class="col-md-2">
                     @Html.HiddenFor(model => model.InScanID)
+                    @Html.HiddenFor(model => model.HoldReleaseID)
+                    @Html.HiddenFor(model => model.ShipmentDetailID)
+                    @Html.HiddenFor(model => model.CourierStatusID)
                     @Html.HiddenFor(model => model.Action)
-                    @Html.HiddenFor(model => model.ActionType)
-                    <input type="hidden" id="employeeid" value="@Model.HeldBy" />
                     <label class="headinglabel required">AWB No.</label>
                     @Html.TextBoxFor(model => model.AWBNo, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.AWBNo)
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel required">Entered By</label>
-                    @*@Html.TextBoxFor(model => model.HeldBy, new {@class="form-control" })*@
-                    @Html.DropDownListFor(model => model.HeldBy, new SelectList(ViewBag.HeldBy, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @required = "true" })
+                    <label class="headinglabel required">Entered By</label>                    
+                    @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.HeldBy, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control", @required = "true" })
 
-                    @Html.ValidationMessageFor(model => model.HeldBy)
+                    @Html.ValidationMessageFor(model => model.EmployeeID)
                 </div>
 
                 <div class="col-md-2">
                     <label class="headinglabel required">Entry Date</label>
-                    @Html.TextBoxFor(model => model.HeldOn, new { @class = "form-control text-right", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.HeldOn)
+                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.EntryDate)
 
                 </div>
 
-                <div class="col-md-6">
-                    <label class="headinglabel required">Remarks</label>
-                    @Html.TextBoxFor(model => model.HeldResoan, new { @class = "form-control", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.HeldResoan)
+                <div class="col-md-3">
+                    <label class="headinglabel required">Reason</label>
+                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Courier Status</label>
+                    @Html.TextBoxFor(model => model.CourierStatus, new { @class = "form-control", @required = "true",@readonly="readonly" })
+                    @Html.ValidationMessageFor(model => model.CourierStatus)
+
+                </div>
+
+                <div class="col-md-1">
+                    <label class="headinglabel required">Action</label>
+                    @Html.TextBoxFor(model => model.ActionType, new { @class = "form-control", @required = "true", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.ActionType)
 
                 </div>
             </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12 btn-right">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
+                    <a href='@Url.Action("Index", "Hold", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                </div>
+            </div>
             <div class="row no-margin">
                 <div class="col-md-3">
                     <h3 style="color:white">AWB DETAILS</h3>
@@ -157,13 +179,13 @@
             </div>
             <div class="row no-margin">
                 <div class="col-md-2">
-                    <label class="headinglabel">Transaction Date</label>
-                    @Html.TextBoxFor(model => model.date, new { @class = "form-control text-right",@readonly="readonly" })
-                    @Html.ValidationMessageFor(model => model.date)
+                    <label class="headinglabel">AWB Date</label>
+                    @Html.TextBoxFor(model => model.AWBDate, new { @class = "form-control text-right", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.AWBDate)
                 </div>
                 <div class="col-md-2">
                     <label class="headinglabel">Collected By</label>
-                    @Html.TextBoxFor(model => model.CollectedByName, new { @class = "form-control" , @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.CollectedByName, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.CollectedByName)
                 </div>
 
@@ -195,7 +217,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel">Shipper</label>
-                    @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control" , @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.Consignor, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Consignor)
                 </div>
 
@@ -217,13 +239,18 @@
                     @Html.ValidationMessageFor(model => model.ConsigneeCountry)
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-12 btn-right">
-                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
-                    <a href='@Url.Action("Index", "Hold", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
 
+
+            <hr />
+            <div class="row no-margin">
+                <div class="col-md-3">
+                    <h3 style="color:white">HISTORY DETAILS</h3>
+                    <hr />
                 </div>
+            </div>
+            <div class="table-responsive tblbackground" style="padding: 15px;margin-top:20px;min-height:400px;max-height:400px;overflow-y: scroll;" id="listContainer">
+                @{Html.RenderPartial("ItemList", Model);}
             </div>
         </fieldset>
 

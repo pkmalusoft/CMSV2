@@ -2019,7 +2019,7 @@
                 <input type="hidden" id="txtAWBProcessed" value="" required />
                 <label class="headinglabel required">Airway Bill No.</label>
                 @if (@Model.InScanID == 0)
-                {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 11 }) }
+                {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 20 }) }
 
             else
             {

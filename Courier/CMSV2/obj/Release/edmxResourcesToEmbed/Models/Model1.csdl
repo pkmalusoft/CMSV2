@@ -300,9 +300,12 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="AcCategoryId" Type="Int32" />
     <Property Name="BranchId" Type="Int32" />
+    <Property Name="TBOrder" Type="Int32" />
+    <Property Name="PLOrder" Type="Int32" />
+    <Property Name="BSOrder" Type="Int32" />
   </EntityType>
   <EntityType Name="AgentMaster">
     <Key>
@@ -969,6 +972,10 @@
     <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
     <Property Name="PlaceID" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
     <Property Name="CountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="CustomerNotification">
     <Key>
@@ -1284,6 +1291,12 @@
     <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
     <Property Name="ActionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="BranchId" Type="Int32" Nullable="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="CourierStatusId" Type="Int32" />
+    <Property Name="ShipmentDetailId" Type="Int32" />
   </EntityType>
   <EntityType Name="Import">
     <Key>
@@ -7627,6 +7640,7 @@
     <EntitySet Name="tblDeliveryAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblDeliveryAttempt" />
     <EntitySet Name="CustomerRateDets" EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" />
     <EntitySet Name="CustomerMultiContracts" EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" />
+    <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12112,6 +12126,7 @@
     <Property Name="Source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="AgentID" Type="Int32" />
     <Property Name="AcFinancialYearID" Type="Int32" />
+    <Property Name="OutScanReturned" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="POD">
     <Key>
@@ -12329,6 +12344,10 @@
     <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
     <Property Name="ParcelNo" Type="Int32" />
     <Property Name="Route" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="EnteredDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="ImportShipmentDetail">
     <Key>
@@ -12702,5 +12721,19 @@
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CustomerID" Type="Int32" />
     <Property Name="CustomerRateTypeID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="OutScanReturn">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InScanID" Type="Int32" />
+    <Property Name="ShipmentDetailID" Type="Int32" />
+    <Property Name="PrevDRSID" Type="Int32" />
+    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PrevCourierStatusId" Type="Int32" />
+    <Property Name="QuickInScanId" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
   </EntityType>
 </Schema>

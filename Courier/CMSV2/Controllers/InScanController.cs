@@ -208,6 +208,7 @@ namespace CMSV2.Controllers
                 _qinscan.DepotId = v.DepotID;
                 _qinscan.UserId = UserId;
                 _qinscan.Source = "Inhouse";
+                _qinscan.OutScanReturned = v.OutScanReturned;
                 if (v.QuickInscanID > 0)
                 {
                     db.Entry(_qinscan).State= EntityState.Modified;
@@ -231,13 +232,28 @@ namespace CMSV2.Controllers
                             _inscan.QuickInscanID = _qinscan.QuickInscanID;
                             _inscan.PickedUpEmpID = v.CollectedByID;
                             _inscan.DepotReceivedBy = v.ReceivedByID;
-                            //_inscan.TransactionDate = v.QuickInscanDateTime;
-                            //_inscan.VehicleTypeId = v.VehicleId;
+                            _inscan.DRSID = null;
                             _inscan.StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Depot Inscan").First().ID;
                             _inscan.CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == _inscan.StatusTypeId && cc.CourierStatus == "Received At Origin Facility").FirstOrDefault().CourierStatusID;
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
-                            AWBTrackStatu _awbstatus = new AWBTrackStatu();
+
+                        //For only OutScan Returning Items
+                        if (item.CourierStatusId==8 || item.CourierStatusId==9 || item.CourierStatusId==10)
+                            {
+                            OutScanReturn oreturn = new OutScanReturn();
+                            oreturn.AWBNo = item.AWB;
+                            oreturn.InScanID = item.InScanId;
+                            oreturn.PrevCourierStatusId = item.CourierStatusId;
+                            oreturn.PrevDRSID = item.DRSID;
+                            oreturn.QuickInScanId = _qinscan.QuickInscanID;
+                            oreturn.CreatedBy = UserId;
+                            oreturn.CreatedDate = DateTime.UtcNow;
+                            db.OutScanReturns.Add(oreturn);
+                            db.SaveChanges();
+                        }
+
+                        AWBTrackStatu _awbstatus = new AWBTrackStatu();
 
                             var StatusTypeId = db.tblStatusTypes.Where(cc => cc.Name == "Pickup Request").First().ID;
                             var CourierStatusID = db.CourierStatus.Where(cc => cc.StatusTypeID == StatusTypeId && cc.CourierStatus == "Assigned For Collection").FirstOrDefault().CourierStatusID;
@@ -302,8 +318,22 @@ namespace CMSV2.Controllers
                         _inscan.QuickInscanID = _qinscan.QuickInscanID;
                         _inscan.StatusTypeId = 2;//Depot Inscan
                         _inscan.CourierStatusID = 22; //Outscan Returned
+                        _inscan.DRSID = null;
                         db.Entry(_inscan).State = EntityState.Modified;
                         db.SaveChanges();
+
+                        //Insert record in outscan return table
+                        OutScanReturn oreturn = new OutScanReturn();
+                        oreturn.AWBNo = item.AWB;
+                        oreturn.ShipmentDetailID = item.ShipmentDetailId;
+                        oreturn.PrevCourierStatusId = item.CourierStatusId;
+                        oreturn.PrevDRSID = item.DRSID;
+                        oreturn.QuickInScanId = _qinscan.QuickInscanID;
+                        oreturn.CreatedBy = UserId;
+                        oreturn.CreatedDate = DateTime.UtcNow;
+                        db.OutScanReturns.Add(oreturn);
+                        db.SaveChanges();
+
                         AWBTrackStatu _awbstatus = new AWBTrackStatu();
 
                         var StatusTypeId = 2;
@@ -423,7 +453,7 @@ namespace CMSV2.Controllers
                     AWBDAO.GenerateAWBJobCode(v.QuickInscanDateTime);
                 //TempData["SuccessMsg"] = "You have successfully Saved InScan Items.";             
 
-                return Json(new { status = "ok", message = "You have successfully Saved InScan Items.!" } , JsonRequestBehavior.AllowGet);
+                 return Json(new { status = "ok", message = "You have successfully Saved InScan Items.!" } , JsonRequestBehavior.AllowGet);
             }
             catch(Exception ex)
             {
@@ -436,8 +466,10 @@ namespace CMSV2.Controllers
         {
 
             List<AWBList> obj = new List<AWBList>();
-            
+
             QuickInscanMaster _qinscanvm = db.QuickInscanMasters.Where(cc => cc.QuickInscanID == id).FirstOrDefault();
+            
+                       
 
             //InScanVM _qinscanvm = new InScanVM();
 
@@ -446,15 +478,15 @@ namespace CMSV2.Controllers
             //              select new InScanVM { QuickInscanID=_qmaster.QuickInscanID,QuickInscanDateTime=_qmaster.QuickInscanDateTime,BranchId=_qmaster.BranchId,DepotID=_qmaster.DepotId,VehicleId=_qmaster.VehicleId,DriverName = _qmaster.DriverName });.first
 
             if (_qinscanvm != null)
-            { 
-                obj = (from _qmaster in db.QuickInscanMasters
-                            join _inscan in db.InScanMasters on _qmaster.QuickInscanID equals _inscan.QuickInscanID
-                            //join _inscan in db.InScanMasters on _qdetail.InScanId equals _inscan.InScanID
-                            where _qmaster.QuickInscanID == id
-                            orderby _inscan.AWBNo descending
-                            select new AWBList { InScanId = _inscan.InScanID, AWB = _inscan.AWBNo, Origin = _inscan.ConsignorCountryName, Destination = _inscan.ConsigneeCountryName }).ToList();
-
-              return Json(new { status = "ok", masterdata=_qinscanvm, data = obj, message = "Data Found" }, JsonRequestBehavior.AllowGet);
+            {
+                //obj = (from _qmaster in db.QuickInscanMasters
+                //            join _inscan in db.InScanMasters on _qmaster.QuickInscanID equals _inscan.QuickInscanID
+                //            //join _inscan in db.InScanMasters on _qdetail.InScanId equals _inscan.InScanID
+                //            where _qmaster.QuickInscanID == id
+                //            orderby _inscan.AWBNo descending
+                //            select new AWBList { InScanId = _inscan.InScanID, AWB = _inscan.AWBNo, Origin = _inscan.ConsignorCountryName, Destination = _inscan.ConsigneeCountryName }).ToList();
+                obj = PickupRequestDAO.GetInScannedItems(id);
+                return Json(new { status = "ok", masterdata=_qinscanvm, data = obj, message = "Data Found" }, JsonRequestBehavior.AllowGet);
         }
         else
         {
@@ -472,7 +504,7 @@ namespace CMSV2.Controllers
             //}
             //return Json(obj, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetAWBDetail(string id,int? collectedby,int? batchid)
+        public JsonResult GetAWBDetail(string id,int? collectedby,int? batchid,bool OutScanReturned = false)
         {
             if (collectedby == null)
                 collectedby = 0;
@@ -482,13 +514,13 @@ namespace CMSV2.Controllers
             
             //checking Domestic Shipment Collected 4,Out For Delivery 8,Attempted To Deliver 9,Delivery Pending 10 -- Checking AWB In the Inscanmaster
             var inscanlst = (from c in db.InScanMasters
-                       where   (c.AWBNo == id) && (c.CourierStatusID == 4 || c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10) && (c.PickedUpEmpID == collectedby || collectedby == 0)
+                       where   (c.AWBNo == id) && (c.CourierStatusID == 4 && OutScanReturned ==false) || (OutScanReturned ==true && (c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10)) && (c.PickedUpEmpID == collectedby || collectedby == 0)
                        select new AWBList { InScanId = c.InScanID, AWB = c.AWBNo, Origin = c.ConsignorCountryName, Destination = c.ConsigneeCountryName,CourierStatusId=c.CourierStatusID,DRSID=c.DRSID }).ToList();
 
             //checking Imported Items
             var importlst1 = (from c in db.ImportShipmentDetails
                         join i in db.ImportShipments on c.ImportID equals i.ID
-                        where c.AWB == id && (c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10)
+                        where c.AWB == id && (OutScanReturned ==true && (c.CourierStatusID == 8 || c.CourierStatusID == 9 || c.CourierStatusID == 10))
                         select new AWBList { InScanId = 0, ShipmentDetailId = c.ShipmentDetailID, AWB = c.AWB, Origin = i.ConsignorCountryName, Destination = c.DestinationCity,CourierStatusId=c.CourierStatusID,DRSID=c.DRSID }).ToList();
             //var lst = (from c in db.InScanMasters where c.AWBNo == id &&  (c.PickedUpEmpID==collectedby || collectedby==0) select c).FirstOrDefault();
             if (inscanlst != null && inscanlst.Count>0)
@@ -516,7 +548,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                if (inscanlst == null || inscanlst.Count == 0)
+                if ((inscanlst == null || inscanlst.Count == 0) && OutScanReturned==false)
                 {
                     //Checking AWB at aWbdetails
                     var lst1 = db.AWBDetails.Where(cc => cc.AWBNo == id && (cc.InScanID == null || cc.InScanID == 0)).FirstOrDefault();
@@ -529,7 +561,7 @@ namespace CMSV2.Controllers
                         obj.InScanId = 0;
                         obj.DRSID = 0;
                         obj.CourierStatusId = 0;
-                        return Json(new { status = "ok", data = obj, message = "AWB found" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = "ok", data = obj, message = "AWB found in AWB Details" }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     { //Allowing outside AWB
@@ -539,8 +571,18 @@ namespace CMSV2.Controllers
                         obj.InScanId = 0;
                         obj.DRSID = 0;
                         obj.CourierStatusId = 0;
-                        return Json(new { status = "ok", data = obj, message = "AWB Not Found!" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = "ok", data = obj, message = "New AWB Adding!" }, JsonRequestBehavior.AllowGet);
                     }
+                }
+                else if (OutScanReturned==true)
+                {
+                    obj.AWB = id;
+                    obj.Origin = "";
+                    obj.Destination = "";
+                    obj.InScanId = 0;
+                    obj.DRSID = 0;
+                    obj.CourierStatusId = 0;
+                    return Json(new { status = "Failed", data = obj, message = "Invalid AWB - Not Outscanned!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -550,7 +592,7 @@ namespace CMSV2.Controllers
                     obj.InScanId = 0;
                     obj.DRSID = 0;
                     obj.CourierStatusId = 0;
-                    return Json(new { status = "ok", data = obj, message = "AWB Not Found!" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = "Failed", data = obj, message = "AWB Not Found!" }, JsonRequestBehavior.AllowGet);
                 }
             }
            

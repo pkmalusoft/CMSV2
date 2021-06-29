@@ -41,6 +41,7 @@ namespace CMSV2.Models
 
         public List<InBoundAWBList>  AWBDetail {get; set; }
         public string Source { get; set; }
+        public bool OutScanReturned { get; set; }
   }
 
 public class InBoundAWBList
@@ -68,7 +69,7 @@ public class InBoundAWBList
     public bool RemoveAllowed { get; set; }
         
 }
-public class AWBList
+    public class AWBList
     {
         public int InScanId { get; set; }
         public string AWB { get; set; }

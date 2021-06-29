@@ -178,8 +178,8 @@ namespace CMSV2.Controllers
             }
             else
             {
-                //12  At Destination Customs Facility Depot Outscan
-                var import = db.ImportShipmentDetails.Where(cc => cc.CourierStatusID == 21 && cc.AWB == id.Trim() && cc.DRSID == null).FirstOrDefault();
+                //12  At Destination Customs Facility Depot Outscan or Outscan Returned Items
+                var import = db.ImportShipmentDetails.Where(cc => cc.AWB == id.Trim() && cc.DRSID == null && (cc.CourierStatusID == 21 || cc.CourierStatusID == 22)).FirstOrDefault();
                 if (import != null)
                 {
                     DRSDet obj = new DRSDet();

@@ -199,12 +199,12 @@
             else {
                 $('#btnadd').attr('disabled', 'disabled');
             }
-
+            var OutScanReturned = $('#OutScanReturned').prop('checked');
             $.ajax({
                 type: "POST",
                 url: "/InScan/GetAWBDetail",
                 datatype: "Json",
-                data: { id: $("#txtawb").val(), collectedby: CollectedByID },
+                data: { id: $("#txtawb").val(), collectedby: CollectedByID, OutScanReturned: OutScanReturned},
                 success: function (response) {
                     if (response.status == "ok") {
                         var data = response.data;
@@ -222,6 +222,7 @@
                             $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + datahtml + (parseInt(i) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" onclick="deletetrans(this,' + i + ')" class="rem">Remove</a></td></tr>');
                         });
                         $('#btnadd').removeAttr('disabled');
+                        $('#OutScanReturned').attr('disabled', 'disabled');
                         $("#txtawb").val('');
                         $("#txtawb").focus();
                     }
@@ -377,6 +378,7 @@
                         QuickInscanDateTime: $('#QuickInscanDateTime').val(),
                         //SelectedInScanId: SelectedInScanId,
                         //RemovedInScanId: RemovedAWB, 
+                        OutScanReturned: $('#OutScanReturned').prop('checked'),
                         Details: JSON.stringify(obj)
                     }
 
@@ -496,7 +498,7 @@
             </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3">
-                    <label class="headinglabel required">Collected By</label>
+                    <label class="headinglabel required">Received From</label>
                     @*@Html.TextBoxFor(model => model.DriverName, new { @class = "form-control" })*@
                     @Html.DropDownListFor(model => model.CollectedByID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
@@ -514,7 +516,14 @@
         </div>*@
             <div class="col-md-6" id="divadd">
                 <div class="col-md-6">
-                    <label class="headinglabel required">AWB No.</label>
+                    <div class="flexTitle">
+                        <label class="headinglabel required">AWB No.</label>
+                        <div class="checkboxdesign no-padding  text-right" style="float:right">
+                            @Html.CheckBox("OutScanReturned", new { @name = "OutScanReturned" }) &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">OutScan Returned</label>
+                        </div>
+                    </div>
+                    
                     <input type="text" id="txtawb" class="form-control" autocomplete="off" />
                 </div>
                 <div class="col-md-6">

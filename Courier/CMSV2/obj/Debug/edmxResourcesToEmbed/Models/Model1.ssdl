@@ -343,9 +343,12 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AccountType" Type="nvarchar" MaxLength="100" />
+    <Property Name="AccountType" Type="varchar" MaxLength="100" />
     <Property Name="AcCategoryId" Type="int" />
     <Property Name="BranchId" Type="int" />
+    <Property Name="TBOrder" Type="int" />
+    <Property Name="PLOrder" Type="int" />
+    <Property Name="BSOrder" Type="int" />
   </EntityType>
   <EntityType Name="AgentInvoice">
     <Key>
@@ -1237,6 +1240,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="ApprovedOn" Type="datetime" />
     <Property Name="PlaceID" Type="varchar" MaxLength="1000" />
     <Property Name="CountryCode" Type="varchar" MaxLength="10" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
   </EntityType>
   <EntityType Name="CustomerMultiContract">
     <Key>
@@ -1886,6 +1893,12 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="Remarks" Type="varchar" MaxLength="1000" />
     <Property Name="ActionType" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="BranchId" Type="int" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="CourierStatusId" Type="int" />
+    <Property Name="ShipmentDetailId" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2050,6 +2063,10 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
     <Property Name="ParcelNo" Type="int" />
     <Property Name="Route" Type="varchar" MaxLength="20" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="EnteredDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
   </EntityType>
   <EntityType Name="ImportShipmentDetails">
     <Key>
@@ -2674,6 +2691,20 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Name" Type="nvarchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="OutScanReturn">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="ShipmentDetailID" Type="int" />
+    <Property Name="PrevDRSID" Type="int" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
+    <Property Name="PrevCourierStatusId" Type="int" />
+    <Property Name="QuickInScanId" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+  </EntityType>
   <EntityType Name="OutstandingInvoiceDetails">
     <Key>
       <PropertyRef Name="OutstandingID" />
@@ -2992,6 +3023,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="Source" Type="varchar" MaxLength="20" />
     <Property Name="AgentID" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
+    <Property Name="OutScanReturned" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Quotation">
     <Key>
@@ -6933,6 +6965,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
     <EntitySet Name="OtherChargeInvoiceDetails" EntityType="Self.OtherChargeInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OtherChargesType" EntityType="Self.OtherChargesType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OthereChargesType" EntityType="Self.OthereChargesType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OutScanReturn" EntityType="Self.OutScanReturn" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutstandingInvoiceDetails" EntityType="Self.OutstandingInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PageControlField" EntityType="Self.PageControlField" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PageControlMaster" EntityType="Self.PageControlMaster" Schema="dbo" store:Type="Tables" />

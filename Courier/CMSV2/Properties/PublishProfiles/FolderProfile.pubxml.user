@@ -26,10 +26,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:25</publishTime>
     </File>
     <File Include="bin/CMSV2.dll">
-      <publishTime>06/25/2021 12:58:28</publishTime>
+      <publishTime>06/29/2021 19:00:57</publishTime>
     </File>
     <File Include="bin/CMSV2.pdb">
-      <publishTime>06/25/2021 12:58:28</publishTime>
+      <publishTime>06/29/2021 19:00:57</publishTime>
     </File>
     <File Include="bin/CrystalDecisions.CrystalReports.Engine.dll">
       <publishTime>04/26/2021 17:18:25</publishTime>
@@ -3317,7 +3317,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:02</publishTime>
     </File>
     <File Include="Models/Model1.edmx.diagram">
-      <publishTime>06/23/2021 14:38:25</publishTime>
+      <publishTime>06/28/2021 10:12:14</publishTime>
+    </File>
+    <File Include="Reports/AccBalanceSheet.rpt">
+      <publishTime>06/29/2021 18:40:00</publishTime>
     </File>
     <File Include="Reports/AccLedger.pdf">
       <publishTime>10/28/2020 14:36:29</publishTime>
@@ -3326,10 +3329,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
     <File Include="Reports/AccTradingAccount.rpt">
-      <publishTime>04/26/2021 17:18:03</publishTime>
+      <publishTime>06/29/2021 18:39:59</publishTime>
     </File>
     <File Include="Reports/AccTrialBalance.rpt">
-      <publishTime>04/26/2021 17:18:03</publishTime>
+      <publishTime>06/29/2021 18:40:00</publishTime>
     </File>
     <File Include="Reports/AcJournalVoucherPrint.rpt">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -3604,6 +3607,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Accounts/AcOpeningMaster.cshtml">
       <publishTime>06/12/2021 13:32:51</publishTime>
     </File>
+    <File Include="Views/Accounts/BalanceSheetReport.cshtml">
+      <publishTime>06/29/2021 10:45:05</publishTime>
+    </File>
     <File Include="Views/Accounts/BankReconcilation.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
     </File>
@@ -3845,7 +3851,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/25/2021 11:04:12</publishTime>
     </File>
     <File Include="Views/AWB/Create.cshtml">
-      <publishTime>06/23/2021 10:41:47</publishTime>
+      <publishTime>06/28/2021 20:05:09</publishTime>
     </File>
     <File Include="Views/AWB/CreateL.cshtml">
       <publishTime>04/26/2021 17:18:03</publishTime>
@@ -4463,7 +4469,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/Hold/Create.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>06/29/2021 18:57:39</publishTime>
     </File>
     <File Include="Views/Hold/Edit.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4472,10 +4478,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:05</publishTime>
     </File>
     <File Include="Views/Hold/Index.cshtml">
-      <publishTime>04/26/2021 17:18:05</publishTime>
+      <publishTime>06/29/2021 18:09:13</publishTime>
     </File>
     <File Include="Views/Hold/IndexRelease.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
+    </File>
+    <File Include="Views/Hold/ItemList.cshtml">
+      <publishTime>06/29/2021 18:38:01</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>04/26/2021 17:18:05</publishTime>
@@ -4550,7 +4559,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/03/2021 15:28:12</publishTime>
     </File>
     <File Include="Views/InScan/Create.cshtml">
-      <publishTime>05/31/2021 14:40:13</publishTime>
+      <publishTime>06/28/2021 12:24:01</publishTime>
     </File>
     <File Include="Views/InScan/Index.cshtml">
       <publishTime>06/14/2021 16:07:11</publishTime>
@@ -5324,7 +5333,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/26/2021 17:18:06</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/24/2021 12:40:22</publishTime>
+      <publishTime>06/29/2021 18:46:40</publishTime>
     </File>
   </ItemGroup>
 </Project>

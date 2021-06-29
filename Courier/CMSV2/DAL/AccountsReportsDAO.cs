@@ -216,8 +216,9 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+
             // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
@@ -233,15 +234,33 @@ namespace CMSV2.DAL
             //Response.ClearHeaders();
             string reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            if (reportparam.Output == "PDF")
+            {
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+                HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AccTrialBal_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            reportparam.ReportFileName = reportname;
+            SessionDataModel.SetAccountsParam1(reportparam);
             HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 
-            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            //stream.Seek(0, SeekOrigin.Begin);
-            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
-
-            //return File(stream, "application/pdf", "AccLedger.pdf");
         }
 
         public static string GenerateTradingAccountReport()
@@ -283,11 +302,12 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+
             // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            string reporttile = "PL/Trading Report";
-            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);            
+            string reporttile = "TRADING AND PROFIT & LOSS ACCOUNT";
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -300,10 +320,32 @@ namespace CMSV2.DAL
             //Response.ClearHeaders();
             string reportname = "AccTrading_" + DateTime.Now.ToString("ddMMyyHHmmSS") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
-            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            if (reportparam.Output == "PDF")
+            {
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+                HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AccTrading_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AccTrading_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+
             rd.Close();
             rd.Dispose();
+            reportparam.ReportFileName = reportname;
+            SessionDataModel.SetAccountsParam2(reportparam);
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
             return reportpath;
 
             //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
@@ -313,6 +355,96 @@ namespace CMSV2.DAL
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
 
+
+        public static string GenerateBalanceSheetReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            string paramdate = reportparam.AsOnDate.ToString("MM/dd/yyyy");
+            paramdate = paramdate.Replace('-', '/');
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_BalanceSheet";
+            comd.Parameters.AddWithValue("@AsOnDate", paramdate);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@YearId", yearid);
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AccBalanceSheet");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AccBalanceSheet.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AccBalanceSheet.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            //rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            string reporttile = "Balance Sheet";
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
+            string period = "As on :" + reportparam.AsOnDate.Date.ToString("dd MMMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "AccBalanceSheet_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+                HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "AccBalanceSheet_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "AccBalanceSheet_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            reportparam.ReportFileName = reportname;
+            SessionDataModel.SetAccountsParam1(reportparam);
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            rd.Close();
+            rd.Dispose();
+            return reportpath;
+
+        }
         public static string GenerateEmposFeeReport()
         {
             int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());

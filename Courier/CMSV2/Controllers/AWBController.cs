@@ -995,7 +995,12 @@ namespace CMSV2.Controllers
             if (data.CustomerID != null)
             {
                 inscan.CustomerID = data.CustomerID.Value;
-                inscan.customer = db.CustomerMasters.Find(inscan.CustomerID).CustomerName;
+                var cust = db.CustomerMasters.Find(inscan.CustomerID);
+                if (cust != null)
+                    inscan.customer = cust.CustomerName;
+                else
+                    inscan.customer = "Customer Unknown";
+
             }
 
                 //inscan.TaxconfigurationID = data.TaxconfigurationID.Value;

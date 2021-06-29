@@ -996,11 +996,17 @@ namespace CMSV2.Controllers
 
                 if (model.ID == 0)
                 {
+                    importShipment.EnteredDate = CommanFunctions.GetCurrentDateTime();
+                    importShipment.CreatedBy = userid;
+                    importShipment.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+                    importShipment.ModifiedBy = userid;
                     db.ImportShipments.Add(importShipment);
                     db.SaveChanges();
                 }
                 else
                 {
+                    importShipment.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+                    importShipment.ModifiedBy = userid;
                     db.Entry(importShipment).State = EntityState.Modified;
                     db.SaveChanges();
 

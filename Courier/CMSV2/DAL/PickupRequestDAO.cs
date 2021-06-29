@@ -957,6 +957,35 @@ namespace CMSV2.DAL
             return objList;
         }
 
+        public static List<AWBList> GetInScannedItems(int QuickInscanId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetQuickInscanItems";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@QuickInscanId", QuickInscanId);            
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AWBList> objList = new List<AWBList>();
+            AWBList obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AWBList();
+                    obj.InScanId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
+                    obj.ShipmentDetailId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ShipmentDetailId"].ToString());
+                    obj.Origin= ds.Tables[0].Rows[i]["Origin"].ToString();
+                    obj.Destination = ds.Tables[0].Rows[i]["Destination"].ToString();
+                    obj.AWB= ds.Tables[0].Rows[i]["AWB"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
         public static List<DRSVM> GetOutScanList(DateTime FromDate, DateTime ToDate, int FyearId, int BranchId, int DepotId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -1155,7 +1184,128 @@ namespace CMSV2.DAL
             }
             return objList;
         }
+        #region "HoldReleasePage"
+        public static HoldVM GetAWBDetailsForHold(string AWBNo,int InscanId,int ShipmentDetailId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetShipmentDetailForHold";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+            cmd.Parameters.AddWithValue("@InScanId", InscanId);
+            cmd.Parameters.AddWithValue("@ShipmentDetailId",ShipmentDetailId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<HoldVM> objList = new List<HoldVM>();
+            HoldVM obj = new HoldVM();
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {                    
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
+                    obj.ShipmentDetailID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ShipmentDetailId"].ToString());
+                    obj.Consignor = ds.Tables[0].Rows[i]["Consignor"].ToString();
+                    obj.Consignee = ds.Tables[0].Rows[i]["Consignee"].ToString();
+                    obj.Pieces = ds.Tables[0].Rows[i]["Pieces"].ToString();
+                    obj.CollectedByName = ds.Tables[0].Rows[i]["CollectedBy"].ToString();
+                    obj.Weight = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Weight"].ToString());
+                    obj.CourierCharges = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CourierCharges"].ToString());
+                    obj.StatusPaymentMOde = ds.Tables[0].Rows[i]["StatusPaymentMOde"].ToString();
+                    obj.OriginCountry = ds.Tables[0].Rows[i]["OriginCountry"].ToString();
+                    obj.ConsigneeCountry = ds.Tables[0].Rows[i]["ConsigneeCountry"].ToString();
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();
+                    obj.AWBType = ds.Tables[0].Rows[i]["Type"].ToString();
+                    obj.CourierStatus = ds.Tables[0].Rows[i]["CourierStatus"].ToString();
+                    obj.CourierStatusID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CourierStatusID"].ToString());
+                    obj.AWBDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AWBDate"].ToString());
+                    if (obj.CourierStatusID ==5 || obj.CourierStatusID==21 || obj.CourierStatusID==22 || obj.CourierStatusID==19)
+                    {
+                        obj.ActionType = "On-Hold";
+                    }
+                    else if (obj.CourierStatusID==18)
+                    {
+                        obj.ActionType = "Released";
+                    }
+                    obj.HistoryDetails = GetHoldHistoryList(AWBNo);
+                }
+            }
+            return obj;
+        }
 
+        public static List<HoldVM> GetHoldAWBList(DateTime FromDate,DateTime ToDate,int BranchId, int StatusId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetHoldList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ActionType", StatusId);
+            cmd.Parameters.AddWithValue("@BranchId", BranchId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<HoldVM> objList = new List<HoldVM>();
+            HoldVM obj = new HoldVM();
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new HoldVM();
+                    obj.HoldReleaseID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["HoldReleaseid"].ToString());
+                    obj.AWBDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AWBDate"].ToString());
+                    obj.EntryDate =Convert.ToDateTime(ds.Tables[0].Rows[i]["EntryDate"].ToString());
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
+                    obj.ShipmentDetailID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ShipmentDetailId"].ToString());                                        
+                    obj.EnteredBy = ds.Tables[0].Rows[i]["EnteredBy"].ToString();
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();
+                    obj.ActionType = ds.Tables[0].Rows[i]["ActionType"].ToString();                    
+                    obj.CourierStatus = ds.Tables[0].Rows[i]["CourierStatus"].ToString();
+                    obj.Remarks = ds.Tables[0].Rows[i]["Remarks"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        public static List<HoldVM> GetHoldHistoryList(string AWBNo, int InscanId=0,int ShipmentDetailId=0)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetHoldHistoryList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AWBNo",AWBNo);
+            cmd.Parameters.AddWithValue("@InscanId", InscanId);
+            cmd.Parameters.AddWithValue("@ShipmentDetailId", ShipmentDetailId);
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<HoldVM> objList = new List<HoldVM>();
+            HoldVM obj = new HoldVM();
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new HoldVM();
+                    obj.HoldReleaseID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["HoldReleaseid"].ToString());
+                    obj.AWBDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["AWBDate"].ToString());
+                    obj.EntryDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["EntryDate"].ToString());
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
+                    obj.ShipmentDetailID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ShipmentDetailId"].ToString());
+                    obj.EnteredBy = ds.Tables[0].Rows[i]["EnteredBy"].ToString();
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();
+                    obj.ActionType = ds.Tables[0].Rows[i]["ActionType"].ToString();
+                    obj.CourierStatus = ds.Tables[0].Rows[i]["CourierStatus"].ToString();
+                    obj.Remarks = ds.Tables[0].Rows[i]["Remarks"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
         #region "COLOADER Invoice"
         public static List<AgentInvoiceVM> GetAgentInvoiceList(DateTime FromDate, DateTime ToDate, string InvoiceNo, int FyearId)
         {

@@ -180,7 +180,7 @@ namespace CMSV2.Controllers
             string country = c.CountryName;
             string city = c.CityName;
 
-
+            int UserId = Convert.ToInt32(Session["UserID"].ToString());
             CustomerMaster obj = new CustomerMaster();
             PickupRequestDAO _dao = new PickupRequestDAO();
             if (c.CustomerID == 0)
@@ -278,11 +278,18 @@ namespace CMSV2.Controllers
                 //  obj.UserID = u.UserID;
                 if (c.CustomerID > 0)
                 {
+                    obj.ModifiedBy = UserId;
+                    obj.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                     db.Entry(obj).State = EntityState.Modified;
                     db.SaveChanges();
+                    ReceiptDAO.ReSaveCustomerCode();
                 }
                 else
                 {
+                    obj.CreatedBy = UserId;
+                    obj.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                    obj.ModifiedBy = UserId;
+                    obj.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                     db.CustomerMasters.Add(obj);
                     db.SaveChanges();
                     ReceiptDAO.ReSaveCustomerCode();

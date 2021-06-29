@@ -28,5 +28,6 @@ namespace CMSV2.Models
         public string Source { get; set; }
         public Nullable<int> AgentID { get; set; }
         public Nullable<int> AcFinancialYearID { get; set; }
+        public bool OutScanReturned { get; set; }
     }
 }

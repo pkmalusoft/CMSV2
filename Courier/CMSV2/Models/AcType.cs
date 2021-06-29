@@ -18,5 +18,8 @@ namespace CMSV2.Models
         public string AccountType { get; set; }
         public Nullable<int> AcCategoryId { get; set; }
         public Nullable<int> BranchId { get; set; }
+        public Nullable<int> TBOrder { get; set; }
+        public Nullable<int> PLOrder { get; set; }
+        public Nullable<int> BSOrder { get; set; }
     }
 }

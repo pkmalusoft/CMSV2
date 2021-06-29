@@ -278,6 +278,9 @@
     <EntitySetMapping Name="AcTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcType">
         <MappingFragment StoreEntitySet="AcType">
+          <ScalarProperty Name="BSOrder" ColumnName="BSOrder" />
+          <ScalarProperty Name="PLOrder" ColumnName="PLOrder" />
+          <ScalarProperty Name="TBOrder" ColumnName="TBOrder" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="AccountType" ColumnName="AccountType" />
           <ScalarProperty Name="AcCategoryId" ColumnName="AcCategoryId" />
@@ -872,6 +875,10 @@
     <EntitySetMapping Name="CustomerMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMaster">
         <MappingFragment StoreEntitySet="CustomerMaster">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
           <ScalarProperty Name="PlaceID" ColumnName="PlaceID" />
           <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
@@ -1216,6 +1223,12 @@
     <EntitySetMapping Name="HoldReleases">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.HoldRelease">
         <MappingFragment StoreEntitySet="HoldRelease">
+          <ScalarProperty Name="ShipmentDetailId" ColumnName="ShipmentDetailId" />
+          <ScalarProperty Name="CourierStatusId" ColumnName="CourierStatusId" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="HoldReleaseid" ColumnName="HoldReleaseid" />
           <ScalarProperty Name="InScanId" ColumnName="InScanId" />
           <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
@@ -8646,6 +8659,7 @@
     <EntitySetMapping Name="QuickInscanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.QuickInscanMaster">
         <MappingFragment StoreEntitySet="QuickInscanMaster">
+          <ScalarProperty Name="OutScanReturned" ColumnName="OutScanReturned" />
           <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="AgentID" ColumnName="AgentID" />
           <ScalarProperty Name="Source" ColumnName="Source" />
@@ -8851,6 +8865,10 @@
     <EntitySetMapping Name="ImportShipments">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipment">
         <MappingFragment StoreEntitySet="ImportShipment">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="EnteredDate" ColumnName="EnteredDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="Route" ColumnName="Route" />
           <ScalarProperty Name="ParcelNo" ColumnName="ParcelNo" />
           <ScalarProperty Name="Weight" ColumnName="Weight" />
@@ -9252,6 +9270,21 @@
         <MappingFragment StoreEntitySet="CustomerMultiContract">
           <ScalarProperty Name="CustomerRateTypeID" ColumnName="CustomerRateTypeID" />
           <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OutScanReturns">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.OutScanReturn">
+        <MappingFragment StoreEntitySet="OutScanReturn">
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="QuickInScanId" ColumnName="QuickInScanId" />
+          <ScalarProperty Name="PrevCourierStatusId" ColumnName="PrevCourierStatusId" />
+          <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
+          <ScalarProperty Name="PrevDRSID" ColumnName="PrevDRSID" />
+          <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -50,5 +50,9 @@ namespace CMSV2.Models
         public Nullable<decimal> Weight { get; set; }
         public Nullable<int> ParcelNo { get; set; }
         public string Route { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> EnteredDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
     }
 }

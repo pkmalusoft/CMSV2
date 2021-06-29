@@ -1424,6 +1424,9 @@
     <Compile Include="Models\OthereChargesType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OutScanReturn.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OutstandingInvoiceDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3107,6 +3110,7 @@
     <Content Include="ReportsXSD\AWBPrint.xss">
       <DependentUpon>AWBPrint.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\AccBalanceSheet.rpt" />
     <None Include="Reports\AccLedger.xsd" />
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />
@@ -3739,6 +3743,8 @@
     <Content Include="Views\Accounts\PLTradingReport.cshtml" />
     <Content Include="Views\Transhipment\Edit.cshtml" />
     <Content Include="Views\Transhipment\EditItemList.cshtml" />
+    <Content Include="Views\Accounts\BalanceSheetReport.cshtml" />
+    <Content Include="Views\Hold\ItemList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

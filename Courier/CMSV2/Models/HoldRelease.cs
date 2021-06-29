@@ -21,5 +21,11 @@ namespace CMSV2.Models
         public string Remarks { get; set; }
         public string ActionType { get; set; }
         public int BranchId { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> CourierStatusId { get; set; }
+        public Nullable<int> ShipmentDetailId { get; set; }
     }
 }
