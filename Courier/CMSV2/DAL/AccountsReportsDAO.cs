@@ -10,6 +10,7 @@ using CMSV2.Models;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web.Hosting;
+using CrystalDecisions.ReportAppServer.CommonObjectModel;
 
 namespace CMSV2.DAL
 {
@@ -3673,7 +3674,24 @@ namespace CMSV2.DAL
             //return File(stream, "application/pdf", "AccLedger.pdf");
         }
 
-
+        public static DataSet ImageTable(string ImageFile)
+        {
+            DataTable data = new DataTable();
+            DataRow row;
+            data.TableName = "Images";
+            data.Columns.Add("img", System.Type.GetType("System.Byte[]"));
+            FileStream fs = new FileStream(ImageFile, FileMode.Open);
+            BinaryReader br = new BinaryReader(fs);
+            row = data.NewRow();
+            row[0] = br.ReadBytes((int)br.BaseStream.Length);
+            data.Rows.Add(row);
+            br = null;
+            fs.Close();
+            fs = null;
+            DataSet ds1 = new DataSet();
+            ds1.Tables.Add(data);
+            return ds1;
+        }
         public static string COLoaderInvoiceReport(int id, string output)
         {
             int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
@@ -3701,9 +3719,22 @@ namespace CMSV2.DAL
             //ds.WriteXmlSchema(writer);
             //writer.Close();
 
+            //Tried for Image
+            //string strPath;
+            //strPath = System.Web.HttpContext.Current.Request.MapPath("~/UploadFiles/defaultlogo.png");
+            //DataSet ImageDataset = ImageTable(strPath);                       
+
+            //System.IO.StreamWriter writer1 = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CompanyLogo.xsd"));
+            //ImageDataset.WriteXmlSchema(writer1);
+            //writer1.Close();
+
+            //System.Drawing.Image drawingImage;
+            //drawingImage = System.Drawing.Image.FromStream(new System.IO.MemoryStream());
+
+            //drawingImage.Save(strPath, System.Drawing.Imaging.ImageFormat.Bmp);
+
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AgentInvoiceReport.rpt"));
-
             rd.SetDataSource(ds);
 
 

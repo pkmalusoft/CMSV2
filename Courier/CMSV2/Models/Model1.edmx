@@ -721,6 +721,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Users' does not have a p
           <Property Name="ShipmentDetailID" Type="int" />
           <Property Name="EmpID" Type="int" />
           <Property Name="APIStatus" Type="bit" Nullable="false" />
+          <Property Name="DRSID" Type="int" Nullable="false" />
+          <Property Name="PODID" Type="int" Nullable="false" />
+          <Property Name="OutScanJOBNo" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="BranchMaster">
           <Key>
@@ -1583,6 +1586,23 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
           <Property Name="FYearId" Type="int" />
           <Property Name="TotalCourierCharge" Type="money" />
           <Property Name="TotalCustomValue" Type="money" />
+        </EntityType>
+        <EntityType Name="DRSMultiple">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PODID" Type="int" />
+          <Property Name="DRSID" Type="int" />
+          <Property Name="InScanID" Type="int" />
+          <Property Name="ShipmentDetailID" Type="int" />
+          <Property Name="TotalPiecs" Type="int" />
+          <Property Name="TotalWeight" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="DeliveredPiecs" Type="int" />
+          <Property Name="DeliveredWeight" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="EmpID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
         </EntityType>
         <EntityType Name="DRSRecPay">
           <Key>
@@ -3649,6 +3669,16 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="PaymentModeText" Type="varchar" MaxLength="100" />
           <Property Name="PaymentModeCode" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="tblPickUpAttempts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InScanID" Type="text" Nullable="false" />
+          <Property Name="image" Type="text" Nullable="false" />
+          <Property Name="reason" Type="text" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="tblPodImages">
           <Key>
@@ -6949,6 +6979,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="DRRRecPay" EntityType="Self.DRRRecPay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRRRecPayDetails" EntityType="Self.DRRRecPayDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRS" EntityType="Self.DRS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DRSMultiple" EntityType="Self.DRSMultiple" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
@@ -7065,6 +7096,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="tblDepot" EntityType="Self.tblDepot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumentType" EntityType="Self.tblDocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPaymentMode" EntityType="Self.tblPaymentMode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPickUpAttempts" EntityType="Self.tblPickUpAttempts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPodImages" EntityType="Self.tblPodImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseInvoiceOtherCharges" EntityType="Self.tblPurchaseInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSalesInvoiceOtherCharges" EntityType="Self.tblSalesInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />
@@ -15006,6 +15038,8 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="CustomerRateDets" EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" />
           <EntitySet Name="CustomerMultiContracts" EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" />
           <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
+          <EntitySet Name="tblPickUpAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblPickUpAttempt" />
+          <EntitySet Name="DRSMultiples" EntityType="DB_9F57C4_couriertest_newModel.DRSMultiple" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20025,6 +20059,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="ShipmentDetailID" Type="Int32" />
           <Property Name="EmpID" Type="Int32" />
           <Property Name="APIStatus" Type="Boolean" Nullable="false" />
+          <Property Name="DRSID" Type="Int32" Nullable="false" />
+          <Property Name="PODID" Type="Int32" Nullable="false" />
+          <Property Name="OutScanJOBNo" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="TransportMode">
           <Key>
@@ -20098,6 +20135,33 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PrevCourierStatusId" Type="Int32" />
           <Property Name="QuickInScanId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblPickUpAttempt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InScanID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="reason" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="DRSMultiple">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PODID" Type="Int32" />
+          <Property Name="DRSID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="ShipmentDetailID" Type="Int32" />
+          <Property Name="TotalPiecs" Type="Int32" />
+          <Property Name="TotalWeight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="DeliveredPiecs" Type="Int32" />
+          <Property Name="DeliveredWeight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="EmpID" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
         </EntityType>
@@ -29297,6 +29361,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="AWBTrackStatus">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
               <MappingFragment StoreEntitySet="AWBTrackStatus">
+                <ScalarProperty Name="OutScanJOBNo" ColumnName="OutScanJOBNo" />
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
                 <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
                 <ScalarProperty Name="EmpID" ColumnName="EmpID" />
                 <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
@@ -29391,6 +29458,35 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
                 <ScalarProperty Name="PrevDRSID" ColumnName="PrevDRSID" />
                 <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPickUpAttempts">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPickUpAttempt">
+              <MappingFragment StoreEntitySet="tblPickUpAttempts">
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DRSMultiples">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSMultiple">
+              <MappingFragment StoreEntitySet="DRSMultiple">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="DeliveredWeight" ColumnName="DeliveredWeight" />
+                <ScalarProperty Name="DeliveredPiecs" ColumnName="DeliveredPiecs" />
+                <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+                <ScalarProperty Name="TotalPiecs" ColumnName="TotalPiecs" />
+                <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="PODID" ColumnName="PODID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

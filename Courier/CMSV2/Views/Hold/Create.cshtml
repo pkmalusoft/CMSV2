@@ -91,7 +91,8 @@
                         $("#InScanID").val(0);
                         $('#AWBNo').val('');
                         $('#AWBNo').focus();
-                        alert(response.message);
+                        $.notify(response.message, "error");
+                        //alert(response.message);
                     }
 
                 }

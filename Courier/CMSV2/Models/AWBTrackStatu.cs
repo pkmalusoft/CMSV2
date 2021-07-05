@@ -26,5 +26,8 @@ namespace CMSV2.Models
         public Nullable<int> ShipmentDetailID { get; set; }
         public Nullable<int> EmpID { get; set; }
         public bool APIStatus { get; set; }
+        public int DRSID { get; set; }
+        public int PODID { get; set; }
+        public int OutScanJOBNo { get; set; }
     }
 }

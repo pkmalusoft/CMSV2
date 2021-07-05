@@ -131,7 +131,7 @@ namespace CMSV2.Models
         public Decimal? materialcost { get; set; }
 
         public string Description { get; set; }
-
+        public string FWDAgentNumber { get; set; }
         public string Pieces { get; set; }
 
         public Decimal? Weight { get; set; }

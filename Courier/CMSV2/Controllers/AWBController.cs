@@ -1316,11 +1316,11 @@ namespace CMSV2.Controllers
                    from subpet2 in gj2.DefaultIfEmpty()
                    where c.BranchID == branchid
                    && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-                   
+
                   //&& (c.CourierStatusID == pStatusId || pStatusId == 0)
                   && c.IsDeleted == false
-                   && (c.PaymentModeId == datePicker.paymentId ||  datePicker.paymentId == 0)
-                   && (c.AcHeadID==datePicker.AcHeadId || datePicker.AcHeadId==0)
+                   && (c.PaymentModeId == datePicker.paymentId || datePicker.paymentId == 0)
+                   && (c.AcHeadID == datePicker.AcHeadId || datePicker.AcHeadId == 0)
                    orderby c.TransactionDate descending, c.AWBNo descending
                    select new QuickAWBVM
                    {
@@ -1339,37 +1339,51 @@ namespace CMSV2.Controllers
                        OtherCharge = c.OtherCharge,
                        totalCharge = c.NetTotal,
                        MovementTypeID = c.MovementID == null ? 0 : c.MovementID.Value,
-                       paymentmode=pay.PaymentModeText,
+                       paymentmode = pay.PaymentModeText,
                        ConsigneePhone = c.ConsigneePhone,
-                       ConsigneeAddress1_Building =c.ConsigneeAddress1_Building + "," + c.ConsigneeAddress2_Street,
-                       ConsigneeAddress3_PinCode=c.ConsigneeAddress3_PinCode,
-                       Description =c.CargoDescription,
-
-                       
+                       ConsigneeMobile = c.ConsigneeMobileNo,
+                       ConsigneeAddress1_Building = c.ConsigneeAddress1_Building + "," + c.ConsigneeAddress2_Street,
+                       ConsigneeAddress3_PinCode = c.ConsigneeAddress3_PinCode,
+                       ConsigneeLocationName = c.ConsigneeLocationName,
+                       ConsigneeCityName = c.ConsigneeCityName,
+                       ConsigneeCountryName = c.ConsigneeCountryName,
+                       Description = c.CargoDescription,
                    }).ToList();
 
+            int qindex = 0;
+            foreach (QuickAWBVM item in lst)
+            {
+                var FAWBDet = db.InScanInternationals.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
+                if (FAWBDet !=null)
+                {
+                    lst[qindex].FWDAgentNumber=FAWBDet.ForwardingAWBNo;
+                }
+            }
             if (datePicker.SelectedValues != null)
             {
                 lst=lst.Where(tt => tt.MovementTypeID != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementTypeID.Value)).ToList(); 
             }
-            int qindex = 0;
-            foreach(QuickAWBVM item in lst)
-            {
-                if (lst[qindex].OtherCharge>0)
-                {
-                    int? _inscanid = lst[qindex].InScanID;
-                    var othercharge = (from c in db.InscanOtherCharges join m in db.OtherCharges on c.OtherChargeID equals m.OtherChargeID where c.InscanID == _inscanid && m.TaxApplicable == true select c).ToList();
-                    decimal? plAmount = othercharge.Sum(i => i.Amount);
-                    lst[qindex].OtherCharge = plAmount;
-                    lst[qindex].totalCharge = lst[qindex].CourierCharge + plAmount;
+            
+            //foreach(QuickAWBVM item in lst)
+            //{
+            //    if (lst[qindex].OtherCharge>0)
+            //    {
+            //        int? _inscanid = lst[qindex].InScanID;
+            //        var othercharge = (from c in db.InscanOtherCharges join m in db.OtherCharges on c.OtherChargeID equals m.OtherChargeID where c.InscanID == _inscanid && m.TaxApplicable == true select c).ToList();
+            //        if (othercharge.Count > 0)
+            //        {
+            //            decimal? plAmount = othercharge.Sum(i => i.Amount);
+            //            lst[qindex].OtherCharge = plAmount;
+            //            lst[qindex].totalCharge = lst[qindex].CourierCharge + plAmount;
+            //        }
 
-                }
-                else
-                {
-                    lst[qindex].totalCharge = lst[qindex].CourierCharge;
-                }
-                qindex = qindex + 1;
-            }
+            //    }
+            //    else
+            //    {
+            //        lst[qindex].totalCharge = lst[qindex].CourierCharge;
+            //    }
+            //    qindex = qindex + 1;
+            //}
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();

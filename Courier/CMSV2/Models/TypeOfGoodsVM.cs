@@ -12,4 +12,9 @@ namespace CMSV2.Models
 
     public string TypeOfGood { get; set; }
   }
+
+    public class PickUpDelAttemptReason: PkpDelAttemptReason
+    {
+
+    }
 }

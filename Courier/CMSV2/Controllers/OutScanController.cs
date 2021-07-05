@@ -140,15 +140,16 @@ namespace CMSV2.Controllers
         {
             //Received at Origin Facility
             //var l = (from c in db.InScans where c.InScanDate >= s  && c.InScanDate <= e select c).ToList();
-            int courierstatusid = db.CourierStatus.Where(cc => cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
-            int courierstatusid1 = db.CourierStatus.Where(cc => cc.CourierStatus == "Released").FirstOrDefault().CourierStatusID;
+            //int courierstatusid = db.CourierStatus.Where(cc => cc.CourierStatus == "Received at Origin Facility").FirstOrDefault().CourierStatusID;
+            //int courierstatusid1 = db.CourierStatus.Where(cc => cc.CourierStatus == "Released").FirstOrDefault().CourierStatusID;
 
-            var l = (from c in db.InScanMasters where c.AWBNo == id && c.DRSID==null && (c.CourierStatusID== courierstatusid || c.CourierStatusID == courierstatusid1)  select c).FirstOrDefault();
+            //--Domestic Items 5,6,7,22,23,19 Received at origin,sorting inprocess,Airwaybill Updated,Outscan Returned, Partially Delivered,Released            
+            var l = (from c in db.InScanMasters where c.AWBNo == id && c.DRSID==null && (c.CourierStatusID== 5 || c.CourierStatusID == 6 || c.CourierStatusID == 7 || c.CourierStatusID == 22 || c.CourierStatusID == 23 || c.CourierStatusID == 19)  select c).FirstOrDefault();
             
 
             if (l != null)
             {
-                DRSDet obj = new DRSDet();
+                DRSDet obj = new DRSDet(); 
                 if (l != null)
                 {
 
@@ -178,8 +179,8 @@ namespace CMSV2.Controllers
             }
             else
             {
-                //12  At Destination Customs Facility Depot Outscan or Outscan Returned Items
-                var import = db.ImportShipmentDetails.Where(cc => cc.AWB == id.Trim() && cc.DRSID == null && (cc.CourierStatusID == 21 || cc.CourierStatusID == 22)).FirstOrDefault();
+                //Import Shipment Items 21,22,23,19 --Received at delivery Factility,Outscan Returned,Partially Delivered,REleased
+                var import = db.ImportShipmentDetails.Where(cc => cc.AWB == id.Trim() && cc.DRSID == null && (cc.CourierStatusID == 21 || cc.CourierStatusID == 22 || cc.CourierStatusID==23 || cc.CourierStatusID == 19)).FirstOrDefault();
                 if (import != null)
                 {
                     DRSDet obj = new DRSDet();
@@ -398,7 +399,8 @@ namespace CMSV2.Controllers
                     _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                     _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                     _awbstatus.UserId = UserId;
-                    _awbstatus.EmpID = v.DeliveredBy;                    
+                    _awbstatus.EmpID = v.DeliveredBy;
+                    _awbstatus.DRSID = objdrs.DRSID;
                     db.AWBTrackStatus.Add(_awbstatus);
                     db.SaveChanges();
 
@@ -431,7 +433,8 @@ namespace CMSV2.Controllers
                     _awbstatus.ShipmentStatus = db.tblStatusTypes.Find(_inscan.StatusTypeId).Name;
                     _awbstatus.CourierStatus = db.CourierStatus.Find(_inscan.CourierStatusID).CourierStatus;
                     _awbstatus.UserId = UserId;
-                    _awbstatus.EmpID = v.DeliveredBy;                 
+                    _awbstatus.EmpID = v.DeliveredBy;
+                    _awbstatus.DRSID = objdrs.DRSID;
                     db.AWBTrackStatus.Add(_awbstatus);
                     db.SaveChanges();
                 }

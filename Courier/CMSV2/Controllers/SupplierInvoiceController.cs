@@ -255,7 +255,8 @@ namespace CMSV2.Controllers
                 Supplierinvoice.AccompanyID = Convert.ToInt32(Session["CurrentCompanyID"]); 
                 Supplierinvoice.BranchId = Convert.ToInt32(Session["CurrentBranchID"]); 
                 Supplierinvoice.FyearID = Convert.ToInt32(Session["fyearid"]);
-                Supplierinvoice.InvoiceTotal = IDetails.Sum(d => d.Amount);
+                var amount = IDetails.Sum(d => d.Value);
+                Supplierinvoice.InvoiceTotal = amount;
                 Supplierinvoice.StatusClose = false;
                 Supplierinvoice.IsDeleted = false;
                 Supplierinvoice.Remarks = Remarks;

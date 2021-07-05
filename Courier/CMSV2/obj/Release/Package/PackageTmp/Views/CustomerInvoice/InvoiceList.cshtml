@@ -4,12 +4,12 @@
     int i = 0;
     var _decimal = @Session["Decimal"].ToString();
 }
+ 
 
 @foreach (var item in Model.CustomerInvoiceDetailsVM)
 {
     <tr>
         <td>
-
             @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceDetailID, new { @Value = @item.CustomerInvoiceDetailID })
             @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceID, new { @Value = @item.CustomerInvoiceID })
             @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].AWBNo, new { @Value = @item.AWBNo })
@@ -20,42 +20,42 @@
             @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].OtherCharge, new { @Value = @item.OtherCharge })
             @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].TotalCharges, new { @Value = @item.TotalCharges })
 
-            
-            <div class="col-md-1 checkboxdesign">
-                @(i + 1)
-                @Html.CheckBoxFor(model => model.CustomerInvoiceDetailsVM[i].AWBChecked, new { name = "AWBChecked", @class = "checkfilter calfield",style="margin-left:10px;" })
-                @*@Html.CheckBox(@item.AWBChecked, new { @name = "AWBChecked", value = @item.AWBChecked })*@
-            </div>
-        </td>        
+
+
+            @(i + 1)
+            @Html.CheckBoxFor(model => model.CustomerInvoiceDetailsVM[i].AWBChecked, new { name = "AWBChecked", @class = "checkfilter calfield", style = "margin-left:10px;" })
+
+
+        </td>
         <td>
             @item.AWBNo
         </td>
         <td>
-            @CMSV2.Models.CommanFunctions.GetShortDateFormat( @item.AWBDateTime)
-         </td>
-         <td>
-             @item.ConsigneeName
-         </td>
-         <td>
-             @item.ConsigneeCountryName
-         </td>
-         <td class="text-right">
-             @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge,_decimal)
-          </td>
-          <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CustomCharge, _decimal)
-          </td>
-          <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, _decimal)
-          </td>
-          <td class="text-right">
-              @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.TotalCharges, _decimal)
-           </td>
+            @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.AWBDateTime)
+        </td>
+        <td>
+            @item.ConsigneeName
+        </td>
+        <td>
+            @item.ConsigneeCountryName
+        </td>
+        <td class="text-right">
+            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge, _decimal)
+        </td>
+        <td class="text-right">
+            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CustomCharge, _decimal)
+        </td>
+        <td class="text-right">
+            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, _decimal)
+        </td>
+        <td class="text-right">
+            @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.TotalCharges, _decimal)
+        </td>
 
-         @*<td style="width:101px">
-        <a onclick="deleteAWBItem('@i')" href="javascript:void(0);"><i class="fa fa-times"></i></a>
-    </td>*@
-</tr>
+        @*<td style="width:101px">
+                <a onclick="deleteAWBItem('@i')" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+            </td>*@
+    </tr>
     i++;
 }
 
@@ -87,7 +87,7 @@
                 success: function (response) {
                     console.log(response.data);
                     var _custdata = response.data;
-                          
+
                     $('#lbltotalcharge').html(addCommas(parseFloat(_custdata.TotalCharges).toFixed(@_decimal)));
                     $('#lbladminpercent').html(addCommas(parseFloat(_custdata.AdminPer).toFixed(@_decimal)));
                     $('#lbltaxpercent').html(addCommas(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal)));

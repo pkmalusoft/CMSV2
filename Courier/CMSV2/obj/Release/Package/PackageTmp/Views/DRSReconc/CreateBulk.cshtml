@@ -416,15 +416,19 @@
                     for (var i = 0; i < data.length; i++) {
                         debugger;
                         var i = $('#tblTrans > tr').length;
+                        var inscanid = data[i].InscanId;
+                        var ShipmentDetailId = data[i].ShipmentDetailID;
                         var TransType = 'AWB';
-                        var Reference = 'AWB:' + data[i].AWBNo;
+                        if (inscanid == 0 && ShipmentDetailId > 0)
+                            TransType = 'Import-AWB';
+                        var Reference = TransType  + data[i].AWBNo;
                         var COD = data[i].CourierCharge + data[i].OtherCharge;
                         var Discount = 0;
                         var MCReceived = data[i].MaterialCost;
-                        var inscanid = data[i].InscanId;
+                      
                         var total = parseFloat(COD) + parseFloat(MCReceived);
                         var html = '<tr><td><input type="checkbox" onchange="deletetrans(this, ' + i + ');" checked id="chkallocate_' + i + '" /></td>';
-                        html = html + '<td><input type="hidden" value="AWB" id="hdntype_' + i + '" /><input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" /> <input type="hidden" id="hdnrefId_' + i + '" value="' + inscanid + '" /><input type="hidden" id="hdnref_' + i + '" value="' + Reference + '" /> <input type="hidden" id="hdncod_' + i + '" value="' + COD + '" /><input type="hidden" id="hdndiscount_' + i + '" value="' + Discount + '" /> <input type="hidden" id="hdnmc_' + i + '" value="' + MCReceived + '" /><input type="hidden" id="hdnreceipt_' + i + '" value="0" /> <input type="hidden" id="hdnpkp_' + i + '" value="0" /> <input type="hidden" id="hdnexp_' + i + '" value="0" />'  + Reference + '</td>';
+                        html = html + '<td><input type="hidden" value="' + TransType + '" id="hdntype_' + i + '" /><input class="hdndeleted" type="hidden" value="false" id="hdndeleted_' + i + '" /> <input type="hidden" id="hdnrefId_' + i + '" value="' + inscanid + '" /><input type="hidden" id="hdnref_' + i + '" value="' + Reference + '" /> <input type="hidden" id="hdncod_' + i + '" value="' + COD + '" /><input type="hidden" id="hdndiscount_' + i + '" value="' + Discount + '" /> <input type="hidden" id="hdnmc_' + i + '" value="' + MCReceived + '" /><input type="hidden" id="hdnreceipt_' + i + '" value="0" /> <input type="hidden" id="hdnpkp_' + i + '" value="0" /> <input type="hidden" id="hdnexp_' + i + '" value="0" />'  + Reference + '</td>';
                         html = html + '<td>' + parseFloat(COD).toFixed(2) + '</td>';  //cod
                    //     html = html + '<td>' + parseFloat(Discount).toFixed(2) + '</td>';  //cod
                         html = html + '<td>' + parseFloat(MCReceived).toFixed(2) + '</td>';//mcreceived

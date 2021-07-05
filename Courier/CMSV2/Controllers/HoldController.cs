@@ -283,7 +283,7 @@ namespace CMSV2.Controllers
             // var l = (from c in db.InScanMasters where c.AWBNo == id && c.DRSID == null && c.CourierStatusID == courierstatusid select c).FirstOrDefault();
             HoldVM obj = new HoldVM();
             obj = PickupRequestDAO.GetAWBDetailsForHold(id,0,0);
-            if (obj != null)
+            if (obj != null && obj.AWBNo!="" && obj.AWBNo!=null)
             {
  
                 Session["HoldAWBHistory"] = obj.HistoryDetails;
@@ -291,7 +291,8 @@ namespace CMSV2.Controllers
             }
             else
             {
-                return Json(new { status = "failed", data = obj, message = "Invalid AWB - Not in the Depot" }, JsonRequestBehavior.AllowGet);
+                Session["HoldAWBHistory"] = new List<HoldVM>();
+                return Json(new { status = "failed", data = obj, message = "Invalid AWB -Shipment not in the Depot" }, JsonRequestBehavior.AllowGet);
             }
             //return Json(obj, JsonRequestBehavior.AllowGet);
         }

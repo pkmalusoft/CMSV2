@@ -281,6 +281,8 @@ namespace CMSV2.Models
         public virtual DbSet<CustomerRateDet> CustomerRateDets { get; set; }
         public virtual DbSet<CustomerMultiContract> CustomerMultiContracts { get; set; }
         public virtual DbSet<OutScanReturn> OutScanReturns { get; set; }
+        public virtual DbSet<tblPickUpAttempt> tblPickUpAttempts { get; set; }
+        public virtual DbSet<DRSMultiple> DRSMultiples { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

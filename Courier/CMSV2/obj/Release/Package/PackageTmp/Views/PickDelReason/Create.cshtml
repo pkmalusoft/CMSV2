@@ -1,0 +1,71 @@
+﻿@model CMSV2.Models.PickUpDelAttemptReason
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#Reason").focus();
+
+        $("#btnsave").click(function () {
+            var type = $("#Reason").val();
+
+            if (type == "") {
+                $("#validations").show();
+                return false;
+            }
+            else {
+                $("#validations").hide();
+                return true;
+            }
+        });
+    });
+</script>
+
+<section class="content-header">
+    <h1 class="headingfont">PickUp Delivery Attempt Reason</h1>
+
+</section>
+
+<section class="content">
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+      <fieldset>
+
+          <div class="row no-margin">
+              <div class="col-md-3">
+                  <label class="headinglabel required">Reason</label>
+                  @Html.HiddenFor(mode => mode.ID)
+                  @Html.TextBoxFor(model => model.Reason, new { @class = "form-control txttarget" })
+                  @Html.ValidationMessageFor(model => model.Reason)
+              </div>
+          </div>
+          <div class="row no-margin" style="padding-top:10px">
+              <div class="col-md-12 btn-right">
+                  @if (@Model.ID == 0)
+                  {
+                      <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                  }
+                  else
+                  {
+                      <input type="submit" value="Update" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                  }
+
+                  <a href='@Url.Action("Index", "PickDelReason", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+              </div>
+          </div>
+
+      </fieldset>
+}
+    </section>
+
+
+ 

@@ -1033,13 +1033,14 @@ namespace CMSV2.Controllers
                     detail.ImportShipmentId = importShipment.ID; //forignkey reference for import tranashipment
                     detail.AWBNo = item.HAWBNo;
                     detail.TransactionDate = Convert.ToDateTime(item.AWBDate);
-                    detail.Consignee = item.Consignee;
-                    detail.ConsigneeAddress1_Building = item.ConsigneeAddress1_Building;
-                    detail.ConsignorPhone = item.ConsignorPhone;
-                    detail.ConsigneeCountryName = item.ConsigneeCountryName;
-                    detail.ConsigneeCityName = item.ConsigneeCityName;
                     detail.Consignor = item.Consignor;
-
+                    detail.ConsignorPhone = item.ConsignorPhone;
+                    detail.ConsignorMobileNo = item.ConsignorMobile;
+                    detail.Consignee = item.Consignee;
+                    detail.ConsigneeAddress1_Building = item.ConsigneeAddress1_Building;                    
+                    detail.ConsigneeCountryName = item.ConsigneeCountryName;
+                    detail.ConsigneeCityName = item.ConsigneeCityName;                    
+                    detail.ConsigneeMobileNo = item.ConsigneeMobile;
                     detail.ParcelTypeId = item.ParcelTypeID;
                     detail.CustomerRateID = item.CustomerRateID;
                     detail.ProductTypeID =item.ProductTypeID;
@@ -1691,17 +1692,29 @@ namespace CMSV2.Controllers
         public JsonResult GetSourceValue(string term, string FieldName)
         {
             var IDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            var matchlist = db.ImportDataFixations.Where(cc => cc.FieldName == FieldName).ToList();
             if (IDetails != null)
             {
                 if (term.Trim() != "")
                 {
+                    
                     if (FieldName == "DestinationCountry" || FieldName =="ConsigneeCountryName")
-                    {
+                    {                        
+                        
                         var list = (from c in IDetails
                                     where c.ConsigneeCountryName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ConsigneeCountryName
                                     select new { SourceValue = c.ConsigneeCountryName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
+
                     }
                     else if (FieldName == "DestinationCity" ||  FieldName=="ConsigneeCityName")
                     {
@@ -1709,7 +1722,15 @@ namespace CMSV2.Controllers
                                     where c.ConsigneeCityName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ConsigneeCityName
                                     select new { SourceValue = c.ConsigneeCityName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "DestinationLocation" || FieldName =="ConsigneeLocationName")
                     {
@@ -1717,7 +1738,15 @@ namespace CMSV2.Controllers
                                     where c.ConsigneeLocationName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ConsigneeLocationName
                                     select new { SourceValue = c.ConsigneeLocationName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "FAgentName")
                     {
@@ -1725,7 +1754,15 @@ namespace CMSV2.Controllers
                                     where c.FAgentName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.FAgentName
                                     select new { SourceValue = c.FAgentName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "Customer")
                     {
@@ -1733,7 +1770,15 @@ namespace CMSV2.Controllers
                                     where c.Customer.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.Customer
                                     select new { SourceValue = c.Customer }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "ReceivedBy")
                     {
@@ -1741,7 +1786,15 @@ namespace CMSV2.Controllers
                                     where c.ReceivedBy.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ReceivedBy
                                     select new { SourceValue = c.ReceivedBy }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "CollectedBy")
@@ -1750,7 +1803,15 @@ namespace CMSV2.Controllers
                                     where c.CollectedBy.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.CollectedBy
                                     select new { SourceValue = c.CollectedBy }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "CourierStatus")
                     {
@@ -1758,7 +1819,15 @@ namespace CMSV2.Controllers
                                     where c.CourierStatus.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.CourierStatus
                                     select new { SourceValue = c.CourierStatus }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "CourierType")
@@ -1767,7 +1836,15 @@ namespace CMSV2.Controllers
                                     where c.CourierType.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.CourierType
                                     select new { SourceValue = c.CourierType}).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "ParcelType")
@@ -1776,7 +1853,15 @@ namespace CMSV2.Controllers
                                     where c.ParcelType.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ProductType
                                     select new { SourceValue = c.ParcelType }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else
@@ -1792,56 +1877,121 @@ namespace CMSV2.Controllers
                         var list = (from c in IDetails
                                     orderby c.ConsigneeCountryName
                                     select new { SourceValue = c.ConsigneeCountryName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
+
                     }
                     else if (FieldName == "DestinationCity" || FieldName == "ConsigneeCityName")
                     {
                         var list = (from c in IDetails
                                     orderby c.ConsigneeCityName
                                     select new { SourceValue = c.ConsigneeCityName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "DestinationLocation" || FieldName == "ConsigneeLocationName")
                     {
                         var list = (from c in IDetails
                                     orderby c.ConsigneeLocationName
                                     select new { SourceValue = c.ConsigneeLocationName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "FAgentName")
                     {
                         var list = (from c in IDetails
                                     orderby c.FAgentName
                                     select new { SourceValue = c.FAgentName }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "Customer")
                     {
                         var list = (from c in IDetails
                                     orderby c.Customer
                                     select new { SourceValue = c.Customer }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else if (FieldName == "ReceivedBy")
                     {
                         var list = (from c in IDetails
                                     orderby c.ReceivedBy
                                     select new { SourceValue = c.ReceivedBy }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "CollectedBy") { 
                         var list = (from c in IDetails
                                     orderby c.CollectedBy
                                     select new { SourceValue = c.CollectedBy }).Distinct().ToList();
-                    return Json(list, JsonRequestBehavior.AllowGet);
-                  }
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
+                    }
                     else if(FieldName=="CourierStatus")
                     {
                         var list = (from c in IDetails
                                     orderby c.CourierStatus
                                     select new { SourceValue = c.CourierStatus }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "CourierType")
@@ -1849,7 +1999,15 @@ namespace CMSV2.Controllers
                         var list = (from c in IDetails                                    
                                     orderby c.CourierType
                                     select new { SourceValue = c.CourierType }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else if (FieldName == "ParcelType")
@@ -1857,7 +2015,15 @@ namespace CMSV2.Controllers
                         var list = (from c in IDetails                                    
                                     orderby c.ParcelType
                                     select new { SourceValue = c.ParcelType }).Distinct().ToList();
-                        return Json(list, JsonRequestBehavior.AllowGet);
+                        if (matchlist != null && matchlist.Count > 0)
+                        {
+                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                            return Json(listnew, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(list, JsonRequestBehavior.AllowGet);
+                        }
 
                     }
                     else
@@ -2078,7 +2244,8 @@ namespace CMSV2.Controllers
                     ConsigneeLocationName = objDataRow["ConsigneeLocationName"].ToString(),
                     ConsignorAddress1_Building = objDataRow["ConsignorAddress1_Building"].ToString(),
                     ConsignorMobile = objDataRow["ConsignorMobile"].ToString(),
-                    ConsigneeMobile = objDataRow["ConsigneeMobile"].ToString(),
+                    ConsigneeMobile = objDataRow["ConsigneeMobile"].ToString(), //ConsigneeTelephone
+
                     Weight = CommanFunctions.ParseDecimal(objDataRow["Weight"].ToString()),
                     Pieces = objDataRow["Pieces"].ToString(),
                     CourierCharge = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()),

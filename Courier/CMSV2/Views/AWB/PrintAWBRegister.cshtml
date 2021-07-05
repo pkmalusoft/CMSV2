@@ -221,6 +221,9 @@
                         Fwd Agent
                     </th>
                     <th>
+                        Fwd Agent No.
+                    </th>
+                    <th>
                         Consignee Address
                     </th>
                     <th>
@@ -253,7 +256,8 @@
                         @Html.DisplayFor(modelItem => item.consigneename)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ConsigneePhone)
+                        @Html.DisplayFor(modelItem => item.ConsigneePhone) <br />
+                        @Html.DisplayFor(modelItem => item.ConsigneeMobile)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.origin)
@@ -289,7 +293,11 @@
                         @Html.DisplayFor(modelItem => item.FAgentName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ConsigneeAddress1_Building) <br />
+                        @Html.DisplayFor(modelItem => item.FWDAgentNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConsigneeAddress1_Building)<br />
+                        @Html.DisplayFor(modelItem => item.ConsigneeLocationName) <br />
                         @Html.DisplayFor(modelItem => item.ConsigneeAddress3_PinCode)
                     </td>
                     <td>

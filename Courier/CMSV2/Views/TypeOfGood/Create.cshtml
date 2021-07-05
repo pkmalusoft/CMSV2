@@ -37,27 +37,30 @@
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
-    <fieldset>
-   
-          <div class="row no-margin"> 
-               
-             <div class="col-md-3">
-                          <label class="headinglabel required">Type Of Good</label>
-                   @Html.TextBoxFor(model => model.TypeOfGood, new {@class="form-control txttarget"  })
-            @Html.ValidationMessageFor(model => model.TypeOfGood)
-                     
-                 </div>
-      
+      <fieldset>
 
-       </div>
-         <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-md-12">
-                           
-                           <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave"/>&nbsp;&nbsp;<a href='@Url.Action("Index", "TypeOfGood", new { id = 0 })' class="btn btn-primary btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-                        </div>
-                    </div>
+          <div class="row no-margin">
 
-    </fieldset>
+              <div class="col-md-3">
+                  <label class="headinglabel required">Type Of Good</label>
+                  @Html.TextBoxFor(model => model.TypeOfGood, new { @class = "form-control txttarget" })
+                  @Html.ValidationMessageFor(model => model.TypeOfGood)
+
+              </div>
+
+
+          </div>
+          <div class="row no-margin" style="padding-top:10px">
+              <div class="col-md-12 btn-right">                  
+                   <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />                  
+
+                  <a href='@Url.Action("Index", "TypeOfGood", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+              </div>
+          </div>
+         
+
+      </fieldset>
 }
     </section>
 

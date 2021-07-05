@@ -7641,6 +7641,8 @@
     <EntitySet Name="CustomerRateDets" EntityType="DB_9F57C4_couriertest_newModel.CustomerRateDet" />
     <EntitySet Name="CustomerMultiContracts" EntityType="DB_9F57C4_couriertest_newModel.CustomerMultiContract" />
     <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
+    <EntitySet Name="tblPickUpAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblPickUpAttempt" />
+    <EntitySet Name="DRSMultiples" EntityType="DB_9F57C4_couriertest_newModel.DRSMultiple" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12660,6 +12662,9 @@
     <Property Name="ShipmentDetailID" Type="Int32" />
     <Property Name="EmpID" Type="Int32" />
     <Property Name="APIStatus" Type="Boolean" Nullable="false" />
+    <Property Name="DRSID" Type="Int32" Nullable="false" />
+    <Property Name="PODID" Type="Int32" Nullable="false" />
+    <Property Name="OutScanJOBNo" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="TransportMode">
     <Key>
@@ -12733,6 +12738,33 @@
     <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="PrevCourierStatusId" Type="Int32" />
     <Property Name="QuickInScanId" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblPickUpAttempt">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InScanID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="reason" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="DRSMultiple">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PODID" Type="Int32" />
+    <Property Name="DRSID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
+    <Property Name="ShipmentDetailID" Type="Int32" />
+    <Property Name="TotalPiecs" Type="Int32" />
+    <Property Name="TotalWeight" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="DeliveredPiecs" Type="Int32" />
+    <Property Name="DeliveredWeight" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="EmpID" Type="Int32" />
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <Property Name="CreatedBy" Type="Int32" />
   </EntityType>

@@ -40,23 +40,17 @@
 
 <section class="content-header">
     <h1 class="headingfont">Type Of Goods</h1>
-
 </section>
 
-
-<p class="indexbtnpadding">
-    @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
-</p>
-
+<div class="col-md-12">
+    <p class="indexbtnpadding pull-right">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+    </p>
+</div>
 <section class="content">
       @if (TempData["SuccessMsg"] != null)
     {
-    @* <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                            <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                            <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
-                                        </div>*@
-                 <script type="text/javascript">
+                     <script type="text/javascript">
                      $(document).ready(function () {
                          $.notify("@TempData["SuccessMsg"]", "success");
                           });

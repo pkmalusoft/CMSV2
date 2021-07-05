@@ -687,6 +687,9 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.aspnet_Users' does not have a p
     <Property Name="ShipmentDetailID" Type="int" />
     <Property Name="EmpID" Type="int" />
     <Property Name="APIStatus" Type="bit" Nullable="false" />
+    <Property Name="DRSID" Type="int" Nullable="false" />
+    <Property Name="PODID" Type="int" Nullable="false" />
+    <Property Name="OutScanJOBNo" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="BranchMaster">
     <Key>
@@ -1549,6 +1552,23 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="FYearId" Type="int" />
     <Property Name="TotalCourierCharge" Type="money" />
     <Property Name="TotalCustomValue" Type="money" />
+  </EntityType>
+  <EntityType Name="DRSMultiple">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PODID" Type="int" />
+    <Property Name="DRSID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="ShipmentDetailID" Type="int" />
+    <Property Name="TotalPiecs" Type="int" />
+    <Property Name="TotalWeight" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="DeliveredPiecs" Type="int" />
+    <Property Name="DeliveredWeight" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="EmpID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
   </EntityType>
   <EntityType Name="DRSRecPay">
     <Key>
@@ -3615,6 +3635,16 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.State' does not have a primary 
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="PaymentModeText" Type="varchar" MaxLength="100" />
     <Property Name="PaymentModeCode" Type="varchar" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="tblPickUpAttempts">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InScanID" Type="text" Nullable="false" />
+    <Property Name="image" Type="text" Nullable="false" />
+    <Property Name="reason" Type="text" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
   </EntityType>
   <EntityType Name="tblPodImages">
     <Key>
@@ -6915,6 +6945,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
     <EntitySet Name="DRRRecPay" EntityType="Self.DRRRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRRecPayDetails" EntityType="Self.DRRRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRS" EntityType="Self.DRS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DRSMultiple" EntityType="Self.DRSMultiple" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSRecPay" EntityType="Self.DRSRecPay" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRSRecPayDetails" EntityType="Self.DRSRecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EmployeeMaster" EntityType="Self.EmployeeMaster" Schema="dbo" store:Type="Tables" />
@@ -7031,6 +7062,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
     <EntitySet Name="tblDepot" EntityType="Self.tblDepot" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDocumentType" EntityType="Self.tblDocumentType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPaymentMode" EntityType="Self.tblPaymentMode" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPickUpAttempts" EntityType="Self.tblPickUpAttempts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPodImages" EntityType="Self.tblPodImages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseInvoiceOtherCharges" EntityType="Self.tblPurchaseInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblSalesInvoiceOtherCharges" EntityType="Self.tblSalesInvoiceOtherCharges" Schema="dbo" store:Type="Tables" />

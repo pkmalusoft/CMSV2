@@ -228,18 +228,48 @@ namespace CMSV2.Controllers
         public JsonResult GetDRSAWB1(int DRSID)
         {
             int FyearId = Convert.ToInt32(Session["fyearid"]);
-           
-                var drslist = (from c3 in db.InScanMasters
+
+            List<DRSAWBList> drslist1 = (from c3 in db.InScanMasters
                                where c3.AcFinancialYearID == FyearId
                                && c3.IsDeleted == false
                                && (c3.DRSID == DRSID)
                                && (c3.DRSID != null)
                                && (c3.PaymentModeId == 2 && c3.CODReceiptId == null)
                                orderby c3.AWBNo ascending
-                               select new { InscanId = c3.InScanID, AWBNo = c3.AWBNo, Shipper = c3.Consignor, Consignee = c3.Consignee, AWBDate = c3.TransactionDate, CourierCharge = c3.CourierCharge, OtherCharge = c3.OtherCharge, TotalCharge = c3.NetTotal, MaterialCost = c3.MaterialCost, IsNCND = c3.IsNCND, IsCashOnly = c3.IsCashOnly, IsCollectMaterial = c3.IsCollectMaterial, IsCheque = c3.IsDOCopyBack, d = c3.IsDOCopyBack, Pieces = c3.Pieces, Weight = c3.Weight }).ToList();
+                               select new DRSAWBList { InscanId = c3.InScanID, ShipmentDetailID=0, AWBNo = c3.AWBNo, Shipper = c3.Consignor, Consignee = c3.Consignee, AWBDate = c3.TransactionDate, CourierCharge = c3.CourierCharge, OtherCharge = c3.OtherCharge, TotalCharge = c3.NetTotal, MaterialCost = c3.MaterialCost, IsNCND = c3.IsNCND, IsCashOnly = c3.IsCashOnly, IsCollectMaterial = c3.IsCollectMaterial, IsCheque =c3.IsChequeOnly,IsDOCopyBack= c3.IsDOCopyBack,  Pieces = c3.Pieces, Weight = c3.Weight }).ToList();
 
-                return Json(drslist, JsonRequestBehavior.AllowGet);
-            
+
+            List<DRSAWBList> drslist2 = (from c3 in db.ImportShipmentDetails
+                           where  (c3.DRSID == DRSID)
+                           && (c3.DRSID != null)
+                           && (c3.CODReceiptId == null)
+                           orderby c3.AWB ascending
+                           select new DRSAWBList { InscanId =0, ShipmentDetailID = c3.ShipmentDetailID, AWBNo = c3.AWB, Shipper = c3.Shipper, Consignee = c3.Receiver, AWBDate = c3.AWBDate, CourierCharge = c3.CustomValue, OtherCharge =0, TotalCharge = c3.CustomValue + c3.COD, MaterialCost = c3.COD, IsNCND = false , IsCashOnly = false, IsCollectMaterial = false, IsCheque = false, IsDOCopyBack = false, Pieces = c3.PCS.ToString(), Weight = c3.Weight }).ToList();
+
+            if (drslist1.Count > 0 && drslist2.Count > 0)
+            {
+                foreach (var item in drslist2)
+                {
+                    drslist1.Add(item);
+                }
+
+                return Json(drslist1, JsonRequestBehavior.AllowGet);
+            }
+            else if(drslist1.Count>0 && drslist2.Count ==0)
+            {
+                return Json(drslist1, JsonRequestBehavior.AllowGet);
+            }
+            else if (drslist2.Count >0 )
+            {
+                return Json(drslist2, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<DRSAWBList> lst = new List<DRSAWBList>();
+
+                return Json(lst, JsonRequestBehavior.AllowGet);
+
+            }
 
         }
 
@@ -364,5 +394,28 @@ namespace CMSV2.Controllers
 
         }
 
+        
+    }
+
+    public class DRSAWBList
+    {
+        public int InscanId { get; set; }
+            public int ShipmentDetailID { get; set; }            
+            public string AWBNo { get; set; }
+            
+        public string Shipper { get; set; }
+        public string Consignee { get; set; }
+        public DateTime AWBDate { get; set; }
+        public decimal? CourierCharge { get; set; }       
+        public decimal? OtherCharge { get; set; }
+        public decimal? TotalCharge { get; set; }
+        public decimal? MaterialCost { get; set; }
+        public bool IsNCND { get; set; }
+        public bool IsCashOnly { get; set; }
+        public bool  IsCollectMaterial { get; set; }
+        public bool  IsCheque { get; set; }
+        public bool IsDOCopyBack { get; set; }
+        public string Pieces { get; set; }
+       public decimal? Weight { get; set; }
     }
 }

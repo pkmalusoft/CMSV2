@@ -147,6 +147,8 @@
                         term: request.term,FieldName:$('#FieldName').val()
                     },
                     success: function (data) {
+                        if (data.length == 0)
+                            $('#spanmsg').html('No Pending Items to fix!');
                         response($.map(data, function (val, item) {
                             return {
                                 label: val.SourceValue,

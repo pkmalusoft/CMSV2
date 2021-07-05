@@ -9191,6 +9191,9 @@
     <EntitySetMapping Name="AWBTrackStatus">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AWBTrackStatu">
         <MappingFragment StoreEntitySet="AWBTrackStatus">
+          <ScalarProperty Name="OutScanJOBNo" ColumnName="OutScanJOBNo" />
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
           <ScalarProperty Name="APIStatus" ColumnName="APIStatus" />
           <ScalarProperty Name="EmpID" ColumnName="EmpID" />
           <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
@@ -9285,6 +9288,35 @@
           <ScalarProperty Name="PrevDRSID" ColumnName="PrevDRSID" />
           <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPickUpAttempts">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.tblPickUpAttempt">
+        <MappingFragment StoreEntitySet="tblPickUpAttempts">
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="reason" ColumnName="reason" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DRSMultiples">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DRSMultiple">
+        <MappingFragment StoreEntitySet="DRSMultiple">
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+          <ScalarProperty Name="DeliveredWeight" ColumnName="DeliveredWeight" />
+          <ScalarProperty Name="DeliveredPiecs" ColumnName="DeliveredPiecs" />
+          <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+          <ScalarProperty Name="TotalPiecs" ColumnName="TotalPiecs" />
+          <ScalarProperty Name="ShipmentDetailID" ColumnName="ShipmentDetailID" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+          <ScalarProperty Name="PODID" ColumnName="PODID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

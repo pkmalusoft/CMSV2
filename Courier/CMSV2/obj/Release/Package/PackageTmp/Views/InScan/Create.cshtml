@@ -199,12 +199,12 @@
             else {
                 $('#btnadd').attr('disabled', 'disabled');
             }
-            var OutScanReturned = $('#OutScanReturned').prop('checked');
+            
             $.ajax({
                 type: "POST",
                 url: "/InScan/GetAWBDetail",
                 datatype: "Json",
-                data: { id: $("#txtawb").val(), collectedby: CollectedByID, OutScanReturned: OutScanReturned},
+                data: { id: $("#txtawb").val(), collectedby: CollectedByID},
                 success: function (response) {
                     if (response.status == "ok") {
                         var data = response.data;
@@ -516,15 +516,14 @@
         </div>*@
             <div class="col-md-6" id="divadd">
                 <div class="col-md-6">
-                    <div class="flexTitle">
+                    
                         <label class="headinglabel required">AWB No.</label>
-                        <div class="checkboxdesign no-padding  text-right" style="float:right">
+                        <input type="text" id="txtawb" class="form-control" autocomplete="off" />
+                        @*<div class="checkboxdesign no-padding  text-right" style="float:right">
                             @Html.CheckBox("OutScanReturned", new { @name = "OutScanReturned" }) &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">OutScan Returned</label>
-                        </div>
-                    </div>
-                    
-                    <input type="text" id="txtawb" class="form-control" autocomplete="off" />
+                        </div>*@                                       
+                   
                 </div>
                 <div class="col-md-6">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>

@@ -137,6 +137,7 @@ namespace CMSV2.Controllers
                             var inscan = db.InScanMasters.Find(item.InScanID);
                             inscan.StatusTypeId = 4;
                             inscan.CourierStatusID = 13;
+                            inscan.PODID = pod.PODID;
                             db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
 
@@ -146,7 +147,7 @@ namespace CMSV2.Controllers
                             awbtrack.CourierStatusId = 13; //Shipment Delivered
                             awbtrack.EntryDate =Convert.ToDateTime(item.DeliveredDate);
                             awbtrack.UserId = Convert.ToInt32(Session["UserID"].ToString());
-                            
+                            awbtrack.PODID = pod.PODID;
                             db.AWBTrackStatus.Add(awbtrack);
                             db.SaveChanges();
                         }

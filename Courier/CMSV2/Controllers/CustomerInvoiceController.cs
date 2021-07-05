@@ -236,6 +236,7 @@ namespace CMSV2.Controllers
                                 && (c.InvoiceID == null || c.InvoiceID == 0)
                                 && c.PaymentModeId == 3 //account
                                 && c.CourierCharge>0
+                                && c.IsDeleted==false
                                 && c.CustomerID == datePicker.CustomerId
                                 select new CustomerInvoiceDetailVM
                                 {
