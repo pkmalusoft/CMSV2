@@ -12387,6 +12387,7 @@
     <Property Name="FlightDate" Type="DateTime" Precision="3" />
     <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ShipmentInvoiceId" Type="Int32" />
+    <Property Name="DRRID" Type="Int32" />
   </EntityType>
   <EntityType Name="ImportField">
     <Key>

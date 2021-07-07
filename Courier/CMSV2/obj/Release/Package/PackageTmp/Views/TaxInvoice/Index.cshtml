@@ -146,11 +146,11 @@
                 <label class="headinglabel">To </label>
                 @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
             </div>
+            <div class="pull-left" style="padding-top: 0px; padding-right: 15px; padding-left: 5px;">
 
-            <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:5px;">
-                @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "InScan")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() " /><i class="fa fa-refresh" aria-hidden="true"></i></a>*@
-                <button class="btn btn-primary" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                <button class="btn btn-primary btn-success sm_btn" type="submit"><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
+            
             <div class="pull-left" style="padding-top:32px;">
                 <p class="indexbtnpadding" style="padding-right:15px">
                     @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))

@@ -46,5 +46,6 @@ namespace CMSV2.Models
         public Nullable<System.DateTime> FlightDate { get; set; }
         public string FlightNo { get; set; }
         public Nullable<int> ShipmentInvoiceId { get; set; }
+        public Nullable<int> DRRID { get; set; }
     }
 }

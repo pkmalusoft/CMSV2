@@ -15,6 +15,9 @@
     .table > tr {
         height: 32px;
     }
+    tfoot {
+        display: table-header-group;
+    }
     .cred
     {
         color:red;
@@ -801,56 +804,73 @@
                
     <div class="row">
         <div class="col-lg-12">
-            <table  border="1"  class="table table-bordered ">
-              <tr style="font-weight: bold">
-                        <td></td>
-                        <td>Total</td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalCOD" value="0" /></td>
+            <table border="1" class="table table-bordered ">
+                <tfoot>
+                   
+                    <tr style="font-weight: bold">
+                        <td colspan="5">Total</td>
+                        <td colspan="1"></td>
+                        <td><input type="text" class="text-right" readonly id="txtTotalCOD" value="0" /></td>
                         @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalMC" value="0" /></td>
+                        <td><input type="text" class=" text-right" readonly id="txtTotalMC" value="0" /></td>
                         @*<td><input type="text" class="form-control text-right" readonly id="txtTotalReceipt" value="0" /></td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
+        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
+        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
                         <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
-                        
-                         <td colspan="1" class="text-right">
+
+                        <td colspan="1" class="text-right">
                             <label id="lbshortage">SHORTAGE</label>
                         </td>
                         <td colspan="1">
                             <input type="text" class="form-control text-right" id="txtShortage" value="0" />
                         </td>
                     </tr>
-                    @*<tr>
-                        <td></td>
-                        <td></td>
-                        <td colspan="1" class="text-right">
-                            DRS Receipt
-                        </td>
-                        <td colspan="1">
-                            <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
-                        </td>
-                    </tr>*@
-                   
-                    @*<tr>
-                            <td colspan="6" class="text-right">
-                                TOTAL
-                            </td>
-                            <td colspan="2">
+                </tfoot>
+                @*<tr>
+            <td></td>
+            <td></td>
+            <td colspan="1" class="text-right">
+                DRS Receipt
+            </td>
+            <td colspan="1">
+                <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
+            </td>
+        </tr>*@
 
-                            </td>
-                        </tr>*@
-                </table>
+                @*<tr>
+            <td colspan="6" class="text-right">
+                TOTAL
+            </td>
+            <td colspan="2">
+
+            </td>
+        </tr>*@
+            </table>
         </div>
     </div>
     <div class="row no-margin">   
         <div class="col-lg-12">
-            <table border="1"  class="table table-bordered table-responsive">
+            <table border="1" class="table table-bordered table-responsive">
+                <tfoot>
+
+                    <tr style="font-weight: bold">
+                        <td colspan="2">Total</td>                        
+                        <td><input type="text" class="text-right" readonly id="txtTotalCOD" value="0" /></td>
+                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
+                        <td><input type="text" class=" text-right" readonly id="txtTotalMC" value="0" /></td>
+                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
+                        <td colspan="1" class="text-right">
+                            <label id="lbshortage">SHORTAGE</label>
+                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
+                        </td>                        
+                    </tr>
+                </tfoot>
                 <thead>
                     <tr style="font-weight: bold">
                         <th></th>
                         <th>AWB No.</th>
-                        <th>COD</th>                        
-                        <th>Material Cost</th>                        
+                        <th>COD</th>
+                        <th>Material Cost</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -860,42 +880,42 @@
                         var i = 0;
                         foreach (var item in Model.Details)
                         {
-                    <tr>
-                        <td>
-                            <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
-                        </td>
-                        <td>
-                            <input type="hidden" id="hdntype_@i" value="@item.Type" />
-                            <input type="hidden" value="false" class="hdndeleted" id="hdndeleted_@i" />
-                            <input type="hidden" id="hdnrefId_@i" value="@item.ReferenceId" />
-                            <input type="hidden" id="hdnref_@i" value="@item.Reference" />
-                            <input type="hidden" id="hdncod_@i" value="@item.COD" />
-                            <input type="hidden" id="hdndiscount_@i" value="@item.Discount" />
-                            <input type="hidden" id="hdnmc_@i" value="@item.MCReceived" />
-                            <input type="hidden" id="hdnreceipt_@i" value="@item.Receipt" />
-                            <input type="hidden" id="hdnpkp_@i" value="@item.PKPCash" />
-                            <input type="hidden" id="hdnexp_@i" value="@item.Expense" />
-                            <input type="hidden" id="hdntotal_@i" value="@item.Total" />
-                            @item.Reference
-                        </td>
-                        <td>
-                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
-                        </td>                       
-                        <td>
-                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
-                        </td>
+                            <tr>
+                                <td>
+                                    <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
+                                </td>
+                                <td>
+                                    <input type="hidden" id="hdntype_@i" value="@item.Type" />
+                                    <input type="hidden" value="false" class="hdndeleted" id="hdndeleted_@i" />
+                                    <input type="hidden" id="hdnrefId_@i" value="@item.ReferenceId" />
+                                    <input type="hidden" id="hdnref_@i" value="@item.Reference" />
+                                    <input type="hidden" id="hdncod_@i" value="@item.COD" />
+                                    <input type="hidden" id="hdndiscount_@i" value="@item.Discount" />
+                                    <input type="hidden" id="hdnmc_@i" value="@item.MCReceived" />
+                                    <input type="hidden" id="hdnreceipt_@i" value="@item.Receipt" />
+                                    <input type="hidden" id="hdnpkp_@i" value="@item.PKPCash" />
+                                    <input type="hidden" id="hdnexp_@i" value="@item.Expense" />
+                                    <input type="hidden" id="hdntotal_@i" value="@item.Total" />
+                                    @item.Reference
+                                </td>
+                                <td>
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
+                                </td>
+                                <td>
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
+                                </td>
 
-                        <td>
-                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
-                        </td>
+                                <td>
+                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
+                                </td>
 
-                    </tr>
+                            </tr>
                             i++;
                         }
                     }
                 </tbody>
                 <tfoot>
-                  
+
                 </tfoot>
             </table>
           

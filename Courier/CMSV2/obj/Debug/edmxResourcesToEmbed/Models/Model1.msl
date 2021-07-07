@@ -8911,6 +8911,7 @@
     <EntitySetMapping Name="ImportShipmentDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
         <MappingFragment StoreEntitySet="ImportShipmentDetails">
+          <ScalarProperty Name="DRRID" ColumnName="DRRID" />
           <ScalarProperty Name="ShipmentInvoiceId" ColumnName="ShipmentInvoiceId" />
           <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
           <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />

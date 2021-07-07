@@ -48,7 +48,7 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({ "aaSorting": [], "sPaginationType": "full_numbers" });
 
         table.columns().every(function () {
             var that = this;
@@ -85,9 +85,10 @@
             @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
         </div>
 
-        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
-            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "DRSReceipt")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+        <div class="pull-left" style="padding-top: 0px; padding-right: 15px; padding-left: 15px;">
+            <a class="btn btn-primary btnwidth btn-success sm_btn" href="Javascript:void(0)" onclick="location.href='/DRSReceipt/Index?FromDate=' + $('#FromDate').val() + '&amp;ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
         </div>
+           
         <div class="pull-left" style="padding-top:32px;">
             <p class="indexbtnpadding">
                 @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)

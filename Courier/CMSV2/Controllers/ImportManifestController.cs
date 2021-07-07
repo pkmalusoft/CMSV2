@@ -334,7 +334,14 @@ namespace CMSV2.Controllers
                     detail.ImportType = "Import";
                     detail.Route = item.route;
                     detail.GroupCode = item.groupCode;
-                    detail.MAWB = item.MAWB;
+                    if (item.MAWB == "" || item.MAWB == null)
+                    {
+                        detail.MAWB = importShipment.ManifestNumber;
+                    }
+                    else
+                    {
+                        detail.MAWB = item.MAWB;
+                    }
                     if (detail.ImportType == "Import")
                     {
                         detail.StatusTypeId = 3;

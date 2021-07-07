@@ -121,14 +121,11 @@
     <div class=" col-md-1 search_field">
         <label for="FromDate" class="col-3 control-label">Invoice No.</label>
         @Html.TextBoxFor(mode => mode.InvoiceNo, new { @class = "form-control text-right" })
+    </div>    
+    <div class="col-md-2 m-top" style="padding-top: 0px;">
+
+        <button type="submit" class="btn btn-success"><i class="fa fa-refresh" aria-hidden="true"></i></button>
     </div>
-    <div class="col-md-2 m-top">
-        @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
-        <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-    </div>
-    @*<div>
-            <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
-        </div>*@
 
     <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
         @if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)

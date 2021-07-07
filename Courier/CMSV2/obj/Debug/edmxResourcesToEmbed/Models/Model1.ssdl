@@ -2124,6 +2124,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
     <Property Name="FlightDate" Type="datetime" />
     <Property Name="FlightNo" Type="varchar" MaxLength="50" />
     <Property Name="ShipmentInvoiceId" Type="int" />
+    <Property Name="DRRID" Type="int" />
   </EntityType>
   <EntityType Name="InScan">
     <Key>

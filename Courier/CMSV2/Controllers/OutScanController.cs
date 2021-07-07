@@ -198,16 +198,16 @@ namespace CMSV2.Controllers
                             obj.phone = import.ReceiverTelephone;
                             obj.address = import.ReceiverAddress;
                         }
-                        
-                        if (import.COD != null)
-                            obj.COD = Convert.ToDecimal(import.COD);
+                        var shipmentinvoice = db.ShipmentInvoiceDetails.Where(cc => cc.ShipmentImportDetailID == import.ShipmentDetailID).FirstOrDefault();
+                        if (shipmentinvoice!=null)                        
+                            obj.COD = Convert.ToDecimal(shipmentinvoice.adminCharges) + Convert.ToDecimal(shipmentinvoice.Tax);
                         else
                             obj.COD = 0;
 
-                        if (import.CustomValue != null)
-                            obj.MaterialCost= Convert.ToDecimal(import.CustomValue);
-                        else
-                            obj.MaterialCost = 0;
+                        //if (import.CustomValue != null)
+                        //    obj.MaterialCost= Convert.ToDecimal(import.);
+                        //else
+                        obj.MaterialCost = 0;
 
                         
 
@@ -276,12 +276,24 @@ namespace CMSV2.Controllers
                         obj.phone = l.ReceiverTelephone;
                     if (l.DestinationCountry != null)
                         obj.address = l.DestinationCountry;
-                    if (l.COD != null)
-                        obj.COD = Convert.ToDecimal(l.COD);
-                    if (l.CustomValue != null)
-                        obj.MaterialCost = Convert.ToDecimal(l.CustomValue);
+
+
+                    var shipmentinvoice = db.ShipmentInvoiceDetails.Where(cc => cc.ShipmentImportDetailID == l.ShipmentDetailID).FirstOrDefault();
+                    if (shipmentinvoice != null)
+                        obj.COD = Convert.ToDecimal(shipmentinvoice.adminCharges) + Convert.ToDecimal(shipmentinvoice.Tax);
                     else
-                        obj.MaterialCost = 0;
+                        obj.COD = 0;
+
+                    //if (import.CustomValue != null)
+                    //    obj.MaterialCost= Convert.ToDecimal(import.);
+                    //else
+                    obj.MaterialCost = 0;
+                    //if (l.COD != null)
+                    //    obj.COD = Convert.ToDecimal(l.COD);
+                    //if (l.CustomValue != null)
+                    //    obj.MaterialCost = Convert.ToDecimal(l.CustomValue);
+                    //else
+                    //    obj.MaterialCost = 0;
                     list.Add(obj);
                 }
 

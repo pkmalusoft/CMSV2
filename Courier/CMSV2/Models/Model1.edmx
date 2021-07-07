@@ -2158,6 +2158,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.ImpExp' does not have a primary
           <Property Name="FlightDate" Type="datetime" />
           <Property Name="FlightNo" Type="varchar" MaxLength="50" />
           <Property Name="ShipmentInvoiceId" Type="int" />
+          <Property Name="DRRID" Type="int" />
         </EntityType>
         <EntityType Name="InScan">
           <Key>
@@ -19784,6 +19785,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="FlightDate" Type="DateTime" Precision="3" />
           <Property Name="FlightNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ShipmentInvoiceId" Type="Int32" />
+          <Property Name="DRRID" Type="Int32" />
         </EntityType>
         <EntityType Name="ImportField">
           <Key>
@@ -29081,6 +29083,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="ImportShipmentDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.ImportShipmentDetail">
               <MappingFragment StoreEntitySet="ImportShipmentDetails">
+                <ScalarProperty Name="DRRID" ColumnName="DRRID" />
                 <ScalarProperty Name="ShipmentInvoiceId" ColumnName="ShipmentInvoiceId" />
                 <ScalarProperty Name="FlightNo" ColumnName="FlightNo" />
                 <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />

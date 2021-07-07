@@ -335,13 +335,24 @@ namespace CMSV2.Controllers
                                 customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
                                 inscan.CustomerID = _customerid;
                             }
+                            else if (v.PaymentModeId == 1)
+                            {
+                                v.CustomerID = -1; //WALK-IN-CUSTOMER
+                            }
+                            else if (v.PaymentModeId == 2)
+                            {
+                                v.CustomerID = -2; //COD-CUSTOMER
+                            }
+                            else if (v.PaymentModeId == 5)
+                            {
+                                v.CustomerID = -3; //COD-CUSTOMER
+                            }
                             else
                             {
                                 inscan.CustomerID = v.CustomerID;
                             }
 
-                            
-                            
+
                         }
                         inscan.TransactionDate = v.TransactionDate;
                     }
@@ -350,11 +361,26 @@ namespace CMSV2.Controllers
                         inscan = db.InScanMasters.Find(v.InScanID);
                         if (v.PaymentModeId != null)
                         {
-                            if (v.CustomerID == 0)
+                            if (v.PaymentModeId == 3)
                             {
-                                int _customerid = SaveCustomer(v);
-                                customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
-                                inscan.CustomerID = _customerid;
+                                if (v.CustomerID == 0)
+                                {
+                                    int _customerid = SaveCustomer(v);
+                                    customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
+                                    inscan.CustomerID = _customerid;
+                                }
+                            }
+                            else if(v.PaymentModeId==1)
+                            {
+                                v.CustomerID = -1; //WALK-IN-CUSTOMER
+                            }
+                            else if (v.PaymentModeId == 2)
+                            {
+                                v.CustomerID = -2; //COD-CUSTOMER
+                            }
+                            else if (v.PaymentModeId == 5)
+                            {
+                                v.CustomerID = -3; //COD-CUSTOMER
                             }
                             else
                             {

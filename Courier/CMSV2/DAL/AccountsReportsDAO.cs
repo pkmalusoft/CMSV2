@@ -466,7 +466,7 @@ namespace CMSV2.DAL
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@FYearId", yearid);
             
-            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter(); 
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
             sqlAdapter.Fill(ds, "EmpostAnalysisReport");

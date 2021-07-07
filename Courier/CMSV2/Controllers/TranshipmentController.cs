@@ -678,7 +678,7 @@ namespace CMSV2.Controllers
 
         }
 
-
+        [HttpPost]
         public JsonResult CheckEditDataValidation(bool AllItem,string Details)
         {
             List<CustomerRateVM> RateList = (List<CustomerRateVM>)Session["CustomerRateList"];
@@ -1293,6 +1293,12 @@ namespace CMSV2.Controllers
 
                     if (item.InScanID > 0)
                         detail = db.InScanMasters.Find(item.InScanID);
+                    if (detail == null)
+                    {
+                        item.InScanID = 0;
+                        detail = new InScanMaster();
+                           
+                        }
 
                     detail.ImportShipmentId = importShipment.ID; //forignkey reference for import tranashipment
                     detail.AWBNo = item.HAWBNo;
@@ -1369,7 +1375,7 @@ namespace CMSV2.Controllers
                     detail.CourierStatusID = courierstatus.CourierStatusID;
                     detail.StatusTypeId = courierstatus.StatusTypeID;
 
-                    if (item.InScanID == 0)
+                    if (item.InScanID == 0 )
                     {
                         detail.IsDeleted = false;
                         detail.BranchID = BranchID;
@@ -1635,7 +1641,7 @@ namespace CMSV2.Controllers
             //ImportDataFixation importdata = new ImportDataFixation();
             string Targetvalue = "";
             //var data = db.ImportDataFixations.Where(cc => cc.ShipmentType == "Transhipment" && cc.FieldName == FieldName && cc.SourceValue == SourceValue).FirstOrDefault();
-            var data = (from c in importdata where c.ShipmentType == "Transhipment" && c.FieldName == FieldName && c.SourceValue.Trim() == SourceValue select c).FirstOrDefault();
+            var data = (from c in importdata where c.ShipmentType == "Transhipment" && c.FieldName == FieldName && c.SourceValue.ToLower().Trim() == SourceValue.ToLower().Trim() select c).FirstOrDefault();
             if (data != null)
                 Targetvalue = data.TargetValue;
 
@@ -1657,24 +1663,26 @@ namespace CMSV2.Controllers
             for (int i = 0; i < dt.Columns.Count; i++)
             {
                 var colname = dt.Columns[i].ColumnName.Trim();
-                if (colname == "FAgentName")
-                    sourcecol = "FAgentName";
-                //else
-                //{ sourcecol = colname
-                //}
-                int rowindex = 0;
-                foreach (DataRow row in dt.Rows)
+                
+                if (colname != "SNo")
                 {
-                    if (row[colname] == null)
-                        row[colname] = "";
+                    if (colname == "ConsigneeCountryName")
+                        sourcecol = "FAgentName";
 
-                    string targetvalue = GetDataFixation(data, colname, row[colname].ToString().Trim());
-                    if (targetvalue != "")
+                    int rowindex = 0;
+                    foreach (DataRow row in dt.Rows)
                     {
-                        dt.Rows[rowindex][colname] = targetvalue;
-                    }
+                        if (row[colname] == null)
+                            row[colname] = "";
 
-                    rowindex++;
+                        string targetvalue = GetDataFixation(data, colname, row[colname].ToString().Trim());
+                        if (targetvalue != "")
+                        {
+                            dt.Rows[rowindex][colname] = targetvalue;
+                        }
+
+                        rowindex++;
+                    }
                 }
 
             }
@@ -2260,8 +2268,8 @@ namespace CMSV2.Controllers
                     MovementType = objDataRow["MovementType"].ToString(),
                     CourierStatus = objDataRow["CourierStatus"].ToString(),
                     remarks = objDataRow["remarks"].ToString(), //Department and Bag no is missing                                                               
-                    DataError = Convert.ToBoolean(objDataRow["DataError"].ToString())
-
+                    DataError = Convert.ToBoolean(objDataRow["DataError"].ToString()),
+                    InScanID= Convert.ToInt32(objDataRow["InScanID"].ToString()),
                 });
             }
             return empList;

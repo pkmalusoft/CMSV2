@@ -239,12 +239,13 @@ namespace CMSV2.Controllers
                                select new DRSAWBList { InscanId = c3.InScanID, ShipmentDetailID=0, AWBNo = c3.AWBNo, Shipper = c3.Consignor, Consignee = c3.Consignee, AWBDate = c3.TransactionDate, CourierCharge = c3.CourierCharge, OtherCharge = c3.OtherCharge, TotalCharge = c3.NetTotal, MaterialCost = c3.MaterialCost, IsNCND = c3.IsNCND, IsCashOnly = c3.IsCashOnly, IsCollectMaterial = c3.IsCollectMaterial, IsCheque =c3.IsChequeOnly,IsDOCopyBack= c3.IsDOCopyBack,  Pieces = c3.Pieces, Weight = c3.Weight }).ToList();
 
 
-            List<DRSAWBList> drslist2 = (from c3 in db.ImportShipmentDetails
+            List<DRSAWBList> drslist2 = (from c3 in db.ImportShipmentDetails join inv in db.ShipmentInvoiceDetails on c3.ShipmentInvoiceId equals inv.ShipmentInvoiceID 
                            where  (c3.DRSID == DRSID)
                            && (c3.DRSID != null)
                            && (c3.CODReceiptId == null)
+                           && (c3.CourierStatusID==13)  //Delivered
                            orderby c3.AWB ascending
-                           select new DRSAWBList { InscanId =0, ShipmentDetailID = c3.ShipmentDetailID, AWBNo = c3.AWB, Shipper = c3.Shipper, Consignee = c3.Receiver, AWBDate = c3.AWBDate, CourierCharge = c3.CustomValue, OtherCharge =0, TotalCharge = c3.CustomValue + c3.COD, MaterialCost = c3.COD, IsNCND = false , IsCashOnly = false, IsCollectMaterial = false, IsCheque = false, IsDOCopyBack = false, Pieces = c3.PCS.ToString(), Weight = c3.Weight }).ToList();
+                           select new DRSAWBList { InscanId =0, ShipmentDetailID = c3.ShipmentDetailID, AWBNo = c3.AWB, Shipper = c3.Shipper, Consignee = c3.Receiver, AWBDate = c3.AWBDate, CourierCharge = inv.Tax+inv.adminCharges, OtherCharge =0, TotalCharge =inv.Tax + inv.adminCharges , MaterialCost = 0, IsNCND = false , IsCashOnly = false, IsCollectMaterial = false, IsCheque = false, IsDOCopyBack = false, Pieces = c3.PCS.ToString(), Weight = c3.Weight }).ToList();
 
             if (drslist1.Count > 0 && drslist2.Count > 0)
             {

@@ -150,10 +150,10 @@
                 url: '@Url.Action("AutoDataFixation", "Transhipment")',
              datatype: "json",
             success: function (data) {
-                if (data == "ok") {
+                if (data == "ok" || data=="Failed") {
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("ShowItemList", "Transhipment")',
+                        url: '@Url.Action("ShowEditItemList", "Transhipment")',
                         datatype: "html",
                         success: function (data) {
                             $("#listContainer").html(data);
@@ -489,13 +489,15 @@
             var maxrow = $('#listbody > tr').length;          
             $('#btnUpdateRate').attr('disabled', 'disabled');
             var obj = [];
-            if (selectall == false) {
+            debugger;
+           
                 for (i = 0; i < maxrow; i++) {
                     //var deleted = $('#hdndeleted_' + i).val();
-                    var checked = $('#hdnawbchecked_' + i).prop('checked');
+                    var index = i + 1;
+                    var checked = $('#hdnawbchecked_' + index).prop('checked');
 
                     var item = {
-                        AWBNo: $('#hdnawbchecked_' + i).attr('awb'), //$('#hdnAWbNo_' + i).val(),
+                        AWBNo: $('#hdnawbchecked_' + index).attr('awb'), //$('#hdnAWbNo_' + i).val(),
                         AWBChecked: checked
                     }
                     obj.push(item);
@@ -506,7 +508,7 @@
                             return;
                         }
                         $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: "/Transhipment/CheckEditDataValidation",
                         datatype: "Json",
                              data: { AllItem: selectall, Details: JSON.stringify(obj)},
@@ -529,7 +531,7 @@
                     });
                     }
                 }
-            }
+         
 
 
 
@@ -648,7 +650,7 @@
     $(function () {
         $('#ManifestDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
         $('#FlightDate1').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
-
+       // $("#Selectall").attr('checked', 'checked');
     });
 </script>
 
