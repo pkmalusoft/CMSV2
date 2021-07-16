@@ -57,6 +57,7 @@
               <xs:element name="ProductName" type="xs:string" minOccurs="0" />
               <xs:element name="ParcelType" type="xs:string" minOccurs="0" />
               <xs:element name="FAgentName" type="xs:string" minOccurs="0" />
+              <xs:element name="ForwardingAWBNo" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

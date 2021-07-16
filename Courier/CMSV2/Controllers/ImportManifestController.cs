@@ -563,42 +563,50 @@ namespace CMSV2.Controllers
         [HttpPost]
         public async Task<ActionResult> CallPostAPI()
         {
-            string URL = "http://www.niceexpress.net/API/v1/postAPI.do";
-            //string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
-            
-            postbill bills = (postbill)Session["bills"];            
-            //var json = JsonConvert.SerializeObject(bills);
-            //string urlParameters = "?bills=" + json;
-            using (var client = new HttpClient())
+
+            string companyname = Session["CompanyName"].ToString();
+            if (companyname == "NICE AL MARRI EXPRESS SERVICES LLC")
             {
-                client.BaseAddress = new Uri(URL);
-                //HTTP GET
-                // Add an Accept header for JSON format.
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
-                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
+                string URL = "http://www.niceexpress.net/API/v1/postAPI.do";
+                //string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy hh:mm");
+                postbill bills = (postbill)Session["bills"];
+                //var json = JsonConvert.SerializeObject(bills);
+                //string urlParameters = "?bills=" + json;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(URL);
+                    //HTTP GET
+                    // Add an Accept header for JSON format.
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                    client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
 
-                // List data response.
-                //var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                //var result  = await client.PostAsync("method",content);  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-                //string resultContent = await result.Content.ReadAsStringAsync();
-                var postResponse = await client.PostAsJsonAsync(URL, bills);
-                var response=postResponse.EnsureSuccessStatusCode();
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    // Parse the response body.
+                    // List data response.
+                    //var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                    //var result  = await client.PostAsync("method",content);  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                    //string resultContent = await result.Content.ReadAsStringAsync();
+                    var postResponse = await client.PostAsJsonAsync(URL, bills);
+                    var response = postResponse.EnsureSuccessStatusCode();
+                    //if (response.IsSuccessStatusCode)
+                    //{
+                    //    // Parse the response body.
 
-                //    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
-                //    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
-                //    // return RedirectToAction("Index");
-                //    return Json(new { Status = "ok",  Message = "API Updated Successfully " });
-                //}
-                //else
-                //{
-                //    return Json(new { Status = "Failed", Message = "API Not Updated Successfully " });
-                //}
-                
-                return Json(new { Status = "ok", Message = "API Updated Successfully " }, JsonRequestBehavior.AllowGet);
+                    //    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+                    //    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
+                    //    // return RedirectToAction("Index");
+                    //    return Json(new { Status = "ok",  Message = "API Updated Successfully " });
+                    //}
+                    //else
+                    //{
+                    //    return Json(new { Status = "Failed", Message = "API Not Updated Successfully " });
+                    //}
+
+                    return Json(new { Status = "ok", Message = "API Updated Successfully " }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { Status = "ok", Message = "API Not Updated!" }, JsonRequestBehavior.AllowGet);
             }
             //return "notworked";
         }
@@ -694,90 +702,98 @@ namespace CMSV2.Controllers
         }
         public async Task<ActionResult> ShowItemList(string InputDate) 
         {
+            string companyname = Session["CompanyName"].ToString();
             ImportManifestVM vm = new ImportManifestVM();
             vm.Details = new List<ImportManifestItem>();
-            string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
-            string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy");
-            string urlParameters = "?dateTime=" + idate;
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(URL);
-                //HTTP GET
-                // Add an Accept header for JSON format.
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
-                client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
-
-                // List data response.
-                HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-                if (response.IsSuccessStatusCode)
+            if (companyname == "NICE AL MARRI EXPRESS SERVICES LLC")
+            {                
+                string URL = "http://www.niceexpress.net/API/v1/getAPI.do";
+                string idate = Convert.ToDateTime(InputDate).ToString("dd-MMM-yyyy");
+                string urlParameters = "?dateTime=" + idate;
+                using (var client = new HttpClient())
                 {
-                    // Parse the response body.
+                    client.BaseAddress = new Uri(URL);
+                    //HTTP GET
+                    // Add an Accept header for JSON format.
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("niceexpress-apikey", "14c3993c0bb082dcafae9183ac7946d5be7a0e565e12bbd32f5d8d5d78bf3121");
+                    client.DefaultRequestHeaders.Add("niceexpress-signature", "37ef0bccb326b2057121ab74fd81cbeee892debaeccdd632d57fff66ffd86ece");
 
-                    var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
-                    var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
-                    int sno = 0;
-                    foreach (Importproductdata d in dataObjects.data)
+                    // List data response.
+                    HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+                    if (response.IsSuccessStatusCode)
                     {
-                        ImportManifestItem item = new ImportManifestItem();
-                        sno++;
-                        item.Sno = sno;
-                        item.AWBNo = d.awbNo;
-                        item.AWBDate = d.awbDate;
-                        item.Bag = d.bagNo;
-                        if (d.cod == "")
-                            item.COD ="0";
-                        else
-                            item.COD = d.cod;
-                        item.Weight = d.weight;
-                        item.ImportType = d.reference;
-                        item.Shipper = d.shipper;
-                        item.ShipperPhone = d.cnorTel;
-                        item.Content = d.content;
-                        item.DestinationCountry = d.destination;
-                        if (d.destinationCity == "")
-                            item.DestinationCity = d.destination;
-                        else
-                        item.DestinationCity = d.destinationCity;
-                        item.DestinationLocation = d.receiverAddress;
-                        if (d.receiverAddress.IndexOf(':')>0)
-                        {
-                            string contact = d.receiverAddress.Split(':')[0];
-                            string address = d.receiverAddress.Split(':')[1];
-                            item.ReceiverContact = contact;
-                            item.ReceiverAddress = address;
-                        }
-                        else
-                        {
-                            item.ReceiverContact = "";
-                            item.ReceiverAddress = d.receiverAddress;
-                        }
-                        item.Pcs = CommanFunctions.ParseInt(d.pcs);
-                        item.Receiver = d.receiverName;
-                        item.route = d.route;
-                        item.groupCode = d.groupcode;
-                        item.MAWB = d.MAWB;
-                        
-                        item.ReceiverPhone = d.receiverPhone;
+                        // Parse the response body.
 
-                        item.Currency = d.currency;
-                        item.Value = d.customsValue;
-                        item.route = d.route;
-                        vm.Details.Add(item);
-                       // Console.WriteLine("{0}", d.awbNo);
+                        var ItemJsonString = await response.Content.ReadAsStringAsync(); // .ReadAsAsync<MasterDataObject>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
+                        var dataObjects = JsonConvert.DeserializeObject<MasterDataObject>(ItemJsonString);
+                        int sno = 0;
+                        foreach (Importproductdata d in dataObjects.data)
+                        {
+                            ImportManifestItem item = new ImportManifestItem();
+                            sno++;
+                            item.Sno = sno;
+                            item.AWBNo = d.awbNo;
+                            item.AWBDate = d.awbDate;
+                            item.Bag = d.bagNo;
+                            if (d.cod == "")
+                                item.COD = "0";
+                            else
+                                item.COD = d.cod;
+                            item.Weight = d.weight;
+                            item.ImportType = d.reference;
+                            item.Shipper = d.shipper;
+                            item.ShipperPhone = d.cnorTel;
+                            item.Content = d.content;
+                            item.DestinationCountry = d.destination;
+                            if (d.destinationCity == "")
+                                item.DestinationCity = d.destination;
+                            else
+                                item.DestinationCity = d.destinationCity;
+                            item.DestinationLocation = d.receiverAddress;
+                            if (d.receiverAddress.IndexOf(':') > 0)
+                            {
+                                string contact = d.receiverAddress.Split(':')[0];
+                                string address = d.receiverAddress.Split(':')[1];
+                                item.ReceiverContact = contact;
+                                item.ReceiverAddress = address;
+                            }
+                            else
+                            {
+                                item.ReceiverContact = "";
+                                item.ReceiverAddress = d.receiverAddress;
+                            }
+                            item.Pcs = CommanFunctions.ParseInt(d.pcs);
+                            item.Receiver = d.receiverName;
+                            item.route = d.route;
+                            item.groupCode = d.groupcode;
+                            item.MAWB = d.MAWB;
+
+                            item.ReceiverPhone = d.receiverPhone;
+
+                            item.Currency = d.currency;
+                            item.Value = d.customsValue;
+                            item.route = d.route;
+                            vm.Details.Add(item);
+                            // Console.WriteLine("{0}", d.awbNo);
+                        }
+                        Session["ManifestImported"] = vm.Details;
+                        return PartialView("ItemList", vm);
+                        //return View(vm);
+                        //return Json(new { data = "ok"});
                     }
-                    Session["ManifestImported"] = vm.Details;
-                    return PartialView("ItemList",vm);
-                    //return View(vm);
-                    //return Json(new { data = "ok"});
+                    else
+                    {
+                        //return View(vm);
+                        return PartialView("ItemList", vm);
+                        //return Json(new { data = response.StatusCode });
+                        //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                    }
                 }
-                else
-                {
-                    //return View(vm);
-                    return PartialView("ItemList", vm);
-                    //return Json(new { data = response.StatusCode });
-                    //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                }
+            }
+            else
+            {
+                return PartialView("ItemList", vm);
             }
         }
 

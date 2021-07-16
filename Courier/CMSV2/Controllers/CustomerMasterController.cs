@@ -84,7 +84,7 @@ namespace CMSV2.Controllers
             }
             else
             {
-                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).OrderBy(cc=>cc.CustomerName).Take(100).ToList();
+                var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).OrderBy(cc=>cc.CustomerName).Take(100).Where(cc=>cc.CustomerID>0).ToList();
 
                 foreach (var item in data)
                 {
@@ -152,7 +152,7 @@ namespace CMSV2.Controllers
             {
                 ViewBag.Title = "Customer - Create";
                 PickupRequestDAO doa = new PickupRequestDAO();
-                ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+                ViewBag.CustomerNo = "";// doa.GetMaxCustomerCode(branchid);
                 obj.CustomerID = 0;
                 obj.RoleID = 13;
                 obj.CustomerType = "CS";
@@ -192,7 +192,7 @@ namespace CMSV2.Controllers
                 obj.CustomerID = max + 1;
                 obj.AcCompanyID = accompanyid;
 
-                obj.CustomerCode = c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+                obj.CustomerCode = ""; // c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
             }
             else
             {

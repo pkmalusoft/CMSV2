@@ -64,7 +64,7 @@ namespace CMSV2.DAL
             
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             
             #endregion
@@ -108,7 +108,10 @@ namespace CMSV2.DAL
             comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
-            
+            if (reportparam.VoucherTypeId == null)
+                reportparam.VoucherTypeId = "";
+            comd.Parameters.AddWithValue("@VoucherType", reportparam.VoucherTypeId);
+
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
@@ -128,38 +131,39 @@ namespace CMSV2.DAL
             #region "param"
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
-            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+
             // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
             string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
             if (reportparam.Output == "PDF")
             {
                 reportparam.ReportFileName = reportname;
                 rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
             }
-            else if (reportparam.Output=="EXCEL")
+            else if (reportparam.Output == "EXCEL")
             {
-                
-                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
-            else if(reportparam.Output=="WORD")
+            else if (reportparam.Output == "WORD")
             {
-                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
                 reportparam.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
@@ -226,7 +230,7 @@ namespace CMSV2.DAL
             string period = "As on :" + reportparam.AsOnDate.Date.ToString("dd MMMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -312,7 +316,7 @@ namespace CMSV2.DAL
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -409,7 +413,7 @@ namespace CMSV2.DAL
             string period = "As on :" + reportparam.AsOnDate.Date.ToString("dd MMMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -472,7 +476,7 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "EmpostAnalysisReport");
 
             //generate XSD to design report
-           // System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "EmpostAnalysisReport.xsd"));
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "EmpostAnalysisReport.xsd"));
             //ds.WriteXmlSchema(writer);
             //writer.Close();
 
@@ -494,7 +498,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -581,7 +585,7 @@ namespace CMSV2.DAL
             //string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -646,7 +650,7 @@ namespace CMSV2.DAL
             string period = "Reprot Period as on Date "; // + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
             //Response.Buffer = false;
@@ -760,7 +764,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -865,7 +869,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -961,7 +965,7 @@ namespace CMSV2.DAL
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1052,7 +1056,7 @@ namespace CMSV2.DAL
             string period = "AWB Print";
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -1130,7 +1134,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1220,7 +1224,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1310,7 +1314,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1399,7 +1403,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1496,7 +1500,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1591,7 +1595,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1696,7 +1700,7 @@ namespace CMSV2.DAL
             string period = " As on " + reportparam.AsonDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1786,7 +1790,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1876,7 +1880,7 @@ namespace CMSV2.DAL
             string period = "As on " + reportparam.AsonDate.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -1981,7 +1985,7 @@ namespace CMSV2.DAL
             string period = "As on " + reportparam.AsonDate.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2070,7 +2074,7 @@ namespace CMSV2.DAL
             string period = " As on " + reportparam.AsonDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2190,7 +2194,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -2315,7 +2319,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -2440,7 +2444,7 @@ namespace CMSV2.DAL
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -2565,7 +2569,7 @@ namespace CMSV2.DAL
             //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2630,7 +2634,7 @@ namespace CMSV2.DAL
             //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2694,7 +2698,7 @@ namespace CMSV2.DAL
             //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2756,7 +2760,7 @@ namespace CMSV2.DAL
             //string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -2832,7 +2836,7 @@ namespace CMSV2.DAL
             }
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -2910,7 +2914,7 @@ namespace CMSV2.DAL
             string period = "";           
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -2988,7 +2992,7 @@ namespace CMSV2.DAL
             string period = "";
             //rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
 
 
@@ -3091,7 +3095,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -3203,7 +3207,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -3295,7 +3299,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -3394,7 +3398,7 @@ namespace CMSV2.DAL
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -3438,19 +3442,19 @@ namespace CMSV2.DAL
             int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
             string usertype = HttpContext.Current.Session["UserType"].ToString();
 
-            CustomerLedgerReportParam reportparam = (CustomerLedgerReportParam)(HttpContext.Current.Session["CustomerLedgerReportParam"]);
+            CustomerLedgerReportParam reportparam = (CustomerLedgerReportParam)(HttpContext.Current.Session["CustomerInvoiceRegisterParam"]);
             string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             SqlConnection sqlConn = new SqlConnection(strConnString);
             SqlCommand comd;
-            comd = new SqlCommand(); 
+            comd = new SqlCommand();
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_CustomerInvoiceRegister";
-            
+
             comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
             comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
-            comd.Parameters.AddWithValue("@FYearId", yearid);            
+            comd.Parameters.AddWithValue("@FYearId", yearid);
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
@@ -3458,9 +3462,9 @@ namespace CMSV2.DAL
 
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoiceRegister.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoiceRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerInvoiceRegister.rpt"));
@@ -3480,11 +3484,11 @@ namespace CMSV2.DAL
             //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
             //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
 
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Material Cost Ledger Report");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Invoice Register");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             #endregion
 
@@ -3521,6 +3525,354 @@ namespace CMSV2.DAL
 
         }
 
+
+        public static string CustomerInvoiceMultiplePrint()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+
+            CustomerLedgerReportParam reportparam = (CustomerLedgerReportParam)(HttpContext.Current.Session["CustomerInvoiceRegisterParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_CustomerInvoiceMultiplePrint";            
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
+            comd.Parameters.AddWithValue("@InvoiceNos","");
+
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "CustomerInvoiceMultiple");
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoiceMultiplePrint.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerInvoiceMultiplePrint.rpt"));
+
+            rd.SetDataSource(ds);
+
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            //   rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("INVOICE");
+
+            string totalwords = ""; // NumberToWords.ConvertAmount(Convert.ToDouble(ds.Tables[0].Rows[0]["InvoiceTotal"].ToString()), monetaryunit);
+
+            //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "CustomerInvoiceMultiplePrint_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            //reportparam.ReportFileName = reportname;
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+        }
+        #region OpeningRegister
+
+
+        public static string GenerateCustomerOpeningRegisterReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            string yearfrom = HttpContext.Current.Session["FyearFrom"].ToString();
+            AcInvoiceOpeningParam reportparam = (AcInvoiceOpeningParam)(HttpContext.Current.Session["CustomerInvoiceOpeningRegisterParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_AcInvoiceOpeningReport";
+            
+            comd.Parameters.AddWithValue("@Type", "C");
+            comd.Parameters.AddWithValue("@PartyId", reportparam.CustomerId);            
+            comd.Parameters.AddWithValue("@AcFinancialYearId", yearid);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "InvoiceOpeningRegister");
+
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoiceOpeningRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerInvoiceOpeningRegister.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
+            //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Invoice Opening Register");
+            string period = "As on " + Convert.ToDateTime(yearfrom).ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "CustomerInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "CustomerInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "CustomerInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+
+        }
+
+        public static string GenerateSupplierOpeningRegisterReport()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            string yearfrom = HttpContext.Current.Session["FyearFrom"].ToString();
+            AcInvoiceOpeningParam reportparam = (AcInvoiceOpeningParam)(HttpContext.Current.Session["SupplierInvoiceOpeningRegisterParam"]);
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_AcInvoiceOpeningReport";
+
+            comd.Parameters.AddWithValue("@Type", "S");
+            comd.Parameters.AddWithValue("@PartyId", reportparam.SupplierId);
+            comd.Parameters.AddWithValue("@AcFinancialYearId", yearid);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "SupplierInvoiceOpeningRegister");
+
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierInvoiceOpeningRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SupplierInvoiceOpeningRegister.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
+            //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Supplier Invoice Opening Register");
+            string period = "As on " + Convert.ToDateTime(yearfrom).ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "SupplierInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (reportparam.Output == "PDF")
+            {
+                reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (reportparam.Output == "EXCEL")
+            {
+
+                reportname = "SupplierInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (reportparam.Output == "WORD")
+            {
+                reportname = "SupplierInvoiceOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+                reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+
+        }
+
+        public static string GenerateAccountOpeningRegisterReport(string output)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            string yearfrom= HttpContext.Current.Session["FyearFrom"].ToString(); 
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "SP_AcHeadOpeningRegister";
+           
+            comd.Parameters.AddWithValue("@AcFinancialYearId", yearid);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AcOpeningRegister");
+
+
+            //generate XSD to design report            
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AcOpeningRegister.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AcOpeningRegister.rpt"));
+
+            rd.SetDataSource(ds);
+
+            //Set Paramerter Field Values -General
+            #region "param"
+            string companyaddress = SourceMastersModel.GetCompanyAddress(branchid);
+            string companyname = SourceMastersModel.GetCompanyname(branchid);
+            string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
+
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
+            //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
+            //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
+
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Account Opening Register");
+            string period = "As on " + Convert.ToDateTime(yearfrom).ToString("dd MMM yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+            #endregion
+
+            //Response.Buffer = false;
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            string reportname = "AcOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".pdf";
+            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+            if (output == "PDF")
+            {
+               // reportparam.ReportFileName = reportname;
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            }
+            else if (output == "EXCEL")
+            {
+
+                reportname = "AcOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx";
+              //  reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+            }
+            else if (output == "WORD")
+            {
+                reportname = "AcOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".doc";
+              //  reportparam.ReportFileName = reportname;
+                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+            }
+            rd.Close();
+            rd.Dispose();
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+            return reportpath;
+
+
+        }
+        #endregion
 
         public static string CustomerVATTaxInvoiceReport(int id, string InvoiceDetailIDs="")
         {
@@ -3573,7 +3925,7 @@ namespace CMSV2.DAL
             //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime(); 
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             //rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
             #endregion
@@ -3622,9 +3974,9 @@ namespace CMSV2.DAL
             sqlAdapter.Fill(ds, "CustomerInvoiceReport");
 
             //generate XSD to design report            
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoicePrint.xsd"));
-            //ds.WriteXmlSchema(writer);
-            //writer.Close();
+            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "CustomerInvoicePrint.xsd"));
+            ds.WriteXmlSchema(writer);
+            writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "CustomerInvoicePrint.rpt"));
@@ -3649,7 +4001,7 @@ namespace CMSV2.DAL
             //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
             #endregion
@@ -3755,7 +4107,7 @@ namespace CMSV2.DAL
             //            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue("");
 
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + CommanFunctions.GetCurrentDateTime();
             rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
             //rd.ParameterFields["TotalWords"].CurrentValues.AddValue(totalwords);
             #endregion

@@ -198,54 +198,72 @@
         });
 
         $('#ConsignorLocationName').blur(function () {
+            if ($('#ConsignorLocationName').attr('PlaceId') != null && $('#ConsignorLocationName').attr('PlaceId') != '') {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#ConsignorLocationName').attr('PlaceId') },
+                    success: function (response) {
+                        debugger;
+                        // console.log(response);
+                        $('#ConsignorCountryName').val(response.Country);
+                        $('#ConsignorCityName').val(response.City);
+                        if ($("#PickupLocation").val() == '') {
+                            $("#PickupLocation").val($('#ConsignorLocationName').val());
+                            $('#PickupLocationPlaceId').val($("#PickupLocation").attr('PlaceId'));
+                            $('#OriginCountry').val(response.Country);
+                            $('#OriginCity').val(response.City);
+                            $('#PickupSubLocality').val(response.SubLocality);
+                            getMovementType();
+                        }
 
-            $.ajax({
-                type: "GET",
-                url: "/ZoneChart/GetVenueDetailsByPlace",
-                datatype: "Json",
-                data: { placeId: $('#ConsignorLocationName').attr('PlaceId') },
-                success: function (response) {
-                    debugger;
-                    // console.log(response);
-                    $('#ConsignorCountryName').val(response.Country);
-                    $('#ConsignorCityName').val(response.City);
-                    if ($("#PickupLocation").val() == '') {
-                        $("#PickupLocation").val($('#ConsignorLocationName').val());
-                        $('#PickupLocationPlaceId').val($("#PickupLocation").attr('PlaceId'));
-                        $('#OriginCountry').val(response.Country);
-                        $('#OriginCity').val(response.City);                        
-                        $('#PickupSubLocality').val(response.SubLocality);
-                        getMovementType();
+
                     }
-
-                    
+                });
+            }
+            else if ($('#ConsignorLocationName').val()!=''){
+                if ($("#PickupLocation").val() == '') {
+                    $("#PickupLocation").val($('#ConsignorLocationName').val());
+                    $('#OriginCountry').val($('#ConsignorCountryName').val());
+                    $('#OriginCity').val($('#ConsignorCityName').val());
+                    getMovementType();
                 }
-            });
+            }
         });
 
         $('#ConsigneeLocationName').blur(function () {
+            if ($('#ConsigneeLocationName').attr('PlaceId') != null && $('#ConsigneeLocationName').attr('PlaceId') != '' && $('#ConsigneeLocationName').attr('PlaceId') != undefined) {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#ConsigneeLocationName').attr('PlaceId') },
+                    success: function (response) {
+                        debugger;
+                        // console.log(response);
+                        $('#ConsigneeCountryName').val(response.Country);
+                        $('#ConsigneeCityName').val(response.City);
+                        if ($("#DeliveryLocation").val() == '') {
+                            $("#DeliveryLocation").val($('#ConsigneeLocationName').val());
+                            $('#DeliveryLocationPlaceId').val($('#ConsigneeLocationName').attr('PlaceId'));
+                            $('#DeliveryCountry').val(response.Country);
+                            $('#DeliveryCity').val(response.City);
+                            $('#DeliverySubLocality').val(response.SubLocality);
+                            getMovementType();
+                        }
 
-            $.ajax({
-                type: "GET",
-                url: "/ZoneChart/GetVenueDetailsByPlace",
-                datatype: "Json",
-                data: { placeId: $('#ConsigneeLocationName').attr('PlaceId') },
-                success: function (response) {
-                    debugger;
-                    // console.log(response);
-                    $('#ConsigneeCountryName').val(response.Country);
-                    $('#ConsigneeCityName').val(response.City);
-                    if ($("#DeliveryLocation").val() == '') {
-                        $("#DeliveryLocation").val($('#ConsigneeLocationName').val());
-                        $('#DeliveryLocationPlaceId').val($('#ConsigneeLocationName').attr('PlaceId'));
-                        $('#DeliveryCountry').val(response.Country);
-                        $('#DeliveryCity').val(response.City);
-                        $('#DeliverySubLocality').val(response.SubLocality);
-                        getMovementType();
                     }
-
+                });
+            }
+            else if ($('#ConsigneeLocationName').val() != '') {
+                if ($("#DeliveryLocation").val() == '') {
+                    $("#DeliveryLocation").val($('#ConsigneeLocationName').val());
+                    $('#DeliveryCountry').val($('#ConsigneeCountryName').val());
+                    $('#DeliveryCity').val($('#ConsigneeCityName').val());
+                    getMovementType();
                 }
-            });
+            }        
         });
         $("#PickupLocation").autocomplete({
             source: function (request, response) {
@@ -420,7 +438,7 @@
                     $("#OfficeTimeFrom").val(data.OfficeOpenTime);
                     $("#OfficeTimeTo").val(data.OfficeCloseTime);
                     $("#hdnCustomerType").val(data.CustomerType);
-
+                    $('#ConsignorMobile').val(data.Mobile);
                 }
             });
         }
@@ -482,9 +500,11 @@
 
             if (modeid == 1 || modeid == 2 || modeid == 4) { //PKP COD FOC
                 $("#customer").attr("readonly", "readonly");
+                $("#customer").removeAttr("readonly");
                 $('#shippername').removeAttr('readonly');
                 $("#CustomerandShipperSame").attr("disabled", "disabled");
                 if (modeid == 1) { //cash
+                    
                     $('#customer').val($('#CASHCustomerName').val());
                     $('#CustomerID').val($('#CASHCustomerId').val());
                     $('#AcHeadName').focus();
@@ -1572,7 +1592,7 @@
         var divitems = $('#divcustomer1').find('.form-control');
 
         if (@ViewBag.EditMode== true) {
-
+            
             //if ($('#AWBProcessed').val() == True) {
             //    $('#txtAWBProcessed').val(1);
             //}
@@ -1605,11 +1625,12 @@
                 $("#CourierCharge").attr('readonly', 'readonly');
                 $("#OtherCharge").attr('readonly', 'readonly');
             }
-            if ($('#TaxAmount').val() != 0) {
-                $('#ChkTaxPercent').prop('checked', 'true');
+           
+            if ( parseFloat($('#TaxAmount').val()) != 0) {
+                $('#ChkTaxPercent').prop('checked', true);
             }
             else {
-                $('#ChkTaxPercent').prop('checked', 'false');
+                $('#ChkTaxPercent').prop('checked', false);
             }
 
             var modeid = $('#PaymentModeId').val();
@@ -2033,7 +2054,7 @@
                 @Html.TextBoxFor(model => model.TransactionDate, new { @class = "form-control", @required = "true" })
                 @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 hide">
                 <label class="headinglabel">Pickup Request No.</label>
                 @Html.TextBoxFor(model => model.EnquiryNo, new { @class = "form-control" })
                 @*@Html.DropDownListFor(model => model.EnquiryNo, new SelectList(@ViewBag.Enquiry, "EnquiryNo", "EnquiryNo"), "Select", new { @class = "form-control" })*@
@@ -2042,7 +2063,7 @@
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
-            <div class="col-md-4" id="divcustomer">
+            <div class="col-md-6" id="divcustomer">
                 <div class="flexTitle">
                     <label class="headinglabel required">Customer</label>
                     <div class="checkboxdesign no-padding text-right" style="float:right">
@@ -2054,7 +2075,7 @@
                 @Html.TextBoxFor(model => model.customer, new { @class = "form-control txttarget", @required = "true" })
 
             </div>
-            <div class="col-md-4 hide" id="divcash">
+            <div class="col-md-6 hide" id="divcash">
                 <label class="headinglabel">Cash Account</label>
                 @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control txttarget", @required = "true", @autocomplete = "off", @type = "search" })
                 @Html.HiddenFor(model => model.AcheadID, new { })

@@ -237,6 +237,7 @@
     <Compile Include="Controllers\CustomerContractController.cs" />
     <Compile Include="Controllers\DevelopmentController.cs" />
     <Compile Include="Controllers\ForwardingAgentController.cs" />
+    <Compile Include="Controllers\TranshipmentBatchController.cs" />
     <Compile Include="Controllers\TranshipmentController.cs" />
     <Compile Include="Controllers\ImportManifestController.cs" />
     <Compile Include="Controllers\MCManagementController.cs" />
@@ -3140,6 +3141,7 @@
     <Content Include="Reports\AWBRegister_ParcelType.rpt" />
     <Content Include="Reports\AWBRegister_Payment.rpt" />
     <Content Include="Reports\AgentInvoiceReport.rpt" />
+    <Content Include="Reports\AcOpeningRegister.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3174,6 +3176,10 @@
     <Content Include="Reports\SalesRegisterSummary.rpt" />
     <Content Include="Reports\VATTaxInvoicePrint.rpt" />
     <Content Include="Reports\CustomerInvoicePrint.rpt" />
+    <Content Include="Reports\CustomerInvoiceOpeningRegister.rpt" />
+    <Content Include="Reports\CustomerInvoiceRegister.rpt" />
+    <Content Include="Reports\SupplierInvoiceOpeningRegister.rpt" />
+    <Content Include="Reports\CustomerInvoiceMultiplePrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3757,10 +3763,18 @@
     <Content Include="Views\PickDelReason\Details.cshtml" />
     <Content Include="Views\PickDelReason\Edit.cshtml" />
     <Content Include="Views\PickDelReason\Index.cshtml" />
+    <Content Include="Views\Reports\CustomerInvoiceRegister.cshtml" />
+    <Content Include="Views\Reports\CustomerInvoiceOpeningRegister.cshtml" />
+    <Content Include="Views\Reports\SupplierInvoiceOpeningRegister.cshtml" />
+    <Content Include="Views\Accounts\AcOpeningRegister.cshtml" />
+    <Content Include="Views\Transhipment\CreateBulk.cshtml" />
+    <Content Include="Views\Reports\CustomerInvoicePrintMultiple.cshtml" />
+    <Content Include="Views\Transhipment\EditCountryList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ReportsPDF\" />
+    <Folder Include="Views\TranshipmentBatch\" />
     <Folder Include="Views\UserRegistration\New folder\" />
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,10 @@ namespace CMSV2.Models
 
         public GeneralSetup generalSetup { get; set; }
         public List<CMSV2.Models.CustomerInvoiceDetailVM> CustomerInvoiceDetailsVM { get; set; }
-  }
+
+        public string MovementId { get; set; }
+        public int[] SelectedValues { get; set; }
+    }
 
     public class CustomerInvoiceDetailVM :CustomerInvoiceDetail
     {

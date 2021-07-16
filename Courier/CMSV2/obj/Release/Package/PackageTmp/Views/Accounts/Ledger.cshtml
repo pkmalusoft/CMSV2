@@ -42,11 +42,40 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $("#AcHeadName").val(ui.item.label);
+                $('#AcHeadId').val(ui.item.AcHeadID);
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#AcHeadName").val(i.item.label);
                 $('#AcHeadId').val(i.item.AcHeadID);
+            }
+        });
+
+        $("#VoucherTypeId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/VoucherType',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#VoucherTypeId").val(ui.item.label);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#VoucherTypeId").val(i.item.label);
             }
         });
     });
@@ -71,12 +100,18 @@
                     <label class="headinglabel required">To Date</label>
                     @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div id="divachead">
                         <label class="headinglabel required">Chart of Accounts</label>
                         @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
                         @Html.HiddenFor(model => model.AcHeadId)
                     </div>
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Voucher Type</label>
+                    @Html.TextBoxFor(model => model.VoucherTypeId, new { @class = "form-control", @autocomplete = "off" })
+
+
                 </div>
                 <div class="col-md-2">
                     <label class="headinglabel  required">Output</label>

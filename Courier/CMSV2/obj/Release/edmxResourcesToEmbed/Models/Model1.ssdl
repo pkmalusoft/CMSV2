@@ -1173,6 +1173,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="CreatedBy" Type="int" />
     <Property Name="ModifiedDate" Type="datetime" />
     <Property Name="ModifiedBy" Type="int" />
+    <Property Name="Discount" Type="decimal" Precision="13" Scale="3" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetails">
     <Key>
@@ -1192,6 +1193,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.CreditNoteDetails' does not hav
     <Property Name="RecPayStatus" Type="int" />
     <Property Name="RecPayDetailId" Type="int" />
     <Property Name="NetValue" Type="money" />
+    <Property Name="VATAmount" Type="decimal" Precision="18" Scale="3" />
   </EntityType>
   <EntityType Name="CustomerMaster">
     <Key>

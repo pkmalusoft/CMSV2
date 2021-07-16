@@ -80,11 +80,90 @@ input[type=checkbox], input[type=radio] {
 
             $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
         }
+        gettotal();
     }
     function setThreeNumberDecimal(obj) {
-        
+
        $(obj).val(parseFloat($(obj).val()).toFixed(3));
-}
+    }
+      function gettotal() {
+        debugger;
+        var netvalue = parseFloat($('#lbltotalcharge').html());
+        var CustomerInvoiceTax = $('#CustomerInvoiceTax').val();
+        var AdminPer = $('#AdminPer').val();
+        var FuelPer = $('#FuelPer').val();
+        var Clearance = $('#ClearingCharge').val();
+        var Discount = $('#Discount').val();
+        if (netvalue == '' || netvalue == null)
+            netvalue = 0;
+
+        if (CustomerInvoiceTax == null || CustomerInvoiceTax == '') {
+            CustomerInvoiceTax = 0;
+        }
+        if (AdminPer == null || AdminPer == '') {
+            AdminPer = 0;
+        }
+        if (Clearance == null || Clearance == '') {
+            Clearance = 0;
+        }
+        if (Discount == null || Discount == '') {
+            Discount = 0;
+        }
+
+        $('#lblfuelpercent').html(FuelPer);
+        $('#lbladminpercent').html(AdminPer);
+        $('#lbltaxpercent').html(CustomerInvoiceTax);
+        $('#lbldiscount').html(Discount);
+        $('#lblothercharge').html(Clearance);
+        var taxamt = parseFloat(CustomerInvoiceTax) / 100 * parseFloat(netvalue);
+        taxamt = parseFloat(taxamt).toFixed(@_decimal);
+        $('#ChargeableWT').val(parseFloat(taxamt).toFixed(@_decimal));
+        $('#lbltaxamount').html(taxamt);
+
+        var adminamt = parseFloat(AdminPer) / 100 * parseFloat(netvalue);
+        adminamt = parseFloat(adminamt).toFixed(@_decimal);
+        $('#AdminAmt').val(adminamt);
+        $('#lbladminamount').html(adminamt);
+
+        var fuelamt = parseFloat(FuelPer) / 100 * parseFloat(netvalue);
+        fuelamt = parseFloat(fuelamt).toFixed(@_decimal);
+        $('#FuelAmt').val(fuelamt);
+        $('#lblfuelamount').html(adminamt);
+
+        var netotal = parseFloat(netvalue) + parseFloat(taxamt) + parseFloat(adminamt) + parseFloat(fuelamt) - parseFloat(Clearance) - parseFloat(Discount);
+        $('#InvoiceTotal').val(parseFloat(netotal).toFixed(@_decimal));
+        $('#lblinvoicetotal').html(parseFloat(netotal).toFixed(@_decimal))
+    }
+    function ValidateTotal() {
+        debugger;
+
+        var idtext = 'hdnTotalCharge_';
+        var amt = 0;
+        var max = $('#details > tbody > tr').length - 7;
+        $('#lbltotalcharge').html(0);
+        $('[id^=' + idtext + ']').each(function (index, item) {
+            var awbchecked = $('#hdnawbchecked_' + index).prop('checked');
+            if (awbchecked == true) {
+
+                if ($(item).val() == "" || $(item).val() == null) {
+                    $(item).val(0);
+                }
+                var itemval = $(item).val();
+                itemval = itemval.replace(',', '');
+
+                var invamount = parseFloat(itemval);
+                amt = parseFloat(amt) + parseFloat(invamount);
+                $('#lbltotalcharge').html(parseFloat(amt).toFixed(2));
+                if (index + 1 == max) {
+                    gettotal();
+                }
+            }
+        });
+
+
+
+
+    }
     $(function () {
         $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
@@ -98,8 +177,10 @@ input[type=checkbox], input[type=radio] {
         setTwoNumberDecimal($('#AdminPer'));
         setTwoNumberDecimal($('#CustomerInvoiceTax'));
         setTwoNumberDecimal($('#FuelPer'));
-        setTwoNumberDecimal($('#OtherCharge'));
+        setTwoNumberDecimal($('#ClearingCharge'));
         setTwoNumberDecimal($('#CustomerInvoiceTax'));
+        setTwoNumberDecimal($('#Discount'));
+        ValidateTotal();
     });
 </script>
 
@@ -121,8 +202,8 @@ input[type=checkbox], input[type=radio] {
             @Html.ValidationSummary(true)
 
             <div class="row no-margin" style="padding-top: 10px">
-              
-            </div>            
+
+            </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-1">
                     <label class="headinglabel required "> Invoice No</label>
@@ -162,204 +243,34 @@ input[type=checkbox], input[type=radio] {
                     @Html.ValidationMessageFor(model => model.FuelPer)
                 </div>
                 <div class="col-md-2 w-6">
-                    <label class="headinglabel">Clearance Charge</label>
-                    @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.OtherCharge)
+                    <label class="headinglabel">Clear. Chg</label>
+                    @Html.TextBoxFor(model => model.ClearingCharge, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
+                    @Html.ValidationMessageFor(model => model.ClearingCharge)
                 </div>
-                <div class="col-md-3 align_self">
+                <div class="col-md-2 w-6">
+                    <label class="headinglabel">Discount</label>
+                    @Html.TextBoxFor(model => model.Discount, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
+                    @Html.ValidationMessageFor(model => model.Discount)
+                </div>
+                <div class="col-md-2 align_self">
 
                     <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
 
                 </div>
             </div>
-            @*<div class="row no-margin taxBlock" style="padding-top:15px">
-                <div class="col-md-2">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Tax%</label>
-                    </div>
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(model => model.CustomerInvoiceTax, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
-                        @Html.ValidationMessageFor(model => model.CustomerInvoiceTax)
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Admin %</label>
-                    </div>
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(model => model.AdminPer, new { @class = "form-control txttarget  text-right calfield ", @onchange = "setTwoNumberDecimal(this)" })
-                        @Html.ValidationMessageFor(model => model.AdminPer)
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="col-md-5">
-                        <label class="headinglabel">Fuel SurCharge %</label>
-                    </div>
-                    <div class="col-md-7">
-                        @Html.TextBoxFor(model => model.FuelPer, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
-                        @Html.ValidationMessageFor(model => model.FuelPer)
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="col-md-4">
-                        <label class="headinglabel">Other Charge</label>
-                    </div>
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
-                        @Html.ValidationMessageFor(model => model.OtherCharge)
-                    </div>
-
-                </div>
-
-            </div>*@
-
-
-            @*<div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-3">
-                    <input type="button" value="Add" id="btnadd" class="btn btn-primary" />&nbsp;&nbsp;
-                    <input type="button" value="Save & Print" id="savepr" class="btn btn-primary" />
-                    <input type="button" value="Cancel" id="btncancel" class="btn btn-primary" />
-                </div>
-
-            </div>*@
-
             <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12">
-                    <table class="table table-bordered table-responsive" id="details" style="background-color: white">
-                        <thead>
-                        <th>SNo.</th>
-                        <th>AWB No</th>
-                        <th>AWB Date</th>
-                        <th>Consingee</th>
-                        <th>Destination Country</th>
-                        <th>Courier Charge</th>
-                        <th>Custom Charge</th>
-                        <th>Other Charge</th>
-                        <th>Total Charge</th>
+                <div class="col-md-12" id="listContainer">
 
-                        <tbody class="input-table" id="listContainer">
-                            @{Html.RenderPartial("InvoiceList", Model);}
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Total Charge</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Admin%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Fuel SurCharge%</td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Tax%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Clearance Charges</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td><b>Net Invoice Total</b></td>
-                                <td></td>
-                                <td> </td>
-                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal, _decimal)</label></td>
-                            </tr>
-                        </tbody>
+                    @{Html.RenderPartial("InvoiceList", Model);}
 
-                    </table>
+
                 </div>
             </div>
-            <div class="row no-margin hide">
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Total Charge</label>
 
-                    </div>
-                    <div class="col-md-3">
 
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges,_decimal)</label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Admin%</label>
 
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbladminpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer,@_decimal)</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel " id="lbladminamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt,@_decimal)</label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Fuel SurCharge%</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblfuelpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer,@_decimal)</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblfuelamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label>
-                    </div>
-                </div>
 
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Tax%</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxpercent">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxamount">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Other Charges</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblothercharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Net Invoice Total</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel " id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal,@_decimal)</label>
-                    </div>
-                </div>
-
-            </div>
 
         }
     </fieldset>
@@ -369,7 +280,7 @@ input[type=checkbox], input[type=radio] {
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-        function gettotal() {
+        function gettotal1() {
               var fullform = $('form#customerInvoice').serialize();
             var cust = JSON.stringify(fullform);
 
@@ -401,13 +312,13 @@ input[type=checkbox], input[type=radio] {
                 }
             });
         }
-        $('.calfield').change(function () {
-            gettotal();
+        //$('.calfield').change(function () {
+        //    gettotal();
 
         })
 
           $('.checkfilter').click(function () {
-              gettotal();
+              ValidateTotal();
         })
 
         $('#CustomerID').change(function () {

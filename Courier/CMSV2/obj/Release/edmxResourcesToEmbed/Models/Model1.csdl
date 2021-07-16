@@ -911,6 +911,7 @@
     <Property Name="RecPayDetailId" Type="Int32" />
     <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="CustomerInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetail" ToRole="CustomerInvoice" />
+    <Property Name="VATAmount" Type="Decimal" Precision="18" Scale="3" />
   </EntityType>
   <EntityType Name="CustomerMaster">
     <Key>
@@ -11371,6 +11372,7 @@
     <Property Name="CreatedBy" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
     <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="Discount" Type="Decimal" Precision="13" Scale="3" />
   </EntityType>
   <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
     <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoice" Role="CustomerInvoice" Multiplicity="0..1">

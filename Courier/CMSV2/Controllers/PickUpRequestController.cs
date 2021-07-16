@@ -207,14 +207,17 @@ namespace CMSV2.Controllers
                 _enquiry.TransactionDate = DateTime.Now;
                 _enquiry.DeviceID = "WebSite";
                 _enquiry.IsDeleted = false;
-                int statustypeid= db.tblStatusTypes.Where(c => c.Name == "PICKUP REQUEST").FirstOrDefault().ID;
+                int statustypeid = 1;// db.tblStatusTypes.Where(c => c.Name == "Pickup Request").FirstOrDefault().ID;
                 _enquiry.StatusTypeId = statustypeid; //pickuprequest       
                 _enquiry.AcFinancialYearID = yearid;
-
+                _enquiry.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                _enquiry.CreatedBy = uid;
             }
             else
             {
                 _enquiry = db.InScanMasters.Find(v.InScanID);
+                _enquiry.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
+                _enquiry.LastModifiedBy = uid;
             }
             _enquiry.PaymentModeId=v.PaymentModeId;
             _enquiry.DocumentTypeId = v.DocumentTypeId;
@@ -817,6 +820,10 @@ namespace CMSV2.Controllers
             objCust.OfficeCloseTime = cust.OfficeCloseTime.ToString();
             objCust.CustomerType = cust.CustomerType;
             objCust.Email = cust.Email;
+            if (cust.Mobile == null)
+                objCust.Mobile = "";
+            else
+                objCust.Mobile = cust.Mobile;
             return Json(objCust, JsonRequestBehavior.AllowGet);
         }
 
@@ -908,6 +915,7 @@ namespace CMSV2.Controllers
             public string Address2 { get; set; }
             public string Address3 { get; set; }
             public string Phone { get; set; }
+            public string Mobile { get; set; }
             public string CustCode { get; set; }
             public int CustID { get; set; }
             public string OfficeOpenTime { get; set; }

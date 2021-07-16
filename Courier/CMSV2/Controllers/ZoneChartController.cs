@@ -103,47 +103,62 @@ namespace CMSV2.Controllers
                 List<ZoneChartDetail> l = new List<ZoneChartDetail>();
             foreach (var i in v.Details)
             {
-
-                var location = db.LocationMasters.Where(cc => cc.PlaceID == i.PlaceID).FirstOrDefault();
                 int LocationID = 0;
-                if (location==null)
+                if (i.PlaceID != null)
                 {
-                    LocationMaster loc = new LocationMaster();
-                    loc.CountryName = i.CountryName;
-                    loc.CityName = i.CityName;
-                    loc.LocationName = i.LocationName;
-                    loc.PlaceID = i.PlaceID;
-                    db.LocationMasters.Add(loc);
-                    db.SaveChanges();
-                    LocationID = loc.LocationID;
+                    var location = db.LocationMasters.Where(cc => cc.PlaceID == i.PlaceID).FirstOrDefault();
+                    
+                    if (location == null && i.Deleted == false)
+                    {
+                        LocationMaster loc = new LocationMaster();
+                        loc.CountryName = i.CountryName;
+                        loc.CityName = i.CityName;
+                        loc.LocationName = i.LocationName;
+                        loc.PlaceID = i.PlaceID;
+                        db.LocationMasters.Add(loc);
+                        db.SaveChanges();
+                        LocationID = loc.LocationID;
+                    }
+                    else if (i.Deleted == false)
+                    {
+                        LocationID = location.LocationID;
+                    }
                 }
                 else
                 {
-                    LocationID = location.LocationID;
+
                 }
                 ZoneChartDetail s = new ZoneChartDetail();
 
                 if (i.ZoneChartDetailID > 0)
                     s = db.ZoneChartDetails.Find(i.ZoneChartDetailID);
-                
-                //s.CountryName = i.CountryName;
-                //s.ZoneChartID = z.ZoneChartID;
-                //s.CityName = i.CityName;
-                s.PlaceID = i.PlaceID;
-                //s.LocationName = i.LocationName;
-                s.LocationID = LocationID;
-                s.PlaceID = i.PlaceID;
-                s.SubLocality = i.SubLocality;
-                s.ZoneChartID = z.ZoneChartID;
-                if (i.ZoneChartDetailID == 0)
-                {
-                    db.ZoneChartDetails.Add(s);
-                    db.SaveChanges();
-                }
                 else
                 {
-                    db.Entry(s).State = EntityState.Modified;
+                    s = new ZoneChartDetail();
+                }
+                if (i.ZoneChartDetailID >0 &&  i.Deleted == true && s!=null)
+                {
+                    db.ZoneChartDetails.Remove(s);
                     db.SaveChanges();
+                }
+                else if(i.Deleted==false)
+                {
+                    s.PlaceID = i.PlaceID;
+                    //s.LocationName = i.LocationName;
+                    s.LocationID = LocationID;
+                    s.PlaceID = i.PlaceID;
+                    s.SubLocality = i.SubLocality;
+                    s.ZoneChartID = z.ZoneChartID;
+                    if (i.ZoneChartDetailID == 0)
+                    {
+                        db.ZoneChartDetails.Add(s);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        db.Entry(s).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
                 //l.Add(s);
 
@@ -447,7 +462,7 @@ namespace CMSV2.Controllers
         public JsonResult GetEventVenuesList(string SearchText)
         {
             
-          string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
+         string GooglePlaceAPIKey = "AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc";
             //string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}";
             string GooglePlaceAPIUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&language=en&key={1}";
             //< add key = "GooglePlaceAPIUrl" value = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types=geocode&language=en&key={1}" />

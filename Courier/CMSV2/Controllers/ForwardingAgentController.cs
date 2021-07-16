@@ -206,6 +206,7 @@ namespace CMSV2.Controllers
             }
             else
             {
+                a.FAgentID = item.FAgentID;
                 //a.Fagent = item.AgentID;
                 a.FAgentName = item.FAgentName;
                 a.FAgentCode = item.FAgentCode;
@@ -248,7 +249,7 @@ namespace CMSV2.Controllers
             int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
-            ForwardingAgentMaster a = db.ForwardingAgentMasters.Find(item.FAgentID);
+            ForwardingAgentMaster a = db.ForwardingAgentMasters.Where(cc => cc.FAgentID == item.FAgentID).FirstOrDefault();    
             
             a.AcCompanyID = accompanyid;
             a.FAgentName = item.FAgentName;
@@ -258,6 +259,7 @@ namespace CMSV2.Controllers
             a.Address3 = item.Address3;
             a.Phone = item.Phone;
             a.Fax = item.Fax;
+            a.Email = item.Email;
             a.WebSite = item.WebSite;
             a.ContactPerson = item.ContactPerson;
             a.CountryName = item.CountryName;

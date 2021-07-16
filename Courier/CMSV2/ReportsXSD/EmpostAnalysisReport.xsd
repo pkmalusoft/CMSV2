@@ -16,6 +16,7 @@
               <xs:element name="NetTotal" type="xs:decimal" minOccurs="0" />
               <xs:element name="TAX" type="xs:decimal" minOccurs="0" />
               <xs:element name="VAT" type="xs:decimal" minOccurs="0" />
+              <xs:element name="VatAmount" type="xs:decimal" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

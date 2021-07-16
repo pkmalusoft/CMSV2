@@ -135,7 +135,7 @@ namespace CMSV2.DAL
         }
 
 
-        public static List<TranshipmentModel> GetTranshipmenItems(int ImportShipmentTypeId)
+        public static List<TranshipmentModel> GetTranshipmenItems(int ImportShipmentTypeId,string CountryName)
         {
             var awbList = new List<TranshipmentModel>();
             SqlCommand cmd = new SqlCommand();
@@ -143,12 +143,11 @@ namespace CMSV2.DAL
             cmd.CommandText = "SP_GetTranshipmentItem";
             cmd.CommandType = CommandType.StoredProcedure;            
             cmd.Parameters.AddWithValue("@ImportShipmentId", ImportShipmentTypeId);
+            cmd.Parameters.AddWithValue("@CountryName", CountryName);
             
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
-            da.Fill(ds);
-
-           
+            da.Fill(ds);                      
 
             if (ds != null && ds.Tables.Count > 0)
             {
@@ -197,6 +196,174 @@ namespace CMSV2.DAL
                         remarks = objDataRow["remarks"].ToString(), //Department and Bag no is missing                                                               
                         DataError = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString())==0 ? true :false,
                         AWBChecked = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()) == 0 ? true : false
+                    });
+                    //AWBNo AWBDate Bag NO.	Shipper ReceiverName    ReceiverContactName ReceiverPhone   ReceiverAddress DestinationLocation DestinationCountry Pcs Weight CustomsValue    COD Content Reference Status  SynchronisedDateTime
+
+                }
+            }
+            return awbList;
+        }
+
+        public static List<TranshipmentCountry> GetTranshipmenCountryList(int ImportShipmentTypeId)
+        {
+            var awbList = new List<TranshipmentCountry>();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_TranshipmentCountryList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ShipmentId", ImportShipmentTypeId);
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                int i = 1;
+                foreach (DataRow objDataRow in ds.Tables[0].Rows)
+                {
+                    awbList.Add(new TranshipmentCountry()
+                    {
+                        SNo = i++,
+                        CountryName  =objDataRow["ConsigneeCountryName"].ToString(),                        
+                        TotalAWB = Convert.ToInt32(objDataRow["TotalAwbNo"].ToString()),
+                        ValidAWB = Convert.ToInt32(objDataRow["ValidAwb"].ToString()),
+                        ErrAWB = Convert.ToInt32(objDataRow["ErrAwb"].ToString())
+                    });
+                    
+
+                }
+            }
+            return awbList;
+        }
+
+        public static string EditManualDataFixation(int ShipmentId, int AgentID,string FieldName,string SourceValue,string TargetValue)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_TranshipmentEditManualFixation";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@ShipmentId", ShipmentId);
+                        cmd.Parameters.AddWithValue("@AgentID", AgentID);
+                        cmd.Parameters.AddWithValue("@FieldName", FieldName);
+                        cmd.Parameters.AddWithValue("@SourceValue", SourceValue);
+                        cmd.Parameters.AddWithValue("@TargetValue", TargetValue);                                               
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();                        
+                        con.Close();
+                        return "ok";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return "Failed";
+            }
+            return "ok";
+
+        }
+
+        public static string EditManualRateFixation(int ShipmentId, string CountryName)
+        {
+            DataTable dt = new DataTable();
+            string MaxPickUpNo = "";
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GetTranshipmentAWBCourierCharge";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = con;
+
+                        cmd.Parameters.AddWithValue("@ShipmentId", ShipmentId);
+                        cmd.Parameters.AddWithValue("@ConsigneeCountryName",CountryName);
+                      
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                        return "ok";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return "Failed";
+            }
+            return "ok";
+
+        }
+
+        public static List<TranshipmentModel> GetBulkTranshipmenItems(string MAWB,int AgentID)
+        {
+            var awbList = new List<TranshipmentModel>();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "Select * From TranshipmentAWB Where MAWB='" + MAWB + "'";
+            cmd.CommandType = CommandType.Text;
+            //cmd.Parameters.AddWithValue("@ImportShipmentId", ImportShipmentTypeId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                int i = 1;
+                foreach (DataRow objDataRow in ds.Tables[0].Rows)
+                {
+                    awbList.Add(new TranshipmentModel()
+                    {
+                        SNo = i++,
+                        CustomerId = AgentID,
+                        HAWBNo = objDataRow["HAWBNo"].ToString(),
+                        AWBDate = objDataRow["AWBDate"].ToString(),
+                        Customer = objDataRow["Customer"].ToString(),
+                        ConsignorPhone = objDataRow["TelephoneNo"].ToString(),
+                        Consignor = objDataRow["Consignor"].ToString(),
+                        ConsignorLocationName = objDataRow["ConsignorLocation"].ToString(),
+                        ConsignorCountryName = objDataRow["ConsignorCountry"].ToString(),
+                        ConsignorCityName = objDataRow["ConsignorCity"].ToString(),
+                        Consignee = objDataRow["Consignee"].ToString(),
+                        ConsigneeCountryName = objDataRow["ConsigneeCountry"].ToString(),
+                        ConsigneeCityName = objDataRow["ConsigneeCity"].ToString(),
+                        ConsigneeLocationName = objDataRow["ConsigneeLocation"].ToString(),
+                        ConsignorAddress1_Building = objDataRow["ConsignorAddress"].ToString(),
+                        ConsigneeAddress1_Building = objDataRow["ConsigneeAddress"].ToString(),
+                        ConsignorMobile = objDataRow["ConsignorTelephone"].ToString(),
+                        ConsigneeMobile = objDataRow["ConsigneeTelephone"].ToString(),
+                        Weight = CommanFunctions.ParseDecimal(objDataRow["Weight"].ToString()),
+                        Pieces = objDataRow["Pieces"].ToString(),
+                        CourierCharge = CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()),
+                        OtherCharge = CommanFunctions.ParseDecimal(objDataRow["OtherCharge"].ToString()),
+                        PaymentMode = objDataRow["PaymentMode"].ToString(),
+                        ReceivedBy = objDataRow["ReceiverName"].ToString(),
+                        CollectedBy = objDataRow["CollectedName"].ToString(),
+                        FAWBNo = objDataRow["FwdNo"].ToString(),
+                        FAgentName = objDataRow["ForwardingAgent"].ToString(),
+                        CourierType = objDataRow["Couriertype"].ToString(),
+                        ParcelType = objDataRow["ParcelType"].ToString(),
+                        MovementType = objDataRow["MovementType"].ToString(),
+                        CourierStatus = objDataRow["CourierStatus"].ToString(),
+                        remarks = objDataRow["Remarks"].ToString(), //Department and Bag no is missing                                                               
+                        DataError = false ,//  CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()) == 0 ? true : false,
+                        AWBChecked = true // CommanFunctions.ParseDecimal(objDataRow["CourierCharge"].ToString()) == 0 ? true : false
                     });
                     //AWBNo AWBDate Bag NO.	Shipper ReceiverName    ReceiverContactName ReceiverPhone   ReceiverAddress DestinationLocation DestinationCountry Pcs Weight CustomsValue    COD Content Reference Status  SynchronisedDateTime
 

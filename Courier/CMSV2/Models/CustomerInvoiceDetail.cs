@@ -28,6 +28,7 @@ namespace CMSV2.Models
         public Nullable<int> RecPayStatus { get; set; }
         public Nullable<int> RecPayDetailId { get; set; }
         public Nullable<decimal> NetValue { get; set; }
+        public Nullable<decimal> VATAmount { get; set; }
     
         public virtual CustomerInvoice CustomerInvoice { get; set; }
     }

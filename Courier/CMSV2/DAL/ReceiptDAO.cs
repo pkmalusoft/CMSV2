@@ -800,6 +800,40 @@ namespace CMSV2.DAL
             }
 
         }
+
+        public static List<DRRVM> GetDRRList(int FYearId, DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetDRRList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<DRRVM> objList = new List<DRRVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DRRVM obj = new DRRVM();
+                    obj.DRRID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["DRRID"].ToString());
+                    obj.DRRDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["DRRDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.DRSReceiptNo = ds.Tables[0].Rows[i]["DRSRecpayNo"].ToString();
+                    obj.DRSNo = ds.Tables[0].Rows[i]["DRSNO"].ToString();
+                    obj.DRSReceiptDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["DRSRecPayDate"].ToString()).ToString("dd-MM-yyyy"); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.ReconciledAmount =Convert.ToDecimal(ds.Tables[0].Rows[i]["ReconciledAmount"].ToString());                  
+                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
         public static List<DRSReceiptVM> GetDRSReceipts(int FYearId, DateTime FromDate, DateTime ToDate)
         {
             SqlCommand cmd = new SqlCommand();

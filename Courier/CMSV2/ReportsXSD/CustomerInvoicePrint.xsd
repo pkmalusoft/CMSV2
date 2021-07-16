@@ -8,52 +8,29 @@
             <xs:sequence>
               <xs:element name="CustomerInvoiceID" type="xs:int" minOccurs="0" />
               <xs:element name="CustomerInvoiceNo" type="xs:string" minOccurs="0" />
-              <xs:element name="CustomerID" type="xs:int" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="CustomerInvoiceTax" type="xs:decimal" minOccurs="0" />
-              <xs:element name="StatusContractCustomer" type="xs:boolean" minOccurs="0" />
-              <xs:element name="AcJournalID" type="xs:int" minOccurs="0" />
-              <xs:element name="StatusClose" type="xs:boolean" minOccurs="0" />
-              <xs:element name="AcCompanyID" type="xs:int" minOccurs="0" />
-              <xs:element name="OtherCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="COtherCharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="ClearingCharge" type="xs:decimal" minOccurs="0" />
-              <xs:element name="ClearingChargeHeadID" type="xs:int" minOccurs="0" />
-              <xs:element name="OtherChargeHeadID" type="xs:int" minOccurs="0" />
-              <xs:element name="FuelSurChargeHeadID" type="xs:int" minOccurs="0" />
               <xs:element name="FuelPer" type="xs:decimal" minOccurs="0" />
               <xs:element name="AdminPer" type="xs:decimal" minOccurs="0" />
               <xs:element name="FuelAmt" type="xs:decimal" minOccurs="0" />
               <xs:element name="AdminAmt" type="xs:decimal" minOccurs="0" />
               <xs:element name="ChargeableWT" type="xs:double" minOccurs="0" />
-              <xs:element name="CalogiRef" type="xs:string" minOccurs="0" />
-              <xs:element name="calogidate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="statusColoader" type="xs:boolean" minOccurs="0" />
-              <xs:element name="CostAmt" type="xs:decimal" minOccurs="0" />
-              <xs:element name="Revenue" type="xs:decimal" minOccurs="0" />
               <xs:element name="CCharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="InvoiceTotal" type="xs:decimal" minOccurs="0" />
-              <xs:element name="IsDeleted" type="xs:boolean" minOccurs="0" />
-              <xs:element name="AcFinancialYearID" type="xs:int" minOccurs="0" />
-              <xs:element name="BranchID" type="xs:int" minOccurs="0" />
-              <xs:element name="CreatedDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="CreatedBy" type="xs:int" minOccurs="0" />
-              <xs:element name="ModifiedDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="ModifiedBy" type="xs:int" minOccurs="0" />
               <xs:element name="CustomerInvoiceDetailID" type="xs:int" minOccurs="0" />
-              <xs:element name="CustomerInvoiceID1" type="xs:int" minOccurs="0" />
-              <xs:element name="AWBNo" type="xs:string" minOccurs="0" />
               <xs:element name="CourierCharge" type="xs:decimal" minOccurs="0" />
-              <xs:element name="InScanInternationalDetailID" type="xs:int" minOccurs="0" />
-              <xs:element name="StatusPaymentMode" type="xs:string" minOccurs="0" />
               <xs:element name="InscanID" type="xs:int" minOccurs="0" />
               <xs:element name="TaxPercentage" type="xs:int" minOccurs="0" />
-              <xs:element name="OtherCharge1" type="xs:decimal" minOccurs="0" />
+              <xs:element name="OtherCharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="FuelSurcharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="CustomCharge" type="xs:decimal" minOccurs="0" />
               <xs:element name="RecPayStatus" type="xs:int" minOccurs="0" />
               <xs:element name="RecPayDetailId" type="xs:int" minOccurs="0" />
               <xs:element name="NetValue" type="xs:decimal" minOccurs="0" />
-              <xs:element name="AWBNo1" type="xs:string" minOccurs="0" />
+              <xs:element name="VATAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="AWBNo" type="xs:string" minOccurs="0" />
               <xs:element name="ConsignmentDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="Consignor" type="xs:string" minOccurs="0" />
               <xs:element name="Consignee" type="xs:string" minOccurs="0" />
@@ -73,6 +50,7 @@
               <xs:element name="CountryName" type="xs:string" minOccurs="0" />
               <xs:element name="Weight" type="xs:decimal" minOccurs="0" />
               <xs:element name="Pieces" type="xs:string" minOccurs="0" />
+              <xs:element name="AWBDate" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

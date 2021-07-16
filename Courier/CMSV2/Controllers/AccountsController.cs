@@ -3959,6 +3959,7 @@ new AcGroupModel()
                 reportparam.AcHeadId = 0;
                 reportparam.AcHeadName = "";
                 reportparam.Output = "PDF";
+                reportparam.VoucherTypeId = "";
             }
             else
             {
@@ -3991,7 +3992,8 @@ new AcGroupModel()
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 AcHeadId = picker.AcHeadId,
                 AcHeadName = picker.AcHeadName,
-                Output = picker.Output
+                Output = picker.Output,
+                VoucherTypeId = picker.VoucherTypeId
             };
 
             ViewBag.Token = model;
@@ -5413,6 +5415,45 @@ new AcGroupModel()
             
         }
 
+        #endregion
+
+
+        #region "AccountOpeningRegister"
+        public ActionResult AcOpeningRegister(string output = "PDF")
+        {
+            ViewBag.ReportName = "Account Opening Register";
+            string filepath = AccountsReportsDAO.GenerateAccountOpeningRegisterReport(output);
+
+            if (output != "PDF")
+            {
+                return RedirectToAction("DownloadFile", "Accounts", new { filePath = filepath });
+            }
+            else
+            {
+                return View();
+            }
+
+        }
+
+        public FileResult DownloadFile(string filepath)
+        {
+            
+            string filename = "AcOpeningRegister_" + DateTime.Now.ToString("ddMMyyHHmmss") + ".xlsx"; // Server.MapPath("~" + filePath);
+
+            byte[] fileBytes = GetFile(filepath);
+            return File(
+                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filename);
+        }
+
+        byte[] GetFile(string s)
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
+        }
         #endregion
     }
 

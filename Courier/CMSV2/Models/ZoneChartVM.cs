@@ -50,6 +50,7 @@ namespace CMSV2.Models
         public string CountryName { get; set; }
         public string PlaceID { get; set; }
         public string SubLocality { get; set; }
+        public bool  Deleted { get; set; }
     }
 
     public class ZoneEmpVM : EmpZoneAllocation

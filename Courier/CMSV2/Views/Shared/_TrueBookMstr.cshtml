@@ -241,6 +241,14 @@
 
 
     <script type="text/javascript">
+      
+            $(document).ready(function () {
+                $("form").bind("keypress", function (e) {
+                    if (e.keyCode == 13) {
+                        return false;
+                    }
+                });
+            });
 
         function ShowProfile() {
             $('#UserProfileModal').modal('show');

@@ -97,21 +97,28 @@
                 e.preventDefault();
                 $("#CustomerName").val(i.item.label);
                 $('#CustomerId').val(i.item.ID);
-                //$('#hdnCustomerType').val(i.item.type);
-                //if ($('#hdnCustomerType').val() == "CR") {
-                //    $("#Consignor1").css('color', 'blue');
-                //}
-                //else if ($('#hdnCustomerType').val() == "CS") {
-                //    $("#Consignor1").css('color', 'red');
-                //}
-                //else {
-                //    $("#Consignor1").css('color', 'black');
-                //}
-
             },
+            focus: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerId').val(i.item.ID);
+            }
 
         });
+        
         $('#ReportType').trigger('change');
+        if ($('#CustomerId').val() != 0) {
+
+            $("#AllCustomer").prop('checked', 'false');
+            $("#AllCustomer").attr('value', false);
+            $("#AllCustomer").trigger('click');
+        }
+        else {
+            $("#AllCustomer").prop('checked', true);
+            $('#CustomerName').removeAttr('required');
+            $('#CustomerName').attr('readonly', 'readonly');
+            //$("#AllCustomer").trigger('click');
+        }
     });
 </script>
 

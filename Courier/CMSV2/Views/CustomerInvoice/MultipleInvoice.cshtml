@@ -71,7 +71,10 @@
     $(document).ready(function () {
 
 
-      
+        $('#InvoiceType1').change(function () {
+            alert($('#InvoiceType1').val());
+            $('#InvoiceType').val($('#InvoiceType1').val());
+        })
 
               $.ajax({
                 type: "Get",
@@ -152,7 +155,7 @@
                 ToDate: $('#ToDate').val(),
                 InvoiceDate: $('#InvoiceDate').val(),
                 SelectedValues: $('#movementid').val(),
-
+                InvoiceType: $('#InvoiceType').val()
             }
             $('#imgloader').css('display', 'block');
 
@@ -202,7 +205,8 @@
                 <label class="required headinglabel">From Date</label>
             </div>
             <div class="col-md-9">
-                @Html.HiddenFor(model => model.MovementId)                
+                @Html.HiddenFor(model => model.MovementId)
+                @Html.HiddenFor(model => model.InvoiceType)
                 @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
             </div>
 
@@ -247,7 +251,20 @@
             </div>
         </div>
     </div>
-
+    <div class="row no-margin">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <label class="headinglabel required">Invoice Type</label>
+            </div>
+            <div class="col-md-9">
+                @Html.DropDownList("InvoiceType1", new List<SelectListItem>
+               {
+                   new SelectListItem{ Text="Customer Invoice", Value = "Customer"},
+                   new SelectListItem{ Text="COLoader Invoice", Value = "COLoader" }
+                }, "Select", new { @class = "form-control", @required = "true",@id="InvoiceType1" })
+            </div>
+        </div>
+    </div>
 
     <div class="row no-margin" style="padding-top:10px">
         <div class="col-md-10" style="text-align:right;padding:10px">

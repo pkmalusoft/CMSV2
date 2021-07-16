@@ -44,10 +44,10 @@ namespace CMSV2.Controllers
 
             }
 
-            List<DRRVM> list = (from c in db.DRRs join c2 in db.DRS on c.DRSID equals c2.DRSID join c3 in db.DRSRecPays on c.DRSRecPayID equals c3.DRSRecPayID
-                                where c.DRRDate>= pFromDate && c.DRRDate <=pToDate
-                                select new DRRVM { DRRID = c.DRRID, DRRDate=c.DRRDate,ReceiptDate=c3.DRSRecPayDate, DRSID = c.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DRSReceiptNo = c3.DocumentNo, ReconciledAmount = c.ReconciledAmount }).ToList();
-            //Receipts = ReceiptDAO.GetDRSReceipts(FyearId, pFromDate, pToDate); // RP.GetAllReciepts();
+            //List<DRRVM> list = (from c in db.DRRs join c2 in db.DRS on c.DRSID equals c2.DRSID join c3 in db.DRSRecPays on c.DRSRecPayID equals c3.DRSRecPayID
+            //                    where c.DRRDate>= pFromDate && c.DRRDate <=pToDate
+            //                    select new DRRVM { DRRID = c.DRRID, DRRDate=c.DRRDate,ReceiptDate=c3.DRSRecPayDate, DRSID = c.DRSID, DRSNo = c2.DRSNo, DRSDate = c2.DRSDate, DRSReceiptNo = c3.DocumentNo, ReconciledAmount = c.ReconciledAmount }).ToList();
+            List<DRRVM> list = ReceiptDAO.GetDRRList(FyearId, pFromDate, pToDate); // RP.GetAllReciepts();
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             return View(list);
@@ -75,6 +75,7 @@ namespace CMSV2.Controllers
                     cust.DRSID = dr.DRSID;
                     var drs = db.DRS.Find(dr.DRSID);
                     cust.DRSNo = drs.DRSNo;
+                    cust.DRSDate = drs.DRSDate;
                     var drsrecpay = db.DRSRecPays.Find(dr.DRSRecPayID);
                     cust.DRSRecPayID = dr.DRSRecPayID;
                     cust.DRSReceiptNo = drsrecpay.DocumentNo;
@@ -89,7 +90,7 @@ namespace CMSV2.Controllers
                     ViewBag.acheadbank = acheadforbank;
 
                     cust.Details = new List<DRRDetailVM>();
-                    cust.Details = (from c in db.DRRDetails where c.DRRID == id select new DRRDetailVM { DRRID=c.DRRID,Reference=c.Reference,ReferenceId=c.ReferenceId,COD=c.CODAmount,PKPCash=c.PKPCash,MCReceived=c.MCReceived,Discount=c.Discount,Expense=c.Expense,Total=c.Total}).ToList();
+                    cust.Details = (from c in db.DRRDetails where c.DRRID == id select new DRRDetailVM { DRRID=c.DRRID,Reference=c.Reference,ReferenceId=c.ReferenceId,COD=c.CODAmount,PKPCash=c.PKPCash,MCReceived=c.MCReceived,Discount=c.Discount,Expense=c.Expense,Total=c.Total,Type=c.TransactionType}).ToList();
 
                     //BindMasters_ForEdit(cust);
                 }
@@ -239,9 +240,10 @@ namespace CMSV2.Controllers
                                select new DRSAWBList { InscanId = c3.InScanID, ShipmentDetailID=0, AWBNo = c3.AWBNo, Shipper = c3.Consignor, Consignee = c3.Consignee, AWBDate = c3.TransactionDate, CourierCharge = c3.CourierCharge, OtherCharge = c3.OtherCharge, TotalCharge = c3.NetTotal, MaterialCost = c3.MaterialCost, IsNCND = c3.IsNCND, IsCashOnly = c3.IsCashOnly, IsCollectMaterial = c3.IsCollectMaterial, IsCheque =c3.IsChequeOnly,IsDOCopyBack= c3.IsDOCopyBack,  Pieces = c3.Pieces, Weight = c3.Weight }).ToList();
 
 
-            List<DRSAWBList> drslist2 = (from c3 in db.ImportShipmentDetails join inv in db.ShipmentInvoiceDetails on c3.ShipmentInvoiceId equals inv.ShipmentInvoiceID 
+            List<DRSAWBList> drslist2 = (from c3 in db.ImportShipmentDetails join inv in db.ShipmentInvoiceDetails on c3.ShipmentDetailID equals inv.ShipmentImportDetailID
                            where  (c3.DRSID == DRSID)
                            && (c3.DRSID != null)
+                           && (c3.DRRID==null)
                            && (c3.CODReceiptId == null)
                            && (c3.CourierStatusID==13)  //Delivered
                            orderby c3.AWB ascending
@@ -287,7 +289,7 @@ namespace CMSV2.Controllers
             { 
                 int userid =Convert.ToInt32(Session["UserID"].ToString());
             int BranchId = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            DateTime drrdate = CommanFunctions.GetLastDayofMonth().Date;
+            DateTime drrdate = CommanFunctions.GetCurrentDateTime();
             ReceiptDAO.SaveReconc(DRRID, drrdate, DRSID, DRSRecpayID, ReconcAmount, CourierId, BranchId ,FyearId, userid, xml);
             return "Ok";
             }

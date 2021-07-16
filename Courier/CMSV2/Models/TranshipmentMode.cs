@@ -5,6 +5,15 @@ using System.Web;
 
 namespace CMSV2.Models
 {
+    public class TranshipmentCountry
+    {
+        public int SNo { get; set; }
+        public string CountryName { get; set; }
+        public int TotalAWB { get; set; }
+        public int ValidAWB { get; set; }
+        public int ErrAWB { get; set; }
+    }
+
     public class TranshipmentModel
     {      
      

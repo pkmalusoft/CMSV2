@@ -58,24 +58,7 @@ namespace CMSV2.Controllers
             Session["CustomerInvoiceSearch"] = obj;
             return RedirectToAction("Index");
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
-        //{
-
-        //    DatePicker model = new DatePicker
-        //    {
-        //        FromDate = picker.FromDate,
-        //        ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-        //        Delete = true, // (bool)Token.Permissions.Deletion,
-        //        Update = true, //(bool)Token.Permissions.Updation,
-        //        Create = true //.ToStrin//(bool)Token.Permissions.Creation
-        //    };
-        //    ViewBag.Token = model;
-        //    SessionDataModel.SetTableVariable(model);
-        //    return View(model);
-
-        //}
+        
         public ActionResult InvoiceSearch()
         {
 
@@ -185,76 +168,17 @@ namespace CMSV2.Controllers
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
-            ViewBag.Token = datePicker;
-            ViewBag.Movement = db.CourierMovements.ToList();
-            if (datePicker != null)
-            {
-                ViewBag.Customer = (from c in db.InScanMasters
-                                    join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
-                                    where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                                    select new CustmorVM { CustomerID = cust.CustomerID, CustomerName = cust.CustomerName }).Distinct();
-
-            }
-
+            
             CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
-            PickupRequestDAO _dao = new PickupRequestDAO();
-            DateTime saveNow = DateTime.Now;
-            DateTime myDt;
-            myDt = DateTime.SpecifyKind(saveNow, DateTimeKind.Unspecified);
-
-            _custinvoice.InvoiceDate = myDt;// DateTimeKind. DateTimeOffset.Now.UtcDateTime.AddHours(5.30); // DateTime.Now;            
+            PickupRequestDAO _dao = new PickupRequestDAO();                                    
+            _custinvoice.InvoiceDate = CommanFunctions.GetCurrentDateTime();//  myDt;// DateTimeKind. DateTimeOffset.Now.UtcDateTime.AddHours(5.30); // DateTime.Now;            
             _custinvoice.CustomerInvoiceNo = _dao.GetMaxInvoiceNo(companyid, branchid,yearid);
-            //_custinvoice.FromDate = datePicker.FromDate;
-            //_custinvoice.ToDate = datePicker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+            
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-
-            if (datePicker!=null)
-                { 
-                if (datePicker.CustomerId != null)
-                _custinvoice.CustomerID = Convert.ToInt32(datePicker.CustomerId);
-
-
-                if (datePicker.CustomerId != null)
-                {
-                    //_details = (from c in db.InScanMasters
-                    //                //            join l in datePicker.SelectedValues on c.MovementID
-                    //            where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                    //            && c.PaymentModeId == 3
-                    //            && c.CustomerID == datePicker.CustomerId
-                    //            select new CustomerInvoiceDetailVM { AWBNo = c.AWBNo,
-                    //                AWBDateTime=c.TransactionDate, ConsigneeName = c.Consignee, ConsigneeCountryName = c.ConsigneeCountryName,
-                    //                CourierCharge = c.CourierCharge,
-                    //                CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                    //                OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
-                    //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InScanID,
-                    //                MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                    //                AWBChecked = true
-                    //            }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                    _details = (from c in db.InScanMasters
-                                where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                                && (c.InvoiceID == null || c.InvoiceID == 0)
-                                && c.PaymentModeId == 3 //account
-                                && c.CourierCharge>0
-                                && c.IsDeleted==false
-                                && c.CustomerID == datePicker.CustomerId
-                                select new CustomerInvoiceDetailVM
-                                {
-                                    AWBNo = c.AWBNo,
-                                    AWBDateTime = c.TransactionDate,
-                                    ConsigneeName = c.Consignee,
-                                    ConsigneeCountryName = c.ConsigneeCountryName,
-                                    CourierCharge = c.CourierCharge,
-                                    CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                                    OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
-                                    //StatusPaymentMode = c.StatusPaymentMode,
-                                    InscanID = c.InScanID,
-                                    MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                                    AWBChecked = true
-                                }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                }
-                int _index = 0;
-                _custinvoice.InvoiceTotal = 0;
+            _custinvoice.FromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date;
+            _custinvoice.ToDate = CommanFunctions.GetCurrentDateTime().Date; // DateTime.Now.Date;
+            _custinvoice.MovementId = "1,2,3,4";
+            _custinvoice.InvoiceTotal = 0;
                 _custinvoice.ChargeableWT = 0;
                 _custinvoice.CustomerInvoiceTax = 0;
                 _custinvoice.OtherCharge = 0;
@@ -262,27 +186,10 @@ namespace CMSV2.Controllers
                 _custinvoice.AdminAmt = 0;
                 _custinvoice.FuelPer = 0;
                 _custinvoice.FuelAmt = 0;
-
-                
-                foreach (var item in _details)
-                {
-                    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                    _custinvoice.TotalCharges = _custinvoice.TotalCharges + _details[_index].TotalCharges;
-
-                    _index++;
-                }
-
+                _custinvoice.Discount = 0;                
+              
                 _custinvoice.InvoiceTotal = _custinvoice.TotalCharges;
-                //_custinvoice.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
-            }
 
-
-            ////CustomerInvoiceDetailVM _detail = new CustomerInvoiceDetailVM();
-            ////_detail.AWBNo = "1010";
-            ////_detail.CourierCharge = 100;
-            ////_detail.OtherCharge = 2020;
-            ////_details.Add(_detail);
-            ///
             _custinvoice.CustomerInvoiceDetailsVM = _details;
 
             Session["InvoiceListing"] = _details;
@@ -290,7 +197,14 @@ namespace CMSV2.Controllers
         }
 
 
-
+        [HttpPost]
+        public ActionResult ShowItemList(int CustomerId, string FromDate, string ToDate,string MovementId)
+        {
+            CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
+            _custinvoice.CustomerInvoiceDetailsVM = PickupRequestDAO.GetCustomerAWBforInvoice(CustomerId, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate),MovementId);
+            Session["InvoiceListing"] = _custinvoice.CustomerInvoiceDetailsVM;
+            return PartialView("InvoiceList", _custinvoice);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CustomerInvoiceVM model)
@@ -315,6 +229,7 @@ namespace CMSV2.Controllers
                 _custinvoice.FuelAmt = model.FuelAmt;
                 _custinvoice.OtherCharge = model.OtherCharge;
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
+                _custinvoice.Discount = model.Discount;
                 _custinvoice.AcFinancialYearID = yearid;                
                 _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
@@ -345,7 +260,8 @@ namespace CMSV2.Controllers
                             _detail.CourierCharge = e_details.CourierCharge;
                             _detail.CustomCharge = e_details.CustomCharge;
                             _detail.OtherCharge = e_details.OtherCharge;                            
-                            _detail.NetValue =  e_details.TotalCharges;
+                            _detail.NetValue =  e_details.NetValue;
+                            _detail.VATAmount = e_details.VATAmount;
                             db.CustomerInvoiceDetails.Add(_detail);
                             db.SaveChanges();
 
@@ -392,14 +308,15 @@ namespace CMSV2.Controllers
             _custinvoice.OtherCharge = _invoice.OtherCharge;
             _custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal= _invoice.InvoiceTotal;
-                       
+            _custinvoice.Discount = _invoice.Discount;
+            _custinvoice.ClearingCharge = _invoice.ClearingCharge;
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
             _details = (from c in db.CustomerInvoiceDetails
                         join ins in db.InScanMasters on  c.InscanID equals ins.InScanID
                         where c.CustomerInvoiceID == id
                         select new CustomerInvoiceDetailVM { CustomerInvoiceDetailID = c.CustomerInvoiceDetailID, CustomerInvoiceID = c.CustomerInvoiceID, AWBNo = c.AWBNo,AWBDateTime=ins.TransactionDate, CustomCharge=c.CustomCharge,
                             CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, ConsigneeCountryName=ins.ConsigneeCountryName,ConsigneeName=ins.Consignee,
-                            StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true }).ToList();
+                            StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true, VATAmount=c.VATAmount,NetValue=c.NetValue }).ToList();
 
             int _index = 0;
          
@@ -532,6 +449,7 @@ namespace CMSV2.Controllers
                             CourierCharge = c.CourierCharge,
                             CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
                             OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
+                            VATAmount =c.TaxAmount ==null ?0 :c.TaxAmount,
                             //StatusPaymentMode = c.StatusPaymentMode,
                             InscanID = c.InScanID,
                             MovementId = c.MovementID == null ? 0 : c.MovementID.Value,AWBChecked=true
@@ -825,8 +743,21 @@ namespace CMSV2.Controllers
 
 
                 PickupRequestDAO _dao = new PickupRequestDAO();
-                _dao.GenerateInvoiceAll(picker);
-                return Json(new {  status="ok", message="Invoice Generated Successfully!"}, JsonRequestBehavior.AllowGet);
+                if (picker.InvoiceType == "Customer")
+                {
+                    _dao.GenerateCustomerInvoiceAll(picker);
+                    return Json(new { status = "ok", message = "Customer Invoice Generated Successfully!" }, JsonRequestBehavior.AllowGet);
+                }
+                else if (picker.InvoiceType== "COLoader")
+                {
+                    _dao.GenerateCOInvoiceAll(picker);
+                    return Json(new { status = "ok", message = "CO Loader Generated Successfully!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "Failed", message = "Invoice Generation Failed"}, JsonRequestBehavior.AllowGet);
+                     
+                }
 
             }
             catch(Exception ex)
@@ -838,222 +769,6 @@ namespace CMSV2.Controllers
         }
 
         
-        //[HttpPost]
-        ////[ValidateAntiForgeryToken]
-        //public ActionResult AddOrRemoveAWBNo(CustomerInvoiceVM _CustomerInvoice, int? i)
-        //{
-        //    var PrevInvoiceListSession = Session["InvoiceListing"] as List<CustomerInvoiceDetailVM>;
-
-        //    if (i.HasValue) //delete mode
-        //    {
-        //        if (PrevInvoiceListSession == null)
-        //        {
-
-        //        }
-        //        else
-        //        {
-        //            if (_CustomerInvoice.CustomerInvoiceDetailsVM == null)
-        //            {
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM = new List<CustomerInvoiceDetailVM>();
-        //            }
-        //            int index = 0;
-        //            if (_CustomerInvoice.CustomerInvoiceDetailsVM.Count != PrevInvoiceListSession.Count)
-        //            {
-        //                foreach (var item in PrevInvoiceListSession)
-        //                {
-        //                    if (i == index)
-        //                    {
-        //                        int ii = Convert.ToInt32(i);
-        //                        _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                        if (_CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked == false)
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-        //                        else
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-
-        //                    }
-        //                    else
-        //                    {
-        //                        _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                    }
-        //                    index++;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                foreach (var item in PrevInvoiceListSession)
-        //                {
-        //                    if (i == index)
-        //                    {
-        //                        int ii = Convert.ToInt32(i);
-        //                        if (_CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked == false)
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-        //                        else
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-
-        //                        //_CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                    }
-        //                    index++;
-        //                }
-        //            }
-        //        }
-
-        //        //s_ImportShipment.Shipments.RemoveAt(i.Value);
-        //        Session["InvoiceListing"] = _CustomerInvoice.CustomerInvoiceDetailsVM;
-        //    }
-        //    else
-        //    {
-        //        if (_CustomerInvoice.CustomerInvoiceDetailsVM == null)
-        //        {
-        //            _CustomerInvoice.CustomerInvoiceDetailsVM = new List<CustomerInvoiceDetailVM>();
-        //        }
-        //        var shipmentsession = Session["EShipmentdetails"] as ExportShipmentDetail;
-        //        var Serialnumber = Convert.ToInt32(Session["EShipSerialNumber"]);
-        //        var isupdate = Convert.ToBoolean(Session["EIsUpdate"]);
-        //        if (PrevInvoiceListSession == null)
-        //        {
-
-        //        }
-        //        else
-        //        {
-        //            foreach (var item in PrevInvoiceListSession)
-        //            {
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //            }
-        //        }
-        //        if (isupdate == true)
-        //        {
-        //            if (_CustomerInvoice.CustomerInvoiceDetailsVM.Count == 0)
-        //            {
-        //                //_CustomerInvoice.CustomerInvoiceDetailsVM.Add(shipmentsession);
-        //            }
-        //            else
-        //            {
-        //                // s_ImportShipment.Shipments[Serialnumber] = shipmentsession;
-        //            }
-        //            //s_ImportShipment.Shipments.RemoveAt(Serialnumber);                  
-
-        //        }
-        //        else
-        //        {
-        //            // s_ImportShipment.Shipments.Add(shipmentsession);
-        //        }
-        //        //Session["EShipmentdetails"] = new ExportShipmentDetail();
-        //        //Session["EShipSerialNumber"] = "";
-        //        Session["InvoiceUpdate"] = false;
-        //        Session["InvoiceListing"] = _CustomerInvoice.CustomerInvoiceDetailsVM;
-        //    }
-        //    return PartialView("InvoiceList", _CustomerInvoice);
-        //}
-        //[HttpPost]
-        ////[ValidateAntiForgeryToken]
-        //public JsonResult AddOrRemoveAWBNo1(CustomerInvoiceVM _CustomerInvoice, int? i)
-        //{
-        //    var PrevInvoiceListSession = Session["InvoiceListing"] as List<CustomerInvoiceDetailVM>;
-
-        //    if (i.HasValue) //delete mode
-        //    {
-        //        if (PrevInvoiceListSession == null)
-        //        {
-
-        //        }
-        //        else
-        //        {
-        //            if (_CustomerInvoice.CustomerInvoiceDetailsVM == null)
-        //            {
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM = new List<CustomerInvoiceDetailVM>();
-        //            }
-        //            int index = 0;
-        //            if (_CustomerInvoice.CustomerInvoiceDetailsVM.Count != PrevInvoiceListSession.Count)
-        //            {
-        //                foreach (var item in PrevInvoiceListSession)
-        //                {
-        //                    if (i == index)
-        //                    {
-        //                        int ii = Convert.ToInt32(i);
-        //                        _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                        if (_CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked == false)
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-        //                        else
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = false;
-
-        //                    }
-        //                    else
-        //                    {
-        //                        _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                    }
-        //                    index++;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                foreach (var item in PrevInvoiceListSession)
-        //                {
-        //                    if (i == index)
-        //                    {
-        //                        int ii = Convert.ToInt32(i);
-        //                        if (_CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked == false)
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-        //                        else
-        //                            _CustomerInvoice.CustomerInvoiceDetailsVM[ii].AWBChecked = true;
-
-        //                        //_CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                    }
-        //                    index++;
-        //                }
-        //            }
-        //        }
-
-        //        //s_ImportShipment.Shipments.RemoveAt(i.Value);
-        //        Session["InvoiceListing"] = _CustomerInvoice.CustomerInvoiceDetailsVM;
-        //    }
-
-        //    return Json(new { data = "ok" }, JsonRequestBehavior.AllowGet);
-        //}
-
-        //public JsonResult AddOrRemoveAWBAll(CustomerInvoiceVM _CustomerInvoice, int i)
-        //{
-        //    var PrevInvoiceListSession = Session["InvoiceListing"] as List<CustomerInvoiceDetailVM>;
-
-        //    bool status = false;
-        //    if (i == 1)
-        //        status = true;
-
-        //    if (PrevInvoiceListSession == null)
-        //    {
-
-        //    }
-        //    else
-        //    {
-        //        if (_CustomerInvoice.CustomerInvoiceDetailsVM == null)
-        //        {
-        //            _CustomerInvoice.CustomerInvoiceDetailsVM = new List<CustomerInvoiceDetailVM>();
-        //        }
-        //        int index = 0;
-        //        if (_CustomerInvoice.CustomerInvoiceDetailsVM.Count != PrevInvoiceListSession.Count)
-        //        {
-        //            foreach (var item in PrevInvoiceListSession)
-        //            {
-
-
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM.Add(item);
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM[index].AWBChecked = status;
-        //                index++;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            foreach (var item in PrevInvoiceListSession)
-        //            {
-
-        //                _CustomerInvoice.CustomerInvoiceDetailsVM[index].AWBChecked = true;
-        //                index++;
-        //            }
-        //        }
-        //    }
-
-        //    //s_ImportShipment.Shipments.RemoveAt(i.Value);
-        //    Session["InvoiceListing"] = _CustomerInvoice.CustomerInvoiceDetailsVM;
-        //    return Json(new { data = "ok" }, JsonRequestBehavior.AllowGet);
-        //}
+       
     }
 }

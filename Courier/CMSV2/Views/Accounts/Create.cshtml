@@ -19,12 +19,12 @@
         display: block;
         width: 100%;
     }
-   /* #details{
+   /*#details{
 	table-layout:fixed;
-    }
+    }*/
  #details input{
         width:100%;
-    }*/
+    }
 </style>
 <style>
     .form-control, input {
@@ -558,7 +558,7 @@
                 var str = "";
                 var totalamt = 0;
 
-                var i = $('#details > tbody > tr').length - 1;
+                var i = $('#details > tbody > tr').length; // - 1;
 
                 var s = 'name="AcExpAllocationVM';
                 var ExpTableHtml = $('#ExpAllocationTable').clone().attr("id", i + "_ExpAllocationTable").css('display', 'none').addClass('CostAllocationDetail').wrap('<p>').parent().html();
@@ -831,7 +831,7 @@
 
         $("#btnsave").click(function () {
 
-            var tlen = $('#details > tbody > tr').length - 1;
+            var tlen = $('#details > tbody > tr').length;
                 if ($("#transdate").val() == "") {
                     alert("Please Select Transaction Date");
                     return false;
@@ -882,8 +882,8 @@
                             data: { AcJournalDetailID: value.AcJournalDetID },
                             success: function (data) {
                                 ExpenseAllocationData = data;
-                                var incountval = 0;
-                                var i = $('#details tr').length - innerTblcount;
+                                var incountval = 0;                                
+                                var i = $('#details > tbody > tr').length;// - innerTblcount;                                
                                 var s = 'name="AcExpAllocationVM';
                                 var ExpTableHtml = '<table id="' + value.AcJournalDetID + '_ExpAllocationTable" class="table table-bordered table-responsive CostAllocationDetail" style="display:none;"><tr><td>Analysis Head</td><td>Amount</td><td>Delete</td></tr>';
                                 $.each(data, function (i, v) {

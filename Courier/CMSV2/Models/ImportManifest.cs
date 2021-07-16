@@ -15,6 +15,7 @@ namespace CMSV2.Models
         public List<ImportManifestItem> Details { get; set; }
 
         public List<TranshipmentModel> TransDetails { get; set; }
+        public List<TranshipmentCountry> TransCountryDetails { get; set; }
     }
     public class ImportManifestSearch
     {

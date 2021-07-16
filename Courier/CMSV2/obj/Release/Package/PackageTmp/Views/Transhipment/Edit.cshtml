@@ -7,7 +7,7 @@
 }
 <style>
 
-  
+
     .reve_rates > input {
         font-size: 12px !important;
     }
@@ -20,14 +20,12 @@
         font-size: 12px !important;
     }
 
-    
+
 
     .reve_rates3 > textarea {
         min-height: 4rem !important;
         font-size: 12px !important;
     }
-
-    
 </style>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
@@ -70,12 +68,12 @@
             },
             select: function (event, ui) {
                 $('#OriginAirportCity').val(ui.item.label);
-             
+
                 return false;
             },
             focus: function (event, ui) {
                 $('#OriginAirportCity').val(ui.item.label);
-               
+
                 return false;
             }
         });
@@ -111,22 +109,65 @@
                 noResults: "", results: ""
             },
             select: function (event, ui) {
-                $('#DestinationAirportCity').val(ui.item.label);                
+                $('#DestinationAirportCity').val(ui.item.label);
                 return false;
             },
             focus: function (event, ui) {
-                $('#DestinationAirportCity').val(ui.item.label);                
+                $('#DestinationAirportCity').val(ui.item.label);
                 return false;
             }
         });
- 
+
 
     })
 </script>
 <script type="text/javascript">
     var objitems = [];
 
+    function ShowTranshipmentCountry(sno) {
+        var countryname = $('#hdncountryId_' + sno).val();
+        $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ShowEditItemList1", "Transhipment")',
+                        data: { ShipmentId: $('#ID').val(),CountryName:countryname},
+                        datatype: "html",
+            success: function (data) {
+                debugger;
+                            $("#listContainer").html(data);
+                            var max = $('#listbody > tr').length;
+                            $('#loaderpopup').modal('hide')
+                            $('#btnUpload').removeAttr('disabled');
+                            $('#TotalAWB').val(max);
+                        },
+                        error: function (err) {
+                            $('#loaderpopup').modal('hide')
+                            console.log(err);
+                        }
+                    });
+    }
+    function RateFixation(sno) {
+        var countryname = $('#hdncountryId_' + sno).val();
+        $('#loaderpopup').modal('show');
+        var selectall = ($("#Selectall").is(':checked'));
+        var maxrow = $('#listbody > tr').length;
+        $('#btnUpdateRate').attr('disabled', 'disabled');
+        var obj = [];
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/Transhipment/EditRateFixation",
+            datatype: "Json",
+            //data: { AllItem: selectall, Details: JSON.stringify(obj) },
+            data: { ShipmentId: $('#ID').val(), CountryName: countryname },
+            success: function (data) {
+                $("#listContainer1").html(data);
+                $("#listContainer").html('');
+                $('#loaderpopup').modal('hide');
 
+            }
+
+        });
+    }
     function UpdateImported() {
         $.ajax({
             type: "POST",
@@ -205,11 +246,12 @@
         //UpdateDataFixation
          $.ajax({
                 type: 'POST',
-                url: '@Url.Action("UpdateDataFixation", "Transhipment")',
+                url: '@Url.Action("EditUpdateDataFixation", "Transhipment")',
              datatype: "html",
-             data: { TargetColumn: Field, SourceValue: SourceValue, TargetValue: TargetValue },
+             data: { ShipmentId: $('#ID').val(), AgentID: $('#AgentID').val(), TargetColumn: Field, SourceValue: SourceValue, TargetValue: TargetValue },
             success: function (data) {
-                $("#listContainer").html(data);
+                $("#listContainer1").html(data);
+                $("#listContainer").html('');
                 $('#SourceValue').val('');
                 $('#TargetValue').val('');
                 $('#DestinationCity').val('');
@@ -220,60 +262,7 @@
               }
             });
 
-        //$("#listContainer").html('');
-        ////$('#imgloader').removeClass('hide');
-        //$('#loaderpopup').modal('show')
-        //var newobjitems = [];
-        //$.each(objitems, function (index, item) {
-        //    var i = index;
-        //    debugger;
-        //    if (Field == 'DestinationLocation') {
-        //        if (SourceValue == item.DestinationLocation) {
-        //            item.DestinationLocation = DestinationLocation;
-        //            item.DestinationCountry = DestinationCountry;
-        //            item.DestinationCity = DestinationCity;
-        //        }
-        //    }
-        //    else if (Field == 'DestinationCountry') {
-        //        if (SourceValue == item.DestinationCountry) {
-        //            item.DestinationCountry = DestinationCountry;
-        //        }
-        //    }
-        //    else if (Field == 'DestinationCity') {
-        //            if (SourceValue == item.DestinationCity) {
-        //                item.DestinationCity = DestinationCity;
-        //            }
-        //    }
-        //    else {
 
-        //    }
-        //    var CompanyCountryName = $('#CompanyCountryName').val().toLowerCase();
-        //    if (item.DestinationCountry.toLowerCase().indexOf(CompanyCountryName) >= 0)
-        //        item.ImportType = 'Import';
-        //    else
-        //        item.ImportType = 'Transit';
-        //    //if (item.DestinationCity.indexOf("DUBAI") >= 0)
-        //    //    item.ImportType = 'Import';
-        //    //else
-        //    //    item.ImportType = 'Transit';
-
-        //    //if (item.DestinationLocation.indexOf("DUBAI") >= 0)
-        //    //    item.ImportType = 'Import';
-        //    //else
-        //    //    item.ImportType = 'Transit';
-
-        //    newobjitems.push(item);
-        //    if (objitems.length == (i + 1)) {
-        //        debugger;
-        //        objitems = [];
-        //        objitems = newobjitems;
-        //        additem();
-        //        UpdateImported();
-        //        $('#imgloader').addClass('hide');
-        //        $('#loaderpopup').modal('hide')
-        //        $('#fixationpopup').modal('hide');
-        //    }
-        //});
     }
     function additem() {
         $.each(objitems, function (index, item) {
@@ -484,56 +473,27 @@
         })
 
         $('#btnUpdateRate').click(function () {
+            var countryname = '';
             $('#loaderpopup').modal('show');
             var selectall = ($("#Selectall").is(':checked'));
-            var maxrow = $('#listbody > tr').length;          
+            var maxrow = $('#listbody > tr').length;
             $('#btnUpdateRate').attr('disabled', 'disabled');
             var obj = [];
             debugger;
-           
-                for (i = 0; i < maxrow; i++) {
-                    //var deleted = $('#hdndeleted_' + i).val();
-                    var index = i + 1;
-                    var checked = $('#hdnawbchecked_' + index).prop('checked');
-
-                    var item = {
-                        AWBNo: $('#hdnawbchecked_' + index).attr('awb'), //$('#hdnAWbNo_' + i).val(),
-                        AWBChecked: checked
-                    }
-                    obj.push(item);
-
-                    if (maxrow == (i + 1)) {
-                        if (obj.length == 0) {
-                            $.notify('Select AWB to process for Rate!');
-                            return;
-                        }
-                        $.ajax({
+            $.ajax({
                         type: "POST",
-                        url: "/Transhipment/CheckEditDataValidation",
+                url: "/Transhipment/EditRateFixation",
                         datatype: "Json",
-                             data: { AllItem: selectall, Details: JSON.stringify(obj)},
-                            success: function (response) {
-                            var status = response.status;
-                                 $.ajax({
-                                type: 'POST',
-                                url: '@Url.Action("ShowEditItemList", "Transhipment")',
-                                datatype: "html",
-                                success: function (data) {
-                                    $("#listContainer").html(data);
-                                    $('#loaderpopup').modal('hide')
-                                },
-                                error: function (err) {
-                                    $('#loaderpopup').modal('hide')
-                                    console.log(err);
-                                }
-                        });
-                    }
-                    });
-                    }
+                //data: { AllItem: selectall, Details: JSON.stringify(obj) },
+                data: { ShipmentId: $('#ID').val(), CountryName: countryname },
+                 success: function (data) {
+                     $("#listContainer1").html(data);
+                     $("#listContainer").html('');
+                     $('#loaderpopup').modal('hide');
+                     $('#btnUpdateRate').removeAttr('disabled', 'disabled');
                 }
-         
 
-
+            });
 
         });
         $('#btnSave').click(function () {
@@ -658,7 +618,7 @@
     <div class="row">
         <div class="col-md-5 pull-left">
             <h1 class="headingfont">Transhipment Upload</h1>
-        </div>        
+        </div>
         <hr />
     </div>
     <section class="content">
@@ -667,79 +627,79 @@
             @Html.AntiForgeryToken()
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-          
-        <div class="row">
-            <div class="col-md-2">
-                @Html.HiddenFor(mode => Model.ID)
-                @Html.HiddenFor(mode => Model.CompanyCountryName)
-                @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
 
-                @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
-
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
-
-                @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
-
-            </div>
-
-            <div class="col-md-2">
-                <label class="headinglabel required">Agent</label>
-                @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
-
-                @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
-                @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
-
-            </div>
-
-            @*<div class="col-md-1" style="padding-top:30px">
-                <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
-                <input type="button" id="btnfile" style="display:none" />
-
-                <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpload" title="Upload Excel" href="Javascript:void(0)"><i class=" fa fa-file-o"></i></a>
-            </div>*@
-            <div class="col-md-1" style="padding-top:30px">
-                <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fix" title="Data Fixation" />
-            </div>
-            <div class="col-md-1" style="padding-top:30px">
-                <a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>
-                @*<input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />*@
-            </div>
-            <div class="col-md-1" style="padding-top:30px">
-                <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpdateRate" title="Rate Update" href="Javascript:void(0)"><i class=" fa fa-money"></i></a>
-                @*<input class="btn btn-primary" id="btnUpdateRate" type="button" value="Update Rate" />*@
-            </div>
-            @*<div class="col-md-5 text-right">
-
-
-
-            </div>*@
-        </div>
             <div class="row">
                 <div class="col-md-2">
-                    
-                    <label class="headinglabel" >Airport City</label>
-                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @type="text",@autocomplete="off" })
+                    @Html.HiddenFor(mode => Model.ID)
+                    @Html.HiddenFor(mode => Model.CompanyCountryName)
+                    @Html.LabelFor(model => model.ManifestNumber, "Manifest Number", htmlAttributes: new { @class = "headinglabel " })
+
+                    @Html.TextBoxFor(model => model.ManifestNumber, new { @class = "form-control", @disabled = "true", @style = "text-decoration:none", @width = "100%" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ManifestDate, "Manifest Date", htmlAttributes: new { @class = "headinglabel" })
+
+                    @Html.TextBoxFor(model => model.ManifestDate, new { @class = "form-control", @required = "true" })
+
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Agent</label>
+                    @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MAWB, htmlAttributes: new { @class = "headinglabel required" })
+
+                    @Html.TextBoxFor(model => model.MAWB, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.MAWB, "", new { @class = "text-danger" })
+
+                </div>
+
+                @*<div class="col-md-1" style="padding-top:30px">
+                        <input class="form-control" type="file" style="display:none" name="importFile" id="importFile" />
+                        <input type="button" id="btnfile" style="display:none" />
+
+                        <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpload" title="Upload Excel" href="Javascript:void(0)"><i class=" fa fa-file-o"></i></a>
+                    </div>*@
+                <div class="col-md-1" style="padding-top:30px">
+                    <input class="btn btn-primary" id="btnFixation" type="button" value="Data Fix" title="Data Fixation" />
+                </div>
+                <div class="col-md-1 hide" style="padding-top:30px">
+                    <a class="btn btn-primary small_btn btn-2 mt-0" onclick="CallAutoFixation()" title="Auto Fixation" href="Javascript:void(0)"><i class=" fa fa-th"></i></a>
+                    @*<input class="btn btn-primary" type="button" value="Auto Fixation" onclick="CallAutoFixation()" />*@
+                </div>
+                <div class="col-md-1" style="padding-top:30px">
+                    <a class="btn btn-primary small_btn btn-2 mt-0" id="btnUpdateRate" title="Rate Update" href="Javascript:void(0)"><i class=" fa fa-money"></i></a>
+                    @*<input class="btn btn-primary" id="btnUpdateRate" type="button" value="Update Rate" />*@
+                </div>
+                @*<div class="col-md-5 text-right">
+
+
+
+                    </div>*@
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+
+                    <label class="headinglabel">Airport City</label>
+                    @Html.TextBoxFor(model => model.OriginAirportCity, new { @class = "form-control", @type = "text", @autocomplete = "off" })
                     @*@Html.ValidationMessageFor(model => model.OriginAirportCity, "", new { @class = "text-danger" })*@
 
                 </div>
                 <div class="col-md-2">
-                    @Html.LabelFor(model => model.DestinationAirportCity, "Destination Airport City", htmlAttributes: new { @class = "headinglabel"})
+                    @Html.LabelFor(model => model.DestinationAirportCity, "Destination Airport City", htmlAttributes: new { @class = "headinglabel" })
 
-                    @Html.TextBoxFor(model => model.DestinationAirportCity, new { @class = "form-control",   @autocomplete = "off", @type = "search" })
+                    @Html.TextBoxFor(model => model.DestinationAirportCity, new { @class = "form-control", @autocomplete = "off", @type = "search" })
 
                     @Html.ValidationMessageFor(model => model.DestinationAirportCity, "", new { @class = "text-danger" })
 
                 </div>
 
                 <div class="col-md-1">
-                    
+
                     <label class="headinglabel">Flight No</label>
-                    @Html.TextBoxFor(model => model.FlightNo, new { @class = "form-control", @autocomplete="off" })
+                    @Html.TextBoxFor(model => model.FlightNo, new { @class = "form-control", @autocomplete = "off" })
 
                     @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
@@ -756,15 +716,15 @@
                     @Html.TextBoxFor(model => model.Route, new { @class = "form-control", @autocomplete = "off" })
                 </div>
                 @*<div class="col-md-2">
-                    <label class="headinglabel required">Type</label>
-                    @Html.DropDownListFor(model => model.Type, (IEnumerable<SelectListItem>)ViewBag.Type, Model.Type, htmlAttributes: new { @class = "form-control", @required = "true", @selected = @Model.Type })
-                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                        <label class="headinglabel required">Type</label>
+                        @Html.DropDownListFor(model => model.Type, (IEnumerable<SelectListItem>)ViewBag.Type, Model.Type, htmlAttributes: new { @class = "form-control", @required = "true", @selected = @Model.Type })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
-                </div>*@
+                    </div>*@
 
-           
-        
-              
+
+
+
                 <div class="col-md-1">
                     <label class="headinglabel">Parcel No.</label>
                     @Html.TextBoxFor(model => model.ParcelNo, new { @class = "form-control text-right", @required = "true" })
@@ -774,13 +734,13 @@
                 <div class="col-md-1">
                     <label class="headinglabel">Bag</label>
 
-                    @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right"})
+                    @Html.TextBoxFor(model => model.Bags, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.Bags, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-1">
                     <label class="headinglabel">Weight</label>
-                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right"   })
+                    @Html.TextBoxFor(model => model.Weight, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
 
                 </div>
@@ -791,20 +751,23 @@
                     @Html.TextBoxFor(model => model.TotalAWB, new { @class = "form-control text-right", @min = 1, @required = "true" })
                     @Html.ValidationMessageFor(model => model.TotalAWB, "", new { @class = "text-danger" })
                 </div>
-               
-                <div class="col-md-12 btn-right " style="padding-top:10px!important;
-                padding-bottom:30px;">
+
+                <div class="col-md-12 btn-right " style="padding-top:10px!important;padding-bottom:30px;">
                     <input type="button" value="Save" id="btnSave" class="btn btn-primary waves-effect waves-light" />
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth" })
                 </div>
 
-          </div>
-            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll" id="listContainer">
-                @{Html.RenderPartial("EditItemList", Model);}
             </div>
-            <hr />
-           
-            
+            <div class="row" >
+                <div class="col-md-4" id="listContainer1" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll">
+                    @{Html.RenderPartial("EditCountryList", Model);}
+                </div>
+                <div class="col-md-8" id="listContainer" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll">
+                    @{Html.RenderPartial("EditItemList", Model);}
+                </div>
+            </div>
+
+
         }
     </section>
 
@@ -830,7 +793,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="padding-top: 5px">
-                <span id="spanmsg" style="color:red" ></span>
+                <span id="spanmsg" style="color:red"></span>
                 <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
@@ -849,16 +812,16 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12" style="text-align:center" >
-                         <h2>Processing...</h2>
+                    <div class="col-md-12" style="text-align:center">
+                        <h2>Processing...</h2>
                         <img src="~/Content/img/loading-gif-free-download-6.gif" id="imgloader" class="" style="padding-left:15px;height:60px;width:60px;" />
                     </div>
                 </div>
             </div>
             @*<div class="modal-footer" style="padding-top: 5px">
-                <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>*@
+                    <button type="button" class="btn btn-primary" onclick="savefixation()">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>*@
         </div>
     </div>
 </div>

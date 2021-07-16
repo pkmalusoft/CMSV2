@@ -51,7 +51,7 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({ "aaSorting": [], "sPaginationType": "full_numbers" });
 
         table.columns().every(function () {
             var that = this;
@@ -89,7 +89,7 @@
         </div>
 
         <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
-            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "QuickAWB")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            <a class="btn btn-success btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "DRSReconc")?FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
         </div>
         <div class="col-md-4" style="padding-top:32px;">
             <div class="d-flex side_btn">                
@@ -104,7 +104,7 @@
 
                     }                               
            
-                @Html.ActionLink("Verify Batch", "CreateBulk", null, new { @class = "btn btn-primary btnwidth" })
+                @Html.ActionLink("Verify Batch", "CreateBulk", null, new { @class = "btn btn-primary btn-verify btnwidth" })
             </div>
             </div>
             
@@ -174,7 +174,7 @@
                         @Html.DisplayFor(modelItem => item.DRSReceiptNo)
                     </td>
                     <td>
-                        @CMSV2.Models.CommanFunctions.GetShortDateFormat(@item.ReceiptDate)
+                        @item.DRSReceiptDate
                     </td>                    
                     <td>
                         @Html.DisplayFor(modelItem => item.DRSNo)

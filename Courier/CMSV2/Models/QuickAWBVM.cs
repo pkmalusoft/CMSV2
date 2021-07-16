@@ -141,11 +141,11 @@ namespace CMSV2.Models
         public int CourierMode { get; set; }
 
         public int ProductType { get; set; }
-
+        public string ProductName { get; set; }
         public int? MovementTypeID { get; set; }
-
+        public string MovementType { get; set; }
         public int ParcelTypeID { get; set; }
-
+        public string ParcelType { get; set; }
         public int ProductTypeID { get; set; }
 
         public int CustomerRateTypeID { get; set; }

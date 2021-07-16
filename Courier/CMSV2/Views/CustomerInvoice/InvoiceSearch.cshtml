@@ -29,10 +29,10 @@
            //$.ajax({
            // type: "GET",
            // url: "/PickUpRequest/GetCustomerName",
-           // datatype: "Json",            
+           // datatype: "Json",
            // success: function (response) {
-           //     debugger;                
-           //     customernames = response.data;                
+           //     debugger;
+           //     customernames = response.data;
            //     $("#CustomerName").autocomplete({
            //         source: customernames
            //     });
@@ -48,7 +48,7 @@
                         term: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (val, item) {                            
+                        response($.map(data, function (val, item) {
                             return {
                                 label: val.CustomerName,
                                 value: val.CustomerName,
@@ -59,7 +59,7 @@
                     }
                 })
             },
-            minLength: 1,              
+            minLength: 1,
               autoFocus: false,
               focus: function (event, ui) {
                   $("#CustomerName").val(ui.item.value);
@@ -67,13 +67,39 @@
             select: function (e, i) {
                 e.preventDefault();
                 $("#CustomerName").val(i.item.label);
-                $('#CustomerId').val(i.item.CustomerId);                
+                $('#CustomerId').val(i.item.CustomerId);
             },
 
         });
 
 
+         $('#btnsearch').click(function () {
 
+            if ($('#CustomerId').val() == 0 || $('#CustomerId').val() == '' ||$('#CustomerId').val() == null) {
+                $('#CustomerName').focus();
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ShowItemList", "CustomerInvoice")',
+                datatype: "html",
+                data: {
+                    CustomerId: $('#CustomerId').val(), FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val(), MAWB: $('#MAWB').val()
+                },
+                success: function (data) {
+                    debugger;
+                    $("#listContainer").html(data);
+                    var max = $('#listbody > tr').length;
+                    var html = $('#listbody > tr >td:first').html();
+                    $('#TotalAWB').val(max);
+                    if (html == 'No data available in table') {
+                        $.notify("No Import Items are available!", "error");
+                    }
+                }
+            });
+
+    });
 
         //  $('#CustomerName').change(function () {
         //    debugger;
@@ -91,13 +117,13 @@
         //           }
         //           else {
         //               $('#CustomerId').val(response.data);
-             
+
         //           }
         //       }
-                                    
+
         //   });
-                  
-                                                  
+
+
         //});
 
               $.ajax({
@@ -105,14 +131,14 @@
                 url: "/CustomerInvoice/GetCourierType",
                 datatype: "Json",
                   success: function (response) {
-                      
+
                       var data = response.data;
                     $('#movementid').empty();
 
                     $.each(data, function (index, value) {
-                        
+
                         var o_st = $("#MovementId").val().split(",");
-                        
+
                         var flag = 0;
                         for (var j = 0 ; j < o_st.length; j++) {
                             debugger;
@@ -144,12 +170,12 @@
                         selectAllValue: 'multiselect-all'
                       });
 
-                     
+
                 }
               });
 
         $('#btnsearch').click(function () {
-            
+
             if ($('#CustomerId').val() == 0 || $('#CustomerId').val() == '' ||$('#CustomerId').val() == null) {
                 $('#CustomerName').focus();
                 return false;
@@ -160,7 +186,7 @@
                 return false;
             }
         })
-       
+
     });
 
 
@@ -205,7 +231,7 @@
         </select>
     </div>
     <div class="col-md-1">
-        <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
     </div>
 </div>
    

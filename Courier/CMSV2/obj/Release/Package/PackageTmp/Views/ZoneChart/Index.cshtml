@@ -9,6 +9,9 @@
      tfoot {
             display: table-header-group;
      }
+     .tblfont td{
+         word-break: break-all;
+     }
         </style>
 
 
@@ -69,19 +72,19 @@
     <thead>
     <tr>
       
-        <th>
+        <th style="width:3%">
            @Html.Label("Zone Category")
         </th>
-        <th>
+        <th style="width:3%">
             @Html.Label("Zone Name")
         </th>
-        <th>
+        <th style="width:50%" >
             @Html.Label("Countries")
         </th>
         @*<th>
             @Html.Label("Cities")
         </th>*@
-        <th>Action</th>
+        <th style="width:3%" >Action</th>
     </tr>
         </thead>
     <tfoot>
@@ -92,7 +95,7 @@
             <th>
                 @Html.Label("Zone Name")
             </th>
-            <th>
+            <th >
                 @Html.Label("Countries")
             </th>
             @*<th>
@@ -111,7 +114,7 @@
     <td>
         @Html.DisplayFor(modelItem => item.ZoneName)
     </td>
-    <td>
+    <td >
         @Html.DisplayFor(modelItem => item.Countries)
     </td>
     @*<td>

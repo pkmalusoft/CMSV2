@@ -422,8 +422,10 @@
                         var inscanid = data[i].InscanId;
                         var ShipmentDetailId = data[i].ShipmentDetailID;
                         var TransType = 'AWB';
-                        if (inscanid == 0 && ShipmentDetailId > 0)
+                        if (inscanid == 0 && ShipmentDetailId > 0) {
                             TransType = 'Import-AWB';
+                            inscanid = ShipmentDetailId;
+                        }
                         var Reference = TransType  + data[i].AWBNo;
                         var COD = data[i].CourierCharge + data[i].OtherCharge;
                         var Discount = 0;
@@ -761,170 +763,128 @@
         @*@Html.HiddenFor(model => model.StatusEntry)*@
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.ReconciledAmount)
-    <div class="row  drsReceipt" style="padding-bottom: 24px;"> 
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel required">Delivered By</label>
-            @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel required">DRS Receipt No.</label>
-            @Html.TextBoxFor(model => model.DRSReceiptNo, new { @class = "form-control" })
+        <div class="row  drsReceipt" style="padding-bottom:5px;">
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">Delivered By</label>
+                @Html.DropDownListFor(model => model.DeliveredBy, new SelectList(ViewBag.Deliverdby, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">DRS Receipt No.</label>
+                @Html.TextBoxFor(model => model.DRSReceiptNo, new { @class = "form-control" })
+
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel">Receipt Date</label>
+                @Html.TextBoxFor(model => model.ReceiptDate, new { @class = "form-control text-right", @required = true, @readonly = "readonly" })
+            </div>
+            <div class="col-xs-2 col-sm-1">
+                <label class="headinglabel">Rec. Amount</label>
+                @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control text-right", @readonly = "readonly" })
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">DRS No.</label>
+                @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control", @readonly = "readonly" })
+                @Html.HiddenFor(mode => Model.DRSID)
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">DRS Date</label>
+                @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control", @readonly = "readonly" })
+                <input type="hidden" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
+            </div>
+            <div class="col-md-1 text-right">
+                <button class="btn btn-success" type="button" id="btnsearch" style="margin-top:33px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
+            </div>                    
 
         </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Receipt Date</label>
-            @Html.TextBoxFor(model => model.ReceiptDate, new { @class = "form-control text-right", @required = true, @readonly = "readonly" })
+        <div class="row drsReceipt" style="padding-bottom:5px;">
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">Total COD</label>
+                <input type="text" class="text-right" readonly id="txtTotalCOD" value="0" />
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">Total Material Cost</label>
+                <input type="text" class=" text-right" readonly id="txtTotalMC" value="0" />
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">Total</label>
+                <input type="text" class="form-control text-right" readonly id="txtTotal" value="0" />
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class="headinglabel required">SHORTAGE</label>
+                <input type="text" class="form-control text-right" id="txtShortage" value="0" />
+            </div>
+            <div class="col-md-4 btn-right" style="padding-top: 30px">
+                <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnSave" name="Command" />
+                <a href='@Url.Action("Index", "DRSReconc", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+            </div>
         </div>
-        <div class="col-xs-2 col-sm-1">
-            <label class="headinglabel">Rec. Amount</label>
-            @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control text-right", @readonly = "readonly" })
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class=" required headinglabel">DRS No.</label>
-            @Html.TextBoxFor(model => model.DRSNo, new { @class = "form-control", @readonly = "readonly" })
-            @Html.HiddenFor(mode => Model.DRSID)
-        </div>
-        <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel required">DRS Date</label>
-            @Html.TextBoxFor(model => model.DRSDate, new { @class = "form-control", @readonly = "readonly" })
-            <input type="hidden" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
-        </div>
-        <div class="col-md-1 text-right">
-            <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:33px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
-        </div>
+            }
 
-         <div class="col-md-11 btn-right" style="padding-top: 10px">
-                    <input type="submit" class="btn btn-primary  btnwidth" value="Save" id="btnSave" name="Command" />
-                    <a href='@Url.Action("Index", "DRSReconc", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
-                </div>
-       
-    </div>
-    }
-
-               
-    <div class="row">
-        <div class="col-lg-12">
-            <table border="1" class="table table-bordered ">
-                <tfoot>
-                   
-                    <tr style="font-weight: bold">
-                        <td colspan="5">Total</td>
-                        <td colspan="1"></td>
-                        <td><input type="text" class="text-right" readonly id="txtTotalCOD" value="0" /></td>
-                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
-                        <td><input type="text" class=" text-right" readonly id="txtTotalMC" value="0" /></td>
-                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalReceipt" value="0" /></td>
-        <td><input type="text" class="form-control text-right" readonly id="txtTotalPKP" value="0" /></td>
-        <td><input type="text" class="form-control text-right" readonly id="txtTotalExp" value="0" /></td>*@
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
-
-                        <td colspan="1" class="text-right">
-                            <label id="lbshortage">SHORTAGE</label>
-                        </td>
-                        <td colspan="1">
-                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
-                        </td>
-                    </tr>
-                </tfoot>
-                @*<tr>
-            <td></td>
-            <td></td>
-            <td colspan="1" class="text-right">
-                DRS Receipt
-            </td>
-            <td colspan="1">
-                <input type="text" class="form-control text-right" id="txtDRSReceipt" value="@Model.ReceivedAmount" />
-            </td>
-        </tr>*@
-
-                @*<tr>
-            <td colspan="6" class="text-right">
-                TOTAL
-            </td>
-            <td colspan="2">
-
-            </td>
-        </tr>*@
-            </table>
-        </div>
-    </div>
-    <div class="row no-margin">   
-        <div class="col-lg-12">
-            <table border="1" class="table table-bordered table-responsive">
-                <tfoot>
-
-                    <tr style="font-weight: bold">
-                        <td colspan="2">Total</td>                        
-                        <td><input type="text" class="text-right" readonly id="txtTotalCOD" value="0" /></td>
-                        @*<td><input type="text" class="form-control text-right" readonly id="txtTotalDiscount" value="0" /></td>*@
-                        <td><input type="text" class=" text-right" readonly id="txtTotalMC" value="0" /></td>
-                        <td><input type="text" class="form-control text-right" readonly id="txtTotal" value="0" /></td>
-                        <td colspan="1" class="text-right">
-                            <label id="lbshortage">SHORTAGE</label>
-                            <input type="text" class="form-control text-right" id="txtShortage" value="0" />
-                        </td>                        
-                    </tr>
-                </tfoot>
-                <thead>
-                    <tr style="font-weight: bold">
-                        <th></th>
-                        <th>AWB No.</th>
-                        <th>COD</th>
-                        <th>Material Cost</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="tblTrans">
-                    @if (@Model.DRRID > 0)
-                    {
-                        var i = 0;
-                        foreach (var item in Model.Details)
-                        {
-                            <tr>
-                                <td>
-                                    <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
-                                </td>
-                                <td>
-                                    <input type="hidden" id="hdntype_@i" value="@item.Type" />
-                                    <input type="hidden" value="false" class="hdndeleted" id="hdndeleted_@i" />
-                                    <input type="hidden" id="hdnrefId_@i" value="@item.ReferenceId" />
-                                    <input type="hidden" id="hdnref_@i" value="@item.Reference" />
-                                    <input type="hidden" id="hdncod_@i" value="@item.COD" />
-                                    <input type="hidden" id="hdndiscount_@i" value="@item.Discount" />
-                                    <input type="hidden" id="hdnmc_@i" value="@item.MCReceived" />
-                                    <input type="hidden" id="hdnreceipt_@i" value="@item.Receipt" />
-                                    <input type="hidden" id="hdnpkp_@i" value="@item.PKPCash" />
-                                    <input type="hidden" id="hdnexp_@i" value="@item.Expense" />
-                                    <input type="hidden" id="hdntotal_@i" value="@item.Total" />
-                                    @item.Reference
-                                </td>
-                                <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
-                                </td>
-                                <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
-                                </td>
-
-                                <td>
-                                    @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
-                                </td>
-
+            
+            <div class="row no-margin">
+                <div class="col-lg-12">
+                    <table border="1" class="table table-bordered table-responsive">
+                        
+                        <thead>
+                            <tr style="font-weight: bold">
+                                <th></th>
+                                <th>AWB No.</th>
+                                <th>COD</th>
+                                <th>Material Cost</th>
+                                <th>Total</th>
                             </tr>
-                            i++;
-                        }
-                    }
-                </tbody>
-                <tfoot>
+                        </thead>
+                        <tbody id="tblTrans">
+                            @if (@Model.DRRID > 0)
+                            {
+                                var i = 0;
+                                foreach (var item in Model.Details)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="#" onclick="deletetrans(this, @i)"><i class="fa fa-times"></i></a>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" id="hdntype_@i" value="@item.Type" />
+                                            <input type="hidden" value="false" class="hdndeleted" id="hdndeleted_@i" />
+                                            <input type="hidden" id="hdnrefId_@i" value="@item.ReferenceId" />
+                                            <input type="hidden" id="hdnref_@i" value="@item.Reference" />
+                                            <input type="hidden" id="hdncod_@i" value="@item.COD" />
+                                            <input type="hidden" id="hdndiscount_@i" value="@item.Discount" />
+                                            <input type="hidden" id="hdnmc_@i" value="@item.MCReceived" />
+                                            <input type="hidden" id="hdnreceipt_@i" value="@item.Receipt" />
+                                            <input type="hidden" id="hdnpkp_@i" value="@item.PKPCash" />
+                                            <input type="hidden" id="hdnexp_@i" value="@item.Expense" />
+                                            <input type="hidden" id="hdntotal_@i" value="@item.Total" />
+                                            @item.Reference
+                                        </td>
+                                        <td>
+                                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.COD, "2")
+                                        </td>
+                                        <td>
+                                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.MCReceived, "2")
+                                        </td>
 
-                </tfoot>
-            </table>
-          
-        </div>
+                                        <td>
+                                            @CMSV2.Models.CommanFunctions.GetDecimalFormat1(item.Total, "2")
+                                        </td>
 
-    </div>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+
+                </div>
+
+            </div>
 
 
-</section>
+    </section>
 
 
             <div>

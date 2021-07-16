@@ -338,11 +338,11 @@
         $('#loaderpopup').modal('show');
         $('#divProcessStatus').html('<h2 style="color:red">Data Save Processing</h2>');
         var obj = [];
-        var maxrow = $('#listbody > tr').length;
-        if (maxrow == 0) {
-            alert('Click upload to import Items from Excel!');
-            return;
-        }
+        //var maxrow = $('#listbody > tr').length;
+        //if (maxrow == 0) {
+        //    alert('Click upload to import Items from Excel!');
+        //    return;
+        //}
         var master = {
             ID: $('#ID').val(),
             ManifestNumber: $('#ManifestNumber').val(),

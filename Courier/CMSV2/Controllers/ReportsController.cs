@@ -1154,7 +1154,7 @@ namespace CMSV2.Controllers
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
 
-            CustomerLedgerReportParam model = (CustomerLedgerReportParam)Session["CustomInvoiceRegisterParam"];
+            CustomerLedgerReportParam model = (CustomerLedgerReportParam)Session["CustomerInvoiceRegisterParam"];
 
             if (model == null)
             {
@@ -1214,15 +1214,217 @@ namespace CMSV2.Controllers
             };
 
             ViewBag.Token = model;
-            Session["CustomInvoiceRegisterParam"] = model;
+            Session["CustomerInvoiceRegisterParam"] = model;
             
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
 
-            AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            AccountsReportsDAO.GenerateCustomerInvoiceRegisterReport();
 
             return RedirectToAction("CustomerInvoiceRegister", "Reports");
+
+
+        }
+
+
+        public ActionResult CustomerInvoicePrintMultiple()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = (CustomerLedgerReportParam)Session["CustomerInvoiceRegisterParam"];
+
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Invoice Print";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerInvoiceMultiplePrint"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+        [HttpPost]
+        public ActionResult CustomerInvoicePrintMultiple(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            Session["CustomerInvoiceRegisterParam"] = model;
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.CustomerInvoiceMultiplePrint();
+
+            return RedirectToAction("CustomerInvoicePrintMultiple", "Reports");
+
+
+        }
+
+   
+        #endregion
+
+        #region "CustomerInvoiceOpeningRegister"
+        public ActionResult CustomerInvoiceOpeningRegister()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            AcInvoiceOpeningParam model = (AcInvoiceOpeningParam)Session["CustomerInvoiceRegisterParam"];
+
+            if (model == null)
+            {
+                model = new AcInvoiceOpeningParam
+                {                    
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }            
+
+            ViewBag.ReportName = "Customer Invoice Opening Register";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerInvoiceOpeningRegister"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerInvoiceOpeningRegister(AcInvoiceOpeningParam picker)
+        {
+
+            AcInvoiceOpeningParam model = new AcInvoiceOpeningParam
+            {              
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType             
+            };
+
+            ViewBag.Token = model;
+            Session["CustomerInvoiceOpeningRegisterParam"] = model;
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateCustomerOpeningRegisterReport();
+
+            return RedirectToAction("CustomerInvoiceOpeningRegister", "Reports");
+
+
+        }
+        #endregion
+
+        #region "SupplierInvoiceOpeningRegister"
+        public ActionResult SupplierInvoiceOpeningRegister()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+
+            AcInvoiceOpeningParam model = (AcInvoiceOpeningParam)Session["SupplierInvoiceOpeningRegisterParam"];
+
+            if (model == null)
+            {
+                model = new AcInvoiceOpeningParam
+                {
+                    SupplierTypeId=0,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+
+            ViewBag.ReportName = "Supplier Invoice Opening Register";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierInvoiceOpeningRegister"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierInvoiceOpeningRegister(AcInvoiceOpeningParam picker)
+        {
+
+            AcInvoiceOpeningParam model = new AcInvoiceOpeningParam
+            {
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                Output = picker.Output,
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["SupplierInvoiceOpeningRegisterParam"] = model;
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateSupplierOpeningRegisterReport();
+
+            return RedirectToAction("SupplierInvoiceOpeningRegister", "Reports");
 
 
         }

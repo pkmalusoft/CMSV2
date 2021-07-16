@@ -5,44 +5,70 @@
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _decimal = @Session["Decimal"].ToString();
 }
-    <style>
-        .w-6 {
-            width: 6%;
-        }
 
-        .charegRow {
-            background: #f8fbff;
-        }
-
-            .charegRow td {
-                border: 0 !important;
-            }
-            .charegRow label{
-                font-size:14px!important;
-            }
-        .taxBlock .col-md-2, .taxBlock .col-md-3 {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .align_self {
-            margin-top: 31px;
-        }
-
-        .w-12 {
-            width: 12%;
-        }
-
-        .taxBlock label {
-            margin: 0;
-        }
-    </style>
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
+<style>
+    .w-6 {
+        width: 6%;
+    }
+
+    .charegRow {
+        background: #f8fbff;
+    }
+
+        .charegRow td {
+            border: 0 !important;
+        }
+
+        .charegRow label {
+            font-size: 14px !important;
+        }
+
+    .taxBlock .col-md-2, .taxBlock .col-md-3 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .align_self {
+        margin-top: 31px;
+    }
+
+    .w-12 {
+        width: 12%;
+    }
+
+    .taxBlock label {
+        margin: 0;
+    }
+</style>
+
+<style>
+    #invoicesearch .row .col-md-1 {
+        width: 12%;
+    }
+
+    .multiselect {
+        align-items: center;
+        display: flex !Important;
+        justify-content: space-around;
+    }
+
+    #movementid + .btn-group button, #movementid + .btn-group {
+        display: block;
+        width: 100%;
+    }
+
+    #FormDate {
+        border-radius: 10px;
+    }
+</style>
 <script type="text/javascript">
     function addCommas(nStr) {
         debugger;
@@ -59,9 +85,10 @@
     function setTwoNumberDecimal(obj) {
         debugger;
 
-       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        gettotal();
     }
-    
+
     function setThreeNumberDecimal(obj) {
         debugger;
 
@@ -83,30 +110,269 @@
 
         $('#InvoiceDate').val(reqdate);
     });
-  
+
 
 
 </script>
 
+<script>
+    var customernames = [];
+    function gettotal() {
+        debugger;
+        var netvalue = parseFloat($('#lbltotalcharge').html());    
+        var CustomerInvoiceTax = $('#CustomerInvoiceTax').val();
+        var AdminPer = $('#AdminPer').val();
+        var FuelPer = $('#FuelPer').val();
+        var Clearance = $('#ClearingCharge').val();
+        var Discount = $('#Discount').val();
+        if (netvalue == '' || netvalue == null)
+            netvalue = 0;
 
+        if (CustomerInvoiceTax == null || CustomerInvoiceTax == '') {
+            CustomerInvoiceTax = 0;
+        }
+        if (AdminPer == null || AdminPer == '') {
+            AdminPer = 0;
+        }
+        if (Clearance == null || Clearance == '') {
+            Clearance = 0;
+        }
+        if (Discount == null || Discount == '') {
+            Discount = 0;
+        }
+
+        $('#lblfuelpercent').html(FuelPer);
+        $('#lbladminpercent').html(AdminPer);
+        $('#lbltaxpercent').html(CustomerInvoiceTax);
+        $('#lbldiscount').html(Discount);
+        $('#lblothercharge').html(Clearance);
+        var taxamt = parseFloat(CustomerInvoiceTax) / 100 * parseFloat(netvalue);
+        taxamt = parseFloat(taxamt).toFixed(@_decimal);
+        $('#ChargeableWT').val(parseFloat(taxamt).toFixed(@_decimal));
+        $('#lbltaxamount').html(taxamt);
+
+        var adminamt = parseFloat(AdminPer) / 100 * parseFloat(netvalue);
+        adminamt = parseFloat(adminamt).toFixed(@_decimal);
+        $('#AdminAmt').val(adminamt);
+        $('#lbladminamount').html(adminamt);
+
+        var fuelamt = parseFloat(FuelPer) / 100 * parseFloat(netvalue);
+        fuelamt = parseFloat(fuelamt).toFixed(@_decimal);
+        $('#FuelAmt').val(fuelamt);
+        $('#lblfuelamount').html(adminamt);
+
+        var netotal = parseFloat(netvalue) + parseFloat(taxamt) + parseFloat(adminamt) + parseFloat(fuelamt) - parseFloat(Clearance) - parseFloat(Discount);
+        $('#InvoiceTotal').val(parseFloat(netotal).toFixed(@_decimal));
+        $('#lblinvoicetotal').html(parseFloat(netotal).toFixed(@_decimal))
+    }
+    function ValidateTotal() {
+        debugger;
+
+        var idtext = 'hdnTotalCharge_';
+        var amt = 0;
+        var max = $('#details > tbody > tr').length - 7;              
+        $('#lbltotalcharge').html(0);        
+        $('[id^=' + idtext + ']').each(function (index, item) {
+            var awbchecked = $('#hdnawbchecked_' + index).prop('checked');
+            if (awbchecked == true) {
+
+                if ($(item).val() == "" || $(item).val() == null) {
+                    $(item).val(0);
+                }
+                var itemval = $(item).val();
+                itemval = itemval.replace(',', '');
+
+                var invamount = parseFloat(itemval);
+                amt = parseFloat(amt) + parseFloat(invamount);
+                $('#lbltotalcharge').html(parseFloat(amt).toFixed(2));        
+                if (index + 1 == max) {
+                    gettotal();
+                }
+            }
+        });
+
+
+
+        
+    }
+    $(document).ready(function () {
+
+
+          $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/AWB/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerName,
+                                CustomerId: val.CustomerID,
+                                type: val.CustomerType
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+              autoFocus: false,
+              focus: function (event, ui) {
+                  $("#CustomerName").val(ui.item.value);
+              },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerID').val(i.item.CustomerId);
+            },
+
+        });
+
+
+         $('#btnsearch').click(function () {
+
+            if ($('#CustomerID').val() == 0 || $('#CustomerID').val() == '' ||$('#CustomerID').val() == null) {
+                $('#CustomerName').focus();
+                return false;
+             }
+            else if ($('#movementid').val() == null) {
+                $('#movementid').focus();
+                alert('Select Courier type!')
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ShowItemList", "CustomerInvoice")',
+                datatype: "html",
+                data: {
+                    CustomerId: $('#CustomerID').val(), FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val(), MovementId: $('#MAWB').val()
+                },
+                success: function (data) {
+                    debugger;
+                    $("#listContainer").html(data);
+                    var max = $('#details > tbody > tr').length  - 7;                    
+                    if (max == 0) {
+                        $.notify("AWB are not available!", "error");
+                    }
+                    else {
+                        ValidateTotal();
+                    }
+
+                }
+            });
+
+    });
+
+
+              $.ajax({
+                type: "Get",
+                url: "/CustomerInvoice/GetCourierType",
+                datatype: "Json",
+                  success: function (response) {
+
+                      var data = response.data;
+                    $('#movementid').empty();
+
+                    $.each(data, function (index, value) {
+
+                        var o_st = $("#MovementId").val().split(",");
+
+                        var flag = 0;
+                        for (var j = 0 ; j < o_st.length; j++) {
+                            debugger;
+                                if (o_st[j] == value.MovementID) {
+                                    flag = 1;
+                                    break;
+                                }
+
+                        }
+
+                        if (flag == 1) {
+                            $('#movementid').append('<option value="' + value.MovementID + '" selected=true>' + value.MovementType + '</option>');
+                        }
+                        else {
+                            $('#movementid').append('<option value="' + value.MovementID + '">' + value.MovementType + '</option>');
+                        }
+
+                    });
+
+
+
+                      $('#movementid').multiselect({
+                        nonSelectedText:'Select',
+                        enableClickableOptGroups: true,
+                        enableCollapsibleOptGroups: true,
+                        enableFiltering: false,
+                        includeSelectAllOption: true,
+                        enableCaseInsensitiveFiltering: false,
+                        selectAllValue: 'multiselect-all'
+                      });
+
+
+                }
+              });
+
+
+
+    });
+
+
+
+
+</script>
 <section class="content-header">
     <h1 class="headingfont">Customer Invoice -Create</h1>
 </section>
 
 <section class="content">
 
-    <div class="row no-margin">
-        @{ Html.RenderAction("InvoiceSearch", "CustomerInvoice");}
-    </div>
-	 
-	
+    @*<div class="row no-margin">
+            @{ Html.RenderAction("InvoiceSearch", "CustomerInvoice");}
+        </div>*@
+
+
     <fieldset>
         @using (Html.BeginForm("Create", "CustomerInvoice", FormMethod.Post, new { @id = "customerInvoice" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
+        <div class="row no-margin ">
+            <div class="col-md-4">
+                <label class="headinglabel required ">Customer</label>
+                @Html.HiddenFor(model => model.CustomerID)
+                @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerName)
+            </div>
+            <div class="col-md-1">
+                @Html.HiddenFor(model => model.MovementId)
+                <label class="headinglabel required ">From Date</label>
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right" })
+            </div>
 
+            <div class="col-md-1">
+                <label class="headinglabel required">To Date</label>
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right" })
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel required ">Courier Type</label>
+
+                <select id="movementid" name="SelectedValues" multiple="multiple" class="form-control">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-success" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-md-3 align_self">
+                <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+            </div>
+        </div>
             <div class="row no-margin" style="padding-top:10px">
 
 
@@ -117,7 +383,6 @@
                 </div>
                 <div class="col-md-2">
                     @Html.HiddenFor(model => model.CustomerInvoiceID)
-                    @Html.HiddenFor(model => model.CustomerID) 
                     @Html.HiddenFor(model => model.ChargeableWT)
                     @Html.HiddenFor(model => model.AdminAmt)
                     @Html.HiddenFor(model => model.FuelAmt)
@@ -128,11 +393,7 @@
                     @Html.ValidationMessageFor(model => model.InvoiceDate)
 
                 </div>
-                @*<div class="col-md-3">
-                    <label class="headinglabel required ">Customer</label>
-                    @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.CustomerID)
-                </div>*@
+           
                 <div class="col-md-2 w-6">
                     <label class="headinglabel">Tax %</label>
                     @Html.TextBoxFor(model => model.CustomerInvoiceTax, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
@@ -153,164 +414,20 @@
                 </div>
                 <div class="col-md-2">
                     <label class="headinglabel">Clearance Charge</label>
-                    @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.OtherCharge)
+                    @Html.TextBoxFor(model => model.ClearingCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
+                    @Html.ValidationMessageFor(model => model.ClearingCharge)
                 </div>
-                <div class="col-md-3 align_self">
-                    <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
-                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
-                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Discount </label>
+                    @Html.TextBoxFor(model => model.Discount, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
+                    @Html.ValidationMessageFor(model => model.Discount)
+                </div>               
             </div>
-
-
-            @*<div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-3">
-                    <input type="button" value="Add" id="btnadd" class="btn btn-primary" />&nbsp;&nbsp;
-                    <input type="button" value="Save & Print" id="savepr" class="btn btn-primary" />
-                    <input type="button" value="Cancel" id="btncancel" class="btn btn-primary" />
-                </div>
-
-            </div>*@
-
             <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12">
-                    <table class="table table-bordered table-responsive" id="details" style="background-color: white">
+                <div class="col-md-12" id="listContainer">
 
-                        <thead>
-                        <th style="text-align:center">
-                            SNo.
-                            All  <input type="checkbox" style="width:20px;" class="Selectall" id="Selectall" value="0" name="Selectall" />
-                        </th>
-                        <th width="12%">AWB No.</th>
-                        <th>AWB Date</th>
-                        <th width="20%">Consignee</th>
-                        <th>Destination Country</th>
-                        <th>Courier Charge</th>
-                        <th>Custom Charge</th>
-                        <th>Other Charge</th>
-                        <th>Total Charge</th>
+                    @{Html.RenderPartial("InvoiceList", Model);}
 
-                        </thead>
-                        <tbody class="input-table" id="listContainer">
-                            @{Html.RenderPartial("InvoiceList", Model);}
-
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Total Charge</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges,_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Admin%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbladminpercent"></label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lbladminamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Fuel SurCharge%</td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelpercent"></label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Tax%</td>
-                                <td class="text-right" > <label class="headinglabel" id="lbltaxpercent"></label></td>
-                                <td></td>
-                                <td class="text-right" > <label class="headinglabel" id="lbltaxamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Clearance Charge</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lblothercharge"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td><b>Net Invoice Total</b></td>
-                                <td></td>
-                                <td> </td>
-                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@CMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal,_decimal)</label></td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
-            <div class="row no-margin hide">
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Total Charge</label>
-
-                    </div>
-                    <div class="col-md-3">
-
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltotalcharge">@Model.TotalCharges</label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Admin%</label>
-
-                    </div>
-                    <div class="col-md-3  text-right">
-                        <label class="headinglabel" id="lbladminpercent"></label>
-                    </div>
-                    <div class="col-md-3  text-right">
-                        <label class="headinglabel" id="lbladminamount"></label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Fuel SurCharge%</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel  text-right" id="lblfuelpercent"></label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel  text-right" id="lblfuelamount"></label>
-                    </div>
-                </div>
-
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Tax%</label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxpercent"></label>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lbltaxamount"></label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Other Charges</label>
-                    </div>
-                    <div class="col-md-3">
-
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel" id="lblothercharge"></label>
-                    </div>
-                </div>
-                <div class="row no-margin d-flex">
-                    <div class="col-md-3">
-                        <label class="headinglabel">Net Invoice Total</label>
-                    </div>
-                    <div class="col-md-3">
-
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <label class="headinglabel"  id="lblinvoicetotal"></label>
-                    </div>
 
                 </div>
             </div>
@@ -347,7 +464,7 @@
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-        function gettotal() {
+        function gettotal1() {
               var fullform = $('form#customerInvoice').serialize();
             var cust = JSON.stringify(fullform);
 
@@ -357,9 +474,9 @@
                 datatype: "json",
                 data: cust ,
                 success: function (response) {
-                  
+
                     var _custdata = response.data;
-                      
+
                     $('#lbltotalcharge').html(addCommas(parseFloat(_custdata.TotalCharges).toFixed(@_decimal).toString()));
                     $('#lbladminpercent').html(addCommas(parseFloat(_custdata.AdminPer).toFixed(@_decimal).toString()));
             $('#lbltaxpercent').html(addCommas(parseFloat(_custdata.CustomerInvoiceTax).toFixed(@_decimal).toString()));
@@ -378,14 +495,14 @@
                 }
             });
         }
-        $('.calfield').change(function () {
-            gettotal();
-          
-        })
+        //$('.calfield').change(function () {
+        //    gettotal();
 
-          $('.checkfilter').click(function () {
-              gettotal();
-        })
+        //})
+
+        //  $('.checkfilter').click(function () {
+        //      gettotal();
+        //})
 
         $('#CustomerID').change(function () {
 
@@ -400,7 +517,7 @@
                 },
                 success: function (data) {
                     //console.log(data);
-                    var _cust = JSON.stringify(data);              
+                    var _cust = JSON.stringify(data);
                     $("#listContainer").html(data);
                     $('#Selectall').prop('checked', true);
                     gettotal();

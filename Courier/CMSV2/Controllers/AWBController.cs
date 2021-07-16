@@ -216,6 +216,30 @@ namespace CMSV2.Controllers
 
                 //ViewBag.Enquiry = db.InScanMasters.FirstOrDefault();
                     v = GetAWBDetail(id);
+                customername = "WALK-IN-CUSTOMER";
+                v.CASHCustomerId = -1;
+                v.CASHCustomerName = customername;
+                customername = "COD-CUSTOMER";
+                v.CODCustomerID = -2;
+                v.CODCustomerName = "COD-CUSTOMER";
+                customername = "FOC CUSTOMER";
+                v.FOCCustomerID = -3;
+                v.FOCCustomerName = "FOC CUSTOMER";
+                if ((v.CustomerID==0 || v.CustomerID==-1) && v.PaymentModeId==1)
+                {
+                    v.customer = v.CASHCustomerName;
+                    v.CustomerID = v.CASHCustomerId;
+                }
+                else if((v.CustomerID==-2 || v.CustomerID==0) && v.PaymentModeId==2)
+                        {
+                    v.customer = v.CODCustomerName;
+                    v.CustomerID = v.CODCustomerID;
+                }
+                else if ((v.CustomerID == -3 || v.CustomerID == 0) && v.PaymentModeId == 4)
+                {
+                    v.customer = v.CODCustomerName;
+                    v.CustomerID = v.CODCustomerID;
+                }
                 v.TaxPercent = 5;
                 otherchargesvm = (from c in db.InscanOtherCharges join o in db.OtherCharges on c.OtherChargeID equals o.OtherChargeID where c.InscanID == id select new OtherChargeDetailVM { InscanID = id, OtherChargeID = c.OtherChargeID, OtherChargeName = o.OtherCharge1, Amount = c.Amount }).ToList();
                 if (otherchargesvm == null)
@@ -329,7 +353,7 @@ namespace CMSV2.Controllers
 
                         if (v.PaymentModeId != null)
                         {
-                            if (v.PaymentModeId == 3)
+                            if (v.PaymentModeId == 3 && (v.CustomerID==0))
                             {
                                 int _customerid = SaveCustomer(v);
                                 customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
@@ -359,6 +383,8 @@ namespace CMSV2.Controllers
                     else
                     {
                         inscan = db.InScanMasters.Find(v.InScanID);
+                        
+                        
                         if (v.PaymentModeId != null)
                         {
                             if (v.PaymentModeId == 3)
@@ -368,6 +394,10 @@ namespace CMSV2.Controllers
                                     int _customerid = SaveCustomer(v);
                                     customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
                                     inscan.CustomerID = _customerid;
+                                }
+                                else
+                                {
+                                    inscan.CustomerID = v.CustomerID;
                                 }
                             }
                             else if(v.PaymentModeId==1)
@@ -387,13 +417,24 @@ namespace CMSV2.Controllers
                                 inscan.CustomerID = v.CustomerID;
                             }
                         }
+
                         inscan.TransactionDate = v.TransactionDate;
                         DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
                     }
                     inscan.Weight = v.Weight;
+                    inscan.ConsignorCountryName = v.ConsignorCountryName;
+                    inscan.ConsignorCityName = v.ConsignorCityName;
+                    inscan.ConsignorLocationName = v.ConsignorLocationName;
+                    inscan.CustomerShipperSame = v.CustomerandShipperSame;
 
+                    inscan.Consignor = v.shippername;
+
+                    inscan.ConsignorAddress1_Building = v.ConsignorAddress1_Building;
+                    inscan.ConsignorAddress2_Street = v.ConsignorAddress2_Street;
+
+                    inscan.ConsignorContact = v.ConsignorContact;
                     inscan.ConsignorPhone = v.ConsignorPhone;
                     inscan.ConsignorMobileNo = v.ConsignorMobile;
                     inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
@@ -1194,8 +1235,8 @@ namespace CMSV2.Controllers
         public int SaveCustomer(QuickAWBVM v)
         {
             CustM objCust = new CustM();
-            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
-
+            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer select c).FirstOrDefault();  //--c.CustomerType == "CR"
+            int uid = Convert.ToInt32(Session["UserID"].ToString());
             int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotid = Convert.ToInt32(Session["CurrentDepotID"].ToString());
@@ -1212,14 +1253,14 @@ namespace CMSV2.Controllers
                 obj.CustomerName = v.customer;//  v.Consignor;
                 obj.CustomerType = "CS"; //Cash customer
 
-                //obj.ContactPerson = v.ConsignorContact;
-                //obj.Address1 = v.ConsignorAddress1_Building;
-                //obj.Address2 = v.ConsignorAddress2_Street;
-                //obj.Address3 = v.ConsignorAddress3_PinCode;
-                //obj.Phone = v.ConsignorPhone;
-                //obj.CountryName = v.ConsignorCountryName;
-                //obj.CityName = v.ConsignorCityName;
-                //obj.LocationName = v.ConsignorLocationName;
+                obj.ContactPerson = v.ConsignorContact;
+                obj.Address1 = v.ConsignorAddress1_Building;
+                obj.Address2 = v.ConsignorAddress2_Street;
+                obj.Address3 = v.ConsignorAddress3_PinCode;
+                obj.Phone = v.ConsignorPhone;
+                obj.CountryName = v.ConsignorCountryName;
+                obj.CityName = v.ConsignorCityName;
+                obj.LocationName = v.ConsignorLocationName;
                 obj.UserID = null;
                 obj.statusCommission = false;
                 obj.Referal = "";
@@ -1230,7 +1271,12 @@ namespace CMSV2.Controllers
                 obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 obj.CurrencyID = Convert.ToInt32(Session["CurrencyID"].ToString());
                 // Convert.ToInt32(Session["UserID"].ToString());
+                obj.CreatedBy = uid;
+                obj.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                obj.ModifiedDate = CommanFunctions.GetCurrentDateTime();
+                obj.ModifiedBy = uid;
                 obj.DepotID = depotid;
+                obj.Mobile = v.ConsignorMobile;
                 db.CustomerMasters.Add(obj);
                 db.SaveChanges();
                 return obj.CustomerID;
@@ -1281,114 +1327,92 @@ namespace CMSV2.Controllers
             db.SaveChanges();
             return "ok";
         }
-        public ActionResult PrintAWBRegister(int? StatusId, string FromDate, string ToDate)
+        public ActionResult PrintAWBRegister()
         {
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
+            DatePicker datePicker = (DatePicker)Session["AWBRegisterPrintSearh"]; // SessionDataModel.GetTableVariable();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
             DateTime pFromDate;
             DateTime pToDate;
-            int pStatusId = 0;
-            if (StatusId == null && datePicker==null)
-            {
-                pStatusId = 0;
-            }
-            else if(datePicker!=null)
-            {
-                pStatusId = Convert.ToInt32(datePicker.StatusId);
-            }
-            else
-            {
-                pStatusId = Convert.ToInt32(StatusId);
-            }
-            if ((FromDate == null || ToDate == null) && datePicker==null)
-            {
-                pFromDate = DateTimeOffset.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
-                pToDate = DateTimeOffset.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
-            }
-            else
-            {
-                if (datePicker == null)
-                {
-                    pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
-                    pToDate = Convert.ToDateTime(ToDate); //.AddDays(1);
+            List<QuickAWBVM> lst = new List<QuickAWBVM>();
+            if (datePicker == null)
+                {                    
+
+                    //int pStatusId = 0;
+                    pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                    pToDate = CommanFunctions.GetLastDayofMonth().Date;                     
                     datePicker = new DatePicker();
                     datePicker.FromDate = pFromDate;
                     datePicker.ToDate = pToDate;
-                    datePicker.paymentId = pStatusId;
-                }
-                else
-                {
-                    pFromDate = datePicker.FromDate;// Convert.ToDateTime(FromDate); //.AddDays(-1);
-                    pToDate = datePicker.ToDate; // Convert.ToDateTime(ToDate).AddDays(1);
-                }
+                    datePicker.paymentId = 0;
+                    datePicker.StatusId = 0;
+                    datePicker.AcHeadId = 0;
                 
             }
-            SessionDataModel.SetTableVariable(datePicker);
+                            
+            Session["AWBRegisterPrintSearch"]=datePicker;
+            lst = PickupRequestDAO.PrintAWBRegister();
 
-            //List<QuickAWBVM> lst = (from c in db.InScans join t1 in db.CityMasters on c.ConsignorCityID equals t1.CityID join t2 in db.CityMasters on c.ConsigneeCityID equals t2.CityID join t3 in db.CustomerMasters on c.CustomerID equals t3.CustomerID select new QuickAWBVM { HAWBNo = c.AWBNo, customer = t3.CustomerName, shippername = c.ConsignorContact, consigneename = c.Consignee, origin = t1.City, destination = t2.City,InScanID=c.InScanID,InScanDate=c.InScanDate }).ToList();
-            //List<QuickAWBVM> lst = (from c in db.InScans select new QuickAWBVM { HAWBNo = c.AWBNo,shippername = c.Consignor, consigneename = c.Consignee, destination = c.DestinationLocation, InScanID = c.InScanID, InScanDate = c.InScanDate }).ToList();
+            //lst = (from c in db.InScanMasters
+            //       join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
+            //       from subpet in gj.DefaultIfEmpty()
+            //       join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
+            //       from subpet1 in gj1.DefaultIfEmpty()
+            //       join pay in db.tblPaymentModes on c.PaymentModeId equals pay.ID
+            //       join fwd in db.ForwardingAgentMasters on c.FAgentId equals fwd.FAgentID into gj2
+            //       from subpet2 in gj2.DefaultIfEmpty()
+            //       where c.BranchID == branchid
+            //       && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
 
-            List<QuickAWBVM> lst = new List<QuickAWBVM>();
+            //      //&& (c.CourierStatusID == pStatusId || pStatusId == 0)
+            //      && c.IsDeleted == false
+            //       && (c.PaymentModeId == datePicker.paymentId || datePicker.paymentId == 0)
+            //       && (c.AcHeadID == datePicker.AcHeadId || datePicker.AcHeadId == 0)
+            //       orderby c.TransactionDate descending, c.AWBNo descending
+            //       select new QuickAWBVM
+            //       {
+            //           HAWBNo = c.AWBNo,
+            //           shippername = c.Consignor,
+            //           consigneename = c.Consignee,
+            //           origin = c.ConsignorCountryName,
+            //           destination = c.ConsigneeCountryName,
+            //           InScanID = c.InScanID,
+            //           InScanDate = c.TransactionDate,
+            //           CourierStatus = subpet1.CourierStatus,
+            //           StatusType = subpet.Name,
+            //           Pieces = c.Pieces,
+            //           Weight = c.Weight,
+            //           CourierCharge = c.CourierCharge,
+            //           OtherCharge = c.OtherCharge,
+            //           totalCharge = c.NetTotal,
+            //           MovementTypeID = c.MovementID == null ? 0 : c.MovementID.Value,
+            //           paymentmode = pay.PaymentModeText,
+            //           ConsigneePhone = c.ConsigneePhone,
+            //           ConsigneeMobile = c.ConsigneeMobileNo,
+            //           ConsigneeAddress1_Building = c.ConsigneeAddress1_Building + "," + c.ConsigneeAddress2_Street,
+            //           ConsigneeAddress3_PinCode = c.ConsigneeAddress3_PinCode,
+            //           ConsigneeLocationName = c.ConsigneeLocationName,
+            //           ConsigneeCityName = c.ConsigneeCityName,
+            //           ConsigneeCountryName = c.ConsigneeCountryName,
+            //           Description = c.CargoDescription,
+            //       }).ToList();
 
-            lst = (from c in db.InScanMasters
-                   join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
-                   from subpet in gj.DefaultIfEmpty()
-                   join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
-                   from subpet1 in gj1.DefaultIfEmpty()
-                   join pay in db.tblPaymentModes on c.PaymentModeId equals pay.ID
-                   join fwd in db.ForwardingAgentMasters on c.FAgentId equals fwd.FAgentID into gj2
-                   from subpet2 in gj2.DefaultIfEmpty()
-                   where c.BranchID == branchid
-                   && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-
-                  //&& (c.CourierStatusID == pStatusId || pStatusId == 0)
-                  && c.IsDeleted == false
-                   && (c.PaymentModeId == datePicker.paymentId || datePicker.paymentId == 0)
-                   && (c.AcHeadID == datePicker.AcHeadId || datePicker.AcHeadId == 0)
-                   orderby c.TransactionDate descending, c.AWBNo descending
-                   select new QuickAWBVM
-                   {
-                       HAWBNo = c.AWBNo,
-                       shippername = c.Consignor,
-                       consigneename = c.Consignee,
-                       origin = c.ConsignorCountryName,
-                       destination = c.ConsigneeCountryName,
-                       InScanID = c.InScanID,
-                       InScanDate = c.TransactionDate,
-                       CourierStatus = subpet1.CourierStatus,
-                       StatusType = subpet.Name,
-                       Pieces = c.Pieces,
-                       Weight = c.Weight,
-                       CourierCharge = c.CourierCharge,
-                       OtherCharge = c.OtherCharge,
-                       totalCharge = c.NetTotal,
-                       MovementTypeID = c.MovementID == null ? 0 : c.MovementID.Value,
-                       paymentmode = pay.PaymentModeText,
-                       ConsigneePhone = c.ConsigneePhone,
-                       ConsigneeMobile = c.ConsigneeMobileNo,
-                       ConsigneeAddress1_Building = c.ConsigneeAddress1_Building + "," + c.ConsigneeAddress2_Street,
-                       ConsigneeAddress3_PinCode = c.ConsigneeAddress3_PinCode,
-                       ConsigneeLocationName = c.ConsigneeLocationName,
-                       ConsigneeCityName = c.ConsigneeCityName,
-                       ConsigneeCountryName = c.ConsigneeCountryName,
-                       Description = c.CargoDescription,
-                   }).ToList();
-
-            int qindex = 0;
-            foreach (QuickAWBVM item in lst)
-            {
-                var FAWBDet = db.InScanInternationals.Where(cc => cc.InScanID == item.InScanID).FirstOrDefault();
-                if (FAWBDet !=null)
-                {
-                    lst[qindex].FWDAgentNumber=FAWBDet.ForwardingAWBNo;
-                }
-            }
-            if (datePicker.SelectedValues != null)
-            {
-                lst=lst.Where(tt => tt.MovementTypeID != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementTypeID.Value)).ToList(); 
-            }
+            //int qindex = 0;
+            //foreach (QuickAWBVM item in lst)
+            //{
+            //    var FAWBDet = (from c in db.InScanInternationals join d in db.ForwardingAgentMasters on c.FAgentID equals d.FAgentID where c.InScanID == item.InScanID select new { FAgentName = d.FAgentName, ForwardingAWBNo = c.ForwardingAWBNo }).FirstOrDefault(); 
+            //    if (FAWBDet !=null)
+            //    {
+            //        lst[qindex].FWDAgentNumber=FAWBDet.ForwardingAWBNo;
+            //        lst[qindex].FAgentName = FAWBDet.FAgentName;
+            //    }
+            //    qindex = qindex + 1;
+            //}
+            //if (datePicker.SelectedValues != null)
+            //{
+            //    lst=lst.Where(tt => tt.MovementTypeID != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementTypeID.Value)).ToList(); 
+            //}
             
             //foreach(QuickAWBVM item in lst)
             //{
@@ -1410,13 +1434,13 @@ namespace CMSV2.Controllers
             //    }
             //    qindex = qindex + 1;
             //}
-            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            //ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
-            ViewBag.StatusId = StatusId;
+            //ViewBag.StatusId = StatusId;
             ViewBag.AcHeads = (from c in db.EmployeeMasters join a in db.AcHeads on c.AcHeadID equals a.AcHeadID select new { AcHeadId = a.AcHeadID, HeadName = a.AcHead1 }).ToList();
             decimal? plCourierCharge =lst.Sum(i => i.CourierCharge);
             decimal? pltotal = lst.Sum(i => i.totalCharge);
@@ -1433,7 +1457,7 @@ namespace CMSV2.Controllers
         public ActionResult PrintSearch()
         {
 
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
+            DatePicker datePicker =(DatePicker)Session["AWBRegisterPrintSearch"];
 
             if (datePicker == null)
             {
@@ -1453,15 +1477,15 @@ namespace CMSV2.Controllers
                 //                    where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
                 //                    select new CustmorVM { CustomerID = cust.CustomerID, CustomerName = cust.CustomerName }).Distinct();
 
-            }           
+            }
 
-
+            Session["AWBRegisterPrintSearch"] = datePicker;
             //ViewBag.Movement = new MultiSelectList(db.CourierMovements.ToList(),"MovementID","MovementType");
             ViewBag.Movement = db.CourierMovements.ToList();
             ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.Token = datePicker;
             ViewBag.AcHeads = (from c in db.EmployeeMasters join a in db.AcHeads on c.AcHeadID equals a.AcHeadID select new { AcHeadId = a.AcHeadID, HeadName = a.AcHead1 }).ToList();
-            SessionDataModel.SetTableVariable(datePicker);
+            //SessionDataModel.SetTableVariable(datePicker);
             return View(datePicker);
 
         }
@@ -1499,8 +1523,8 @@ namespace CMSV2.Controllers
 
                 }
             }
-            ViewBag.Token = model;
-            SessionDataModel.SetTableVariable(model);
+            //ViewBag.Token = model;
+            Session["AWBRegisterPrintSearh"] = model;
             return RedirectToAction("PrintAWBRegister", "AWB");
             //return PartialView("InvoiceSearch",model);
 

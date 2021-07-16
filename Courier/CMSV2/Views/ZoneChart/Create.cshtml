@@ -56,7 +56,7 @@
         }).autocomplete("widget").addClass("CitiesAutocomplete");
     });
 </script>
-<script type="text/javascript">
+@*<script type="text/javascript">
     //    google.maps.event.addDomListener(window, 'load', function () {
     //        var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
     //        google.maps.event.addListener(places, 'place_changed', function () {
@@ -194,11 +194,15 @@
             });
         }
     }
-</script>
+</script>*@
 <script type="text/javascript">
     var countrylist = "";
-   
 
+    function deletetrans(obj, i) {
+        $(obj).parent().parent().addClass('hide');
+        var obj1 = $(obj).parent().parent().find('.hdndeleted');
+        $(obj1).val(true);
+    }
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
@@ -240,7 +244,66 @@
                 }
             });
         });
+          $("#LocationName1").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#LocationName1').val(ui.item.label);
+                $('#LocationName1').attr('placeid', ui.item.value);
+                $('#PLACEID1').val(ui.item.value)
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#LocationName1').val(ui.item.label);
+                $('#LocationName1').attr('placeid', ui.item.value);
+                $('#PLACEID1').val(ui.item.value)
+                return false;
+            }
+          });
+        $('#LocationName1').blur(function () {
+            if ($('#LocationName1').attr('placeid') != '') {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#LocationName1').attr('placeid') },
+                    success: function (response) {
+                        // console.log(response);
+                        $('#CountryName1').val(response.Country);
+                        $('#CityName1').val(response.City);
+                        $('#SubLocality1').val(response.SubLocality);
 
+                    }
+                });
+            }
+        });
         $("#btnsave").click(function () {
             var i = $('#tbl1 > tr').length;
             if (i == 0) {
@@ -272,36 +335,38 @@
             }
         });
         $('#btnadd').click(function () {
-            
-            var locationname = $('#LocationName').val();
-            var countryname = $('#CountryName').val();
-            var cityname = $('#CityName').val();
-            var sublocality = $('#SubLocality').val();
+
+            var locationname = $('#LocationName1').val();
+            var countryname = $('#CountryName1').val();
+            var cityname = $('#CityName1').val();
+            var sublocality = $('#SubLocality1').val();
             if (cityname == null)
                 cityname = '';
-            if (countryname == null)
-                countryname = '';
+
+            if (countryname == null || countryname == '')
+                countryname = locationname;
+
             if (location != null && location != '' && countryname!='' && countryname!=null) {
-                var placeid = $('#PlaceID').val();
+                var placeid = $('#LocationName1').attr('placeid'); //$('#PLACEID1').val();
                 var i = $('#tbl1 > tr').length;
                 html = '<tr>' +
-                    '<td>' + locationname + '<input type = "hidden" name="Details[' + i + '].PlaceID"  value = "' + placeid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].CountryName" value="' + countryname + '" type="hidden" /><input id="" name="Details[' + i + '].CityName" value="' + cityname + '" type="hidden"/><input id="" name="Details[' + i + '].SubLocality" value="' + sublocality + '" type="hidden"></td>' +
+                    '<td>' + locationname + '<input class="hdndeleted" type="hidden" name="Details[' + i + '].Deleted" value = "false" id = "hdndeleted_' + i + '" /><input type = "hidden" name="Details[' + i + '].PlaceID"  value = "' + placeid + '" /><input type="hidden" name="Details[' + i + '].LocationName"  value="' + locationname + '" />  <input id="" name="Details[' + i + '].CountryName" value="' + countryname + '" type="hidden" /><input id="" name="Details[' + i + '].CityName" value="' + cityname + '" type="hidden"/><input id="" name="Details[' + i + '].SubLocality" value="' + sublocality + '" type="hidden"></td>' +
                     '<td>' + cityname + '</td>' +
                     '<td>' + countryname + '</td>' +
                     '<td>' + sublocality + '</td>' +
-                    '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td></tr>';
+                    '<td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td></tr>';
                 $('#tbl1').append(html);
 
-                $('#LocationName').val('');
-                $('#CountryName').val('');
-                $('#CityName').val('');
-                $('#PlaceID').val('');
-                $('#LocationName').focus();
+                $('#LocationName1').val('');
+                $('#CountryName1').val('');
+                $('#CityName1').val('');
+                $('#PLACEID1').val('');
+                $('#LocationName1').focus();
             }
             else {
-                $('#LocationName').focus();
+                $('#LocationName1').focus();
             }
-        }); 
+        });
 
     });
 </script>
@@ -365,21 +430,21 @@
                     <input type="hidden" id="EventVenueId" class="form-control" />
                     @*<input type="text" id="TextBoxVenueLocation" class="form-control" style="background-color:bisque" />*@
                     
-                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control txttarget autocomplete", @onFocus = "geolocate()", @placeholder = "Location" })
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control txttarget", @placeholder = "Location", @id = "LocationName1" })
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">City</label>
-                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control txttarget", @id = "CityName1" })
 
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Country</label>
-                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control txttarget", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control txttarget", @id = "CountryName1" })
                 </div>
                 <div class="col-md-1 hide">
                     <label class="headinglabel required">PlaceID</label>
-                    @Html.TextBoxFor(model => model.PlaceID, new { @class = "form-control txttarget", @readonly = "readonly" })
-                    <input type="hidden" id="SubLocality" />
+                    @Html.TextBoxFor(model => model.PlaceID, new { @class = "form-control txttarget",@id="PLACEID1"})
+                    <input type="hidden" id="SubLocality1" />
                 </div>
                 <div class="col-md-1" style="padding-top:10px">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
@@ -418,6 +483,7 @@
                                     {
                                 <tr>
                                     <td>
+                                        @Html.HiddenFor(item => @Model.Details[i].Deleted,new { @class = "hdndeleted" })
                                         @Html.HiddenFor(item => @Model.Details[i].ZoneChartDetailID)
                                         @Html.HiddenFor(item => @Model.Details[i].LocationName)
                                         @Html.HiddenFor(item => @Model.Details[i].CityName)
@@ -435,7 +501,7 @@
                                     <td>
                                         @Model.Details[i].SubLocality
                                     </td>
-                                    <td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>
+                                    <td><a href="javascript:void(0)" onclick="deletetrans(this,' + i + ')"><i class="fa fa-times"></i></a></td>
                                 </tr>
                                     }
                                 }
@@ -449,5 +515,5 @@
                                  }
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>*@
 

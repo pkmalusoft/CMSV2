@@ -28,11 +28,11 @@
 </style>
 <script type="text/javascript">
         $(document).ready(function () {
-            var table = $('#dataTables-example').DataTable({
-                "aaSorting": [],
-                 "paging": false
-            });
-            table.draw();
+            //var table = $('#dataTables-example').DataTable({
+            //    "aaSorting": [],
+            //     "paging": false
+            //});
+            //table.draw();
         });
          function setTwoNumberDecimal(item) {
              if (parseFloat(item) > 0) {
@@ -132,7 +132,7 @@
 </div>
 
 <section class="content">
-    <div class="table-responsive" style="padding:15px" id="divreport">
+    <div class="table-responsive" style="padding:15px;margin-top:20px;max-height:400px;overflow-y:scroll;overflow-x:scroll" id="divreport" >
         <style>
             tfoot {
                 display: table-header-group;
@@ -209,25 +209,37 @@
                         PAYMENT MODE
                     </th>
                     <th width="5%">
+                        PARCEL TYPE
+                    </th>
+                    <th width="5%">
+                        MOVEMENT
+                    </th>
+                    <th>
+                        PRODUCT
+                    </th>                    
+                    <th width="5%">
                         COURIER CHARGE
                     </th>
                     <th width="5%">
                         OTHER CHARGE
                     </th>
+                    <th width="5%">
+                        TAX
+                    </th>
                     <th width="10%">
                         TOTAL CHARGE
                     </th>
                     <th>
-                        Fwd Agent
+                        FWD Agent
                     </th>
                     <th>
-                        Fwd Agent No.
+                        FWD NO.
                     </th>
                     <th>
-                        Consignee Address
+                        CONSIGNEE ADDRESS
                     </th>
                     <th>
-                        Description
+                        DESCRIPTION
                     </th>
                 </tr>
             </thead>
@@ -277,13 +289,24 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.paymentmode)
                     </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParcelType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MovementType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
                     <td class="textright" style="text-align: right">
                         @*@Html.DisplayFor(modelItem => item.CourierCharge)*@
                         @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.CourierCharge, @_decimal.ToString())
                     </td>
                     <td style="text-align:right">
-                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, @_decimal.ToString())
-                        @*@Html.DisplayFor(modelItem => item.OtherCharge)*@
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.OtherCharge, @_decimal.ToString())                        
+                    </td>
+                    <td style="text-align:right">
+                        @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.TaxAmount, @_decimal.ToString())                        
                     </td>
                     <td style="text-align: right">
                         @CMSV2.Models.CommanFunctions.GetFormatNumber(@item.totalCharge, @_decimal.ToString())
@@ -301,7 +324,7 @@
                         @Html.DisplayFor(modelItem => item.ConsigneeAddress3_PinCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem=>item.Description)
+                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
                 </tr>
                     i++;

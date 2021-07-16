@@ -35,26 +35,29 @@
         debugger;
         //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         //var phoneno = /^[0-9]{10}$/;
-        var phoneno = /(?([0-9]{3})\)?[-. ]?^[0-9]{10}$/;
-        if (inputtxt.match(phoneno)) {
-            $("#validations").html('* Please fill mandatory fields!');
-            return true;
-        }
-        else {
-            $("#validations").html('The Mobile Number entered is invalid!');
-            return false;
-        }
+        //var phoneno = /(?([0-9]{3})\)?[-. ]?^[0-9]{10}$/;
+        //if (inputtxt.match(phoneno)) {
+        //    $("#validations").html('* Please fill mandatory fields!');
+        //    return true;
+        //}
+        //else {
+        //    $("#validations").html('The Mobile Number entered is invalid!');
+        //    return false;
+        //}
+
+        return true;
     }
     function checkPhoneNumber(phoneNo) {
-        var phoneRE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/; ///^\(\d\d\d\) \d\d\d-\d\d\d\d$/;
-        if (phoneNo.match(phoneRE)) {
-            $("#validations").html('* Please fill mandatory fields!');
-            return true;
-        } else {
-            $("#validations").html('The phone number entered is invalid!');
+        //var phoneRE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/; ///^\(\d\d\d\) \d\d\d-\d\d\d\d$/;
+        //if (phoneNo.match(phoneRE)) {
+        //    $("#validations").html('* Please fill mandatory fields!');
+        //    return true;
+        //} else {
+        //    $("#validations").html('The phone number entered is invalid!');
 
-            return false;
-        }
+            //return false;
+        //}
+        return true;
     }
     function checkNumeric(numtext) {
         //^[1-9]\d * (\.\d +)?$
@@ -90,18 +93,18 @@
        
         $("#CustomerName").change(function () {
 
-            $.ajax({
-                type: "POST",
-                url: "/CustomerMaster/GetCustomerCode",
-                datatype: "Json",
-                data: { custname: $("#CustomerName").val() },
-                success: function (result) {
-                    debugger;
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/CustomerMaster/GetCustomerCode",
+            //    datatype: "Json",
+            //    data: { custname: $("#CustomerName").val() },
+            //    success: function (result) {
+            //        debugger;
 
-                        $('#CustomerCode').val(result.data)
-                    // BindCity(data.CityID, data.LocationID);
-                }
-            });
+            //            $('#CustomerCode').val(result.data)
+            //        // BindCity(data.CityID, data.LocationID);
+            //    }
+            //});
 
         });
         $("#btnApprove").click(function () {
@@ -139,11 +142,11 @@
                 $("#CountryName").focus();
                 return false;
             }
-            else if (code == "") {
-                $("#validations").show();
-                $("#CustomerCode").focus();
-                return false;
-            }
+            //else if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
             else if (add1 == "") {
                 $("#validations").show();
                 $("#Address1").focus();
@@ -640,19 +643,19 @@
                     @Html.ValidationMessageFor(model => model.CustomerType)
 
                 </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Customer Code</label>
+                    @*@Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control" })*@
+                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control", @style = "font-weight:700;font-size:18px; ", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CustomerCode)
+                </div>
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Customer Name</label>
-                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget",@autocomplete="off" })
+                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control txttarget", @autocomplete = "off" })
                     @Html.ValidationMessageFor(model => model.CustomerName)
                 </div>
 
-                <div class="col-md-3">
-                    <label class="headinglabel required">Customer Code</label>
-                    @*@Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control" })*@
-                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control", @style = "font-weight:700;font-size:18px; " })
-                    @Html.ValidationMessageFor(model => model.CustomerCode)
-                </div>
 
 
                 <div class="col-md-3">

@@ -116,7 +116,7 @@ namespace CMSV2.Controllers
                 vm.AgentID = model.AgentID;
                 vm.TransDetails = new List<TranshipmentModel>();
                 //var IDEtails = (from c in db.InScanMasters where c.ImportShipmentId == vm.ID select new TranshipmentModel { InScanID=c.InScanID, HAWBNo =c.AWBNo,AWBDate=c.TransactionDate.ToString("dd-MM-yyyy"),Consignor=c.Consignor,ConsignorCountryName=c.ConsignorCountryName,ConsignorCityName=c.ConsignorCityName,Consignee=c.Consignee,ConsigneeCityName=c.ConsigneeCityName,Weight=c.Weight,Pieces=c.Pieces,CourierCharge=c.CourierCharge,OtherCharge=c.OtherCharge}).ToList();
-                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID);
+                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID,"");
                 vm.TransDetails = IDetails;
             }
 
@@ -182,9 +182,11 @@ namespace CMSV2.Controllers
                 Session["CustomerRateList"] = AllRateList;
                 vm.TransDetails = new List<TranshipmentModel>();
                 //var IDEtails = (from c in db.InScanMasters where c.ImportShipmentId == vm.ID select new TranshipmentModel { InScanID=c.InScanID, HAWBNo =c.AWBNo,AWBDate=c.TransactionDate.ToString("dd-MM-yyyy"),Consignor=c.Consignor,ConsignorCountryName=c.ConsignorCountryName,ConsignorCityName=c.ConsignorCityName,Consignee=c.Consignee,ConsigneeCityName=c.ConsigneeCityName,Weight=c.Weight,Pieces=c.Pieces,CourierCharge=c.CourierCharge,OtherCharge=c.OtherCharge}).ToList();
-                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID);
+                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID,"-1");
                 vm.TransDetails = IDetails;
+                vm.TransCountryDetails = ImportDAO.GetTranshipmenCountryList(vm.ID);
                 Session["ManifestTranshipment"] = IDetails;
+                Session["ManifestTranshipmentCountry"] = vm.TransCountryDetails;
             }
 
             return View(vm);
@@ -201,7 +203,17 @@ namespace CMSV2.Controllers
             vm.TransDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
             return PartialView("EditItemList", vm);
         }
+        public ActionResult ShowEditItemList1(int ShipmentId,string CountryName)
+        {
 
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.TransDetails = new List<TranshipmentModel>();
+            //var IDEtails = (from c in db.InScanMasters where c.ImportShipmentId == vm.ID select new TranshipmentModel { InScanID=c.InScanID, HAWBNo =c.AWBNo,AWBDate=c.TransactionDate.ToString("dd-MM-yyyy"),Consignor=c.Consignor,ConsignorCountryName=c.ConsignorCountryName,ConsignorCityName=c.ConsignorCityName,Consignee=c.Consignee,ConsigneeCityName=c.ConsigneeCityName,Weight=c.Weight,Pieces=c.Pieces,CourierCharge=c.CourierCharge,OtherCharge=c.OtherCharge}).ToList();
+            var IDetails = ImportDAO.GetTranshipmenItems(ShipmentId, CountryName);
+            vm.TransDetails = IDetails;
+            Session["ManifestTranshipment"] = IDetails;
+            return PartialView("EditItemList", vm);
+        }
         [HttpGet]
         public JsonResult CheckDuplicationTranshipment(string ManifestDate, string MAWB,int AgentID)
         {
@@ -958,6 +970,11 @@ namespace CMSV2.Controllers
                 var model = JsonConvert.DeserializeObject<ImportManifestVM>(Master);
                 //var IDetails = JsonConvert.DeserializeObject<List<ImportManifestItem>>(Details);
                 var IDetails = (List<TranshipmentModel>)Session["ManifestTranshipment"];
+
+                DataTable ds = new DataTable();
+                DataSet dt = new DataSet();
+                dt = ToDataSet(IDetails);
+
                 ImportShipment importShipment = new ImportShipment();
                 if (model.ID == 0)
                 {
@@ -1713,15 +1730,17 @@ namespace CMSV2.Controllers
                                     where c.ConsigneeCountryName.ToLower().Contains(term.Trim().ToLower())
                                     orderby c.ConsigneeCountryName
                                     select new { SourceValue = c.ConsigneeCountryName }).Distinct().ToList();
-                        if (matchlist != null && matchlist.Count > 0)
-                        {
-                            var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
-                            return Json(listnew, JsonRequestBehavior.AllowGet);
-                        }
-                        else
-                        {
-                            return Json(list, JsonRequestBehavior.AllowGet);
-                        }
+                        //if (matchlist != null && matchlist.Count > 0)
+                        //{
+                        //    var listnew = list.Where(p => !matchlist.Any(p2 => p2.TargetValue == p.SourceValue));
+                        //    return Json(listnew, JsonRequestBehavior.AllowGet);
+                        //}
+                        //else
+                        //{
+                        //    return Json(list, JsonRequestBehavior.AllowGet);
+                        //}
+
+                        return Json(list, JsonRequestBehavior.AllowGet);
 
                     }
                     else if (FieldName == "DestinationCity" ||  FieldName=="ConsigneeCityName")
@@ -2228,7 +2247,34 @@ namespace CMSV2.Controllers
             //put a breakpoint here and check datatable
             return dataTable;
         }
+        public static DataSet ToDataSet<T>(List<T> items)
+        {
+            DataSet ds = new DataSet();
+            DataTable dataTable = new DataTable(typeof(T).Name);
 
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Defining type of data column gives proper data table 
+                var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name, type);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            ds.Tables.Add(dataTable);
+            //put a breakpoint here and check datatable
+            return ds;
+        }
         public static List<TranshipmentModel> TranshipmentList(DataTable dt)
         {
             var empList = new List<TranshipmentModel>();
@@ -2274,10 +2320,126 @@ namespace CMSV2.Controllers
             }
             return empList;
         }
+
+        #region CreateBulk
+        public ActionResult CreateBulk(int id = 0)
+        {
+            var userid = Convert.ToInt32(Session["UserID"]);
+            var CompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+            var BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+
+            var agent = db.CustomerMasters.Where(cc => cc.CustomerType == "CL").ToList();//  db.AgentMasters.ToList(); // .Where(cc => cc.UserID == userid).FirstOrDefault();
+            var company = db.AcCompanies.FirstOrDefault(); // .Select(x => new { Address = x.Address1 
+            string selectedVal = ""; ;
+            var types = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Select Shipment Type", Value = null, Selected = selectedVal == null},
+                new SelectListItem{Text = "Transhipment", Value = "Transhipment", Selected = selectedVal == "Transhipment"},
+                new SelectListItem{Text = "Import", Value = "Import", Selected = selectedVal == "Import"},
+            };
+
+            ViewBag.Type = types;
+            var currency = new SelectList(db.CurrencyMasters.OrderBy(x => x.CurrencyName), "CurrencyID", "CurrencyName").ToList();
+            ViewBag.CurrencyID = db.CurrencyMasters.ToList();  // db.CurrencyMasters.ToList();
+            ViewBag.Currencies = db.CurrencyMasters.ToList();
+            ViewBag.Agent = agent;
+            string CompanyCountryName = db.BranchMasters.Find(BranchID).CountryName;
+            //ViewBag.AgentName = agent.Name;
+            //ViewBag.AgentCity = agent.CityName;
+            ViewBag.CompanyName = company.AcCompany1;
+            ImportManifestVM vm = new ImportManifestVM();
+            if (id == 0)
+            {
+                vm.CompanyCountryName = CompanyCountryName;
+                vm.ManifestDate = CommanFunctions.GetCurrentDateTime().ToString();
+                vm.ManifestNumber = ImportDAO.GetMaxManifestNo(CompanyID, BranchID, Convert.ToDateTime(vm.ManifestDate), "T");
+                vm.ID = 0;
+                vm.TransDetails = new List<TranshipmentModel>();
+            }
+            else
+            {
+                vm.CompanyCountryName = CompanyCountryName;
+                ImportShipment model = db.ImportShipments.Find(id);
+                vm.ID = model.ID;
+                vm.ManifestNumber = model.ManifestNumber;
+                vm.ManifestDate = model.CreatedDate.ToString();
+                vm.FlightDate1 = model.FlightDate.ToString();
+                vm.FlightNo = model.FlightNo;
+                vm.MAWB = model.MAWB;
+                vm.Route = model.Route;
+                vm.ParcelNo = model.ParcelNo;
+                vm.Bags = model.Bags;
+                vm.Type = model.Type;
+                vm.Route = model.Route;
+                vm.Weight = model.Weight;
+                vm.TotalAWB = model.TotalAWB;
+                vm.OriginAirportCity = model.OriginAirportCity;
+                vm.DestinationAirportCity = model.DestinationAirportCity;
+                vm.AgentID = model.AgentID;
+                vm.TransDetails = new List<TranshipmentModel>();
+                //var IDEtails = (from c in db.InScanMasters where c.ImportShipmentId == vm.ID select new TranshipmentModel { InScanID=c.InScanID, HAWBNo =c.AWBNo,AWBDate=c.TransactionDate.ToString("dd-MM-yyyy"),Consignor=c.Consignor,ConsignorCountryName=c.ConsignorCountryName,ConsignorCityName=c.ConsignorCityName,Consignee=c.Consignee,ConsigneeCityName=c.ConsigneeCityName,Weight=c.Weight,Pieces=c.Pieces,CourierCharge=c.CourierCharge,OtherCharge=c.OtherCharge}).ToList();
+                var IDetails = ImportDAO.GetTranshipmenItems(vm.ID,"");
+                vm.TransDetails = IDetails;
+            }
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult GetBulkItemList(string MAWBNo, int AgentID)
+        {
+            Session["TranshipmentAgentID"] = AgentID;
+            //int AgentID = (int)Session["TranshipmentAgentID"];
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.TransDetails = ImportDAO.GetBulkTranshipmenItems(MAWBNo,AgentID);// (List<TranshipmentModel>)Session["ManifestTranshipment"];
+            return PartialView("ItemList", vm);
+        }
+        #endregion
+
+
+        [HttpPost]
+        public ActionResult EditUpdateDataFixation(int ShipmentId,int AgentID,string TargetColumn, string SourceValue, string TargetValue)
+        {
+
+            string result=ImportDAO.EditManualDataFixation(ShipmentId, AgentID, TargetColumn, SourceValue, TargetValue);
+            ImportManifestVM model = new ImportManifestVM();
+            
+            model.TransCountryDetails = ImportDAO.GetTranshipmenCountryList(ShipmentId);
+            var IDetails = ImportDAO.GetTranshipmenItems(ShipmentId, model.TransCountryDetails[0].CountryName);
+            model.TransDetails = IDetails;           
+
+            Session["ManifestTranshipment"] = IDetails;
+            Session["ManifestTranshipmentCountry"] = model.TransCountryDetails;         
+            return View("EditCountryList", model);
+        }
         
+
+        [HttpPost]
+        public ActionResult EditRateFixation(int ShipmentId, string CountryName)
+        {
+
+            string result = ImportDAO.EditManualRateFixation(ShipmentId, CountryName);
+            ImportManifestVM model = new ImportManifestVM();
+
+            model.TransCountryDetails = ImportDAO.GetTranshipmenCountryList(ShipmentId);
+            var IDetails = ImportDAO.GetTranshipmenItems(ShipmentId, model.TransCountryDetails[0].CountryName);
+            model.TransDetails = IDetails;
+
+            Session["ManifestTranshipment"] = IDetails;
+            Session["ManifestTranshipmentCountry"] = model.TransCountryDetails;
+            return View("EditCountryList", model);
+        }
+
+        public ActionResult ShowCountryList()
+        {
+            ImportManifestVM vm = new ImportManifestVM();
+            vm.TransDetails = (List<TranshipmentModel>)Session["ManifestTranshipmentCountry"];
+            return PartialView("EditCountryList", vm);
+        }
+
     }
 
-        public class DataObject
+    public class DataObject
         {
             public int code { get; set; }
             public List<productdata> data { get; set; }

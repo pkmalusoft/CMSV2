@@ -750,7 +750,7 @@ namespace CMSV2.DAL
         }
 
 
-        public string GenerateInvoiceAll(InvoiceAllParam obj)
+        public string GenerateCustomerInvoiceAll(InvoiceAllParam obj)
         {
             int companyId = Convert.ToInt32(HttpContext.Current.Session["CurrentCompanyID"].ToString());
             int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
@@ -775,7 +775,50 @@ namespace CMSV2.DAL
                         cmd.Parameters.AddWithValue("@Companyid", companyId);
                         cmd.Parameters.AddWithValue("@FYearId",  yearid);
                         cmd.Parameters.AddWithValue("@BranchId", branchid);
+                        cmd.Parameters.AddWithValue("@UserId", userid);
+                        cmd.Parameters.AddWithValue("@EntryDate", CommanFunctions.GetCurrentDateTime().ToString("MM/dd/yyyy hh:mm"));
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
 
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
+
+        public string GenerateCOInvoiceAll(InvoiceAllParam obj)
+        {
+            int companyId = Convert.ToInt32(HttpContext.Current.Session["CurrentCompanyID"].ToString());
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            string usertype = HttpContext.Current.Session["UserType"].ToString();
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GenerateMultipleCOInvoice";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@FromDate", obj.FromDate);
+                        cmd.Parameters.AddWithValue("@ToDate", obj.ToDate);
+                        cmd.Parameters.AddWithValue("@InvoiceDate", obj.InvoiceDate);
+                        cmd.Parameters.AddWithValue("@MovementId", 4);
+                        cmd.Parameters.AddWithValue("@Companyid", companyId);
+                        cmd.Parameters.AddWithValue("@FYearId", yearid);
+                        cmd.Parameters.AddWithValue("@BranchId", branchid);
+                        cmd.Parameters.AddWithValue("@UserId", userid);
+                        cmd.Parameters.AddWithValue("@EntryDate", CommanFunctions.GetCurrentDateTime().ToString("MM/dd/yyyy HH:mm"));
                         cmd.Connection = con;
                         con.Open();
                         cmd.ExecuteNonQuery();
@@ -852,6 +895,73 @@ namespace CMSV2.DAL
                     obj.LastModifiedByName= ds.Tables[0].Rows[i]["LastModifiedByName"].ToString();
                     obj.CreatedByDate = ds.Tables[0].Rows[i]["CreatedByDate"].ToString();
                     obj.LastModifiedDate = ds.Tables[0].Rows[i]["LastModifiedDate"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        public static List<QuickAWBVM> PrintAWBRegister()
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            DatePicker param = (DatePicker)HttpContext.Current.Session["AWBRegisterPrintSearch"];
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_PrintAWBRegister";
+            cmd.CommandType = CommandType.StoredProcedure;
+            if (param.StatusId == null)
+                param.StatusId = 0;
+            cmd.Parameters.AddWithValue("@StatusId", param.StatusId);
+            cmd.Parameters.AddWithValue("@FromDate", param.FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", param.ToDate.ToString("MM/dd/yyyy"));            
+            cmd.Parameters.AddWithValue("@PaymentModeId", param.paymentId);
+            cmd.Parameters.AddWithValue("@AcHeadId", param.AcHeadId);            
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            cmd.Parameters.AddWithValue("@FYearId", yearid);
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<QuickAWBVM> objList = new List<QuickAWBVM>();
+            QuickAWBVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new QuickAWBVM();
+                    obj.HAWBNo = ds.Tables[0].Rows[i]["HAWBNo"].ToString();
+                    obj.shippername = ds.Tables[0].Rows[i]["shippername"].ToString();
+                    obj.consigneename = ds.Tables[0].Rows[i]["consigneename"].ToString();
+                    obj.origin = ds.Tables[0].Rows[i]["origin"].ToString();
+                    obj.destination = ds.Tables[0].Rows[i]["destination"].ToString();
+                    obj.InScanID = Convert.ToInt32(ds.Tables[0].Rows[i]["InScanID"].ToString());
+                    obj.InScanDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InScanDate"].ToString());
+                    obj.CourierStatus = ds.Tables[0].Rows[i]["CourierStatus"].ToString();
+                    obj.StatusType = ds.Tables[0].Rows[i]["StatusType"].ToString();
+                    obj.Pieces = ds.Tables[0].Rows[i]["Pieces"].ToString();
+                    obj.Weight = Convert.ToDecimal(ds.Tables[0].Rows[i]["Weight"].ToString());
+                    obj.CourierCharge = Convert.ToDecimal(ds.Tables[0].Rows[i]["CourierCharge"].ToString());
+                    obj.OtherCharge = Convert.ToDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
+                    obj.totalCharge = Convert.ToDecimal(ds.Tables[0].Rows[i]["totalCharge"].ToString());
+                    obj.MovementTypeID= Convert.ToInt32(ds.Tables[0].Rows[i]["MovementID"].ToString());
+                    //obj.MovementTypeID = Convert.ToInt32(ds.Tables[0].Rows[i]["MovementID"].ToString());
+                    obj.paymentmode = ds.Tables[0].Rows[i]["paymentmode"].ToString();
+                    obj.ConsigneePhone = ds.Tables[0].Rows[i]["ConsigneePhone"].ToString();
+                    obj.ConsigneeMobile = ds.Tables[0].Rows[i]["ConsigneeMobile"].ToString();
+                    obj.ConsigneeAddress1_Building = ds.Tables[0].Rows[i]["ConsigneeAddress1_Building"].ToString();
+                    obj.ConsigneeAddress3_PinCode = ds.Tables[0].Rows[i]["ConsigneeAddress3_PinCode"].ToString();
+                    obj.ConsigneeLocationName = ds.Tables[0].Rows[i]["ConsigneeLocationName"].ToString();
+                    obj.ConsigneeCityName = ds.Tables[0].Rows[i]["ConsigneeCityName"].ToString();
+                    obj.ConsigneeCountryName = ds.Tables[0].Rows[i]["ConsigneeCountryName"].ToString();
+                    obj.Description  = ds.Tables[0].Rows[i]["Description"].ToString();
+                    obj.FWDAgentNumber  = ds.Tables[0].Rows[i]["FWDAgentNumber"].ToString();
+                    obj.FAgentName = ds.Tables[0].Rows[i]["FAgentName"].ToString();
+                    obj.ParcelType = ds.Tables[0].Rows[i]["ParcelType"].ToString();
+                    obj.MovementType = ds.Tables[0].Rows[i]["MovementType"].ToString();
+                    obj.ProductName = ds.Tables[0].Rows[i]["ProductName"].ToString();
+                    obj.TaxAmount = Convert.ToDecimal(ds.Tables[0].Rows[i]["Taxamount"].ToString());
                     objList.Add(obj);
                 }
             }
@@ -1444,6 +1554,47 @@ namespace CMSV2.DAL
                     obj.RegistrationNo = ds.Tables[0].Rows[i]["RegistrationNo"].ToString();
                     obj.Model = ds.Tables[0].Rows[i]["Model"].ToString();                    
                     obj.EmployeeName = ds.Tables[0].Rows[i]["EmployeeName"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        #endregion
+
+        #region "CustomerInvoice"
+        public static List<CustomerInvoiceDetailVM> GetCustomerAWBforInvoice(int CustomerId, DateTime FromDate, DateTime ToDate,string MovementId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerAWBForInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@MovementId", ToDate.ToString("MM/dd/yyyy"));
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<CustomerInvoiceDetailVM> objList = new List<CustomerInvoiceDetailVM>();
+            CustomerInvoiceDetailVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new CustomerInvoiceDetailVM();
+                    obj.CustomerInvoiceID = 0;
+                    obj.CustomerInvoiceDetailID = 0;
+                    obj.InscanID = Convert.ToInt32(ds.Tables[0].Rows[i]["InscanID"].ToString());
+                    obj.AWBDateTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString());
+                    obj.AWBNo = ds.Tables[0].Rows[i]["AWBNo"].ToString();
+                    obj.ConsigneeName = ds.Tables[0].Rows[i]["Consignee"].ToString();
+                    obj.ConsigneeCountryName = ds.Tables[0].Rows[i]["ConsigneeCountryName"].ToString();
+                    obj.CourierCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CourierCharge"].ToString());
+                    obj.OtherCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
+                    obj.VATAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["VATAmount"].ToString());
+                    obj.NetValue = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["NetTotal"].ToString());
+                    obj.AWBChecked = true;
                     objList.Add(obj);
                 }
             }
