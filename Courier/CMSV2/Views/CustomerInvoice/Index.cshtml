@@ -53,6 +53,33 @@
 
 </script>
 <script type="text/javascript">
+    function ShowReceipt(InvoiceId,CustomerId) {
+        debugger;        
+        //GetInvoiceReceipt
+        var url = '';
+        $.ajax({
+            type: "GET",
+            url: "/CustomerInvoice/GetInvoiceReceipt",
+            datatype: "Json",
+            data: { 'InvoiceId': InvoiceId ,'CustomerId':CustomerId},
+            success: function (response) {
+                debugger;
+                var receiptid = response;            
+                if (receiptid == 0) {
+                    url = '/CustomerReceipt/CustomerTradeReceipt/0';
+                }
+                else {
+                    url = '/CustomerReceipt/CustomerTradeReceipt/' + receiptid;
+                }
+                window.open(url, '_blank').focus();
+
+
+            }
+        });
+        
+    
+
+    }
     $(document).ready(function () {
 
 
@@ -147,7 +174,7 @@
     </div>
     <div class="col-md-2 m-top">
         @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
-        <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        <button type="submit" class="btn btn-success" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
     </div>
     @*<div>
             <a href="@Url.Action("ExportCustomers")"> Report PDF </a>

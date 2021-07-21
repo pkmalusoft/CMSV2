@@ -15,7 +15,7 @@ namespace CMSV2.Models
     public partial class UserInBranch
     {
         public int UserBranchID { get; set; }
-        public string UserID { get; set; }
+        public Nullable<int> UserID { get; set; }
         public Nullable<int> BranchID { get; set; }
     }
 }

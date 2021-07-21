@@ -446,7 +446,12 @@ namespace CMSV2.Controllers
             return RedirectToAction("GeneralSetup", "BranchMaster", new {id= branchid});                      
             
         }
-
+        [HttpGet]
+        public JsonResult GetBranches()
+        {
+            var lstcourier = (from c in db.BranchMasters select new { BranchID = c.BranchID, BranchName = c.BranchName }).ToList();
+            return Json(new { data = lstcourier }, JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             db.Dispose();

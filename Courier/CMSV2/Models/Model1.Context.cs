@@ -196,7 +196,6 @@ namespace CMSV2.Models
         public virtual DbSet<UMModule> UMModules { get; set; }
         public virtual DbSet<UMUserMaster> UMUserMasters { get; set; }
         public virtual DbSet<UMUserMonitor> UMUserMonitors { get; set; }
-        public virtual DbSet<UserInBranch> UserInBranches { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<VehicleMaintenance> VehicleMaintenances { get; set; }
         public virtual DbSet<WorkCategory> WorkCategories { get; set; }
@@ -283,6 +282,7 @@ namespace CMSV2.Models
         public virtual DbSet<OutScanReturn> OutScanReturns { get; set; }
         public virtual DbSet<tblPickUpAttempt> tblPickUpAttempts { get; set; }
         public virtual DbSet<DRSMultiple> DRSMultiples { get; set; }
+        public virtual DbSet<UserInBranch> UserInBranches { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

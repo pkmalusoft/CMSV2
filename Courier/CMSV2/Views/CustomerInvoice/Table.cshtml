@@ -37,16 +37,16 @@
                 @CMSV2.Models.CommanFunctions.GetFormatNumber(item.InvoiceTotal, _decimal)
 
             </td>
-            <td style="font-size:13px" >
+            <td style="font-size:13px">
                 @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
                 <a class="aprint" target="_blank" href="InvoicePrint?id=@item.CustomerInvoiceID" title="Invoice Printing"><i class="fa fa-print"></i></a>
 
-                <a class="aview"  href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a>
-                
-                <a  class="aedit" href="Edit?id=@item.CustomerInvoiceID"><i class="fa fa-pencil"></i></a>
-                
-                <a class="adelete"  href="#" onclick="Delete(@item.CustomerInvoiceID)"><i class="fa fa-times"></i></a>
+                <a class="aview" href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a>
 
+                <a class="aedit" href="Edit?id=@item.CustomerInvoiceID"><i class="fa fa-pencil"></i></a>
+
+                <a class="adelete" href="#" onclick="Delete(@item.CustomerInvoiceID)"><i class="fa fa-times"></i></a>
+                <a class="" href="#" onclick="ShowReceipt(@item.CustomerInvoiceID,@item.CustomerID)">CR</a>
             </td>
         </tr>
     }

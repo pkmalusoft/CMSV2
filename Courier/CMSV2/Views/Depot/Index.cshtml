@@ -67,69 +67,78 @@
 <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
     
    <thead>
-        <tr>
-        <th>
-            @Html.Label("Depot")
-        </th>
-        <th>
-            @Html.Label("City/Hub")
-        </th>
-        <th>
-            @Html.Label("Type")
-        </th>
-        <th>
-            @Html.Label("Country")
-        </th>
-       
-        <th>Action</th>
-    </tr>
+       <tr>
+           <th>
+               @Html.Label("Branch")
+           </th>
+           <th>
+               @Html.Label("Depot")
+           </th>
+           <th>
+               @Html.Label("City/Hub")
+           </th>
+           <th>
+               @Html.Label("Type")
+           </th>
+           <th>
+               @Html.Label("Country")
+           </th>
+
+           <th>Action</th>
+       </tr>
    </thead>
     <tfoot>
-          <tr>
-        <th class="form-100">
-            @Html.Label("Depot")
-        </th>
-        <th class="form-100">
-            @Html.Label("City/Hub")
-        </th>
-        <th>
-            @Html.Label("Type")
-        </th>
-        <th class="form-100">
-            @Html.Label("Country")
-        </th>
-       
-        <th style="display:none"></th>
-    </tr>
+        <tr>
+            <th class="form-100">
+                @Html.Label("Depot")
+            </th>
+            <th class="form-100">
+                @Html.Label("Depot")
+            </th>
+            <th class="form-100">
+                @Html.Label("City/Hub")
+            </th>
+            <th>
+                @Html.Label("Type")
+            </th>
+            <th class="form-100">
+                @Html.Label("Country")
+            </th>
+
+            <th style="display:none"></th>
+        </tr>
     </tfoot>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Depot)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CityName)
-        </td>
-        <td>
-          @if (item.IsOwn == true)
-          {
-               @Html.Label("Own")
-          }
-            else
-            {
-                @Html.Label("Agent")
-          }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CountryName)
-        </td>
-       
-        <td>
-            <a href="@Url.Action("Edit", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
-           <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.BranchName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Depot)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CityName)
+    </td>
+    <td>
+        @if (item.IsOwn == true)
+        {
+            @Html.Label("Own")
+        }
+        else
+        {
+            @Html.Label("Agent")
+        }
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CountryName)
+    </td>
+
+    <td>
+        <a href="@Url.Action("Edit", new { id = item.ID })"><i class="fa fa-pencil"></i></a> |
+        <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+    </td>
+</tr>
 }
 
 </table>

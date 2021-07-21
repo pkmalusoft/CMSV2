@@ -90,8 +90,8 @@ namespace CMSV2.Controllers
                 if (v.InvoiceID != null && v.InvoiceID!=0)
                 {
                     vm.InvoiceID = Convert.ToInt32(v.InvoiceID);
-                    vm.InvoiceType = v.InvoiceType;                
-                
+                    vm.InvoiceType = v.InvoiceType;
+                    vm.ForInvoice = true;
                     SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
                     List<CustomerTradeReceiptVM> lst = (List<CustomerTradeReceiptVM>)Session["CustomerInvoice"];
                     if (v.InvoiceType == "TR")

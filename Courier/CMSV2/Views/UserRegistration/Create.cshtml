@@ -1,9 +1,10 @@
 ﻿@model CMSV2.Models.UserRegistrationVM
 @{
-   
+
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
-
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
 <script type="text/javascript">
         var employeenames= [];
     var customernames = [];
@@ -15,7 +16,7 @@
                 url: "/UserRegistration/GetRandomPassword",
                 datatype: "Json",
                 success: function (response) {
-                    
+
                     $('#Password').val(response.data);
                     $('#txtpass').val(response.data);
 
@@ -25,49 +26,96 @@
 
     $(document).ready(function () {
 
-         
+
         $("#RoleID").focus();
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
         $(":password").css({ "border-radius": "5px" });
 
-        
+
 
          $.ajax({
             type: "GET",
             url: "/PickUpRequest/GetCustomerName",
-            datatype: "Json",            
+            datatype: "Json",
             success: function (response) {
-                
-                customernames = response.data;                
-               
+
+                customernames = response.data;
+
             }
           });
 
            $.ajax({
             type: "GET",
             url: "/EmployeeMaster/GetEmployeeName",
-            datatype: "Json",            
+            datatype: "Json",
             success: function (response) {
-                
-                employeenames = response.data;                
-             
+
+                employeenames = response.data;
+
             }
            });
 
         $.ajax({
             type: "GET",
             url: "/Agent/GetAgentName",
-            datatype: "Json",            
+            datatype: "Json",
             success: function (response) {
-                            
-                agentnames = response.data;                
-               
+
+                agentnames = response.data;
+
             }
           });
+        $.ajax({
+            type: "Get",
+            url: "/BranchMaster/GetBranches",
+            datatype: "Json",
+            success: function (response) {
+                debugger;
+                var data = response.data;
+                $('#SelectedValues').empty();
+
+                $.each(data, function (index, value) {
+
+                    var o_st = $("#BranchId").val().split(",");
+
+                    var flag = 0;
+                    for (var j = 0; j < o_st.length; j++) {
+                        debugger;
+                        if (o_st[j] == value.BranchID) {
+                            flag = 1;
+                            break;
+                        }
+
+                    }
+
+                    if (flag == 1) {
+                        $('#SelectedValues').append('<option value="' + value.BranchID + '" selected=true>' + value.BranchName + '</option>');
+                    }
+                    else {
+                        $('#SelectedValues').append('<option value="' + value.BranchID + '">' + value.BranchName + '</option>');
+                    }
+
+                });
+
+
+
+                $('#SelectedValues').multiselect({
+                    nonSelectedText: 'Select',
+                    enableClickableOptGroups: true,
+                    enableCollapsibleOptGroups: true,
+                    enableFiltering: false,
+                    includeSelectAllOption: true,
+                    enableCaseInsensitiveFiltering: false,
+                    selectAllValue: 'multiselect-all'
+                });
+
+
+            }
+        });
 
           $("#RoleID").change(function () {
-            
+
             var roleid = $("#RoleID").val();
               console.log(roleid);
             if (roleid == 13) {
@@ -91,7 +139,7 @@
 
           });
         $('#apassshow').click(function () {
-            
+
             if ($('#apassshow').html() == 'Show') {
 
                 if ($('#Password').val()!="")
@@ -106,7 +154,7 @@
                 $('#txtpass').addClass('hide');
                   $('#apassshow').html('Show');
             }
-            
+
         });
 
         $('#txtpass').change(function () {
@@ -125,7 +173,7 @@
                     data: { username: $('#UserName').val(), roleid: $('#RoleID').val() },
                     datatype: "Json",
                     success: function (response) {
-                        
+
 
                         if (response.status == true) {
                             $('#EmailId').val(response.data);
@@ -149,7 +197,7 @@
             var role = $("#RoleID option:selected").val();
             //var phone = $("#Phone").val();
             var email = $("#EmailId").val();
-            var isactive = $("#IsActive option:selected").val();          
+            var isactive = $("#IsActive option:selected").val();
 
             if (role == "") {
                 $("#alert").show();
@@ -195,7 +243,7 @@
                 //    datatype: "Json",
                 //    data: { EmailId: $('#EmailId').val() },
                 //    success: function (data) {
-                //        
+                //
                 //        console.log(data);
                 //        if (data == "true") {
                 //            $("#validations").html("User Emailid already exists!");
@@ -226,10 +274,10 @@
             //else {
             //    $("#alert").hide();
             //    return true;
-           
+
         });
 
-        
+
         if (@ViewBag.EditMode == true) {
 
             setTimeout(function () {
@@ -246,9 +294,9 @@
 
 
 <section class="content-header">
-    
+
     <h1 class="headingfont"> @ViewBag.Title </h1>
-    
+
 </section>
 
 
@@ -283,6 +331,7 @@
                 <div class="col-md-6">
 
                     @Html.HiddenFor(model => model.UserReferenceId)
+                    @Html.HiddenFor(model => model.BranchId)
                     @Html.HiddenFor(model => model.UserID)
                     <label class="required headinglabel">Role</label>
 
@@ -299,7 +348,7 @@
                 <div class="col-md-6">
 
                     <label class="required headinglabel" id="lblusername">User Name</label>
-                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control",@autocomplete="off",@type="search" })
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @autocomplete = "off", @type = "search" })
                     @Html.ValidationMessageFor(model => model.UserName)
                 </div>
             </div>
@@ -322,13 +371,15 @@
                 <div class="col-md-6" style="padding-top:40px">
                     <a href="javascript:void(0);" onclick="getpassword();" id="btngenerate">Generate Password</a>
                 </div>
-                @*<div class="col-md-3">
-                        <label class="required headinglabel">Phone</label>
-                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control textright txttarget" })
-                        @Html.ValidationMessageFor(model => model.Phone)
-                    </div>*@
 
-
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-6">
+                    <label class="headinglabel required ">Branches</label>
+                    <select id="SelectedValues" name="SelectedValues" multiple="multiple" class="form-control">
+                        <option value=""></option>
+                    </select>
+                </div>
             </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-4 checkboxdesign" style="padding-top:20px">
@@ -348,8 +399,8 @@
 
             </div>
             <div class="row no-margin" style="padding-top:20px">
-                <div class="col-md-12 btn-right">                    
-                        <input type="submit" value="Create" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;                    
+                <div class="col-md-12 btn-right">
+                    <input type="submit" value="Create" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;
 
                     <a href='@Url.Action("Index", "UserRegistration", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
                 </div>
@@ -361,5 +412,5 @@
 </section>
 
 @*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}*@
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

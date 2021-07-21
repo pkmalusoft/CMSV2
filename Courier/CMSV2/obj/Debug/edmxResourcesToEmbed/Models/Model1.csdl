@@ -88,6 +88,7 @@
     <NavigationProperty Name="Designation" Relationship="Self.FK_AcCompany_Designation" FromRole="AcCompany" ToRole="Designation" />
     <NavigationProperty Name="LocationMaster" Relationship="Self.FK_AcCompany_LocationMaster" FromRole="AcCompany" ToRole="LocationMaster" />
     <Property Name="EnableAPI" Type="Boolean" Nullable="false" />
+    <Property Name="EnableCashCustomerInvoice" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="AcFinancialYear">
     <Key>
@@ -2816,14 +2817,6 @@
     <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="MID" Type="Int32" />
   </EntityType>
-  <EntityType Name="UserInBranch">
-    <Key>
-      <PropertyRef Name="UserBranchID" />
-    </Key>
-    <Property Name="UserBranchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BranchID" Type="Int32" />
-  </EntityType>
   <EntityType Name="UserType">
     <Key>
       <PropertyRef Name="ID" />
@@ -4543,7 +4536,6 @@
     <EntitySet Name="UMModules" EntityType="Self.UMModule" />
     <EntitySet Name="UMUserMasters" EntityType="Self.UMUserMaster" />
     <EntitySet Name="UMUserMonitors" EntityType="Self.UMUserMonitor" />
-    <EntitySet Name="UserInBranches" EntityType="Self.UserInBranch" />
     <EntitySet Name="UserTypes" EntityType="Self.UserType" />
     <EntitySet Name="VehicleMaintenances" EntityType="Self.VehicleMaintenance" />
     <EntitySet Name="WorkCategories" EntityType="Self.WorkCategory" />
@@ -7644,6 +7636,7 @@
     <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
     <EntitySet Name="tblPickUpAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblPickUpAttempt" />
     <EntitySet Name="DRSMultiples" EntityType="DB_9F57C4_couriertest_newModel.DRSMultiple" />
+    <EntitySet Name="UserInBranches" EntityType="DB_9F57C4_couriertest_newModel.UserInBranch" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12770,5 +12763,13 @@
     <Property Name="EmpID" Type="Int32" />
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <Property Name="CreatedBy" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserInBranch">
+    <Key>
+      <PropertyRef Name="UserBranchID" />
+    </Key>
+    <Property Name="UserBranchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
   </EntityType>
 </Schema>

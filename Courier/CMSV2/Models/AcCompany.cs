@@ -50,6 +50,7 @@ namespace CMSV2.Models
         public string LogoFileName { get; set; }
         public string Logo { get; set; }
         public bool EnableAPI { get; set; }
+        public bool EnableCashCustomerInvoice { get; set; }
     
         public virtual CityMaster CityMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

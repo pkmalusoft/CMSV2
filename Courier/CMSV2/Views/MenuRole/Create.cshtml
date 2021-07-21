@@ -222,7 +222,7 @@
                           foreach (var item1 in menuList.Where(p => p.ParentID == mi.MenuID))
                           {
                               @:<li style="list-style:none">
-                                  <div class="checkboxdesign" style="color:black">
+                                  <div class="checkboxdesign" style="color: black;padding-top:0px!important">
                                       <input type="checkbox" id="menu_@item1.MenuID" value="0" parentid=@mi.MenuID />
                                       <label class="headinglabel">@item1.Title</label>
                                   </div>                                  

@@ -78,23 +78,19 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
             select: function (e, i) {
                 e.preventDefault();
                 $("#CustomerName").val(i.item.label);
-                $('#CustomerId').val(i.item.ID);
-                //$('#hdnCustomerType').val(i.item.type);
-                //if ($('#hdnCustomerType').val() == "CR") {
-                //    $("#Consignor1").css('color', 'blue');
-                //}
-                //else if ($('#hdnCustomerType').val() == "CS") {
-                //    $("#Consignor1").css('color', 'red');
-                //}
-                //else {
-                //    $("#Consignor1").css('color', 'black');
-                //}
+                $('#CustomerId').val(i.item.ID);               
 
             },
+            focus: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerId').val(i.item.ID);
+
+            }
 
         });
         $('#ReportType').trigger('change');

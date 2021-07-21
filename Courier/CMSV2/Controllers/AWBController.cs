@@ -692,44 +692,58 @@ namespace CMSV2.Controllers
                         {
                             for (int j = 0; j < v.otherchargesVM.Count; j++)
                             {
-                            //InscanOtherCharge objOtherCharge = new InscanOtherCharge();
-                            int oid = Convert.ToInt32(v.otherchargesVM[j].OtherChargeID);
-                                InscanOtherCharge objOtherCharge = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID && cc.OtherChargeID == oid).FirstOrDefault();
-                            if (objOtherCharge == null)
+
+                            if (v.otherchargesVM[j].Deleted == false)
                             {
-                                objOtherCharge = new InscanOtherCharge();
-                                var maxid = (from c in db.InscanOtherCharges orderby c.InscanOtherChargeID descending select c.InscanOtherChargeID).FirstOrDefault();
-                                objOtherCharge.InscanOtherChargeID = maxid + 1;
-                                objOtherCharge.InscanID = inscan.InScanID;
-                                objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
-                                objOtherCharge.Amount = v.otherchargesVM[j].Amount;
-                                db.InscanOtherCharges.Add(objOtherCharge);
-                                db.SaveChanges();
-                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                                int oid = Convert.ToInt32(v.otherchargesVM[j].OtherChargeID);
+                                InscanOtherCharge objOtherCharge = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID && cc.OtherChargeID == oid).FirstOrDefault();
+                                if (objOtherCharge == null)
+                                {
+                                    objOtherCharge = new InscanOtherCharge();
+                                    var maxid = (from c in db.InscanOtherCharges orderby c.InscanOtherChargeID descending select c.InscanOtherChargeID).FirstOrDefault();
+                                    objOtherCharge.InscanOtherChargeID = maxid + 1;
+                                    objOtherCharge.InscanID = inscan.InScanID;
+                                    objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
+                                    objOtherCharge.Amount = v.otherchargesVM[j].Amount;
+                                    db.InscanOtherCharges.Add(objOtherCharge);
+                                    db.SaveChanges();
+                                    db.Entry(objOtherCharge).State = EntityState.Detached;
+                                }
+                                else
+                                {
+                                    //objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
+                                    objOtherCharge.Amount = v.otherchargesVM[j].Amount;
+                                    db.Entry(objOtherCharge).State = EntityState.Modified;
+                                    db.SaveChanges();
+                                    db.Entry(objOtherCharge).State = EntityState.Detached;
+                                }
                             }
                             else
                             {
-                                //objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
-                                objOtherCharge.Amount = v.otherchargesVM[j].Amount;
-                                db.Entry(objOtherCharge).State = EntityState.Modified;
-                                db.SaveChanges();
-                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                                int oid = Convert.ToInt32(v.otherchargesVM[j].OtherChargeID);
+                                InscanOtherCharge objOtherChargeDel = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID && cc.OtherChargeID == oid).FirstOrDefault();
+
+                                    if (objOtherChargeDel != null)
+                                    {
+                                            db.InscanOtherCharges.Remove(objOtherChargeDel);
+                                            db.SaveChanges();
+                                    }
                             }
                             }
 
-                        var otherchargeitems = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID);
-                        var exportdetailsid = v.otherchargesVM.Select(s => s.OtherChargeID).ToList();
-                        foreach (var e_details in otherchargeitems)
-                        {
-                            var _found = v.otherchargesVM.Where(cc => cc.OtherChargeID == e_details.OtherChargeID).FirstOrDefault();
-                            if (_found == null)
-                            {
-                                db.Entry(e_details).State = EntityState.Deleted;
+                        //var otherchargeitems = db.InscanOtherCharges.Where(cc => cc.InscanID == inscan.InScanID);
+                        //var exportdetailsid = v.otherchargesVM.Select(s => s.OtherChargeID).ToList();
+                        //foreach (var e_details in otherchargeitems)
+                        //{
+                        //    var _found = v.otherchargesVM.Where(cc => cc.OtherChargeID == e_details.OtherChargeID).FirstOrDefault();
+                        //    if (_found == null)
+                        //    {
+                        //        db.Entry(e_details).State = EntityState.Deleted;
                                 
-                            }
-                        }
+                        //    }
+                        //}
 
-                        db.SaveChanges();
+                        //db.SaveChanges();
 
                     }
 
@@ -1279,9 +1293,8 @@ namespace CMSV2.Controllers
                 obj.Mobile = v.ConsignorMobile;
                 db.CustomerMasters.Add(obj);
                 db.SaveChanges();
-                return obj.CustomerID;
-                //cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
-                //return cust.CustomerID;
+                ReceiptDAO.ReSaveCustomerCode();
+                return obj.CustomerID;                
             }
             else
             {
@@ -1596,22 +1609,49 @@ namespace CMSV2.Controllers
         [HttpGet]
         public JsonResult GetCustomerName(string term) 
         {
+            bool enablecashcustomer = (bool)Session["EnableCashCustomerInvoice"];
             if (term.Trim()!="")
             {
-                var customerlist = (from c1 in db.CustomerMasters
-                                    where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
-                                    orderby c1.CustomerName ascending
-                                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
+                if (enablecashcustomer == true)
+                {
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerID > 0 && (c1.CustomerType=="CS" || c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                        orderby c1.CustomerName ascending
+                                        select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
 
-                return Json(customerlist, JsonRequestBehavior.AllowGet);
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+
+
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") && c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                        orderby c1.CustomerName ascending
+                                        select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
+
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
-                var customerlist = (from c1 in db.CustomerMasters
-                                    where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL") 
-                                    orderby c1.CustomerName ascending
-                                    select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
-                return Json(customerlist, JsonRequestBehavior.AllowGet);
+                if (enablecashcustomer == true)
+                {
+
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerID > 0 && (c1.CustomerType=="CS" || c1.CustomerType == "CR" || c1.CustomerType == "CL")
+                                        orderby c1.CustomerName ascending
+                                        select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerID > 0 && (c1.CustomerType == "CR" || c1.CustomerType == "CL")
+                                        orderby c1.CustomerName ascending
+                                        select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).Take(25).ToList();
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
             }
             
 

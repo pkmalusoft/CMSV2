@@ -83,7 +83,7 @@
                         response($.map(data, function (val, item) {
                             return {
                                 label: val.CustomerName,
-                                value: val.CustomerName,
+                                value: val.CustomerID,
                                 ID: val.CustomerID,
                                 type: val.CustomerType
                             }
@@ -92,7 +92,7 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus:false,
             select: function (e, i) {
                 e.preventDefault();
                 $("#CustomerName").val(i.item.label);

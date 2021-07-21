@@ -19,17 +19,53 @@ namespace CMSV2.Controllers
 
         public ActionResult Home()
         {
-            var Query = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.MenuID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+            //var Query = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.MenuID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
 
-            var Query1 = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.ParentID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+            //var Query1 = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.ParentID where t1.RoleID == 13 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
 
-            foreach (Menu q in Query)
-            {
+            //foreach (Menu q in Query)
+            //{
                
-                Query1.Add(q);
+            //    Query1.Add(q);
+            //}
+
+            List<int> RoleId = (List<int>)Session["RoleID"];
+
+            int roleid = RoleId[0];
+
+            //List<Menu> Query2 = new List<Menu>();
+            var Query = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.MenuID where t1.RoleID == roleid && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+
+            var Query1 = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.ParentID where t1.RoleID == roleid && t.ParentID == 0 && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+
+            var Query2 = (from t in db.Menus join t1 in db.MenuAccessLevels on t.MenuID equals t1.ParentID where t1.RoleID == roleid && t.IsAccountMenu.Value == false orderby t.MenuOrder select t).ToList();
+
+            if (Query2 != null)
+            {
+                foreach (Menu q in Query1)
+                {
+                    var query3 = Query.Where(cc => cc.MenuID == q.MenuID).FirstOrDefault();
+                    if (query3 == null)
+                        Query2.Add(q);
+                }
+            }
+
+            if (Query1 != null)
+            {
+                foreach (Menu q in Query1)
+                {
+                    var query3 = Query.Where(cc => cc.MenuID == q.MenuID).FirstOrDefault();
+                    if (query3 == null)
+                        Query.Add(q);
+                }
             }
 
 
+
+            Session["Menu"] = Query;
+
+            ViewBag.UserName = SourceMastersModel.GetUserFullName(Convert.ToInt32(Session["UserId"].ToString()), Session["UserType"].ToString());
+            return View();
             //List<MenuVM> Query = (
             //      from a in db.Menus
             //      from b in db.MenuAccessLevels

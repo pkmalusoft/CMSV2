@@ -20,7 +20,7 @@ namespace CMSV2.Controllers
         public ActionResult Index()
         {
             int BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            List<DepotVM> lst = (from c in db.tblDepots where c.BranchID== BranchID select new DepotVM { ID = c.ID, Depot = c.Depot, CityName = c.CityName, CountryName = c.CountryName, IsOwn = c.IsOwn.Value }).ToList();
+            List<DepotVM> lst = (from c in db.tblDepots join d in db.BranchMasters on c.BranchID equals d.BranchID select new DepotVM { ID = c.ID, Depot = c.Depot, CityName = c.CityName, CountryName = c.CountryName, IsOwn = c.IsOwn.Value, BranchID=c.BranchID,BranchName=d.BranchName }).ToList();
             return View(lst);
         }
 
@@ -35,7 +35,7 @@ namespace CMSV2.Controllers
           //  ViewBag.Country = db.CountryMasters.ToList();
  //           ViewBag.Hubs = (from c in db.CityMasters where c.IsHub == true select c).ToList();
             ViewBag.Agent = db.AgentMasters.ToList();
-
+            ViewBag.Branch = db.BranchMasters.ToList();
             return View();
         }
 
@@ -54,7 +54,7 @@ namespace CMSV2.Controllers
                 a.CityName = v.CityName;
                 a.Depot = v.Depot;
                 a.CompanyID = 1;
-                a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                a.BranchID = v.BranchID;//  Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 a.IsOwn = v.IsOwn;
                 if (v.IsOwn == false)
                 {
@@ -79,8 +79,8 @@ namespace CMSV2.Controllers
 
             //ViewBag.Country = db.CountryMasters.ToList();
             //ViewBag.Hubs = (from c in db.CityMasters where c.IsHub == true && c.CountryID==tbldepot.CountryID select c).ToList();
-            ViewBag.Agent = db.AgentMasters.ToList();            
-          
+            ViewBag.Agent = db.AgentMasters.ToList();
+            ViewBag.Branch = db.BranchMasters.ToList();
             DepotVM v = new DepotVM();
             if (tbldepot == null)
             {
@@ -99,7 +99,9 @@ namespace CMSV2.Controllers
                 v.Depot = tbldepot.Depot;
                 v.IsOwn = tbldepot.IsOwn.Value;
                 v.AgentID = tbldepot.AgentID;
-
+                v.BranchID = Convert.ToInt32(tbldepot.BranchID);
+                
+                
                 if (v.IsOwn == true)
                 {
                     v.Own = "True";
@@ -125,7 +127,7 @@ namespace CMSV2.Controllers
             {
                 a.ID = v.ID;
                 a.CompanyID = v.CompanyID;
-                a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                a.BranchID = v.BranchID; //  Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 a.CityID = 19;// v.CityID;                
                 a.CountryName = v.CountryName;
                 a.CityName = v.CityName;

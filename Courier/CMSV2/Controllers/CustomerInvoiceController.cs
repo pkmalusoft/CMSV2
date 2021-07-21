@@ -198,10 +198,26 @@ namespace CMSV2.Controllers
 
 
         [HttpPost]
-        public ActionResult ShowItemList(int CustomerId, string FromDate, string ToDate,string MovementId)
+        public ActionResult ShowItemList(int CustomerId, string FromDate, string ToDate,int[] MovementId)
         {
+            string pMovementId = "";
+            if (MovementId!= null)
+            {
+                foreach (var item in MovementId)
+                {
+                    if (pMovementId == "")
+                    {
+                        pMovementId = item.ToString();
+                    }
+                    else
+                    {
+                        pMovementId = pMovementId + "," + item.ToString();
+                    }
+
+                }
+            }
             CustomerInvoiceVM _custinvoice = new CustomerInvoiceVM();
-            _custinvoice.CustomerInvoiceDetailsVM = PickupRequestDAO.GetCustomerAWBforInvoice(CustomerId, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate),MovementId);
+            _custinvoice.CustomerInvoiceDetailsVM = PickupRequestDAO.GetCustomerAWBforInvoice(CustomerId, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate),pMovementId);
             Session["InvoiceListing"] = _custinvoice.CustomerInvoiceDetailsVM;
             return PartialView("InvoiceList", _custinvoice);
         }
@@ -419,6 +435,10 @@ namespace CMSV2.Controllers
                         }
                     }
                 }
+                //Accounts Posting
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateInvoicePosting(_custinvoice.CustomerInvoiceID);
+
                 TempData["SuccessMsg"] = "You have successfully Updated the Customer Invoice";
                 return RedirectToAction("Index");
             }
@@ -484,6 +504,15 @@ namespace CMSV2.Controllers
 
             return PartialView("InvoiceList", customerInvoice);
 
+        }
+
+
+
+        [HttpGet]
+        public JsonResult GetInvoiceReceipt(int InvoiceId,int CustomerId)
+        {
+            int receiptid = PickupRequestDAO.CheckInvoiceReceipt(InvoiceId, CustomerId);
+            return Json( receiptid , JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

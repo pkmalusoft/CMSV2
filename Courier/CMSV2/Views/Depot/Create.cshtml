@@ -141,15 +141,71 @@
             }
         }
     </script>
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
 
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
-        $("#CountryID").focus();
+        $("#CityName").focus();
+        $("#CityName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("GetEventVenuesList", "ZoneChart")",
+                    data: { SearchText: request.term },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.length == 0) {
+                            //$('#EventVenueId').val("");
+                            //$('#VenueLocationMesssage').show();
+                            return false;
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.description,
+                                    value: item.place_id
+                                }
+                            }));
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert('error');
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+            select: function (event, ui) {
+                $('#CityName').val(ui.item.label);
+                $('#CityName').attr('PlaceId',ui.item.value);
+                return false;
+            },
+            focus: function (event, ui) {
+                $('#CityName').val(ui.item.label);
+                $('#CityName').attr('PlaceId', ui.item.value);
+                return false;
+            }
+        });
 
+        $('#CityName').blur(function () {
+            if ($('#CityName').attr('PlaceId') != null && $('#CityName').attr('PlaceId') != '') {
+                $.ajax({
+                    type: "GET",
+                    url: "/ZoneChart/GetVenueDetailsByPlace",
+                    datatype: "Json",
+                    data: { placeId: $('#CityName').attr('PlaceId') },
+                    success: function (response) {                                                
+                        $('#CountryName').val(response.Country);
+                        //$('#CityName').val(response.City);
+                    }
+                });
+            }
+            
+        });
         $("#AgentID").prop("disabled", false);
         $("#IsOwn").click(function () {
             if ($("#IsOwn").is(':checked')) {
@@ -164,8 +220,8 @@
             var cou = $("#CountryName").val();
             var cit = $("#CityName").val();
             var dep = $("#Depot").val();
-         
-         
+
+
             if (cou == "") {
                 $("#validations").show();
                 return false;
@@ -178,18 +234,18 @@
                 $("#validations").show();
                 return false;
             }
-          
+
             else {
                 $("#validations").hide();
                 return true;
             }
         });
-      
-       
+
+
 
 
     });
-</script>
+    </script>
 <section class="content-header">
     <h1 class="headingfont">Depot</h1>
 
@@ -200,51 +256,54 @@
     @Html.ValidationSummary(true)
      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
-        <div class="row no-margin"> 
+        <div class="row no-margin">
+            <div class="col-md-3">
+                <label class="headinglabel required">City</label>
+                @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName"})
+                @Html.ValidationMessageFor(model => model.CityName)
 
+            </div>
             <div class="col-md-3">
                 <label class="headinglabel required">Country</label>
-                @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @onFocus = "geoCountrylocate()" })
-                @*@Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
-
+                @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName"})                
                 @Html.ValidationMessageFor(model => model.CountryName)
 
             </div>
 
+
+
             <div class="col-md-3">
-                <label class="headinglabel required">City</label>                
-                @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
-                @Html.ValidationMessageFor(model => model.CityName)
+                <label class="headinglabel required">Depot</label>
+                @Html.TextBoxFor(model => model.Depot, new { @class = "form-control txttarget" })
+                @Html.ValidationMessageFor(model => model.Depot)
 
             </div>
-            
-                  <div class="col-md-3">
-                          <label class="headinglabel required">Depot</label>
-         @Html.TextBoxFor(model => model.Depot, new { @class = "form-control txttarget" })
-            @Html.ValidationMessageFor(model => model.Depot)
-                     
-                 </div>
 
 
         </div>
 
-           <div class="row no-margin" style="padding-top:25px"> 
-                   <div class="col-md-3 checkboxdesign" style="padding-top:15px">
-                    @Html.CheckBox("IsOwn", new { @name = "IsOwn" }) &nbsp;&nbsp;
-                    <label class="headinglabel">Is Own</label>
-                    @Html.ValidationMessageFor(model => model.IsOwn)
-               </div>
+        <div class="row no-margin" style="padding-top:25px">
 
-                   <div class="col-md-3">
-                          <label class="headinglabel">Agent</label>
-        @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.CountryID)
-                     
-                     
-                 </div>
+            <div class="col-md-3">
+                <label class="headinglabel">Branch</label>
+                @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BranchID)
+            </div>
 
-           
-</div>
+            <div class="col-md-3">
+                <label class="headinglabel">Agent</label>
+                @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AgentID)
+
+
+            </div>
+            <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+                @Html.CheckBox("IsOwn", new { @name = "IsOwn" }) &nbsp;&nbsp;
+                <label class="headinglabel">Is Own</label>
+                @Html.ValidationMessageFor(model => model.IsOwn)
+            </div>
+
+        </div>
     
 
  
@@ -277,4 +336,4 @@
 
    
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>*@

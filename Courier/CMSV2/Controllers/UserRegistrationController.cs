@@ -183,10 +183,29 @@ namespace CMSV2.Controllers
                         else { v.UserName = "";
                             v.UserReferenceId = 0;
                         }
+
                     }
                     
                     v.Password = a.Password;
                     v.IsActive = a.IsActive.Value;
+                    var userbranch = db.UserInBranches.Where(u => u.UserID == a.UserID).ToList();
+                    
+                    if (userbranch != null)
+                    {
+                        foreach (var item in userbranch)
+                        {
+                             if (v.BranchId=="" || v.BranchId==null)
+                            {
+                                v.BranchId = item.BranchID.ToString();
+                            }
+                            else
+                            {
+                                v.BranchId = v.BranchId + "," + item.BranchID.ToString();
+                            }
+                        }
+                    }
+
+
                     ViewBag.EditMode = "true";
                     return View(v);
 
@@ -259,6 +278,22 @@ namespace CMSV2.Controllers
                     }
 
                 }
+
+                var userbranch = db.UserInBranches.Where(u => u.UserID == a.UserID).ToList();
+                db.UserInBranches.RemoveRange(userbranch);
+                db.SaveChanges();
+                if (v.SelectedValues != null)
+                {
+                    foreach (var item in v.SelectedValues)
+                    {
+                        UserInBranch ub = new UserInBranch();
+                        ub.UserID = a.UserID;
+                        ub.BranchID = item;
+                        db.UserInBranches.Add(ub);
+                        db.SaveChanges();
+                    }
+                }
+
                 if (v.EmailNotify == true)
                 {
                     EmailDAO _emaildao = new EmailDAO();
@@ -323,6 +358,20 @@ namespace CMSV2.Controllers
                         db.SaveChanges();
                     }
 
+                }
+                var userbranch = db.UserInBranches.Where(u => u.UserID == uv.UserID).ToList();
+                db.UserInBranches.RemoveRange(userbranch);
+                db.SaveChanges();
+                if (v.SelectedValues != null)
+                {
+                    foreach (var item in v.SelectedValues)
+                    {
+                        UserInBranch ub = new UserInBranch();
+                        ub.UserID = uv.UserID;
+                        ub.BranchID = item;
+                        db.UserInBranches.Add(ub);
+                        db.SaveChanges();
+                    }
                 }
                 if (v.EmailNotify == true)
                 {

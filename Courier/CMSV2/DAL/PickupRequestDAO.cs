@@ -895,6 +895,9 @@ namespace CMSV2.DAL
                     obj.LastModifiedByName= ds.Tables[0].Rows[i]["LastModifiedByName"].ToString();
                     obj.CreatedByDate = ds.Tables[0].Rows[i]["CreatedByDate"].ToString();
                     obj.LastModifiedDate = ds.Tables[0].Rows[i]["LastModifiedDate"].ToString();
+                    obj.InvoiceId = Convert.ToInt32(ds.Tables[0].Rows[i]["InvoiceID"].ToString());
+                    obj.COInvoiceId = Convert.ToInt32(ds.Tables[0].Rows[i]["COInvoiceID"].ToString());
+                    obj.ImportShipmentId = Convert.ToInt32(ds.Tables[0].Rows[i]["ImportShipmentId"].ToString());
                     objList.Add(obj);
                 }
             }
@@ -1562,6 +1565,30 @@ namespace CMSV2.DAL
         #endregion
 
         #region "CustomerInvoice"
+        public static int CheckInvoiceReceipt(int InvoiceId,int CustomerId)
+        {
+            int ReceiptId = 0;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_CheckInvoiceReceipt";
+            cmd.CommandType = CommandType.StoredProcedure;            
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count>0)
+                {
+                    ReceiptId  = Convert.ToInt32(ds.Tables[0].Rows[0]["RecPayID"]);
+                }
+            }
+
+            return ReceiptId;
+
+          }
         public static List<CustomerInvoiceDetailVM> GetCustomerAWBforInvoice(int CustomerId, DateTime FromDate, DateTime ToDate,string MovementId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -1571,7 +1598,7 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
-            cmd.Parameters.AddWithValue("@MovementId", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@MovementId", MovementId);
             
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();

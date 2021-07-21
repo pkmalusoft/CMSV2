@@ -140,6 +140,32 @@
         $('#FromDate').val(reqdate);
         $('#ToDate').val(reqdate);
     }
+
+    function ShowInvoice(InScanId, obj) {
+        debugger;
+        var invoiceid = $(obj).attr('invoiceid');
+        var coinvoiceid = $(obj).attr('coinvoiceid');
+        var importshipmentid = $(obj).attr('importshipmentid');
+        
+        var url = '';
+        if (importshipmentid == 0 && invoiceid == 0) {
+            url = '/CustomerInvoice/Create';
+        }
+        else if (importshipmentid > 0 && coinvoiceid == 0) {
+            url = '/COLoaderInvoice/Create';
+        }
+        else if (importshipmentid == 0 && invoiceid > 0) {
+            
+            url = '/CustomerInvoice/Edit?id=' + invoiceid;
+        }
+        else if (importshipmentid > 0 && coinvoiceid > 0) {
+            url = '/COLoader/Edit?id=' + coinvoiceid;            
+        }
+        
+        window.open(url, '_blank').focus();
+
+
+    }
         function ShowStatusModal(InScanId) {
 
             $('#InScanID').val(InScanId);
@@ -405,36 +431,39 @@
              
 
 </div>
-        <div class="row">
-           
-          
-           
-              <div class="col-md-2">
-                <label class="headinglabel">Payment Mode</label>
-                @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control" })
-            </div>
-            <div class="col-md-2">
-                <label class="headinglabel">Origin</label>
-                @Html.TextBoxFor(model => model.Origin, new { @class = "form-control txttarget", @placeholder = "Select Origin" })
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Destination</label>
-                @Html.TextBoxFor(model => model.Destination, new { @class = "form-control txttarget",  @placeholder = "Select Destination" })
+    <div class="row">
 
-            </div>
 
-            <div class="col-md-3">
-            
-               <div class="" style="padding-top:32px; ">
 
-                <button type="button" class="btn btn-danger  mt-0" title="Clear Data" onclick="ClearData()">Clear All</button>&nbsp;&nbsp;
-                <button class="btn btn-success" type="submit" style="width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                
-            </div>
+        <div class="col-md-2">
+            <label class="headinglabel">Payment Mode</label>
+            @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control" })
         </div>
-        
+        <div class="col-md-2">
+            <label class="headinglabel">Origin</label>
+            @Html.TextBoxFor(model => model.Origin, new { @class = "form-control txttarget", @placeholder = "Select Origin" })
+        </div>
+        <div class="col-md-3">
+            <label class="headinglabel">Destination</label>
+            @Html.TextBoxFor(model => model.Destination, new { @class = "form-control txttarget", @placeholder = "Select Destination" })
 
         </div>
+      
+        <div class="col-md-3">
+
+            <div class=" " style="padding-top: 0px;">
+
+                <button type="button" class="btn btn-danger btn_top_gap " title="Clear Data" onclick="ClearData()">Clear All</button>&nbsp;&nbsp;
+
+                <button class="btn btn-success sm_btn" type="submit">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+
+
+    </div>
     </div>
 
         <div class="text-right row">
@@ -448,7 +477,7 @@
                     {
                         if (@CMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                         {
-                            @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                            @*@Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })*@
                         }
                         else
                         {
@@ -595,7 +624,7 @@
                                 <a href="#" title="Change Satus" onclick="ShowStatusModal('@item.InScanID')"><i class="fa fa-file"></i></a> |
                                 @if (ismodify)
                                 {
-                                    <a href="@Url.Action("Create", new { id = item.InScanID})"><i class="fa fa-pencil"></i>|</a>
+                                    <a href="@Url.Action("Create", new { id = item.InScanID })"><i class="fa fa-pencil"></i>|</a>
                                 }
                                 @if (isview)
                                 {
@@ -607,8 +636,9 @@
                                 }
                                 @if (isprint)
                                 {
-                                    <a target="_blank" href="@Url.Action("AWBPrintReport", "AWB", new { id = item.InScanID })"><i class="fa fa-print"></i></a>
-                                }
+                                    <a target="_blank" href="@Url.Action("AWBPrintReport", "AWB", new { id = item.InScanID })"><i class="fa fa-print"></i>|</a>
+                                } 
+                                <a href="#" title="Invoice" invoiceid="@item.InvoiceId" coinvoiceid="@item.COInvoiceId" importshipmentid="@item.ImportShipmentId"  onclick="ShowInvoice('@item.InScanID',this)">IN</a>                                
                             </td>
                         </tr>
                     }

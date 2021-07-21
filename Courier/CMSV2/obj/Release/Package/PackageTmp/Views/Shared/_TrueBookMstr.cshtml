@@ -45,6 +45,11 @@
         html, button, input, optgroup, select, textarea {
             font-family: Calibri;
         }
+        .icon_ques{
+            font-size: 22px;
+            padding-top: 17px;
+            color: red;
+        }
 
         .field-validation-error {
             color: #ff0000;
@@ -241,15 +246,13 @@
 
 
     <script type="text/javascript">
-      
-            $(document).ready(function () {
-                $("form").bind("keypress", function (e) {
-                    if (e.keyCode == 13) {
-                        return false;
-                    }
-                });
+        $(document).ready(function () {
+            $("form").bind("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    return false;
+                }
             });
-
+        });
         function ShowProfile() {
             $('#UserProfileModal').modal('show');
 
@@ -358,6 +361,25 @@
 
             });
 
+            $(".txttargetcaps").change(function () {
+                var x = $(this);
+                var str = "";
+                str = x.val();
+                var newtxt = "";
+                var newtxt = str.toUpperCase();
+                //for (var i = 0; i < splitStr.length; i++) {
+                //    // You do not need to check if i is larger than splitStr length, as your for does that for you
+                //    // Assign it back to the array
+                //    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+                //}
+                //// Directly return the joined string
+                
+                //newtxt = splitStr.join(' ');
+                //$(x).val('');
+                $(x).val(newtxt);
+
+            });
+
           @*  $("#AcFYearID").change(function () {
                 alert("hi");
                 //$.ajax({
@@ -460,6 +482,7 @@
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->
 
+               <a href="https://www.manula.com/manuals/malusoft/https-www-manula-com-manuals-malusoft-1-en-pdf/1/en/topic/net4courier" target="_blank" title="help"> <i class="fa fa-question icon_ques text-danger"></i></a>
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"><span class="sr-only">Toggle navigation</span> </a>
                 <div style="display: inline-block; padding-top: 15px;">
                     @*@Html.DropDownList("AcFYearID", new SelectList(AcYearList, "AcFinancialYearID", "FYearName"), new { @class = "form-control" })*@
@@ -696,6 +719,23 @@
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
         }
+    </script>
+    <script type="text/javascript">
+        $("document").ready(function(){
+                
+                var elem = $('.fa.fa-refresh').parent('.btn').parent();
+                $(elem).css({"padding-top":"0"});
+
+                if($(elem).hasClass("mt-3"))        {
+                    $(elem).removeClass("mt-3");
+                }
+
+                if($(elem).hasClass("m-top")){
+                    $('.fa.fa-refresh').parent('.btn').addClass('btn-success ').removeAttr('style');
+                }else{
+                    $('.fa.fa-refresh').parent('.btn').addClass('btn-success sm_btn').removeAttr('style');
+                }
+        });
     </script>
     <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 

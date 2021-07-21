@@ -60,7 +60,7 @@
     }
     $(document).ready(function () {
         $('#EffectFromDate').datetimepicker({
-            format: 'MM-DD-YYYY'
+            format: 'DD-MM-YYYY'
         });
         $("#TextBoxVenueLocation").autocomplete({
             source: function (request, response) {
@@ -211,15 +211,15 @@
                 $("#validations").show();
                 return false;
             }
-            else if (countrycount == 0 && $("#StatusZone").val() == "I") {
+            //else if (countrycount == 0 && $("#StatusZone").val() == "I") {
 
-                $("#validations").show();
-                return false;
-            }
-            else if (citycount == 0 && $("#StatusZone").val() == "D") {
-                $("#validations").show();
-                return false;
-            }
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (citycount == 0 && $("#StatusZone").val() == "D") {
+            //    $("#validations").show();
+            //    return false;
+            //}
             else {
                 $("#validations").hide();
                 return true;
@@ -261,7 +261,7 @@
                 <div class="col-md-2">
                     @Html.HiddenFor(mode => Model.EmpZoneAllocationID)
                     <label class="headinglabel required">Effective date</label>
-                    @Html.TextBoxFor(model => model.EffectFromDate, new { @class = "form-control text-right", @required = "true" })
+                    @Html.TextBoxFor(model => model.EffectFromDate, new { @name= "EffectFromDate", @class = "form-control text-right", @required = "true" })
                 </div>
 
                 <div class="col-md-3">

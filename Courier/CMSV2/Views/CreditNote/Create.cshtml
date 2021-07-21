@@ -147,7 +147,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $("#CustomerName").val(ui.item.value);
-                $('#CustomerID').val(i.item.CustomerId);
+                $('#CustomerID').val(ui.item.CustomerId);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -157,7 +157,7 @@
 
         });
 
-        $("#CustomerID").change(function () {
+        $("#CustomerName").change(function () {
             var ID = $('#CustomerID').val();
             $.ajax({
                 type: "POST",
@@ -241,8 +241,7 @@
             }
         });
 
-        if ($('#CreditNoteID').val() !=0)
-        {
+        if ($('#CreditNoteID').val() != 0) {
             $("#CustomerID").attr('readonly', 'readonly');
             if ($("#ForInvoice").is(':checked')) {
                 $('#InvoiceNo').removeAttr('readonly');
@@ -260,6 +259,10 @@
                 $('#InvoiceID').removeAttr('required');
             }
 
+        }
+        else {
+            $('#InvoiceNo').attr('readonly', 'readonly');
+            $('#InvoiceDate').attr('readonly', 'readonly');
         }
 
         $("#Amount").on('change', function () {

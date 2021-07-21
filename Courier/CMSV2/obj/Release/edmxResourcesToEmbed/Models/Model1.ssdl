@@ -71,6 +71,7 @@
     <Property Name="Logo" Type="nvarchar(max)" />
     <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
     <Property Name="EnableAPI" Type="bit" Nullable="false" />
+    <Property Name="EnableCashCustomerInvoice" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="AccountHeadControl">
     <Key>
@@ -4118,7 +4119,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
       <PropertyRef Name="UserBranchID" />
     </Key>
     <Property Name="UserBranchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserID" Type="int" />
     <Property Name="BranchID" Type="int" />
   </EntityType>
   <EntityType Name="UserRegistration">

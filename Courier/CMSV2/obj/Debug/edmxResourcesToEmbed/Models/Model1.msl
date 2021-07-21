@@ -38,6 +38,7 @@
     <EntitySetMapping Name="AcCompanies">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcCompany">
         <MappingFragment StoreEntitySet="AcCompany">
+          <ScalarProperty Name="EnableCashCustomerInvoice" ColumnName="EnableCashCustomerInvoice" />
           <ScalarProperty Name="EnableAPI" ColumnName="EnableAPI" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
           <ScalarProperty Name="AcCompany1" ColumnName="AcCompany" />
@@ -2755,15 +2756,6 @@
           <ScalarProperty Name="LogoutTime" ColumnName="LogoutTime" />
           <ScalarProperty Name="MachineName" ColumnName="MachineName" />
           <ScalarProperty Name="MID" ColumnName="MID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserInBranches">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.UserInBranch">
-        <MappingFragment StoreEntitySet="UserInBranch">
-          <ScalarProperty Name="UserBranchID" ColumnName="UserBranchID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -9321,6 +9313,15 @@
           <ScalarProperty Name="DRSID" ColumnName="DRSID" />
           <ScalarProperty Name="PODID" ColumnName="PODID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInBranches">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.UserInBranch">
+        <MappingFragment StoreEntitySet="UserInBranch">
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserBranchID" ColumnName="UserBranchID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

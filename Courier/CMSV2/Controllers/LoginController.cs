@@ -52,10 +52,10 @@ namespace CMSV2.Controllers
             int proleid = 0;
             int userid = 0;
             string roletype = "";
-                  int currentyear = DateTime.Now.Year;
+            int currentyear = DateTime.Now.Year;
             List<int> rolelist = new List<int>();
             UserRegistration u1 = null;
-            u1 = (from c in db.UserRegistrations where c.UserName == u.UserName && c.Password == u.Password  select c).FirstOrDefault();
+            u1 = (from c in db.UserRegistrations where c.UserName == u.UserName && c.Password == u.Password select c).FirstOrDefault();
             if (u1 != null)
             {
                 userid = u1.UserID;
@@ -69,7 +69,7 @@ namespace CMSV2.Controllers
                 {
                     proleid = 13;
                     roletype = "Customer";
-                    var custdetail= (from u2 in db.CustomerMasters where u2.UserID == userid select u2).FirstOrDefault();
+                    var custdetail = (from u2 in db.CustomerMasters where u2.UserID == userid select u2).FirstOrDefault();
                     //var custdetail = (from u2 in db.UserRegistrations join c1 in db.CustomerMasters on u2.UserID equals c1.UserID join d1 in db.tblDepots on c1.DepotID equals d1.ID where u1.UserID == userid select new { Customerid = c1.CustomerID, DepotId = d1.ID }).FirstOrDefault();
                     if (custdetail == null)
                     {
@@ -79,19 +79,19 @@ namespace CMSV2.Controllers
                     else
                     {
                         Session["CustomerId"] = custdetail.CustomerID;
-                        int custdepotid=0;
+                        int custdepotid = 0;
                         if (custdetail.DepotID == null)
                         {
                             custdepotid = db.tblDepots.FirstOrDefault().ID;
-                            
+
                         }
                         else
                         {
-                            custdepotid =Convert.ToInt32(custdetail.DepotID);
-                            
+                            custdepotid = Convert.ToInt32(custdetail.DepotID);
+
                         }
-                        
-                        int? branchid = (from u2 in db.tblDepots where u2.ID == custdepotid && u2.BranchID!=null select u2.BranchID).FirstOrDefault();
+
+                        int? branchid = (from u2 in db.tblDepots where u2.ID == custdepotid && u2.BranchID != null select u2.BranchID).FirstOrDefault();
                         Session["CurrentBranchID"] = branchid;
                         Session["CurrentDepotID"] = custdepotid;
                         Session["CurrentDepot"] = db.tblDepots.Find(custdepotid).Depot;
@@ -100,73 +100,83 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-                    proleid =Convert.ToInt32(u1.RoleID);
+                    proleid = Convert.ToInt32(u1.RoleID);
                     roletype = "Employee";
                     int? depotid = (from u2 in db.EmployeeMasters where u2.UserID == userid select u2.DepotID).FirstOrDefault(); //&& u2.DepotID == u.DepotID 
-                  
-                    
+
+
                     if (depotid == null)
                     {
                         depotid = db.tblDepots.FirstOrDefault().ID;
                         //TempData["SuccessMsg"] = "Invalid Depot Selection!";
                         //return RedirectToAction("Login", "Login");
                     }
-                    
-                        int? branchid = (from u2 in db.tblDepots where u2.ID == depotid && u2.BranchID != null select u2.BranchID).FirstOrDefault();
-                        Session["CurrentBranchID"] = branchid;
-                        Session["CurrentDepotID"] = depotid;
+
+                    int? branchid = (from u2 in db.tblDepots where u2.ID == depotid && u2.BranchID != null select u2.BranchID).FirstOrDefault();
+                    Session["CurrentBranchID"] = branchid;
+                    Session["CurrentDepotID"] = depotid;
                     Session["CurrentDepot"] = db.tblDepots.Find(depotid).Depot;
 
                 }
 
-             }                         
+            }
             else
             {
                 //TempData["ErrorMsg"] = "User does not exists!";
                 //TempData["Modal"] = "Login";
                 Session["LoginStatus"] = "Login";
-                Session["StatusMessage"]= "User does not exists!";
+                Session["StatusMessage"] = "User does not exists!";
                 //return RedirectToAction("Login");
-                return RedirectToAction("Home","Home");
+                return RedirectToAction("Home", "Home");
             }
 
 
             //User and role Setting
             rolelist.Add(proleid);
-                Session["RoleID"] = rolelist;
+            Session["RoleID"] = rolelist;
             Session["UserRoleID"] = rolelist[0];
-                Session["UserID"] = u1.UserID;
-                Session["UserName"] = u1.UserName;
-                //Session["CurrentBranchID"] = u.BranchID;                                                          
-                               
-                var compdetail = db.AcCompanies.FirstOrDefault();
-                Session["CurrentCompanyID"] = compdetail.AcCompanyID;
-                Session["CurrencyId"] = compdetail.CurrencyID;
-                Session["EXRATE"] = 1;
-                Session["CompanyName"] = compdetail.AcCompany1;
-                Session["CompanyAddress"] = compdetail.Address1 + "," + compdetail.Address2 + " " + compdetail.Address3 + compdetail.CityName + " " + compdetail.CountryName;
+            Session["UserID"] = u1.UserID;
+            Session["UserName"] = u1.UserName;
+            //Session["CurrentBranchID"] = u.BranchID;                                                          
+
+            var compdetail = db.AcCompanies.FirstOrDefault();
+            Session["CurrentCompanyID"] = compdetail.AcCompanyID;
+            Session["CurrencyId"] = compdetail.CurrencyID;
+            Session["EXRATE"] = 1;
+            Session["CompanyName"] = compdetail.AcCompany1;
+            Session["EnableCashCustomerInvoice"] = compdetail.EnableCashCustomerInvoice;
+            Session["EnableAPI"] = compdetail.EnableAPI;
+            Session["CompanyAddress"] = compdetail.Address1 + "," + compdetail.Address2 + " " + compdetail.Address3 + compdetail.CityName + " " + compdetail.CountryName;
             //int accid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
 
             int currencyid = compdetail.CurrencyID.Value; //  (from c in db.AcCompanies where c.AcCompanyID == accid select c.CurrencyID).FirstOrDefault().Value;
-                var currency = (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c).FirstOrDefault();
-                short? noofdecimals = currency.NoOfDecimals;
-                string monetaryunit = currency.MonetaryUnit; // (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c.MonetaryUnit.FirstOrDefault().Value;
-                Session["Decimal"] = noofdecimals;
-                Session["MonetaryUnit"] = monetaryunit;
+            var currency = (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c).FirstOrDefault();
+            short? noofdecimals = currency.NoOfDecimals;
+            string monetaryunit = currency.MonetaryUnit; // (from c in db.CurrencyMasters where c.CurrencyID == currencyid select c.MonetaryUnit.FirstOrDefault().Value;
+            Session["Decimal"] = noofdecimals;
+            Session["MonetaryUnit"] = monetaryunit;
 
-
-            //var allyear = db.AcFinancialYears.OrderByDescending(cc => cc.AcFYearFrom).ToList();
-            //    Session["FYear"] = allyear;
-
-            var alldepot = db.tblDepots.Where(cc=>cc.BranchID!=null).OrderBy(cc => cc.Depot).ToList();
+            if (Session["CurrentBranchID"] == null)
+            {
+                Session["CurrentBranchID"] = db.BranchMasters.FirstOrDefault().BranchID;
+            }
+            
+            //var alldepot = db.tblDepots.Where(cc=>cc.BranchID!=null).OrderBy(cc => cc.Depot).ToList();
+            var alldepot = (from c in db.tblDepots join d in db.BranchMasters on c.BranchID equals d.BranchID join e in db.UserInBranches on d.BranchID equals e.BranchID select c).ToList(); // db.tblDepots.Where(cc => cc.BranchID != null).OrderBy(cc => cc.Depot).ToList();
+            if (alldepot==null)
+            {
+                if (Session["CurrentBranchID"] != null)
+                {
+                    int currentbranchid1 = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    alldepot = db.tblDepots.Where(cc => cc.BranchID != null && cc.BranchID== currentbranchid1).OrderBy(cc => cc.Depot).ToList();
+                }
+            }
+            
             Session["Depot"] = alldepot;
 
             ////Year Setting
             ///
-            if (Session["CurrentBranchID"]==null)
-            {
-                Session["CurrentBranchID"] = alldepot.FirstOrDefault().BranchID;
-            }
+           
             int currentbranchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int startyearid = Convert.ToInt32(db.BranchMasters.Find(currentbranchid).AcFinancialYearID);
             if (startyearid==0)

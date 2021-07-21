@@ -76,6 +76,7 @@
           <Property Name="Logo" Type="nvarchar(max)" />
           <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
           <Property Name="EnableAPI" Type="bit" Nullable="false" />
+          <Property Name="EnableCashCustomerInvoice" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountHeadControl">
           <Key>
@@ -4152,7 +4153,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
             <PropertyRef Name="UserBranchID" />
           </Key>
           <Property Name="UserBranchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="int" />
           <Property Name="BranchID" Type="int" />
         </EntityType>
         <EntityType Name="UserRegistration">
@@ -7488,6 +7489,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <NavigationProperty Name="Designation" Relationship="Self.FK_AcCompany_Designation" FromRole="AcCompany" ToRole="Designation" />
           <NavigationProperty Name="LocationMaster" Relationship="Self.FK_AcCompany_LocationMaster" FromRole="AcCompany" ToRole="LocationMaster" />
           <Property Name="EnableAPI" Type="Boolean" Nullable="false" />
+          <Property Name="EnableCashCustomerInvoice" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AcFinancialYear">
           <Key>
@@ -10216,14 +10218,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MID" Type="Int32" />
         </EntityType>
-        <EntityType Name="UserInBranch">
-          <Key>
-            <PropertyRef Name="UserBranchID" />
-          </Key>
-          <Property Name="UserBranchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BranchID" Type="Int32" />
-        </EntityType>
         <EntityType Name="UserType">
           <Key>
             <PropertyRef Name="ID" />
@@ -11943,7 +11937,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="UMModules" EntityType="Self.UMModule" />
           <EntitySet Name="UMUserMasters" EntityType="Self.UMUserMaster" />
           <EntitySet Name="UMUserMonitors" EntityType="Self.UMUserMonitor" />
-          <EntitySet Name="UserInBranches" EntityType="Self.UserInBranch" />
           <EntitySet Name="UserTypes" EntityType="Self.UserType" />
           <EntitySet Name="VehicleMaintenances" EntityType="Self.VehicleMaintenance" />
           <EntitySet Name="WorkCategories" EntityType="Self.WorkCategory" />
@@ -15044,6 +15037,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySet Name="OutScanReturns" EntityType="DB_9F57C4_couriertest_newModel.OutScanReturn" />
           <EntitySet Name="tblPickUpAttempts" EntityType="DB_9F57C4_couriertest_newModel.tblPickUpAttempt" />
           <EntitySet Name="DRSMultiples" EntityType="DB_9F57C4_couriertest_newModel.DRSMultiple" />
+          <EntitySet Name="UserInBranches" EntityType="DB_9F57C4_couriertest_newModel.UserInBranch" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -20171,6 +20165,14 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
         </EntityType>
+        <EntityType Name="UserInBranch">
+          <Key>
+            <PropertyRef Name="UserBranchID" />
+          </Key>
+          <Property Name="UserBranchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20214,6 +20216,7 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
           <EntitySetMapping Name="AcCompanies">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcCompany">
               <MappingFragment StoreEntitySet="AcCompany">
+                <ScalarProperty Name="EnableCashCustomerInvoice" ColumnName="EnableCashCustomerInvoice" />
                 <ScalarProperty Name="EnableAPI" ColumnName="EnableAPI" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
                 <ScalarProperty Name="AcCompany1" ColumnName="AcCompany" />
@@ -22931,15 +22934,6 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
                 <ScalarProperty Name="LogoutTime" ColumnName="LogoutTime" />
                 <ScalarProperty Name="MachineName" ColumnName="MachineName" />
                 <ScalarProperty Name="MID" ColumnName="MID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserInBranches">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.UserInBranch">
-              <MappingFragment StoreEntitySet="UserInBranch">
-                <ScalarProperty Name="UserBranchID" ColumnName="UserBranchID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29497,6 +29491,15 @@ warning 6002: The table/view 'DB_A69D99_NICE.dbo.Transit' does not have a primar
                 <ScalarProperty Name="DRSID" ColumnName="DRSID" />
                 <ScalarProperty Name="PODID" ColumnName="PODID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInBranches">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.UserInBranch">
+              <MappingFragment StoreEntitySet="UserInBranch">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserBranchID" ColumnName="UserBranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

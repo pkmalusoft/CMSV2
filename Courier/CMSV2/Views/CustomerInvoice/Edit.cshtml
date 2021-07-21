@@ -165,9 +165,7 @@ input[type=checkbox], input[type=radio] {
 
     }
     $(function () {
-        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
-
-        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
 </script>
 <script type="text/javascript">
@@ -210,14 +208,14 @@ input[type=checkbox], input[type=radio] {
                     @Html.TextBoxFor(model => model.CustomerInvoiceNo, new { @class = "form-control txttarget", @disabled = "true" })
                     @Html.ValidationMessageFor(model => model.CustomerInvoiceNo)
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     @Html.HiddenFor(model => model.CustomerInvoiceID)
                     @Html.HiddenFor(model => model.CustomerID)
                     @Html.HiddenFor(model => model.ChargeableWT)
                     @Html.HiddenFor(model => model.AdminAmt)
                     @Html.HiddenFor(model => model.FuelAmt)
                     @Html.HiddenFor(model => model.InvoiceTotal)
-                    <label class="headinglabel required "> Invoice Date</label>
+                    <label class="headinglabel required"> Invoice Date</label>
                     @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.InvoiceDate)
                 </div>
@@ -252,7 +250,7 @@ input[type=checkbox], input[type=radio] {
                     @Html.TextBoxFor(model => model.Discount, new { @class = "form-control txttarget text-right calfield", @onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.Discount)
                 </div>
-                <div class="col-md-2 align_self">
+                <div class="col-md-3 align_self">
 
                     <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })

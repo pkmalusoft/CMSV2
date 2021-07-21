@@ -202,6 +202,10 @@ namespace CMSV2.Models
         public string CreatedByDate { get; set; }
         public string LastModifiedDate { get; set; }
 
+        
+
+        public int COInvoiceId { get; set; }
+        public int ImportShipmentId { get; set; }
         public int AcheadID { get; set; }
         public string AcHeadName { get; set; }
         public bool IsNCND { get; set; }
@@ -250,5 +254,6 @@ namespace CMSV2.Models
     public class OtherChargeDetailVM : InscanOtherCharge
     { 
         public string OtherChargeName { get; set; }
+        public bool Deleted { get; set; }
     }
 }

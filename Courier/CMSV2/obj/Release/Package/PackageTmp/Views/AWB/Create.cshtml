@@ -205,7 +205,7 @@
                     datatype: "Json",
                     data: { placeId: $('#ConsignorLocationName').attr('PlaceId') },
                     success: function (response) {
-                        debugger;
+                        
                         // console.log(response);
                         $('#ConsignorCountryName').val(response.Country);
                         $('#ConsignorCityName').val(response.City);
@@ -240,7 +240,7 @@
                     datatype: "Json",
                     data: { placeId: $('#ConsigneeLocationName').attr('PlaceId') },
                     success: function (response) {
-                        debugger;
+                        
                         // console.log(response);
                         $('#ConsigneeCountryName').val(response.Country);
                         $('#ConsigneeCityName').val(response.City);
@@ -358,7 +358,7 @@
                     datatype: "Json",
                     data: { placeId: $('#DeliveryLocationPlaceId').val() },
                     success: function (response) {
-                        debugger;
+                        
                         // console.log(response);
                         $('#DeliveryCountry').val(response.Country);
                         $('#DeliveryCity').val(response.City);
@@ -389,7 +389,7 @@
                     datatype: "Json",
                     data: { placeId: $('#PickupLocationPlaceId').val() },
                     success: function (response) {
-                        debugger;
+                        
                         // console.log(response);
                         $('#OriginCountry').val(response.Country);
                         $('#OriginCity').val(response.City);
@@ -444,7 +444,7 @@
         }
     }
     function CalculateTax() {
-        debugger;
+        
         var tax = $('#ChkTaxPercent').prop('checked');
         if (tax == true) {
             //$('#lblTaxPercent').removeClass('hide');
@@ -457,9 +457,9 @@
             var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
 
             var taxval = parseFloat(charge) * (parseFloat(taxpercent) / 100.00);
-            $('#TaxAmount').val(parseFloat(taxval).toFixed(2));
+            $('#TaxAmount').val(parseFloat(taxval).toFixed(@_decimal));
             var net = parseFloat(charge) + parseFloat(taxval)
-            $('#totalCharge').val(parseFloat(net).toFixed(2));
+            $('#totalCharge').val(parseFloat(net).toFixed(@_decimal));
         }
         else {
             var taxpercent = 0;
@@ -471,9 +471,9 @@
             var charge = parseFloat($('#CourierCharge').val()) + parseFloat($('#OtherCharge').val());
 
             var taxval = 0;
-            $('#TaxAmount').val(parseFloat(taxval).toFixed(2));
+            $('#TaxAmount').val(parseFloat(taxval).toFixed(@_decimal));
             var net = parseFloat(charge) + parseFloat(taxval)
-            $('#totalCharge').val(parseFloat(net).toFixed(2));
+            $('#totalCharge').val(parseFloat(net).toFixed(@_decimal));
         }
 
 
@@ -482,7 +482,7 @@
     $(document).ready(function () {
         //paymenttype change
         $('#PaymentModeId').change(function () {
-            debugger;
+            
             var modeid = $('#PaymentModeId').val();
             if (modeid == 1) { //PKP
                 $('#divcustomer').addClass('hide');
@@ -579,7 +579,7 @@
                 $('#hdnCustomerType').val(ui.item.type);
             },
             select: function (e, i) {
-                debugger;
+                
                 e.preventDefault();
                 $("#customer").val(i.item.label);
                 $('#CustomerID').val(i.item.CustomerId);
@@ -589,7 +589,7 @@
 
         });
         $('#customer').change(function () {
-            debugger;
+            
             if ($("#CustomerandShipperSame").is(':checked')) {
                 $("#shippername").val($('#customer').val());
                 $("#shippername").attr('readonly', 'readonly');
@@ -946,7 +946,7 @@
                     if (response.status == "ok") {
                          $("#notesdetailsbody").html('');
                         $.each(response.data, function (index, item) {
-                            debugger;
+                            
                             var myDate = new Date(item.EntryDate.match(/\d+/)[0] * 1);
                             var cmon = myDate.getMonth() + 1;
                             var entrydate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
@@ -999,7 +999,7 @@
                         $('#txtcustomeremail').val(response.custemail);
                          $("#notificationdetailsbody").html('');
                         $.each(response.data, function (index, item) {
-                            debugger;
+                            
                             var myDate = new Date(item.EntryDate.match(/\d+/)[0] * 1);
                             var cmon = myDate.getMonth() + 1;
                             var entrydate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
@@ -1013,7 +1013,7 @@
             });
     }
     function getMovementType() {
-        debugger;
+        
         if ($('#OriginCountry').val() != $('#BranchCountry').val() && $('#DeliveryCountry').val() != $('#BranchCountry').val()) {
             $('#MovementTypeID').val(4).trigger('change');//Transhipment
         }
@@ -1112,7 +1112,7 @@
         });
 
         $('#MovementTypeID').change(function () {
-            debugger;
+            
             var movetype = $('#MovementTypeID option:selected').text();
             if (movetype == 'Domestic' || movetype == 'Export') {
                 $('#materialcost').removeAttr('Disabled');
@@ -1125,7 +1125,7 @@
         });
 
         $('#Weight').change(function () {
-            debugger;
+            
             var weightval = parseFloat($('#Weight').val());
             if (weightval > 30 && $('#ParcelTypeID').val() != 4) {
                 if ($('#ParcelTypeID').val() == 0) {
@@ -1172,7 +1172,7 @@
         // });
 
         $('#ChangeStatusTypeId').change(function () {
-            debugger;
+            
             var pcourierstatusid = $('#CourierStatusId').val();
             if (pcourierstatusid == null)
                 pcourierstatusid = 0;
@@ -1183,7 +1183,7 @@
                 datatype: "Json",
                 data: { 'StatusTypeId' : $('#ChangeStatusTypeId').val() },
                 success: function (response) {
-                    debugger;
+                    
                     //$('#CourierStatusId').select2("destroy");
                      //$("#ChangeCourierStatusId").select2('destroy');
                      $('#ChangeCourierStatusId').html('');
@@ -1231,7 +1231,7 @@
                 datatype: "Json",
                 data: statusobj,
                 success: function (response) {
-                    debugger;
+                    
                     if (response.status == "ok")
                     {
                         var statustype = $("#ChangeStatusTypeId option:selected").text();
@@ -1266,7 +1266,7 @@
                 datatype: "Json",
                 data: { id: $("#HAWBNo").val() },
                 success: function (data) {
-                    debugger;
+                    
                     if (data.Exist == 0) {
                         $("#IsAvailable").val(0);
                         var AWBInfo = data.AWBInfo;
@@ -1316,7 +1316,7 @@
                             $("#ConsignorMobileNo").val('');
                             $('#TransactionDate').focus();
                         }
-                        debugger;
+                        
                         if (status == 'Available') {
                             var CustomerName = AWBInfo.CustomerName;
                             var CustomerId = AWBInfo.CustomerID;
@@ -1378,7 +1378,7 @@
             });
         });
         $("#btnsave").click(function () {
-            debugger;
+            
 
             //var fullform = $('#quickAWB').valid();            
             //if ($("#HAWBNo1").val() != "") {
@@ -1464,7 +1464,7 @@
 
                         },
                         error: function () {
-                            alert("Failed! Please try again.");
+                           console.log("Date Validation Failed! Please try again.");
                         }
                     });
                 }
@@ -1519,7 +1519,7 @@
                 data: { id: $('#EnquiryNo').val() },
                 success: function (data) {
                     if (data.Exist == 1) {
-                        debugger;
+                        
                         $('#HAWBNo').val(data.AWBNo);
                          $('#h2awb').html('<strong>' + $('#HAWBNo').val() + '</strong>');
                         $("#InScanID").val(data.InScanID);
@@ -1677,7 +1677,7 @@
 <script>
     //get courier charge
     function getCourierCharge() {
-        debugger;
+        
         var CustomerRateTypeID = $('#CustomerRateTypeID').val();
         var CustomerId = $('#CustomerID').val();
         var MovementId = $('#MovementTypeID').val();
@@ -1744,7 +1744,7 @@
                     var status = '';
                     if (data.length > 0) {
                         for (var i = 0; i < data.length; i++) {
-                            debugger;
+                            
                             if ($('#CustomerRateTypeID').val() == 0) {
                                 $('#CustomerRateType').val(data[i].CustomerRateType1);
                                 $('#CustomerRateTypeID').val(data[i].CustomerRateTypeID);
@@ -1794,7 +1794,7 @@
                 CustomerRateTypeID: CustomerRateTypeID, CustomerId: CustomerId, MovementId: MovementId, ProductTypeID: ProductTypeID, PaymentModeId: PaymentModeId, Weight: Weight, CountryName: CountryName, CityName: CityName
             },
             success: function (response) {
-                debugger;
+                
                 if (response != null) {
                     if ($('#CustomerRateTypeID').val() != response.CustomerRateTypeID) {
                         $('#CustomerRateTypeID').val(response.CustomerRateTypeID);
@@ -2040,11 +2040,11 @@
                 <input type="hidden" id="txtAWBProcessed" value="" required />
                 <label class="headinglabel required">Airway Bill No.</label>
                 @if (@Model.InScanID == 0)
-                {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 20 }) }
+                {@Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttargetcaps", @required = "true", @maxlength = 20 }) }
 
             else
             {
-                @Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttarget", @Disabled = "disabled" })
+                @Html.TextBoxFor(model => model.HAWBNo, new { @class = "form-control txttargetcaps", @Disabled = "disabled" })
             }
 
             </div>
@@ -2537,7 +2537,8 @@
                                             <tr>
                                                 <td>
                                                     @item.OtherChargeName
-                                                    <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
+                                                    <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" id="OtherCharge_@otherchargecount" />
+                                                    <input type="hidden" class="hdndeleted"  name="otherchargesVM[@otherchargecount].Deleted" id="hdndeleted_@otherchargecount" value="@item.Deleted"  />
                                                 </td>
                                                 <td style="text-align:right">
                                                     @CMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "2")
@@ -2545,7 +2546,7 @@
                                                 </td>
                                                 <td style="text-align: center;">
 
-                                                    <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+                                                    <a href="javascript:void(0)" onclick="deleteOthertrans(this)"><i class="fa fa-times"></i></a>
 
                                                 </td>
                                             </tr>
@@ -2581,36 +2582,81 @@
         </div>
 
     }
-    <script type="text/javascript">
+<script type="text/javascript">
+        function deleteOthertrans(obj) {
+            $(obj).parent().parent().addClass('hide');
+            var obj1 = $(obj).parent().parent().find('.hdndeleted');
+            $(obj1).val(true);
+            calculateothertotal();
+
+    }
+    function checkduplication(potherchargeid) {
+        //OtherCharge_
+        var maxrow = $('#OtherChargeTable > tr').length;
+        var totalothercharge = 0;
+        for (i = 0; i < maxrow; i++) {
+            var deleted = $('#hdndeleted_' + i).val();
+            if (deleted == 'false') {
+                var otherchargeid = $('#OtherCharge_' + i).val();
+                if (potherchargeid == otherchargeid) {
+                    $.notify('Could not add Duplicate Other Charge Item!');
+                    return true;                }
+            }
+        }
+        return false;
+    }
+        function calculateothertotal() {
+            //Amount_@otherchargecount
+            
+            var maxrow = $('#OtherChargeTable > tr').length;
+            var totalothercharge = 0;
+            $('#OtherCharge').val(totalothercharge);
+            for (i = 0; i < maxrow; i++) {
+                var deleted = $('#hdndeleted_' + i).val();
+                if (deleted == 'false') {
+                    var othercharge = $('#Amount_' + i).val();
+                    totalothercharge = parseFloat(totalothercharge) + parseFloat(othercharge);
+                    $('#OtherCharge').val(parseFloat(totalothercharge).toFixed(@_decimal));
+                }
+                if ((i + 1) == maxrow) {
+                    CalculateTax();
+                }
+              
+            }
+        }
                                 $(document).ready(function () {
 
                                     $('#AddExpAllocation').click(function () {
                                         //if ($('#OtherCharge').attr('readonly') != 'readonly') {
-                                      if ($('#InvoiceId').val() == '' || $('#InvoiceId').val() == '0') {
+                                        if ($('#InvoiceId').val() == '' || $('#InvoiceId').val() == '0' || $('#InvoiceId').val()==null) {
                                             var Total = 0;
                                             var MainTotal = 0;
                                             var selectedval = $("#OtherChargeID").val();
                                             var exists = false;
-                                            debugger;
+                                            
                                             if (selectedval == 0) {
                                                 alert('Please select Other Charge Name!');
                                                 return;
                                             }
                                             $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
-                                                debugger;
+                                                
                                                 if (isNaN(parseFloat($(this).val())) === false) {
                                                     Total += parseFloat($(this).val());
                                                 }
                                             });
-
-                                            $('#OtherChargeTable').find('.OChargeID').each(function () {
-                                                debugger;
-                                                if ($(this).val() === selectedval) {
-                                                    exists = true;
-                                                    alert('Already this charge added!');
-                                                    return;
-                                                }
-                                            });
+                                            if (checkduplication(selectedval) == true) {
+                                                exists = true;
+                                                return;
+                                            }
+                                            //$('#OtherChargeTable').find('.OChargeID').each(function () {
+                                            //    
+                                            //    var deleted = $('#hdndeleted_' + i).val();
+                                            //    if ($(this).val() === selectedval) {
+                                            //        exists = true;
+                                            //        alert('Already this charge added!');
+                                            //        return;
+                                            //    }
+                                            //});
                                             if (exists == true)
                                                 return;
 
@@ -2629,22 +2675,16 @@
                                             var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a); parseFloat(y)
 
                                             $("#totalCharge").val(tot.toFixed(2));
-                                            //if (isNaN(parseFloat($('#amount').val())) === false) {
-                                            //    MainTotal += parseFloat($('#amount').val());
-                                            //}
-                                            //if (Total > MainTotal) {
-                                            //    alert('Amount cannot exceed total allocated amount');
-                                            //    return;
-                                            //}
+
 
                                             var othercharngename = $("#OtherChargeID option:selected").text();
                                         @*if (@otherchargecount>0)
                                             $('#RowCount').val(@otherchargecount);*@
 
                                             var RowCount = parseInt($('#RowCount').val());
-                                            var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
-                                            RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
-                                            RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
+                                            var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" name="otherchargesVM[' + RowCount + '].Deleted" class="hdndeleted" value="false" id="hdndeleted_' + RowCount + '" /><input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID"  id="OtherCharge_' + RowCount + '" value="' + $('#OtherChargeID').val() + '"/></td>';
+                                            RowHtml = RowHtml + '<td style="text-align:right">' + $('#ExpAmount').val() + '<input type="hidden" id="Amount_' + RowCount + '"  name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
+                                            RowHtml = RowHtml + '<td><a href="javascript:void(0)"  onclick="deleteOthertrans(this)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
                                             RowHtml = RowHtml + '</tr>';
                                             $('#OtherChargeTable').append(RowHtml);
                                             $('#RowCount').val(RowCount + 1);
@@ -2653,6 +2693,7 @@
                                             $("#OtherChargeID").val(0);
                                             $("#ExpAmount").val(0);
                                             $('#OtherChargeName').focus()
+                                            calculateothertotal();
                                         }
                                         else {
                                             $.notify('Charges could not be edited in the Invoiced AWB!');
@@ -2668,11 +2709,11 @@
                                         }
                                     });
 
-                                    $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
-                                        if ($('#OtherCharge').attr('readonly') != 'readonly') {
-                                            $(this).parent().parent().remove();
-                                        }
-                                    });
+                                    //$('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
+                                    //    if ($('#OtherCharge').attr('readonly') != 'readonly') {
+                                    //        $(this).parent().parent().remove();
+                                    //    }
+                                    //});
 
                                     //$('#details').on("click", "#DeleteAllocationRow", function () {
 
@@ -2689,7 +2730,7 @@
                                     $("#ExpAmount").val('');
                                     $("#ExpAllocationTable").find("tr:gt(0)").remove();
                                 }
-    </script>
+</script>
 
 
 

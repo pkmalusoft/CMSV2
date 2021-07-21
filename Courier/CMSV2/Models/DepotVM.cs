@@ -30,5 +30,8 @@ namespace CMSV2.Models
 
         public string CountryName { get; set; }
         public string CityName { get; set; }
-  }
+
+        public string BranchName { get; set; }
+        public int?  BranchID { get; set; }
+    }
 }

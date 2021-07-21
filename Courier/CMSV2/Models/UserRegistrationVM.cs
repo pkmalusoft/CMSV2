@@ -28,5 +28,8 @@ namespace CMSV2.Models
     public bool EmailNotify { get; set; }
     public int UserReferenceId { get; set; }
 
-  }
+        public string BranchId { get; set; }
+        public int[] SelectedValues { get; set; }
+
+    }
 }

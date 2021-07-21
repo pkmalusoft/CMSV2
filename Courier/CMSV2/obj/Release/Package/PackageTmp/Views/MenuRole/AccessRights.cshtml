@@ -215,24 +215,24 @@
                             @Html.DisplayFor(modelItem => item.MenuName)
                         </td>
                         <td>
-                            <div class="col-md-1 checkboxdesign">
+                        
                                 @Html.CheckBoxFor(modelIte => item.IsAdd, new { name = "", @id= "IsAdd_"+ item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
-                            </div>
+                        
                         </td>
                         <td>
-                            <div class="col-md-1 checkboxdesign">
+                        
                                 @Html.CheckBoxFor(modelIte => item.IsModify, new { name = "", @id = "IsModify_" + item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
-                            </div>
+                        
                         </td>
                         <td>
-                            <div class="col-md-1 checkboxdesign">
+                        
                                 @Html.CheckBoxFor(modelIte => item.Isprint, new { name = "", @id = "Isprint_" + item.MenuAccessID, @class = "checkfilter calfield", style = "margin-left:10px;" })
-                            </div>
+                        
                         </td>
                         <td>
-                            <div class="col-md-1 checkboxdesign">
+                        
                                 @Html.CheckBoxFor(modelIte => item.IsDelete, new { name = "", @id = "IsDelete_" + item.MenuAccessID,@class = "checkfilter calfield", style = "margin-left:10px;" })
-                            </div>
+                        
                         </td>
                         <!--<td>-->
                             @*<a href="@Url.Action("Delete", new { id = item.MenuID })"><i class="fa fa-times"></i></a>*@
