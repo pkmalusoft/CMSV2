@@ -333,7 +333,7 @@ namespace CMSV2.DAL
             cmd.Parameters.AddWithValue("@InvNo", InvNo);
             cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);            
             cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
-            cmd.Parameters.AddWithValue("@JobID",  JobID);
+            //cmd.Parameters.AddWithValue("@JobID",  JobID);
                         
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -425,7 +425,7 @@ namespace CMSV2.DAL
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "SP_SP_DeleteAcHead";
+            cmd.CommandText = "SP_DeleteAcHead";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@AcHeadId", AcheadId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);

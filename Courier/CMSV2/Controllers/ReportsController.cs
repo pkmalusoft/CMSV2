@@ -1508,5 +1508,76 @@ namespace CMSV2.Controllers
 
 
         #endregion
+
+        #region "ImportList"
+        public ActionResult ImportList()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            
+            DateParam model = (DateParam)Session["ImportListParam"];
+            if (model == null)
+            {
+                model = new DateParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,                    
+                    Output = "PDF",
+                    ReportType = "ImportList"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["ImportListParam"] = model;
+
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Import Shipment List";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("ImportShipmentList"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult ImportList(DateParam picker)
+        {
+
+            DateParam model = new DateParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
+                Output = picker.Output,
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            Session["ImportListParam"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.ImportListrepot();
+
+            return RedirectToAction("ImportList", "Reports");
+
+
+        }
+        #endregion
     }
 }

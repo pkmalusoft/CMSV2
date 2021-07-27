@@ -168,18 +168,41 @@
 
         } else {
             $('#btnsearch').attr('disabled', 'disabled');
-            if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
+            if ($("#RecPayID").val() > 0) {
+            if ($("#StatusEntry").val() == "BK") {
+                $("#Bank").prop('checked', true);
+                $("#Cash").prop('checked', false);
+                $("#Bank").trigger("click");
+            }
+            else if ($("#StatusEntry").val() == "CS") {
+                $("#Cash").prop('checked', true);
+                $("#Bank").prop('checked', false);
+                $("#Cash").trigger("click");
+            }
+            
+
+            var money = parseFloat($("#FMoney").val());
+            $("#FMoney").val(money.toFixed(@_decimal));
+
+            var exrate = parseFloat($("#EXRate").val());
+            $("#ExRate").val(exrate.toFixed(@_decimal));
+        }
+             if ('@Model.StatusEntry' == 'CS') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
-                $("#ChequeNo").attr("readonly","readonly")
-                $("#ChequeDate").attr("readonly","readonly")
-                $("#PaymentMode").val(2);
+                 $("#ChequeNo").attr("readonly", "readonly");
+                 $("#ChequeDate").attr("readonly", "readonly");
+                 $("#PaymentMode").val(2);
 
             } else {
                 $("#divCash").css({ "display": "none" });
                 $("#divBank").css({ "display": "block" });
 
             }
+            setTimeout(function () {
+                PaymentModeChange();
+            },100)
+            
             ValidateTotal();
         }
         var wt = $("#EXRate").val();
@@ -704,8 +727,9 @@
         }
     }
     function PaymentModeChange() {
+        debugger;
         var val = $("#PaymentMode").val();
-        if (val == 1) {
+        if (val == 1) { //Bank
             $("#divCash").css({ "display": "none" });
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
@@ -714,15 +738,18 @@
             $("#ChequeDate").removeAttr('readonly');
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
-        } else {
+            $('#CashBank').val(0).trigger('change');
+        } else { //2 Cash
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
             $("#ChequeNo").removeAttr('required');
             $("#ChequeDate").removeAttr('required');
             $("#ChequeNo").attr('readonly', 'readonly');
-            $("#ChequeDate").attr('readonly','readonly')
-            $('#CashBank').attr('required','required');
-
+            $("#ChequeDate").attr('readonly', 'readonly')
+            $('#CashBank').attr('required', 'required');
+            $('#ChequeBank').val(0).trigger('change');
             $('#ChequeBank').removeAttr('required')
         }
 
@@ -881,10 +908,11 @@
                 @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
             </div>
 
-              <div class="col-xs-12 col-sm-3 " style="width: calc(45% - 79px);">
-            <label class=" required headinglabel">Client</label>
-            @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
-        </div>
+            <div class="col-xs-12 col-sm-3"style="width: calc(45% - 100px);">
+                
+                <label class=" required headinglabel">Client</label>
+                @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
+            </div>
 
         <div class="pull-left" style="padding-right:5px; padding-top: 10px">
             <button class="btn btn-success small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i></button>

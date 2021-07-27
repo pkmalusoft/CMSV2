@@ -2800,7 +2800,7 @@ namespace CMSV2.Controllers
         public JsonResult GetAWB(string id)
         {
             AWB obj = new AWB();
-            var data = (from c in db.InScanMasters where c.AWBNo == id select c).FirstOrDefault();    
+            var data = (from c in db.InScanMasters where c.AWBNo == id && c.IsDeleted==false select c).FirstOrDefault();    
             if (data == null)
             {
                 obj.Exist = 0;

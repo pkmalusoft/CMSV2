@@ -368,7 +368,7 @@ namespace CMSV2.Controllers
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
 
                     decimal Advance = 0;
-                    Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(id), FyearId);
+                    //Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(id), FyearId);
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     cust.Balance = Advance;
                     foreach (var item in cust.recPayDetail)
@@ -754,7 +754,7 @@ namespace CMSV2.Controllers
                     Advance = Convert.ToDecimal(item.Amount) - item.AmountToBeRecieved;
                     DateTime vInvoiceDate = Convert.ToDateTime(item.InvoiceDate);
                     string vInvoiceDate1 = Convert.ToDateTime(vInvoiceDate).ToString("yyyy-MM-dd h:mm tt");
-                    if (1 == 1) //item.Amount > 0 || item.AdjustmentAmount > 0)
+                    if (item.Amount > 0 || item.AdjustmentAmount > 0)
                     {
                         var maxrecpaydetailid = (from c in Context1.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
                         string invoicetype = "C";
@@ -938,7 +938,7 @@ namespace CMSV2.Controllers
                 {
                     DateTime vInvoiceDate = Convert.ToDateTime(item.InvoiceDate);
                     string vInvoiceDate1 = Convert.ToDateTime(vInvoiceDate).ToString("yyyy-MM-dd h:mm tt");
-                    if (1 == 1) //item.Amount > 0 || item.AdjustmentAmount > 0)
+                    if (item.Amount > 0 || item.AdjustmentAmount > 0)
                     {
                         var maxrecpaydetailid = (from c in Context1.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
                         string invoicetype = "C";

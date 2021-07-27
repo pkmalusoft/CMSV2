@@ -104,6 +104,8 @@ namespace CMSV2.Controllers
             foreach (var i in v.Details)
             {
                 int LocationID = 0;
+                bool isMaanula = i.IsCountryChange; ;
+
                 if (i.PlaceID != null)
                 {
                     var location = db.LocationMasters.Where(cc => cc.PlaceID == i.PlaceID).FirstOrDefault();
@@ -114,7 +116,11 @@ namespace CMSV2.Controllers
                         loc.CountryName = i.CountryName;
                         loc.CityName = i.CityName;
                         loc.LocationName = i.LocationName;
-                        loc.PlaceID = i.PlaceID;
+                        if(isMaanula)
+                            loc.PlaceID = "PlaceIdNull";
+                        else
+                            loc.PlaceID = i.PlaceID;
+                       
                         db.LocationMasters.Add(loc);
                         db.SaveChanges();
                         LocationID = loc.LocationID;
@@ -126,7 +132,14 @@ namespace CMSV2.Controllers
                 }
                 else
                 {
-
+                    LocationMaster loc = new LocationMaster();
+                    loc.CountryName = i.CountryName;
+                    loc.CityName = i.CityName;
+                    loc.LocationName = i.LocationName;
+                    loc.PlaceID = "PlaceIdNull";
+                    db.LocationMasters.Add(loc);
+                    db.SaveChanges();
+                    LocationID = loc.LocationID;
                 }
                 ZoneChartDetail s = new ZoneChartDetail();
 
@@ -146,6 +159,12 @@ namespace CMSV2.Controllers
                     s.PlaceID = i.PlaceID;
                     //s.LocationName = i.LocationName;
                     s.LocationID = LocationID;
+
+                    if(isMaanula)
+                        s.PlaceID = "PlaceIdNull";
+                    else
+                        s.PlaceID = i.PlaceID;
+
                     s.PlaceID = i.PlaceID;
                     s.SubLocality = i.SubLocality;
                     s.ZoneChartID = z.ZoneChartID;

@@ -39,6 +39,8 @@ namespace CMSV2.Models
         public string CityName { get; set; }
 
         public List<ZoneChartDetailsVM> Details { get; set; }
+
+        public bool IsCountryChange { get; set; }
     }
 
     public class ZoneChartDetailsVM
@@ -51,6 +53,7 @@ namespace CMSV2.Models
         public string PlaceID { get; set; }
         public string SubLocality { get; set; }
         public bool  Deleted { get; set; }
+        public bool IsCountryChange { get; set; }
     }
 
     public class ZoneEmpVM : EmpZoneAllocation

@@ -174,6 +174,11 @@ namespace CMSV2.Models
                 cust.SupplierID = item.SupplierID;
                 cust.AcJournalID = item.AcJournalID;
                 cust.StatusEntry = item.StatusEntry;
+                if (cust.StatusEntry == "CS")
+                    cust.CashBank = (cashOrBankID).ToString();
+                else
+                    cust.ChequeBank = (cashOrBankID).ToString();
+
                 cust.BankName = item.BankName;
                 var a = (from t in Context1.RecPayDetails where t.RecPayID == RecpayID select t.CurrencyID).FirstOrDefault();
                 cust.CurrencyId = Convert.ToInt32(a.HasValue ? a.Value : 0);
